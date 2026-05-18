@@ -43,7 +43,7 @@ abbrev ReducedMetricHypotheses
   ExplicitClosedPlacementProducerW19.ReducedMetricHypotheses F
 
 abbrev ClosureSource
-    (F : GeneratedChainFamily) : Type :=
+    (F : GeneratedChainFamily) : Prop :=
   GeneratedChainClosureProducerW20.ClosureSource F
 
 abbrev ExactFamilyHypotheses : Type :=
@@ -56,14 +56,14 @@ abbrev RoleHingedPeriodSearchFamily : Type :=
   NonConnectorTableInputPackageW21.RoleHingedPeriodSearchFamily
 
 abbrev IndexedNonConnectorCrossBlockSqDistanceTableFamily
-    (F : RoleHingedPeriodSearchFamily) : Type :=
+    (F : RoleHingedPeriodSearchFamily) : Prop :=
   NonConnectorTableInputPackageW21.IndexedNonConnectorCrossBlockSqDistanceTableFamily F
 
 abbrev NonConnectorLowerTableFamily
-    (F : RoleHingedPeriodSearchFamily) : Type :=
+    (F : RoleHingedPeriodSearchFamily) : Prop :=
   ConcreteCrossBlockLowerTable.NonConnectorLowerTableFamily F
 
-abbrev ConcreteNonConnectorLowerTableFamily : Type :=
+abbrev ConcreteNonConnectorLowerTableFamily : Prop :=
   ConcreteCrossBlockLowerTable.ConcreteNonConnectorLowerTableFamily
 
 /-! ## Generic exact-family and W19/W20 adapters -/
@@ -272,7 +272,7 @@ def closuresOfConcreteNonConnectorLowerTableFamily
     (C : ConcreteNonConnectorLowerTableFamily) :
     GeneratedChainFamilyClosures
       (NonConnectorTableInputPackageW21.generatedChainFamily
-        C.toRoleHingedPeriodSearchFamily) := by
+        C.periodSearch.toRoleHingedPeriodSearchFamily) := by
   intro k hk
   exact
     (PeriodClosureSourceW21.sourceOfConcretePeriodSearchData C.periodSearch)
@@ -283,7 +283,7 @@ def closureSourceOfConcreteNonConnectorLowerTableFamily
     (C : ConcreteNonConnectorLowerTableFamily) :
     ClosureSource
       (NonConnectorTableInputPackageW21.generatedChainFamily
-        C.toRoleHingedPeriodSearchFamily) :=
+        C.periodSearch.toRoleHingedPeriodSearchFamily) :=
   GeneratedChainClosureProducerW20.ClosureSource.ofClosures
     (closuresOfConcreteNonConnectorLowerTableFamily C)
 
@@ -293,6 +293,7 @@ def inputPackageOfConcreteNonConnectorLowerTableFamily
     (C : ConcreteNonConnectorLowerTableFamily) :
     W19InputPackage :=
   inputPackageOfNonConnectorLowerTableFamilyAndClosureSource
+    (F := C.periodSearch.toRoleHingedPeriodSearchFamily)
     C.tables (closureSourceOfConcreteNonConnectorLowerTableFamily C)
 
 /-- Concrete non-connector lower-table data flattened to
