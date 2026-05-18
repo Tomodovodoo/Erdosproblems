@@ -19,8 +19,6 @@ open M8ConstructionInterface
 open M8PipelineClosure
 open MinimalGraphFacts
 
-noncomputable section
-
 namespace M8ConstructionInterface
 namespace M8ConstructionData
 
@@ -86,8 +84,6 @@ theorem no_minimalClearedFailure_of_constructionDataEliminator
   exact
     no_minimalClearedFailure_of_separatedConstructionEliminator
       (separatedConstructionEliminator_of_constructionDataEliminator hbuild)
-
-end
 
 end M8ConstructionDataBridge
 end Swanepoel
