@@ -124,8 +124,8 @@ theorem smallComplement_of_exactChainThresholdEvidence
     SmallComplement K0 := by
   intro n hn
   exact
-    LargeSmallCaseClosureW14.ExactChainThresholdEvidence
-      .targetUpperConstructionFiveSixteenSmallUpTo E n hn
+    LargeSmallCaseClosureW14.ExactChainThresholdEvidence.targetUpperConstructionFiveSixteenSmallUpTo
+      E n hn
 
 theorem smallComplement_iff_exactBlockThresholdEvidence
     (K0 : Nat) :
@@ -136,11 +136,13 @@ theorem smallComplement_iff_exactBlockTargetsBelowThreshold
     (K0 : Nat) :
     SmallComplement K0 <-> ExactBlockTargetsBelowThreshold K0 := by
   constructor
-  · intro small k hklt hk
+  case mp =>
+    intro small k hklt hk
     exact
       LargeThresholdSmallCasesW15.exactBlockTarget_of_smallComplement
         small hklt hk
-  · intro exactBlock
+  case mpr =>
+    intro exactBlock
     exact smallComplement_of_exactBlockThresholdEvidence
       { exactBlock := exactBlock }
 
@@ -158,18 +160,24 @@ theorem smallComplement_iff_nonempty_exactChainThresholdEvidence
     (K0 : Nat) :
     SmallComplement K0 <-> Nonempty (ExactChainThresholdEvidence K0) := by
   constructor
-  · intro small
-    exact ⟨exactChainThresholdEvidence_of_smallComplement small⟩
-  · rintro ⟨E⟩
+  case mp =>
+    intro small
+    exact Nonempty.intro (exactChainThresholdEvidence_of_smallComplement small)
+  case mpr =>
+    intro E
+    rcases E with ⟨E⟩
     exact smallComplement_of_exactChainThresholdEvidence E
 
 theorem smallComplement_iff_nonempty_exactChainTargetsBelowThreshold
     (K0 : Nat) :
     SmallComplement K0 <-> Nonempty (ExactChainTargetsBelowThreshold K0) := by
   constructor
-  · intro small
-    exact ⟨(exactChainThresholdEvidence_of_smallComplement small).chain⟩
-  · rintro ⟨chain⟩
+  case mp =>
+    intro small
+    exact Nonempty.intro (exactChainThresholdEvidence_of_smallComplement small).chain
+  case mpr =>
+    intro chain
+    rcases chain with ⟨chain⟩
     exact smallComplement_of_exactChainThresholdEvidence
       { chain := chain }
 
@@ -177,7 +185,7 @@ theorem smallComplement_of_exactChainTargetsBelowThreshold
     {K0 : Nat} (chain : ExactChainTargetsBelowThreshold K0) :
     SmallComplement K0 :=
   (smallComplement_iff_nonempty_exactChainTargetsBelowThreshold K0).2
-    ⟨chain⟩
+    (Nonempty.intro chain)
 
 def exactChainTargetsBelowThreshold_of_smallComplement
     {K0 : Nat} (small : SmallComplement K0) :
@@ -190,55 +198,59 @@ def smallLengthExactBlockTargetsOfSmallComplementSix
     (small : SmallComplement blockThresholdSix) :
     SmallLengthExactBlockTargets where
   lengthOne := by
-    simpa [blockThresholdSix, ExactBlockTarget] using
+    simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 1
         (by
-          change 1 < 6
+          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
           norm_num)
         (by norm_num)
   lengthTwo := by
-    simpa [blockThresholdSix, ExactBlockTarget] using
+    simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 2
         (by
-          change 2 < 6
+          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
           norm_num)
         (by norm_num)
   lengthThree := by
-    simpa [blockThresholdSix, ExactBlockTarget] using
+    simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 3
         (by
-          change 3 < 6
+          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
           norm_num)
         (by norm_num)
   lengthFour := by
-    simpa [blockThresholdSix, ExactBlockTarget] using
+    simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 4
         (by
-          change 4 < 6
+          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
           norm_num)
         (by norm_num)
   lengthFive := by
-    simpa [blockThresholdSix, ExactBlockTarget] using
+    simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 5
         (by
-          change 5 < 6
+          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
           norm_num)
         (by norm_num)
 
 theorem smallComplement_six_iff_nonempty_smallLengthExactBlockTargets :
     SmallComplement blockThresholdSix <-> Nonempty SmallLengthExactBlockTargets := by
   constructor
-  · intro small
-    exact ⟨smallLengthExactBlockTargetsOfSmallComplementSix small⟩
-  · rintro ⟨C⟩
+  case mp =>
+    intro small
+    exact Nonempty.intro (smallLengthExactBlockTargetsOfSmallComplementSix small)
+  case mpr =>
+    intro C
+    rcases C with ⟨C⟩
     exact
-      SmallComplementConcreteBlocksW17
-        .smallComplement_six_of_smallLengthExactBlockTargets C
+      SmallComplementConcreteBlocksW17.smallComplement_six_of_smallLengthExactBlockTargets
+        C
 
 theorem smallComplement_six_of_smallLengthExactBlockTargets
     (C : SmallLengthExactBlockTargets) :
     SmallComplement blockThresholdSix :=
-  (smallComplement_six_iff_nonempty_smallLengthExactBlockTargets).2 ⟨C⟩
+  smallComplement_six_iff_nonempty_smallLengthExactBlockTargets.2
+    (Nonempty.intro C)
 
 theorem smallComplement_of_smallLengthExactBlockTargets_le_six
     {K0 : Nat} (C : SmallLengthExactBlockTargets)
@@ -267,18 +279,20 @@ theorem smallComplement_of_exactBlocksTwoThroughFive_le_six
 theorem smallComplement_two_of_concreteOneBlockCertificate
     {orientation : Fin 1 -> OrientationData.BlockOrientation}
     (oneBlock : ConcreteOneBlockCertificate orientation) :
-  SmallComplement 2 :=
-  SmallComplementExactBlocksW16
-    .smallComplement_two_of_concreteOneBlockCertificate oneBlock
+    SmallComplement 2 :=
+  SmallComplementExactBlocksW16.smallComplement_two_of_concreteOneBlockCertificate
+    oneBlock
 
 theorem smallComplement_two_iff_lengthOneExactBlock :
     SmallComplement 2 <-> ExactBlockTarget 1 := by
   constructor
-  · intro small
+  case mp =>
+    intro small
     exact exactBlockTargetsBelowThreshold_of_smallComplement small 1
       (by norm_num)
       (by norm_num)
-  · intro lengthOne
+  case mpr =>
+    intro lengthOne
     exact smallComplement_of_exactBlockTargetsBelowThreshold
       (fun k hklt hk => by
         have hkone : k = 1 := by
@@ -288,15 +302,15 @@ theorem smallComplement_two_iff_lengthOneExactBlock :
 
 theorem smallComplement_six_of_allPositiveCertificateRows
     (C : AllPositiveCertificateRows) :
-  SmallComplement blockThresholdSix :=
-  SmallComplementConcreteBlocksW17
-    .smallComplement_six_of_allPositiveCertificateRows C
+    SmallComplement blockThresholdSix :=
+  SmallComplementConcreteBlocksW17.smallComplement_six_of_allPositiveCertificateRows
+    C
 
 theorem smallComplement_seven_of_allPositiveCertificateRows
     (C : AllPositiveCertificateRows) :
-  SmallComplement blockThresholdSeven :=
-  SmallComplementConcreteBlocksW17
-    .smallComplement_seven_of_allPositiveCertificateRows C
+    SmallComplement blockThresholdSeven :=
+  SmallComplementConcreteBlocksW17.smallComplement_seven_of_allPositiveCertificateRows
+    C
 
 theorem smallComplement_of_allPositiveFields
     (K0 : Nat) (F : AllPositiveFields) :
@@ -305,90 +319,84 @@ theorem smallComplement_of_allPositiveFields
 
 theorem smallComplement_of_concreteValueMatrixFamily
     (K0 : Nat) (C : ConcreteValueMatrixFamily) :
-  SmallComplement K0 :=
-  SmallComplementExactBlocksW16
-    .smallComplement_of_concreteValueMatrixFamily K0 C
+    SmallComplement K0 :=
+  SmallComplementExactBlocksW16.smallComplement_of_concreteValueMatrixFamily
+    K0 C
 
 theorem smallComplement_of_candidateValueMatrixFamily
     (K0 : Nat) (C : CandidateValueMatrixFamily) :
-  SmallComplement K0 :=
-  SmallComplementExactBlocksW16
-    .smallComplement_of_candidateValueMatrixFamily K0 C
+    SmallComplement K0 :=
+  SmallComplementExactBlocksW16.smallComplement_of_candidateValueMatrixFamily
+    K0 C
 
 /-! ## W21 large-field reductions to the finite side -/
 
 theorem arbitraryTarget_iff_exactBlockTargetsBelowThreshold_of_largeClosedPlacementFields
     {K0 : Nat} (L : LargeClosedPlacementFields K0) :
     ArbitraryTarget <-> ExactBlockTargetsBelowThreshold K0 :=
-  (SmallLargeInputPackageAssemblyW21
-    .arbitraryTarget_of_largeClosedPlacementFields_iff_smallComplement L).trans
+  (SmallLargeInputPackageAssemblyW21.arbitraryTarget_of_largeClosedPlacementFields_iff_smallComplement
+    L).trans
     (smallComplement_iff_exactBlockTargetsBelowThreshold K0)
 
 theorem arbitraryTarget_iff_exactChainTargetsBelowThreshold_of_largeClosedPlacementFields
     {K0 : Nat} (L : LargeClosedPlacementFields K0) :
     ArbitraryTarget <-> Nonempty (ExactChainTargetsBelowThreshold K0) :=
-  (SmallLargeInputPackageAssemblyW21
-    .arbitraryTarget_of_largeClosedPlacementFields_iff_smallComplement L).trans
+  (SmallLargeInputPackageAssemblyW21.arbitraryTarget_of_largeClosedPlacementFields_iff_smallComplement
+    L).trans
     (smallComplement_iff_nonempty_exactChainTargetsBelowThreshold K0)
 
 theorem exact_eventual_arbitrary_iff_exactBlockTargetsBelowThreshold_of_largeClosedPlacementFields
     {K0 : Nat} (L : LargeClosedPlacementFields K0) :
     (ExactTarget /\ EventualTarget /\ ArbitraryTarget) <->
       ExactBlockTargetsBelowThreshold K0 :=
-  (SmallLargeInputPackageAssemblyW21
-    .exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
-      L).trans
+  (SmallLargeInputPackageAssemblyW21.exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
+    L).trans
     (smallComplement_iff_exactBlockTargetsBelowThreshold K0)
 
 theorem exact_eventual_arbitrary_iff_exactChainTargetsBelowThreshold_of_largeClosedPlacementFields
     {K0 : Nat} (L : LargeClosedPlacementFields K0) :
     (ExactTarget /\ EventualTarget /\ ArbitraryTarget) <->
       Nonempty (ExactChainTargetsBelowThreshold K0) :=
-  (SmallLargeInputPackageAssemblyW21
-    .exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
-      L).trans
+  (SmallLargeInputPackageAssemblyW21.exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
+    L).trans
     (smallComplement_iff_nonempty_exactChainTargetsBelowThreshold K0)
 
 theorem arbitraryTarget_iff_nonempty_smallLengthExactBlockTargets_of_largeClosedPlacementFields_six
     (L : LargeClosedPlacementFields blockThresholdSix) :
     ArbitraryTarget <-> Nonempty SmallLengthExactBlockTargets :=
-  (SmallLargeInputPackageAssemblyW21
-    .arbitraryTarget_of_largeClosedPlacementFields_iff_smallComplement L).trans
+  (SmallLargeInputPackageAssemblyW21.arbitraryTarget_of_largeClosedPlacementFields_iff_smallComplement
+    L).trans
     smallComplement_six_iff_nonempty_smallLengthExactBlockTargets
 
 theorem exact_eventual_arbitrary_iff_nonempty_smallLengthExactBlockTargets_of_largeClosedPlacementFields_six
     (L : LargeClosedPlacementFields blockThresholdSix) :
     (ExactTarget /\ EventualTarget /\ ArbitraryTarget) <->
       Nonempty SmallLengthExactBlockTargets :=
-  (SmallLargeInputPackageAssemblyW21
-    .exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
-      L).trans
+  (SmallLargeInputPackageAssemblyW21.exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
+    L).trans
     smallComplement_six_iff_nonempty_smallLengthExactBlockTargets
 
 theorem exact_eventual_arbitrary_of_largeClosedPlacementFields_allPositiveFields
     {K0 : Nat} (L : LargeClosedPlacementFields K0) (F : AllPositiveFields) :
     ExactTarget /\ EventualTarget /\ ArbitraryTarget :=
-  (SmallLargeInputPackageAssemblyW21
-    .exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
-      L).2
+  (SmallLargeInputPackageAssemblyW21.exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
+    L).2
     (smallComplement_of_allPositiveFields K0 F)
 
 theorem exact_eventual_arbitrary_of_largeClosedPlacementFields_concreteValueMatrixFamily
     {K0 : Nat} (L : LargeClosedPlacementFields K0)
     (C : ConcreteValueMatrixFamily) :
     ExactTarget /\ EventualTarget /\ ArbitraryTarget :=
-  (SmallLargeInputPackageAssemblyW21
-    .exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
-      L).2
+  (SmallLargeInputPackageAssemblyW21.exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
+    L).2
     (smallComplement_of_concreteValueMatrixFamily K0 C)
 
 theorem exact_eventual_arbitrary_of_largeClosedPlacementFields_candidateValueMatrixFamily
     {K0 : Nat} (L : LargeClosedPlacementFields K0)
     (C : CandidateValueMatrixFamily) :
     ExactTarget /\ EventualTarget /\ ArbitraryTarget :=
-  (SmallLargeInputPackageAssemblyW21
-    .exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
-      L).2
+  (SmallLargeInputPackageAssemblyW21.exact_eventual_arbitrary_of_largeClosedPlacementFields_iff_smallComplement
+    L).2
     (smallComplement_of_candidateValueMatrixFamily K0 C)
 
 end

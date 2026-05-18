@@ -120,7 +120,7 @@ Lemma 9 data. -/
 def concreteNoEarlyTripleEquality_of_natLateTripleInputs
     (H : M8NatLateTripleInputs P) :
     M8ConcreteNoEarlyTripleEquality P :=
-  concreteNoEarlyTripleEquality_of_natLateTripleInputs H
+  NoEarlyTripleFromLemma9.concreteNoEarlyTripleEquality_of_natLateTripleInputs H
 
 /-- Finite natural-index Lemma 9 data is equivalent to the concrete five-start
 no-early package. -/
@@ -185,18 +185,20 @@ def indexedObstructionInputs_of_natLateTripleInputs
 obstruction data. -/
 theorem nonempty_natLateTripleInputs_iff_indexedObstructionInputs :
     Nonempty (M8NatLateTripleInputs P) <->
-      M8ConcreteIndexedObstructionInputs P := by
+      Nonempty (M8ConcreteIndexedObstructionInputs P) := by
   constructor
   case mp =>
     intro h
     cases h with
     | intro H =>
-        exact indexedObstructionInputs_of_natLateTripleInputs H
+        exact Nonempty.intro (indexedObstructionInputs_of_natLateTripleInputs H)
   case mpr =>
     intro H
-    exact
-      Nonempty.intro
-        (natLateTripleInputs_of_indexedObstructionInputs H)
+    cases H with
+    | intro I =>
+        exact
+          Nonempty.intro
+            (natLateTripleInputs_of_indexedObstructionInputs I)
 
 /-- Abstract no-early data is an abstract early-obstruction package. -/
 def earlyTripleObstructionInputs_of_noEarlyTripleEquality
@@ -229,18 +231,20 @@ def natLateTripleInputs_of_earlyTripleObstructionInputs
 obstruction data. -/
 theorem nonempty_natLateTripleInputs_iff_earlyTripleObstructionInputs :
     Nonempty (M8NatLateTripleInputs P) <->
-      M8EarlyTripleObstructionInputs P := by
+      Nonempty (M8EarlyTripleObstructionInputs P) := by
   constructor
   case mp =>
     intro h
     cases h with
     | intro H =>
-        exact earlyTripleObstructionInputs_of_natLateTripleInputs H
+        exact Nonempty.intro (earlyTripleObstructionInputs_of_natLateTripleInputs H)
   case mpr =>
     intro H
-    exact
-      Nonempty.intro
-        (natLateTripleInputs_of_earlyTripleObstructionInputs H)
+    cases H with
+    | intro I =>
+        exact
+          Nonempty.intro
+            (natLateTripleInputs_of_earlyTripleObstructionInputs I)
 
 /-! ## Pipeline and construction-facing packages -/
 

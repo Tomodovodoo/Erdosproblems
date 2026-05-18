@@ -141,22 +141,23 @@ def matrixOfValueRows
     (tail : TailValueRows F)
     (k : Nat) (hk : 0 < k) :
     NonConnectorValueMatrix F k hk := by
-  by_cases h1 : k = 1
-  · subst k
+  if h1 : k = 1 then
+    subst k
     simpa using ConcreteValueCertificateExamples.lengthOneMatrix F
-  by_cases h2 : k = 2
-  · subst k
+  else if h2 : k = 2 then
+    subst k
     simpa using matrixOfSmallBlockPairValueRows smallTwoThree.lengthTwo
-  by_cases h3 : k = 3
-  · subst k
+  else if h3 : k = 3 then
+    subst k
     simpa using matrixOfSmallBlockPairValueRows smallTwoThree.lengthThree
-  by_cases h4 : k = 4
-  · subst k
+  else if h4 : k = 4 then
+    subst k
     simpa using matrixOfSmallBlockPairValueRows smallFourFive.lengthFour
-  by_cases h5 : k = 5
-  · subst k
+  else if h5 : k = 5 then
+    subst k
     simpa using matrixOfSmallBlockPairValueRows smallFourFive.lengthFive
-  · have hgt : 5 < k := by omega
+  else
+    have hgt : 5 < k := by omega
     exact matrixOfTailValueRows hgt tail
 
 def valueMatrixFamilyOfValueRows
@@ -295,11 +296,13 @@ theorem nonempty_concreteValueMatrixFamily_iff_rowPackage :
     Nonempty ConcreteValueMatrixFamily <->
       Nonempty ConcreteValueMatrixRowPackage := by
   constructor
-  · intro h
+  case mp =>
+    intro h
     cases h with
     | intro C =>
         exact Nonempty.intro (rowPackageOfConcreteValueMatrixFamily C)
-  · intro h
+  case mpr =>
+    intro h
     cases h with
     | intro P =>
         exact Nonempty.intro P.toConcreteValueMatrixFamily
@@ -394,11 +397,13 @@ theorem nonempty_candidateValueMatrixFamily_iff_rowPackage :
     Nonempty CandidateValueMatrixFamily <->
       Nonempty CandidateValueMatrixRowPackage := by
   constructor
-  · intro h
+  case mp =>
+    intro h
     cases h with
     | intro C =>
         exact Nonempty.intro (rowPackageOfCandidateValueMatrixFamily C)
-  · intro h
+  case mpr =>
+    intro h
     cases h with
     | intro P =>
         exact Nonempty.intro P.toCandidateValueMatrixFamily
