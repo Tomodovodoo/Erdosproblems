@@ -52,21 +52,21 @@ Last verification recorded in this file:
 
 ```text
 elan run leanprover/lean4:v4.28.0 lake build
-Build completed successfully (8830 jobs).
+Build completed successfully (8850 jobs).
 
 Lean source forbidden-token scan over ErdosProblems1066/ and
 ErdosProblems1066.lean: clean.
 
-Root import coverage: 803 imported modules for 803 Lean files under
+Root import coverage: 823 imported modules for 823 Lean files under
 ErdosProblems1066/.  No missing, extra, or duplicate root imports.
 
 Trust-source scan for `native_decide`, `trustCompiler`, and `ofReduceBool`:
 clean.
 
-CI-style dependency audit: passed for 1106 declarations, including W13-W30
+CI-style dependency audit: passed for 1127 declarations, including W13-W31
 endpoint and gate declarations.  Every checked declaration reports only
 Lean/mathlib base axioms `propext`, `Classical.choice`, and `Quot.sound`.
-W18-W30 endpoint declarations are imported, build-clean, source-scan clean,
+W18-W31 endpoint declarations are imported, build-clean, source-scan clean,
 trust-source clean, and represented in the CI-style declaration list.
 
 Encoding hygiene is not a proof-state gate.  A broad marker scan reports older
@@ -76,12 +76,12 @@ evidence for or against the current certified bounds route.
 
 ## Active Snapshot
 
-- [x] W13 through W30 route and source-package layers are integrated and root-imported.
-  - Current coverage: 803 imported package modules for 803 Lean files.
-  - Current root target build succeeds with 8830 jobs under
+- [x] W13 through W31 route and source-package layers are integrated and root-imported.
+  - Current coverage: 823 imported package modules for 823 Lean files.
+  - Current root target build succeeds with 8850 jobs under
     `leanprover/lean4:v4.28.0`.
   - Lean-source forbidden-token and trust-source scans are clean.
-  - The W15-W30 final-gate modules are conditional gates, not
+  - The W15-W31 final-gate modules are conditional gates, not
     unconditional final closures.
 
 - [x] W16 proof wave is integrated.
@@ -2827,38 +2827,38 @@ project-local proof obligations.
 - [x] Every `.lean` source file under
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066` is imported by
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`.
-  - Current coverage: 803 imported modules for 803 Lean files, with no missing,
+  - Current coverage: 823 imported modules for 823 Lean files, with no missing,
     extra, or duplicate root imports.
 - [x] Pinned build succeeds.
-  - Current command succeeded for the root target with 8830 jobs.
+  - Current command succeeded for the root target with 8850 jobs.
 - [x] Forbidden-token scan is clean over `ErdosProblems1066` and
   `ErdosProblems1066.lean`.
 - [x] Trust-source scan is clean for `native_decide`, `trustCompiler`, and
   `ofReduceBool`.
-- [x] CI-style axiom audit declaration list covers the current W13-W30
+- [x] CI-style axiom audit declaration list covers the current W13-W31
   endpoint layer.
-  - Current configured audit checks 1106 declarations and reports only
+  - Current configured audit checks 1127 declarations and reports only
     `propext`, `Classical.choice`, and `Quot.sound`.
   - Current source-level no-additional-declared-axiom evidence: the full
-    Lean-source forbidden-token scan is clean over the 803-module root surface.
+    Lean-source forbidden-token scan is clean over the 823-module root surface.
 - [x] Add W18/W19/W20 endpoint declarations to the CI-style axiom audit.
   - The configured audit now includes the W18 final/ledger endpoints, the W19
     Pach-Toth closed-placement audit aliases, the W19 Swanepoel
     pointwise/final closure endpoints, and the W20 Pach-Toth/Swanepoel
     endpoint surfaces.
 - [x] Add W21/W22 endpoint declarations to the CI-style axiom audit.
-  - The W21/W22 subset is folded into the current 1106-declaration replayed
+  - The W21/W22 subset is folded into the current 1127-declaration replayed
     audit, which passed with only Lean/mathlib base axioms.
 - [x] Add W23/W24/W25/W26/W27/W28 endpoint declarations to the CI-style axiom audit.
   - The configured audit now includes W23 route/audit wrappers, W24 source and
     obstruction surfaces, W25 source-inhabitation/audit endpoints, and W26
     concrete-adapter/final-gate endpoints, plus W27/W28 source/audit endpoints.
-  - The replayed audit passed for 1106 declarations with only Lean/mathlib base
+  - The replayed audit passed for 1127 declarations with only Lean/mathlib base
     axioms.
 - [x] Add W29 endpoint declarations to the CI-style axiom audit.
   - The configured audit now includes W29 Pach--Toth source/assembly/audit
     endpoints and W29 Swanepoel source/final-gate endpoints.
-  - The replayed audit passed for 1106 declarations with only Lean/mathlib base
+  - The replayed audit passed for 1127 declarations with only Lean/mathlib base
     axioms.
 - [x] Add W30 endpoint declarations to the CI-style axiom audit.
   - The configured audit now includes W30 Pach--Toth generated-closure,
@@ -2866,40 +2866,49 @@ project-local proof obligations.
     conditional endpoints, plus W30 Swanepoel selected-face, extracted-witness,
     frame/cyclic-order, no-cut, no-early, figure, pointwise, route-audit, and
     final-source endpoints.
-  - The replayed audit passed for 1106 declarations with only Lean/mathlib base
+  - The replayed audit passed for 1127 declarations with only Lean/mathlib base
+    axioms.
+- [x] Add W31 endpoint declarations to the CI-style axiom audit.
+  - The configured audit now includes W31 Pach--Toth explicit generated metric
+    rows, completion-row inhabitants, closed-orbit branch, exact-chain family,
+    positive-chain small blocks, large-tail row realization, remainder
+    dependency, route/no-fake audit, and final conditional assembly endpoints.
+  - The configured audit also includes W31 Swanepoel selected-face/enclosure,
+    extracted components, frame/cyclic rows, no-early rows, figure inequalities,
+    pointwise/lane product, route audit, and final conditional endpoints.
+  - The replayed audit passed for 1127 declarations with only Lean/mathlib base
     axioms.
 - [x] `KnownBounds.lean` exposes only the theorems actually closed in Lean.
   - Next action: add no new public wrappers until the matching internal
     `*_verified` theorem exists and builds.
 
-## Latest W30 Status
+## Latest W31 Status
 
-- [x] W20-W30 waves integrated and verified.
-  - Root surface: 803 Lean files imported by 803 root imports.
+- [x] W20-W31 waves integrated and verified.
+  - Root surface: 823 Lean files imported by 823 root imports.
   - Pinned build: `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
-    succeeded with 8830 jobs.
+    succeeded with 8850 jobs.
   - Forbidden-token scan, trust-source scan, root import coverage, and the
-    1106-declaration CI-style axiom audit all pass.
-  - W30 fixes the previous audit/name blocker for the selected-face endpoint
-    by using the checked namespace
-    `ErdosProblems1066.Swanepoel.Verified.swanepoelW30_selectedFaceEnclosure_exactly_exactTopologyFields`.
+    1127-declaration CI-style axiom audit all pass.
+  - W31 fixes the W31 face-boundary/enclosure audit namespace by using
+    `ErdosProblems1066.Swanepoel.Verified.swanepoelW31_source_exactly_exactTopologyFields`.
 
-- [x] W23-W30 waves integrated, root-build verified, and CI-audited.
-  - All W23, W24, W25, W26, W27, W28, W29, and W30 files are root-imported and
-    covered by the current 803/803 import surface.
-  - W23-W30 add concrete route/audit wrappers, source-package equivalences,
+- [x] W23-W31 waves integrated, root-build verified, and CI-audited.
+  - All W23, W24, W25, W26, W27, W28, W29, W30, and W31 files are root-imported
+    and covered by the current 823/823 import surface.
+  - W23-W31 add concrete route/audit wrappers, source-package equivalences,
     route obstruction records, and sharper lane/row package names; they do not
     prove the final public bounds unconditionally.
 
-- [ ] Next action: inhabit the concrete source packages beyond W30.
+- [ ] Next action: inhabit the concrete source packages beyond W31.
   - Pach--Toth: produce actual completion-row/generated-orbit, positive-chain,
-    large-tail, and remainder-split source data for the W30 final gate; do not
+    large-tail, and remainder-split source data for the W31 final gate; do not
     target the blocked role-hinged lower-table alias.
-  - Swanepoel: produce actual W30 final-source gate data from minimal failure
+  - Swanepoel: produce actual W31 final-source gate data from minimal failure
     topology/geometry, no-cut, no-early, finite-row, figure-angle, pointwise,
     and lane-product data.
   - Public `KnownBounds` wrappers remain closed until the internal
-    `*_verified` theorem builds through the W30 gate and the expanded axiom
+    `*_verified` theorem builds through the W31 gate and the expanded axiom
     audit is clean.
 
 - [x] W30 parallel source-inhabitation wave is integrated and verified.
@@ -2927,27 +2936,48 @@ project-local proof obligations.
     root-imported, scan-clean, trust-source clean, included in the 8830-job root
     build, and covered by the 1106-declaration CI-style axiom audit.
 
-- [ ] W31 parallel source-inhabitation wave is running.
+- [x] W31 parallel source-inhabitation wave is integrated and verified.
   - Pool policy: W30 agents were closed only after their work was integrated,
-    root-built, and audited.  Keep W31 agents active long enough to do real
-    Lean work; prune only finished or genuinely stale agents.
-  - Agent pool opened:
+    root-built, and audited.  W31 agents were likewise kept active until all
+    outputs were locally checked, root-imported, root-built, and CI-audited.
+  - Agent pool completed:
     Popper/Mendel/Leibniz/Plato/Russell/Bacon/Godel/Avicenna/Hegel/Pauli own
     the Pach--Toth W31 tasks; Pasteur/Curie/Ampere/Faraday/Bohr/Herschel/Gibbs/
     Volta/Erdos/Parfit own the Swanepoel W31 tasks.
-  - Pach--Toth W31 targets:
+  - Pach--Toth W31 completed tasks:
     `GeneratedMetricSourceFieldsW31`, `CompletionRowsInhabitationW31`,
     `ClosedOrbitConcreteBranchW31`, `ExactChainFamilyInhabitationW31`,
     `PositiveChainSmallBlocksW31`, `LargeTailRowsRealizationW31`,
     `RemainderDependencyFinalW31`, `PachTothW31NoFakeAudit`,
     `PachTothW31RouteAudit`, and `PachTothW31FinalAssembly`.
-  - Swanepoel W31 targets:
+  - Swanepoel W31 completed tasks:
     `SelectedOuterFaceConstructionW31`, `EnclosureAndFaceBoundaryW31`,
     `ExtractedComponentsInhabitationW31`, `FrameRowsInhabitationW31`,
     `CyclicOrderRowsInhabitationW31`, `NoEarlyConcreteRowsW31`,
     `FigureInequalityRowsW31`, `PointwiseLaneProductInhabitationW31`,
     `SwanepoelW31RouteAudit`, and `SwanepoelW31FinalAssembly`.
   - W31 completion gate:
+    all 20 produced `.lean` files compile with pinned Lean 4.28.0, are
+    root-imported, scan-clean, trust-source clean, included in the 8850-job root
+    build, and covered by the 1127-declaration CI-style axiom audit.
+
+- [ ] W32 parallel source-inhabitation wave is queued.
+  - Pool policy: close the integrated W31 agents, then keep W32 agents active
+    long enough to do real Lean work; prune only finished or genuinely stale
+    agents.
+  - Pach--Toth W32 targets:
+    `ExplicitMetricRowsInhabitationW32`, `CompletionRowsConcretePayloadsW32`,
+    `ClosedOrbitPayloadInhabitationW32`, `ExactChainSourceCertificateW32`,
+    `PositiveChainLargeTailAssemblyW32`, `LargeTailClosedPlacementRowsW32`,
+    `RemainderSplitSourceClosureW32`, `PachTothW32NoFakeAudit`,
+    `PachTothW32RouteAudit`, and `PachTothW32FinalAssembly`.
+  - Swanepoel W32 targets:
+    `SelectedFaceEnclosureBridgeW32`, `FaceBoundaryTopologySourceW32`,
+    `ExtractedComponentsConcreteClosureW32`, `FrameCyclicOrderAssemblyW32`,
+    `NoEarlyRouteCoverageClosureW32`, `ExactFigureRowsAssemblyW32`,
+    `NoCutPointwiseBridgeW32`, `PointwiseLaneFinalBridgeW32`,
+    `SwanepoelW32RouteAudit`, and `SwanepoelW32FinalAssembly`.
+  - W32 completion gate:
     each produced `.lean` file must compile with pinned Lean 4.28.0 before root
     import, then the root import surface, source scans, trust scans, root build,
     and CI-style axiom audit must be expanded and replayed.
