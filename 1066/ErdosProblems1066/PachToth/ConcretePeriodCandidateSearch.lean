@@ -978,7 +978,7 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock
 
 /-- Exact-block target from a generic all-positive period-equation candidate
 family plus the explicit cross-block lower-bound ledger. -/
-theorem targetUpperConstructionFiveSixteenAt_exactBlock_ofPeriodEquationCandidateFamilyAndLowerBounds
+theorem targetUpperConstructionFiveSixteenAt_ofPeriodEquationFamilyAndLowerBounds
     (transitions : TransitionFacts)
     (family :
       PeriodEquationConcreteSearch.PeriodEquationCandidateFamily

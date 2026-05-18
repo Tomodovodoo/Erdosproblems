@@ -1,5 +1,6 @@
 import ErdosProblems1066.Swanepoel.BoundarySpineFiniteCertificate
 import ErdosProblems1066.Swanepoel.BoundaryLabelExtractionTasks
+import ErdosProblems1066.Swanepoel.BoundaryWalkConstruction
 import ErdosProblems1066.Swanepoel.M8BoundaryLabelsConcrete
 
 set_option autoImplicit false
@@ -24,12 +25,14 @@ namespace BoundaryLabelCertificateAssembly
 
 open BoundaryFaceCountingToM8
 open BoundarySpineFiniteCertificate
+open BoundaryWalkConstruction
 open CutVertexClosure
 open GraphBridge
 open M8BoundaryLabelsConcrete
 open M8ConstructionInterface
 open M8LabelsFromBoundaryInterface
 open MinimalGraphFacts
+open PlanarInterface
 
 universe u
 
@@ -994,6 +997,300 @@ theorem contradictionOfFiniteLabels
   (toBoundaryConstructionPackageOfFiniteLabels (D := D)
     (connectedNoCut := connectedNoCut) (hmin := hmin)
     finiteLabels lemma8 turnBounds lateTriples windowGeometry).contradiction
+
+/-! ## Boundary-walk and angle-data entry point -/
+
+/--
+Finite `p/q` labels over a boundary walk.
+
+Compared with `M8FinitePQSpineCertificate`, the `p` labels are not separate
+data: they are the selected outer-cycle vertices at `pIndex`.  The boundary
+edge facts are also not separate data: each triangle edge is tied to an actual
+certified edge of the supplied outer-boundary walk.
+-/
+structure M8BoundaryWalkPQSpineCertificate
+    {P : OuterBoundaryCore (CanonicalUDGraph C)}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+        IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData
+        (CanonicalUDGraph C)) where
+  pIndex : M8BoundaryIndex -> Fin P.outerCycle.length
+  q : M8TriangleIndex -> Fin n
+  edgeIndex : M8TriangleIndex -> Fin P.outerCycle.length
+  boundaryEdge_left :
+    forall i : M8TriangleIndex,
+      P.outerCycle.vertex (pIndex (m8BoundaryIndexLeft i)) =
+        (P.outerCycle.edge (edgeIndex i)).1
+  boundaryEdge_right :
+    forall i : M8TriangleIndex,
+      P.outerCycle.vertex (pIndex (m8BoundaryIndexRight i)) =
+        (P.outerCycle.edge (edgeIndex i)).2
+  triangleWitness :
+    forall i : M8TriangleIndex,
+      (unitDistanceLocalGraph C).CommonNeighbor
+        (P.outerCycle.vertex (pIndex (m8BoundaryIndexLeft i)))
+        (P.outerCycle.vertex (pIndex (m8BoundaryIndexRight i))) (q i)
+
+namespace M8BoundaryWalkPQSpineCertificate
+
+variable {P : OuterBoundaryCore (CanonicalUDGraph C)}
+variable {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+variable {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+variable {walk :
+  OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+    IsDegree3 IsDegree4 IsDegree5 IsDegree6}
+variable {geometricAngleSum : Real}
+variable {forced_le_geometric :
+  walk.counts.forcedBoundaryAngleSum <= geometricAngleSum}
+variable {geometric_le_polygon :
+  geometricAngleSum <= walk.counts.polygonAngleSum}
+variable {Subpolygon : Type u}
+variable {subpolygonData :
+  Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData
+    (CanonicalUDGraph C)}
+
+variable (K :
+  M8BoundaryWalkPQSpineCertificate walk geometricAngleSum
+    forced_le_geometric geometric_le_polygon Subpolygon subpolygonData)
+
+/-- The planar-boundary package produced by the strengthened walk, outer-angle,
+and subpolygon inputs. -/
+def toPlanarBoundaryData
+    (_K :
+      M8BoundaryWalkPQSpineCertificate walk geometricAngleSum
+        forced_le_geometric geometric_le_polygon Subpolygon subpolygonData) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} (CanonicalUDGraph C) :=
+  walk.toPlanarBoundaryData geometricAngleSum forced_le_geometric
+    geometric_le_polygon Subpolygon subpolygonData
+
+@[simp]
+theorem toPlanarBoundaryData_core :
+    K.toPlanarBoundaryData.core = P :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerBoundaryCounts :
+    K.toPlanarBoundaryData.outerBoundaryCounts = walk.counts :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_Subpolygon :
+    K.toPlanarBoundaryData.Subpolygon = Subpolygon :=
+  rfl
+
+/-- The `p_i` label determined by the indexed boundary walk. -/
+def p (i : M8BoundaryIndex) : Fin n :=
+  P.outerCycle.vertex (K.pIndex i)
+
+@[simp]
+theorem p_eq_outerCycle (i : M8BoundaryIndex) :
+    K.p i = K.toPlanarBoundaryData.core.outerCycle.vertex (K.pIndex i) :=
+  rfl
+
+/-- Boundary-edge adjacency derived from the actual certified boundary-walk
+edge named by `edgeIndex`. -/
+theorem boundaryEdge (i : M8TriangleIndex) :
+    (unitDistanceLocalGraph C).Adj
+      (K.p (m8BoundaryIndexLeft i)) (K.p (m8BoundaryIndexRight i)) := by
+  have h :=
+    OuterBoundaryWalkBookkeeping.edgeCertificate_unitDistanceAdj
+      walk (K.edgeIndex i)
+  have hedge :
+      (OuterBoundaryWalkBookkeeping.edgeCertificate
+        walk (K.edgeIndex i)).edge =
+        P.outerCycle.edge (K.edgeIndex i) :=
+    OuterBoundaryWalkBookkeeping.edgeCertificate_edge walk (K.edgeIndex i)
+  simpa [p, GraphBridge.unitDistanceLocalGraph, CanonicalUDGraph, hedge,
+    K.boundaryEdge_left i, K.boundaryEdge_right i] using h
+
+/-- Convert the boundary-walk label input into the older finite `p/q` spine
+certificate, deriving the fields available from the walk. -/
+def toFinitePQSpineCertificate :
+    M8FinitePQSpineCertificate K.toPlanarBoundaryData where
+  pIndex := K.pIndex
+  p := K.p
+  q := K.q
+  p_eq_outerCycle := K.p_eq_outerCycle
+  boundaryEdge := K.boundaryEdge
+  triangleWitness := K.triangleWitness
+
+@[simp]
+theorem toFinitePQSpineCertificate_pIndex (i : M8BoundaryIndex) :
+    K.toFinitePQSpineCertificate.pIndex i = K.pIndex i :=
+  rfl
+
+@[simp]
+theorem toFinitePQSpineCertificate_p (i : M8BoundaryIndex) :
+    K.toFinitePQSpineCertificate.p i = K.p i :=
+  rfl
+
+@[simp]
+theorem toFinitePQSpineCertificate_q (i : M8TriangleIndex) :
+    K.toFinitePQSpineCertificate.q i = K.q i :=
+  rfl
+
+/-- Boundary-walk entry point to the finite boundary-label assembly. -/
+def toFiniteBoundaryLabelCertificate
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin)) :
+    M8FiniteBoundaryLabelCertificate
+      K.toPlanarBoundaryData connectedNoCut hmin where
+  finiteLabels := K.toFinitePQSpineCertificate
+  lemma8 := lemma8
+
+@[simp]
+theorem toFiniteBoundaryLabelCertificate_finiteLabels
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin)) :
+    (K.toFiniteBoundaryLabelCertificate
+      connectedNoCut hmin lemma8).finiteLabels =
+        K.toFinitePQSpineCertificate :=
+  rfl
+
+@[simp]
+theorem toFiniteBoundaryLabelCertificate_lemma8
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin)) :
+    (K.toFiniteBoundaryLabelCertificate
+      connectedNoCut hmin lemma8).lemma8 = lemma8 :=
+  rfl
+
+/-- Boundary-walk route to the checked boundary-label package. -/
+def toBoundaryLabelPackage
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin)) :
+    M8BoundaryLabelPackage C :=
+  (K.toFiniteBoundaryLabelCertificate connectedNoCut hmin lemma8).toBoundaryLabelPackage
+
+@[simp]
+theorem toBoundaryLabelPackage_labels_p
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin))
+    (i : M8BoundaryIndex) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).labels.p i =
+      K.p i :=
+  rfl
+
+@[simp]
+theorem toBoundaryLabelPackage_labels_q
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).labels.q i =
+      K.q i :=
+  rfl
+
+/-- Boundary-walk route to local M8 labels. -/
+def toM8LocalLabels
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin)) :
+    M8LocalLabels C :=
+  (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).toM8LocalLabels
+
+@[simp]
+theorem toM8LocalLabels_p
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin))
+    (i : M8BoundaryIndex) :
+    (K.toM8LocalLabels connectedNoCut hmin lemma8).labels.p i =
+      K.p i :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_q
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toM8LocalLabels connectedNoCut hmin lemma8).labels.q i =
+      K.q i :=
+  rfl
+
+/-- Boundary-walk route to `M8ConstructionData` once the non-label M8 fields
+are supplied. -/
+def toM8ConstructionData
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin))
+    (turnBounds : M8TurnBounds)
+    (lateTriples :
+      M8LateTriples (K.toM8LocalLabels connectedNoCut hmin lemma8))
+    (windowGeometry :
+      M8WindowGeometry
+        (K.toM8LocalLabels connectedNoCut hmin lemma8) turnBounds) :
+    M8ConstructionData C hmin :=
+  (K.toFiniteBoundaryLabelCertificate
+    connectedNoCut hmin lemma8).toM8ConstructionData
+      turnBounds lateTriples windowGeometry
+
+/-- Conditional endpoint for the boundary-walk route. -/
+theorem contradiction
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toFinitePQSpineCertificate.toM8BoundarySpine
+          connectedNoCut hmin))
+    (turnBounds : M8TurnBounds)
+    (lateTriples :
+      M8LateTriples (K.toM8LocalLabels connectedNoCut hmin lemma8))
+    (windowGeometry :
+      M8WindowGeometry
+        (K.toM8LocalLabels connectedNoCut hmin lemma8) turnBounds) :
+    False :=
+  (K.toFiniteBoundaryLabelCertificate
+    connectedNoCut hmin lemma8).contradiction
+      turnBounds lateTriples windowGeometry
+
+end M8BoundaryWalkPQSpineCertificate
 
 end
 

@@ -1,5 +1,6 @@
 import ErdosProblems1066.PachToth.GeneratedClosedChainEventualReduction
 import ErdosProblems1066.PachToth.GeneratedMetricClosure
+import ErdosProblems1066.PachToth.ConcretePeriodSearchFamily
 import ErdosProblems1066.PachToth.PeriodCertificateExamples
 import ErdosProblems1066.PachToth.SmallCaseCertificates
 import ErdosProblems1066.PachToth.SmallCaseReduction
@@ -21,12 +22,21 @@ namespace PachToth
 namespace EventualRoleHingeClosure
 
 open FiniteGraph
+open ClosedChainReduction
 open GeneratedClosedChainEventualReduction
+open GeneratedClosedChainReduction
 
 noncomputable section
 
 abbrev R2 := Prod Real Real
 abbrev RoleHingeTransitions := GeneratedMetricClosure.RoleHingeTransitions
+
+/-- If an eventual block threshold is at most one, then every positive block
+count lies in the eventual range. -/
+theorem threshold_le_of_atMostOne
+    {K0 k : Nat} (hK0 : K0 <= 1) (hk : 0 < k) :
+    K0 <= k := by
+  exact le_trans hK0 (Nat.succ_le_of_lt hk)
 
 /-- Package one role-hinged generated period and generated separation as the
 transition-based closed-placement certificate consumed by the split route. -/
@@ -45,7 +55,7 @@ def explicitTransitionClosedPlacementCertificateOfRoleHinged
     ClosedPlacementInterface.ExplicitTransitionClosedPlacementCertificate
       k hk := by
   exact
-    GeneratedClosedChainReduction.explicitTransitionClosedPlacementCertificateOfGenerated_reducedSameBlock
+    explicitTransitionClosedPlacementCertificateOfGenerated_reducedSameBlock
       T.toFigure2TransitionObligations hk
       BaseTransitionRealization.exactBase
       orientation
@@ -105,7 +115,7 @@ theorem targetUpperConstructionFiveSixteenAt_of_eventual_roleHinged_large
       targetUpperConstructionFiveSixteenAt
         (16 * (n / 16) + n % 16) := by
     by_cases hk : 0 < n / 16
-    case pos hk =>
+    case pos =>
       have hK : K0 <= n / 16 := by
         omega
       exact
@@ -116,7 +126,7 @@ theorem targetUpperConstructionFiveSixteenAt_of_eventual_roleHinged_large
             (period (n / 16) hK hk)
             (separated (n / 16) hK hk))
           (SplitSoundness.remainderUpperOfConstruction (n % 16))
-    case neg hk =>
+    case neg =>
       have hk0 : n / 16 = 0 := Nat.eq_zero_of_not_pos hk
       have hzero :
           targetUpperConstructionFiveSixteenAt (16 * 0 + n % 16) :=
@@ -154,6 +164,63 @@ theorem targetUpperConstructionFiveSixteenEventually_of_eventual_roleHinged
       (fun n hn =>
         targetUpperConstructionFiveSixteenAt_of_eventual_roleHinged_large
           K0 T orientation period separated hn)
+
+/-- Eventual role-hinged period and separation data whose threshold is at most
+one gives the exact block-form Pach--Toth target. -/
+theorem targetUpperConstructionFiveSixteen_of_eventual_roleHinged_atMostOne
+    (K0 : Nat)
+    (T : RoleHingeTransitions)
+    (orientation :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedPeriod
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (separated :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedGlobalSeparation
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (hK0 : K0 <= 1) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    targetUpperConstructionFiveSixteen_of_explicitTransitionClosedPlacementCertificates
+      (fun k hk =>
+        let hK : K0 <= k := threshold_le_of_atMostOne hK0 hk
+        explicitTransitionClosedPlacementCertificateOfRoleHinged
+          T hk (orientation k hK hk)
+          (period k hK hk) (separated k hK hk))
+
+/-- Eventual role-hinged period and separation data whose threshold is at most
+one gives the arbitrary target via the exact target and checked remainders. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_atMostOne
+    (K0 : Nat)
+    (T : RoleHingeTransitions)
+    (orientation :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedPeriod
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (separated :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedGlobalSeparation
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (hK0 : K0 <= 1) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    SmallCaseCertificates.targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+      (targetUpperConstructionFiveSixteen_of_eventual_roleHinged_atMostOne
+        K0 T orientation period separated hK0)
 
 /-- Eventual role-hinged generated-chain data plus exactly the small cases
 below the induced vertex threshold `16 * K0` gives the arbitrary target. -/
@@ -208,10 +275,39 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_check
     (hK0 : K0 <= 1) :
     targetUpperConstructionFiveSixteenArbitrary := by
   exact
+    targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_atMostOne
+      K0 T orientation period separated hK0
+
+/-- Eventual role-hinged generated-chain data plus exact-chain certificates for
+the block counts below `K0` gives the arbitrary target.  The zero quotient is
+discharged by the checked empty exact chain, so only positive small block
+counts are requested. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_and_blockSmallCases
+    (K0 : Nat)
+    (T : RoleHingeTransitions)
+    (orientation :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedPeriod
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (separated :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedGlobalSeparation
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (smallChains :
+      forall k : Nat, k < K0 -> 0 < k -> SplitSoundness.ExactChainUpper k) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
     targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_and_smallUpTo
       K0 T orientation period separated
-      (SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_of_le_sixteen
-        (by omega))
+      (SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_blockThreshold
+        K0 smallChains)
 
 /-- Exact-block target data supplies the finite complement below the explicit
 eventual threshold `16 * K0`. -/
@@ -273,6 +369,39 @@ theorem targetUpperConstructionFiveSixteenAt_of_eventual_roleHingedClosure_large
           (closure k hK hk))
       separated hn
 
+/-- Closure-equation spelling of the exact block-form route when the eventual
+threshold is at most one. -/
+theorem targetUpperConstructionFiveSixteen_of_eventual_roleHingedClosure_atMostOne
+    (K0 : Nat)
+    (T : RoleHingeTransitions)
+    (orientation :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        PeriodInterface.GeneratedClosureEquation
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (separated :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedGlobalSeparation
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (hK0 : K0 <= 1) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    targetUpperConstructionFiveSixteen_of_eventual_roleHinged_atMostOne
+      K0 T orientation
+      (fun k hK hk =>
+        PeriodInterface.generatedPeriodEquation_of_generatedClosureEquation
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk)
+          (closure k hK hk))
+      separated hK0
+
 /-- Closure-equation spelling with the exact finite complement below
 `16 * K0`. -/
 theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_and_smallUpTo
@@ -326,14 +455,42 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosur
     (hK0 : K0 <= 1) :
     targetUpperConstructionFiveSixteenArbitrary := by
   exact
+    SmallCaseCertificates.targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+      (targetUpperConstructionFiveSixteen_of_eventual_roleHingedClosure_atMostOne
+        K0 T orientation closure separated hK0)
+
+/-- Closure-equation spelling with exact-chain certificates for the block
+counts below `K0`. -/
+theorem targetArbitrary_of_eventual_roleHingedClosure_blockSmallCases
+    (K0 : Nat)
+    (T : RoleHingeTransitions)
+    (orientation :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        PeriodInterface.GeneratedClosureEquation
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (separated :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedGlobalSeparation
+          T.toFigure2TransitionObligations hk
+          BaseTransitionRealization.exactBase
+          (orientation k hK hk))
+    (smallChains :
+      forall k : Nat, k < K0 -> 0 < k -> SplitSoundness.ExactChainUpper k) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
     targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_and_smallUpTo
       K0 T orientation closure separated
-      (SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_of_le_sixteen
-        (by omega))
+      (SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_blockThreshold
+        K0 smallChains)
 
 /-- Closure-equation spelling using exact-block target data for the finite
 small-case complement below `16 * K0`. -/
-theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_exactTargetSmallCases
+theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_exactTarget
     (K0 : Nat)
     (T : RoleHingeTransitions)
     (orientation :
@@ -489,6 +646,16 @@ theorem targetUpperConstructionFiveSixteenEventually
     Exists.intro (16 * K0)
       (fun n hn => O.targetUpperConstructionFiveSixteenAt_large hn)
 
+/-- Eventual finite certificates whose threshold is at most one give the exact
+block-form target. -/
+theorem targetUpperConstructionFiveSixteen_atMostOne
+    {K0 : Nat} (O : EventualFiniteCertificateObligations K0)
+    (hK0 : K0 <= 1) :
+    PachToth.targetUpperConstructionFiveSixteen := by
+  exact
+    targetUpperConstructionFiveSixteen_of_eventual_roleHinged_atMostOne
+      K0 O.transitions O.orientation O.period O.generatedSeparation hK0
+
 /-- Eventual finite certificates plus exactly the small cases below
 `16 * K0` give the arbitrary target. -/
 theorem targetUpperConstructionFiveSixteenArbitrary_of_smallUpTo
@@ -508,9 +675,30 @@ theorem targetUpperConstructionFiveSixteenArbitrary_checkedSmallCases
     (hK0 : K0 <= 1) :
     PachToth.targetUpperConstructionFiveSixteenArbitrary := by
   exact
+    SmallCaseCertificates.targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+      (O.targetUpperConstructionFiveSixteen_atMostOne hK0)
+
+/-- Eventual finite certificates plus exact-chain certificates for the block
+counts below `K0` give the arbitrary target. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_blockSmallCases
+    {K0 : Nat} (O : EventualFiniteCertificateObligations K0)
+    (smallChains :
+      forall k : Nat, k < K0 -> 0 < k -> SplitSoundness.ExactChainUpper k) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
     O.targetUpperConstructionFiveSixteenArbitrary_of_smallUpTo
-      (SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_of_le_sixteen
-        (by omega))
+      (SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_blockThreshold
+        K0 smallChains)
+
+/-- Eventual finite certificates whose threshold is at most one give the
+arbitrary target through the exact block-form target. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_atMostOne
+    {K0 : Nat} (O : EventualFiniteCertificateObligations K0)
+    (hK0 : K0 <= 1) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    SmallCaseCertificates.targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+      (O.targetUpperConstructionFiveSixteen_atMostOne hK0)
 
 /-- The common `K0 = 1` specialization: eventual finite certificates from one
 block onward plus the checked below-sixteen cases give the arbitrary target. -/
@@ -529,6 +717,70 @@ theorem targetUpperConstructionFiveSixteenArbitrary_exactTargetSmallCases
     O.targetUpperConstructionFiveSixteenArbitrary_of_smallUpTo
       (SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_of_exactTarget
         Hexact (16 * K0))
+
+/-- A concrete cross-block family already contains the transition package, all
+positive period words/equations, and generated separation obtained from its
+cross-block inequalities.  For any chosen eventual block threshold `K0`,
+forget the all-positive data to the eventual finite-certificate interface. -/
+def ofConcreteCrossBlockFamily
+    (K0 : Nat) (F : ConcretePeriodSearchFamily.ConcreteCrossBlockFamily) :
+    EventualFiniteCertificateObligations K0 where
+  transitions := F.periodSearch.transitions
+  word := fun k _hK hk => F.periodSearch.word k hk
+  equation := fun k _hK hk i => F.periodSearch.equation k hk i
+  separated := fun k _hK hk => by
+    simpa [ConcretePeriodSearchFamily.PeriodSearchData.orientation] using
+      F.separated k hk
+
+/-- Concrete cross-block-family data gives every vertex target from the explicit
+eventual threshold `16 * K0` onward after forgetting to the eventual route. -/
+theorem targetUpperConstructionFiveSixteenAt_large_of_concreteCrossBlockFamily
+    (K0 : Nat) (F : ConcretePeriodSearchFamily.ConcreteCrossBlockFamily)
+    {n : Nat} (hn : 16 * K0 <= n) :
+    targetUpperConstructionFiveSixteenAt n := by
+  exact
+    (ofConcreteCrossBlockFamily K0 F)
+      |>.targetUpperConstructionFiveSixteenAt_large hn
+
+/-- Concrete cross-block-family data gives the source-faithful eventual target
+with the explicit threshold `16 * K0`. -/
+theorem targetUpperConstructionFiveSixteenEventually_of_concreteCrossBlockFamily
+    (K0 : Nat) (F : ConcretePeriodSearchFamily.ConcreteCrossBlockFamily) :
+    PachToth.targetUpperConstructionFiveSixteenEventually := by
+  exact
+    (ofConcreteCrossBlockFamily K0 F)
+      |>.targetUpperConstructionFiveSixteenEventually
+
+/-- Concrete cross-block-family data plus exactly the small cases below
+`16 * K0` give the arbitrary target through the eventual route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_concreteCrossBlockFamily_smallUpTo
+    (K0 : Nat) (F : ConcretePeriodSearchFamily.ConcreteCrossBlockFamily)
+    (Hsmall : targetUpperConstructionFiveSixteenSmallUpTo (16 * K0)) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    (ofConcreteCrossBlockFamily K0 F)
+      |>.targetUpperConstructionFiveSixteenArbitrary_of_smallUpTo Hsmall
+
+/-- If the selected eventual block threshold is at most one, the checked
+below-sixteen small cases discharge the finite complement for concrete
+cross-block-family data. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_concreteCrossBlockFamily_checkedSmallCases
+    (K0 : Nat) (F : ConcretePeriodSearchFamily.ConcreteCrossBlockFamily)
+    (hK0 : K0 <= 1) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    (ofConcreteCrossBlockFamily K0 F)
+      |>.targetUpperConstructionFiveSixteenArbitrary_checkedSmallCases hK0
+
+/-- The common `K0 = 1` spelling: concrete cross-block-family data routes
+through eventual closure with threshold `16`, and the checked below-sixteen
+certificates close the complement. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_one_of_concreteCrossBlockFamily
+    (F : ConcretePeriodSearchFamily.ConcreteCrossBlockFamily) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_concreteCrossBlockFamily_checkedSmallCases
+      1 F (by norm_num)
 
 end EventualFiniteCertificateObligations
 

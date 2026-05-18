@@ -49,6 +49,9 @@ abbrev UpperTriangleSqValueTableFamily :=
 abbrev IndexedCrossBlockSqDistanceTableFamily :=
   CrossBlockDistanceSqReduction.IndexedCrossBlockSqDistanceTableFamily
 
+abbrev IndexedNonConnectorCrossBlockSqDistanceTableFamily :=
+  NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTableFamily
+
 /-- The square-value half of the finite-certificate checklist, once the
 role-hinged period-search data has been fixed.
 
@@ -133,6 +136,15 @@ def toSqDistanceTableFamily
       periodSearch.toRoleHingedPeriodSearchFamily :=
   S.toSqValueTableFamily.toSqDistanceTableFamily
 
+/-- Non-connector square-distance table family obtained from the checklist.
+The connector slots are delegated to the role-hinge connector-unit route. -/
+def toNonConnectorSqDistanceTableFamily
+    {periodSearch : PeriodSearchData}
+    (S : SqValueCertificate periodSearch) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily
+      periodSearch.toRoleHingedPeriodSearchFamily :=
+  S.toSqValueTableFamily.toNonConnectorSqDistanceTableFamily
+
 /-- Cross-block lower-bound facade obtained from the checklist. -/
 def toCrossBlockLowerBounds
     {periodSearch : PeriodSearchData}
@@ -154,6 +166,37 @@ def separated
       (periodSearch.orientation k hk) :=
   S.toSqDistanceTableFamily.separated k hk
 
+/-- Reduced metric hypotheses obtained from the square-value checklist and
+the checked exact-base role-hinge metric facts. -/
+def reducedMetricHypotheses
+    {periodSearch : PeriodSearchData}
+    (S : SqValueCertificate periodSearch)
+    (k : Nat) (hk : 0 < k) :
+    GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+      periodSearch.transitions.toFigure2TransitionObligations
+      hk
+      BaseTransitionRealization.exactBase
+      (periodSearch.orientation k hk) :=
+  GeneratedMetricClosure.generatedReducedMetricHypotheses
+    periodSearch.transitions hk (periodSearch.orientation k hk)
+    (S.separated k hk)
+
+/-- Exact-block Pach--Toth target at a chosen positive period length from
+period-search data plus the square-value checklist. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock
+    {periodSearch : PeriodSearchData}
+    (S : SqValueCertificate periodSearch)
+    (k : Nat) (hk : 0 < k) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    GeneratedSeparationInterface.targetUpperConstructionFiveSixteenAt_exactBlock_reduced
+      periodSearch.transitions.toFigure2TransitionObligations
+      hk
+      BaseTransitionRealization.exactBase
+      (periodSearch.orientation k hk)
+      (periodSearch.generatedPeriod k hk)
+      (S.reducedMetricHypotheses k hk)
+
 /-- Exact-multiple Pach--Toth target from period-search data plus the
 square-value checklist. -/
 theorem targetUpperConstructionFiveSixteen
@@ -162,6 +205,31 @@ theorem targetUpperConstructionFiveSixteen
     PachToth.targetUpperConstructionFiveSixteen :=
   S.toSqValueTableFamily.targetUpperConstructionFiveSixteen
 
+/-- Exact-multiple Pach--Toth target routed through generated periods and the
+reduced generated-chain metric interface. -/
+theorem targetUpperConstructionFiveSixteen_viaGeneratedPeriod
+    {periodSearch : PeriodSearchData}
+    (S : SqValueCertificate periodSearch) :
+    PachToth.targetUpperConstructionFiveSixteen := by
+  let G : GeneratedSeparationInterface.GeneratedChainFamily :=
+    { O := fun _ _ => periodSearch.transitions.toFigure2TransitionObligations
+      base := fun _ _ => BaseTransitionRealization.exactBase
+      orientation := periodSearch.orientation }
+  exact
+    GeneratedSeparationInterface.targetUpperConstructionFiveSixteen_of_family_reduced
+      G
+      (fun k hk => periodSearch.generatedPeriod k hk)
+      { metric := fun k hk => S.reducedMetricHypotheses k hk }
+
+/-- Exact-multiple Pach--Toth target routed through the reduced
+non-connector square-distance tables; connector pairs use the role-hinge
+connector-unit facts. -/
+theorem targetUpperConstructionFiveSixteen_nonConnector
+    {periodSearch : PeriodSearchData}
+    (S : SqValueCertificate periodSearch) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  S.toNonConnectorSqDistanceTableFamily.targetUpperConstructionFiveSixteen
+
 /-- Arbitrary-`n` Pach--Toth target from period-search data plus the
 square-value checklist. -/
 theorem targetUpperConstructionFiveSixteenArbitrary
@@ -169,6 +237,24 @@ theorem targetUpperConstructionFiveSixteenArbitrary
     (S : SqValueCertificate periodSearch) :
     PachToth.targetUpperConstructionFiveSixteenArbitrary :=
   S.toSqValueTableFamily.targetUpperConstructionFiveSixteenArbitrary
+
+/-- Arbitrary-`n` Pach--Toth target routed through generated periods and the
+checked exact-target-to-arbitrary bridge. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_viaGeneratedPeriod
+    {periodSearch : PeriodSearchData}
+    (S : SqValueCertificate periodSearch) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  ExactFamilyClosure.targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+    S.targetUpperConstructionFiveSixteen_viaGeneratedPeriod
+
+/-- Arbitrary-`n` Pach--Toth target routed through the reduced
+non-connector exact target and the checked exact-target-to-arbitrary bridge. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_nonConnector
+    {periodSearch : PeriodSearchData}
+    (S : SqValueCertificate periodSearch) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  ExactFamilyClosure.targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+    S.targetUpperConstructionFiveSixteen_nonConnector
 
 end SqValueCertificate
 
@@ -512,6 +598,14 @@ def toSqDistanceTableFamily
       O.toRoleHingedPeriodSearchFamily :=
   O.toSqValueTableFamily.toSqDistanceTableFamily
 
+/-- The generated non-connector square-distance table family obtained from
+the stored upper-triangle value tables. -/
+def toNonConnectorSqDistanceTableFamily
+    (O : Obligations) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily
+      O.toRoleHingedPeriodSearchFamily :=
+  O.toSqValueTableFamily.toNonConnectorSqDistanceTableFamily
+
 /-- The cross-block lower-bound facade obtained from the stored finite
 square-distance tables. -/
 def toCrossBlockLowerBounds
@@ -532,12 +626,40 @@ def separated
       (O.orientation k hk) :=
   O.toSqDistanceTableFamily.separated k hk
 
+/-- Reduced metric hypotheses obtained from the stored finite square-value
+tables and the checked exact-base role-hinge metric facts. -/
+def reducedMetricHypotheses
+    (O : Obligations)
+    (k : Nat) (hk : 0 < k) :
+    GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+      O.transitions.toFigure2TransitionObligations
+      hk
+      BaseTransitionRealization.exactBase
+      (O.orientation k hk) :=
+  GeneratedMetricClosure.generatedReducedMetricHypotheses
+    O.transitions hk (O.orientation k hk) (O.separated k hk)
+
 /-- The role-hinged generated-closure family obtained from the summarized
 period and cross-block fields. -/
 def toRoleHingedGeneratedClosureFamily
     (O : Obligations) :
     GeneratedMetricClosure.RoleHingedGeneratedClosureFamily :=
   O.toCrossBlockLowerBounds.toRoleHingedGeneratedClosureFamily
+
+/-- Exact-block Pach--Toth target at a chosen positive period length from the
+summarized non-rigid finite-certificate obligations. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock
+    (O : Obligations)
+    (k : Nat) (hk : 0 < k) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    GeneratedSeparationInterface.targetUpperConstructionFiveSixteenAt_exactBlock_reduced
+      O.transitions.toFigure2TransitionObligations
+      hk
+      BaseTransitionRealization.exactBase
+      (O.orientation k hk)
+      (O.toPeriodSearchData.generatedPeriod k hk)
+      (O.reducedMetricHypotheses k hk)
 
 /-- The exact-multiple Pach--Toth target obtained from the summarized
 non-rigid finite-certificate obligations. -/
@@ -546,6 +668,28 @@ theorem targetUpperConstructionFiveSixteen
     PachToth.targetUpperConstructionFiveSixteen :=
   O.toSqValueTableFamily.targetUpperConstructionFiveSixteen
 
+/-- The exact-multiple Pach--Toth target obtained via generated periods and
+the reduced generated-chain metric route. -/
+theorem targetUpperConstructionFiveSixteen_viaGeneratedPeriod
+    (O : Obligations) :
+    PachToth.targetUpperConstructionFiveSixteen := by
+  let G : GeneratedSeparationInterface.GeneratedChainFamily :=
+    { O := fun _ _ => O.transitions.toFigure2TransitionObligations
+      base := fun _ _ => BaseTransitionRealization.exactBase
+      orientation := O.orientation }
+  exact
+    GeneratedSeparationInterface.targetUpperConstructionFiveSixteen_of_family_reduced
+      G
+      (fun k hk => O.toPeriodSearchData.generatedPeriod k hk)
+      { metric := fun k hk => O.reducedMetricHypotheses k hk }
+
+/-- The exact-multiple Pach--Toth target obtained via the reduced
+non-connector square-distance route. -/
+theorem targetUpperConstructionFiveSixteen_nonConnector
+    (O : Obligations) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  O.toNonConnectorSqDistanceTableFamily.targetUpperConstructionFiveSixteen
+
 /-- The arbitrary-`n` Pach--Toth target obtained from the summarized
 non-rigid finite-certificate obligations. -/
 theorem targetUpperConstructionFiveSixteenArbitrary
@@ -553,7 +697,33 @@ theorem targetUpperConstructionFiveSixteenArbitrary
     PachToth.targetUpperConstructionFiveSixteenArbitrary :=
   O.toSqValueTableFamily.targetUpperConstructionFiveSixteenArbitrary
 
+/-- The arbitrary-`n` Pach--Toth target obtained via generated periods and
+the checked exact-target-to-arbitrary bridge. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_viaGeneratedPeriod
+    (O : Obligations) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  ExactFamilyClosure.targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+    O.targetUpperConstructionFiveSixteen_viaGeneratedPeriod
+
+/-- The arbitrary-`n` Pach--Toth target obtained via the reduced
+non-connector square-distance route and the checked exact-target-to-arbitrary
+bridge. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_nonConnector
+    (O : Obligations) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  ExactFamilyClosure.targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+    O.targetUpperConstructionFiveSixteen_nonConnector
+
 end Obligations
+
+/-- Exact-block target from an existing period-search package plus the
+remaining square-value checklist. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_periodSearchData_sqValueCertificate
+    (periodSearch : PeriodSearchData)
+    (sqValue : SqValueCertificate periodSearch)
+    (k : Nat) (hk : 0 < k) :
+    targetUpperConstructionFiveSixteenAt (16 * k) :=
+  sqValue.targetUpperConstructionFiveSixteenAt_exactBlock k hk
 
 /-- Exact target from an existing period-search package plus the remaining
 square-value checklist. -/
@@ -564,6 +734,22 @@ theorem targetUpperConstructionFiveSixteen_of_periodSearchData_sqValueCertificat
   (Obligations.ofPeriodSearchDataSqValueCertificate periodSearch
     sqValue).targetUpperConstructionFiveSixteen
 
+/-- Exact target from an existing period-search package plus the remaining
+square-value checklist, routed through generated periods. -/
+theorem targetUpperConstructionFiveSixteen_viaGeneratedPeriod_of_periodSearchData_sqValueCertificate
+    (periodSearch : PeriodSearchData)
+    (sqValue : SqValueCertificate periodSearch) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  sqValue.targetUpperConstructionFiveSixteen_viaGeneratedPeriod
+
+/-- Exact target from an existing period-search package plus the remaining
+square-value checklist, routed through the reduced non-connector tables. -/
+theorem targetUpperConstructionFiveSixteen_nonConnector_of_periodSearchData_sqValueCertificate
+    (periodSearch : PeriodSearchData)
+    (sqValue : SqValueCertificate periodSearch) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  sqValue.targetUpperConstructionFiveSixteen_nonConnector
+
 /-- Arbitrary target from an existing period-search package plus the
 remaining square-value checklist. -/
 theorem targetUpperConstructionFiveSixteenArbitrary_of_periodSearchData_sqValueCertificate
@@ -572,6 +758,105 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_periodSearchData_sqValueC
     PachToth.targetUpperConstructionFiveSixteenArbitrary :=
   (Obligations.ofPeriodSearchDataSqValueCertificate periodSearch
     sqValue).targetUpperConstructionFiveSixteenArbitrary
+
+/-- Arbitrary target from an existing period-search package plus the
+remaining square-value checklist, routed through generated periods. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_viaGeneratedPeriod_of_sqValueCertificate
+    (periodSearch : PeriodSearchData)
+    (sqValue : SqValueCertificate periodSearch) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  sqValue.targetUpperConstructionFiveSixteenArbitrary_viaGeneratedPeriod
+
+/-- Arbitrary target from an existing period-search package plus the
+remaining square-value checklist, routed through the reduced non-connector
+tables. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_nonConnector_of_sqValueCertificate
+    (periodSearch : PeriodSearchData)
+    (sqValue : SqValueCertificate periodSearch) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  sqValue.targetUpperConstructionFiveSixteenArbitrary_nonConnector
+
+/-- Exact-block target from period-search data plus raw square-value facts. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_periodSearchData_sqValueFacts
+    (periodSearch : PeriodSearchData)
+    (sqValue :
+      forall (k : Nat), 0 < k ->
+        Fin k -> LocalVertexIndex -> Fin k -> LocalVertexIndex -> Real)
+    (sqValue_eq_polynomial_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val ->
+            sqValue k hk i u j v =
+              CrossBlockSqTableSearch.indexedGeneratedSqPolynomial
+                periodSearch.toRoleHingedPeriodSearchFamily hk i u j v)
+    (sqValue_ge_one_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val -> 1 <= sqValue k hk i u j v)
+    (k : Nat) (hk : 0 < k) :
+    targetUpperConstructionFiveSixteenAt (16 * k) :=
+  targetUpperConstructionFiveSixteenAt_exactBlock_of_periodSearchData_sqValueCertificate
+    periodSearch
+    { value := sqValue
+      value_eq_polynomial_lt := sqValue_eq_polynomial_lt
+      value_ge_one_lt := sqValue_ge_one_lt }
+    k hk
+
+/-- Exact target from period-search data plus raw square-value facts, routed
+through generated periods. -/
+theorem targetUpperConstructionFiveSixteen_viaGeneratedPeriod_of_periodSearchData_sqValueFacts
+    (periodSearch : PeriodSearchData)
+    (sqValue :
+      forall (k : Nat), 0 < k ->
+        Fin k -> LocalVertexIndex -> Fin k -> LocalVertexIndex -> Real)
+    (sqValue_eq_polynomial_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val ->
+            sqValue k hk i u j v =
+              CrossBlockSqTableSearch.indexedGeneratedSqPolynomial
+                periodSearch.toRoleHingedPeriodSearchFamily hk i u j v)
+    (sqValue_ge_one_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val -> 1 <= sqValue k hk i u j v) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  targetUpperConstructionFiveSixteen_viaGeneratedPeriod_of_periodSearchData_sqValueCertificate
+    periodSearch
+    { value := sqValue
+      value_eq_polynomial_lt := sqValue_eq_polynomial_lt
+      value_ge_one_lt := sqValue_ge_one_lt }
+
+/-- Exact target from period-search data plus raw square-value facts, routed
+through reduced non-connector tables. -/
+theorem targetUpperConstructionFiveSixteen_nonConnector_of_periodSearchData_sqValueFacts
+    (periodSearch : PeriodSearchData)
+    (sqValue :
+      forall (k : Nat), 0 < k ->
+        Fin k -> LocalVertexIndex -> Fin k -> LocalVertexIndex -> Real)
+    (sqValue_eq_polynomial_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val ->
+            sqValue k hk i u j v =
+              CrossBlockSqTableSearch.indexedGeneratedSqPolynomial
+                periodSearch.toRoleHingedPeriodSearchFamily hk i u j v)
+    (sqValue_ge_one_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val -> 1 <= sqValue k hk i u j v) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  targetUpperConstructionFiveSixteen_nonConnector_of_periodSearchData_sqValueCertificate
+    periodSearch
+    { value := sqValue
+      value_eq_polynomial_lt := sqValue_eq_polynomial_lt
+      value_ge_one_lt := sqValue_ge_one_lt }
 
 /-- Arbitrary target from period-search data plus raw square-value facts.
 This is the compact checklist theorem for callers that have already assembled
@@ -602,12 +887,102 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_periodSearchData_sqValueF
       value_eq_polynomial_lt := sqValue_eq_polynomial_lt
       value_ge_one_lt := sqValue_ge_one_lt }
 
+/-- Arbitrary target from period-search data plus raw square-value facts,
+routed through generated periods. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_viaGeneratedPeriod_of_sqValueFacts
+    (periodSearch : PeriodSearchData)
+    (sqValue :
+      forall (k : Nat), 0 < k ->
+        Fin k -> LocalVertexIndex -> Fin k -> LocalVertexIndex -> Real)
+    (sqValue_eq_polynomial_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val ->
+            sqValue k hk i u j v =
+              CrossBlockSqTableSearch.indexedGeneratedSqPolynomial
+                periodSearch.toRoleHingedPeriodSearchFamily hk i u j v)
+    (sqValue_ge_one_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val -> 1 <= sqValue k hk i u j v) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_viaGeneratedPeriod_of_sqValueCertificate
+    periodSearch
+    { value := sqValue
+      value_eq_polynomial_lt := sqValue_eq_polynomial_lt
+      value_ge_one_lt := sqValue_ge_one_lt }
+
+/-- Arbitrary target from period-search data plus raw square-value facts,
+routed through reduced non-connector tables. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_nonConnector_of_sqValueFacts
+    (periodSearch : PeriodSearchData)
+    (sqValue :
+      forall (k : Nat), 0 < k ->
+        Fin k -> LocalVertexIndex -> Fin k -> LocalVertexIndex -> Real)
+    (sqValue_eq_polynomial_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val ->
+            sqValue k hk i u j v =
+              CrossBlockSqTableSearch.indexedGeneratedSqPolynomial
+                periodSearch.toRoleHingedPeriodSearchFamily hk i u j v)
+    (sqValue_ge_one_lt :
+      forall (k : Nat) (hk : 0 < k)
+        (i : Fin k) (u : LocalVertexIndex)
+        (j : Fin k) (v : LocalVertexIndex),
+          i.val < j.val -> 1 <= sqValue k hk i u j v) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_nonConnector_of_sqValueCertificate
+    periodSearch
+    { value := sqValue
+      value_eq_polynomial_lt := sqValue_eq_polynomial_lt
+      value_ge_one_lt := sqValue_ge_one_lt }
+
+/-- Top-level spelling of the exact-block bridge from the finite-certificate
+obligation summary to one exact Pach--Toth block count. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock
+    (O : Obligations)
+    (k : Nat) (hk : 0 < k) :
+    targetUpperConstructionFiveSixteenAt (16 * k) :=
+  O.targetUpperConstructionFiveSixteenAt_exactBlock k hk
+
+/-- Top-level spelling of the generated-period exact target bridge from the
+finite-certificate obligation summary. -/
+theorem targetUpperConstructionFiveSixteen_viaGeneratedPeriod
+    (O : Obligations) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  O.targetUpperConstructionFiveSixteen_viaGeneratedPeriod
+
+/-- Top-level spelling of the non-connector exact target bridge from the
+finite-certificate obligation summary. -/
+theorem targetUpperConstructionFiveSixteen_nonConnector
+    (O : Obligations) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  O.targetUpperConstructionFiveSixteen_nonConnector
+
 /-- Top-level spelling of the final bridge from the finite-certificate
 obligation summary to the arbitrary Pach--Toth target. -/
 theorem targetUpperConstructionFiveSixteenArbitrary
     (O : Obligations) :
     PachToth.targetUpperConstructionFiveSixteenArbitrary :=
   O.targetUpperConstructionFiveSixteenArbitrary
+
+/-- Top-level spelling of the generated-period arbitrary target bridge from
+the finite-certificate obligation summary. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_viaGeneratedPeriod
+    (O : Obligations) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  O.targetUpperConstructionFiveSixteenArbitrary_viaGeneratedPeriod
+
+/-- Top-level spelling of the non-connector arbitrary target bridge from the
+finite-certificate obligation summary. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_nonConnector
+    (O : Obligations) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  O.targetUpperConstructionFiveSixteenArbitrary_nonConnector
 
 end
 

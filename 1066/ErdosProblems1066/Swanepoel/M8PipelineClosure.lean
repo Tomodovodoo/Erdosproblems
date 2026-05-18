@@ -1,7 +1,10 @@
 import ErdosProblems1066.Swanepoel.BrokenLatticeMinimalFailure
+import ErdosProblems1066.Swanepoel.Figure8EuclideanFactsConcrete
+import ErdosProblems1066.Swanepoel.Figure9EuclideanFactsConcrete
 import ErdosProblems1066.Swanepoel.LateTriplesInterface
 import ErdosProblems1066.Swanepoel.Lemma10WindowGeometry
 import ErdosProblems1066.Swanepoel.M8ConstructionInterface
+import ErdosProblems1066.Swanepoel.NonconcaveArcConcrete
 
 set_option autoImplicit false
 
@@ -33,6 +36,7 @@ open Lemma10Inequalities
 open Lemma10WindowGeometry
 open LocalConfigurations
 open MinimalGraphFacts
+open NonconcaveArcConcrete
 
 universe u
 
@@ -186,6 +190,141 @@ theorem contradiction
   D.toConstructionData.contradiction
 
 end M8E22E23NoEarlyConstructionFields
+
+/-! ## Euclidean fact witness plus no-early route -/
+
+/-- Explicit Figure 8/Figure 9 Euclidean fact witnesses, together with
+no-early triples, for one fixed minimal cleared failure.
+
+This is the refined concrete interface just above the E22/E23 interface: the
+Figure 8 and Figure 9 facts are selected Euclidean witnesses, and this file
+uses their checked adapters to obtain the named E22/E23 inputs. -/
+structure M8EuclideanFactNoEarlyConstructionFields {n : Nat}
+    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) where
+  predicates : M8HonestLocalPredicates (unitDistanceLocalGraph C)
+  turn : Nat -> Real
+  turnBounds : M8TurnBounds turn
+  figure8EuclideanFacts :
+    Figure8EuclideanFactsConcrete.HonestFigure8SeparatedEuclideanFactWitnesses
+      predicates turn
+  figure9EuclideanFacts :
+    Figure9EuclideanFactsConcrete.HonestFigure9AdjacentLeftEuclideanFactWitnesses
+      predicates turn
+  noEarlyTripleEquality :
+    LateTriplesInterface.M8NoEarlyTripleEquality predicates.data
+
+namespace M8EuclideanFactNoEarlyConstructionFields
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {hmin : IsMinimalClearedFailure C}
+
+/-- Figure 8 Euclidean fact witnesses supply the E22 field. -/
+theorem figure8_E22
+    (D : M8EuclideanFactNoEarlyConstructionFields C hmin) :
+    HonestFigure8SeparatedWindowLowerE22 D.predicates D.turn :=
+  Figure8EuclideanFactsConcrete.honestFigure8SeparatedWindowLowerE22_of_euclideanFactWitnesses
+    D.figure8EuclideanFacts
+
+/-- Figure 9 Euclidean fact witnesses supply the E23 field. -/
+theorem figure9_E23
+    (D : M8EuclideanFactNoEarlyConstructionFields C hmin) :
+    HonestFigure9AdjacentWindowLowerE23 D.predicates D.turn :=
+  Figure9EuclideanFactsConcrete.honestE23_of_euclideanFactWitnesses
+    D.figure9EuclideanFacts
+
+/-- Forget the Euclidean witness layer to the direct E22/E23 plus no-early
+interface. -/
+def toE22E23NoEarlyConstructionFields
+    (D : M8EuclideanFactNoEarlyConstructionFields C hmin) :
+    M8E22E23NoEarlyConstructionFields C hmin where
+  predicates := D.predicates
+  turn := D.turn
+  turnBounds := D.turnBounds
+  figure8_E22 := D.figure8_E22
+  figure9_E23 := D.figure9_E23
+  noEarlyTripleEquality := D.noEarlyTripleEquality
+
+/-- A fixed minimal cleared failure with Euclidean Figure 8/Figure 9 witnesses
+and no-early fields is contradictory. -/
+theorem contradiction
+    (D : M8EuclideanFactNoEarlyConstructionFields C hmin) :
+    False :=
+  D.toE22E23NoEarlyConstructionFields.contradiction
+
+end M8EuclideanFactNoEarlyConstructionFields
+
+/-! ## Boundary-selected long-arc turn bounds plus Euclidean witnesses -/
+
+/-- Repackage a construction-interface turn-bound record as the turn-budget
+field used by this closure. -/
+def turnBounds_of_m8TurnBounds
+    (T : M8ConstructionInterface.M8TurnBounds) :
+    M8TurnBounds T.turn where
+  nonnegative := T.turn_nonnegative
+  total_lt_pi_div_three := T.total_turn_lt_pi_div_three
+
+/-- Boundary long-arc facts select the normalized M8 turn bounds used by this
+closure. -/
+def turnBounds_of_boundaryLongArcFacts
+    {n : Nat}
+    {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
+    {D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G}
+    (F : BoundaryLongArcFacts.{u} D) :
+    M8TurnBounds F.toM8TurnBounds.turn where
+  nonnegative := F.toM8TurnBounds_turn_nonnegative
+  total_lt_pi_div_three := F.toM8TurnBounds_totalTurn_lt_pi_div_three
+
+/-- Refined concrete inputs for one fixed minimal cleared failure: boundary
+long-arc facts select the turn bounds, Figure 8/Figure 9 Euclidean witnesses
+give E22/E23, and no-early triples gives late triples. -/
+structure M8BoundaryLongArcEuclideanNoEarlyConstructionFields {n : Nat}
+    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) where
+  boundaryGraph : FaceReduction.CanonicalStraightLineUnitDistanceGraph n
+  planarBoundary :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} boundaryGraph
+  boundaryLongArcFacts :
+    BoundaryLongArcFacts.{u} planarBoundary
+  predicates : M8HonestLocalPredicates (unitDistanceLocalGraph C)
+  figure8EuclideanFacts :
+    Figure8EuclideanFactsConcrete.HonestFigure8SeparatedEuclideanFactWitnesses
+      predicates boundaryLongArcFacts.toM8TurnBounds.turn
+  figure9EuclideanFacts :
+    Figure9EuclideanFactsConcrete.HonestFigure9AdjacentLeftEuclideanFactWitnesses
+      predicates boundaryLongArcFacts.toM8TurnBounds.turn
+  noEarlyTripleEquality :
+    LateTriplesInterface.M8NoEarlyTripleEquality predicates.data
+
+namespace M8BoundaryLongArcEuclideanNoEarlyConstructionFields
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {hmin : IsMinimalClearedFailure C}
+
+/-- The turn bounds selected by the finite boundary long-arc count gap. -/
+def turnBounds
+    (D : M8BoundaryLongArcEuclideanNoEarlyConstructionFields C hmin) :
+    M8TurnBounds D.boundaryLongArcFacts.toM8TurnBounds.turn :=
+  turnBounds_of_boundaryLongArcFacts D.boundaryLongArcFacts
+
+/-- Forget boundary long-arc selection to the Euclidean-witness/no-early
+interface. -/
+def toEuclideanFactNoEarlyConstructionFields
+    (D : M8BoundaryLongArcEuclideanNoEarlyConstructionFields C hmin) :
+    M8EuclideanFactNoEarlyConstructionFields C hmin where
+  predicates := D.predicates
+  turn := D.boundaryLongArcFacts.toM8TurnBounds.turn
+  turnBounds := D.turnBounds
+  figure8EuclideanFacts := D.figure8EuclideanFacts
+  figure9EuclideanFacts := D.figure9EuclideanFacts
+  noEarlyTripleEquality := D.noEarlyTripleEquality
+
+/-- A fixed minimal cleared failure with boundary-selected long-arc turn bounds,
+Euclidean Figure 8/Figure 9 witnesses, and no-early fields is contradictory. -/
+theorem contradiction
+    (D : M8BoundaryLongArcEuclideanNoEarlyConstructionFields C hmin) :
+    False :=
+  D.toEuclideanFactNoEarlyConstructionFields.contradiction
+
+end M8BoundaryLongArcEuclideanNoEarlyConstructionFields
 
 /-! ## Window geometry plus no-early route -/
 
@@ -347,6 +486,65 @@ theorem no_minimalClearedFailure_of_E22E23NoEarlyConstructionEliminator
       Not (IsMinimalClearedFailure C) := by
   exact no_minimalClearedFailure_of_m8ConstructionEliminator
     (m8ConstructionEliminator_of_E22E23NoEarlyConstructionEliminator hbuild)
+
+/-- A uniform eliminator that supplies Euclidean Figure 8/Figure 9 witness
+fields plus no-early triples for every minimal cleared failure. -/
+def MinimalFailureM8EuclideanFactNoEarlyConstructionEliminator : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C),
+      Nonempty (M8EuclideanFactNoEarlyConstructionFields C hmin)
+
+/-- Euclidean Figure 8/Figure 9 witnesses plus no-early fields can be viewed
+as direct E22/E23 plus no-early fields. -/
+theorem E22E23NoEarlyConstructionEliminator_of_euclideanFactNoEarlyConstructionEliminator
+    (hbuild : MinimalFailureM8EuclideanFactNoEarlyConstructionEliminator) :
+    MinimalFailureM8E22E23NoEarlyConstructionEliminator := by
+  intro n C hmin
+  cases hbuild C hmin with
+  | intro D =>
+      exact Nonempty.intro D.toE22E23NoEarlyConstructionFields
+
+/-- Euclidean Figure 8/Figure 9 witnesses plus no-early fields rule out every
+minimal cleared failure. -/
+theorem no_minimalClearedFailure_of_euclideanFactNoEarlyConstructionEliminator
+    (hbuild : MinimalFailureM8EuclideanFactNoEarlyConstructionEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) := by
+  exact no_minimalClearedFailure_of_E22E23NoEarlyConstructionEliminator
+    (E22E23NoEarlyConstructionEliminator_of_euclideanFactNoEarlyConstructionEliminator
+      hbuild)
+
+/-- A uniform eliminator that supplies boundary-selected long-arc turn bounds,
+Euclidean Figure 8/Figure 9 witness fields, and no-early triples for every
+minimal cleared failure. -/
+def MinimalFailureM8BoundaryLongArcEuclideanNoEarlyConstructionEliminator :
+    Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C),
+      Nonempty
+        (M8BoundaryLongArcEuclideanNoEarlyConstructionFields.{u, u} C hmin)
+
+/-- Boundary-selected long-arc plus Euclidean witness fields can be viewed as
+Euclidean Figure 8/Figure 9 witness plus no-early fields. -/
+theorem euclideanFactNoEarlyEliminator_of_boundaryLongArcEliminator
+    (hbuild :
+      MinimalFailureM8BoundaryLongArcEuclideanNoEarlyConstructionEliminator) :
+    MinimalFailureM8EuclideanFactNoEarlyConstructionEliminator := by
+  intro n C hmin
+  cases hbuild C hmin with
+  | intro D =>
+      exact Nonempty.intro D.toEuclideanFactNoEarlyConstructionFields
+
+/-- Boundary-selected long-arc turn bounds, Euclidean Figure 8/Figure 9
+witnesses, and no-early fields rule out every minimal cleared failure. -/
+theorem no_minimalClearedFailure_of_boundaryLongArcEuclideanNoEarlyEliminator
+    (hbuild :
+      MinimalFailureM8BoundaryLongArcEuclideanNoEarlyConstructionEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) := by
+  exact no_minimalClearedFailure_of_euclideanFactNoEarlyConstructionEliminator
+    (euclideanFactNoEarlyEliminator_of_boundaryLongArcEliminator
+      hbuild)
 
 /-- A uniform eliminator that supplies window geometry plus no-early fields
 for every minimal cleared failure. -/

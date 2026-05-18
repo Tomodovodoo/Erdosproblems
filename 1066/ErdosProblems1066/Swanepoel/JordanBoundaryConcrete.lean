@@ -24,6 +24,7 @@ namespace JordanBoundaryConcrete
 noncomputable section
 
 variable {n : Nat}
+universe u
 
 /-- The canonical straight-line unit-distance graph attached to a `UDConfig`. -/
 abbrev canonicalGraph (C : _root_.UDConfig n) :
@@ -445,6 +446,14 @@ def ofExtractionData
   outerFace_isOuter := D.outerFace_isOuter
   outerEnclosure := D.outerEnclosure
 
+/-- Repackage an already checked outer-boundary core as concrete topology data. -/
+def ofCore (P : OuterBoundaryCore (canonicalGraph C)) :
+    MissingTopologyFacts C where
+  faceBoundary := P.faceBoundary
+  outerFace := P.outerFace
+  outerFace_isOuter := P.outerFace_isOuter
+  outerEnclosure := P.outerEnclosure
+
 @[simp]
 theorem ofExtractionData_faceBoundary
     (D : JordanBoundaryExtraction.Data (canonicalGraph C)) :
@@ -467,6 +476,29 @@ theorem ofExtractionData_outerFace_isOuter
 theorem ofExtractionData_outerEnclosure
     (D : JordanBoundaryExtraction.Data (canonicalGraph C)) :
     (ofExtractionData D).outerEnclosure = D.outerEnclosure :=
+  rfl
+
+@[simp]
+theorem ofCore_faceBoundary
+    (P : OuterBoundaryCore (canonicalGraph C)) :
+    (ofCore P).faceBoundary = P.faceBoundary :=
+  rfl
+
+@[simp]
+theorem ofCore_outerFace
+    (P : OuterBoundaryCore (canonicalGraph C)) :
+    (ofCore P).outerFace = P.outerFace :=
+  rfl
+
+theorem ofCore_outerFace_isOuter
+    (P : OuterBoundaryCore (canonicalGraph C)) :
+    (ofCore P).faceBoundary.IsOuterFace (ofCore P).outerFace :=
+  P.outerFace_isOuter
+
+@[simp]
+theorem ofCore_outerEnclosure
+    (P : OuterBoundaryCore (canonicalGraph C)) :
+    (ofCore P).outerEnclosure = P.outerEnclosure :=
   rfl
 
 @[simp]
@@ -514,6 +546,27 @@ theorem toCore_outerFace_isOuter (T : MissingTopologyFacts C) :
 @[simp]
 theorem toCore_outerEnclosure (T : MissingTopologyFacts C) :
     T.toCore.outerEnclosure = T.outerEnclosure :=
+  rfl
+
+@[simp]
+theorem toCore_ofCore
+    (P : OuterBoundaryCore (canonicalGraph C)) :
+    (ofCore P).toCore = P := by
+  cases P
+  rfl
+
+@[simp]
+theorem ofCore_toCore
+    (T : MissingTopologyFacts C) :
+    ofCore T.toCore = T := by
+  cases T
+  rfl
+
+@[simp]
+theorem ofExtractionData_eq_ofCore_toCore
+    (D : JordanBoundaryExtraction.Data (canonicalGraph C)) :
+    ofExtractionData D = ofCore D.toCore := by
+  cases D
   rfl
 
 /-! ## Projections to the planar interface -/
@@ -690,6 +743,486 @@ theorem finalBoundaryNegativeCountInequality
     counts.negativeCount + counts.B + 6 <= counts.d3 :=
   T.toExtractionData.finalBoundaryNegativeCountInequality
     counts geometricAngleSum hforced hpolygon
+
+/-! ## Full planar-boundary consumer projections -/
+
+/--
+Extend the concrete topology facts by the still-explicit angle and subpolygon
+data to the full planar-boundary package consumed downstream.
+-/
+def toPlanarBoundaryData
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} (canonicalGraph C) where
+  core := T.toCore
+  outerAngleBounds := outerAngleBounds
+  Subpolygon := Subpolygon
+  subpolygonData := subpolygonData
+
+@[simp]
+theorem toPlanarBoundaryData_core
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).core = T.toCore :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_faceBoundary
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).faceBoundary =
+        T.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_planarFaceBoundary
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).planarFaceBoundary =
+        T.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerFace
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).outerFace =
+        T.outerFace :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerCycle
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).outerCycle =
+        T.outerCycle :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerBoundaryCounts
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).outerBoundaryCounts =
+        outerAngleBounds.counts :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_Subpolygon
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).Subpolygon =
+        Subpolygon :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_subpolygonData
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C))
+    (S : Subpolygon) :
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).subpolygonData S =
+        subpolygonData S :=
+  rfl
+
+/-- The assembled face-counting bridge input consumed by the planar closure. -/
+def toFaceCountingBridgeData
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryClosure.FaceCountingBridgeData.{u} (canonicalGraph C) :=
+  (T.toPlanarBoundaryData
+    outerAngleBounds Subpolygon subpolygonData).toFaceCountingBridgeData
+
+@[simp]
+theorem toFaceCountingBridgeData_faceBoundary
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toFaceCountingBridgeData
+      outerAngleBounds Subpolygon subpolygonData).faceBoundary =
+        T.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_planarFaceBoundary
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toFaceCountingBridgeData
+      outerAngleBounds Subpolygon subpolygonData).planarFaceBoundary =
+        T.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_outerCounts
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toFaceCountingBridgeData
+      outerAngleBounds Subpolygon subpolygonData).outerCounts =
+        outerAngleBounds.counts :=
+  rfl
+
+/-- Checked counting conclusions exposed in the bridge consumer's shape. -/
+theorem toFaceCountingBridgeData_countingTheorems
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryClosure.FaceCountingBridgeData.CountingTheorems
+      (T.toFaceCountingBridgeData outerAngleBounds Subpolygon subpolygonData) :=
+  (T.toFaceCountingBridgeData
+    outerAngleBounds Subpolygon subpolygonData).countingTheorems
+
+/-- Concrete face-counting data exposed by `PlanarBoundaryFinal`. -/
+def concreteFaceCountingData
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryFinal.PlanarBoundaryData.ConcreteFaceCountingData
+      (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData) :=
+  PlanarBoundaryFinal.PlanarBoundaryData.concreteFaceCountingData
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData)
+
+@[simp]
+theorem concreteFaceCountingData_faceBoundary
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.concreteFaceCountingData
+      outerAngleBounds Subpolygon subpolygonData).faceBoundary =
+        T.faceBoundary :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_planarFaceBoundary
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.concreteFaceCountingData
+      outerAngleBounds Subpolygon subpolygonData).planarFaceBoundary =
+        T.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundaryCounts
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.concreteFaceCountingData
+      outerAngleBounds Subpolygon subpolygonData).boundaryCounts =
+        outerAngleBounds.counts :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundaryCountHypotheses
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.concreteFaceCountingData
+      outerAngleBounds Subpolygon subpolygonData).boundaryCountHypotheses =
+        (T.toPlanarBoundaryData
+          outerAngleBounds Subpolygon subpolygonData).canonicalBoundaryCountHypotheses :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_Subpolygon
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.concreteFaceCountingData
+      outerAngleBounds Subpolygon subpolygonData).Subpolygon =
+        Subpolygon :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_subpolygonCounts
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C))
+    (S : Subpolygon) :
+    (T.concreteFaceCountingData
+      outerAngleBounds Subpolygon subpolygonData).subpolygonCounts S =
+        (subpolygonData S).counts :=
+  rfl
+
+/-- The full planar-boundary theorem summary obtained from concrete topology. -/
+theorem toPlanarBoundaryData_faceCountingTheorems
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryClosure.PlanarBoundaryData.FaceCountingTheorems
+      (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData) :=
+  (T.toPlanarBoundaryData
+    outerAngleBounds Subpolygon subpolygonData).faceCountingTheorems
+
+/-- E12 after projecting the concrete topology facts to planar-boundary data. -/
+theorem toPlanarBoundaryData_boundaryAngleCount
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    outerAngleBounds.counts.d5 + 2 * outerAngleBounds.counts.d6 +
+        outerAngleBounds.counts.b + outerAngleBounds.counts.B + 6 <=
+      outerAngleBounds.counts.d3 := by
+  simpa using
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).boundaryAngleCountInequality
+
+/-- Negative-element E12 after projecting to planar-boundary data. -/
+theorem toPlanarBoundaryData_boundaryNegativeCount
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    outerAngleBounds.counts.negativeCount + outerAngleBounds.counts.B + 6 <=
+      outerAngleBounds.counts.d3 := by
+  simpa using
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).boundaryNegativeCountInequality
+
+/-- Low-degree subpolygon conclusion after projecting to planar-boundary data. -/
+theorem toPlanarBoundaryData_subpolygonLowDegree
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C))
+    (S : Subpolygon) :
+    6 <= 2 * (subpolygonData S).counts.D2 +
+      (subpolygonData S).counts.D3 := by
+  simpa using
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).subpolygonLowDegreeInequality S
+
+/-- High-degree-slack subpolygon conclusion after planar-boundary projection. -/
+theorem toPlanarBoundaryData_subpolygonLowDegreeWithHighDegreeSlack
+    (T : MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C))
+    (S : Subpolygon) :
+    (subpolygonData S).counts.D5 +
+        2 * (subpolygonData S).counts.D6 + 6 <=
+      2 * (subpolygonData S).counts.D2 +
+        (subpolygonData S).counts.D3 := by
+  simpa using
+    (T.toPlanarBoundaryData
+      outerAngleBounds Subpolygon subpolygonData).subpolygonLowDegreeWithHighDegreeSlack S
+
+/-! ## Honest remaining construction statement -/
+
+/--
+The minimal topology construction still missing for the canonical unit-distance
+graph of `C`.
+
+All graph-theoretic input in this file is already concrete: `canonicalGraph C`
+is built from `C`, and noncrossing of its unit edges is proved by
+`canonicalGraph_pairwiseNoncrossing`.  What remains is exactly the existence of
+finite face-boundary data, a selected outer face, and enclosure predicates for
+that selected face.
+-/
+def RemainingTopologyTheorem (C : _root_.UDConfig n) : Prop :=
+  Nonempty (MissingTopologyFacts.{0} C)
+
+/--
+Equivalent split form of the remaining theorem: first construct the
+face-boundary surface and selected outer face, then construct the enclosure
+data over that selected face.
+-/
+theorem remainingTopologyTheorem_iff_split (C : _root_.UDConfig n) :
+    RemainingTopologyTheorem C <->
+      Exists fun D : MissingOuterFaceData.{0} C =>
+        Nonempty (MissingEnclosureData.{0} D) := by
+  constructor
+  · rintro ⟨T⟩
+    exact ⟨T.toOuterFaceData, ⟨T.toEnclosureData⟩⟩
+  · rintro ⟨D, ⟨E⟩⟩
+    exact ⟨MissingTopologyFacts.ofEnclosureData D E⟩
+
+/--
+Equivalent extraction-facade form of the remaining theorem.  This confirms that
+`MissingTopologyFacts` adds no extra assumptions beyond the existing
+`JordanBoundaryExtraction.Data` record.
+-/
+theorem remainingTopologyTheorem_iff_extractionData
+    (C : _root_.UDConfig n) :
+    RemainingTopologyTheorem C <->
+      Nonempty (JordanBoundaryExtraction.Data.{0} (canonicalGraph C)) := by
+  constructor
+  · rintro ⟨T⟩
+    exact ⟨T.toExtractionData⟩
+  · rintro ⟨D⟩
+    exact ⟨MissingTopologyFacts.ofExtractionData D⟩
+
+/--
+Equivalent checked-core form of the remaining theorem.  Thus the honest
+construction target can also be read as: construct an `OuterBoundaryCore` for
+the canonical graph attached to `C`.
+-/
+theorem remainingTopologyTheorem_iff_outerBoundaryCore
+    (C : _root_.UDConfig n) :
+    RemainingTopologyTheorem C <->
+      Nonempty (OuterBoundaryCore.{0} (canonicalGraph C)) := by
+  constructor
+  · rintro ⟨T⟩
+    exact ⟨T.toCore⟩
+  · rintro ⟨P⟩
+    exact ⟨MissingTopologyFacts.ofCore P⟩
+
+/--
+If the remaining topology construction is supplied, then any already explicit
+angle and subpolygon data assemble into the full planar-boundary consumer.
+-/
+theorem remainingTopologyTheorem_to_planarBoundaryData
+    {C : _root_.UDConfig n}
+    (h : RemainingTopologyTheorem C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    Nonempty (PlanarBoundaryClosure.PlanarBoundaryData.{u, 0}
+      (canonicalGraph C)) := by
+  rcases h with ⟨T⟩
+  exact ⟨T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData⟩
+
+/--
+Conversely, any full planar-boundary consumer for the canonical graph already
+contains enough topology/core data to discharge `RemainingTopologyTheorem`.
+-/
+theorem remainingTopologyTheorem_of_planarBoundaryData
+    {C : _root_.UDConfig n}
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u, 0} (canonicalGraph C)) :
+    RemainingTopologyTheorem C :=
+  ⟨MissingTopologyFacts.ofCore D.core⟩
+
+/--
+The global paper-facing construction theorem that is not supplied by the
+current Mathlib/project topology stack.
+
+This is intentionally a proposition, not a global assumption or declaration
+with a fake witness.  Proving it would close the concrete outer-face/Jordan
+extraction for every `UDConfig`; the lemmas above show the exact checked
+records it must produce.
+-/
+def RemainingTopologyConstructionTheorem : Prop :=
+  forall (n : Nat) (C : _root_.UDConfig n), RemainingTopologyTheorem C
 
 end MissingTopologyFacts
 

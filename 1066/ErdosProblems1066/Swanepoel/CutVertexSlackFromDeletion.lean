@@ -188,6 +188,16 @@ def CutVertexDeletionSlackFact {n : Nat} (C : _root_.UDConfig n) : Prop :=
   forall P : CutVertexPartition C,
     Nonempty (CutVertexPartition.CutVertexSlackGluingData P)
 
+/-- If there are no supplied cut-vertex partitions, the deletion slack fact is
+vacuously true.  This isolates the exact blocker for proving the deletion
+slack fact from minimality alone: one must first extract no-cut-vertex data,
+or else supply real pay-for-cut witnesses for every partition. -/
+theorem deletionSlackFact_of_noCutVertex
+    (hno : CutVertexInterface.NoCutVertex C) :
+    CutVertexDeletionSlackFact C := by
+  intro P
+  exact False.elim (hno (Nonempty.intro P))
+
 /-- If the isolated pay-for-cut arithmetic is supplied for the side-specific
 minimality witnesses, the original deletion slack fact follows. -/
 theorem deletionSlackFact_of_minimalFailure_missingArithmetic
@@ -249,6 +259,18 @@ theorem noCutVertex_of_minimalFailure_deletionSlackFact_core
     CutVertexInterface.NoCutVertex C := by
   rintro ⟨P⟩
   exact deletionSlackFact_false_of_minimalFailure_partition hmin hslack P
+
+/-- In a minimal failure, deletion slack is equivalent to no supplied
+cut-vertex partition.  The forward direction is the usual contradiction with
+minimality; the reverse direction is vacuous. -/
+theorem deletionSlackFact_iff_noCutVertex_of_minimalFailure
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
+    CutVertexDeletionSlackFact C <-> CutVertexInterface.NoCutVertex C := by
+  constructor
+  case mp =>
+    exact noCutVertex_of_minimalFailure_deletionSlackFact_core hmin
+  case mpr =>
+    exact deletionSlackFact_of_noCutVertex
 
 /-- Direct no-cut route from the missing arithmetic, showing that this
 arithmetic is already as strong as the remaining no-cut input when paired with

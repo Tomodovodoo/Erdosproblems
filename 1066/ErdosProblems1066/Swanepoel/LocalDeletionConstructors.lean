@@ -23,7 +23,7 @@ open MinimalGraphFacts
 
 noncomputable section
 
-/-- A generic eliminator saying every minimal cleared failure admits a certified
+/-- A generic eliminator saying every minimal cleared failure has a certified
 degree-controlled local deletion. -/
 def MinimalFailureDegreeDeletionEliminator : Prop :=
   forall {n : Nat} (C : _root_.UDConfig n),
@@ -32,7 +32,7 @@ def MinimalFailureDegreeDeletionEliminator : Prop :=
         Exists fun Csmall : _root_.UDConfig nSmall =>
           Nonempty (DegreeLocalDeletionCertificate C Csmall)
 
-/-- A generic eliminator saying every minimal cleared failure admits honest
+/-- A generic eliminator saying every minimal cleared failure has honest
 local closed-neighborhood deletion data. -/
 def MinimalFailureLocalClosedNeighborhoodDeletionEliminator : Prop :=
   forall {n : Nat} (C : _root_.UDConfig n),
@@ -109,7 +109,7 @@ theorem hasCleared_of_degreeDeletionEliminator
     (hdel : MinimalFailureDegreeDeletionEliminator) :
     forall (n : Nat) (C : _root_.UDConfig n),
       HasClearedEightThirtyOneIndependentSet C := by
-  exact hasCleared_of_no_minimalClearedFailure
+  exact MinimalFailureClosure.hasCleared_of_no_minimalClearedFailure
     (no_minimalClearedFailure_of_degreeDeletionEliminator hdel)
 
 /-- Local closed-neighborhood deletion data proves the cleared `8 / 31`

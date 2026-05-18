@@ -1,10 +1,15 @@
 import ErdosProblems1066.Swanepoel.CutVertexFinal
+import ErdosProblems1066.Swanepoel.BoundarySpineFiniteCertificate
+import ErdosProblems1066.Swanepoel.Lemma8ExistenceConcrete
 import ErdosProblems1066.Swanepoel.PlanarBoundaryFinal
 import ErdosProblems1066.Swanepoel.M8BoundaryLabelsConcrete
 import ErdosProblems1066.Swanepoel.M8TurnBoundsConcrete
 import ErdosProblems1066.Swanepoel.M8LateTriplesConcrete
 import ErdosProblems1066.Swanepoel.M8WindowGeometryConcrete
 import ErdosProblems1066.Swanepoel.M8SeparatedConstructionConcrete
+import ErdosProblems1066.Swanepoel.M8TurnWindowNoEarlyFinal
+import ErdosProblems1066.Swanepoel.NoEarlyTripleFromLemma9
+import ErdosProblems1066.Swanepoel.NonconcaveArcAngleFacts
 
 set_option autoImplicit false
 
@@ -25,15 +30,23 @@ namespace ErdosProblems1066
 namespace Swanepoel
 namespace MinimalFailureComponentPackage
 
+open AngleContainmentInterface
+open BoundarySpineFiniteCertificate
 open CutVertexFinal
+open Lemma8ExistenceConcrete
+open Lemma10Bridge
 open M8BoundaryLabelsConcrete
 open M8ConstructionInterface
 open M8LabelsFromBoundaryInterface
 open M8LateTriplesFromNoEarly
 open M8SeparatedConstructionConcrete
 open M8TurnBoundsFromArc
+open M8TurnWindowNoEarlyFinal
 open M8WindowGeometryFromContainment
 open MinimalGraphFacts
+open NoEarlyTripleConcrete
+open NoEarlyTripleFromLemma9
+open NonconcaveArcAngleFacts
 
 universe u
 
@@ -218,6 +231,181 @@ theorem contradiction
   P.toM8SeparatedConstructionComponentPackage.contradiction
 
 end MinimalFailureM8PaperFacts
+
+/-! ## Refined source-facing input row -/
+
+/--
+The refined remaining input row for one fixed minimal cleared failure.
+
+This is the shortest source-facing package currently routed in this file:
+positive cardinality, remaining no-cut slack, planar boundary data, a finite
+boundary-spine certificate, Lemma 8 existence data, long-arc angle facts,
+Lemma 9 late facts, and Figure 8/Figure 9 angle containment.
+-/
+structure MinimalFailureM8RefinedInputRow
+    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) where
+  positiveCard : 0 < n
+  remainingNoCutSlack : RemainingNoCutSlackFact C
+  planarBoundary :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} (CanonicalGraph C)
+  spineCertificate : M8FinitePQSpineCertificate planarBoundary
+  lemma8Existence :
+    M8Lemma8MissingExistenceConditions
+      (spineCertificate.toM8BoundarySpine
+        ({ positiveCard := positiveCard
+           remainingSlack := remainingNoCutSlack } :
+          MinimalFailureCutVertexFacts C hmin).preconnectedNoCut hmin)
+  arcAngleFacts : NonconcaveArcGeometricAngleFacts
+  lemma9FiveStartLateFacts :
+    M8Lemma9FiveStartLateFacts
+      (M8BoundaryLabelPackage.ofMinimalClearedFailure
+        planarBoundary.core
+        ({ positiveCard := positiveCard
+           remainingSlack := remainingNoCutSlack } :
+          MinimalFailureCutVertexFacts C hmin).preconnectedNoCut hmin
+        (spineCertificate.toM8BoundarySpine
+          ({ positiveCard := positiveCard
+             remainingSlack := remainingNoCutSlack } :
+            MinimalFailureCutVertexFacts C hmin).preconnectedNoCut hmin)
+        lemma8Existence.toLemma8Combinatorics).toM8LocalLabels.predicates.data
+  angleContainment :
+    AngleContainmentBridges
+      (M8BrokenLatticeGood
+        (M8BoundaryLabelPackage.ofMinimalClearedFailure
+          planarBoundary.core
+          ({ positiveCard := positiveCard
+             remainingSlack := remainingNoCutSlack } :
+            MinimalFailureCutVertexFacts C hmin).preconnectedNoCut hmin
+          (spineCertificate.toM8BoundarySpine
+            ({ positiveCard := positiveCard
+               remainingSlack := remainingNoCutSlack } :
+              MinimalFailureCutVertexFacts C hmin).preconnectedNoCut hmin)
+          lemma8Existence.toLemma8Combinatorics).toM8LocalLabels.predicates.data)
+      arcAngleFacts.toNonconcaveArcTurnData.toM8TurnBounds.turn
+
+namespace MinimalFailureM8RefinedInputRow
+
+variable {C : _root_.UDConfig n} {hmin : IsMinimalClearedFailure C}
+
+/-- Cut-vertex facts assembled from the positive-cardinality and no-cut slack
+fields. -/
+def cutVertex
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    MinimalFailureCutVertexFacts C hmin where
+  positiveCard := P.positiveCard
+  remainingSlack := P.remainingNoCutSlack
+
+/-- Boundary spine produced by the finite `p/q` spine certificate. -/
+def spine
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8BoundarySpine
+      (M8BoundaryCutDegreeContext.of_minimalClearedFailure
+        P.planarBoundary.core P.cutVertex.preconnectedNoCut hmin) :=
+  P.spineCertificate.toM8BoundarySpine
+    P.cutVertex.preconnectedNoCut hmin
+
+/-- Lemma 8 combinatorics produced from the explicit existence package. -/
+def lemma8
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8Lemma8Combinatorics P.spine :=
+  P.lemma8Existence.toLemma8Combinatorics
+
+/-- Boundary labels determined by the refined boundary and Lemma 8 packages. -/
+def boundaryLabels
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8BoundaryLabelPackage C :=
+  M8BoundaryLabelPackage.ofMinimalClearedFailure
+    P.planarBoundary.core P.cutVertex.preconnectedNoCut hmin
+    P.spine P.lemma8
+
+/-- Local labels determined by the refined boundary package. -/
+def localLabels
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8LocalLabels C :=
+  P.boundaryLabels.toM8LocalLabels
+
+/-- Nonconcave-arc turn data obtained from the long-arc angle facts. -/
+def arc
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    NonconcaveArcTurnData :=
+  P.arcAngleFacts.toNonconcaveArcTurnData
+
+/-- The construction turn bounds obtained from the long-arc route. -/
+def turnBounds
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8TurnBounds :=
+  P.arc.toM8TurnBounds
+
+/-- Concrete no-early-triple exclusions obtained from the Lemma 9 late facts.
+-/
+def noEarlyTripleEquality
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8ConcreteNoEarlyTripleEquality P.localLabels.predicates.data :=
+  P.lemma9FiveStartLateFacts.toConcreteNoEarlyTripleEquality
+
+/-- The construction-interface no-early package obtained from Lemma 9. -/
+def noEarlyTriples
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8ConstructionNoEarlyTriples P.localLabels :=
+  constructionNoEarlyTriples_of_concreteNoEarlyTripleEquality
+    P.noEarlyTripleEquality
+
+/-- Figure 8/Figure 9 containment packaged for the construction interface. -/
+def windowContainment
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8WindowContainment P.localLabels P.turnBounds :=
+  M8WindowContainment.ofAngleContainmentBridges P.angleContainment
+
+/-- The explicit containment bridge as the existing arc-plus-containment
+package. -/
+def toM8ArcContainmentData
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8ArcContainmentData P.localLabels where
+  arc := P.arc
+  containment := P.angleContainment
+
+/-- Adapter to the fixed turn/window/no-early package. -/
+def toM8TurnWindowNoEarlyPackage
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8TurnWindowNoEarlyPackage C hmin where
+  localLabels := P.localLabels
+  arc := P.arc
+  noEarlyTriples := P.noEarlyTripleEquality
+  windowContainment := P.windowContainment
+
+/-- Adapter to the existing component package consumed by the separated
+construction aggregator. -/
+def toMinimalFailureM8PaperFacts
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    MinimalFailureM8PaperFacts C hmin where
+  cutVertex := P.cutVertex
+  planarBoundary := P.planarBoundary
+  spine := P.spine
+  lemma8 := P.lemma8
+  arc := P.arc
+  noEarlyTriples := P.noEarlyTriples
+  windowContainment := P.windowContainment
+
+/-- Adapter directly to the separated component package. -/
+def toM8SeparatedConstructionComponentPackage
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8SeparatedConstructionComponentPackage C hmin :=
+  P.toMinimalFailureM8PaperFacts.toM8SeparatedConstructionComponentPackage
+
+/-- Adapter directly to the separated fields. -/
+def toM8SeparatedConstructionFields
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    M8PipelineClosure.M8SeparatedConstructionFields C hmin :=
+  P.toMinimalFailureM8PaperFacts.toM8SeparatedConstructionFields
+
+/-- A fixed minimal failure equipped with the refined row is contradictory
+through the checked separated-construction closure. -/
+theorem contradiction
+    (P : MinimalFailureM8RefinedInputRow C hmin) :
+    False :=
+  P.toMinimalFailureM8PaperFacts.contradiction
+
+end MinimalFailureM8RefinedInputRow
 
 /-! ## Uniform conditional package -/
 

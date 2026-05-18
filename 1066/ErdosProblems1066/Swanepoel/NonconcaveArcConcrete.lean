@@ -801,6 +801,181 @@ theorem toM8TurnBounds_m8ThirteenTurnSum_lt_pi_div_three
 
 end NonconcaveArcBoundaryBudgetData
 
+/-! ## Finite long-arc selection from boundary facts -/
+
+/--
+Finite boundary long-arc facts sufficient to select a nonconcave long arc and
+turn it into boundary-budget data.
+
+The count inequality is the final combinatorial shape of Lemma 5: there are
+strictly more long arcs than concave long arcs.  The `concave_iff` field ties
+that finite predicate to the actual turn sum, so the selected nonconcave arc
+gets a concrete budget, namely its own total turn.
+-/
+structure BoundaryLongArcFacts
+    {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) where
+  LongArc : Type u
+  longArcFintype : Fintype LongArc
+  concave : LongArc -> Prop
+  concaveLongArcFintype : Fintype {a : LongArc // concave a}
+  concaveLongArcCount_lt_longArcCount :
+    @Fintype.card {a : LongArc // concave a} concaveLongArcFintype <
+      @Fintype.card LongArc longArcFintype
+  rawTurn : LongArc -> Nat -> Real
+  rawTurn_nonnegative_on_arc :
+    forall a : LongArc,
+      forall k : Nat, Membership.mem turnIndexSet k -> 0 <= rawTurn a k
+  concave_iff :
+    forall a : LongArc, concave a <-> Real.pi / 3 <= totalTurn (rawTurn a)
+
+namespace BoundaryLongArcFacts
+
+variable {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
+variable {D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G}
+
+/-- The count gap produces an actual long arc which is not concave. -/
+theorem exists_nonconcave_longArc
+    (F : BoundaryLongArcFacts.{u} D) :
+    Exists fun a : F.LongArc => Not (F.concave a) := by
+  letI : Fintype F.LongArc := F.longArcFintype
+  letI : Fintype {a : F.LongArc // F.concave a} :=
+    F.concaveLongArcFintype
+  by_contra hnone
+  have hall : forall a : F.LongArc, F.concave a := by
+    intro a
+    by_contra ha
+    exact hnone (Exists.intro a ha)
+  let e : F.LongArc ≃ {a : F.LongArc // F.concave a} :=
+    { toFun := fun a => ⟨a, hall a⟩
+      invFun := fun a => a.1
+      left_inv := fun _ => rfl
+      right_inv := by
+        intro a
+        ext
+        rfl }
+  have hcard :
+      Fintype.card F.LongArc =
+        Fintype.card {a : F.LongArc // F.concave a} :=
+    Fintype.card_congr e
+  have hlt : Fintype.card F.LongArc < Fintype.card F.LongArc := by
+    simpa [hcard] using F.concaveLongArcCount_lt_longArcCount
+  exact (Nat.lt_irrefl _) hlt
+
+/-- A nonconcave long arc has total turn below `pi / 3`. -/
+theorem totalTurn_lt_pi_div_three_of_not_concave
+    (F : BoundaryLongArcFacts.{u} D) {a : F.LongArc}
+    (ha : Not (F.concave a)) :
+    totalTurn (F.rawTurn a) < Real.pi / 3 := by
+  have hnot :
+      Not (Real.pi / 3 <= totalTurn (F.rawTurn a)) := by
+    intro hle
+    exact ha ((F.concave_iff a).2 hle)
+  exact lt_of_not_ge hnot
+
+/-- The concrete boundary angle budget attached to a nonconcave long arc. -/
+def boundaryAngleBudgetOfNonconcave
+    (F : BoundaryLongArcFacts.{u} D) {a : F.LongArc}
+    (ha : Not (F.concave a)) :
+    BoundaryArcAngleBudget D (F.rawTurn a) where
+  geometricAngleBudget := totalTurn (F.rawTurn a)
+  totalTurn_le_geometricAngleBudget := le_rfl
+  geometricAngleBudget_lt_pi_div_three :=
+    F.totalTurn_lt_pi_div_three_of_not_concave ha
+
+@[simp] theorem boundaryAngleBudgetOfNonconcave_geometricAngleBudget
+    (F : BoundaryLongArcFacts.{u} D) {a : F.LongArc}
+    (ha : Not (F.concave a)) :
+    (F.boundaryAngleBudgetOfNonconcave ha).geometricAngleBudget =
+      totalTurn (F.rawTurn a) :=
+  rfl
+
+/-- Package one proved nonconcave long arc as boundary-budget data. -/
+def toNonconcaveArcBoundaryBudgetDataOfNonconcave
+    (F : BoundaryLongArcFacts.{u} D) {a : F.LongArc}
+    (ha : Not (F.concave a)) :
+    NonconcaveArcBoundaryBudgetData.{u} G where
+  planarBoundary := D
+  rawTurn := F.rawTurn a
+  rawTurn_nonnegative_on_arc := F.rawTurn_nonnegative_on_arc a
+  boundaryAngleBudget := F.boundaryAngleBudgetOfNonconcave ha
+
+@[simp] theorem toNonconcaveArcBoundaryBudgetDataOfNonconcave_rawTurn
+    (F : BoundaryLongArcFacts.{u} D) {a : F.LongArc}
+    (ha : Not (F.concave a)) :
+    (F.toNonconcaveArcBoundaryBudgetDataOfNonconcave ha).rawTurn =
+      F.rawTurn a :=
+  rfl
+
+@[simp] theorem toNonconcaveArcBoundaryBudgetDataOfNonconcave_budget
+    (F : BoundaryLongArcFacts.{u} D) {a : F.LongArc}
+    (ha : Not (F.concave a)) :
+    BoundaryArcAngleBudget.geometricAngleBudget
+        ((F.toNonconcaveArcBoundaryBudgetDataOfNonconcave ha).boundaryAngleBudget) =
+      totalTurn (F.rawTurn a) :=
+  rfl
+
+/-- The selected nonconcave long arc supplied by the finite count gap. -/
+noncomputable def selectedLongArc
+    (F : BoundaryLongArcFacts.{u} D) : F.LongArc :=
+  Classical.choose F.exists_nonconcave_longArc
+
+/-- The selected long arc is nonconcave. -/
+theorem selectedLongArc_not_concave
+    (F : BoundaryLongArcFacts.{u} D) :
+    Not (F.concave F.selectedLongArc) :=
+  Classical.choose_spec F.exists_nonconcave_longArc
+
+/-- The selected long arc has total turn below `pi / 3`. -/
+theorem selectedLongArc_totalTurn_lt_pi_div_three
+    (F : BoundaryLongArcFacts.{u} D) :
+    totalTurn (F.rawTurn F.selectedLongArc) < Real.pi / 3 :=
+  F.totalTurn_lt_pi_div_three_of_not_concave
+    F.selectedLongArc_not_concave
+
+/-- Select a concrete nonconcave long arc and package it as boundary-budget
+data. -/
+noncomputable def toNonconcaveArcBoundaryBudgetData
+    (F : BoundaryLongArcFacts.{u} D) :
+    NonconcaveArcBoundaryBudgetData.{u} G :=
+  F.toNonconcaveArcBoundaryBudgetDataOfNonconcave
+    F.selectedLongArc_not_concave
+
+@[simp] theorem toNonconcaveArcBoundaryBudgetData_rawTurn
+    (F : BoundaryLongArcFacts.{u} D) :
+    F.toNonconcaveArcBoundaryBudgetData.rawTurn =
+      F.rawTurn F.selectedLongArc :=
+  rfl
+
+/-- The selected boundary-budget data has the selected arc's total turn as its
+angle budget. -/
+@[simp] theorem toNonconcaveArcBoundaryBudgetData_geometricAngleBudget
+    (F : BoundaryLongArcFacts.{u} D) :
+    BoundaryArcAngleBudget.geometricAngleBudget
+      F.toNonconcaveArcBoundaryBudgetData.boundaryAngleBudget =
+      totalTurn (F.rawTurn F.selectedLongArc) :=
+  rfl
+
+/-- The selected boundary-budget data reduces to normalized M8 turn bounds. -/
+def toM8TurnBounds
+    (F : BoundaryLongArcFacts.{u} D) :
+    M8ConstructionInterface.M8TurnBounds :=
+  F.toNonconcaveArcBoundaryBudgetData.toM8TurnBounds
+
+/-- The selected M8 turn function is nonnegative. -/
+theorem toM8TurnBounds_turn_nonnegative
+    (F : BoundaryLongArcFacts.{u} D) (k : Nat) :
+    0 <= F.toM8TurnBounds.turn k :=
+  F.toNonconcaveArcBoundaryBudgetData.toM8TurnBounds_turn_nonnegative k
+
+/-- The selected M8 total turn is below `pi / 3`. -/
+theorem toM8TurnBounds_totalTurn_lt_pi_div_three
+    (F : BoundaryLongArcFacts.{u} D) :
+    totalTurn F.toM8TurnBounds.turn < Real.pi / 3 :=
+  F.toNonconcaveArcBoundaryBudgetData.toM8TurnBounds_totalTurn_lt_pi_div_three
+
+end BoundaryLongArcFacts
+
 end NonconcaveArcConcrete
 end Swanepoel
 end ErdosProblems1066

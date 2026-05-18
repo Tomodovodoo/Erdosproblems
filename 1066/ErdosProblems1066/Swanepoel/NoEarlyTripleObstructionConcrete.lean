@@ -1,4 +1,5 @@
 import ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions
+import ErdosProblems1066.Swanepoel.M8TurnWindowNoEarlyFinal
 import ErdosProblems1066.Swanepoel.NoEarlyTripleFromLemma9
 
 set_option autoImplicit false
@@ -661,6 +662,365 @@ def k23ArcAngleObstructionData_of_minimalFailure
     finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
       hmin hred
   arcAngleData := D
+
+/-! ## Packaged K23 obstruction plus turn/window data -/
+
+/-- One fixed `m = 8` construction package where the no-early field is
+derived from a `K_{2,3}` obstruction and finite local exclusions.
+
+This is the pipeline-facing version of the K23 route: callers provide the
+same local labels, nonconcave-arc turn data, and window-containment data as in
+`M8TurnWindowNoEarlyFinal`, but the no-early triple package is constructed
+here from the actual local obstruction route. -/
+structure M8ConcreteK23TurnWindowObstructionData {n : Nat}
+    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) where
+  localLabels : M8ConstructionInterface.M8LocalLabels C
+  arc : M8TurnBoundsFromArc.NonconcaveArcTurnData
+  k23Obstruction : M8ConcreteK23ObstructionInputs localLabels.predicates.data
+  finiteLocalExclusions :
+    FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C)
+  windowContainment :
+    M8WindowGeometryFromContainment.M8WindowContainment
+      localLabels arc.toM8TurnBounds
+
+namespace M8ConcreteK23TurnWindowObstructionData
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {hmin : IsMinimalClearedFailure C}
+
+/-- The K23 obstruction and finite local exclusions supply the concrete
+five-start no-early package. -/
+def noEarlyTriples
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8ConcreteNoEarlyTripleEquality D.localLabels.predicates.data :=
+  concreteNoEarlyTripleEquality_of_K23Obstruction_and_finiteLocalExclusions
+    D.k23Obstruction D.finiteLocalExclusions
+
+/-- The same derived no-early fact as the raw abstract predicate consumed by
+the late-triples bridge. -/
+theorem noEarlyTripleEquality
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8NoEarlyTripleEquality D.localLabels.predicates.data :=
+  D.noEarlyTriples.toNoEarlyTripleEquality
+
+/-- The derived no-early fact packaged for the construction interface. -/
+def constructionNoEarlyTriples
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8LateTriplesFromNoEarly.M8ConstructionNoEarlyTriples D.localLabels :=
+  constructionNoEarlyTriples_of_K23Obstruction_and_finiteLocalExclusions
+    D.k23Obstruction D.finiteLocalExclusions
+
+/-- The derived no-early fact packaged for the pipeline closure. -/
+def pipelineNoEarlyTriples
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8LateTriplesFromNoEarly.M8PipelineNoEarlyTriples
+      D.localLabels.predicates :=
+  pipelineNoEarlyTriples_of_K23Obstruction_and_finiteLocalExclusions
+    D.localLabels.predicates D.k23Obstruction D.finiteLocalExclusions
+
+/-- K23 obstruction data and finite local exclusions produce the
+construction-level late-triples field. -/
+def lateTriples
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8ConstructionInterface.M8LateTriples D.localLabels :=
+  D.constructionNoEarlyTriples.toM8LateTriples
+
+/-- K23 obstruction data and finite local exclusions produce the honest
+late-triples predicate. -/
+theorem honestLateTriples
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    D.localLabels.predicates.LateTriples :=
+  D.pipelineNoEarlyTriples.toHonestLateTriples
+
+/-- K23 obstruction data and finite local exclusions produce the separated
+pipeline late-triples field. -/
+def pipelineLateTriplesField
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8PipelineClosure.M8LateTriplesField D.localLabels.predicates :=
+  D.pipelineNoEarlyTriples.toM8LateTriplesField
+
+/-- Forget the K23 route after deriving no-early triples, producing the
+turn/window/no-early package used by the current M8 closure. -/
+def toTurnWindowNoEarlyPackage
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8TurnWindowNoEarlyFinal.M8TurnWindowNoEarlyPackage C hmin where
+  localLabels := D.localLabels
+  arc := D.arc
+  noEarlyTriples := D.noEarlyTriples
+  windowContainment := D.windowContainment
+
+/-- The K23 route supplies the strongest current pipeline gate: window
+geometry plus no-early triples. -/
+def toM8WindowNoEarlyConstructionFields
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8PipelineClosure.M8WindowNoEarlyConstructionFields C hmin :=
+  D.toTurnWindowNoEarlyPackage.toM8WindowNoEarlyConstructionFields
+
+/-- The K23 route supplies direct E22/E23 plus no-early construction fields. -/
+def toM8E22E23NoEarlyConstructionFields
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8PipelineClosure.M8E22E23NoEarlyConstructionFields C hmin :=
+  D.toTurnWindowNoEarlyPackage.toM8E22E23NoEarlyConstructionFields
+
+/-- The K23 route supplies separated construction fields, with late triples
+derived from the obstruction rather than assumed separately. -/
+def toM8SeparatedConstructionFields
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8PipelineClosure.M8SeparatedConstructionFields C hmin :=
+  D.toTurnWindowNoEarlyPackage.toM8SeparatedConstructionFields
+
+/-- The K23 route supplies clean construction-interface data. -/
+def toM8ConstructionData
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    M8ConstructionInterface.M8ConstructionData C hmin :=
+  D.toTurnWindowNoEarlyPackage.toM8ConstructionData
+
+/-- A fixed minimal cleared failure equipped with the K23 obstruction route,
+finite local exclusions, nonconcave-arc turn data, and window containment is
+contradictory. -/
+theorem contradiction
+    (D : M8ConcreteK23TurnWindowObstructionData C hmin) :
+    False :=
+  D.toTurnWindowNoEarlyPackage.contradiction
+
+end M8ConcreteK23TurnWindowObstructionData
+
+/-- Unit-distance finite local exclusions package the K23 obstruction and
+turn/window data directly. -/
+def k23TurnWindowObstructionData_of_unitDistanceConfig
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8ConcreteK23TurnWindowObstructionData C hmin where
+  localLabels := localLabels
+  arc := A
+  k23Obstruction := H
+  finiteLocalExclusions := finiteLocalExclusionPackage_of_unitDistanceConfig C
+  windowContainment := W
+
+/-- Minimal-failure finite local exclusions package the K23 obstruction and
+turn/window data directly once the K23 degree-reduction rule is available. -/
+def k23TurnWindowObstructionData_of_minimalFailure
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (hred : K23DegreeReducible C)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8ConcreteK23TurnWindowObstructionData C hmin where
+  localLabels := localLabels
+  arc := A
+  k23Obstruction := H
+  finiteLocalExclusions :=
+    finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
+      hmin hred
+  windowContainment := W
+
+/-! ## Direct turn/window composition from K23 obstruction data -/
+
+/-- Direct composition theorem: K23 obstruction data, finite local exclusions,
+nonconcave-arc turn data, and window containment assemble the exact
+turn/window/no-early package consumed by `M8TurnWindowNoEarlyFinal`. -/
+def turnWindowNoEarlyPackage_of_K23Obstruction_and_finiteLocalExclusions
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (E : FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C))
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8TurnWindowNoEarlyFinal.M8TurnWindowNoEarlyPackage C hmin :=
+  ({ localLabels := localLabels
+     arc := A
+     k23Obstruction := H
+     finiteLocalExclusions := E
+     windowContainment := W } :
+    M8ConcreteK23TurnWindowObstructionData C hmin).toTurnWindowNoEarlyPackage
+
+/-- Direct unit-distance specialization of the K23 obstruction route into the
+turn/window/no-early package. -/
+def turnWindowNoEarlyPackage_of_K23Obstruction_and_unitDistanceConfig
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8TurnWindowNoEarlyFinal.M8TurnWindowNoEarlyPackage C hmin :=
+  turnWindowNoEarlyPackage_of_K23Obstruction_and_finiteLocalExclusions
+    A H (finiteLocalExclusionPackage_of_unitDistanceConfig C) W
+
+/-- Direct minimal-failure specialization of the K23 obstruction route into the
+turn/window/no-early package, using the supplied K23 degree-reduction rule only
+to obtain finite local exclusions. -/
+def turnWindowNoEarlyPackage_of_K23Obstruction_minimalFailure
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (hred : K23DegreeReducible C)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8TurnWindowNoEarlyFinal.M8TurnWindowNoEarlyPackage C hmin :=
+  (k23TurnWindowObstructionData_of_minimalFailure
+    (C := C) (hmin := hmin) (localLabels := localLabels) A H hred W).toTurnWindowNoEarlyPackage
+
+/-- The direct finite-local-exclusion K23 route supplies the strongest current
+window/no-early construction fields. -/
+def windowNoEarlyConstructionFields_of_K23Obstruction_and_finiteLocalExclusions
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (E : FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C))
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8PipelineClosure.M8WindowNoEarlyConstructionFields C hmin :=
+  (turnWindowNoEarlyPackage_of_K23Obstruction_and_finiteLocalExclusions
+    A H E W).toM8WindowNoEarlyConstructionFields
+
+/-- The direct finite-local-exclusion K23 route supplies separated construction
+fields, with late triples derived from no-early triples. -/
+def separatedConstructionFields_of_K23Obstruction_and_finiteLocalExclusions
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (E : FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C))
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8PipelineClosure.M8SeparatedConstructionFields C hmin :=
+  (turnWindowNoEarlyPackage_of_K23Obstruction_and_finiteLocalExclusions
+    A H E W).toM8SeparatedConstructionFields
+
+/-- The direct finite-local-exclusion K23 route supplies clean construction
+interface data. -/
+def constructionData_of_K23Obstruction_and_finiteLocalExclusions
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (E : FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C))
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8ConstructionInterface.M8ConstructionData C hmin :=
+  (turnWindowNoEarlyPackage_of_K23Obstruction_and_finiteLocalExclusions
+    A H E W).toM8ConstructionData
+
+/-- K23 obstruction data, finite local exclusions, turn data, and window
+containment contradict a fixed minimal cleared failure. -/
+theorem contradiction_of_K23Obstruction_finiteLocalExclusions_and_turnWindow
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (E : FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C))
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    False :=
+  (turnWindowNoEarlyPackage_of_K23Obstruction_and_finiteLocalExclusions
+    (hmin := hmin) A H E W).contradiction
+
+/-- Unit-distance finite local exclusions close the direct K23 turn/window
+route for a fixed minimal cleared failure. -/
+theorem contradiction_of_K23Obstruction_unitDistanceConfig_and_turnWindow
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    False :=
+  contradiction_of_K23Obstruction_finiteLocalExclusions_and_turnWindow
+    (hmin := hmin) A H (finiteLocalExclusionPackage_of_unitDistanceConfig C) W
+
+/-- A K23 degree-reduction rule closes the direct K23 turn/window route for a
+fixed minimal cleared failure. -/
+theorem contradiction_of_K23Obstruction_minimalFailure_and_turnWindow
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (hred : K23DegreeReducible C)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    False :=
+  (turnWindowNoEarlyPackage_of_K23Obstruction_minimalFailure
+    (hmin := hmin) A H hred W).contradiction
+
+/-! ## Uniform K23 turn/window eliminator -/
+
+/-- Uniform M8 eliminator whose no-early/late-triples field is derived from
+K23 obstruction data and finite local exclusions for each minimal failure. -/
+def MinimalFailureM8K23TurnWindowEliminator : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C),
+      Nonempty (M8ConcreteK23TurnWindowObstructionData C hmin)
+
+/-- The K23 turn/window eliminator supplies the exact
+turn/window/no-early package family used by `M8TurnWindowNoEarlyFinal`. -/
+theorem turnWindowNoEarlyEliminator_of_K23TurnWindowEliminator
+    (hbuild : MinimalFailureM8K23TurnWindowEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (hmin : IsMinimalClearedFailure C),
+        Nonempty
+          (M8TurnWindowNoEarlyFinal.M8TurnWindowNoEarlyPackage C hmin) := by
+  intro n C hmin
+  rcases hbuild C hmin with ⟨D⟩
+  exact Nonempty.intro D.toTurnWindowNoEarlyPackage
+
+/-- The K23 turn/window eliminator supplies the window/no-early eliminator
+used by `M8PipelineClosure`. -/
+theorem windowNoEarlyConstructionEliminator_of_K23TurnWindowEliminator
+    (hbuild : MinimalFailureM8K23TurnWindowEliminator) :
+    M8PipelineClosure.MinimalFailureM8WindowNoEarlyConstructionEliminator := by
+  intro n C hmin
+  rcases hbuild C hmin with ⟨D⟩
+  exact Nonempty.intro D.toM8WindowNoEarlyConstructionFields
+
+/-- The K23 turn/window eliminator also supplies the separated-field
+eliminator, with late triples derived from the obstruction route. -/
+theorem separatedConstructionEliminator_of_K23TurnWindowEliminator
+    (hbuild : MinimalFailureM8K23TurnWindowEliminator) :
+    M8PipelineClosure.MinimalFailureM8SeparatedConstructionEliminator := by
+  intro n C hmin
+  rcases hbuild C hmin with ⟨D⟩
+  exact Nonempty.intro D.toM8SeparatedConstructionFields
+
+/-- Uniform K23 obstruction, finite local exclusions, turn data, and window
+containment rule out every minimal cleared failure. -/
+theorem no_minimalClearedFailure_of_K23TurnWindowEliminator
+    (hbuild : MinimalFailureM8K23TurnWindowEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) := by
+  exact M8PipelineClosure.no_minimalClearedFailure_of_windowNoEarlyConstructionEliminator
+    (windowNoEarlyConstructionEliminator_of_K23TurnWindowEliminator hbuild)
 
 /-! ## Final contradiction wrappers -/
 

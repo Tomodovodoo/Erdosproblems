@@ -1,5 +1,7 @@
 import ErdosProblems1066.PachToth.ClosedPlacementNonRigidComponents
 import ErdosProblems1066.PachToth.ClosedPlacementClosure
+import ErdosProblems1066.PachToth.GeneratedMetricClosure
+import ErdosProblems1066.PachToth.GeneratedPeriodClosure
 import ErdosProblems1066.PachToth.SplitArbitraryNNonRigidBridge
 
 set_option autoImplicit false
@@ -114,6 +116,38 @@ def of_generatedClosure_family_reduced
   ofClosedPlacements
     (ClosedPlacementClosure.closedPlacementFamily_of_generatedClosure_reduced
       F closure H)
+
+/-- Repackage a generated-period-equation family with full metric hypotheses
+as component-family fields. -/
+def of_family_periodEquations
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    ComponentFamilyFields :=
+  ofClosedPlacements
+    (GeneratedPeriodClosure.closedPlacementFamily_of_periodEquations
+      F period H)
+
+/-- Repackage a generated-period-equation family with reduced metric
+hypotheses as component-family fields. -/
+def of_family_periodEquations_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    ComponentFamilyFields :=
+  ofClosedPlacements
+    (GeneratedPeriodClosure.closedPlacementFamily_of_periodEquations_reduced
+      F period H)
+
+/-- Repackage a role-hinged generated-closure family as component-family
+fields. -/
+def of_roleHingedGeneratedClosureFamily
+    (F : GeneratedMetricClosure.RoleHingedGeneratedClosureFamily) :
+    ComponentFamilyFields :=
+  ofClosedPlacements
+    F.closedPlacementFamily
 
 /-- Repackage the family fields as the component bundle for one block count. -/
 def components (H : ComponentFamilyFields)
@@ -232,7 +266,120 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedClosure_family_r
   exact
     (of_generatedClosure_family_reduced F closure H).targetUpperConstructionFiveSixteenArbitrary
 
+/-- Exact block-form target from generated period equations and full metric
+hypotheses, routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteen_of_family_periodEquations
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen := by
+  exact
+    (of_family_periodEquations F period H).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary-vertex target from generated period equations and full metric
+hypotheses, routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_family_periodEquations
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    (of_family_periodEquations F period H).targetUpperConstructionFiveSixteenArbitrary
+
+/-- Exact block-form target from generated period equations and reduced
+metric hypotheses, routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteen_of_family_periodEquations_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen := by
+  exact
+    (of_family_periodEquations_reduced F period H).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary-vertex target from generated period equations and reduced
+metric hypotheses, routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_family_periodEquations_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    (of_family_periodEquations_reduced F period H).targetUpperConstructionFiveSixteenArbitrary
+
+/-- Exact block-form target from a role-hinged generated-closure family,
+routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteen_of_roleHingedGeneratedClosureFamily
+    (F : GeneratedMetricClosure.RoleHingedGeneratedClosureFamily) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen := by
+  exact
+    (of_roleHingedGeneratedClosureFamily F).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary-vertex target from a role-hinged generated-closure family,
+routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_roleHingedGeneratedClosureFamily
+    (F : GeneratedMetricClosure.RoleHingedGeneratedClosureFamily) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    (of_roleHingedGeneratedClosureFamily F).targetUpperConstructionFiveSixteenArbitrary
+
 end ComponentFamilyFields
+
+/-- Repackage one checked closed placement as a component bundle. -/
+def componentsOfClosedPlacement
+    {k : Nat} {hk : 0 < k}
+    (P : DeformedPlacement.ClosedPlacement k hk) :
+    ClosedPlacementNonRigidComponents.Components k hk where
+  point := P.point
+  separated := P.separated
+  same_block_edges_unit := P.same_block_edges_unit
+  successor_connector_edges_unit := P.cross_connector_edges_unit
+
+/-- Repackage one generated-period-equation wrapper with full metric
+hypotheses as direct closed-placement components. -/
+def componentsOfGeneratedPeriodEquation
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      PeriodInterface.GeneratedPeriodEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation) :
+    ClosedPlacementNonRigidComponents.Components k hk :=
+  componentsOfClosedPlacement
+    (GeneratedPeriodClosure.closedPlacement_of_generatedPeriodEquation
+      O hk base orientation period H)
+
+/-- Repackage one generated-period-equation wrapper with reduced metric
+hypotheses as direct closed-placement components. -/
+def componentsOfGeneratedPeriodEquationReduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      PeriodInterface.GeneratedPeriodEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    ClosedPlacementNonRigidComponents.Components k hk :=
+  componentsOfClosedPlacement
+    (GeneratedPeriodClosure.closedPlacement_of_generatedPeriodEquation_reduced
+      O hk base orientation period H)
+
+/-- Repackage one role-hinged generated closure bundle as direct
+closed-placement components. -/
+def componentsOfRoleHingedGeneratedClosureData
+    {k : Nat} {hk : 0 < k}
+    (G : GeneratedMetricClosure.RoleHingedGeneratedClosureData k hk) :
+    ClosedPlacementNonRigidComponents.Components k hk :=
+  componentsOfClosedPlacement
+    G.toClosedPlacement
 
 /-- Bundled-field exact block-form wrapper. -/
 theorem targetUpperConstructionFiveSixteen_of_componentFamilyFields
@@ -293,6 +440,116 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedClosure_family_r
   let Hcomp :=
     ComponentFamilyFields.of_generatedClosure_family_reduced F closure H
   exact Hcomp.targetUpperConstructionFiveSixteenArbitrary
+
+/-- Generated-period-equation exact block-form wrapper through
+component-family fields, using full metric hypotheses. -/
+theorem targetUpperConstructionFiveSixteen_of_family_periodEquations
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    ComponentFamilyFields.targetUpperConstructionFiveSixteen_of_family_periodEquations
+      F period H
+
+/-- Generated-period-equation arbitrary-vertex wrapper through
+component-family fields, using full metric hypotheses. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_family_periodEquations
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    ComponentFamilyFields.targetUpperConstructionFiveSixteenArbitrary_of_family_periodEquations
+      F period H
+
+/-- Generated-period-equation exact block-form wrapper through
+component-family fields, using reduced metric hypotheses. -/
+theorem targetUpperConstructionFiveSixteen_of_family_periodEquations_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    ComponentFamilyFields.targetUpperConstructionFiveSixteen_of_family_periodEquations_reduced
+      F period H
+
+/-- Generated-period-equation arbitrary-vertex wrapper through
+component-family fields, using reduced metric hypotheses. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_family_periodEquations_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : GeneratedPeriodClosure.FamilyPeriodEquations F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  let Hcomp :=
+    ComponentFamilyFields.of_family_periodEquations_reduced F period H
+  exact Hcomp.targetUpperConstructionFiveSixteenArbitrary
+
+/-- Role-hinged generated-closure exact block-form wrapper through
+component-family fields. -/
+theorem targetUpperConstructionFiveSixteen_of_roleHingedGeneratedClosureFamily
+    (F : GeneratedMetricClosure.RoleHingedGeneratedClosureFamily) :
+    targetUpperConstructionFiveSixteen := by
+  let Hcomp := ComponentFamilyFields.of_roleHingedGeneratedClosureFamily F
+  exact Hcomp.targetUpperConstructionFiveSixteen
+
+/-- Role-hinged generated-closure arbitrary-vertex wrapper through
+component-family fields. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_roleHingedGeneratedClosureFamily
+    (F : GeneratedMetricClosure.RoleHingedGeneratedClosureFamily) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  let Hcomp := ComponentFamilyFields.of_roleHingedGeneratedClosureFamily F
+  exact Hcomp.targetUpperConstructionFiveSixteenArbitrary
+
+/-- One generated period equation with full metric hypotheses supplies the
+component exact-block target. -/
+theorem exactBlockTarget_of_generatedPeriodEquation
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      PeriodInterface.GeneratedPeriodEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation) :
+    Exists fun U : _root_.UDConfig (16 * k) =>
+      forall s : Finset (Fin (16 * k)), U.IsIndep s -> s.card <= 5 * k := by
+  exact
+    (componentsOfGeneratedPeriodEquation
+      O hk base orientation period H).exactBlockTarget
+
+/-- One generated period equation with reduced metric hypotheses supplies the
+component exact-block target. -/
+theorem exactBlockTarget_of_generatedPeriodEquation_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      PeriodInterface.GeneratedPeriodEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    Exists fun U : _root_.UDConfig (16 * k) =>
+      forall s : Finset (Fin (16 * k)), U.IsIndep s -> s.card <= 5 * k := by
+  exact
+    (componentsOfGeneratedPeriodEquationReduced
+      O hk base orientation period H).exactBlockTarget
+
+/-- One role-hinged generated closure bundle supplies the component
+exact-block target. -/
+theorem exactBlockTarget_of_roleHingedGeneratedClosureData
+    {k : Nat} {hk : 0 < k}
+    (G : GeneratedMetricClosure.RoleHingedGeneratedClosureData k hk) :
+    Exists fun U : _root_.UDConfig (16 * k) =>
+      forall s : Finset (Fin (16 * k)), U.IsIndep s -> s.card <= 5 * k := by
+  exact
+    (componentsOfRoleHingedGeneratedClosureData G).exactBlockTarget
 
 /-- Raw-field exact block-form wrapper. -/
 theorem targetUpperConstructionFiveSixteen_of_fields

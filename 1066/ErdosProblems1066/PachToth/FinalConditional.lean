@@ -26,6 +26,9 @@ namespace FinalConditional
 
 open FiniteGraph
 open GeneratedPeriodClosure
+open FiniteCertificateObligationSummary
+open NonRigidConnectorSeparationFacts
+open CrossBlockSqTableSearch
 
 noncomputable section
 
@@ -285,7 +288,7 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_periodSearchData_sqVa
     (k : Nat) (hk : 0 < k) :
     targetUpperConstructionFiveSixteenAt (16 * k) := by
   exact
-    GeneratedPeriodClosure.targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation_reduced
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation_reduced
       periodSearch.transitions.toFigure2TransitionObligations
       hk
       BaseTransitionRealization.exactBase
@@ -305,7 +308,7 @@ theorem exactTarget_of_periodSearchData_sqValueCertificate
     (sqValue :
       FiniteCertificateObligationSummary.SqValueCertificate periodSearch) :
     PachToth.targetUpperConstructionFiveSixteen :=
-  FiniteCertificateObligationSummary.targetUpperConstructionFiveSixteen_of_periodSearchData_sqValueCertificate
+  targetUpperConstructionFiveSixteen_of_periodSearchData_sqValueCertificate
     periodSearch sqValue
 
 /-- Arbitrary-`n` target from period-search data plus the remaining
@@ -315,7 +318,7 @@ theorem arbitraryTarget_of_periodSearchData_sqValueCertificate
     (sqValue :
       FiniteCertificateObligationSummary.SqValueCertificate periodSearch) :
     PachToth.targetUpperConstructionFiveSixteenArbitrary :=
-  FiniteCertificateObligationSummary.targetUpperConstructionFiveSixteenArbitrary_of_periodSearchData_sqValueCertificate
+  targetUpperConstructionFiveSixteenArbitrary_of_periodSearchData_sqValueCertificate
     periodSearch sqValue
 
 /-- Exact-block target from period-search data plus raw upper-triangle
@@ -440,7 +443,7 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_nonConnectorSqDistanc
         F k hk) :
     targetUpperConstructionFiveSixteenAt (16 * k) := by
   exact
-    GeneratedPeriodClosure.targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation_reduced
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation_reduced
       F.transitions.toFigure2TransitionObligations
       hk
       BaseTransitionRealization.exactBase
@@ -460,7 +463,7 @@ theorem exactTarget_of_nonConnectorSqDistanceTableFamily
       NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTableFamily
         F) :
     PachToth.targetUpperConstructionFiveSixteen :=
-  NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTableFamily.targetUpperConstructionFiveSixteen
+  IndexedNonConnectorCrossBlockSqDistanceTableFamily.targetUpperConstructionFiveSixteen
     T
 
 /-- Arbitrary-`n` target from reduced non-connector square-distance table
@@ -523,7 +526,7 @@ theorem exactTarget_of_upperTriangleNonConnectorPolynomialTableFamily
     (T : CrossBlockSqTableSearch.UpperTriangleNonConnectorPolynomialTableFamily
       F) :
     PachToth.targetUpperConstructionFiveSixteen :=
-  CrossBlockSqTableSearch.UpperTriangleNonConnectorPolynomialTableFamily.targetUpperConstructionFiveSixteen
+  UpperTriangleNonConnectorPolynomialTableFamily.targetUpperConstructionFiveSixteen
     T
 
 /-- Arbitrary-`n` target from upper-triangle non-connector
@@ -543,7 +546,7 @@ theorem exactTarget_of_upperTriangleNonConnectorSqValueTableFamily
     (T : CrossBlockSqTableSearch.UpperTriangleNonConnectorSqValueTableFamily
       F) :
     PachToth.targetUpperConstructionFiveSixteen :=
-  CrossBlockSqTableSearch.UpperTriangleNonConnectorSqValueTableFamily.targetUpperConstructionFiveSixteen
+  UpperTriangleNonConnectorSqValueTableFamily.targetUpperConstructionFiveSixteen
     T
 
 /-- Arbitrary-`n` target from upper-triangle non-connector computed

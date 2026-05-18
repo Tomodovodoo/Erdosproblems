@@ -1,4 +1,5 @@
 import ErdosProblems1066.Swanepoel.BoundarySpineConcrete
+import ErdosProblems1066.Swanepoel.BoundarySpineFiniteCertificate
 import ErdosProblems1066.Swanepoel.Lemma8CombinatoricsConcrete
 import ErdosProblems1066.Swanepoel.Lemma8ExistenceConcrete
 import ErdosProblems1066.Swanepoel.LocalExclusions
@@ -550,6 +551,83 @@ theorem ofDegreeSixForbiddenFrame_s
         (hdegree i)).s :=
   rfl
 
+/-- The degree-six/frame extraction exposes the local witness predicate
+directly. -/
+theorem ofDegreeSixForbiddenFrame_extraNeighborWitness
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).extraNeighborWitness
+      i :=
+  (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).extraNeighborWitness_holds
+    i
+
+/-- Projection of the generated `r_i` adjacency from degree-six/frame data. -/
+theorem ofDegreeSixForbiddenFrame_r_neighbor
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    (unitDistanceLocalGraph C).Adj (S.centerQ i)
+      ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i) :=
+  (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r_neighbor i
+
+/-- Projection of the generated `s_i` adjacency from degree-six/frame data. -/
+theorem ofDegreeSixForbiddenFrame_s_neighbor
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    (unitDistanceLocalGraph C).Adj (S.centerQ i)
+      ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i) :=
+  (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s_neighbor i
+
+/-- Projection of the generated `r_i` non-forbidden fact from
+degree-six/frame data. -/
+theorem ofDegreeSixForbiddenFrame_r_not_forbidden
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    Not (S.forbiddenExtraNeighbor i
+      ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)) :=
+  (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r_not_forbidden i
+
+/-- Projection of the generated `s_i` non-forbidden fact from
+degree-six/frame data. -/
+theorem ofDegreeSixForbiddenFrame_s_not_forbidden
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    Not (S.forbiddenExtraNeighbor i
+      ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)) :=
+  (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s_not_forbidden i
+
+/-- Projection of generated distinctness from degree-six/frame data. -/
+theorem ofDegreeSixForbiddenFrame_r_ne_s
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    Not ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i =
+      (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i) :=
+  (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r_ne_s i
+
+/-- The degree-six/frame extraction names every non-forbidden neighbor. -/
+theorem ofDegreeSixForbiddenFrame_named_of_extra_neighbor
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    {i : M8ExtraIndex} {x : Fin n}
+    (hadj : (unitDistanceLocalGraph C).Adj (S.centerQ i) x)
+    (hnot : Not (S.forbiddenExtraNeighbor i x)) :
+    x = (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i \/
+      x = (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i :=
+  (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).named_of_extra_neighbor
+    hadj hnot
+
 /-- Attach the remaining cyclic-order assertion to the degree-six/frame
 extraction record. -/
 def cyclicOrderOfDegreeSixForbiddenFrame
@@ -631,6 +709,232 @@ theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_s
         (hdegree i)).s :=
   rfl
 
+@[simp]
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_positiveCyclicOrderAt
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i)) :
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt
+      positiveCyclicOrder).positiveCyclicOrderAt =
+        positiveCyclicOrderAt :=
+  rfl
+
+/-- Direct projection of generated `r_i` adjacency from the assembled
+degree-six/frame Lemma 8 package. -/
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_r_neighbor
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    (unitDistanceLocalGraph C).Adj (S.centerQ i)
+      ((toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+        hdegree forbiddenFrame positiveCyclicOrderAt
+        positiveCyclicOrder).r i) :=
+  (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).r_neighbor
+    i
+
+/-- Direct projection of generated `s_i` adjacency from the assembled
+degree-six/frame Lemma 8 package. -/
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_s_neighbor
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    (unitDistanceLocalGraph C).Adj (S.centerQ i)
+      ((toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+        hdegree forbiddenFrame positiveCyclicOrderAt
+        positiveCyclicOrder).s i) :=
+  (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).s_neighbor
+    i
+
+/-- Direct projection of generated `r_i` non-forbiddenness from the assembled
+degree-six/frame Lemma 8 package. -/
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_r_not_forbidden
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    Not (S.forbiddenExtraNeighbor i
+      ((toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+        hdegree forbiddenFrame positiveCyclicOrderAt
+        positiveCyclicOrder).r i)) :=
+  (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    hdegree forbiddenFrame positiveCyclicOrderAt
+    positiveCyclicOrder).r_not_forbidden i
+
+/-- Direct projection of generated `s_i` non-forbiddenness from the assembled
+degree-six/frame Lemma 8 package. -/
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_s_not_forbidden
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    Not (S.forbiddenExtraNeighbor i
+      ((toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+        hdegree forbiddenFrame positiveCyclicOrderAt
+        positiveCyclicOrder).s i)) :=
+  (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    hdegree forbiddenFrame positiveCyclicOrderAt
+    positiveCyclicOrder).s_not_forbidden i
+
+/-- Direct projection of generated `r_i/s_i` distinctness from the assembled
+degree-six/frame Lemma 8 package. -/
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_r_ne_s
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    Not
+      ((toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+          hdegree forbiddenFrame positiveCyclicOrderAt
+          positiveCyclicOrder).r i =
+        (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+          hdegree forbiddenFrame positiveCyclicOrderAt
+          positiveCyclicOrder).s i) :=
+  (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).r_ne_s i
+
+/-- Direct projection of the remaining cyclic-order assertion from the
+assembled degree-six/frame Lemma 8 package. -/
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_positiveCyclicOrder
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    positiveCyclicOrderAt i
+      ((toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+          hdegree forbiddenFrame positiveCyclicOrderAt
+          positiveCyclicOrder).s i)
+      ((toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+          hdegree forbiddenFrame positiveCyclicOrderAt
+          positiveCyclicOrder).r i)
+      (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i) :=
+  M8Lemma8Combinatorics.positiveCyclicOrder_holds
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder) i
+
+/-- The direct degree-six/frame combinatorics package preserves the local
+extra-neighbor witness needed by boundary-label extraction. -/
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_extraNeighborWitness
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    M8Lemma8Combinatorics.extraNeighborWitness
+      (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+        hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder) i :=
+  M8Lemma8Combinatorics.extraNeighborWitness_holds
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder) i
+
+/-- The direct degree-six/frame combinatorics package preserves generated
+non-forbidden-neighbor exhaustiveness. -/
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_named_of_extra_neighbor
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    {i : M8ExtraIndex} {x : Fin n}
+    (hadj : (unitDistanceLocalGraph C).Adj (S.centerQ i) x)
+    (hnot : Not (S.forbiddenExtraNeighbor i x)) :
+    x =
+        M8Lemma8Combinatorics.r
+          (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+            hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)
+          i \/
+      x =
+        M8Lemma8Combinatorics.s
+          (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+            hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)
+          i :=
+  M8Lemma8Combinatorics.named_of_extra_neighbor
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)
+    hadj hnot
+
 end M8ExtraNeighborData
 
 /-! ## Boundary-spine skeleton routing -/
@@ -666,6 +970,18 @@ def toM8BoundaryRouteDataFromExtraction
     BoundaryFaceCountingToM8.M8BoundaryRouteData C hmin :=
   X.toM8BoundaryRouteData hvalid
     (toLemma8Combinatorics X hvalid neighbors cyclic)
+
+@[simp]
+theorem toM8BoundaryRouteDataFromExtraction_lemma8
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (neighbors : M8ExtraNeighborData (X.toM8BoundarySpine hvalid))
+    (cyclic : M8ExtraNeighborData.CyclicOrder neighbors) :
+    (toM8BoundaryRouteDataFromExtraction X hvalid neighbors cyclic).lemma8 =
+      toLemma8Combinatorics X hvalid neighbors cyclic :=
+  rfl
 
 @[simp]
 theorem toM8BoundaryRouteDataFromExtraction_spine
@@ -711,7 +1027,736 @@ theorem toM8BoundaryRouteDataFromExtraction_labels_s
       i = neighbors.s i :=
   rfl
 
+@[simp]
+theorem toM8BoundaryRouteDataFromExtraction_boundaryLabels_r
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (neighbors : M8ExtraNeighborData (X.toM8BoundarySpine hvalid))
+    (cyclic : M8ExtraNeighborData.CyclicOrder neighbors)
+    (i : M8ExtraIndex) :
+    (toM8BoundaryRouteDataFromExtraction X hvalid neighbors cyclic).toBoundaryLabelPackage.labels.r
+      i = neighbors.r i :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromExtraction_boundaryLabels_s
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (neighbors : M8ExtraNeighborData (X.toM8BoundarySpine hvalid))
+    (cyclic : M8ExtraNeighborData.CyclicOrder neighbors)
+    (i : M8ExtraIndex) :
+    (toM8BoundaryRouteDataFromExtraction X hvalid neighbors cyclic).toBoundaryLabelPackage.labels.s
+      i = neighbors.s i :=
+  rfl
+
+/-- The extracted route supplies the local extra-neighbor predicate without
+requiring consumers to unfold the boundary-label package. -/
+theorem toM8BoundaryRouteDataFromExtraction_extraNeighborWitness
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (neighbors : M8ExtraNeighborData (X.toM8BoundarySpine hvalid))
+    (cyclic : M8ExtraNeighborData.CyclicOrder neighbors)
+    (i : M8ExtraIndex) :
+    ((toM8BoundaryRouteDataFromExtraction X hvalid neighbors cyclic).toBoundaryLabelPackage
+      ).predicates.data.extraNeighborWitness i :=
+  M8Lemma8Combinatorics.extraNeighborWitness_holds
+    (toLemma8Combinatorics X hvalid neighbors cyclic) i
+
+/-- Route degree-six and four-forbidden-neighbor data on a valid skeleton
+directly to the Lemma 8 combinatorics package. -/
+def toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i)) :
+    M8Lemma8Combinatorics (X.toM8BoundarySpine hvalid) :=
+  M8ExtraNeighborData.toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder
+
+@[simp]
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_r
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i))
+    (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame X hvalid hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).r i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).r i :=
+  rfl
+
+@[simp]
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_s
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i))
+    (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame X hvalid hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).s i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).s i :=
+  rfl
+
+/-- The skeleton route can consume degree-six/frame data directly; only the
+isolated cyclic-order assertion remains separate. -/
+def toM8BoundaryRouteDataFromDegreeSixForbiddenFrame
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i)) :
+    BoundaryFaceCountingToM8.M8BoundaryRouteData C hmin :=
+  X.toM8BoundaryRouteData hvalid
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame X hvalid
+      hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_lemma8
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i)) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame X hvalid hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).lemma8 =
+        toLemma8CombinatoricsOfDegreeSixForbiddenFrame X hvalid hdegree
+          forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_spine
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i)) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame X hvalid hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).spine =
+      X.toM8BoundarySpine hvalid :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_labels_r
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i))
+    (i : M8ExtraIndex) :
+    LocalConfigurations.BrokenLatticeLabels.r
+      (M8ConstructionInterface.M8LocalLabels.labels
+        (BoundaryFaceCountingToM8.M8BoundaryRouteData.toM8LocalLabels
+          (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame X hvalid
+            hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)))
+      i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).r i :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_labels_s
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i))
+    (i : M8ExtraIndex) :
+    LocalConfigurations.BrokenLatticeLabels.s
+      (M8ConstructionInterface.M8LocalLabels.labels
+        (BoundaryFaceCountingToM8.M8BoundaryRouteData.toM8LocalLabels
+          (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame X hvalid
+            hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)))
+      i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).s i :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_boundaryLabels_r
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i))
+    (i : M8ExtraIndex) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame X hvalid hdegree
+      forbiddenFrame positiveCyclicOrderAt
+      positiveCyclicOrder).toBoundaryLabelPackage.labels.r i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).r i :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_boundaryLabels_s
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i))
+    (i : M8ExtraIndex) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame X hvalid hdegree
+      forbiddenFrame positiveCyclicOrderAt
+      positiveCyclicOrder).toBoundaryLabelPackage.labels.s i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).s i :=
+  rfl
+
+/-- Degree-six/frame route supplies the local extra-neighbor predicate without
+unfolding the boundary route. -/
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_extraNeighborWitness
+    (X : BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton Dplanar)
+    (hvalid :
+      BoundarySpineConcrete.M8PlanarBoundarySpineSkeleton.Valid
+        connectedNoCut hmin X)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (X.toM8BoundarySpine hvalid) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame (X.toM8BoundarySpine hvalid) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((X.toM8BoundarySpine hvalid).prevQ i)
+          ((X.toM8BoundarySpine hvalid).leftP i)
+          ((X.toM8BoundarySpine hvalid).rightP i)
+          ((X.toM8BoundarySpine hvalid).nextQ i))
+    (i : M8ExtraIndex) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame X hvalid hdegree
+      forbiddenFrame positiveCyclicOrderAt
+      positiveCyclicOrder).toBoundaryLabelPackage.predicates.data.extraNeighborWitness
+        i :=
+  M8Lemma8Combinatorics.extraNeighborWitness_holds
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame X hvalid hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder) i
+
 end PlanarSkeletonRoute
+
+/- Direct finite-label routing from degree-six/forbidden-frame data to the
+boundary route package used by boundary-label extraction. -/
+namespace FinitePQSpineRoute
+
+universe u
+
+variable {Dplanar : PlanarBoundaryClosure.PlanarBoundaryData.{u}
+  (BoundaryFaceCountingToM8.CanonicalUDGraph C)}
+variable {connectedNoCut : CutVertexClosure.PreconnectedNoCutVertexCertificate C}
+variable {hmin : MinimalGraphFacts.IsMinimalClearedFailure C}
+
+/-- Convert degree-six/frame data on a finite `p/q` certificate directly into
+Lemma 8 combinatorics for its boundary spine. -/
+def toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i)) :
+    M8Lemma8Combinatorics (K.toM8BoundarySpine connectedNoCut hmin) :=
+  M8ExtraNeighborData.toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder
+
+/-- Promote finite `p/q` labels using only degree-six/frame data plus the
+remaining cyclic-order assertion, rather than a preassembled Lemma 8 package.
+-/
+def toM8BoundaryRouteDataFromDegreeSixForbiddenFrame
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i)) :
+    BoundaryFaceCountingToM8.M8BoundaryRouteData.{u} C hmin :=
+  K.toM8BoundaryRouteData connectedNoCut hmin
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)
+
+@[simp]
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_r
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i))
+    (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).r i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).r i :=
+  rfl
+
+@[simp]
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_s
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i))
+    (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).s i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).s i :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_lemma8
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i)) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).lemma8 =
+        toLemma8CombinatoricsOfDegreeSixForbiddenFrame K hdegree
+          forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_spine
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i)) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).spine =
+      K.toM8BoundarySpine connectedNoCut hmin :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_labels_r
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i))
+    (i : M8ExtraIndex) :
+    LocalConfigurations.BrokenLatticeLabels.r
+      (M8ConstructionInterface.M8LocalLabels.labels
+        (BoundaryFaceCountingToM8.M8BoundaryRouteData.toM8LocalLabels
+          (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame K hdegree
+            forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)))
+      i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).r i :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_labels_s
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i))
+    (i : M8ExtraIndex) :
+    LocalConfigurations.BrokenLatticeLabels.s
+      (M8ConstructionInterface.M8LocalLabels.labels
+        (BoundaryFaceCountingToM8.M8BoundaryRouteData.toM8LocalLabels
+          (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame K hdegree
+            forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)))
+      i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).s i :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_boundaryLabels_r
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i))
+    (i : M8ExtraIndex) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt
+      positiveCyclicOrder).toBoundaryLabelPackage.labels.r i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).r i :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_boundaryLabels_s
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i))
+    (i : M8ExtraIndex) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt
+      positiveCyclicOrder).toBoundaryLabelPackage.labels.s i =
+        (M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+          hdegree forbiddenFrame).s i :=
+  rfl
+
+/-- Finite degree-six/frame route supplies the local extra-neighbor predicate
+without unfolding the boundary route. -/
+theorem toM8BoundaryRouteDataFromDegreeSixForbiddenFrame_extraNeighborWitness
+    (K : BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate Dplanar)
+    (hdegree : forall i : M8ExtraIndex,
+      centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame
+        (K.toM8BoundarySpine connectedNoCut hmin) i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).s i)
+          ((M8ExtraNeighborData.ofDegreeSixForbiddenFrame
+              hdegree forbiddenFrame).r i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+          ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i))
+    (i : M8ExtraIndex) :
+    (toM8BoundaryRouteDataFromDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt
+      positiveCyclicOrder).toBoundaryLabelPackage.predicates.data.extraNeighborWitness
+        i :=
+  M8Lemma8Combinatorics.extraNeighborWitness_holds
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame K hdegree
+      forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder) i
+
+end FinitePQSpineRoute
 
 end
 

@@ -3,12 +3,15 @@ import ErdosProblems1066.UnitDistanceBounds
 /-!
 # Kernel-Checked Bounds
 
-This module is the public theorem facade. It exposes only bounds whose proof
-terms are present in this Lean project.
+This module is the public theorem facade. It exposes only unconditional bounds
+whose proof terms are present in this Lean project.
 
-The Swanepoel `8 / 31` lower bound and Pach--Toth `5 / 16` upper construction
-are tracked as work in `proof_workings/`, but are not declared as Lean theorems
-until their proofs are fully formalized.
+The Swanepoel `8 / 31` lower bound and Pach--Toth `5 / 16` upper
+construction are tracked by conditional internal endpoints such as
+`Swanepoel.FinalConditional.targetLowerBoundEightThirtyOne` and the
+Pach--Toth split-realization final conditional-family route.
+Those theorems still require explicit input families, so they are not declared
+here as public unconditional wrappers.
 -/
 
 namespace ErdosProblems1066

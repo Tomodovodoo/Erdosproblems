@@ -1,4 +1,6 @@
 import ErdosProblems1066.Swanepoel.JordanBoundaryConcrete
+import ErdosProblems1066.Swanepoel.CutVertexFinal
+import ErdosProblems1066.Swanepoel.MinimalConnectednessClosure
 
 set_option autoImplicit false
 
@@ -1087,6 +1089,180 @@ theorem planarBoundaryDataOfExtractionData_core
   rfl
 
 end TopologyFacts
+
+/-! ## W12 minimal-failure topology frontier -/
+
+namespace MinimalFailureTopology
+
+variable {C : _root_.UDConfig n}
+
+/--
+The raw face/enclosure field still needed after the graph route is cleared.
+
+It is deliberately only the dependent face-boundary payload: a finite
+face-boundary surface for the canonical graph, a selected outer face, and
+enclosure predicates for that selected face.
+-/
+def ExactOuterBoundaryTopologyFields (C : _root_.UDConfig n) : Prop :=
+  Exists fun H : UnitDistanceFaceBoundaryHypotheses.{0} (canonicalGraph C) =>
+    Exists fun F : H.Face =>
+      H.IsOuterFace F /\
+        Nonempty (OuterBoundaryEnclosure (canonicalGraph C) H F)
+
+/-- Minimal failure alone gives a positive vertex count. -/
+theorem positiveCard_of_minimalClearedFailure
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
+    0 < n := by
+  rcases MinimalConnectednessClosure.fin_nonempty_of_minimalClearedFailure
+      (C := C) hmin with ⟨v⟩
+  exact Nat.lt_of_le_of_lt (Nat.zero_le v.val) v.isLt
+
+/--
+The graph-side data already obtained from minimality: connectedness,
+degree range, and canonical noncrossing.  This still contains no face or
+enclosure data.
+-/
+structure MinimalFailureConnectedNoncrossingRoute
+    (C : _root_.UDConfig n) : Prop where
+  positiveCard : 0 < n
+  connectedDegreeRange : CutVertexFinal.ConnectedDegreeRangeCertificate C
+  pairwiseNoncrossing :
+    PlanarInterface.PairwiseNoncrossing
+      (canonicalGraph C).config (canonicalGraph C).edgeSet
+
+/-- Minimal cleared failure supplies the connected/noncrossing graph route. -/
+theorem connectedNoncrossingRoute_of_minimalFailure
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
+    MinimalFailureConnectedNoncrossingRoute C := by
+  let hn := positiveCard_of_minimalClearedFailure (C := C) hmin
+  exact
+    { positiveCard := hn
+      connectedDegreeRange :=
+        CutVertexFinal.connectedDegreeRangeCertificate_of_minimalFailure
+          (C := C) hn hmin
+      pairwiseNoncrossing := (canonicalGraph C).pairwiseNoncrossing }
+
+/--
+The graph-side route after the current conditional no-cut input is supplied.
+It packages connectedness, no-cut, degree range, and canonical noncrossing,
+but still does not produce the face/enclosure fields.
+-/
+structure MinimalFailureGraphRoute
+    (C : _root_.UDConfig n) : Prop where
+  positiveCard : 0 < n
+  connectedNoCutDegreeRange :
+    CutVertexFinal.ConnectedNoCutDegreeRangeCertificate C
+  pairwiseNoncrossing :
+    PlanarInterface.PairwiseNoncrossing
+      (canonicalGraph C).config (canonicalGraph C).edgeSet
+
+/-- The no-cut graph route from minimality plus the current slack payload. -/
+theorem graphRoute_of_minimalFailure_remainingSlack
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (hslack : CutVertexFinal.RemainingNoCutSlackFact C) :
+    MinimalFailureGraphRoute C := by
+  let hn := positiveCard_of_minimalClearedFailure (C := C) hmin
+  exact
+    { positiveCard := hn
+      connectedNoCutDegreeRange :=
+        CutVertexFinal.connectedNoCutDegreeRangeCertificate_of_minimalFailure_remainingSlack
+          (C := C) hn hmin hslack
+      pairwiseNoncrossing := (canonicalGraph C).pairwiseNoncrossing }
+
+/-- The raw face/enclosure field is exactly nonempty concrete topology facts. -/
+theorem exactOuterBoundaryTopologyFields_iff_topologyFacts
+    (C : _root_.UDConfig n) :
+    ExactOuterBoundaryTopologyFields C <->
+      Nonempty (TopologyFacts.{0} C) := by
+  constructor
+  · rintro ⟨H, F, hF, ⟨E⟩⟩
+    exact
+      ⟨{
+        outerFaceData :=
+          { faceBoundary := H
+            outerFace := F
+            outerFace_isOuter := hF }
+        enclosureData :=
+          { outerEnclosure := E } }⟩
+  · rintro ⟨T⟩
+    exact
+      ⟨T.faceBoundary, T.outerFace, T.outerFace_isOuter,
+        ⟨T.outerEnclosure⟩⟩
+
+/-- The raw face/enclosure field is exactly nonempty missing-topology facts. -/
+theorem exactOuterBoundaryTopologyFields_iff_missingTopologyFacts
+    (C : _root_.UDConfig n) :
+    ExactOuterBoundaryTopologyFields C <->
+      Nonempty (JordanBoundaryConcrete.MissingTopologyFacts.{0} C) := by
+  constructor
+  · rintro ⟨H, F, hF, ⟨E⟩⟩
+    exact
+      ⟨{
+        faceBoundary := H
+        outerFace := F
+        outerFace_isOuter := hF
+        outerEnclosure := E }⟩
+  · rintro ⟨T⟩
+    exact
+      ⟨T.faceBoundary, T.outerFace, T.outerFace_isOuter,
+        ⟨T.outerEnclosure⟩⟩
+
+/-- The raw face/enclosure field is exactly nonempty checked core data. -/
+theorem exactOuterBoundaryTopologyFields_iff_outerBoundaryCore
+    (C : _root_.UDConfig n) :
+    ExactOuterBoundaryTopologyFields C <->
+      Nonempty (OuterBoundaryCore.{0} (canonicalGraph C)) := by
+  constructor
+  · rintro ⟨H, F, hF, ⟨E⟩⟩
+    exact
+      ⟨{
+        faceBoundary := H
+        outerFace := F
+        outerFace_isOuter := hF
+        outerEnclosure := E }⟩
+  · rintro ⟨P⟩
+    exact
+      ⟨P.faceBoundary, P.outerFace, P.outerFace_isOuter,
+        ⟨P.outerEnclosure⟩⟩
+
+/--
+Topology completion after the graph route is cleared.  The equivalence below
+shows that the only remaining content is the raw face/enclosure field.
+-/
+def MinimalFailureTopologyCompletion (C : _root_.UDConfig n) : Prop :=
+  Exists fun _route : MinimalFailureGraphRoute C =>
+    ExactOuterBoundaryTopologyFields C
+
+/--
+Once the graph route is available, completing the minimal-failure topology
+package is equivalent to producing concrete topology facts.
+-/
+theorem minimalFailureTopologyCompletion_iff_topologyFacts_of_graphRoute
+    {C : _root_.UDConfig n}
+    (route : MinimalFailureGraphRoute C) :
+    MinimalFailureTopologyCompletion C <->
+      Nonempty (TopologyFacts.{0} C) := by
+  constructor
+  · rintro ⟨_route, hfields⟩
+    exact (exactOuterBoundaryTopologyFields_iff_topologyFacts C).1 hfields
+  · intro hT
+    exact
+      ⟨route, (exactOuterBoundaryTopologyFields_iff_topologyFacts C).2 hT⟩
+
+/--
+Minimality plus the current no-cut slack reduces the requested W12 package to
+exactly the face/enclosure field above.
+-/
+theorem minimalFailureTopologyCompletion_iff_topologyFacts_of_minimalFailure
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (hslack : CutVertexFinal.RemainingNoCutSlackFact C) :
+    MinimalFailureTopologyCompletion C <->
+      Nonempty (TopologyFacts.{0} C) :=
+  minimalFailureTopologyCompletion_iff_topologyFacts_of_graphRoute
+    (graphRoute_of_minimalFailure_remainingSlack
+      (C := C) hmin hslack)
+
+end MinimalFailureTopology
 
 end
 

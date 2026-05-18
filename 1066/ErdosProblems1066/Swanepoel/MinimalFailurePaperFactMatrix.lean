@@ -29,6 +29,7 @@ namespace MinimalFailurePaperFactMatrix
 
 open MinimalFailureComponentPackage
 open MinimalGraphFacts
+open M8PaperFactsAssemblyRefined
 
 universe u
 
@@ -67,9 +68,9 @@ abbrev RefinedPaperFacts (C : _root_.UDConfig n)
 
 For each minimal cleared failure, this family supplies exactly the refined
 input row:
-`positiveCard`, `remainingNoCutSlack`, `planarBoundary`, `spineCertificate`,
-`lemma8Existence`, `arcAngleFacts`, `lemma9FiveStartLateFacts`, and
-`angleContainment`.
+`positiveCard`, `remainingNoCutSlack`, `arcBoundaryBudget`,
+`spineCertificate`, `lemma8Existence`, `lemma9FiveStartLateFacts`,
+`figure8EuclideanFacts`, and `figure9EuclideanFacts`.
 -/
 abbrev RefinedPaperFactsFamily :=
   M8PaperFactsAssemblyRefined.MinimalFailureM8RefinedPaperFactsFamily
@@ -374,8 +375,8 @@ theorem remaining_contradiction_consumes_toPaperFacts
 
 /--
 For one fixed minimal cleared failure, the refined matrix records the current
-third-wave theorem surfaces and their checked adapters into the concrete
-remaining-facts row.
+third-wave theorem surfaces and their checked direct adapter into
+`M8ConstructionData`.
 -/
 structure RefinedReducerMatrix
     (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) where
@@ -387,18 +388,17 @@ structure RefinedReducerMatrix
         refined.planarBoundary.core refined.cutVertex.preconnectedNoCut hmin)
   lemma8 : M8LabelsFromBoundaryInterface.M8Lemma8Combinatorics spine
   arc : M8TurnBoundsFromArc.NonconcaveArcTurnData
+  turnBounds : M8ConstructionInterface.M8TurnBounds
   noEarlyTripleEquality :
     NoEarlyTripleConcrete.M8ConcreteNoEarlyTripleEquality
       refined.localLabels.predicates.data
-  windowContainment :
-    M8WindowGeometryFromContainment.M8WindowContainment
-      refined.localLabels refined.arc.toM8TurnBounds
-  remaining : RemainingPaperFacts C hmin
-  paper : PaperFacts C hmin
-  componentPackage :
-    M8SeparatedConstructionConcrete.M8SeparatedConstructionComponentPackage
-      C hmin
-  separatedFields : M8PipelineClosure.M8SeparatedConstructionFields C hmin
+  noEarlyTriples :
+    M8LateTriplesFromNoEarly.M8ConstructionNoEarlyTriples
+      refined.localLabels
+  lateTriples : M8ConstructionInterface.M8LateTriples refined.localLabels
+  windowGeometry :
+    M8ConstructionInterface.M8WindowGeometry refined.localLabels turnBounds
+  constructionData : M8ConstructionInterface.M8ConstructionData C hmin
 
 namespace RefinedReducerMatrix
 
@@ -412,14 +412,12 @@ def ofRefinedPaperFacts (P : RefinedPaperFacts C hmin) :
   spine := P.spine
   lemma8 := P.lemma8
   arc := P.arc
+  turnBounds := P.turnBounds
   noEarlyTripleEquality := P.noEarlyTripleEquality
-  windowContainment := P.windowContainment
-  remaining := P.toRemainingPaperFacts
-  paper := P.toRemainingPaperFacts.toMinimalFailureM8PaperFacts
-  componentPackage :=
-    (P.toRemainingPaperFacts.toMinimalFailureM8PaperFacts).toM8SeparatedConstructionComponentPackage
-  separatedFields :=
-    (P.toRemainingPaperFacts.toMinimalFailureM8PaperFacts).toM8SeparatedConstructionFields
+  noEarlyTriples := P.noEarlyTriples
+  lateTriples := P.lateTriples
+  windowGeometry := P.windowGeometry
+  constructionData := P.toM8ConstructionData
 
 @[simp]
 theorem ofRefinedPaperFacts_refined
@@ -428,17 +426,10 @@ theorem ofRefinedPaperFacts_refined
   rfl
 
 @[simp]
-theorem ofRefinedPaperFacts_remaining
+theorem ofRefinedPaperFacts_constructionData
     (P : RefinedPaperFacts C hmin) :
-    (ofRefinedPaperFacts P).remaining =
-      P.toRemainingPaperFacts :=
-  rfl
-
-@[simp]
-theorem ofRefinedPaperFacts_paper
-    (P : RefinedPaperFacts C hmin) :
-    (ofRefinedPaperFacts P).paper =
-      P.toRemainingPaperFacts.toMinimalFailureM8PaperFacts :=
+    (ofRefinedPaperFacts P).constructionData =
+      P.toM8ConstructionData :=
   rfl
 
 end RefinedReducerMatrix
@@ -469,9 +460,16 @@ theorem refined_lemma8_consumes_lemma8Existence
 
 /-- The refined nonconcave-arc row consumes the geometric angle-facts package.
 -/
-theorem refined_arc_consumes_arcAngleFacts
+theorem refined_arc_consumes_arcBoundaryBudget
     (P : RefinedPaperFacts C hmin) :
-    P.arc = P.arcAngleFacts.toNonconcaveArcTurnData :=
+    P.arc = P.arcBoundaryBudget.toNonconcaveArcTurnData :=
+  rfl
+
+/-- The refined turn-bound row consumes the boundary-attached nonconcave arc
+budget. -/
+theorem refined_turnBounds_consumes_arcBoundaryBudget
+    (P : RefinedPaperFacts C hmin) :
+    P.turnBounds = P.arcBoundaryBudget.toM8TurnBounds :=
   rfl
 
 /-- The refined no-early-triples row consumes the Lemma 9 five-start late
@@ -482,35 +480,52 @@ theorem refined_noEarly_consumes_lemma9FiveStartLateFacts
       P.lemma9FiveStartLateFacts.toConcreteNoEarlyTripleEquality :=
   rfl
 
-/-- The refined window-containment row consumes the combined Figure 8/Figure 9
-angle-containment bridge. -/
-theorem refined_windowContainment_consumes_angleContainment
+/-- The refined no-early-triples interface consumes the five concrete
+exclusions. -/
+theorem refined_noEarlyTriples_consumes_noEarlyTripleEquality
     (P : RefinedPaperFacts C hmin) :
-    P.windowContainment =
-      M8WindowGeometryFromContainment.M8WindowContainment.ofAngleContainmentBridges
-        P.angleContainment :=
+    P.noEarlyTriples.noEarlyTripleEquality =
+      P.noEarlyTripleEquality.toNoEarlyTripleEquality :=
   rfl
 
-/-- Forgetting the refined row to concrete remaining facts keeps exactly the
-checked third-wave reducer outputs. -/
-theorem refined_toRemainingPaperFacts_consumes_refined_outputs
+/-- The refined late-triples row consumes the no-early-triples interface. -/
+theorem refined_lateTriples_consumes_noEarlyTriples
     (P : RefinedPaperFacts C hmin) :
-    P.toRemainingPaperFacts =
-      { cutVertex := P.cutVertex
-        planarBoundary := P.planarBoundary
-        spine := P.spine
-        lemma8 := P.lemma8
-        arc := P.arc
-        noEarlyTripleEquality := P.noEarlyTripleEquality
-        windowContainment := P.windowContainment } :=
+    P.lateTriples = P.noEarlyTriples.toM8LateTriples :=
   rfl
 
-/-- A refined row closes a fixed minimal failure through the concrete
-remaining-facts adapter. -/
-theorem refined_contradiction_consumes_remaining
+/-- The refined window-geometry row consumes exactly the Figure 8 and Figure 9
+Euclidean fact packages. -/
+theorem refined_windowGeometry_consumes_figure8_figure9
+    (P : RefinedPaperFacts C hmin) :
+    P.windowGeometry =
+      { figure8 :=
+          MinimalFailureM8RefinedPaperFacts.figure8WindowGeometry_of_explicitEuclideanFacts
+            (localLabels := P.localLabels) (turnBounds := P.turnBounds)
+            P.figure8EuclideanFacts
+        figure9_left :=
+          MinimalFailureM8RefinedPaperFacts.figure9WindowGeometry_of_euclideanFactWitnesses
+            (localLabels := P.localLabels) (turnBounds := P.turnBounds)
+            P.figure9EuclideanFacts } :=
+  rfl
+
+/-- The refined construction-data row consumes labels, turn bounds,
+late triples, and window geometry directly. -/
+theorem refined_toM8ConstructionData_consumes_refined_outputs
+    (P : RefinedPaperFacts C hmin) :
+    P.toM8ConstructionData =
+      { localLabels := P.localLabels
+        turnBounds := P.turnBounds
+        lateTriples := P.lateTriples
+        windowGeometry := P.windowGeometry } :=
+  rfl
+
+/-- A refined row closes a fixed minimal failure through the checked
+construction-data adapter. -/
+theorem refined_contradiction_consumes_constructionData
     (P : RefinedPaperFacts C hmin) :
     False :=
-  P.toRemainingPaperFacts.contradiction
+  P.contradiction
 
 /-! ## Uniform minimal-failure matrix -/
 
@@ -587,35 +602,33 @@ theorem remaining_family_to_paperFamily_consumes_facts
       (H.facts C hmin).toMinimalFailureM8PaperFacts :=
   rfl
 
-/-- The refined family consumes its `facts` field pointwise when it forgets to
-the concrete remaining-facts family. -/
-theorem refined_family_to_remainingFamily_consumes_facts
+/-- The refined family consumes its `facts` field pointwise when it builds the
+construction-data eliminator. -/
+theorem refined_family_to_constructionEliminator_consumes_facts
     (H : RefinedPaperFactsFamily) {n : Nat} (C : _root_.UDConfig n)
     (hmin : IsMinimalClearedFailure C) :
-    H.toRemainingPaperFactsFamily.facts C hmin =
-      (H.facts C hmin).toRemainingPaperFacts :=
+    H.toM8ConstructionEliminator C hmin =
+      Nonempty.intro
+        ((H.facts C hmin).toM8ConstructionData.toBrokenLatticeMinimalFailure) :=
   rfl
 
-/-- The refined family reaches the older paper-facts family only through the
-concrete remaining-facts adapter. -/
-theorem refined_family_to_paperFamily_consumes_remainingFamily
-    (H : RefinedPaperFactsFamily) {n : Nat} (C : _root_.UDConfig n)
-    (hmin : IsMinimalClearedFailure C) :
-    (H.toRemainingPaperFactsFamily.toMinimalFailureM8PaperFactsFamily).facts
-        C hmin =
-      ((H.facts C hmin).toRemainingPaperFacts).toMinimalFailureM8PaperFacts :=
-  rfl
+/-- The refined family rules out minimal cleared failures through the
+construction-data eliminator. -/
+theorem refined_family_noMinimalClearedFailure_consumes_eliminator
+    (H : RefinedPaperFactsFamily) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) :=
+  H.no_minimalClearedFailure
 
 /--
 The uniform refined matrix records the currently shortest source-facing input
-family and every checked family adapter down to the final conditional target.
+family and the checked construction-data adapter down to the final conditional
+target.
 -/
 structure RefinedUniformReducerMatrix where
   inputs : TargetLowerBoundEightThirtyOneInputs
-  remainingFamily : RemainingPaperFactsFamily
-  paperFamily : PaperFactsFamily
-  separatedComponents :
-    M8SeparatedConstructionConcrete.M8SeparatedConstructionComponents
+  constructionEliminator :
+    BrokenLatticeMinimalFailure.MinimalFailureM8ConstructionEliminator
   noMinimalClearedFailure :
     forall {n : Nat} (C : _root_.UDConfig n),
       Not (IsMinimalClearedFailure C)
@@ -630,11 +643,7 @@ def ofInputs
     (H : TargetLowerBoundEightThirtyOneInputs) :
     RefinedUniformReducerMatrix where
   inputs := H
-  remainingFamily := H.toRemainingPaperFactsFamily
-  paperFamily :=
-    H.toRemainingPaperFactsFamily.toMinimalFailureM8PaperFactsFamily
-  separatedComponents :=
-    (H.toRemainingPaperFactsFamily.toMinimalFailureM8PaperFactsFamily).toSeparatedConstructionComponents
+  constructionEliminator := H.toM8ConstructionEliminator
   noMinimalClearedFailure := H.no_minimalClearedFailure
   targetLowerBoundEightThirtyOne := H.targetLowerBoundEightThirtyOne
 
@@ -645,16 +654,11 @@ theorem ofInputs_inputs
   rfl
 
 @[simp]
-theorem ofInputs_remainingFamily
-    (H : TargetLowerBoundEightThirtyOneInputs) :
-    (ofInputs H).remainingFamily = H.toRemainingPaperFactsFamily :=
-  rfl
-
-@[simp]
-theorem ofInputs_paperFamily
-    (H : TargetLowerBoundEightThirtyOneInputs) :
-    (ofInputs H).paperFamily =
-      H.toRemainingPaperFactsFamily.toMinimalFailureM8PaperFactsFamily :=
+theorem ofInputs_constructionEliminator
+    (H : TargetLowerBoundEightThirtyOneInputs) {n : Nat}
+    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) :
+    (ofInputs H).constructionEliminator C hmin =
+      H.toM8ConstructionEliminator C hmin :=
   rfl
 
 end RefinedUniformReducerMatrix

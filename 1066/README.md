@@ -24,7 +24,7 @@ The Aristotle API key is expected to live in the user/system environment as
 - `ErdosProblems1066.lean`: root import file. It imports every retained checked
   Lean module so a root build covers the whole project.
 - `ErdosProblems1066/KnownBounds.lean`: public facade. It exposes only
-  kernel-checked theorem wrappers.
+  unconditional kernel-checked theorem wrappers.
 - `ErdosProblems1066/UnitDistanceBounds.lean`: legacy imported proof file with
   the core definitions and the currently verified `1 / 3` upper construction
   and `1 / 4` lower bound.
@@ -56,6 +56,32 @@ The Swanepoel `8 / 31` lower bound and Pach--Toth `5 / 16` upper construction
 are not exposed as unconditional public theorem wrappers yet. They will remain
 absent from the public facade until their proof terms are fully formalized
 without `axiom`, `sorry`, or `admit`.
+
+Conditional endpoints are allowed to mention the target propositions only when
+their hypotheses carry the remaining input families explicitly. The strongest
+current Pach--Toth routes are
+`ErdosProblems1066.PachToth.FinalConditional.exactTarget_of_periodSearch_equationTransitions_crossBlock`,
+`ErdosProblems1066.PachToth.FinalConditional.arbitraryTarget_of_periodSearch_equationTransitions_crossBlock`,
+and
+`ErdosProblems1066.PachToth.SplitRealizationFinal.targetUpperConstructionFiveSixteenArbitrary_of_finalConditionalFamily`;
+they still require a uniform
+`FinalConditional.EquationPeriodSearchCrossBlockFamily`, i.e. period-search
+certificates, same/opposite equation transitions, and cross-block lower-bound
+tables for every positive block count. The source-facing compact variants
+`ErdosProblems1066.PachToth.FinalConditional.exactTarget_of_periodSearchData_sqValueCertificate`
+and
+`ErdosProblems1066.PachToth.FinalConditional.arbitraryTarget_of_periodSearchData_sqValueCertificate`
+make the remaining upper-triangle square-value checklist explicit.
+
+The strongest current Swanepoel routes are
+`ErdosProblems1066.Swanepoel.FinalConditional.targetLowerBoundEightThirtyOne_of_m8SeparatedConstructionEliminator`,
+`ErdosProblems1066.Swanepoel.M8SeparatedConstructionConcrete.targetLowerBoundEightThirtyOne_of_componentPackage`,
+and
+`ErdosProblems1066.Swanepoel.MinimalFailurePaperFactMatrix.targetLowerBoundEightThirtyOne_consumes_exact_inputs`.
+They still require, uniformly for every minimal cleared failure, the remaining
+M8 labels, nonconcave-arc turn bounds, no-early-triple data, and Figure 8/Figure
+9 window-containment/angle inputs packaged by
+`MinimalFailurePaperFactMatrix.TargetLowerBoundEightThirtyOneInputs`.
 
 Bridge modules:
 
@@ -132,6 +158,13 @@ Bridge modules:
 - `ErdosProblems1066.PachToth.ClosedChainReduction` packages the final
   Pach--Toth spine as conditional theorems from explicit closed-placement
   certificates; arbitrary remainders are now placed by `RemainderPlacement`.
+- `ErdosProblems1066.PachToth.FinalConditional` assembles the current strongest
+  conditional exact and arbitrary-`n` Pach--Toth facades from explicit
+  period-search/equation-transition/cross-block lower-bound families, plus
+  compact square-value-certificate variants.
+- `ErdosProblems1066.PachToth.SplitRealizationFinal` routes the exact target
+  through checked finite remainders and far-apart translated placement to the
+  full arbitrary-`n` conditional target.
 - `ErdosProblems1066.PachToth.TargetReduction` proves that the proposition
   target follows from indexed chain realizations for all positive block counts.
 - `ErdosProblems1066.Swanepoel.Lemma10Bridge` proves the checked finite
@@ -223,6 +256,16 @@ Bridge modules:
   proposition.
 - `ErdosProblems1066.Swanepoel.TargetReduction` proves that the proposition
   target follows from a cleared `8 / 31` independent set in every configuration.
+- `ErdosProblems1066.Swanepoel.FinalConditional` records the final conditional
+  target route from a uniform minimal-failure M8 separated-construction
+  eliminator.
+- `ErdosProblems1066.Swanepoel.M8SeparatedConstructionConcrete` packages the
+  explicit M8 labels, arc-turn, no-early-triple, and window-containment
+  component families consumed by that final conditional route.
+- `ErdosProblems1066.Swanepoel.MinimalFailurePaperFactMatrix` records the
+  source-facing remaining input family
+  `TargetLowerBoundEightThirtyOneInputs` and the checked reducers that consume
+  it pointwise.
 
 ## Trust Audit
 
@@ -330,4 +373,6 @@ and `Quot.sound`; the complete checked declaration set is maintained in
 `.github/workflows/lean_action_ci.yml`. The target proposition names
 `ErdosProblems1066.Swanepoel.targetLowerBoundEightThirtyOne` and
 `ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen` are definitions,
-not verified theorem claims.
+not verified theorem claims. Any theorem whose name ends in or contains these
+targets but takes one of the explicit families above is a conditional reducer,
+not a public unconditional bound.

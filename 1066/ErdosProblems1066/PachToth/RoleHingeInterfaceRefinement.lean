@@ -541,6 +541,64 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_roleHingeTransitionEx
       (generatedOrbitSqDistances_exactBase_of_transitionExactLocalSqDistances
         T hk orientation htransition)
 
+/-- Generated-period exact-block target bridge for the current concrete
+connector-only transition obligations. -/
+theorem targetUpperConstructionFiveSixteenAt_concreteExactBlock_of_generatedPeriod_orbitSqDistances
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
+        BaseTransitionRealization.exactBase orientation)
+    (horbit :
+      GeneratedOrbitMatchesExactLocalSqDistances
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
+        BaseTransitionRealization.exactBase orientation) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriod_orbitSqDistances
+      RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+      hk BaseTransitionRealization.exactBase orientation period
+      { separated := separated
+        orbit_sq_distances := horbit }
+
+/-- Generated-period exact-block target bridge for concrete obligations when the
+orbit metric is obtained from exact-local squared-distance preservation. -/
+theorem targetUpperConstructionFiveSixteenAt_concreteExactBlock_of_period_transitionSqDistances
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
+        BaseTransitionRealization.exactBase orientation)
+    (htransition :
+      RoleHingeSameBlockAlgebra.GeneratedTransitionsPreserveExactLocalSqDistances
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_concreteExactBlock_of_generatedPeriod_orbitSqDistances
+      hk orientation period separated
+      (by
+        simpa [GeneratedOrbitMatchesExactLocalSqDistances] using
+          RoleHingeSameBlockAlgebra.generatedOrbit_exactBase_matchesExactLocalSqDistances
+            RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+            hk orientation htransition)
+
+set_option linter.style.longLine false
+
 /-- Exact-block target bridge for the current concrete connector-only
 transition obligations.  The same-block metric is supplied only on the
 generated orbit, so this route avoids the impossible arbitrary-source
@@ -550,21 +608,24 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_concreteTransitionObl
     (orientation : Fin k -> OrientationData.BlockOrientation)
     (closure :
       PeriodInterface.GeneratedClosureEquation
-        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
         BaseTransitionRealization.exactBase orientation)
     (separated :
       GeneratedSeparationInterface.GeneratedGlobalSeparation
-        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
         BaseTransitionRealization.exactBase orientation)
     (horbit :
       GeneratedOrbitMatchesExactLocalSqDistances
-        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
         BaseTransitionRealization.exactBase orientation) :
     targetUpperConstructionFiveSixteenAt (16 * k) := by
   exact
     targetUpperConstructionFiveSixteenAt_exactBlock_of_orbitSqDistances
-      RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
-      BaseTransitionRealization.exactBase orientation closure separated horbit
+      RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+      hk BaseTransitionRealization.exactBase orientation closure separated horbit
 
 /-- Exact-block target bridge for the current concrete connector-only
 transition obligations, deriving the orbit same-block metric from exact-local
@@ -574,11 +635,13 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_concreteTransitionObl
     (orientation : Fin k -> OrientationData.BlockOrientation)
     (closure :
       PeriodInterface.GeneratedClosureEquation
-        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
         BaseTransitionRealization.exactBase orientation)
     (separated :
       GeneratedSeparationInterface.GeneratedGlobalSeparation
-        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+        hk
         BaseTransitionRealization.exactBase orientation)
     (htransition :
       RoleHingeSameBlockAlgebra.GeneratedTransitionsPreserveExactLocalSqDistances
@@ -592,6 +655,8 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_concreteTransitionObl
           RoleHingeSameBlockAlgebra.generatedOrbit_exactBase_matchesExactLocalSqDistances
             RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
             hk orientation htransition)
+
+set_option linter.style.longLine true
 
 /-- Named obstruction: the concrete fixed-angle role-hinge override cannot
 satisfy the old arbitrary-source same-block preservation interface. -/

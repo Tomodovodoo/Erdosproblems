@@ -220,6 +220,105 @@ lemma smaller_hasCleared_of_minimalClearedFailure {n m : Nat}
     HasClearedEightThirtyOneIndependentSet Csmall :=
   hmin.2 Csmall hlt
 
+/-! ## Minimal-failure eliminator interface -/
+
+/-- A dependency-light eliminator for minimal cleared failures.
+
+Downstream refined M8 packages can instantiate this with their strongest
+checked contradiction route.  This base file keeps the route conditional so it
+does not assert `no_minimalClearedFailure` without the remaining inputs. -/
+abbrev MinimalClearedFailureEliminator : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n),
+    IsMinimalClearedFailure C -> False
+
+/-- A variant eliminator that proves the cleared predicate for each proposed
+minimal failure; the contradiction is then exactly the failure component of
+`IsMinimalClearedFailure`. -/
+abbrev MinimalClearedFailureClearingEliminator : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n),
+    IsMinimalClearedFailure C ->
+      HasClearedEightThirtyOneIndependentSet C
+
+/-- A supplied minimal-failure eliminator rules out every minimal cleared
+failure. -/
+theorem no_minimalClearedFailure
+    (hElim : MinimalClearedFailureEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) := by
+  intro n C hmin
+  exact hElim C hmin
+
+/-- If every proposed minimal cleared failure can actually be cleared, then no
+minimal cleared failure exists. -/
+theorem no_minimalClearedFailure_of_clearingEliminator
+    (hElim : MinimalClearedFailureClearingEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) := by
+  intro n C hmin
+  exact not_hasCleared_of_minimalClearedFailure hmin (hElim C hmin)
+
+/-- A clearing eliminator is an ordinary contradiction-valued eliminator. -/
+theorem minimalClearedFailureEliminator_of_clearingEliminator
+    (hElim : MinimalClearedFailureClearingEliminator) :
+    MinimalClearedFailureEliminator := by
+  intro n C hmin
+  exact not_hasCleared_of_minimalClearedFailure hmin (hElim C hmin)
+
+/-- Any counterexample to the cleared pipeline predicate has a minimal
+counterexample at some cardinality. -/
+theorem exists_minimalClearedFailure_of_not_hasCleared {n : Nat}
+    {C : _root_.UDConfig n}
+    (hC : Not (HasClearedEightThirtyOneIndependentSet C)) :
+    Exists fun m : Nat =>
+      Exists fun Cmin : _root_.UDConfig m =>
+        IsMinimalClearedFailure Cmin := by
+  classical
+  let Bad : Nat -> Prop := fun m =>
+    Exists fun Cbad : _root_.UDConfig m =>
+      Not (HasClearedEightThirtyOneIndependentSet Cbad)
+  have hBad : Exists Bad := Exists.intro n (Exists.intro C hC)
+  let m := Nat.find hBad
+  rcases Nat.find_spec hBad with ⟨Cmin, hCmin⟩
+  refine Exists.intro m (Exists.intro Cmin ?_)
+  constructor
+  · exact hCmin
+  · intro k Csmall hk
+    by_contra hSmall
+    have hkBad : Bad k := Exists.intro Csmall hSmall
+    exact (Nat.find_min hBad hk) hkBad
+
+/-- Eliminating every minimal cleared failure gives the cleared pipeline
+predicate for every unit-distance configuration. -/
+theorem hasCleared_of_minimalClearedFailureEliminator
+    (hElim : MinimalClearedFailureEliminator) :
+    forall (n : Nat) (C : _root_.UDConfig n),
+      HasClearedEightThirtyOneIndependentSet C := by
+  intro n C
+  by_contra hC
+  rcases exists_minimalClearedFailure_of_not_hasCleared (C := C) hC with
+    ⟨m, Cmin, hmin⟩
+  exact hElim Cmin hmin
+
+/-- A negated minimal-failure theorem gives the cleared pipeline predicate for
+every unit-distance configuration. -/
+theorem hasCleared_of_no_minimalClearedFailure
+    (hNoMin :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        Not (IsMinimalClearedFailure C)) :
+    forall (n : Nat) (C : _root_.UDConfig n),
+      HasClearedEightThirtyOneIndependentSet C :=
+  hasCleared_of_minimalClearedFailureEliminator
+    (fun C hmin => hNoMin C hmin)
+
+/-- If every proposed minimal cleared failure can actually be cleared, then
+the cleared pipeline predicate holds for every unit-distance configuration. -/
+theorem hasCleared_of_minimalClearedFailureClearingEliminator
+    (hElim : MinimalClearedFailureClearingEliminator) :
+    forall (n : Nat) (C : _root_.UDConfig n),
+      HasClearedEightThirtyOneIndependentSet C :=
+  hasCleared_of_minimalClearedFailureEliminator
+    (minimalClearedFailureEliminator_of_clearingEliminator hElim)
+
 lemma smaller_hasCleared_of_minimalFailure_and_deleted_nonempty
     (D : DeletionReinsertionData C Csmall)
     (hmin : IsMinimalClearedFailure C)

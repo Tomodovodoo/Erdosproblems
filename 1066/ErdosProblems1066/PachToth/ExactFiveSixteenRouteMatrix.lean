@@ -3,9 +3,12 @@ import ErdosProblems1066.PachToth.SplitRealizationFinal
 import ErdosProblems1066.PachToth.ClosedPlacementComponentsAssembly
 import ErdosProblems1066.PachToth.IndexedCrossBlockTableConcrete
 import ErdosProblems1066.PachToth.CrossBlockUpperTriangleConcrete
+import ErdosProblems1066.PachToth.CrossBlockPolynomialNormalization
 import ErdosProblems1066.PachToth.ConcretePeriodSearchFamily
 import ErdosProblems1066.PachToth.ConcretePeriodCandidateSearch
+import ErdosProblems1066.PachToth.FiniteSearchCertificate
 import ErdosProblems1066.PachToth.FiniteCertificateObligationSummary
+import ErdosProblems1066.PachToth.EventualRoleHingeClosure
 import ErdosProblems1066.PachToth.RoleHingeFiniteFamilyBridge
 import ErdosProblems1066.PachToth.SmallCaseCertificates
 
@@ -29,6 +32,8 @@ open SplitRealizationFinal
 open SplitArbitraryNNonRigidBridge
 open IndexedCrossBlockTableConcrete
 open NonRigidConnectorSeparationFacts
+open EventualRoleHingeClosure
+open FiniteSearchCertificate
 
 universe u
 
@@ -144,6 +149,18 @@ and upper-triangle square-value tables. -/
 abbrev FiniteCertificateObligationsInput : Type :=
   FiniteCertificateObligationSummary.Obligations
 
+/-- Compact all-positive finite-search certificate with non-connector
+square-value tables. -/
+abbrev AllPositiveNonConnectorSqValueCertificateInput : Type :=
+  FiniteSearchCertificate.AllPositiveNonConnectorSqValueCertificate
+
+/-- Split all-positive finite-search period data plus non-connector
+square-value tables. -/
+structure AllPositivePeriodSearchNonConnectorSqValueInput where
+  periodSearch : FiniteSearchCertificate.AllPositivePeriodSearchData
+  sqValue :
+    FiniteSearchCertificate.NonConnectorSqValueCertificate periodSearch
+
 /-- Existing period-search data plus the remaining upper-triangle square-value
 certificate. -/
 structure PeriodSearchSqValueCertificateInput where
@@ -181,6 +198,53 @@ abbrev ComponentFamilyInput : Type :=
 route. -/
 abbrev ComponentFamilyFieldsInput : Type :=
   ClosedPlacementComponentsAssembly.ComponentFamilyFields
+
+/-- Normalized vector-backed upper-triangle certificates, consumed through the
+non-connector route where cyclic connector pairs are discharged separately. -/
+structure NormalizedVectorCertificateFamilyInput where
+  family : CrossBlockPolynomialNormalization.RoleHingedPeriodSearchFamily
+  certificates :
+    CrossBlockPolynomialNormalization.UpperTriangleVectorCertificateFamily
+      family
+
+/-- Normalized list-backed upper-triangle certificates, consumed through the
+non-connector route where cyclic connector pairs are discharged separately. -/
+structure NormalizedListCertificateFamilyInput where
+  family : CrossBlockPolynomialNormalization.RoleHingedPeriodSearchFamily
+  certificates :
+    CrossBlockPolynomialNormalization.UpperTriangleListCertificateFamily
+      family
+
+/-- Eventual role-hinge closure data whose block threshold is at most one.
+The threshold side condition is what turns the eventual route into an exact
+`16 * k` route for every positive `k`. -/
+structure EventualRoleHingedClosureAtMostOneInput where
+  K0 : Nat
+  transitions : EventualRoleHingeClosure.RoleHingeTransitions
+  orientation :
+    forall (k : Nat), K0 <= k -> 0 < k ->
+      Fin k -> OrientationData.BlockOrientation
+  closure :
+    forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+      PeriodInterface.GeneratedClosureEquation
+        transitions.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase
+        (orientation k hK hk)
+  separated :
+    forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        transitions.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase
+        (orientation k hK hk)
+  threshold_at_most_one : K0 <= 1
+
+/-- Eventual finite-certificate obligations whose block threshold is at most
+one.  This is the compact search-facing spelling of the eventual closure
+route. -/
+structure EventualFiniteCertificateObligationsAtMostOneInput where
+  K0 : Nat
+  obligations : EventualRoleHingeClosure.EventualFiniteCertificateObligations K0
+  threshold_at_most_one : K0 <= 1
 
 namespace CandidateWordEquationsLowerBoundsInput
 
@@ -222,16 +286,13 @@ def toSqValueCertificate
 theorem targetUpperConstructionFiveSixteen
     (I : PeriodSearchSqValueFactsInput) :
     targetUpperConstructionFiveSixteen :=
-  FiniteCertificateObligationSummary.targetUpperConstructionFiveSixteen_of_periodSearchData_sqValueCertificate
-    I.periodSearch I.toSqValueCertificate
+  I.toSqValueCertificate.targetUpperConstructionFiveSixteen
 
 /-- Arbitrary target from period-search data plus raw square-value facts. -/
 theorem targetUpperConstructionFiveSixteenArbitrary
     (I : PeriodSearchSqValueFactsInput) :
     targetUpperConstructionFiveSixteenArbitrary :=
-  FiniteCertificateObligationSummary.targetUpperConstructionFiveSixteenArbitrary_of_periodSearchData_sqValueFacts
-    I.periodSearch I.sqValue I.sqValue_eq_polynomial_lt
-    I.sqValue_ge_one_lt
+  I.toSqValueCertificate.targetUpperConstructionFiveSixteenArbitrary
 
 end PeriodSearchSqValueFactsInput
 
@@ -253,6 +314,111 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_checkedSmallC
           Hexact hn)
       targetUpperConstructionFiveSixteenSmallUpTo_sixteen
 
+namespace NormalizedVectorCertificateFamilyInput
+
+/-- Exact target from normalized vector-backed upper-triangle certificates via
+the non-connector connector-separated route. -/
+theorem targetUpperConstructionFiveSixteen
+    (I : NormalizedVectorCertificateFamilyInput) :
+    targetUpperConstructionFiveSixteen :=
+  (I.certificates.toNonConnectorSqDistanceTableFamily).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary target from normalized vector-backed upper-triangle certificates
+via the non-connector connector-separated route and checked small cases. -/
+theorem targetUpperConstructionFiveSixteenArbitrary
+    (I : NormalizedVectorCertificateFamilyInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_checkedSmallCases
+    I.targetUpperConstructionFiveSixteen
+
+end NormalizedVectorCertificateFamilyInput
+
+namespace NormalizedListCertificateFamilyInput
+
+/-- Exact target from normalized list-backed upper-triangle certificates via
+the non-connector connector-separated route. -/
+theorem targetUpperConstructionFiveSixteen
+    (I : NormalizedListCertificateFamilyInput) :
+    targetUpperConstructionFiveSixteen :=
+  (I.certificates.toNonConnectorSqDistanceTableFamily).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary target from normalized list-backed upper-triangle certificates
+via the non-connector connector-separated route and checked small cases. -/
+theorem targetUpperConstructionFiveSixteenArbitrary
+    (I : NormalizedListCertificateFamilyInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_checkedSmallCases
+    I.targetUpperConstructionFiveSixteen
+
+end NormalizedListCertificateFamilyInput
+
+namespace EventualRoleHingedClosureAtMostOneInput
+
+/-- Exact target from eventual role-hinge closure data once the eventual block
+threshold is at most one. -/
+theorem targetUpperConstructionFiveSixteen
+    (I : EventualRoleHingedClosureAtMostOneInput) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    GeneratedMetricClosure.RoleHingedGeneratedClosureFamily.targetUpperConstructionFiveSixteen
+      { transitions := I.transitions
+        orientation := fun k hk =>
+          I.orientation k (by
+            have hk1 : 1 <= k := Nat.succ_le_of_lt hk
+            exact le_trans I.threshold_at_most_one hk1) hk
+        closure := fun k hk =>
+          I.closure k (by
+            have hk1 : 1 <= k := Nat.succ_le_of_lt hk
+            exact le_trans I.threshold_at_most_one hk1) hk
+        separated := fun k hk =>
+          I.separated k (by
+            have hk1 : 1 <= k := Nat.succ_le_of_lt hk
+            exact le_trans I.threshold_at_most_one hk1) hk }
+
+/-- Arbitrary target from eventual role-hinge closure data with `K0 <= 1`,
+using the checked below-sixteen small cases. -/
+theorem targetUpperConstructionFiveSixteenArbitrary
+    (I : EventualRoleHingedClosureAtMostOneInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_checkedSmallCases
+    I.K0 I.transitions I.orientation I.closure I.separated
+    I.threshold_at_most_one
+
+end EventualRoleHingedClosureAtMostOneInput
+
+namespace EventualFiniteCertificateObligationsAtMostOneInput
+
+/-- Exact target from eventual finite-certificate obligations once the
+eventual block threshold is at most one. -/
+theorem targetUpperConstructionFiveSixteen
+    (I : EventualFiniteCertificateObligationsAtMostOneInput) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    GeneratedMetricClosure.RoleHingedGeneratedClosureFamily.targetUpperConstructionFiveSixteen
+      { transitions := I.obligations.transitions
+        orientation := fun k hk =>
+          I.obligations.orientation k (by
+            have hk1 : 1 <= k := Nat.succ_le_of_lt hk
+            exact le_trans I.threshold_at_most_one hk1) hk
+        closure := fun k hk =>
+          I.obligations.closure k (by
+            have hk1 : 1 <= k := Nat.succ_le_of_lt hk
+            exact le_trans I.threshold_at_most_one hk1) hk
+        separated := fun k hk =>
+          I.obligations.generatedSeparation k (by
+            have hk1 : 1 <= k := Nat.succ_le_of_lt hk
+            exact le_trans I.threshold_at_most_one hk1) hk }
+
+/-- Arbitrary target from eventual finite-certificate obligations with
+`K0 <= 1`, using the checked below-sixteen small cases. -/
+theorem targetUpperConstructionFiveSixteenArbitrary
+    (I : EventualFiniteCertificateObligationsAtMostOneInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  I.obligations.targetUpperConstructionFiveSixteenArbitrary_checkedSmallCases
+    I.threshold_at_most_one
+
+end EventualFiniteCertificateObligationsAtMostOneInput
+
 /-- The route matrix.  Rows are deliberately conditional: a row says how to
 turn that row's explicit data shape into the exact and arbitrary targets. -/
 structure Matrix where
@@ -270,6 +436,10 @@ structure Matrix where
     RouteRow ComponentFamilyFieldsInput
   finiteSearchFamily :
     RouteRow FiniteSearchCertificate.RoleHingedFiniteSearchFamily
+  allPositiveNonConnectorSqValueCertificate :
+    RouteRow AllPositiveNonConnectorSqValueCertificateInput
+  allPositivePeriodSearchNonConnectorSqValue :
+    RouteRow AllPositivePeriodSearchNonConnectorSqValueInput
   candidateWordEquationsLowerBounds :
     RouteRow CandidateWordEquationsLowerBoundsInput
   transitionFactsFiniteSearchFamily :
@@ -283,6 +453,10 @@ structure Matrix where
     RouteRow PeriodSearchSqValueCertificateInput
   periodSearchSqValueFacts :
     RouteRow PeriodSearchSqValueFactsInput
+  eventualRoleHingedClosureAtMostOne :
+    RouteRow EventualRoleHingedClosureAtMostOneInput
+  eventualFiniteCertificateObligationsAtMostOne :
+    RouteRow EventualFiniteCertificateObligationsAtMostOneInput
   crossBlockLowerBounds :
     RouteRow CrossBlockLowerBoundsInput
   indexedCrossBlockLowerTables :
@@ -299,6 +473,10 @@ structure Matrix where
     RouteRow UpperTrianglePolynomialTableInput
   upperTriangleSqValueTables :
     RouteRow UpperTriangleSqValueTableInput
+  normalizedVectorCertificateFamily :
+    RouteRow NormalizedVectorCertificateFamilyInput
+  normalizedListCertificateFamily :
+    RouteRow NormalizedListCertificateFamilyInput
   vectorConcreteCrossBlock :
     RouteRow CrossBlockUpperTriangleConcrete.VectorConcreteCrossBlockFamily
   listConcreteCrossBlock :
@@ -336,6 +514,22 @@ def matrix : Matrix where
       arbitraryTarget := fun F =>
         targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_checkedSmallCases
           F.targetUpperConstructionFiveSixteen }
+  allPositiveNonConnectorSqValueCertificate :=
+    { exactTarget := fun C =>
+        C.targetUpperConstructionFiveSixteen
+      arbitraryTarget := fun C =>
+        C.targetUpperConstructionFiveSixteenArbitrary }
+  allPositivePeriodSearchNonConnectorSqValue :=
+    { exactTarget := fun I =>
+        let C : FiniteSearchCertificate.AllPositiveNonConnectorSqValueCertificate :=
+          { periodSearch := I.periodSearch
+            sqValue := I.sqValue }
+        C.targetUpperConstructionFiveSixteen
+      arbitraryTarget := fun I =>
+        let C : FiniteSearchCertificate.AllPositiveNonConnectorSqValueCertificate :=
+          { periodSearch := I.periodSearch
+            sqValue := I.sqValue }
+        C.targetUpperConstructionFiveSixteenArbitrary }
   candidateWordEquationsLowerBounds :=
     { exactTarget := fun I =>
         I.targetUpperConstructionFiveSixteen
@@ -359,12 +553,20 @@ def matrix : Matrix where
         O.targetUpperConstructionFiveSixteenArbitrary }
   periodSearchSqValueCertificate :=
     { exactTarget := fun I =>
-        FiniteCertificateObligationSummary.targetUpperConstructionFiveSixteen_of_periodSearchData_sqValueCertificate
-          I.periodSearch I.sqValue
+        I.sqValue.targetUpperConstructionFiveSixteen
       arbitraryTarget := fun I =>
-        FiniteCertificateObligationSummary.targetUpperConstructionFiveSixteenArbitrary_of_periodSearchData_sqValueCertificate
-          I.periodSearch I.sqValue }
+        I.sqValue.targetUpperConstructionFiveSixteenArbitrary }
   periodSearchSqValueFacts :=
+    { exactTarget := fun I =>
+        I.targetUpperConstructionFiveSixteen
+      arbitraryTarget := fun I =>
+        I.targetUpperConstructionFiveSixteenArbitrary }
+  eventualRoleHingedClosureAtMostOne :=
+    { exactTarget := fun I =>
+        I.targetUpperConstructionFiveSixteen
+      arbitraryTarget := fun I =>
+        I.targetUpperConstructionFiveSixteenArbitrary }
+  eventualFiniteCertificateObligationsAtMostOne :=
     { exactTarget := fun I =>
         I.targetUpperConstructionFiveSixteen
       arbitraryTarget := fun I =>
@@ -388,12 +590,10 @@ def matrix : Matrix where
         C.targetUpperConstructionFiveSixteenArbitrary }
   nonConnectorSqDistanceTables :=
     { exactTarget := fun I =>
-        IndexedNonConnectorCrossBlockSqDistanceTableFamily.targetUpperConstructionFiveSixteen
-          I.tables
+        I.tables.targetUpperConstructionFiveSixteen
       arbitraryTarget := fun I =>
         targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_checkedSmallCases
-          (IndexedNonConnectorCrossBlockSqDistanceTableFamily.targetUpperConstructionFiveSixteen
-            I.tables) }
+          I.tables.targetUpperConstructionFiveSixteen }
   upperTriangleNonConnectorPolynomialTables :=
     { exactTarget := fun I =>
         I.tables.targetUpperConstructionFiveSixteen
@@ -416,6 +616,16 @@ def matrix : Matrix where
         I.tables.targetUpperConstructionFiveSixteen
       arbitraryTarget := fun I =>
         I.tables.targetUpperConstructionFiveSixteenArbitrary }
+  normalizedVectorCertificateFamily :=
+    { exactTarget := fun I =>
+        I.targetUpperConstructionFiveSixteen
+      arbitraryTarget := fun I =>
+        I.targetUpperConstructionFiveSixteenArbitrary }
+  normalizedListCertificateFamily :=
+    { exactTarget := fun I =>
+        I.targetUpperConstructionFiveSixteen
+      arbitraryTarget := fun I =>
+        I.targetUpperConstructionFiveSixteenArbitrary }
   vectorConcreteCrossBlock :=
     { exactTarget := fun C =>
         C.targetUpperConstructionFiveSixteen
@@ -441,6 +651,14 @@ structure ShortestRouteChecklist where
     RouteRow PeriodSearchSqValueCertificateInput
   periodSearchSqValueFacts :
     RouteRow PeriodSearchSqValueFactsInput
+  allPositiveNonConnectorSqValueCertificate :
+    RouteRow AllPositiveNonConnectorSqValueCertificateInput
+  allPositivePeriodSearchNonConnectorSqValue :
+    RouteRow AllPositivePeriodSearchNonConnectorSqValueInput
+  eventualRoleHingedClosureAtMostOne :
+    RouteRow EventualRoleHingedClosureAtMostOneInput
+  eventualFiniteCertificateObligationsAtMostOne :
+    RouteRow EventualFiniteCertificateObligationsAtMostOneInput
   finiteCandidateFamily :
     RouteRow FiniteCandidateFamilyInput
   candidateWordEquationsLowerBounds :
@@ -457,6 +675,10 @@ structure ShortestRouteChecklist where
     RouteRow UpperTriangleNonConnectorPolynomialTableInput
   upperTriangleNonConnectorSqValueTables :
     RouteRow UpperTriangleNonConnectorSqValueTableInput
+  normalizedVectorCertificateFamily :
+    RouteRow NormalizedVectorCertificateFamilyInput
+  normalizedListCertificateFamily :
+    RouteRow NormalizedListCertificateFamilyInput
 
 /-- The current shortest checked conditional route checklist from compact
 finite certificates, reduced non-connector tables, raw candidates, or
@@ -468,6 +690,14 @@ def shortestRouteChecklist : ShortestRouteChecklist where
     matrix.periodSearchSqValueCertificate
   periodSearchSqValueFacts :=
     matrix.periodSearchSqValueFacts
+  allPositiveNonConnectorSqValueCertificate :=
+    matrix.allPositiveNonConnectorSqValueCertificate
+  allPositivePeriodSearchNonConnectorSqValue :=
+    matrix.allPositivePeriodSearchNonConnectorSqValue
+  eventualRoleHingedClosureAtMostOne :=
+    matrix.eventualRoleHingedClosureAtMostOne
+  eventualFiniteCertificateObligationsAtMostOne :=
+    matrix.eventualFiniteCertificateObligationsAtMostOne
   finiteCandidateFamily :=
     { exactTarget := fun F =>
         F.targetUpperConstructionFiveSixteen
@@ -487,6 +717,10 @@ def shortestRouteChecklist : ShortestRouteChecklist where
     matrix.upperTriangleNonConnectorPolynomialTables
   upperTriangleNonConnectorSqValueTables :=
     matrix.upperTriangleNonConnectorSqValueTables
+  normalizedVectorCertificateFamily :=
+    matrix.normalizedVectorCertificateFamily
+  normalizedListCertificateFamily :=
+    matrix.normalizedListCertificateFamily
 
 /-- Exact target from the compact finite-certificate obligation package. -/
 theorem targetUpperConstructionFiveSixteen_of_finiteCertificateObligations
@@ -655,7 +889,7 @@ theorem targetUpperConstructionFiveSixteen_of_upperTriangleNonConnectorPolynomia
 
 /-- Arbitrary target from a dependent reduced upper-triangle non-connector
 polynomial table family. -/
-theorem targetUpperConstructionFiveSixteenArbitrary_of_upperTriangleNonConnectorPolynomialTableFamily
+theorem targetUpperConstructionFiveSixteenArbitrary_of_nonConnectorPolynomialTableFamily
     {F : CrossBlockSqTableSearch.RoleHingedPeriodSearchFamily}
     (T :
       CrossBlockSqTableSearch.UpperTriangleNonConnectorPolynomialTableFamily
@@ -664,6 +898,18 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_upperTriangleNonConnector
   targetUpperConstructionFiveSixteenArbitrary_of_upperTriangleNonConnectorPolynomialTables
     { family := F
       tables := T }
+
+/-- Compatibility spelling for the dependent reduced upper-triangle
+non-connector polynomial table route. -/
+theorem
+    targetUpperConstructionFiveSixteenArbitrary_of_upperTriangleNonConnectorPolynomialTableFamily
+    {F : CrossBlockSqTableSearch.RoleHingedPeriodSearchFamily}
+    (T :
+      CrossBlockSqTableSearch.UpperTriangleNonConnectorPolynomialTableFamily
+        F) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_nonConnectorPolynomialTableFamily
+    T
 
 /-- Exact target from reduced upper-triangle non-connector square-value
 tables. -/
@@ -760,6 +1006,57 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_finiteSearchFamily
     targetUpperConstructionFiveSixteenArbitrary :=
   matrix.finiteSearchFamily.arbitraryTarget F
 
+/-- Exact target from the compact all-positive non-connector square-value
+finite-search certificate. -/
+theorem targetUpperConstructionFiveSixteen_of_allPositiveNonConnectorSqValueCertificate
+    (C : AllPositiveNonConnectorSqValueCertificateInput) :
+    targetUpperConstructionFiveSixteen :=
+  matrix.allPositiveNonConnectorSqValueCertificate.exactTarget C
+
+/-- Arbitrary target from the compact all-positive non-connector square-value
+finite-search certificate. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_allPositiveNonConnectorSqValueCertificate
+    (C : AllPositiveNonConnectorSqValueCertificateInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  matrix.allPositiveNonConnectorSqValueCertificate.arbitraryTarget C
+
+/-- Exact target from all-positive period-search data plus non-connector
+square-value tables. -/
+theorem targetUpperConstructionFiveSixteen_of_allPositivePeriodSearchNonConnectorSqValue
+    (I : AllPositivePeriodSearchNonConnectorSqValueInput) :
+    targetUpperConstructionFiveSixteen :=
+  matrix.allPositivePeriodSearchNonConnectorSqValue.exactTarget I
+
+/-- Arbitrary target from all-positive period-search data plus non-connector
+square-value tables. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_allPositivePeriodSearchNonConnectorSqValue
+    (I : AllPositivePeriodSearchNonConnectorSqValueInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  matrix.allPositivePeriodSearchNonConnectorSqValue.arbitraryTarget I
+
+/-- Exact target from a dependent all-positive period-search package and its
+non-connector square-value certificate. -/
+theorem targetUpperConstructionFiveSixteen_of_allPositivePeriodSearchData_nonConnectorSqValue
+    (periodSearch : FiniteSearchCertificate.AllPositivePeriodSearchData)
+    (sqValue :
+      FiniteSearchCertificate.NonConnectorSqValueCertificate periodSearch) :
+    targetUpperConstructionFiveSixteen :=
+  targetUpperConstructionFiveSixteen_of_allPositivePeriodSearchNonConnectorSqValue
+    { periodSearch := periodSearch
+      sqValue := sqValue }
+
+/-- Arbitrary target from a dependent all-positive period-search package and
+its non-connector square-value certificate. -/
+theorem
+    targetUpperConstructionFiveSixteenArbitrary_of_allPositivePeriodSearchData_nonConnectorSqValue
+    (periodSearch : FiniteSearchCertificate.AllPositivePeriodSearchData)
+    (sqValue :
+      FiniteSearchCertificate.NonConnectorSqValueCertificate periodSearch) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_allPositivePeriodSearchNonConnectorSqValue
+    { periodSearch := periodSearch
+      sqValue := sqValue }
+
 /-- Exact target from search-facing role-hinge transition facts and finite
 data. -/
 theorem targetUpperConstructionFiveSixteen_of_transitionFactsFiniteSearchFamily
@@ -787,6 +1084,45 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_finiteCertificateObligati
     (O : FiniteCertificateObligationsInput) :
     targetUpperConstructionFiveSixteenArbitrary :=
   matrix.finiteCertificateObligations.arbitraryTarget O
+
+/-- Exact target from eventual role-hinge closure data, conditional on
+eventual block threshold at most one. -/
+theorem targetUpperConstructionFiveSixteen_of_eventualRoleHingedClosureAtMostOne
+    (I : EventualRoleHingedClosureAtMostOneInput) :
+    targetUpperConstructionFiveSixteen :=
+  matrix.eventualRoleHingedClosureAtMostOne.exactTarget I
+
+/-- Arbitrary target from eventual role-hinge closure data, conditional on
+eventual block threshold at most one. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_eventualRoleHingedClosureAtMostOne
+    (I : EventualRoleHingedClosureAtMostOneInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  matrix.eventualRoleHingedClosureAtMostOne.arbitraryTarget I
+
+/-- Exact target from eventual finite-certificate obligations, conditional on
+eventual block threshold at most one. -/
+theorem targetUpperConstructionFiveSixteen_of_eventualFiniteCertificateObligationsAtMostOne
+    (I : EventualFiniteCertificateObligationsAtMostOneInput) :
+    targetUpperConstructionFiveSixteen :=
+  matrix.eventualFiniteCertificateObligationsAtMostOne.exactTarget I
+
+/-- Arbitrary target from eventual finite-certificate obligations, conditional
+on eventual block threshold at most one. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_eventualFiniteCertificateObligationsAtMostOne
+    (I : EventualFiniteCertificateObligationsAtMostOneInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  matrix.eventualFiniteCertificateObligationsAtMostOne.arbitraryTarget I
+
+/-- Arbitrary target from eventual finite-certificate obligations from one
+block onward.  No exact target is hidden here; the exact theorem above uses
+the explicit threshold-at-most-one input package. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_eventualFiniteCertificateObligations_one
+    (O : EventualRoleHingeClosure.EventualFiniteCertificateObligations 1) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_eventualFiniteCertificateObligationsAtMostOne
+    { K0 := 1
+      obligations := O
+      threshold_at_most_one := by norm_num }
 
 /-- Exact target from period-search data plus finite-index cross-block lower
 bounds. -/
@@ -952,6 +1288,82 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_upperTriangleSqValueTable
   matrix.upperTriangleSqValueTables.arbitraryTarget
     { family := F
       tables := T }
+
+/-- Exact target from normalized vector-backed upper-triangle certificates via
+the non-connector connector-separated route. -/
+theorem targetUpperConstructionFiveSixteen_of_normalizedVectorCertificateFamily
+    (I : NormalizedVectorCertificateFamilyInput) :
+    targetUpperConstructionFiveSixteen :=
+  matrix.normalizedVectorCertificateFamily.exactTarget I
+
+/-- Arbitrary target from normalized vector-backed upper-triangle certificates
+via the non-connector connector-separated route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_normalizedVectorCertificateFamily
+    (I : NormalizedVectorCertificateFamilyInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  matrix.normalizedVectorCertificateFamily.arbitraryTarget I
+
+/-- Exact target from a dependent normalized vector-backed upper-triangle
+certificate family. -/
+theorem targetUpperConstructionFiveSixteen_of_normalizedVectorCertificateFamily'
+    {F : CrossBlockPolynomialNormalization.RoleHingedPeriodSearchFamily}
+    (C :
+      CrossBlockPolynomialNormalization.UpperTriangleVectorCertificateFamily
+        F) :
+    targetUpperConstructionFiveSixteen :=
+  targetUpperConstructionFiveSixteen_of_normalizedVectorCertificateFamily
+    { family := F
+      certificates := C }
+
+/-- Arbitrary target from a dependent normalized vector-backed upper-triangle
+certificate family. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_normalizedVectorCertificateFamily'
+    {F : CrossBlockPolynomialNormalization.RoleHingedPeriodSearchFamily}
+    (C :
+      CrossBlockPolynomialNormalization.UpperTriangleVectorCertificateFamily
+        F) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_normalizedVectorCertificateFamily
+    { family := F
+      certificates := C }
+
+/-- Exact target from normalized list-backed upper-triangle certificates via
+the non-connector connector-separated route. -/
+theorem targetUpperConstructionFiveSixteen_of_normalizedListCertificateFamily
+    (I : NormalizedListCertificateFamilyInput) :
+    targetUpperConstructionFiveSixteen :=
+  matrix.normalizedListCertificateFamily.exactTarget I
+
+/-- Arbitrary target from normalized list-backed upper-triangle certificates
+via the non-connector connector-separated route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_normalizedListCertificateFamily
+    (I : NormalizedListCertificateFamilyInput) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  matrix.normalizedListCertificateFamily.arbitraryTarget I
+
+/-- Exact target from a dependent normalized list-backed upper-triangle
+certificate family. -/
+theorem targetUpperConstructionFiveSixteen_of_normalizedListCertificateFamily'
+    {F : CrossBlockPolynomialNormalization.RoleHingedPeriodSearchFamily}
+    (C :
+      CrossBlockPolynomialNormalization.UpperTriangleListCertificateFamily
+        F) :
+    targetUpperConstructionFiveSixteen :=
+  targetUpperConstructionFiveSixteen_of_normalizedListCertificateFamily
+    { family := F
+      certificates := C }
+
+/-- Arbitrary target from a dependent normalized list-backed upper-triangle
+certificate family. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_normalizedListCertificateFamily'
+    {F : CrossBlockPolynomialNormalization.RoleHingedPeriodSearchFamily}
+    (C :
+      CrossBlockPolynomialNormalization.UpperTriangleListCertificateFamily
+        F) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_normalizedListCertificateFamily
+    { family := F
+      certificates := C }
 
 /-- Exact target from concrete vector-backed upper-triangle tables. -/
 theorem targetUpperConstructionFiveSixteen_of_vectorConcreteCrossBlock

@@ -1,5 +1,6 @@
 import ErdosProblems1066.Swanepoel.PlanarBoundaryClosure
 import ErdosProblems1066.Swanepoel.BoundaryCounting
+import ErdosProblems1066.Swanepoel.BoundaryWalkConstruction
 import ErdosProblems1066.Swanepoel.PlanarInterface
 
 set_option autoImplicit false
@@ -12,8 +13,9 @@ used downstream: angle-lower-bound hypotheses, canonical face-counting bridge
 packages, and the resulting E12/E13 count inequalities.
 
 It remains conditional.  The face/Jordan-style content is still supplied
-through `OuterBoundaryCore`, while subpolygon cycles, induced count data, and
-their angle comparisons are supplied through `PlanarBoundaryData`.
+through `OuterBoundaryCore` (the output boundary used by the concrete Jordan
+adapters), while outer-boundary angle bookkeeping and honest subpolygon
+families are supplied by `OuterBoundaryAngleClosure` and `SubpolygonAssembly`.
 -/
 
 namespace ErdosProblems1066
@@ -97,6 +99,565 @@ theorem boundaryNegativeCountInequalityOfCore
 namespace PlanarBoundaryData
 
 variable {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
+
+/-! ### Construction wrappers from assembled boundary outputs -/
+
+/--
+Build planar-boundary data from an explicit outer-boundary core, the assembled
+outer-boundary angle bounds, and supplied subpolygon cycle/count/angle data.
+
+The remaining topology is exactly the `core` parameter.  This wrapper does not
+assert that a Jordan boundary exists; it only packages an already supplied core
+with already assembled finite/count/angle data.
+-/
+def ofCoreOuterAngleBoundsSubpolygonData
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G where
+  core := core
+  outerAngleBounds := outerAngleBounds
+  Subpolygon := Subpolygon
+  subpolygonData := subpolygonData
+
+@[simp]
+theorem ofCoreOuterAngleBoundsSubpolygonData_core
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofCoreOuterAngleBoundsSubpolygonData core outerAngleBounds
+      Subpolygon subpolygonData).core = core :=
+  rfl
+
+@[simp]
+theorem ofCoreOuterAngleBoundsSubpolygonData_outerBoundaryCounts
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofCoreOuterAngleBoundsSubpolygonData core outerAngleBounds
+      Subpolygon subpolygonData).outerBoundaryCounts =
+        outerAngleBounds.counts :=
+  rfl
+
+@[simp]
+theorem ofCoreOuterAngleBoundsSubpolygonData_Subpolygon
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofCoreOuterAngleBoundsSubpolygonData core outerAngleBounds
+      Subpolygon subpolygonData).Subpolygon = Subpolygon :=
+  rfl
+
+@[simp]
+theorem ofCoreOuterAngleBoundsSubpolygonData_subpolygonData
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G)
+    (S : Subpolygon) :
+    (ofCoreOuterAngleBoundsSubpolygonData core outerAngleBounds
+      Subpolygon subpolygonData).subpolygonData S = subpolygonData S :=
+  rfl
+
+/--
+Build planar-boundary data from the full outer-boundary angle closure package
+and supplied subpolygon cycle/count/angle data.
+-/
+def ofOuterBoundaryAngleDataSubpolygonData
+    (outerData : OuterBoundaryAngleClosure.OuterBoundaryAngleData.{u} G)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G :=
+  ofCoreOuterAngleBoundsSubpolygonData
+    outerData.core outerData.angleBounds Subpolygon subpolygonData
+
+@[simp]
+theorem ofOuterBoundaryAngleDataSubpolygonData_core
+    (outerData : OuterBoundaryAngleClosure.OuterBoundaryAngleData.{u} G)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofOuterBoundaryAngleDataSubpolygonData outerData
+      Subpolygon subpolygonData).core = outerData.core :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryAngleDataSubpolygonData_outerBoundaryCounts
+    (outerData : OuterBoundaryAngleClosure.OuterBoundaryAngleData.{u} G)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofOuterBoundaryAngleDataSubpolygonData outerData
+      Subpolygon subpolygonData).outerBoundaryCounts = outerData.counts :=
+  rfl
+
+/--
+Build planar-boundary data from explicit outer-boundary angle-realization
+data.  The per-class realization is honestly forgotten to the angle-bound
+package consumed by `PlanarBoundaryData`.
+-/
+def ofOuterBoundaryRealizedAngleDataSubpolygonData
+    (outerData :
+      OuterBoundaryAngleClosure.OuterBoundaryRealizedAngleData.{u} G)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G :=
+  ofCoreOuterAngleBoundsSubpolygonData
+    outerData.core outerData.angleRealization.toAngleBounds
+    Subpolygon subpolygonData
+
+@[simp]
+theorem ofOuterBoundaryRealizedAngleDataSubpolygonData_core
+    (outerData :
+      OuterBoundaryAngleClosure.OuterBoundaryRealizedAngleData.{u} G)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofOuterBoundaryRealizedAngleDataSubpolygonData outerData
+      Subpolygon subpolygonData).core = outerData.core :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryRealizedAngleDataSubpolygonData_outerBoundaryCounts
+    (outerData :
+      OuterBoundaryAngleClosure.OuterBoundaryRealizedAngleData.{u} G)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofOuterBoundaryRealizedAngleDataSubpolygonData outerData
+      Subpolygon subpolygonData).outerBoundaryCounts = outerData.counts :=
+  rfl
+
+/--
+Build planar-boundary data from the strongest subpolygon-family input exposed
+by `SubpolygonAssembly`.
+
+The equality hypothesis records that the subpolygon family is tied to the same
+face-boundary witness as the outer core.  It is not used to manufacture data;
+it is kept visible so callers cannot silently mix unrelated face-boundary
+packages.
+-/
+def ofCoreOuterAngleBoundsSubpolygonInputs
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (_sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G :=
+  ofCoreOuterAngleBoundsSubpolygonData
+    core outerAngleBounds inputs.Subpolygon inputs.subpolygonData
+
+@[simp]
+theorem ofCoreOuterAngleBoundsSubpolygonInputs_core
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    (ofCoreOuterAngleBoundsSubpolygonInputs core outerAngleBounds
+      inputs sameFaceBoundary).core = core :=
+  rfl
+
+@[simp]
+theorem ofCoreOuterAngleBoundsSubpolygonInputs_Subpolygon
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    (ofCoreOuterAngleBoundsSubpolygonInputs core outerAngleBounds
+      inputs sameFaceBoundary).Subpolygon = inputs.Subpolygon :=
+  rfl
+
+@[simp]
+theorem ofCoreOuterAngleBoundsSubpolygonInputs_subpolygonData
+    (core : OuterBoundaryCore G)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary)
+    (S : inputs.Subpolygon) :
+    (ofCoreOuterAngleBoundsSubpolygonInputs core outerAngleBounds
+      inputs sameFaceBoundary).subpolygonData S = inputs.subpolygonData S :=
+  rfl
+
+/--
+Build planar-boundary data from an outer-boundary angle closure package and
+the strongest assembled subpolygon-family input.
+-/
+def ofOuterBoundaryAngleDataSubpolygonInputs
+    (outerData : OuterBoundaryAngleClosure.OuterBoundaryAngleData.{u} G)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = outerData.core.faceBoundary) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G :=
+  ofCoreOuterAngleBoundsSubpolygonInputs
+    outerData.core outerData.angleBounds inputs sameFaceBoundary
+
+@[simp]
+theorem ofOuterBoundaryAngleDataSubpolygonInputs_core
+    (outerData : OuterBoundaryAngleClosure.OuterBoundaryAngleData.{u} G)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = outerData.core.faceBoundary) :
+    (ofOuterBoundaryAngleDataSubpolygonInputs outerData
+      inputs sameFaceBoundary).core = outerData.core :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryAngleDataSubpolygonInputs_outerBoundaryCounts
+    (outerData : OuterBoundaryAngleClosure.OuterBoundaryAngleData.{u} G)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = outerData.core.faceBoundary) :
+    (ofOuterBoundaryAngleDataSubpolygonInputs outerData
+      inputs sameFaceBoundary).outerBoundaryCounts = outerData.counts :=
+  rfl
+
+/--
+Build planar-boundary data from explicit outer-boundary angle-realization data
+and the strongest assembled subpolygon-family input.
+-/
+def ofOuterBoundaryRealizedAngleDataSubpolygonInputs
+    (outerData :
+      OuterBoundaryAngleClosure.OuterBoundaryRealizedAngleData.{u} G)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = outerData.core.faceBoundary) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G :=
+  ofCoreOuterAngleBoundsSubpolygonInputs
+    outerData.core outerData.angleRealization.toAngleBounds
+    inputs sameFaceBoundary
+
+@[simp]
+theorem ofOuterBoundaryRealizedAngleDataSubpolygonInputs_core
+    (outerData :
+      OuterBoundaryAngleClosure.OuterBoundaryRealizedAngleData.{u} G)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = outerData.core.faceBoundary) :
+    (ofOuterBoundaryRealizedAngleDataSubpolygonInputs outerData
+      inputs sameFaceBoundary).core = outerData.core :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryRealizedAngleDataSubpolygonInputs_outerBoundaryCounts
+    (outerData :
+      OuterBoundaryAngleClosure.OuterBoundaryRealizedAngleData.{u} G)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = outerData.core.faceBoundary) :
+    (ofOuterBoundaryRealizedAngleDataSubpolygonInputs outerData
+      inputs sameFaceBoundary).outerBoundaryCounts = outerData.counts :=
+  rfl
+
+/--
+Assemble the outer-boundary angle package directly from the finite
+boundary-walk bookkeeping and the still-explicit geometric angle comparisons.
+
+The Jordan/topology input is still the `core` parameter.  In the concrete
+`UDConfig` route, `JordanBoundaryConcrete.MissingTopologyFacts.toCore` supplies
+that core without making this final facade depend back on the Jordan modules.
+-/
+def outerBoundaryAngleDataOfWalk
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum) :
+    OuterBoundaryAngleClosure.OuterBoundaryAngleData.{u} G where
+  core := core
+  angleBounds :=
+    walk.toBoundaryBookkeepingAngleBounds geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+
+@[simp]
+theorem outerBoundaryAngleDataOfWalk_core
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum) :
+    (outerBoundaryAngleDataOfWalk walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon).core = core :=
+  rfl
+
+@[simp]
+theorem outerBoundaryAngleDataOfWalk_counts
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum) :
+    (outerBoundaryAngleDataOfWalk walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon).counts = walk.counts :=
+  rfl
+
+@[simp]
+theorem outerBoundaryAngleDataOfWalk_bookkeeping
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum) :
+    (outerBoundaryAngleDataOfWalk walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon).angleBounds.countsRealization.bookkeeping =
+        walk.toBoundaryBookkeepingLift :=
+  rfl
+
+/--
+Build planar-boundary data from explicit topology/core data, constructed
+boundary-walk bookkeeping, explicit angle comparisons, and raw subpolygon
+cycle/count/angle data.
+-/
+def ofOuterBoundaryWalkSubpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G :=
+  ofOuterBoundaryAngleDataSubpolygonData
+    (outerBoundaryAngleDataOfWalk walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon)
+    Subpolygon subpolygonData
+
+@[simp]
+theorem ofOuterBoundaryWalkSubpolygonData_core
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofOuterBoundaryWalkSubpolygonData walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+      Subpolygon subpolygonData).core = core :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryWalkSubpolygonData_outerBoundaryCounts
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofOuterBoundaryWalkSubpolygonData walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+      Subpolygon subpolygonData).outerBoundaryCounts = walk.counts :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryWalkSubpolygonData_Subpolygon
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (ofOuterBoundaryWalkSubpolygonData walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+      Subpolygon subpolygonData).Subpolygon = Subpolygon :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryWalkSubpolygonData_subpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G)
+    (S : Subpolygon) :
+    (ofOuterBoundaryWalkSubpolygonData walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+      Subpolygon subpolygonData).subpolygonData S = subpolygonData S :=
+  rfl
+
+/--
+Build planar-boundary data from explicit topology/core data, constructed
+boundary-walk bookkeeping, explicit angle comparisons, and the strongest
+honest subpolygon family supplied by `SubpolygonAssembly`.
+
+The equality hypothesis keeps the boundary witness shared between the
+subpolygon family and the selected outer core explicit.
+-/
+def ofOuterBoundaryWalkSubpolygonInputs
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G :=
+  ofOuterBoundaryAngleDataSubpolygonInputs
+    (outerBoundaryAngleDataOfWalk walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon)
+    inputs sameFaceBoundary
+
+@[simp]
+theorem ofOuterBoundaryWalkSubpolygonInputs_core
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    (ofOuterBoundaryWalkSubpolygonInputs walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon inputs sameFaceBoundary).core =
+        core :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryWalkSubpolygonInputs_outerBoundaryCounts
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    (ofOuterBoundaryWalkSubpolygonInputs walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+      inputs sameFaceBoundary).outerBoundaryCounts = walk.counts :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryWalkSubpolygonInputs_Subpolygon
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    (ofOuterBoundaryWalkSubpolygonInputs walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+      inputs sameFaceBoundary).Subpolygon = inputs.Subpolygon :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryWalkSubpolygonInputs_subpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary)
+    (S : inputs.Subpolygon) :
+    (ofOuterBoundaryWalkSubpolygonInputs walk geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+      inputs sameFaceBoundary).subpolygonData S = inputs.subpolygonData S :=
+  rfl
 
 /-- The outer-boundary counting-layer angle lower bound carried by
 `PlanarBoundaryData`. -/
@@ -252,6 +813,354 @@ def concreteFaceCountingData
     subpolygonLowDegreeWithHighDegreeSlack_viaBoundaryCounting D
   subpolygonLowDegree := subpolygonLowDegreeInequality_viaBoundaryCounting D
 
+@[simp]
+theorem concreteFaceCountingData_faceBoundary
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).faceBoundary = D.faceBoundary :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_planarFaceBoundary
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).planarFaceBoundary =
+      D.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_pairwiseNoncrossing
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).pairwiseNoncrossing =
+      pairwiseNoncrossing D :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_outerFace
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).outerFace = D.outerFace :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundaryCounts
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).boundaryCounts =
+      D.outerBoundaryCounts :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundaryAngleLowerBound
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).boundaryAngleLowerBound =
+      outerBoundaryAngleLowerBound D :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundaryCountHypotheses
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).boundaryCountHypotheses =
+      D.canonicalBoundaryCountHypotheses :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundary_faceBoundary_eq
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).boundary_faceBoundary_eq =
+      D.canonicalBoundaryCountHypotheses_faceBoundary :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundary_counts_eq
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).boundary_counts_eq =
+      D.canonicalBoundaryCountHypotheses_counts :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundaryAngleCount
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).boundaryAngleCount =
+      boundaryAngleCountInequality_viaBoundaryCounting D :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_boundaryNegativeCount
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).boundaryNegativeCount =
+      boundaryNegativeCountInequality_viaBoundaryCounting D :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_Subpolygon
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G) :
+    (concreteFaceCountingData D).Subpolygon = D.Subpolygon :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_subpolygonCounts
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G)
+    (S : D.Subpolygon) :
+    (concreteFaceCountingData D).subpolygonCounts S =
+      (D.subpolygonData S).counts :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_subpolygonAngleLowerBound
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G)
+    (S : D.Subpolygon) :
+    (concreteFaceCountingData D).subpolygonAngleLowerBound S =
+      subpolygonAngleLowerBound D S :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_subpolygonCountHypotheses
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G)
+    (S : D.Subpolygon) :
+    (concreteFaceCountingData D).subpolygonCountHypotheses S =
+      D.canonicalSubpolygonCountHypotheses S :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_subpolygon_faceBoundary_eq
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G)
+    (S : D.Subpolygon) :
+    (concreteFaceCountingData D).subpolygon_faceBoundary_eq S =
+      D.canonicalSubpolygonCountHypotheses_faceBoundary S :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_subpolygon_counts_eq
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G)
+    (S : D.Subpolygon) :
+    (concreteFaceCountingData D).subpolygon_counts_eq S = rfl :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_subpolygonLowDegreeWithHighDegreeSlack
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G)
+    (S : D.Subpolygon) :
+    (concreteFaceCountingData D).subpolygonLowDegreeWithHighDegreeSlack S =
+      subpolygonLowDegreeWithHighDegreeSlack_viaBoundaryCounting D S :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingData_subpolygonLowDegree
+    (D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G)
+    (S : D.Subpolygon) :
+    (concreteFaceCountingData D).subpolygonLowDegree S =
+      subpolygonLowDegreeInequality_viaBoundaryCounting D S :=
+  rfl
+
+/-- Extract concrete face-counting data directly from explicit
+outer-boundary-walk bookkeeping and raw subpolygon data. -/
+def concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    ConcreteFaceCountingData
+      (ofOuterBoundaryWalkSubpolygonData walk geometricAngleSum
+        forced_le_geometric geometric_le_polygon
+        Subpolygon subpolygonData) :=
+  concreteFaceCountingData _
+
+/-- Extract concrete face-counting data directly from explicit
+outer-boundary-walk bookkeeping and an honest subpolygon-input family. -/
+def concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    ConcreteFaceCountingData
+      (ofOuterBoundaryWalkSubpolygonInputs walk geometricAngleSum
+        forced_le_geometric geometric_le_polygon inputs sameFaceBoundary) :=
+  concreteFaceCountingData _
+
+@[simp]
+theorem concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData_faceBoundary
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData walk
+      geometricAngleSum forced_le_geometric geometric_le_polygon
+      Subpolygon subpolygonData).faceBoundary = core.faceBoundary :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData_boundaryCounts
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData walk
+      geometricAngleSum forced_le_geometric geometric_le_polygon
+      Subpolygon subpolygonData).boundaryCounts = walk.counts :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData_Subpolygon
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData walk
+      geometricAngleSum forced_le_geometric geometric_le_polygon
+      Subpolygon subpolygonData).Subpolygon = Subpolygon :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData_subpolygonCounts
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G)
+    (S : Subpolygon) :
+    (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData walk
+      geometricAngleSum forced_le_geometric geometric_le_polygon
+      Subpolygon subpolygonData).subpolygonCounts S =
+        (subpolygonData S).counts :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs_faceBoundary
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs walk
+      geometricAngleSum forced_le_geometric geometric_le_polygon
+      inputs sameFaceBoundary).faceBoundary = core.faceBoundary :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs_boundaryCounts
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs walk
+      geometricAngleSum forced_le_geometric geometric_le_polygon
+      inputs sameFaceBoundary).boundaryCounts = walk.counts :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs_Subpolygon
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs walk
+      geometricAngleSum forced_le_geometric geometric_le_polygon
+      inputs sameFaceBoundary).Subpolygon = inputs.Subpolygon :=
+  rfl
+
+@[simp]
+theorem concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs_subpolygonCounts
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary)
+    (S : inputs.Subpolygon) :
+    (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs walk
+      geometricAngleSum forced_le_geometric geometric_le_polygon
+      inputs sameFaceBoundary).subpolygonCounts S =
+        inputs.subpolygonDegreeCounts S :=
+  rfl
+
 /-- The concrete data immediately recovers the proposition-valued closure
 theorem from `PlanarBoundaryClosure`. -/
 theorem faceCountingTheorems_of_concreteData
@@ -262,6 +1171,238 @@ theorem faceCountingTheorems_of_concreteData
   subpolygonLowDegreeWithHighDegreeSlack :=
     (concreteFaceCountingData D).subpolygonLowDegreeWithHighDegreeSlack
   subpolygonLowDegree := (concreteFaceCountingData D).subpolygonLowDegree
+
+/-- Face-counting theorems directly from explicit outer-boundary-walk
+bookkeeping and raw subpolygon data. -/
+theorem faceCountingTheoremsOfOuterBoundaryWalkSubpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    PlanarBoundaryClosure.PlanarBoundaryData.FaceCountingTheorems
+      (ofOuterBoundaryWalkSubpolygonData walk geometricAngleSum
+        forced_le_geometric geometric_le_polygon
+        Subpolygon subpolygonData) :=
+  faceCountingTheorems_of_concreteData _
+
+/-- Face-counting theorems directly from explicit outer-boundary-walk
+bookkeeping and an honest subpolygon-input family. -/
+theorem faceCountingTheoremsOfOuterBoundaryWalkSubpolygonInputs
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    PlanarBoundaryClosure.PlanarBoundaryData.FaceCountingTheorems
+      (ofOuterBoundaryWalkSubpolygonInputs walk geometricAngleSum
+        forced_le_geometric geometric_le_polygon inputs sameFaceBoundary) :=
+  faceCountingTheorems_of_concreteData _
+
+/-- Outer-boundary E12 directly from explicit outer-boundary-walk bookkeeping
+and raw subpolygon data. -/
+theorem boundaryAngleCountOfOuterBoundaryWalkSubpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    walk.counts.d5 + 2 * walk.counts.d6 +
+        walk.counts.b + walk.counts.B + 6 <=
+      walk.counts.d3 :=
+  (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData walk
+    geometricAngleSum forced_le_geometric geometric_le_polygon
+    Subpolygon subpolygonData).boundaryAngleCount
+
+/-- Negative-element E12 directly from explicit outer-boundary-walk
+bookkeeping and raw subpolygon data. -/
+theorem boundaryNegativeCountOfOuterBoundaryWalkSubpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    walk.counts.negativeCount + walk.counts.B + 6 <=
+      walk.counts.d3 :=
+  (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData walk
+    geometricAngleSum forced_le_geometric geometric_le_polygon
+    Subpolygon subpolygonData).boundaryNegativeCount
+
+/-- Outer-boundary E12 directly from explicit outer-boundary-walk bookkeeping
+and an honest subpolygon-input family. -/
+theorem boundaryAngleCountOfOuterBoundaryWalkSubpolygonInputs
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    walk.counts.d5 + 2 * walk.counts.d6 +
+        walk.counts.b + walk.counts.B + 6 <=
+      walk.counts.d3 :=
+  (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs walk
+    geometricAngleSum forced_le_geometric geometric_le_polygon
+    inputs sameFaceBoundary).boundaryAngleCount
+
+/-- Negative-element E12 directly from explicit outer-boundary-walk
+bookkeeping and an honest subpolygon-input family. -/
+theorem boundaryNegativeCountOfOuterBoundaryWalkSubpolygonInputs
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary) :
+    walk.counts.negativeCount + walk.counts.B + 6 <=
+      walk.counts.d3 :=
+  (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs walk
+    geometricAngleSum forced_le_geometric geometric_le_polygon
+    inputs sameFaceBoundary).boundaryNegativeCount
+
+/-- E13 with high-degree slack directly from explicit outer-boundary-walk
+bookkeeping and raw subpolygon data. -/
+theorem subpolygonLowDegreeWithHighDegreeSlackOfOuterBoundaryWalkSubpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G)
+    (S : Subpolygon) :
+    (subpolygonData S).counts.D5 + 2 * (subpolygonData S).counts.D6 + 6 <=
+      2 * (subpolygonData S).counts.D2 + (subpolygonData S).counts.D3 :=
+  (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData walk
+    geometricAngleSum forced_le_geometric geometric_le_polygon
+    Subpolygon subpolygonData).subpolygonLowDegreeWithHighDegreeSlack S
+
+/-- Swanepoel Lemma 4's low-degree count directly from explicit
+outer-boundary-walk bookkeeping and raw subpolygon data. -/
+theorem subpolygonLowDegreeOfOuterBoundaryWalkSubpolygonData
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G)
+    (S : Subpolygon) :
+    6 <= 2 * (subpolygonData S).counts.D2 +
+      (subpolygonData S).counts.D3 :=
+  (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonData walk
+    geometricAngleSum forced_le_geometric geometric_le_polygon
+    Subpolygon subpolygonData).subpolygonLowDegree S
+
+/-- E13 with high-degree slack directly from explicit outer-boundary-walk
+bookkeeping and an honest subpolygon-input family. -/
+theorem subpolygonLowDegreeWithHighDegreeSlackOfOuterBoundaryWalkSubpolygonInputs
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary)
+    (S : inputs.Subpolygon) :
+    (inputs.subpolygonDegreeCounts S).D5 +
+        2 * (inputs.subpolygonDegreeCounts S).D6 + 6 <=
+      2 * (inputs.subpolygonDegreeCounts S).D2 +
+        (inputs.subpolygonDegreeCounts S).D3 :=
+  (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs walk
+    geometricAngleSum forced_le_geometric geometric_le_polygon
+    inputs sameFaceBoundary).subpolygonLowDegreeWithHighDegreeSlack S
+
+/-- Swanepoel Lemma 4's low-degree count directly from explicit
+outer-boundary-walk bookkeeping and an honest subpolygon-input family. -/
+theorem subpolygonLowDegreeOfOuterBoundaryWalkSubpolygonInputs
+    {core : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    (walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping core
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum)
+    (inputs : SubpolygonAssembly.PlanarBoundarySubpolygonInputs.{u} G)
+    (sameFaceBoundary : inputs.faceBoundary = core.faceBoundary)
+    (S : inputs.Subpolygon) :
+    6 <= 2 * (inputs.subpolygonDegreeCounts S).D2 +
+      (inputs.subpolygonDegreeCounts S).D3 :=
+  (concreteFaceCountingDataOfOuterBoundaryWalkSubpolygonInputs walk
+    geometricAngleSum forced_le_geometric geometric_le_polygon
+    inputs sameFaceBoundary).subpolygonLowDegree S
 
 end PlanarBoundaryData
 

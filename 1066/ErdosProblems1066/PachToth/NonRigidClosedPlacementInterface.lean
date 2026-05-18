@@ -74,6 +74,14 @@ theorem toClosedPlacement_point {k : Nat} {hk : 0 < k}
     D.toClosedPlacement.point i v = D.point i v :=
   rfl
 
+/-- Direct non-rigid point/edge data constructs the requested closed
+placement; the witness uses exactly the stored point map. -/
+theorem exists_closedPlacement {k : Nat} {hk : 0 < k}
+    (D : ExplicitCyclicPointEdgeData k hk) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = D.point := by
+  exact Exists.intro D.toClosedPlacement rfl
+
 /-- The exact-chain upper certificate obtained from the checked closed
 placement. -/
 def exactChainUpper {k : Nat} {hk : 0 < k}
@@ -87,16 +95,18 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock
     {k : Nat} {hk : 0 < k}
     (D : ExplicitCyclicPointEdgeData k hk) :
     targetUpperConstructionFiveSixteenAt (16 * k) := by
-  refine Exists.intro D.toClosedPlacement.config ?_
-  intro s hs
-  have hfive :
-      s.card <= 5 * k :=
-    IndexedChain.independent_card_le_five_mul hk
-      D.toClosedPlacement.toIndexedChainRealization s hs
-  have harith : 5 * k <= ceilDiv (5 * (16 * k)) 16 := by
-    unfold ceilDiv
-    omega
-  exact le_trans hfive harith
+  exact
+    Exists.intro D.toClosedPlacement.config
+      (by
+        intro s hs
+        have hfive :
+            s.card <= 5 * k :=
+          IndexedChain.independent_card_le_five_mul hk
+            D.toClosedPlacement.toIndexedChainRealization s hs
+        have harith : 5 * k <= ceilDiv (5 * (16 * k)) 16 := by
+          unfold ceilDiv
+          omega
+        exact le_trans hfive harith)
 
 end ExplicitCyclicPointEdgeData
 
@@ -171,6 +181,14 @@ theorem toClosedPlacement_point {k : Nat} {hk : 0 < k}
     D.toClosedPlacement.point i v = D.point i v :=
   rfl
 
+/-- Successor-compatible non-rigid orbit data constructs the requested closed
+placement; the witness uses exactly the stored point map. -/
+theorem exists_closedPlacement {k : Nat} {hk : 0 < k}
+    (D : ExplicitCyclicOrbitEdgeData k hk) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = D.point := by
+  exact Exists.intro D.toClosedPlacement rfl
+
 /-- The one-step successor equation exposed through `ClosedPlacementAlgebra`. -/
 theorem transition_target_eq_placeNext {k : Nat} {hk : 0 < k}
     (D : ExplicitCyclicOrbitEdgeData k hk)
@@ -240,6 +258,16 @@ theorem toClosedPlacement_point
     (i : Fin k) (v : LocalVertex) :
     D.toClosedPlacement.point i v = D.point i v :=
   rfl
+
+/-- Same/opposite cyclic-orbit data constructs the requested closed
+placement; the witness uses exactly the stored point map. -/
+theorem exists_closedPlacement
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    (D : SameOppositeCyclicOrbitData O k hk) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = D.point := by
+  exact Exists.intro D.toClosedPlacement rfl
 
 /-- The stored orientation word is retained by the generated transition
 certificate. -/
@@ -368,6 +396,23 @@ theorem sameOppositeCyclicOrbitData_of_generatedPeriod_point
         GeneratedClosedChain.generatedPoint O hk base orientation i v :=
   rfl
 
+@[simp]
+theorem sameOppositeCyclicOrbitData_of_generatedPeriod_reduced_point
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    (sameOppositeCyclicOrbitData_of_generatedPeriod_reduced
+      O hk base orientation period H).point i v =
+        GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
 /-- Generated-period data with full metric hypotheses supplies the explicit
 successor-orbit edge interface. -/
 def explicitCyclicOrbitEdgeData_of_generatedPeriod
@@ -435,6 +480,23 @@ theorem explicitCyclicOrbitEdgeData_of_generatedPeriod_point
         GeneratedClosedChain.generatedPoint O hk base orientation i v :=
   rfl
 
+@[simp]
+theorem explicitCyclicOrbitEdgeData_of_generatedPeriod_reduced_point
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    (explicitCyclicOrbitEdgeData_of_generatedPeriod_reduced
+      O hk base orientation period H).point i v =
+        GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
 /-- Generated-period data with full metric hypotheses supplies the direct
 cyclic point/edge interface. -/
 def explicitCyclicPointEdgeData_of_generatedPeriod
@@ -480,6 +542,23 @@ theorem explicitCyclicPointEdgeData_of_generatedPeriod_point
         O hk base orientation)
     (i : Fin k) (v : LocalVertex) :
     (explicitCyclicPointEdgeData_of_generatedPeriod
+      O hk base orientation period H).point i v =
+        GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
+@[simp]
+theorem explicitCyclicPointEdgeData_of_generatedPeriod_reduced_point
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    (explicitCyclicPointEdgeData_of_generatedPeriod_reduced
       O hk base orientation period H).point i v =
         GeneratedClosedChain.generatedPoint O hk base orientation i v :=
   rfl
@@ -532,6 +611,208 @@ theorem closedPlacement_of_generatedPeriod_point
       O hk base orientation period H).point i v =
         GeneratedClosedChain.generatedPoint O hk base orientation i v :=
   rfl
+
+/-- The reduced generated-period route keeps the generated point map. -/
+@[simp]
+theorem closedPlacement_of_generatedPeriod_reduced_point
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    (closedPlacement_of_generatedPeriod_reduced
+      O hk base orientation period H).point i v =
+        GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
+/-- Generated period plus full generated metric data constructs a checked
+non-rigid closed placement with the generated point map. -/
+theorem exists_closedPlacement_of_generatedPeriod
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = GeneratedClosedChain.generatedPoint O hk base orientation := by
+  exact
+    Exists.intro
+      (closedPlacement_of_generatedPeriod O hk base orientation period H)
+      rfl
+
+/-- Generated period plus reduced concrete metric data constructs a checked
+non-rigid closed placement with the generated point map. -/
+theorem exists_closedPlacement_of_generatedPeriod_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = GeneratedClosedChain.generatedPoint O hk base orientation := by
+  exact
+    Exists.intro
+      (closedPlacement_of_generatedPeriod_reduced
+        O hk base orientation period H)
+      rfl
+
+/-- Concrete named proof obligations for one generated non-rigid closed
+placement.  These are the remaining facts that must be proved from a period
+search and metric/separation certificate; no placement is asserted without
+them. -/
+structure GeneratedReducedClosedPlacementObligations
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation) where
+  period : GeneratedSeparationInterface.GeneratedPeriod O hk base orientation
+  separated :
+    GeneratedSeparationInterface.GeneratedGlobalSeparation
+      O hk base orientation
+  base_same_block_isometry :
+    GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base
+  transition_preserves_same_block_distances :
+    GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+      O
+
+namespace GeneratedReducedClosedPlacementObligations
+
+/-- Repackage the named one-chain obligations as reduced generated metric
+hypotheses. -/
+def toReducedMetricHypotheses
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (B : GeneratedReducedClosedPlacementObligations O hk base orientation) :
+    GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+      O hk base orientation where
+  separated := B.separated
+  base_same_block_isometry := B.base_same_block_isometry
+  transition_preserves_same_block_distances :=
+    B.transition_preserves_same_block_distances
+
+@[simp]
+theorem toReducedMetricHypotheses_separated
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (B : GeneratedReducedClosedPlacementObligations O hk base orientation) :
+    B.toReducedMetricHypotheses.separated = B.separated :=
+  rfl
+
+@[simp]
+theorem toReducedMetricHypotheses_baseSameBlock
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (B : GeneratedReducedClosedPlacementObligations O hk base orientation) :
+    B.toReducedMetricHypotheses.base_same_block_isometry =
+      B.base_same_block_isometry :=
+  rfl
+
+@[simp]
+theorem toReducedMetricHypotheses_transitionPreserves
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (B : GeneratedReducedClosedPlacementObligations O hk base orientation) :
+    B.toReducedMetricHypotheses.transition_preserves_same_block_distances =
+      B.transition_preserves_same_block_distances :=
+  rfl
+
+/-- The checked closed placement obtained from the named one-chain
+obligations. -/
+def toClosedPlacement
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (B : GeneratedReducedClosedPlacementObligations O hk base orientation) :
+    DeformedPlacement.ClosedPlacement k hk :=
+  closedPlacement_of_generatedPeriod_reduced
+    O hk base orientation B.period B.toReducedMetricHypotheses
+
+@[simp]
+theorem toClosedPlacement_point
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (B : GeneratedReducedClosedPlacementObligations O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    B.toClosedPlacement.point i v =
+      GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
+/-- Named period/separation/metric obligations construct the requested
+closed placement. -/
+theorem exists_closedPlacement
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (B : GeneratedReducedClosedPlacementObligations O hk base orientation) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = GeneratedClosedChain.generatedPoint O hk base orientation := by
+  exact Exists.intro B.toClosedPlacement rfl
+
+/-- The exact-block target from the same named one-chain obligations. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (B : GeneratedReducedClosedPlacementObligations O hk base orientation) :
+    targetUpperConstructionFiveSixteenAt (16 * k) :=
+  GeneratedSeparationInterface.targetUpperConstructionFiveSixteenAt_exactBlock_reduced
+    O hk base orientation B.period B.toReducedMetricHypotheses
+
+end GeneratedReducedClosedPlacementObligations
+
+/-- Raw-field existence wrapper: the remaining assumptions are exactly the
+generated period equation, global separation, base-block isometry, and
+transition distance preservation. -/
+theorem exists_closedPlacement_of_generatedPeriod_separation_reducedSameBlock
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        O hk base orientation)
+    (base_same_block_isometry :
+      GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base)
+    (transition_preserves_same_block_distances :
+      GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+        O) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = GeneratedClosedChain.generatedPoint O hk base orientation := by
+  exact
+    (GeneratedReducedClosedPlacementObligations.exists_closedPlacement
+      { period := period
+        separated := separated
+        base_same_block_isometry := base_same_block_isometry
+        transition_preserves_same_block_distances :=
+          transition_preserves_same_block_distances })
 
 /-- Exact-block target from generated-period data and full metric
 hypotheses, routed through the direct non-rigid point/edge interface. -/

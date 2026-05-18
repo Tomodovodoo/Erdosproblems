@@ -125,6 +125,45 @@ theorem noCutVertex_of_minimalFailure_remainingSlack
   noCutVertex_of_minimalFailure_allCutVertexSlack
     (C := C) hn hmin hslack
 
+/-- Once no cut-vertex partition exists, the remaining slack package is
+vacuous: its only field is indexed by supplied cut partitions. -/
+def remainingNoCutSlackFact_of_noCutVertex
+    {n : Nat} {C : _root_.UDConfig n}
+    (hno : CutVertexInterface.NoCutVertex C) :
+    RemainingNoCutSlackFact C where
+  gluingData := fun P => False.elim (hno (Nonempty.intro P))
+
+/-- The no-cardinality-assumption core of the remaining-slack route:
+minimality plus remaining slack rules out supplied cut partitions directly
+through `CutVertexClosure`. -/
+theorem noCutVertex_of_minimalFailure_remainingSlack_core
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (hslack : RemainingNoCutSlackFact C) :
+    CutVertexInterface.NoCutVertex C :=
+  ({ minimalFailure := hmin
+     cutVertexSlack := hslack } :
+      CutVertexClosure.MinimalFailureCutVertexSlackData C).noCutVertex
+
+/-- Under minimality, the data-valued remaining slack package is equivalent
+to already having no supplied cut-vertex partition.  Thus the unconditional
+`remainingNoCutSlackFact_of_minimalFailure` target is exactly a no-cut
+extraction problem in the current interface. -/
+theorem remainingNoCutSlackFact_nonempty_iff_noCutVertex_of_minimalFailure
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
+    Nonempty (RemainingNoCutSlackFact C) <->
+      CutVertexInterface.NoCutVertex C := by
+  constructor
+  case mp =>
+    intro hslack
+    cases hslack with
+    | intro H =>
+        exact noCutVertex_of_minimalFailure_remainingSlack_core hmin H
+  case mpr =>
+    intro hno
+    exact Nonempty.intro (remainingNoCutSlackFact_of_noCutVertex hno)
+
 /-- Compatibility projection to the certificate from
 `CutVertexFromConnectedness`. -/
 theorem cutVertexFromConnectednessCertificate_of_minimalFailure_remainingSlack

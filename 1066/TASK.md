@@ -52,99 +52,195 @@ Last verification recorded in this file:
 
 ```text
 elan run leanprover/lean4:v4.28.0 lake build
-Build completed successfully (8240 jobs).
+Build completed successfully (8654 jobs).
 
 Lean source forbidden-token scan over ErdosProblems1066/ and
 ErdosProblems1066.lean: clean.
 
-Root import coverage: 213 imported modules for 213 Lean files under
-ErdosProblems1066/.
+Root import coverage: 627 imported modules for 627 Lean files under
+ErdosProblems1066/.  No missing, extra, or duplicate root imports.
 
-CI-style axiom audit: passed for 374 declarations; every checked declaration
-reports only Lean/mathlib base axioms `propext`, `Classical.choice`, and
-`Quot.sound`.
+Trust-source scan for `native_decide`, `trustCompiler`, and `ofReduceBool`:
+clean.
 
-Encoding scan for common mojibake markers in Lean files: clean.
+CI-style dependency audit: passed for 752 declarations, including W13-W20
+endpoint and gate declarations.  Every checked declaration reports only
+Lean/mathlib base axioms `propext`, `Classical.choice`, and `Quot.sound`.
+W18/W19/W20 endpoint declarations are imported, build-clean, source-scan
+clean, and represented in the CI-style declaration list.
+W21 source-package and KnownBounds-gate files are imported, build-clean, and
+source-scan clean, but their endpoint declarations have not yet been added to
+the CI-style declaration list.
+
+Encoding hygiene is not a proof-state gate.  A broad marker scan reports older
+legacy non-ASCII/mojibake-looking text, so do not use encoding hygiene as
+evidence for or against the current certified bounds route.
 ```
+
+## Active Snapshot
+
+- [x] W13 through W21 route and source-package layers are integrated and root-imported.
+  - Current coverage: 627 imported package modules for 627 Lean files.
+  - Current root target build succeeds with 8654 jobs under
+    `leanprover/lean4:v4.28.0`.
+  - Lean-source forbidden-token and trust-source scans are clean.
+  - The W15/W16/W17/W18/W19/W20/W21 final-gate modules are conditional gates, not
+    unconditional final closures.
+
+- [x] W16 proof wave is integrated.
+  - W16 ownership map:
+    `PayForCutArithmeticW16`, `NoCutFromMinimalityW16`,
+    `BoundaryArcFiniteWalkConstructionW16`, `BoundaryTopologyArcBridgeW16`,
+    `Figure8WindowContainmentW16`, `Figure9WindowContainmentW16`,
+    `Lemma8LocalLabelsW16`, `Lemma9LateTriplesW16`,
+    `LongArcFactsSelectionW16`, `TailPolynomialRowsW16`,
+    `SmallRowsTwoThreeW16`, `SmallRowsFourFiveW16`,
+    `PeriodBaseFixingSameW16`, `PeriodBaseFixingOppositeW16`,
+    `PeriodBaseFixingCertificateW16`, `LargeKGlobalSeparationW16`,
+    `SmallComplementExactBlocksW16`, and
+    `EventualClosedPlacementCertificateW16`.
+  - W16 audit result:
+    keep W16 focused on concrete input rows and local package fields.  The
+    W15 final gates are endpoint bookkeeping until their concrete blockers are
+    supplied, and `Verified`-namespace conditional wrappers are not completion
+    evidence.
+  - W16 verification:
+    root build passes at 8654 jobs; coverage is 627/627; forbidden-token scan,
+    trust-source scan, and 752-declaration dependency audit pass.
+  - W16 status:
+    the new modules are checked reducers/adapters, not unconditional final
+    theorem closures.  Swanepoel still needs a uniform construction of the
+    concrete pointwise remaining input rows.  Pach--Toth still needs viable
+    transition/base-fixing data and concrete inequality/certificate rows rather
+    than only conditional adapter surfaces.
+
+- [x] W17 concrete interface surface is integrated and root-imported.
+  - Swanepoel W17 modules:
+    `BoundaryBudgetLongArcConcreteW17`, `FigureWitnessConcreteAssemblyW17`,
+    `Lemma8FiniteDataConstructionW17`, `Lemma9CoverageConcreteW17`,
+    `PayForCutConcreteInequalityW17`, `PointwiseRemainingRowAssemblyW17`,
+    `SwanepoelConcreteBlockerLedgerW17`, `SwanepoelUniformFamilyGateW17`,
+    `TopologyTrianglePipelineW17`, and `TriangleRunSelectorW17`.
+  - Pach--Toth W17 modules:
+    `AllPositiveFinalCertificateW17`, `BaseFixingRowsViableW17`,
+    `LargeK0ExplicitSeparationDataW17`, `PachTothEventualFinalGateW17`,
+    `SmallComplementConcreteBlocksW17`, `SmallRowValueCertificatesW17`,
+    `TailValueCertificateConcreteW17`, and `ViableTransitionPackageW17`.
+  - W17 status:
+    these are rooted reducer/adapter surfaces over the W16/W15 gates.  They do
+    not yet make the Swanepoel 8/31 or Pach--Toth 5/16 bounds public
+    unconditional `KnownBounds` theorems.
+
+- [x] W17 concrete final-input lane is integrated.
+  - W17 completed the rooted adapter/reducer layer feeding W16 and W15.
+    Every W17 file is imported by `ErdosProblems1066.lean`, targeted-checked,
+    source-scan clean, included in the 8654-job root build, and represented in
+    the 752-declaration dependency audit.
+  - W17 does not close the final paper bounds unconditionally.  It sharpens the
+    remaining work to inhabiting concrete input packages rather than proving
+    more endpoint wrappers.
+
+- [x] W18 concrete input-production surface is integrated and root-imported.
+  - W18 modules now build through the root target and route into the W17/W16
+    packages.  W18 is still conditional plumbing: it does not prove the final
+    Swanepoel or Pach--Toth public bounds without the W19 concrete closure
+    inputs below.
+
+- [x] W19 closure surface is integrated and root-imported.
+  - Swanepoel W19 modules:
+    `AngleContainmentBridgeProducerW19`, `BoundaryFrameCoreProducerW19`,
+    `FigureWitnessClosureW19`, `Lemma8ConcreteGeometryProducerW19`,
+    `Lemma9NatLateTripleProducerW19`, `NoCutMinimalityClosureW19`,
+    `PointwiseAssemblyClosureW19`, `PositiveCyclicOrderProducerW19`,
+    `SwanepoelFinalClosureW19`, and `TopologyArcClosureW19`.
+  - Pach--Toth W19 modules:
+    `ArbitraryNClosedPlacementRouteW19`, `ClosedPlacementCrossConnectorEdgesW19`,
+    `ClosedPlacementObstructionBypassW19`, `ClosedPlacementSameBlockEdgesW19`,
+    `ClosedPlacementSeparationW19`, `ClosedPlacementSmallKCertificatesW19`,
+    `ClosedPlacementTargetWrappersW19`, `ExplicitClosedPlacementProducerW19`,
+    `NonRigidClosedPlacementDataW19`, and `PachTothClosedPlacementAuditW19`.
+  - W19 status:
+    these are rooted closure/adaptor surfaces.  They expose the exact remaining
+    concrete input packages, but `KnownBounds.lean` is still intentionally not
+    extended to the two requested public bounds.
+
+- [x] W20 source-package and audit surface is integrated and root-imported.
+  - Pach--Toth W20 modules:
+    `ClosedPlacementCIEndpointsW20`, `ClosedPlacementUnconditionalAttemptW20`,
+    `ExplicitClosedPlacementInputPackageW20`, `GeneratedChainClosureProducerW20`,
+    `GeneratedChainFamilyProducerW20`, `GeneratedMetricAuditW20`,
+    `LargeKClosedPlacementSourceW20`, `PachTothFinalRouteW20`,
+    `ReducedMetricHypothesesProducerW20`, and
+    `SmallKClosedPlacementSourceW20`.
+  - Swanepoel W20 modules:
+    `FigureProducerFamilyW20`, `Lemma8ProducerFamilyW20`,
+    `Lemma9ProducerFamilyW20`, `PayForCutProducerFamilyW20`,
+    `PointwiseProducerFamilyFieldsW20`, `RemainingObligationLedgerW20`,
+    `SwanepoelCIEndpointsW20`, `SwanepoelSourcePackageW20`,
+    `SwanepoelUnconditionalAttemptW20`, and `TopologyArcProducerFamilyW20`.
+  - W20 status:
+    the project now has checked source-package adapters and audit endpoints for
+    the W19 final closures.  It does not yet have unconditional inhabitants of
+    those source packages, so `KnownBounds.lean` must not expose the requested
+    `8 / 31` or `5 / 16` paper bounds.
+
+- [x] W21 source-package and KnownBounds-gate surface is integrated and root-imported.
+  - Pach--Toth W21 modules package the generated-chain source route, concrete
+    value-matrix adapters, period/base/large-small source fields, and the
+    closed-placement KnownBounds exposure gate.
+  - Swanepoel W21 modules package the no-cut, topology, Lemma 8, Lemma 9,
+    figure-angle, remaining-field, boundary-topology, broken-lattice, and
+    Swanepoel KnownBounds exposure surfaces.
+  - W21 status:
+    the files are imported by the root, build-clean, forbidden-token clean, and
+    trust-source clean.  They still reduce the final public bounds to concrete
+    source-package inhabitants; they do not close the requested public
+    `KnownBounds` wrappers.
+
+- [ ] Concrete source-inhabitation plus W21 endpoint-audit lane is live.
+  - Swanepoel target:
+    produce an actual
+    `RemainingObligationLedgerW20.RemainingObligationFields`,
+    `PointwiseProducerFamilyFieldsW20.PointwiseSourceFamilyFields`, or
+    `SwanepoelSourcePackageW20.ExactRemainingFields`, and route it through
+    `SwanepoelKnownBoundsGateW21.KnownBoundsExposureGate`.
+  - Pach--Toth target:
+    produce an actual
+    `ExplicitClosedPlacementInputPackageW20.GeneratedFamilyClosureReducedMetricSourceFields`,
+    `GeneratedChainFamilyProducerW20.SourceFields`, or
+    `ExplicitClosedPlacementProducerW19.InputPackage`, and route it through
+    `ClosedPlacementKnownBoundsGateW21.KnownBoundsExposureGate`.
+  - Completion gate:
+    root-imported declarations build with the pinned toolchain; root coverage
+    is complete; forbidden-token and trust-source scans are clean; W21 endpoint
+    declarations are added to the CI-style axiom audit and report only
+    Lean/mathlib base axioms; public `KnownBounds` wrappers are added only
+    after the matching internal `*_verified` theorem exists and builds.
 
 ## Current Certified State
 
 - [x] The imported project builds through the pinned Lean toolchain.
-  - Root import file: `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`.
-  - Current root imports include every Lean source module under
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/`.
-  - Recent non-rigid Pach--Toth route modules imported:
-    `PachToth.NonRigidClosedPlacementInterface`,
-    `PachToth.RoleHingeTransitionSearch`,
-    `PachToth.RoleHingeConnectorAlgebra`,
-    `PachToth.RoleHingeAngleCertificates`,
-    `PachToth.RoleHingeSameBlockAlgebra`,
-    `PachToth.RoleHingeFiniteFamilyBridge`,
-    `PachToth.RoleHingeConcreteSearch`,
-    `PachToth.RoleHingeInterfaceRefinement`,
-    `PachToth.IndexedCrossBlockTableConcrete`,
-    `PachToth.CrossBlockDistanceSqReduction`,
-    `PachToth.CrossBlockSqTableSearch`,
-    `PachToth.CrossBlockUpperTriangleConcrete`,
-    `PachToth.CrossBlockPolynomialNormalization`,
-    `PachToth.NonRigidConnectorSeparationFacts`,
-    `PachToth.ClosedPlacementNonRigidComponents`,
-    `PachToth.ClosedPlacementComponentsAssembly`,
-    `PachToth.SplitArbitraryNNonRigidBridge`,
-    `PachToth.PeriodWordCertificates`,
-    `PachToth.PeriodEquationConcreteSearch`,
-    `PachToth.ConcretePeriodCandidateSearch`,
-    `PachToth.EventualRoleHingeClosure`, and
-    `PachToth.ExactFiveSixteenRouteMatrix`.
-  - Recent Swanepoel M8 assembly modules imported:
-    `Swanepoel.M8ConstructionDataBridge`,
-    `Swanepoel.MinimalFailureComponentPackage`,
-    `Swanepoel.MinimalFailureFactsFamilyConcrete`,
-    `Swanepoel.M8PaperFactsAssemblyRefined`,
-    `Swanepoel.MinimalFailurePaperFactMatrix`,
-    `Swanepoel.M8TurnWindowNoEarlyFinal`,
-    `Swanepoel.BoundaryFaceCountingToM8`,
-    `Swanepoel.BoundaryLabelExtractionTasks`,
-    `Swanepoel.BoundarySpineConcrete`,
-    `Swanepoel.BoundaryLabelCertificateAssembly`,
-    `Swanepoel.CutVertexSlackFromDeletion`,
-    `Swanepoel.CutVertexPayForCutArithmetic`,
-    `Swanepoel.CutVertexSideCardFromMinimality`,
-    `Swanepoel.JordanBoundaryExtraction`,
-    `Swanepoel.JordanBoundaryConcrete`,
-    `Swanepoel.JordanTopologyFactsConcrete`,
-    `Swanepoel.Lemma8CombinatoricsConcrete`,
-    `Swanepoel.Lemma8NeighborExtractionConcrete`,
-    `Swanepoel.Lemma8ExistenceConcrete`,
-    `Swanepoel.Lemma8CyclicOrderConcrete`,
-    `Swanepoel.Lemma8DegreeSixConcrete`,
-    `Swanepoel.Lemma8ForbiddenDistinctConcrete`,
-    `Swanepoel.BoundarySpineFiniteCertificate`,
-    `Swanepoel.NonconcaveArcConcrete`,
-    `Swanepoel.NonconcaveArcAngleFacts`,
-    `Swanepoel.NonconcaveArcBudgetFromBoundary`,
-    `Swanepoel.NoEarlyTripleFromLemma9`,
-    `Swanepoel.NoEarlyTripleObstructionConcrete`,
-    `Swanepoel.Figure8ContainmentConcrete`,
-    `Swanepoel.Figure8EuclideanFactsConcrete`,
-    `Swanepoel.Figure8ContainmentAngleBudget`,
-    `Swanepoel.Figure9ContainmentConcrete`,
-    `Swanepoel.Figure9EuclideanFactsConcrete`,
-    `Swanepoel.Figure9ContainmentAngleBudget`, and
-    `Swanepoel.PlanarBoundaryFaceDataRefinement`.
-  - Current root target build succeeds and root import coverage is complete:
-    213 imported package modules for 213 Lean files under
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/`.
+  - `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean` imports every
+    Lean source module under `E:/Personal/Erdosproblems/1066/ErdosProblems1066`.
+  - Current coverage: 627 imported package modules for 627 Lean files.
+  - Current root target build succeeds with 8654 jobs.  W7/W8/W9/W10/W11/W12 route and matrix modules
+    remain included, especially `PachTothRemainingMatrix`,
+    `PachTothW8ClosureMatrix`, `ExactLocalTransitionObligationMatrix`,
+    `SwanepoelRemainingMatrix`, `SwanepoelW8ClosureMatrix`,
+    `M8RefinedInputConcrete`, `MinimalFailureConcreteDataMatrix`,
+    `MinimalFailureDirectMatrixW10`, `GeometryRemainingFieldsW10`, and
+    `SwanepoelW10ClosureMatrix`, plus the imported W11/W12/W13/W14/W15/W16/W17/W18/W19/W20/W21
+    closure, summary, gate, and certificate layers.
 
 - [x] Third parallel proof wave is integrated.
-  - Pach--Toth workers P1--P10 own:
+  - Pach--Toth workers PT3-1--PT3-10 own:
     `RoleHingeConcreteSearch.lean`, `ConcretePeriodSearchFamily.lean`,
     `CrossBlockSqTableSearch.lean`, `FiniteCertificateObligationSummary.lean`,
     `ExactFiveSixteenRouteMatrix.lean`, `GeneratedSeparationFarApart.lean`,
     `SplitRealizationFinal.lean`, `NonRigidClosedPlacementInterface.lean`,
     `ClosedPlacementComponentsAssembly.lean`, and
     `SmallCaseCertificates.lean`.
-  - Swanepoel workers S1--S10 own:
+  - Swanepoel workers SW3-1--SW3-10 own:
     `CutVertexSideCardFromMinimality.lean`, `JordanTopologyFactsConcrete.lean`,
     `PlanarBoundaryFaceDataRefinement.lean`,
     `BoundaryLabelCertificateAssembly.lean`, `Lemma8ExistenceConcrete.lean`,
@@ -159,7 +255,7 @@ Encoding scan for common mojibake markers in Lean files: clean.
     and the root build, source scan, coverage scan, encoding scan, and
     CI-style axiom audit passed.
 
-- [ ] Fourth parallel proof wave is active.
+- [x] Fourth parallel proof wave is integrated.
   - Pach--Toth workers P11--P20 own:
     `RoleHingeInterfaceRefinement.lean`, `GeneratedMetricClosure.lean`,
     `FiniteSearchCertificate.lean`, `CrossBlockPolynomialNormalization.lean`,
@@ -173,73 +269,336 @@ Encoding scan for common mojibake markers in Lean files: clean.
     `Figure8EuclideanFactsConcrete.lean`,
     `Figure9EuclideanFactsConcrete.lean`, `M8TurnWindowNoEarlyFinal.lean`,
     and `MinimalFailurePaperFactMatrix.lean`.
-  - Completion gate: close only completed workers, run targeted pinned checks
-    and scans for their files, then rerun root build, source scan, coverage,
-    encoding, and CI-style axiom audit before marking the wave integrated.
+  - Fourth-wave conditional bridges now integrated:
+    `ConcretePeriodCandidateSearch` exposes the period-equation family plus
+    lower-bound route under the current target spelling;
+    `EventualRoleHingeClosure` exposes the eventual role-hinged closure route
+    with exact-target small-case complement;
+    `ExactFiveSixteenRouteMatrix` routes square-value certificates and
+    reduced non-connector polynomial tables to the current conditional
+    exact/arbitrary Pach--Toth facades; `BoundaryWalkConstruction` exposes a
+    reusable long-arc contribution and planar-boundary count-realization
+    projection; and `NonconcaveArcConcrete` exposes a finite long-arc count-gap
+    selector that produces boundary-budget data and M8 turn bounds.
+  - Refined remaining blockers: the conditional bridges above do not supply
+    unconditional Pach--Toth `5 / 16` or Swanepoel `8 / 31` bounds.  Pach--Toth
+    still needs actual same/opposite transition data, period
+    certificates/equations, cross-block lower-bound inequalities, and the
+    large/even-threshold closed-chain family.  Swanepoel still needs the
+    honest boundary classifications/count gap from an actual outer boundary,
+    Lemmas 6 and 7 as project-local geometry, and the final
+    `NonconcaveArcGeometricAngleFacts` package.
+  - Completion gate passed: completed workers were closed after completion,
+    their touched modules received targeted pinned checks and source scans, and
+    the root build, source scan, coverage scan, encoding scan, and CI-style
+    axiom audit all passed after integration.
 
-- [x] Import and scan the current-wave interface modules.
-  - Current-wave modules now covered by the root import:
-    `PachToth.ConnectorEquationClosure`,
-    `PachToth.ExactFamilyClosure`,
-    `PachToth.GeneratedSeparationFarApart`,
-    `PachToth.OrientationWord`,
-    `Swanepoel.SubpolygonAssembly`,
-    `Swanepoel.BoundaryWalkConstruction`,
-    `PachToth.EquationTransitionClosure`,
-    `PachToth.CrossBlockLowerBoundsInterface`,
-    `PachToth.PeriodCertificateExamples`,
-    `PachToth.FinalConditional`,
-    `Swanepoel.CutVertexFromConnectedness`,
-    `Swanepoel.M8LabelsFromBoundaryInterface`,
-    `Swanepoel.M8LateTriplesFromNoEarly`,
-    `Swanepoel.M8MinimalFailureEliminatorInterface`,
-    `Swanepoel.M8TurnBoundsFromArc`,
-    `Swanepoel.M8WindowGeometryFromContainment`,
-    `Swanepoel.PlanarBoundaryClosure`,
-    `PachToth.RoleHingeConnectorAlgebra`,
-    `PachToth.RoleHingeAngleCertificates`,
-    `PachToth.RoleHingeSameBlockAlgebra`,
-    `PachToth.RoleHingeFiniteFamilyBridge`,
-    `PachToth.RoleHingeConcreteSearch`,
-    `PachToth.RoleHingeInterfaceRefinement`,
-    `PachToth.CrossBlockSqTableSearch`,
-    `PachToth.CrossBlockUpperTriangleConcrete`,
-    `PachToth.CrossBlockPolynomialNormalization`,
-    `PachToth.NonRigidConnectorSeparationFacts`,
-    `PachToth.PeriodEquationConcreteSearch`,
-    `PachToth.ConcretePeriodCandidateSearch`,
-    `PachToth.EventualRoleHingeClosure`,
-    `PachToth.SplitArbitraryNNonRigidBridge`,
-    `PachToth.ClosedPlacementComponentsAssembly`,
-    `PachToth.ExactFiveSixteenRouteMatrix`,
-    `PachToth.FiniteCertificateObligationSummary`,
-    `Swanepoel.BoundarySpineConcrete`,
-    `Swanepoel.BoundarySpineFiniteCertificate`,
-    `Swanepoel.BoundaryLabelCertificateAssembly`,
-    `Swanepoel.JordanBoundaryConcrete`,
-    `Swanepoel.JordanTopologyFactsConcrete`,
-    `Swanepoel.NonconcaveArcConcrete`,
-    `Swanepoel.NonconcaveArcAngleFacts`,
-    `Swanepoel.NonconcaveArcBudgetFromBoundary`,
-    `Swanepoel.NoEarlyTripleFromLemma9`,
-    `Swanepoel.NoEarlyTripleObstructionConcrete`,
-    `Swanepoel.MinimalFailureFactsFamilyConcrete`,
-    `Swanepoel.M8PaperFactsAssemblyRefined`,
-    `Swanepoel.MinimalFailurePaperFactMatrix`,
-    `Swanepoel.CutVertexPayForCutArithmetic`,
-    `Swanepoel.CutVertexSideCardFromMinimality`,
-    `Swanepoel.Lemma8NeighborExtractionConcrete`,
-    `Swanepoel.Lemma8ExistenceConcrete`,
-    `Swanepoel.Lemma8CyclicOrderConcrete`,
-    `Swanepoel.Lemma8DegreeSixConcrete`,
-    `Swanepoel.Lemma8ForbiddenDistinctConcrete`,
-    `Swanepoel.Figure8ContainmentConcrete`,
-    `Swanepoel.Figure8EuclideanFactsConcrete`,
-    `Swanepoel.Figure8ContainmentAngleBudget`,
-    `Swanepoel.Figure9ContainmentConcrete`,
-    `Swanepoel.Figure9EuclideanFactsConcrete`, and
-    `Swanepoel.FinalConditional`.
-  - Current scan status: the full-tree forbidden-token scan is clean.
+- [x] Fifth parallel proof wave is integrated.
+  - Pach--Toth workers PT5-1--PT5-10 own concrete construction files:
+    `RoleHingeTransitionSearch.lean`, `RoleHingeAngleCertificates.lean`,
+    `PeriodWordCertificates.lean`, `PeriodCertificateExamples.lean`,
+    `CrossBlockUpperTriangleConcrete.lean`,
+    `IndexedCrossBlockTableConcrete.lean`, `SmallCaseCertificates.lean`,
+    `EventualRoleHingeClosure.lean`, `NonRigidClosedPlacementInterface.lean`,
+    and `GeneratedSeparationFarApart.lean`.
+  - Swanepoel workers SW5-1--SW5-10 own concrete geometry/topology files:
+    `JordanBoundaryConcrete.lean`, `PlanarBoundaryFinal.lean`,
+    `BoundaryLabelExtractionTasks.lean`, `NonconcaveArcAngleFacts.lean`,
+    `NonconcaveArcBudgetFromBoundary.lean`,
+    `Lemma8NeighborExtractionConcrete.lean`,
+    `NoEarlyTripleObstructionConcrete.lean`, `BrokenLatticePipeline.lean`,
+    `MinimalGraphFacts.lean`, and `OuterBoundaryAssembly.lean`.
+  - Fifth-wave results integrated: Pach--Toth now has explicit obstruction
+    facts for the too-strong role-hinge transition package, equilateral
+    role-angle exact-local bridges, all-positive and threshold period-word
+    families, concrete upper-triangle/non-connector cross-block projections,
+    generated reduced closed-placement routes, and small-case threshold
+    plumbing.  Swanepoel now has stronger Jordan/topology equivalences,
+    boundary-walk-to-face-counting bridges, boundary-label projections,
+    Lemma 7 angle-to-turn projections, long-arc budget routes, Lemma 8
+    extraction projections, no-early/K23 routes, broken-lattice fact
+    constructors, minimal-failure closure wrappers, and outer-boundary count
+    projections.
+  - Completion gate passed: all completed workers were closed after
+    completion; targeted pinned checks passed; root build, source scan,
+    coverage scan, encoding scan, diff whitespace check, and CI-style axiom
+    audit passed.
+
+- [x] Sixth parallel proof wave is integrated.
+  - Pach--Toth workers W6-P1--W6-P10 owned:
+    `RoleHingeTransitionSearch.lean`, `RoleHingeAngleCertificates.lean`,
+    `PeriodWordCertificates.lean`, `PeriodCertificateExamples.lean`,
+    `CrossBlockUpperTriangleConcrete.lean`,
+    `IndexedCrossBlockTableConcrete.lean`, `SmallCaseCertificates.lean`,
+    `EventualRoleHingeClosure.lean`, `NonRigidClosedPlacementInterface.lean`,
+    `ClosedPlacementClosure.lean`, and `GeneratedSeparationFarApart.lean`.
+  - Swanepoel workers W6-S1--W6-S10 owned:
+    `JordanBoundaryConcrete.lean`, `PlanarBoundaryFinal.lean`,
+    `BoundaryLabelExtractionTasks.lean`, `NonconcaveArcAngleFacts.lean`,
+    `NonconcaveArcBudgetFromBoundary.lean`,
+    `Lemma8NeighborExtractionConcrete.lean`,
+    `NoEarlyTripleObstructionConcrete.lean`, `BrokenLatticePipeline.lean`,
+    `BrokenLatticeClosure.lean`, `MinimalGraphFacts.lean`,
+    `MinimalGraphClosure.lean`, and `OuterBoundaryAssembly.lean`.
+  - Sixth-wave results integrated: the non-rigid Pach--Toth route now has
+    weaker connector-only role-hinge transition facts separated from the
+    impossible all-pairs preservation package; period-word families project to
+    generated-chain families; two-step nontrivial period examples are
+    available; non-connector distance and squared-distance lower-bound routes
+    feed exact, eventual, and arbitrary-`n` targets; and generated
+    period/reduced-metric data routes to closed-placement families.  The
+    Swanepoel route now has planar-boundary consumer bridges from topology
+    data, direct face-counting constructors from boundary walks, stronger
+    label/projection surfaces, turn-bound output packages, K23-to-no-early
+    construction packages, broken-lattice closure adapters, and minimal graph
+    target wrappers.
+  - Remaining blockers after this wave: Pach--Toth still needs actual
+    numerical/finite certificates for the non-rigid period and non-connector
+    lower-bound inputs rather than just the consuming route.  Swanepoel still
+    needs the honest construction of the topology/core boundary data and the
+    concrete paper facts that fill the refined M8 input matrix.
+  - Completion gate passed and remains covered by the current full verification
+    snapshot above.
+
+- [x] Seventh parallel proof wave is integrated.
+  - W7 Pach--Toth and Swanepoel route modules are root-imported,
+    build-checked, scan-clean, and consumed by `PachTothRemainingMatrix` and
+    `SwanepoelRemainingMatrix`.
+  - Remaining blockers after this wave: Pach--Toth must replace the blocked
+    four-target exact-local transition with a viable non-rigid transition
+    model and then fill actual numeric lower tables for the resulting
+    candidate.  Swanepoel must still supply the concrete topology, boundary,
+    label, window-containment, and no-early fields carried by the W7 matrices.
+  - Completion gate passed and remains covered by the current full verification
+    snapshot above.
+
+- [x] Eighth parallel proof wave is integrated.
+  - Pach--Toth workers W8-P1--W8-P10 own:
+    `FlexibleExactLocalTransition.lean`,
+    `ExactLocalTransitionObligationMatrix.lean`,
+    `RoleHingeCandidateSearchSurface.lean`,
+    `ConcretePeriodWordSearch.lean`,
+    `PeriodCandidateTargetRoute.lean`,
+    `GeneratedPolynomialLowerTableRoute.lean`,
+    `ConcreteNonConnectorValueMatrix.lean`,
+    `ArbitraryNExactRemainderClosure.lean`,
+    `GeneratedPointPolynomialFacts.lean`, and
+    `PachTothW8ClosureMatrix.lean`.
+  - Swanepoel workers W8-S1--W8-S10 own:
+    `OuterBoundaryExistenceConcrete.lean`,
+    `BoundaryWalkFinitePartitions.lean`,
+    `SubpolygonFaceConstruction.lean`,
+    `BoundaryAngleAssembly.lean`,
+    `LongArcGapConcrete.lean`,
+    `K23NoEarlyClosure.lean`,
+    `M8WindowContainmentConcrete.lean`,
+    `Lemma9NoStartConcrete.lean`,
+    `MinimalFailureW8RowAssembly.lean`, and
+    `SwanepoelW8ClosureMatrix.lean`.
+  - Eighth-wave results integrated: Pach--Toth now has a flexible exact-local
+    transition interface, a checked exact-local possible-row/obstruction
+    matrix with no `trustCompiler` dependency, a role-hinge finite-search
+    surface, reusable checked period-word families, period-candidate target
+    routing, generated polynomial lower-table routing, concrete value-matrix
+    certificate wrappers, exact-remainder arbitrary-`n` closure, generated
+    point polynomial normalization facts, and a W8 closure matrix.  Swanepoel
+    now has exact outer-boundary topology fields, finite boundary-walk
+    partitions, subpolygon-face construction bridges, boundary/subpolygon
+    angle assembly, long-arc gap-to-turn-bound routing, K23/common-neighbor
+    no-early closure, M8 window containment packaging, Lemma 9 no-start
+    adapters, minimal-failure W8 row assembly, and a W8 closure matrix.
+  - Remaining blockers after this wave: Pach--Toth still needs concrete
+    same/opposite flexible branch data and actual polynomial/value lower-table
+    certificates for a viable period family.  Swanepoel still needs actual
+    topology extraction, boundary-label facts, window containment witnesses,
+    and no-start/no-early fields instantiated from the geometric graph rather
+    than carried as row data.
+  - Completion gate passed and remains covered by the current full verification
+    snapshot above.
+
+- [x] Ninth parallel proof wave is integrated.
+  - Pach--Toth workers W9-P1--W9-P10 own:
+    `FlexibleBranchCoordinateSearch.lean`,
+    `ExactLocalBranchSolverSurface.lean`,
+    `PeriodFamilyCandidateSearchW9.lean`,
+    `PolynomialCertificateExtraction.lean`,
+    `ConcreteValueCertificateExamples.lean`,
+    `PachTothFinalDataAssembly.lean`,
+    `ExactRemainderPublicBridge.lean`,
+    `UnitVectorParameterizationSearch.lean`,
+    `CrossBlockLowerBoundSearchW9.lean`, and
+    `PachTothRemainingObligationsW9.lean`.
+  - Swanepoel workers W9-S1--W9-S10 own:
+    `TopologyExtractionFromNoncrossing.lean`,
+    `OuterBoundaryLabelFacts.lean`,
+    `BoundaryPartitionInstantiation.lean`,
+    `SubpolygonInstantiation.lean`,
+    `BoundaryAngleWitnessConstruction.lean`,
+    `M8WindowContainmentConcrete.lean`,
+    `NoStartInstantiation.lean`,
+    `K23MinimalFailureInstantiation.lean`,
+    `MinimalFailureW8RowAssembly.lean`, and
+    `SwanepoelRemainingObligationsW9.lean`.
+  - Ninth-wave results integrated: Pach--Toth now has explicit coordinate
+    search surfaces for the blocked same/opposite branch, a filtered
+    exact-local row API, unit-vector parameterization routing, generated
+    period/equation family surfaces, polynomial/value certificate extraction
+    facades, concrete value examples, exact-remainder public routing, cross-block
+    lower-bound facades, final-data assembly wrappers, and an explicit
+    W9 remaining-obligation matrix.  Swanepoel now has topology-from-noncrossing
+    frontier equivalences, boundary-label projections, partition/count
+    instantiation, subpolygon instantiation fields, unit-separated angle
+    witnesses, expanded M8 containment routes, no-start/K23 minimal-failure
+    row adapters, W8 row assembly extensions, and a W9 remaining-obligation
+    matrix.
+  - Remaining blockers after this wave: Pach--Toth still needs an actually
+    viable non-rigid transition family, period equations, and non-connector
+    lower/value tables that inhabit the explicit closing fields.  The concrete
+    same/opposite four-target coordinates remain formally blocked by the
+    `T1_1,r` exact-local row.  Swanepoel still needs concrete topology,
+    enclosure, label, angle, containment, and no-early witnesses instantiated
+    uniformly for every minimal failure, rather than carried as explicit row
+    fields.
+  - Completion gate passed: all 20 W9 workers were closed only after completion;
+    all owned modules received targeted pinned Lean checks and source scans;
+    root import coverage, full build, forbidden-token scan,
+    `native_decide`/`trustCompiler` source scan, diff whitespace check, and
+    CI-style axiom audit passed.
+
+- [x] Tenth parallel proof wave is integrated.
+  - Pach--Toth workers W10-P1--W10-P10 own:
+    `FlexibleTransitionSearchW10.lean`,
+    `RoleHingePolynomialSystemW10.lean`,
+    `NonRigidPeriodCandidateW10.lean`,
+    `CrossBlockValueSearchW10.lean`,
+    `LengthTwoThreeCaseW10.lean`,
+    `ExactLocalObstructionExpansionW10.lean`,
+    `FlexibleBranchSearchSummaryW10.lean`,
+    `ArbitraryNBridgeW10.lean`,
+    `GeneratedPointNormalizationW10.lean`, and
+    `PachTothW10ClosureMatrix.lean`.
+  - Swanepoel workers W10-S1--W10-S10 own:
+    `TopologyFrontierW10.lean`,
+    `BoundaryLabelInstantiationW10.lean`,
+    `BoundaryCountingInstantiationW10.lean`,
+    `SubpolygonAngleW10.lean`,
+    `WindowContainmentW10.lean`,
+    `NoEarlyK23AssemblyW10.lean`,
+    `MinimalFailureDirectMatrixW10.lean`,
+    `SwanepoelTargetFacadeW10.lean`,
+    `GeometryRemainingFieldsW10.lean`, and
+    `SwanepoelW10ClosureMatrix.lean`.
+  - Tenth-wave results integrated: Pach--Toth now has sharper non-rigid
+    transition search surfaces, role-hinge polynomial systems, period-candidate
+    routing, cross-block value/inequality ledgers, length-two/length-three
+    missing-data ledgers, exact-local obstruction expansions, generated-point
+    normalization certificates, arbitrary-`n` routing, and a W10 closure
+    matrix.  Swanepoel now has topology-frontier equivalences, boundary-label
+    instantiation rows, boundary/subpolygon angle-count adapters, M8 window
+    containment adapters, no-early/K23 assembly rows, minimal-failure direct
+    matrices, remaining geometry-field packages, target facades, and a W10
+    closure matrix.
+  - Remaining blockers after this wave: Pach--Toth still needs concrete
+    non-rigid transition/period data and actual polynomial/value lower-table
+    certificates for a viable generated closed-chain family.  Swanepoel still
+    needs concrete inhabitants of the topology/enclosure, boundary-label,
+    angle/long-arc, window-containment, no-start/no-early, K23/common-neighbor,
+    and broken-lattice geometry fields.
+  - W10 status: these modules provide checked conditional direct/K23/component
+    and geometry projection routes, plus 20 CI axiom-audit entries.  They do
+    not yet provide uniform row-family inhabitants for either final bound.
+  - Completion gate passed: all 20 W10 workers were closed only after
+    completion; all owned modules received targeted pinned Lean checks and
+    source scans; root import coverage, full build, forbidden-token scan,
+    `native_decide`/`trustCompiler` source scan, diff whitespace check, and
+    CI-style axiom audit passed.
+
+- [x] Eleventh parallel proof wave is integrated.
+  - Pach--Toth W11 worker and terminal-route modules are root-imported,
+    build-checked, and scan-clean.
+  - Swanepoel W11 worker and terminal-route modules are root-imported,
+    build-checked, and scan-clean.
+  - Completion gate passed: the 19 W11 terminal-route files that were outside
+    the root import surface now import through
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`; targeted checks,
+    root build, source scan, `native_decide`/`trustCompiler` source scan,
+    coverage scan, diff whitespace check, and CI-style axiom audit passed.
+  - Current status: W11 closes the terminal-summary import/build plumbing; it
+    still does not supply the final unconditional
+    Swanepoel `8 / 31` or Pach--Toth `5 / 16` public theorem data.
+
+- [x] Twelfth parallel proof wave surface is integrated.
+  - Pach--Toth W12 modules are root-imported, build-checked, and scan-clean:
+    `FiniteCertificateObligationsW12`, `LargeClosedPlacementW12`,
+    `NonConnectorSeparationW12`, and `OrbitSqDistancesW12`.
+  - Swanepoel W12 modules are root-imported, build-checked, and scan-clean:
+    `BoundaryArcW12`, `BoundaryClassificationW12`, `CutVertexSlackW12`,
+    `E22E23BridgeW12`, `Figure8ContainmentW12`,
+    `Figure9ContainmentW12`, `Lemma6NegativeAfterGapW12`,
+    `Lemma7GapInductionW12`, `Lemma8WitnessW12`, `M8TurnPackageW12`,
+    `OuterBoundaryAngleW12`, `SubpolygonAngleW12`, and
+    `SubpolygonPackageW12`.
+  - Current W12 route correction: `OrbitSqDistancesW12` proves the old fully
+    quantified concrete connector-only orbit-distance target is blocked, so
+    Pach--Toth work must instantiate a replacement transition/orbit package or
+    use the restricted exact-block route that avoids the obstructed all-same
+    two-block word.
+  - Completion gate passed: all 17 W12 files import through
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`; targeted checks,
+    root build, source scan, `native_decide`/`trustCompiler` source scan,
+    coverage scan, diff whitespace check, and CI-style axiom audit passed.
+
+- [x] Thirteenth parallel proof wave surface is integrated.
+  - Swanepoel W13 bridge/assembly modules are root-imported, build-checked,
+    and scan-clean.
+  - Pach--Toth W13 bridge/assembly modules are root-imported, build-checked,
+    and scan-clean.
+  - Current status: W13 routes the W12 package surfaces into narrower
+    endpoint/assembly paths, but the final theorem data is still conditional.
+
+- [x] Fourteenth parallel proof wave surface is integrated.
+  - Pach--Toth W14 endpoint and certificate modules are root-imported,
+    build-checked, and scan-clean, including exact-to-arbitrary, large/small,
+    period/non-connector, and known-bound-spine surfaces.
+  - Swanepoel W14 endpoint and remaining-input modules are root-imported,
+    build-checked, and scan-clean, including boundary-arc, boundary-angle,
+    Lemma 6/7, Lemma 8/9, face-reduction, and final endpoint attempts.
+  - Current status: W14 gives the live conditional endpoint facades; it does
+    not by itself supply the concrete final gate inputs.
+
+- [x] Fifteenth proof-surface wave is integrated.
+  - Pach--Toth W15 modules are root-imported, build-checked, and scan-clean:
+    `AllPositiveCertificateAssemblyW15`, `FinalPachTothGateW15`,
+    `LargeThresholdSmallCasesW15`, `PeriodRowsAllPositiveProofW15`, and
+    `TailPolynomialLowerProofW15`.
+  - Swanepoel W15 modules are root-imported, build-checked, and scan-clean:
+    `BoundaryArcExtractionProofW15`, `FinalSwanepoelGateW15`,
+    `Lemma89WindowContainmentProofW15`, `NoCutMinimalityProofW15`,
+    `OuterAngleBudgetProofW15`, and `RemainingInputConcreteAssemblyW15`.
+  - Current status: W15 provides the final-gate shape.  The final bounds are
+    still conditional on constructing `FinalPachTothGateW15.FinalGate` and
+    `FinalSwanepoelGateW15.FinalGate`.
+
+- [x] Sixteenth proof-surface wave is integrated.
+  - Pach--Toth W16 modules are root-imported, build-checked, and scan-clean:
+    `EventualClosedPlacementCertificateW16`, `LargeKGlobalSeparationW16`,
+    `PeriodBaseFixingCertificateW16`, `PeriodBaseFixingOppositeW16`,
+    `PeriodBaseFixingSameW16`, `SmallComplementExactBlocksW16`,
+    `SmallRowsFourFiveW16`, `SmallRowsTwoThreeW16`, and
+    `TailPolynomialRowsW16`.
+  - Swanepoel W16 modules are root-imported, build-checked, and scan-clean:
+    `BoundaryArcFiniteWalkConstructionW16`, `BoundaryTopologyArcBridgeW16`,
+    `Figure8WindowContainmentW16`, `Figure9WindowContainmentW16`,
+    `Lemma8LocalLabelsW16`, `Lemma9LateTriplesW16`,
+    `LongArcFactsSelectionW16`, `NoCutFromMinimalityW16`, and
+    `PayForCutArithmeticW16`.
+  - Current status: W16 tightens the final-gate input contracts, but it still
+    leaves the concrete final-gate constructors as the live proof work.
+
+- [x] Import and scan the completed interface-wave modules.
+  - Completed interface-wave modules are root-imported and covered by the
+    current full-tree forbidden-token scan.  The long per-module inventory has
+    been retired; remaining active work is tracked by the open items below.
 
 - [x] Record the Pach--Toth translated-equation obstruction.
   - File:
@@ -282,7 +641,7 @@ Encoding scan for common mojibake markers in Lean files: clean.
   - Do not expose Swanepoel `8 / 31` or Pach-Toth `5 / 16` until the final
     checklists below are complete.
 
-- [ ] Keep file hygiene clear.
+File hygiene note.
   - Ignored stale generated output:
     `E:/Personal/Erdosproblems/1066/Aristotle/ARISTOTLE_SUMMARY.md`.
   - Ignored build cache: `E:/Personal/Erdosproblems/1066/.lake/`.
@@ -327,10 +686,10 @@ Paper-to-Lean route:
 | `E8-E10` | outer boundary and boundary bookkeeping | S4, `JordanTopologyFactsConcrete.TopologyFacts`, `JordanBoundaryConcrete.MissingTopologyFacts`, `PlanarBoundaryClosure.PlanarBoundaryData` |
 | `E11` | source-faithful boundary arc bookkeeping that feeds the boundary labels | S4, boundary cycle/classification data, `BoundaryFaceCountingToM8`, `BoundaryLabelExtractionTasks` |
 | `E12-E13` | boundary and subpolygon angle/count inequalities | S5, `BoundaryAngleRealization.OuterBoundaryAngleRealization.angleLowerBound`, `SubpolygonAssembly.SubpolygonCycleCountAngleData.lowDegreeInequality`, `SubpolygonAssembly.e13LowDegreeInequality_of_explicitCycleCountAngleData` |
-| `E14-E16` | Lemmas 6, 7, 5: long nonconcave arc | S6, current Lean has reducers/adapters; the remaining proof must construct `NonconcaveArcAngleFacts.NonconcaveArcGeometricAngleFacts` |
-| `E17` | `m = 8` thirteen-turn specialization of the long-arc data | S6, `NonconcaveArcAngleFacts.NonconcaveArcGeometricAngleFacts` to `M8TurnBoundsFromArc.NonconcaveArcTurnData` |
+| `E14-E16` | Lemmas 6, 7, 5: long nonconcave arc | S6, current Lean has reducers/adapters; the remaining proof must construct `NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData` |
+| `E17` | `m = 8` thirteen-turn specialization of the long-arc data | S6, `NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData` to `M8TurnBoundsFromArc.NonconcaveArcTurnData` |
 | `E18-E19` | Lemma 8 labels and Lemma 9 late triples | S6/S8, `M8FinitePQSpineCertificate`, `M8Lemma8MissingExistenceConditions`, `M8Lemma9FiveStartLateFacts` |
-| `E21-E23` | Euclidean Lemma 10 and Figure 8/Figure 9 inequalities | S7, `AngleContainmentBridges`, `M8WindowContainment` |
+| `E21-E23` | Euclidean Lemma 10 and Figure 8/Figure 9 inequalities | S7, `HonestFigure8ExplicitEuclideanFacts`, `HonestFigure9AdjacentLeftEuclideanFactWitnesses`, then `MinimalFailureM8RefinedPaperFacts.windowGeometry` |
 | `E24` | `m = 8` contradiction and lower-bound target | S8, `MinimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne` |
 
 Current source-refined paper package:
@@ -343,19 +702,21 @@ This is the cleanest paper-facing checklist.  The smallest Lean-efficient
 conditional gate below it is:
 
 ```lean
-M8PipelineClosure.MinimalFailureM8SeparatedConstructionEliminator
+BrokenLatticeMinimalFailure.MinimalFailureM8ConstructionEliminator
 ```
 
 The source-refined package closes the target through:
 
 ```text
-MinimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne
--> MinimalFailureM8RemainingPaperFactsFamily.targetLowerBoundEightThirtyOne
--> MinimalFailureM8PaperFactsFamily.targetLowerBoundEightThirtyOne
+MinimalFailureM8RefinedPaperFacts
+-> MinimalFailureM8RefinedPaperFacts.toM8ConstructionData
+-> MinimalFailureM8RefinedPaperFactsFamily.toM8ConstructionEliminator
+-> MinimalFailureM8RefinedPaperFactsFamily.no_minimalClearedFailure
+-> MinimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne
 -> Swanepoel.targetLowerBoundEightThirtyOne
 ```
 
-The Lean-efficient separated-construction gate closes through:
+The older separated-construction gate remains checked separately through:
 
 ```text
 M8PipelineClosure.MinimalFailureM8SeparatedConstructionEliminator
@@ -364,10 +725,23 @@ M8PipelineClosure.MinimalFailureM8SeparatedConstructionEliminator
 -> Swanepoel.targetLowerBoundEightThirtyOne
 ```
 
-The remaining fields to construct for each minimal cleared failure are exactly
-`positiveCard`, `remainingNoCutSlack`, `planarBoundary`, `spineCertificate`,
-`lemma8Existence`, `arcAngleFacts`, `lemma9FiveStartLateFacts`, and
-`angleContainment`.
+The paper-facing `MinimalFailureM8RefinedPaperFacts` package still has a
+`positiveCard` field, but the concrete matrix routes derive it from minimality.
+The remaining source obligations are no-cut slack, arc budget, spine
+certificate, Lemma 8, Lemma 9, and Figure 8/Figure 9 facts.
+
+For current parallel handoff, use the rooted W20/W21 source-package lane.
+Swanepoel agents should target
+`RemainingObligationLedgerW20.RemainingObligationFields`,
+`PointwiseProducerFamilyFieldsW20.PointwiseSourceFamilyFields`,
+`SwanepoelSourcePackageW20.ExactRemainingFields`, and
+`SwanepoelKnownBoundsGateW21.KnownBoundsExposureGate`.  Pach--Toth agents
+should target
+`ExplicitClosedPlacementInputPackageW20.GeneratedFamilyClosureReducedMetricSourceFields`,
+`GeneratedChainFamilyProducerW20.SourceFields`,
+`ExplicitClosedPlacementProducerW19.InputPackage`, and
+`ClosedPlacementKnownBoundsGateW21.KnownBoundsExposureGate`.  W12-W21 package
+surfaces remain the component contracts underneath this handoff.
 
 ### Swanepoel Already Checked
 
@@ -612,58 +986,68 @@ theorem unitDistanceNeighborSet_card_ge_three_of_minimalClearedFailure
   - This is not an unconditional no-cut-vertex theorem: it still requires the
     uniform cut-vertex slack package.
 
-- [ ] Construct the remaining cut-vertex slack from minimality.
+- [ ] Prove the W16 no-cut payload from minimality.
   - Paper step: Swanepoel `E7`, Lemma 3 two-connectedness/no-cut-vertex
     reduction.
   - Lean route:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexClosure.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexFromConnectedness.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexFinal.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoCutMinimalityProofW15.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/PayForCutArithmeticW16.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoCutFromMinimalityW16.lean`,
     consumed downstream by
-    `M8PaperFactsAssemblyRefined.MinimalFailureM8RefinedPaperFacts.remainingNoCutSlack`.
-  - Correct target shape: `CutVertexFinal.RemainingNoCutSlackFact C` is a
-    data-valued alias for `CutVertexClosure.AllCutVertexSlackGluingData C`,
-    so the main target should be a `def`, not a `Prop` theorem.
+    `NoCutFromMinimalityW16.PointwiseNoCutMinimalityInputs.noCutVertex`
+    and eventually `FinalSwanepoelGateW15.FinalGate`.
+  - Current checked W16 localization:
 
 ```lean
-noncomputable def remainingNoCutSlackFact_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
+def NoCutMinimalityProofW15.MinimalitySelectedPayForCut
+
+theorem PayForCutArithmeticW16
+  .minimalitySelectedPayForCut_iff_sideCardExactFact
     (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    CutVertexFinal.RemainingNoCutSlackFact C := by
-  sorry
+    MinimalitySelectedPayForCut hmin <->
+      CutVertexDeletionSideCardExactFact hmin
+
+theorem PayForCutArithmeticW16
+  .minimalitySelectedPayForCut_iff_noCutVertex_of_minimalFailure
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
+    MinimalitySelectedPayForCut hmin <-> CutVertexInterface.NoCutVertex C
 ```
 
-  - Exact hard leaf: prove the side-cardinality/slack statement below, then
-    route it through the checked deletion reducers.
+  - Correct next target: prove the partition-independent W15 pay-for-cut
+    statement from minimality, or prove `NoCutVertex C` directly and recover
+    the pay-for-cut statement by the checked equivalence.
 
 ```lean
-theorem cutVertexDeletionSideCardExactFact_of_minimalFailure
+theorem minimalitySelectedPayForCut_of_minimalFailure
     {n : Nat} {C : UDConfig n}
     (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    CutVertexSlackFromDeletion.CutVertexDeletionSideCardExactFact hmin := by
+    NoCutMinimalityProofW15.MinimalitySelectedPayForCut hmin := by
   sorry
 
-theorem cutVertexDeletionSlackFact_of_minimalFailure
+theorem noCutVertex_of_minimalFailure
     {n : Nat} {C : UDConfig n}
     (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    CutVertexSlackFromDeletion.CutVertexDeletionSlackFact C := by
+    CutVertexInterface.NoCutVertex C := by
   exact
-    CutVertexSlackFromDeletion.deletionSlackFact_of_minimalFailure_sideCardExactFact
-      hmin
-      (cutVertexDeletionSideCardExactFact_of_minimalFailure hmin)
+    NoCutMinimalityProofW15
+      .noCutVertex_of_minimalFailure_minimalitySelectedPayForCut
+        hmin
+        (minimalitySelectedPayForCut_of_minimalFailure hmin)
 ```
 
-  - How: prove the uniform side-cardinality fact by deleting the two
-    cut-vertex sides, gluing the cleared independent sets obtained from the
-    induced side configurations, and paying the shared cut vertex with the
-    existing `CutVertexPayForCutArithmetic` lemmas.  Be careful with the
-    existing `CutVertexSideCardFromMinimality` facts: they also show that an
-    actual cut partition plus the universal side-cardinality fact contradicts
-    minimality, so the proof must derive no-cut by contradiction rather than
-    asserting the side-cardinality fact under an already-supplied cut
-    partition without closing the contradiction.
-  - Completion gate: use this theorem to fill the `remainingNoCutSlack` field
-    in the refined M8 paper-facts package for every minimal cleared failure.
+  - How: argue by contradiction from a supplied `CutVertexPartition C`.
+    `NoCutMinimalityProofW15` proves that a concrete partition obstructs the
+    uniform pay-for-cut input, so the proof must extract an actual contradiction
+    from the partition using deletion/gluing and `CutVertexPayForCutArithmetic`,
+    not merely assert that the minimality-selected side surplus pays the cut
+    vertex while the partition remains live.
+  - Completion gate: root-import a theorem providing `NoCutVertex C` for every
+    minimal cleared failure, then consume it through
+    `NoCutFromMinimalityW16.NoCutMinimalityRemainingInputFamily` or directly in
+    `FinalSwanepoelGateW15.FinalGate`.
 
 - [x] Add connectedness-plus-conditional cut-vertex closure adapter.
   - File:
@@ -764,6 +1148,10 @@ noncomputable def outerBoundaryCore_of_minimalFailure
     `SimpleGraph.Walk`, `Walk.IsCycle`, `Polygon`, `Wbtw`, and `Sbtw` only for
     graph/cycle/polygon primitives.  The actual outer-face/Jordan extraction is
     project-local.
+  - Dependency: the full `OuterBoundaryCore`/`PlanarBoundaryData` route needs
+    `remainingNoCutSlackFact_of_minimalFailure` from S3.  Until then,
+    `MissingTopologyFacts`-style topology extraction is the parallel-safe
+    subtask.
   - Completion gate: the constructed core is usable by
     `PlanarBoundaryClosure.PlanarBoundaryData.core`.
 
@@ -791,6 +1179,12 @@ noncomputable def outerBoundaryCore_of_minimalFailure
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/PlanarBoundaryFaceDataRefinement.lean`.
   - Deliverable: concrete boundary `BoundaryCountsRealization` and the
     boundary-face data needed by `PlanarBoundaryClosure.PlanarBoundaryData`.
+  - Conditional bridge now present: `BoundaryWalkConstruction` has
+    `longArcContribution`, `longArcIndicator_sum_eq_B` in terms of that
+    contribution, and `toPlanarBoundaryData_countsRealization` for projecting
+    the count realization carried by the constructed planar-boundary package.
+    This is bookkeeping glue only; the actual boundary classifications and
+    count data still have to be extracted from the outer boundary.
   - How: define all counts from the actual boundary cycle, prove the
     classification is exhaustive and nonoverlapping, and project the computed
     counts to the fields consumed by `BoundaryCounting`.
@@ -989,14 +1383,14 @@ theorem subpolygonLowDegreeInequality_of_minimalFailure
 - [ ] Prove Lemma 6 / forced negative after a gap.
   - Paper step: Swanepoel `E14`.
   - Lean route:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma6NegativeAfterGapW12.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcBudgetFromBoundary.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcAngleFacts.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonAssembly.lean`.
-  - Deliverable: a reusable theorem turning the paper gap condition on a
-    boundary arc into the negative/concavity conclusion consumed by the
-    nonconcave-arc package.  The existing Lean files are reducers; this task
-    must introduce the exact project-local gap predicate and prove the paper
-    implication before it is used to build the final arc-angle data.
+  - Deliverable: instantiate the checked W12
+    `BoundaryWalkLemma6Obstruction` or `BoundaryArcIndexMap` for the actual
+    boundary walk, then use `negativeAfter_of_gap` / `negativeAfterAt_of_gapAt`
+    to feed the nonconcave-arc package.
   - How: express the gap condition in terms of the current boundary-spine and
     turn data, construct the subpolygon contradiction, and feed the checked
     S5 subpolygon low-degree inequality.
@@ -1016,7 +1410,8 @@ theorem subpolygonLowDegreeInequality_of_minimalFailure
     all finite-index arithmetic in `Nat`/`Fin` rather than informal cyclic
     notation.
   - Completion gate: the induction theorem is used in the construction of
-    `arcAngleFacts`.
+    `NonconcaveArcBoundaryBudgetData` and its
+    `toNonconcaveArcGeometricAngleFacts` projection.
 
 - [ ] Prove Lemma 5 / existence of a nonconcave long arc.
   - Paper step: Swanepoel `E16`.
@@ -1026,26 +1421,36 @@ theorem subpolygonLowDegreeInequality_of_minimalFailure
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnBoundsFromArc.lean`.
   - Deliverable: construct the existing geometric-angle package from the S4/S5
     boundary and subpolygon facts plus Lemmas 6 and 7.
+  - Conditional bridge now present: `NonconcaveArcConcrete.BoundaryLongArcFacts`
+    packages a finite family of long arcs, a concavity predicate, the strict
+    count gap, raw turn functions, nonnegativity, and the `concave_iff`
+    comparison.  It already selects a nonconcave long arc and routes it to
+    `NonconcaveArcBoundaryBudgetData` and `M8ConstructionInterface.M8TurnBounds`.
+    This does not prove Lemma 5 by itself; the remaining work is to build the
+    `BoundaryLongArcFacts` instance from the real boundary data and connect
+    Lemmas 6 and 7 to `NonconcaveArcGeometricAngleFacts`.
 
 ```lean
-noncomputable def nonconcaveArcGeometricAngleFacts_of_minimalFailure
+noncomputable def nonconcaveArcBoundaryBudgetData_of_minimalFailure
     {n : Nat} {C : UDConfig n}
     (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
     (planarBoundary :
       PlanarBoundaryClosure.PlanarBoundaryData
         (BoundaryFaceCountingToM8.CanonicalUDGraph C)) :
-    NonconcaveArcAngleFacts.NonconcaveArcGeometricAngleFacts := by
+    NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData
+      (BoundaryFaceCountingToM8.CanonicalUDGraph C) := by
   sorry
 ```
 
   - How: package the selected long arc, the turn function, turn
     nonnegativity, and the `totalTurn < Real.pi / 3` budget from Lemmas 6 and
     7.
-  - Completion gate: the refined M8 package field `arcAngleFacts` is filled.
+  - Completion gate: the refined M8 package field `arcBoundaryBudget` is filled.
 
 - [ ] Specialize the long-arc data to the `m = 8` thirteen-turn package.
   - Paper step: Swanepoel `E17`.
   - Lean route:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnPackageW12.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcAngleFacts.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnBoundsFromArc.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnBoundsConcrete.lean`.
@@ -1053,17 +1458,18 @@ noncomputable def nonconcaveArcGeometricAngleFacts_of_minimalFailure
 
 ```lean
 noncomputable def m8ThirteenTurnData_of_nonconcaveArc
-    (A : NonconcaveArcAngleFacts.NonconcaveArcGeometricAngleFacts) :
+    {G : Type u} [Fintype G] [DecidableEq G]
+    (D : NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData G) :
     M8TurnBoundsFromArc.NonconcaveArcTurnData :=
-  A.toNonconcaveArcTurnData
+  D.toNonconcaveArcTurnData
 ```
 
   - How: prove that the paper's selected `m = 8` arc is exactly the current
     `turnIndexSet = {1, ..., 13}` and that all off-arc turns are normalized to
     zero by the checked adapter.
-  - Completion gate: S7 can use
-    `A.toNonconcaveArcTurnData.toM8TurnBounds.turn` as the turn function in
-    the angle-containment field.
+  - Completion gate: S7 can use the resulting
+    `M8TurnPackageW12.BoundaryLongArcM8TurnPackage` turn function in the
+    Figure 8/Figure 9 Euclidean fact fields.
 
 - [ ] Prove Lemma 8 / construction of the `r_i, s_i` witnesses.
   - Paper step: Swanepoel `E18`.
@@ -1172,8 +1578,8 @@ Figure8ContainmentConcrete.Figure8SeparatedWindowContainment
   - How: map the broken-lattice witnesses into the current Figure 8 contained
     witness structure, prove the unit-distance/squared-distance facts, and
     route them through the existing Euclidean facts module.
-  - Completion gate: the Figure 8 half of `AngleContainmentBridges` can be
-    constructed for the honest M8 labels.
+  - Completion gate: the refined M8 package field `figure8EuclideanFacts` can
+    be constructed for the honest M8 labels.
 
 - [ ] Prove Figure 8 central-angle containment.
   - Paper step: Swanepoel `E22`, angle-to-turn containment.
@@ -1185,7 +1591,7 @@ Figure8ContainmentConcrete.Figure8SeparatedWindowContainment
   - How: prove the oriented angle lies inside the separated turn window.  The
     local `pi / 3` angle lower bound is already checked.
   - Completion gate: this field is combined with the Figure 8 witness package
-    into the Figure 8 part of `AngleContainmentBridges`.
+    into `HonestFigure8ExplicitEuclideanFacts`.
 
 - [ ] Extract Figure 9 distance data from failed adjacent labels.
   - Paper step: Swanepoel `E23`, Lemma 10 inequality (6), Figure 9.
@@ -1202,8 +1608,8 @@ Figure9ContainmentConcrete.Figure9AdjacentLeftContainedWitnesses
   - How: map adjacent failed labels into the current Figure 9 contained
     witness structure and prove the required unit-distance/squared-distance
     facts.
-  - Completion gate: the Figure 9 half of `AngleContainmentBridges` can be
-    constructed for the honest M8 labels.
+  - Completion gate: the refined M8 package field `figure9EuclideanFacts` can
+    be constructed for the honest M8 labels.
 
 - [ ] Prove Figure 9 left-angle containment.
   - Paper step: Swanepoel `E23`, angle-to-turn containment.
@@ -1216,13 +1622,15 @@ Figure9ContainmentConcrete.Figure9AdjacentLeftContainedWitnesses
     window, then package the field with the distance data from the previous
     item.
   - Completion gate: this field is combined with the Figure 9 witness package
-    into the Figure 9 part of `AngleContainmentBridges`.
+    into `HonestFigure9AdjacentLeftEuclideanFactWitnesses`.
 
 - [ ] Build the honest E22/E23 hypotheses.
   - Existing final bridge:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10AngleToTurn.lean`.
   - Window-geometry bridge:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10WindowGeometry.lean`.
+  - W12 route:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/E22E23BridgeW12.lean`.
   - Target route:
 
 ```lean
@@ -1231,18 +1639,31 @@ figure9AdjacentWindowLowerE23_of_leftAngleToTurnBridge
 E22_E23_of_angleToTurnBridges
 
 Lemma10WindowGeometry.honestE22_E23_of_leftWindowGeometry
+M8PaperFactsAssemblyRefined.MinimalFailureM8RefinedPaperFacts.windowGeometry
+E22E23BridgeW12.contradiction_of_constructionDataFromContainment
 ```
 
   - Deliverable:
 
 ```lean
-noncomputable def angleContainment_of_m8LabelsAndArc
+noncomputable def figure8EuclideanFacts_of_m8LabelsAndArc
     {n : Nat} {C : UDConfig n}
     (localLabels : M8ConstructionInterface.M8LocalLabels C)
-    (A : NonconcaveArcAngleFacts.NonconcaveArcGeometricAngleFacts) :
-    AngleContainmentInterface.AngleContainmentBridges
-      (Lemma10Bridge.M8BrokenLatticeGood localLabels.predicates.data)
-      A.toNonconcaveArcTurnData.toM8TurnBounds.turn := by
+    (D :
+      NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData
+        (BoundaryFaceCountingToM8.CanonicalUDGraph C)) :
+    Figure8EuclideanFactsConcrete.HonestFigure8ExplicitEuclideanFacts
+      localLabels.predicates D.toM8TurnBounds.turn := by
+  sorry
+
+noncomputable def figure9EuclideanFacts_of_m8LabelsAndArc
+    {n : Nat} {C : UDConfig n}
+    (localLabels : M8ConstructionInterface.M8LocalLabels C)
+    (D :
+      NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData
+        (BoundaryFaceCountingToM8.CanonicalUDGraph C)) :
+    Figure9EuclideanFactsConcrete.HonestFigure9AdjacentLeftEuclideanFactWitnesses
+      localLabels.predicates D.toM8TurnBounds.turn := by
   sorry
 ```
 
@@ -1250,7 +1671,8 @@ noncomputable def angleContainment_of_m8LabelsAndArc
     `Figure9AdjacentLeftAngleToTurnBridge`, or use the newer containment
     wrappers directly from extracted distance data and window-containment
     lemmas.
-  - Completion gate: the refined M8 package field `angleContainment` is filled.
+  - Completion gate: the refined M8 package fields `figure8EuclideanFacts` and
+    `figure9EuclideanFacts` are filled.
 
 - [x] Add containment-to-M8 window geometry adapter.
   - Files:
@@ -1351,10 +1773,10 @@ noncomputable def angleContainment_of_m8LabelsAndArc
   - Current state: imported, build-checked, scan-clean, and compatible with
     the current CI-style axiom audit.
   - Current purpose: the remaining Swanepoel construction has been narrowed to
-    the explicit `MinimalFailureM8PaperFacts` fields: positive cardinality,
-    cut-vertex slack, planar boundary/Jordan data, the M8 boundary spine,
-    Lemma 8 extra-neighbor combinatorics, nonconcave-arc turn data, no-early
-    triples, and Figure 8/Figure 9 containment.
+    the explicit `MinimalFailureM8RefinedPaperFacts` fields: positive
+    cardinality, cut-vertex slack, boundary-attached nonconcave arc budget,
+    the M8 boundary spine certificate, Lemma 8 extra-neighbor combinatorics,
+    Lemma 9 five-start late facts, and Figure 8/Figure 9 Euclidean facts.
   - Conditional status: these fields are still paper facts to prove, not
     completed Lean constructions.
 
@@ -1362,9 +1784,9 @@ noncomputable def angleContainment_of_m8LabelsAndArc
   - Paper step: Swanepoel `E24`, final `m = 8` contradiction.
   - Lean route:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8PaperFactsAssemblyRefined.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureFactsFamilyConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureComponentPackage.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8PipelineClosure.lean`.
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BrokenLatticeMinimalFailure.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureClosure.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailurePaperFactMatrix.lean`.
   - Source-refined paper deliverables:
 
 ```lean
@@ -1383,26 +1805,27 @@ theorem targetLowerBoundEightThirtyOne_verified :
   minimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne
 ```
 
-  - Lean-efficient separated-construction gate:
+  - Lean-efficient construction-data gate:
 
 ```lean
-noncomputable def minimalFailureM8SeparatedConstructionEliminator :
-    M8PipelineClosure.MinimalFailureM8SeparatedConstructionEliminator := by
-  intro n C hmin
+noncomputable def minimalFailureM8ConstructionEliminator :
+    BrokenLatticeMinimalFailure.MinimalFailureM8ConstructionEliminator := by
+  intro C hmin
   sorry
 ```
 
   - Exact gate definition already checked in Lean:
 
 ```lean
-def M8PipelineClosure.MinimalFailureM8SeparatedConstructionEliminator : Prop :=
+def BrokenLatticeMinimalFailure.MinimalFailureM8ConstructionEliminator : Prop :=
   forall {n : Nat} (C : _root_.UDConfig n)
     (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
-      Nonempty (M8PipelineClosure.M8SeparatedConstructionFields C hmin)
+      Nonempty (BrokenLatticeMinimalFailure.M8ConstructionData C hmin)
 ```
 
   - How: assemble the S3 cut-slack field, S4/S5 planar-boundary field, S6
-    spine/Lemma 8/arc/Lemma 9 fields, and S7 containment field into
+    boundary-attached arc budget plus spine/Lemma 8/Lemma 9 fields, and S7
+    Figure 8/Figure 9 Euclidean fields into
     `MinimalFailureM8RefinedPaperFacts`.  Then use
     `MinimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne`.
   - Completion gate: the refined family proves
@@ -1497,7 +1920,10 @@ The only top-level theorem currently exposed in that module is the arbitrary
 wrapper
 `FiniteCertificateObligationSummary.targetUpperConstructionFiveSixteenArbitrary`.
 The source-faithful thresholded/eventual analogue of this obligation package is
-still a target task, not an existing imported structure.
+already present as
+`EventualRoleHingeClosure.EventualFiniteCertificateObligations`; the remaining
+work is supplying concrete eventual transition, orientation, period, and
+separation data, plus matching small cases for the chosen threshold.
 Do not use the translated four-equation facade as the live route; that route is
 kept only as an audited obstruction surface.
 
@@ -1721,26 +2147,26 @@ structure SourceFaithfulFigure2TableCertificate where
     defines `unitVec`, `hingePoint`, squared-distance hinge lemmas,
     same/opposite transition metric interfaces, `RoleHingeTransition`, and
     the exact base-block isometry for `ExactLocalGeometry.localPoint`.
-  - Conditional status: concrete same/opposite role-hinge transitions and
-    their distance-preservation fields are still supplied data.
+  - Conditional status: concrete connector-only same/opposite role-hinge
+    transition obligations are now checked; exact-local same-block
+    square-distance preservation, period/closure data, and generated global
+    separation remain supplied data.
 
-- [ ] Build concrete refined same/opposite role-hinge transition data.
+- [x] Build concrete connector-only same/opposite role-hinge transition data.
   - Live target shape:
 
 ```lean
-noncomputable def concreteSameOppositeRoleHingeOrbitTransitionFacts :
-    RoleHingeInterfaceRefinement.SameOppositeRoleHingeOrbitTransitionFacts := by
-  sorry
-
-noncomputable def concreteSameOppositeTransitionObligations_refined :
-    Figure2Certificate.SameOppositeTransitionObligations :=
-  concreteSameOppositeRoleHingeOrbitTransitionFacts.toFigure2TransitionObligations
+def RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations :
+    Figure2Certificate.SameOppositeTransitionObligations
 ```
 
-  - Next action: choose the role angles and transition maps, prove the
-    connector unit-edge fields through `RoleHingeConnectorAlgebra`, and route
-    the refined facts to `Figure2Certificate.SameOppositeTransitionObligations`.
-    Do not target the old
+  - Current state: `RoleHingeConcreteSearch` defines the concrete role angles,
+    same/opposite maps, connector unit-edge proofs, and the bundled
+    `concreteSameOppositeTransitionObligations`; `RoleHingeInterfaceRefinement`
+    routes this object into exact-block conditional bridges.
+  - Remaining blocker: prove exact-local same-block square-distance
+    preservation for these concrete maps, plus period/closure data and global
+    separation.  Do not target the old
     `BaseTransitionRealization.BaseSameOppositeTransitionRealization` as the
     live path; the current fixed-angle strong interface is obstructed by
     `RoleHingeInterfaceRefinement.no_concreteSameOppositeRemainingEquations_for_strong_interface`.
@@ -1766,31 +2192,33 @@ noncomputable def concreteSameOppositeTransitionObligations_refined :
     obligations, role-hinge interface refinements, component assembly, and a
     concrete role-angle search facade without using the contradictory
     translated four-equation data.
-  - Conditional status: concrete role-angle maps, same-block preservation,
-    successor connector unit edges, and global separation are still fields to
-    prove.
+  - Conditional status: the old full exact-local preservation field for the
+    concrete connector-only obligations is blocked by W12.  The live fields are
+    replacement transition/orbit data, period/closure data, and generated
+    global separation/non-connector lower tables.
 
-- [ ] Prove exact-local same-block square-distance preservation for the
-  concrete transitions.
-  - Target theorems:
+- [ ] Replace the blocked concrete connector-only orbit-distance route.
+  - Checked W12 facts:
 
 ```lean
-theorem concreteSamePlaceNext_preservesExactLocalSqDistances :
-    RoleHingeSameBlockAlgebra.PreservesExactLocalSqDistances
-      RoleHingeConcreteSearch.samePlaceNext := by
-  sorry
-
-theorem concreteOppositePlaceNext_preservesExactLocalSqDistances :
-    RoleHingeSameBlockAlgebra.PreservesExactLocalSqDistances
-      RoleHingeConcreteSearch.oppositePlaceNext := by
-  sorry
+OrbitSqDistancesW12.sameBlockIsometry_of_concreteTransitionObligations_orbitSqDistances
+OrbitSqDistancesW12.exactBlockTarget_of_concreteTransitionObligations_orbitSqDistances
+OrbitSqDistancesW12.concreteTransitionObligations_transitionExactLocalSqDistances_blocked
+OrbitSqDistancesW12.concreteTransitionObligations_orbitSqDistances_twoSame_blocked
+OrbitSqDistancesW12.concreteTransitionObligations_orbitSqDistances_blocked
 ```
 
-  - Next action: case-split over `FiniteGraph.adj` / local vertex pairs and
-    discharge each squared-distance identity with exact trig/vector algebra.
-    These theorems feed
-    `RoleHingeSameBlockAlgebra.GeneratedTransitionsPreserveExactLocalSqDistances`
-    and then the orbit-level exact-local metric route.
+  - Next action: do not target the old fully quantified theorem for
+    `RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations`.
+    It is false for the current concrete map.  A proof agent should either
+    choose replacement transition data whose orbit rows avoid the checked
+    obstruction, or keep the current connector-only map and instantiate only
+    the restricted closure/separation/orbit data consumed by
+    `OrbitSqDistancesW12.exactBlockTarget_of_concreteTransitionObligations_orbitSqDistances`.
+  - Completion gate: a root-imported route supplies the exact-block target
+    through either the replacement transition package or the checked restricted
+    W12 exact-block theorem, without contradicting
+    `OrbitSqDistancesW12.concreteTransitionObligations_orbitSqDistances_blocked`.
 
 - [x] Prove the generic connector-port unit-edge reducer.
   - Checked route:
@@ -1799,57 +2227,30 @@ theorem concreteOppositePlaceNext_preservesExactLocalSqDistances :
   - Current state: the generic role-hinge connector algebra is imported,
     build-checked, and scan-clean.
 
-- [ ] Instantiate concrete connector-port unit edges.
-  - Target theorem shape:
+- [x] Instantiate concrete connector-port unit edges.
+  - Checked declarations:
 
 ```lean
-theorem concreteSameOppositeTransitionObligations_connector_edges :
-    (forall source u v,
-      CrossBlock.NextConnector u v ->
-        _root_.eucDist (source u)
-          (concreteSameOppositeTransitionObligations_refined.samePlaceNext
-            source v) = 1) /\
-    (forall source u v,
-      CrossBlock.NextConnector u v ->
-        _root_.eucDist (source u)
-          (concreteSameOppositeTransitionObligations_refined.oppositePlaceNext
-            source v) = 1) := by
-  constructor
-  case left =>
-    intro source u v hconn
-    exact
-      concreteSameOppositeTransitionObligations_refined.same_connector_unit_edges
-        source u v hconn
-  case right =>
-    intro source u v hconn
-    exact
-      concreteSameOppositeTransitionObligations_refined.opposite_connector_unit_edges
-        source u v hconn
+RoleHingeConcreteSearch.concreteRoleHingePlace_connector_unit_edges
+RoleHingeConcreteSearch.same_connector_unit_edges
+RoleHingeConcreteSearch.opposite_connector_unit_edges
+RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
 ```
 
-  - Next action: fill `concreteSameOppositeRoleHingeOrbitTransitionFacts`; the
-    projection theorem above is then immediate.
+  - Remaining blocker: connector-pair unit edges are done; non-connector
+    separation and same-block metric preservation remain open.
 
-- [ ] Build same/opposite transition maps, or bypass them with direct
-  certificates.
-  - Existing conditional interface:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/Figure2Certificate.lean`.
-  - Target declaration if using the interface:
+- [x] Build connector-only same/opposite transition maps.
+  - Checked declaration:
 
 ```lean
-def concreteSameOppositeTransitionObligations_refined :
+def RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations :
   Figure2Certificate.SameOppositeTransitionObligations
 ```
 
-  - Current state: the refined role-hinge route avoids the obstructed
-    arbitrary-source preservation field.  The old
-    `ConcreteSameOppositeRemainingEquations` /
-    `BaseSameOppositeTransitionRealization` path is retained only as an
-    obstruction audit surface.
-  - Next action: instantiate the refined transition obligations, prove exact
-    same-block square-distance preservation on generated orbits, then pass the
-    resulting `SameOppositeTransitionObligations` to the P4 period/separation
-    tasks.  Global separation and period closure remain separate obligations.
+  - Remaining dependencies: residual/orbit exact-local metric data, period
+    equations, and reduced non-connector separation.  The old all-source
+    preservation route remains only an obstruction audit surface.
 
 #### P4. Construct closed placements
 
@@ -1954,41 +2355,44 @@ theorem GeneratedClosedChainReduction.targetUpperConstructionFiveSixteen_of_gene
   - Conditional status: they still require actual same/opposite transition
     data, period certificates/equations, and cross-block lower-bound
     inequalities.
+  - Fourth-wave bridge status: the live conditional names include
+    `ConcretePeriodCandidateSearch.targetUpperConstructionFiveSixteenAt_ofPeriodEquationFamilyAndLowerBounds`,
+    `EventualRoleHingeClosure.targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_exactTarget`,
+    the square-value certificate projections
+    `PeriodSearchSqValueFactsInput.targetUpperConstructionFiveSixteen` and
+    `PeriodSearchSqValueFactsInput.targetUpperConstructionFiveSixteenArbitrary`,
+    and
+    `ExactFiveSixteenRouteMatrix.targetUpperConstructionFiveSixteenArbitrary_of_nonConnectorPolynomialTableFamily`.
+    These are conditional bridge names only; they do not close an
+    unconditional Pach--Toth bound.
 
-- [ ] Build the compact all-positive finite-certificate obligation package.
+- [x] Build the compact all-positive finite-certificate obligation package.
   - Paper step: stronger Lean route for `GEO.2-GEO.3`.
   - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FiniteCertificateObligationSummary.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ConcretePeriodSearchFamily.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockSqTableSearch.lean`.
-  - Target skeleton:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FiniteCertificateObligationsW12.lean`.
+  - Checked facade:
 
 ```lean
-noncomputable def finiteCertificateObligations :
-    FiniteCertificateObligationSummary.Obligations := by
-  sorry
-
-theorem targetUpperConstructionFiveSixteen_verified :
-    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen :=
-  finiteCertificateObligations.targetUpperConstructionFiveSixteen
+structure FiniteCertificateObligationsW12.PeriodEquationFields
+structure FiniteCertificateObligationsW12.AllPositiveNonConnectorFields
+structure FiniteCertificateObligationsW12.TableFamilyPackage
+structure FiniteCertificateObligationsW12.VectorPackage
+structure FiniteCertificateObligationsW12.ListPackage
+theorem FiniteCertificateObligationsW12.targetUpperConstructionFiveSixteenArbitrary_of_rawFields
 ```
 
-  - How: supply refined same/opposite transitions from P3, one orientation
-    word and sixteen algebraic period equations for every positive `k`, and an
-    upper-triangle square-value table proving every distinct cross-block pair
-    has generated squared distance at least `1`.
-  - Completion gate: the exact `16 * k` target follows through
-    `FiniteCertificateObligationSummary.Obligations.targetUpperConstructionFiveSixteen`.
+  - Current state: the W12 facade is root-imported, build-checked, scan-clean,
+    and covered by the CI-style axiom audit.
+  - Remaining open work: instantiate `PeriodEquationFields` and one of
+    `AllPositiveNonConnectorFields`, `TableFamilyPackage`, `VectorPackage`, or
+    `ListPackage` with actual period equations and non-connector lower tables.
+    That instantiation, not another facade, is the live proof task.
 
-- [ ] Decide whether separation is proved by the stronger all-pairs table or
-  the reduced non-connector table.
-  - All-pairs route:
-    `CrossBlockSqTableSearch.UpperTriangleSqValueTableFamily` to
-    `CrossBlockDistanceSqReduction.IndexedCrossBlockSqDistanceTableFamily`.
-  - Reduced route:
-    `NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTableFamily`
-    plus the checked connector-pair separation lemmas.
-  - Reduced target skeleton:
+- [x] Choose the reduced non-connector separation route.
+  - Verified route choice: use reduced non-connector tables through
+    `ConcreteCrossBlockLowerTable`, `NonConnectorPolynomialCertificates`, and
+    `PachTothRemainingMatrix`; keep all-pairs tables only as fallback.
+  - Remaining numeric-certificate target skeleton:
 
 ```lean
 noncomputable def indexedNonConnectorCrossBlockSqDistanceTableFamily
@@ -2010,14 +2414,19 @@ noncomputable def indexedNonConnectorCrossBlockSqDistanceTableFamily
     `GeneratedSeparationInterface.GeneratedGlobalSeparation` for every
     generated chain used by the period route.
 
-- [ ] Add a source-faithful thresholded/eventual finite-certificate package if
+- [x] Add a source-faithful thresholded/eventual finite-certificate package if
   the all-positive route is too strong.
   - Paper step: Pach--Toth `GEO.3` / `PT96.Main`, sufficiently large `k`.
-  - Target skeleton for a new imported module:
+  - Current bridge status: `EventualRoleHingeClosure` already carries the
+    thresholded role-hinged closure route down to exact-target small-case
+    complement data.  The remaining blocker is not another facade theorem but
+    the actual eventual transition, orientation, period, and separation data,
+    plus enough small cases to match the chosen threshold.
+  - Existing imported structure:
 
 ```lean
 structure EventualFiniteCertificateObligations (K0 : Nat) where
-  transitions : FiniteCertificateObligationSummary.RoleHingeTransitions
+  transitions : EventualRoleHingeClosure.RoleHingeTransitions
   word :
     forall (k : Nat), K0 <= k -> 0 < k -> OrientationWord.Word k
   equation :
@@ -2034,43 +2443,44 @@ structure EventualFiniteCertificateObligations (K0 : Nat) where
         transitions.toFigure2TransitionObligations
         hk
         BaseTransitionRealization.exactBase
-        (fun i => word k hK hk i)
+        ((word k hK hk).toFin)
 
-theorem targetUpperConstructionFiveSixteenEventually_of_eventualFiniteObligations
+theorem EventualFiniteCertificateObligations.targetUpperConstructionFiveSixteenEventually
     {K0 : Nat} (O : EventualFiniteCertificateObligations K0) :
-    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenEventually := by
-  sorry
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenEventually
 ```
 
-  - How: mirror the all-positive obligation summary but index all data by
-    `K0 <= k`.  Then combine with small cases in P5/P6 for the arbitrary-`n`
-    theorem.
-  - Completion gate: the eventual target is proved without claiming
-    all-positive period/separation data.
+  - Current state: the package and eventual/arbitrary wrappers are imported
+    and build-checked.
+  - Remaining blocker: instantiate the structure by supplying concrete
+    transitions, orientation words, period equations, and generated global
+    separation for all `K0 <= k`, then combine with matching small cases.
 
 - [ ] Prove sufficiently-large closed placement certificates.
-  - Best home: `ClosedChainExistence.lean`.
+  - Best home:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/LargeClosedPlacementW12.lean`
+    or a new imported module directly instantiating its W12 structures.
   - Source-faithful target:
 
 ```lean
 def closedChainThreshold : Nat
 
-theorem exists_explicitClosedPlacementCertificate_large
-    (k : Nat) (hlarge : closedChainThreshold <= k) (hk : 0 < k) :
-    ClosedPlacementInterface.ExplicitClosedPlacementCertificate k hk
+noncomputable def largeExplicitClosedPlacementCertificates_verified :
+    LargeClosedPlacementW12.LargeExplicitClosedPlacementCertificates
+      closedChainThreshold := by
+  sorry
 
 theorem targetUpperConstructionFiveSixteenEventually_verified :
     _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenEventually := by
   exact
-    ClosedChainReduction.targetUpperConstructionFiveSixteenEventually_of_eventualExplicitClosedPlacementCertificates
-      closedChainThreshold
-      (fun k hlarge hk =>
-        exists_explicitClosedPlacementCertificate_large k hlarge hk)
+    largeExplicitClosedPlacementCertificates_verified
+      |>.targetUpperConstructionFiveSixteenEventually
 ```
 
   - Next action: build macro-step certificates, express every large `k` by the
     macro lengths, close cyclic displacement, prove global separation, and
-    package the resulting orbit through `ClosedChainExistence`.
+    package the resulting certificates through
+    `LargeClosedPlacementW12.LargeExplicitClosedPlacementCertificates`.
 
 - [ ] Optionally prove all-small exact-chain certificates.
   - Needed only for the stronger all-`k` / all-`n` theorem.
@@ -2234,15 +2644,69 @@ project-local proof obligations.
 - [x] Every `.lean` source file under
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066` is imported by
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`.
-  - Current coverage: 213 imported modules for 213 Lean files.
+  - Current coverage: 627 imported modules for 627 Lean files, with no missing,
+    extra, or duplicate root imports.
 - [x] Pinned build succeeds.
-  - Current command succeeded for the root target with 8240 jobs.
+  - Current command succeeded for the root target with 8654 jobs.
 - [x] Forbidden-token scan is clean over `ErdosProblems1066` and
   `ErdosProblems1066.lean`.
-- [x] CI-style axiom audit reports only `propext`, `Classical.choice`, and
-  `Quot.sound`.
-  - Current audit: passed for 374 declarations after the current interface
-    wave was imported, build-checked, and scan-checked.
+- [x] Trust-source scan is clean for `native_decide`, `trustCompiler`, and
+  `ofReduceBool`.
+- [x] CI-style axiom audit declaration list covers the current W13-W20
+  endpoint layer.
+  - Current configured audit checks 752 declarations and reports only
+    `propext`, `Classical.choice`, and `Quot.sound`.
+  - Current source-level no-additional-declared-axiom evidence: the full
+    Lean-source forbidden-token scan is clean over the 627-module root surface.
+- [x] Add W18/W19/W20 endpoint declarations to the CI-style axiom audit.
+  - The configured audit now includes the W18 final/ledger endpoints, the W19
+    Pach-Toth closed-placement audit aliases, the W19 Swanepoel
+    pointwise/final closure endpoints, and the W20 Pach-Toth/Swanepoel
+    endpoint surfaces.
+- [ ] Add W21 KnownBounds-gate endpoint declarations to the CI-style axiom audit.
+  - Current configured audit checks 752 declarations through W20 and has no
+    W21 entries.
+  - Add `ClosedPlacementKnownBoundsGateW21` and
+    `SwanepoelKnownBoundsGateW21` endpoint declarations, then replay the audit
+    before marking W21 endpoint coverage done.
 - [x] `KnownBounds.lean` exposes only the theorems actually closed in Lean.
   - Next action: add no new public wrappers until the matching internal
     `*_verified` theorem exists and builds.
+
+## Latest W21 Status
+
+- [x] W20 wave integrated and verified.
+  - Root surface: 627 Lean files imported by 627 root imports.
+  - Pinned build: `elan run leanprover/lean4:v4.28.0 lake build` succeeded
+    with 8654 jobs.
+  - Forbidden-token scan, trust-source scan, root import coverage, and the
+    752-declaration CI-style axiom audit all pass.
+  - Pach-Toth W20 reduces the exact and arbitrary `5 / 16` target to an actual
+    inhabitant of `ExplicitClosedPlacementProducerW19.InputPackage`, or
+    equivalently to `GeneratedChainFamilyProducerW20.SourceFields`.  W20 also
+    proves that the role-hinge reduced-metric bypass is empty in the current
+    interface.
+  - Swanepoel W20 reduces the `8 / 31` target to an actual inhabitant of
+    `RemainingObligationLedgerW20.RemainingObligationFields`,
+    `SwanepoelSourcePackageW20.ExactRemainingFields`, or
+    `PointwiseProducerFamilyFieldsW20.PointwiseSourceFamilyFields`.
+  - No public `KnownBounds` wrapper has been added for Swanepoel `8 / 31` or
+    Pach--Toth `5 / 16`, because these W20 source packages are still not
+    inhabited unconditionally.
+
+- [x] W21 wave integrated and verified.
+  - All 20 W21 files are root-imported and covered by the current 627/627
+    import surface.
+  - W21 adds conditional KnownBounds exposure gates and sharper source-package
+    routes; it does not prove the final public bounds unconditionally.
+  - W21 endpoint declarations are not yet in the CI-style axiom audit, so the
+    audit task above remains open.
+
+- [ ] Next action: inhabit the concrete source packages and audit W21 endpoints.
+  - Pach--Toth: build a generated-chain source field package directly; do not
+    reuse the blocked role-hinge route.
+  - Swanepoel: build the remaining-obligation fields from actual minimal
+    failure geometry/topology, not from endpoint aliases.
+  - Public `KnownBounds` wrappers remain closed until the internal
+    `*_verified` theorem builds through the W21 gate and the expanded axiom
+    audit is clean.

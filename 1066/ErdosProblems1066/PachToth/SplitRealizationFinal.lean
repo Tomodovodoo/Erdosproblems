@@ -1,7 +1,10 @@
 import ErdosProblems1066.PachToth.SplitSoundness
 import ErdosProblems1066.PachToth.RemainderConstruction
 import ErdosProblems1066.PachToth.RemainderPlacement
+import ErdosProblems1066.PachToth.FiniteSearchCertificate
+import ErdosProblems1066.PachToth.GeneratedPeriodClosure
 import ErdosProblems1066.PachToth.GeneratedSeparationFarApart
+import ErdosProblems1066.PachToth.NonRigidConnectorSeparationFacts
 import ErdosProblems1066.PachToth.FinalConditional
 
 set_option autoImplicit false
@@ -27,6 +30,7 @@ namespace SplitRealizationFinal
 open Arithmetic
 open FiniteGraph
 open GeneratedSeparationFarApart
+open GeneratedPeriodClosure
 
 noncomputable section
 
@@ -224,6 +228,127 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_period_crossBlockDistance
   exact
     targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
       exactTarget
+
+/-- Packaged generated-period equations and full metric hypotheses imply the
+full arbitrary-`n` target through the exact target and the split
+remainder/far-apart construction. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedPeriod_metricHypotheses
+    (O :
+      forall (k : Nat), 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base : forall (k : Nat), 0 < k -> LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hk) hk (base k hk) (orientation k hk))
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedMetricHypotheses
+          (O k hk) hk (base k hk) (orientation k hk)) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
+      (GeneratedPeriodClosure.targetUpperConstructionFiveSixteen_of_period_metricHypotheses
+        O base orientation period H)
+
+/-- Packaged generated-period equations and reduced metric hypotheses imply
+the full arbitrary-`n` target through the exact target and the split
+remainder/far-apart construction. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedPeriod_reducedMetricHypotheses
+    (O :
+      forall (k : Nat), 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base : forall (k : Nat), 0 < k -> LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hk) hk (base k hk) (orientation k hk))
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+          (O k hk) hk (base k hk) (orientation k hk)) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
+      (GeneratedPeriodClosure.targetUpperConstructionFiveSixteen_of_period_reducedMetricHypotheses
+        O base orientation period H)
+
+/-- Generated-period equations, global separation, and orbit-square-distance
+metric certificates imply the full arbitrary-`n` target through the split
+route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedPeriod_orbitSqDistances
+    (O :
+      forall (k : Nat), 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base : forall (k : Nat), 0 < k -> LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hk) hk (base k hk) (orientation k hk))
+    (separated :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedGlobalSeparation
+          (O k hk) hk (base k hk) (orientation k hk))
+    (orbit_sq_distances :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedPeriodClosure.GeneratedOrbitMatchesExactLocalSqDistances
+          (O k hk) hk (base k hk) (orientation k hk)) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
+      (targetUpperConstructionFiveSixteen_of_period_separation_orbitSqDistances
+        O base orientation period separated orbit_sq_distances)
+
+/-- A role-hinged finite search family is consumed directly by the
+arbitrary-`n` split route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_roleHingedFiniteSearchFamily
+    (F : FiniteSearchCertificate.RoleHingedFiniteSearchFamily) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
+      (F.targetUpperConstructionFiveSixteen)
+
+/-- The compact all-positive non-connector square-value certificate is
+consumed directly by the arbitrary-`n` split route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_allPositiveNonConnectorSqValueCertificate
+    (C : FiniteSearchCertificate.AllPositiveNonConnectorSqValueCertificate) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
+      (C.targetUpperConstructionFiveSixteen)
+
+/-- Split all-positive period data plus non-connector square-value tables are
+consumed directly by the arbitrary-`n` split route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_allPositivePeriodSearchData
+    (periodSearch : FiniteSearchCertificate.AllPositivePeriodSearchData)
+    (sqValue :
+      FiniteSearchCertificate.NonConnectorSqValueCertificate periodSearch) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
+      (FiniteSearchCertificate.targetUpperConstructionFiveSixteen_of_allPositivePeriodSearchData
+        periodSearch sqValue)
+
+/-- A period-search family plus finite non-connector square-distance tables
+are consumed directly by the arbitrary-`n` split route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_nonConnectorSqDistanceTableFamily
+    {F : FiniteSearchCertificate.RoleHingedPeriodSearchFamily}
+    (T :
+      NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTableFamily
+        F) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
+      (T.targetUpperConstructionFiveSixteen)
 
 /-- Final conditional period-search/equation-transition/cross-block data imply
 the full arbitrary-`n` target through the split realization closure. -/

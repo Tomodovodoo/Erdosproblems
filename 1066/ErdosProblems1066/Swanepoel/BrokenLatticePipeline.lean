@@ -1,4 +1,6 @@
+import ErdosProblems1066.Swanepoel.GraphBridge
 import ErdosProblems1066.Swanepoel.Lemma10Bridge
+import ErdosProblems1066.Swanepoel.MinimalGraphFacts
 
 /-!
 # Swanepoel broken-lattice pipeline
@@ -15,6 +17,8 @@ namespace BrokenLatticePipeline
 
 open Lemma10Bridge
 open LocalConfigurations
+open GraphBridge
+open MinimalGraphFacts
 
 universe u
 
@@ -40,6 +44,67 @@ def M8LabelLateTriples (labels : BrokenLatticeLabels V 8) : Prop :=
     M8LabelGood labels (a + 1) ->
     M8LabelGood labels (a + 2) ->
     6 <= a
+
+/-! ## Minimal-failure source for honest local predicates -/
+
+/-- The remaining local-predicate construction fact for one fixed minimal
+cleared failure.
+
+This package is intentionally not derived from `hmin` alone.  It is the named
+paper/geometric input asserting that the minimal failure supplies the actual
+honest `m = 8` local predicate package on its unit-distance graph. -/
+structure MinimalFailureM8HonestLocalPredicatesFacts {n : Nat}
+    (C : _root_.UDConfig n) (_hmin : IsMinimalClearedFailure C) where
+  predicates : M8HonestLocalPredicates (unitDistanceLocalGraph C)
+
+namespace MinimalFailureM8HonestLocalPredicatesFacts
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {hmin : IsMinimalClearedFailure C}
+
+/-- Projection of the honest local predicates from the explicit
+minimal-failure local-predicate fact. -/
+def toHonestLocalPredicates
+    (H : MinimalFailureM8HonestLocalPredicatesFacts C hmin) :
+    M8HonestLocalPredicates (unitDistanceLocalGraph C) :=
+  H.predicates
+
+@[simp]
+theorem toHonestLocalPredicates_eq
+    (H : MinimalFailureM8HonestLocalPredicatesFacts C hmin) :
+    H.toHonestLocalPredicates = H.predicates :=
+  rfl
+
+/-- Build the minimal-failure local-predicate fact from an already assembled
+honest local predicate package.  Higher construction layers use this as the
+acyclic entry point into `exists_m8_honestLocalPredicates_of_minimalFailure`.
+-/
+def ofHonestLocalPredicates
+    (P : M8HonestLocalPredicates (unitDistanceLocalGraph C)) :
+    MinimalFailureM8HonestLocalPredicatesFacts C hmin where
+  predicates := P
+
+@[simp]
+theorem ofHonestLocalPredicates_toHonestLocalPredicates
+    (P : M8HonestLocalPredicates (unitDistanceLocalGraph C)) :
+    (ofHonestLocalPredicates (hmin := hmin) P).toHonestLocalPredicates = P :=
+  rfl
+
+end MinimalFailureM8HonestLocalPredicatesFacts
+
+/-- A fixed minimal cleared failure supplies honest `m = 8` local predicates
+once the corresponding local-predicate construction fact is explicitly given.
+
+The hypothesis is the remaining paper/geometric construction input; the theorem
+only connects that actual named fact to the existing honest-local-predicates
+interface. -/
+theorem exists_m8_honestLocalPredicates_of_minimalFailure
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    (H : MinimalFailureM8HonestLocalPredicatesFacts C hmin) :
+    Exists fun P : M8HonestLocalPredicates (unitDistanceLocalGraph C) =>
+      P = H.toHonestLocalPredicates := by
+  exact Exists.intro H.toHonestLocalPredicates rfl
 
 /-! ## Transport through honest local packages -/
 

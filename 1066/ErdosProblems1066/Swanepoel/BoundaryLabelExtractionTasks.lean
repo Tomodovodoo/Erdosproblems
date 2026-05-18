@@ -318,6 +318,26 @@ theorem predicates_labels
     D.predicates.labels = D.labels :=
   rfl
 
+@[simp]
+theorem labels_eq_spine_lemma8
+    (D : M8LabelsFromBoundaryData C) :
+    D.labels =
+      { p := D.spine.p
+        q := D.spine.q
+        r := D.lemma8.r
+        s := D.lemma8.s } :=
+  rfl
+
+@[simp]
+theorem predicates_labels_eq_spine_lemma8
+    (D : M8LabelsFromBoundaryData C) :
+    D.predicates.labels =
+      { p := D.spine.p
+        q := D.spine.q
+        r := D.lemma8.r
+        s := D.lemma8.s } :=
+  rfl
+
 theorem predicates_boundaryEdge_iff
     (D : M8LabelsFromBoundaryData C) (i : M8TriangleIndex) :
     D.predicates.boundaryEdge i <->
@@ -367,6 +387,74 @@ theorem toM8LocalLabels_predicates
   rfl
 
 @[simp]
+theorem toM8LocalLabels_predicates_data
+    (D : M8LabelsFromBoundaryData C) :
+    D.toM8LocalLabels.predicates.data = D.predicates :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_labels_eq_spine_lemma8
+    (D : M8LabelsFromBoundaryData C) :
+    D.toM8LocalLabels.labels =
+      { p := D.spine.p
+        q := D.spine.q
+        r := D.lemma8.r
+        s := D.lemma8.s } :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_p
+    (D : M8LabelsFromBoundaryData C)
+    (i : M8BoundaryIndex) :
+    D.toM8LocalLabels.labels.p i = D.spine.p i :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_q
+    (D : M8LabelsFromBoundaryData C)
+    (i : M8TriangleIndex) :
+    D.toM8LocalLabels.labels.q i = D.spine.q i :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_r
+    (D : M8LabelsFromBoundaryData C)
+    (i : M8ExtraIndex) :
+    D.toM8LocalLabels.labels.r i = D.lemma8.r i :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_s
+    (D : M8LabelsFromBoundaryData C)
+    (i : M8ExtraIndex) :
+    D.toM8LocalLabels.labels.s i = D.lemma8.s i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_localLabels
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels =
+        D.toM8LocalLabels :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_turnBounds
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).turnBounds =
+        turnBounds :=
+  rfl
+
+@[simp]
 theorem toM8ConstructionData_lateTriples
     {hmin : IsMinimalClearedFailure C}
     (D : M8LabelsFromBoundaryData C)
@@ -389,6 +477,145 @@ theorem toM8ConstructionData_windowGeometry
       turnBounds lateTriples windowGeometry).windowGeometry =
         windowGeometry :=
   rfl
+
+@[simp]
+theorem toM8ConstructionData_localLabels_predicates
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates =
+        D.toHonestLocalPredicates :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_predicates_data
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data =
+        D.predicates :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_predicates_data_labels
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data.labels =
+        D.labels :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_eq_spine_lemma8
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels =
+      { p := D.spine.p
+        q := D.spine.q
+        r := D.lemma8.r
+        s := D.lemma8.s } :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_p
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8BoundaryIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels.p i =
+        D.spine.p i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_q
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8TriangleIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels.q i =
+        D.spine.q i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_r
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8ExtraIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels.r i =
+        D.lemma8.r i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_s
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8ExtraIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels.s i =
+        D.lemma8.s i :=
+  rfl
+
+theorem toM8ConstructionData_boundaryEdge
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8TriangleIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data.boundaryEdge
+        i :=
+  D.boundaryEdge_holds i
+
+theorem toM8ConstructionData_triangleWitness
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8TriangleIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data.triangleWitness
+        i :=
+  D.triangleWitness_holds i
+
+theorem toM8ConstructionData_extraNeighborWitness
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8ExtraIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data.extraNeighborWitness
+        i :=
+  D.extraNeighborWitness_holds i
 
 end M8LabelsFromBoundaryData
 
@@ -504,6 +731,16 @@ theorem toLabelsFromBoundaryData_labels
   rfl
 
 @[simp]
+theorem labels_eq_spine_lemma8
+    (D : M8BoundaryLabelPackage C) :
+    D.labels =
+      { p := D.spine.p
+        q := D.spine.q
+        r := D.lemma8.r
+        s := D.lemma8.s } :=
+  rfl
+
+@[simp]
 theorem toLabelsFromBoundaryData_predicates
     (D : M8BoundaryLabelPackage C) :
     D.toLabelsFromBoundaryData.toHonestLocalPredicates = D.predicates :=
@@ -513,6 +750,24 @@ theorem toLabelsFromBoundaryData_predicates
 theorem toLabelsFromBoundaryData_toM8LocalLabels
     (D : M8BoundaryLabelPackage C) :
     D.toLabelsFromBoundaryData.toM8LocalLabels = D.toM8LocalLabels :=
+  rfl
+
+@[simp]
+theorem localLabels_predicates
+    (D : M8BoundaryLabelPackage C) :
+    D.toM8LocalLabels.predicates = D.predicates :=
+  rfl
+
+@[simp]
+theorem localLabels_predicates_data
+    (D : M8BoundaryLabelPackage C) :
+    D.toM8LocalLabels.predicates.data = D.predicates.data :=
+  rfl
+
+@[simp]
+theorem localLabels_predicates_data_labels
+    (D : M8BoundaryLabelPackage C) :
+    D.toM8LocalLabels.predicates.data.labels = D.labels :=
   rfl
 
 theorem preconnected
@@ -556,6 +811,16 @@ theorem predicates_data_labels
     D.predicates.data.labels = D.labels :=
   rfl
 
+@[simp]
+theorem predicates_data_labels_eq_spine_lemma8
+    (D : M8BoundaryLabelPackage C) :
+    D.predicates.data.labels =
+      { p := D.spine.p
+        q := D.spine.q
+        r := D.lemma8.r
+        s := D.lemma8.s } :=
+  rfl
+
 theorem predicates_boundaryEdge_iff
     (D : M8BoundaryLabelPackage C) (i : M8TriangleIndex) :
     D.predicates.data.boundaryEdge i <->
@@ -597,6 +862,16 @@ theorem localLabels_p (D : M8BoundaryLabelPackage C)
   rfl
 
 @[simp]
+theorem localLabels_labels_eq_spine_lemma8
+    (D : M8BoundaryLabelPackage C) :
+    D.toM8LocalLabels.labels =
+      { p := D.spine.p
+        q := D.spine.q
+        r := D.lemma8.r
+        s := D.lemma8.s } :=
+  rfl
+
+@[simp]
 theorem localLabels_q (D : M8BoundaryLabelPackage C)
     (i : M8TriangleIndex) :
     D.toM8LocalLabels.labels.q i = D.spine.q i :=
@@ -612,6 +887,30 @@ theorem localLabels_r (D : M8BoundaryLabelPackage C)
 theorem localLabels_s (D : M8BoundaryLabelPackage C)
     (i : M8ExtraIndex) :
     D.toM8LocalLabels.labels.s i = D.lemma8.s i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_localLabels
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels =
+        D.toM8LocalLabels :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_turnBounds
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).turnBounds =
+        turnBounds :=
   rfl
 
 @[simp]
@@ -637,6 +936,145 @@ theorem toM8ConstructionData_windowGeometry
       turnBounds lateTriples windowGeometry).windowGeometry =
         windowGeometry :=
   rfl
+
+@[simp]
+theorem toM8ConstructionData_localLabels_predicates
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates =
+        D.predicates :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_predicates_data
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data =
+        D.predicates.data :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_predicates_data_labels
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data.labels =
+        D.labels :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_eq_spine_lemma8
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels =
+      { p := D.spine.p
+        q := D.spine.q
+        r := D.lemma8.r
+        s := D.lemma8.s } :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_p
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8BoundaryIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels.p i =
+        D.spine.p i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_q
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8TriangleIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels.q i =
+        D.spine.q i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_r
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8ExtraIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels.r i =
+        D.lemma8.r i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_s
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8ExtraIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.labels.s i =
+        D.lemma8.s i :=
+  rfl
+
+theorem toM8ConstructionData_boundaryEdge
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8TriangleIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data.boundaryEdge
+        i :=
+  D.boundaryEdge i
+
+theorem toM8ConstructionData_triangleWitness
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8TriangleIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data.triangleWitness
+        i :=
+  D.triangleWitness i
+
+theorem toM8ConstructionData_extraNeighborWitness
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds)
+    (i : M8ExtraIndex) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).localLabels.predicates.data.extraNeighborWitness
+        i :=
+  D.extraNeighborWitness i
 
 end M8BoundaryLabelPackage
 
@@ -669,6 +1107,18 @@ theorem maxDegree
 theorem localLabels_labels
     (D : M8BoundaryConstructionPackage C hmin) :
     D.localLabels.labels = D.boundaryLabels.labels :=
+  rfl
+
+@[simp]
+theorem localLabels_predicates
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.localLabels.predicates = D.predicates :=
+  rfl
+
+@[simp]
+theorem localLabels_predicates_data
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.localLabels.predicates.data = D.predicates.data :=
   rfl
 
 @[simp]
@@ -724,6 +1174,18 @@ theorem localLabels_s
   rfl
 
 @[simp]
+theorem toM8ConstructionData_localLabels
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.toM8ConstructionData.localLabels = D.localLabels :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_turnBounds
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.toM8ConstructionData.turnBounds = D.turnBounds :=
+  rfl
+
+@[simp]
 theorem toM8ConstructionData_lateTriples
     (D : M8BoundaryConstructionPackage C hmin) :
     D.toM8ConstructionData.lateTriples = D.lateTriples :=
@@ -734,6 +1196,76 @@ theorem toM8ConstructionData_windowGeometry
     (D : M8BoundaryConstructionPackage C hmin) :
     D.toM8ConstructionData.windowGeometry = D.windowGeometry :=
   rfl
+
+@[simp]
+theorem toM8ConstructionData_localLabels_predicates
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.toM8ConstructionData.localLabels.predicates = D.predicates :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_predicates_data
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.toM8ConstructionData.localLabels.predicates.data =
+        D.predicates.data :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_predicates_data_labels
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.toM8ConstructionData.localLabels.predicates.data.labels =
+        D.boundaryLabels.labels :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_p
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8BoundaryIndex) :
+    D.toM8ConstructionData.localLabels.labels.p i =
+        D.boundaryLabels.spine.p i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_q
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8TriangleIndex) :
+    D.toM8ConstructionData.localLabels.labels.q i =
+        D.boundaryLabels.spine.q i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_r
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8ExtraIndex) :
+    D.toM8ConstructionData.localLabels.labels.r i =
+        D.boundaryLabels.lemma8.r i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_labels_s
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8ExtraIndex) :
+    D.toM8ConstructionData.localLabels.labels.s i =
+        D.boundaryLabels.lemma8.s i :=
+  rfl
+
+theorem toM8ConstructionData_boundaryEdge
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8TriangleIndex) :
+    D.toM8ConstructionData.localLabels.predicates.data.boundaryEdge i :=
+  D.boundaryLabels.boundaryEdge i
+
+theorem toM8ConstructionData_triangleWitness
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8TriangleIndex) :
+    D.toM8ConstructionData.localLabels.predicates.data.triangleWitness i :=
+  D.boundaryLabels.triangleWitness i
+
+theorem toM8ConstructionData_extraNeighborWitness
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8ExtraIndex) :
+    D.toM8ConstructionData.localLabels.predicates.data.extraNeighborWitness i :=
+  D.boundaryLabels.extraNeighborWitness i
 
 end M8BoundaryConstructionPackage
 
