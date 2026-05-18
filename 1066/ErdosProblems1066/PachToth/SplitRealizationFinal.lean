@@ -113,8 +113,7 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_period_crossBlockDistance
     targetUpperConstructionFiveSixteenArbitrary := by
   exact
     targetUpperConstructionFiveSixteenArbitrary_of_exactTarget_remainderFarApart
-      (GeneratedSeparationFarApart
-        .targetUpperConstructionFiveSixteen_of_period_crossBlockDistanceLowerBounds_reduced
+      (GeneratedSeparationFarApart.targetUpperConstructionFiveSixteen_of_period_crossBlockDistanceLowerBounds_reduced
         O base orientation period base_same_block_isometry
         transition_preserves_same_block_distances lower hge_one hlower)
 

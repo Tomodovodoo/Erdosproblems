@@ -66,9 +66,7 @@ def config {k : Nat} {hk : 0 < k}
 theorem config_pts_globalVertex {k : Nat} {hk : 0 < k}
     (C : Components k hk) (i : Fin k) (v : LocalVertex) :
     C.config.pts (GeometricSoundness.globalVertex k i v) = C.point i v := by
-  simp [config, toClosedPlacement,
-    DeformedPlacement.ClosedPlacement.config_pts_globalVertex
-      C.toClosedPlacement i v]
+  simp [config, toClosedPlacement]
 
 /-- Direct concrete fields provide the explicit edge-soundness wrapper. -/
 def toExplicitEdgeSoundness {k : Nat} {hk : 0 < k}

@@ -20,6 +20,12 @@ abbrev FinalProofUsesOnlyFourEquationTranslatedRoute : Prop :=
 abbrev FinalProofUsesNonRigidOrAlternativeTransitionInterface : Prop :=
   Not FinalProofUsesOnlyFourEquationTranslatedRoute
 
+abbrev FourEquationTranslatedRouteUninhabited : Prop :=
+  IsEmpty FourEquationTranslatedRoute
+
+abbrev SameOppositeFourEquationTranslatedRouteUninhabited : Prop :=
+  IsEmpty SameOppositeFourEquationTranslatedRoute
+
 theorem false_of_fourEquationTranslatedRoute
     (T : FourEquationTranslatedRoute) :
     False :=
@@ -31,11 +37,11 @@ theorem false_of_sameOppositeFourEquationTranslatedRoute
   ConnectorEquationConcrete.false_of_sameOppositeEquationTransitionData T
 
 theorem fourEquationTranslatedRoute_isEmpty :
-    IsEmpty FourEquationTranslatedRoute :=
+    FourEquationTranslatedRouteUninhabited :=
   ⟨false_of_fourEquationTranslatedRoute⟩
 
 theorem sameOppositeFourEquationTranslatedRoute_isEmpty :
-    IsEmpty SameOppositeFourEquationTranslatedRoute :=
+    SameOppositeFourEquationTranslatedRouteUninhabited :=
   ⟨false_of_sameOppositeFourEquationTranslatedRoute⟩
 
 theorem no_fourEquationTranslatedRoute :

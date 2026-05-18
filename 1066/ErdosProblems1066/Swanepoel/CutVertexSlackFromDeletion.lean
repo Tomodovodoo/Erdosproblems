@@ -92,6 +92,13 @@ theorem deletionSlackFact_iff_remainingNoCutSlackFact :
   · rintro ⟨hslack⟩
     exact deletionSlackFact_of_allCutVertexSlackGluingData hslack
 
+/-- Symmetric form of `deletionSlackFact_iff_remainingNoCutSlackFact` for
+downstream files that start from the final remaining-slack alias. -/
+theorem remainingNoCutSlackFact_iff_deletionSlackFact :
+    Nonempty (CutVertexFinal.RemainingNoCutSlackFact C) <->
+      CutVertexDeletionSlackFact C :=
+  deletionSlackFact_iff_remainingNoCutSlackFact.symm
+
 /-! ## Projections into `CutVertexFinal` -/
 
 /-- Conditional no-cut projection through the final API, using exactly the

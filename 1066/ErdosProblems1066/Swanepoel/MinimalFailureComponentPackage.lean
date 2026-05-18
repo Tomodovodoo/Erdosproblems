@@ -55,7 +55,7 @@ The only paper input here is `remainingSlack`; the connectedness, no-cut, and
 degree conclusions are checked projections from `CutVertexFinal`.
 -/
 structure MinimalFailureCutVertexFacts {n : Nat}
-    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) : Prop where
+    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) where
   positiveCard : 0 < n
   remainingSlack : RemainingNoCutSlackFact C
 

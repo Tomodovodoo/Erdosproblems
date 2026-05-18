@@ -269,42 +269,42 @@ theorem named_left_or_right
 theorem r_ne_leftP (E : M8Lemma8Combinatorics S)
     (i : M8ExtraIndex) :
     Not (E.r i = S.leftP i) :=
-  S.ne_leftP_of_not_forbidden (E.r_not_forbidden i)
+  M8BoundarySpine.ne_leftP_of_not_forbidden S (E.r_not_forbidden i)
 
 theorem r_ne_rightP (E : M8Lemma8Combinatorics S)
     (i : M8ExtraIndex) :
     Not (E.r i = S.rightP i) :=
-  S.ne_rightP_of_not_forbidden (E.r_not_forbidden i)
+  M8BoundarySpine.ne_rightP_of_not_forbidden S (E.r_not_forbidden i)
 
 theorem r_ne_prevQ (E : M8Lemma8Combinatorics S)
     (i : M8ExtraIndex) :
     Not (E.r i = S.prevQ i) :=
-  S.ne_prevQ_of_not_forbidden (E.r_not_forbidden i)
+  M8BoundarySpine.ne_prevQ_of_not_forbidden S (E.r_not_forbidden i)
 
 theorem r_ne_nextQ (E : M8Lemma8Combinatorics S)
     (i : M8ExtraIndex) :
     Not (E.r i = S.nextQ i) :=
-  S.ne_nextQ_of_not_forbidden (E.r_not_forbidden i)
+  M8BoundarySpine.ne_nextQ_of_not_forbidden S (E.r_not_forbidden i)
 
 theorem s_ne_leftP (E : M8Lemma8Combinatorics S)
     (i : M8ExtraIndex) :
     Not (E.s i = S.leftP i) :=
-  S.ne_leftP_of_not_forbidden (E.s_not_forbidden i)
+  M8BoundarySpine.ne_leftP_of_not_forbidden S (E.s_not_forbidden i)
 
 theorem s_ne_rightP (E : M8Lemma8Combinatorics S)
     (i : M8ExtraIndex) :
     Not (E.s i = S.rightP i) :=
-  S.ne_rightP_of_not_forbidden (E.s_not_forbidden i)
+  M8BoundarySpine.ne_rightP_of_not_forbidden S (E.s_not_forbidden i)
 
 theorem s_ne_prevQ (E : M8Lemma8Combinatorics S)
     (i : M8ExtraIndex) :
     Not (E.s i = S.prevQ i) :=
-  S.ne_prevQ_of_not_forbidden (E.s_not_forbidden i)
+  M8BoundarySpine.ne_prevQ_of_not_forbidden S (E.s_not_forbidden i)
 
 theorem s_ne_nextQ (E : M8Lemma8Combinatorics S)
     (i : M8ExtraIndex) :
     Not (E.s i = S.nextQ i) :=
-  S.ne_nextQ_of_not_forbidden (E.s_not_forbidden i)
+  M8BoundarySpine.ne_nextQ_of_not_forbidden S (E.s_not_forbidden i)
 
 end M8Lemma8Combinatorics
 
@@ -421,22 +421,22 @@ variable {hmin : IsMinimalClearedFailure C}
 theorem preconnected
     (D : M8BoundaryConstructionPackage C hmin) :
     (unitDistanceSimpleGraph C).Preconnected :=
-  D.boundaryLabels.preconnected
+  M8BoundaryLabelPackage.preconnected D.boundaryLabels
 
 theorem noCutVertex
     (D : M8BoundaryConstructionPackage C hmin) :
     CutVertexInterface.NoCutVertex C :=
-  D.boundaryLabels.noCutVertex
+  M8BoundaryLabelPackage.noCutVertex D.boundaryLabels
 
 theorem minDegree
     (D : M8BoundaryConstructionPackage C hmin) (v : Fin n) :
     3 <= (DegreePipeline.unitDistanceNeighborSet C v).card :=
-  D.boundaryLabels.minDegree v
+  M8BoundaryLabelPackage.minDegree D.boundaryLabels v
 
 theorem maxDegree
     (D : M8BoundaryConstructionPackage C hmin) (v : Fin n) :
     (DegreePipeline.unitDistanceNeighborSet C v).card <= 6 :=
-  D.boundaryLabels.maxDegree v
+  M8BoundaryLabelPackage.maxDegree D.boundaryLabels v
 
 @[simp]
 theorem localLabels_labels

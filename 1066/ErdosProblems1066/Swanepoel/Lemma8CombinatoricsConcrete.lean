@@ -193,7 +193,7 @@ theorem eq_r_of_extra_neighbor_symm_ne_s
     (hnot : Not (S.forbiddenExtraNeighbor i x))
     (hne : Not (x = E.s i)) :
     x = E.r i :=
-  E.eq_r_of_extra_neighbor_ne_s
+  eq_r_of_extra_neighbor_ne_s E
     ((unitDistanceLocalGraph C).symm hadj) hnot hne
 
 /-- Reverse-adjacency version of the `s_i` reducer. -/
@@ -204,7 +204,7 @@ theorem eq_s_of_extra_neighbor_symm_ne_r
     (hnot : Not (S.forbiddenExtraNeighbor i x))
     (hne : Not (x = E.r i)) :
     x = E.s i :=
-  E.eq_s_of_extra_neighbor_ne_r
+  eq_s_of_extra_neighbor_ne_r E
     ((unitDistanceLocalGraph C).symm hadj) hnot hne
 
 /-- For an extra neighbor, being different from `s_i` is equivalent to being
@@ -216,7 +216,7 @@ theorem extra_neighbor_ne_s_iff_eq_r
     (hnot : Not (S.forbiddenExtraNeighbor i x)) :
     Not (x = E.s i) <-> x = E.r i :=
   Iff.intro
-    (fun hne => E.eq_r_of_extra_neighbor_ne_s hadj hnot hne)
+    (fun hne => eq_r_of_extra_neighbor_ne_s E hadj hnot hne)
     (fun hx hxs => E.r_ne_s i (hx.symm.trans hxs))
 
 /-- For an extra neighbor, being different from `r_i` is equivalent to being
@@ -228,7 +228,7 @@ theorem extra_neighbor_ne_r_iff_eq_s
     (hnot : Not (S.forbiddenExtraNeighbor i x)) :
     Not (x = E.r i) <-> x = E.s i :=
   Iff.intro
-    (fun hne => E.eq_s_of_extra_neighbor_ne_r hadj hnot hne)
+    (fun hne => eq_s_of_extra_neighbor_ne_r E hadj hnot hne)
     (fun hx hxr => E.r_ne_s i (hxr.symm.trans hx))
 
 /-- There is no third extra neighbor distinct from both named ones. -/
@@ -240,7 +240,7 @@ theorem false_of_extra_neighbor_ne_r_ne_s
     (hne_r : Not (x = E.r i))
     (hne_s : Not (x = E.s i)) :
     False :=
-  hne_r (E.eq_r_of_extra_neighbor_ne_s hadj hnot hne_s)
+  hne_r (eq_r_of_extra_neighbor_ne_s E hadj hnot hne_s)
 
 /-- Equality with `r_i` follows from eliminating the `s_i` branch of the named
 case split. -/
@@ -277,7 +277,7 @@ def cyclicOrderRoute
 /-- The routed cyclic-order proposition is exactly the stored field. -/
 theorem cyclicOrderRoute_holds
     (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
-    E.cyclicOrderRoute i :=
+    cyclicOrderRoute E i :=
   E.positiveCyclicOrder i
 
 namespace M8LabelsFromBoundaryData
@@ -313,7 +313,8 @@ theorem eq_r_of_extra_neighbor_ne_s
     (hne : Not (x = D.labels.s i)) :
     x = D.labels.r i := by
   simpa [M8LabelsFromBoundaryData.labels] using
-    D.lemma8.eq_r_of_extra_neighbor_ne_s hadj hnot hne
+    Lemma8CombinatoricsConcrete.eq_r_of_extra_neighbor_ne_s
+      D.lemma8 hadj hnot hne
 
 /-- Route the symmetric exhaustiveness reducer through boundary-derived data. -/
 theorem eq_s_of_extra_neighbor_ne_r
@@ -323,7 +324,8 @@ theorem eq_s_of_extra_neighbor_ne_r
     (hne : Not (x = D.labels.r i)) :
     x = D.labels.s i := by
   simpa [M8LabelsFromBoundaryData.labels] using
-    D.lemma8.eq_s_of_extra_neighbor_ne_r hadj hnot hne
+    Lemma8CombinatoricsConcrete.eq_s_of_extra_neighbor_ne_r
+      D.lemma8 hadj hnot hne
 
 end M8LabelsFromBoundaryData
 
@@ -368,7 +370,8 @@ theorem eq_r_of_extra_neighbor_ne_s
   simpa [M8BoundaryLabelPackage.labels,
     M8BoundaryLabelPackage.toLabelsFromBoundaryData,
     M8LabelsFromBoundaryData.labels] using
-    D.lemma8.eq_r_of_extra_neighbor_ne_s hadj hnot hne
+    Lemma8CombinatoricsConcrete.eq_r_of_extra_neighbor_ne_s
+      D.lemma8 hadj hnot hne
 
 /-- Route the `s_i` exhaustive reducer through the concrete boundary-label
 package. -/
@@ -381,7 +384,8 @@ theorem eq_s_of_extra_neighbor_ne_r
   simpa [M8BoundaryLabelPackage.labels,
     M8BoundaryLabelPackage.toLabelsFromBoundaryData,
     M8LabelsFromBoundaryData.labels] using
-    D.lemma8.eq_s_of_extra_neighbor_ne_r hadj hnot hne
+    Lemma8CombinatoricsConcrete.eq_s_of_extra_neighbor_ne_r
+      D.lemma8 hadj hnot hne
 
 end M8BoundaryLabelPackage
 
