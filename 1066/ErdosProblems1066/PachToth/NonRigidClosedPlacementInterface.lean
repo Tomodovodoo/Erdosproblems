@@ -175,8 +175,8 @@ theorem transition_target_eq_placeNext {k : Nat} {hk : 0 < k}
     (D : ExplicitCyclicOrbitEdgeData k hk)
     (i : Fin k) (v : LocalVertex) :
     D.point (cyclicSucc hk i) v =
-      ((D.toExplicitTransitionClosedPlacementCertificate.transition i).transition)
-        .placeNext (D.point i) v :=
+      (D.toExplicitTransitionClosedPlacementCertificate.transition i).transition.placeNext
+        (D.point i) v :=
   ClosedPlacementAlgebra.transition_target_eq_placeNext
     D.toExplicitTransitionClosedPlacementCertificate i v
 
@@ -247,8 +247,8 @@ theorem transition_orientation
     {k : Nat} {hk : 0 < k}
     (D : SameOppositeCyclicOrbitData O k hk)
     (i : Fin k) :
-    (D.toExplicitTransitionClosedPlacementCertificate.transition i)
-        .transition.orientation = D.orientation i :=
+    (D.toExplicitTransitionClosedPlacementCertificate.transition i).transition.orientation =
+      D.orientation i :=
   ClosedPlacementAlgebra.sameOpposite_transition_orientation
     O D.point D.orientation D.successor_eq D.separated
     D.same_block_edges_unit i
@@ -300,13 +300,15 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_closedPlacements
   have hAt :
       targetUpperConstructionFiveSixteenAt (16 * (n / 16) + n % 16) := by
     by_cases hk : 0 < n / 16
-    · exact
+    case pos =>
+      exact
         RemainderPlacement.targetUpperConstructionFiveSixteenAt_of_exactChain_translatedRemainder
           hr
           (SplitCertificateBridge.exactChainUpperOfClosedPlacement
             (H (n / 16) hk))
           (SplitSoundness.remainderUpperOfConstruction (n % 16))
-    · have hk0 : n / 16 = 0 := Nat.eq_zero_of_not_pos hk
+    case neg =>
+      have hk0 : n / 16 = 0 := Nat.eq_zero_of_not_pos hk
       have hzero :
           targetUpperConstructionFiveSixteenAt (16 * 0 + n % 16) :=
         RemainderPlacement.targetUpperConstructionFiveSixteenAt_of_exactChain_translatedRemainder

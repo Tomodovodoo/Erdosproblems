@@ -308,9 +308,212 @@ theorem s_ne_nextQ (E : M8Lemma8Combinatorics S)
 
 end M8Lemma8Combinatorics
 
+namespace M8LabelsFromBoundaryData
+
+variable {n : Nat} {C : _root_.UDConfig n}
+
+@[simp]
+theorem predicates_labels
+    (D : M8LabelsFromBoundaryData C) :
+    D.predicates.labels = D.labels :=
+  rfl
+
+theorem predicates_boundaryEdge_iff
+    (D : M8LabelsFromBoundaryData C) (i : M8TriangleIndex) :
+    D.predicates.boundaryEdge i <->
+      (unitDistanceLocalGraph C).Adj
+        (D.spine.p (m8BoundaryIndexLeft i))
+        (D.spine.p (m8BoundaryIndexRight i)) :=
+  Iff.rfl
+
+theorem predicates_triangleWitness_iff
+    (D : M8LabelsFromBoundaryData C) (i : M8TriangleIndex) :
+    D.predicates.triangleWitness i <->
+      (unitDistanceLocalGraph C).CommonNeighbor
+        (D.spine.p (m8BoundaryIndexLeft i))
+        (D.spine.p (m8BoundaryIndexRight i)) (D.spine.q i) :=
+  Iff.rfl
+
+theorem predicates_extraNeighborWitness_iff
+    (D : M8LabelsFromBoundaryData C) (i : M8ExtraIndex) :
+    D.predicates.extraNeighborWitness i <->
+      D.lemma8.extraNeighborWitness i :=
+  Iff.rfl
+
+theorem predicates_lemma10Equality_iff
+    (D : M8LabelsFromBoundaryData C)
+    (i : Lemma10Bridge.M8Lemma10Index) :
+    D.predicates.lemma10Equality i <->
+      Lemma10Bridge.M8LabelEquality D.labels i :=
+  Iff.rfl
+
+theorem predicates_tripleEquality_iff
+    (D : M8LabelsFromBoundaryData C)
+    (i : Lemma10Bridge.M8TripleStartIndex) :
+    D.predicates.tripleEquality i <->
+      Lemma10Bridge.M8LabelTriple D.labels i :=
+  Iff.rfl
+
+@[simp]
+theorem toHonestLocalPredicates_data
+    (D : M8LabelsFromBoundaryData C) :
+    D.toHonestLocalPredicates.data = D.predicates :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_predicates
+    (D : M8LabelsFromBoundaryData C) :
+    D.toM8LocalLabels.predicates = D.toHonestLocalPredicates :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_lateTriples
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).lateTriples =
+        lateTriples :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_windowGeometry
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8LabelsFromBoundaryData C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).windowGeometry =
+        windowGeometry :=
+  rfl
+
+end M8LabelsFromBoundaryData
+
 namespace M8BoundaryLabelPackage
 
 variable {n : Nat} {C : _root_.UDConfig n}
+
+@[simp]
+theorem ofMinimalClearedFailure_context
+    (outerBoundary :
+      OuterBoundaryCore
+        (FaceReduction.CanonicalStraightLineUnitDistanceGraph.ofUDConfig C))
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (spine :
+      M8BoundarySpine
+        (M8BoundaryCutDegreeContext.of_minimalClearedFailure
+          outerBoundary connectedNoCut hmin))
+    (lemma8 : M8Lemma8Combinatorics spine) :
+    (M8BoundaryLabelPackage.ofMinimalClearedFailure
+      outerBoundary connectedNoCut hmin spine lemma8).context =
+        M8BoundaryCutDegreeContext.of_minimalClearedFailure
+          outerBoundary connectedNoCut hmin :=
+  rfl
+
+@[simp]
+theorem ofMinimalClearedFailure_spine
+    (outerBoundary :
+      OuterBoundaryCore
+        (FaceReduction.CanonicalStraightLineUnitDistanceGraph.ofUDConfig C))
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (spine :
+      M8BoundarySpine
+        (M8BoundaryCutDegreeContext.of_minimalClearedFailure
+          outerBoundary connectedNoCut hmin))
+    (lemma8 : M8Lemma8Combinatorics spine) :
+    (M8BoundaryLabelPackage.ofMinimalClearedFailure
+      outerBoundary connectedNoCut hmin spine lemma8).spine =
+        spine :=
+  rfl
+
+@[simp]
+theorem ofMinimalClearedFailure_lemma8
+    (outerBoundary :
+      OuterBoundaryCore
+        (FaceReduction.CanonicalStraightLineUnitDistanceGraph.ofUDConfig C))
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (spine :
+      M8BoundarySpine
+        (M8BoundaryCutDegreeContext.of_minimalClearedFailure
+          outerBoundary connectedNoCut hmin))
+    (lemma8 : M8Lemma8Combinatorics spine) :
+    (M8BoundaryLabelPackage.ofMinimalClearedFailure
+      outerBoundary connectedNoCut hmin spine lemma8).lemma8 =
+        lemma8 :=
+  rfl
+
+@[simp]
+theorem ofConnectedNoCutVertexClosureData_context
+    (outerBoundary :
+      OuterBoundaryCore
+        (FaceReduction.CanonicalStraightLineUnitDistanceGraph.ofUDConfig C))
+    (H : ConnectedNoCutVertexClosureData C)
+    (spine :
+      M8BoundarySpine
+        (M8BoundaryCutDegreeContext.of_connectedNoCutVertexClosureData
+          outerBoundary H))
+    (lemma8 : M8Lemma8Combinatorics spine) :
+    (M8BoundaryLabelPackage.ofConnectedNoCutVertexClosureData
+      outerBoundary H spine lemma8).context =
+        M8BoundaryCutDegreeContext.of_connectedNoCutVertexClosureData
+          outerBoundary H :=
+  rfl
+
+@[simp]
+theorem ofConnectedNoCutVertexClosureData_spine
+    (outerBoundary :
+      OuterBoundaryCore
+        (FaceReduction.CanonicalStraightLineUnitDistanceGraph.ofUDConfig C))
+    (H : ConnectedNoCutVertexClosureData C)
+    (spine :
+      M8BoundarySpine
+        (M8BoundaryCutDegreeContext.of_connectedNoCutVertexClosureData
+          outerBoundary H))
+    (lemma8 : M8Lemma8Combinatorics spine) :
+    (M8BoundaryLabelPackage.ofConnectedNoCutVertexClosureData
+      outerBoundary H spine lemma8).spine =
+        spine :=
+  rfl
+
+@[simp]
+theorem ofConnectedNoCutVertexClosureData_lemma8
+    (outerBoundary :
+      OuterBoundaryCore
+        (FaceReduction.CanonicalStraightLineUnitDistanceGraph.ofUDConfig C))
+    (H : ConnectedNoCutVertexClosureData C)
+    (spine :
+      M8BoundarySpine
+        (M8BoundaryCutDegreeContext.of_connectedNoCutVertexClosureData
+          outerBoundary H))
+    (lemma8 : M8Lemma8Combinatorics spine) :
+    (M8BoundaryLabelPackage.ofConnectedNoCutVertexClosureData
+      outerBoundary H spine lemma8).lemma8 =
+        lemma8 :=
+  rfl
+
+@[simp]
+theorem toLabelsFromBoundaryData_labels
+    (D : M8BoundaryLabelPackage C) :
+    D.toLabelsFromBoundaryData.labels = D.labels :=
+  rfl
+
+@[simp]
+theorem toLabelsFromBoundaryData_predicates
+    (D : M8BoundaryLabelPackage C) :
+    D.toLabelsFromBoundaryData.toHonestLocalPredicates = D.predicates :=
+  rfl
+
+@[simp]
+theorem toLabelsFromBoundaryData_toM8LocalLabels
+    (D : M8BoundaryLabelPackage C) :
+    D.toLabelsFromBoundaryData.toM8LocalLabels = D.toM8LocalLabels :=
+  rfl
 
 theorem preconnected
     (D : M8BoundaryLabelPackage C) :
@@ -411,6 +614,30 @@ theorem localLabels_s (D : M8BoundaryLabelPackage C)
     D.toM8LocalLabels.labels.s i = D.lemma8.s i :=
   rfl
 
+@[simp]
+theorem toM8ConstructionData_lateTriples
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).lateTriples =
+        lateTriples :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_windowGeometry
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8BoundaryLabelPackage C)
+    (turnBounds : M8TurnBounds)
+    (lateTriples : M8LateTriples D.toM8LocalLabels)
+    (windowGeometry : M8WindowGeometry D.toM8LocalLabels turnBounds) :
+    (D.toM8ConstructionData (hmin := hmin)
+      turnBounds lateTriples windowGeometry).windowGeometry =
+        windowGeometry :=
+  rfl
+
 end M8BoundaryLabelPackage
 
 namespace M8BoundaryConstructionPackage
@@ -467,6 +694,46 @@ theorem extraNeighborWitness
     (i : M8ExtraIndex) :
     D.predicates.data.extraNeighborWitness i :=
   D.boundaryLabels.extraNeighborWitness i
+
+@[simp]
+theorem localLabels_p
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8BoundaryIndex) :
+    D.localLabels.labels.p i = D.boundaryLabels.spine.p i :=
+  rfl
+
+@[simp]
+theorem localLabels_q
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8TriangleIndex) :
+    D.localLabels.labels.q i = D.boundaryLabels.spine.q i :=
+  rfl
+
+@[simp]
+theorem localLabels_r
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8ExtraIndex) :
+    D.localLabels.labels.r i = D.boundaryLabels.lemma8.r i :=
+  rfl
+
+@[simp]
+theorem localLabels_s
+    (D : M8BoundaryConstructionPackage C hmin)
+    (i : M8ExtraIndex) :
+    D.localLabels.labels.s i = D.boundaryLabels.lemma8.s i :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_lateTriples
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.toM8ConstructionData.lateTriples = D.lateTriples :=
+  rfl
+
+@[simp]
+theorem toM8ConstructionData_windowGeometry
+    (D : M8BoundaryConstructionPackage C hmin) :
+    D.toM8ConstructionData.windowGeometry = D.windowGeometry :=
+  rfl
 
 end M8BoundaryConstructionPackage
 
