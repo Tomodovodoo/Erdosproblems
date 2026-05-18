@@ -61,15 +61,14 @@ abbrev PositiveOrderFamily
   PointwisePositiveCyclicOrderFamily.{u}
     payForCut topologyArc frameCore
 
-abbrev FrameCoreRows : Type (u + 1) :=
+abbrev FrameCoreRows : Prop :=
   forall {n : Nat} (C : _root_.UDConfig n)
     (hmin : IsMinimalClearedFailure C),
       M8FrameCoreCardinalitySources
         (pointwiseSpine payForCut topologyArc C hmin)
 
 abbrev PositiveOrderRows
-    (frameRows : FrameCoreRows.{u} payForCut topologyArc) :
-    Type (u + 1) :=
+    (frameRows : FrameCoreRows.{u} payForCut topologyArc) :=
   forall {n : Nat} (C : _root_.UDConfig n)
     (hmin : IsMinimalClearedFailure C),
       M8PositiveCyclicOrderCertificate
@@ -129,8 +128,7 @@ def frameCoreRowsOfExactPackage
 
 def positiveOrderRowsOfExactPackage
     (P : ExactPackage.{u} payForCut topologyArc) :
-    PositiveOrderRows.{u}
-      payForCut topologyArc (frameCoreRowsOfExactPackage
+    PositiveOrderRows.{u} payForCut topologyArc (frameCoreRowsOfExactPackage
         (payForCut := payForCut) (topologyArc := topologyArc) P) :=
   P.positiveOrder.row
 
@@ -382,7 +380,7 @@ abbrev SwanepoelW22Lemma8FrameCoreRows
       Swanepoel.PointwiseFamilyProducerW18.PayForCutConcreteProducerFamily)
     (topologyArc :
       Swanepoel.PointwiseFamilyProducerW18.TopologyArcConcreteProducerFamily.{u}) :
-    Type (u + 1) :=
+    Prop :=
   Swanepoel.Lemma8ExactPackageInhabitationW22.FrameCoreRows.{u}
     payForCut topologyArc
 
@@ -392,8 +390,7 @@ abbrev SwanepoelW22Lemma8PositiveOrderRows
     (topologyArc :
       Swanepoel.PointwiseFamilyProducerW18.TopologyArcConcreteProducerFamily.{u})
     (frameRows :
-      SwanepoelW22Lemma8FrameCoreRows.{u} payForCut topologyArc) :
-    Type (u + 1) :=
+      SwanepoelW22Lemma8FrameCoreRows.{u} payForCut topologyArc) :=
   Swanepoel.Lemma8ExactPackageInhabitationW22.PositiveOrderRows.{u}
     payForCut topologyArc frameRows
 

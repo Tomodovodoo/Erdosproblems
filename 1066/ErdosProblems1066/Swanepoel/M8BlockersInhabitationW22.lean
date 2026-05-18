@@ -165,17 +165,4 @@ end
 
 end M8BlockersInhabitationW22
 end Swanepoel
-
-namespace Verified
-
-abbrev SwanepoelW22M8BlockerComponentLanes :=
-  Swanepoel.M8BlockersInhabitationW22.ComponentLanes
-
-theorem targetLowerBoundEightThirtyOne_of_swanepoel_w22_m8BlockerComponentLanes
-    (P : SwanepoelW22M8BlockerComponentLanes.{0}) :
-    _root_.ErdosProblems1066.Swanepoel.targetLowerBoundEightThirtyOne :=
-  Swanepoel.M8BlockersInhabitationW22.targetLowerBoundEightThirtyOne_of_componentLanes
-    P
-
-end Verified
 end ErdosProblems1066

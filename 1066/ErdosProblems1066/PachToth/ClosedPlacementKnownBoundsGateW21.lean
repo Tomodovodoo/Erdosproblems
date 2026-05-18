@@ -27,10 +27,19 @@ abbrev InputPackage : Type :=
 abbrev SourceFields : Type :=
   ExplicitClosedPlacementInputPackageW20.GeneratedFamilyClosureReducedMetricSourceFields
 
+/-- Globally explicit spelling for the W21 Pach--Toth source fields consumed by
+the `KnownBounds` exposure gate. -/
+abbrev ClosedPlacementSourceFields : Type :=
+  SourceFields
+
 /-- The exact remaining gate for promoting the W20 Pach--Toth route to
 `KnownBounds`-shaped public wrappers. -/
 abbrev KnownBoundsGate : Prop :=
   Nonempty SourceFields
+
+/-- Symmetric spelling with the Swanepoel final-gate files. -/
+abbrev KnownBoundsExposureGate : Prop :=
+  KnownBoundsGate
 
 abbrev ExactTarget : Prop :=
   PachToth.targetUpperConstructionFiveSixteen

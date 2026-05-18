@@ -63,7 +63,7 @@ abbrev NonConnectorLowerTableFamily
     (F : RoleHingedPeriodSearchFamily) : Prop :=
   ConcreteCrossBlockLowerTable.NonConnectorLowerTableFamily F
 
-abbrev ConcreteNonConnectorLowerTableFamily : Prop :=
+abbrev ConcreteNonConnectorLowerTableFamily : Type :=
   ConcreteCrossBlockLowerTable.ConcreteNonConnectorLowerTableFamily
 
 /-! ## Generic exact-family and W19/W20 adapters -/

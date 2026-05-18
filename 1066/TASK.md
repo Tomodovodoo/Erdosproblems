@@ -35,7 +35,7 @@ Verification command:
 
 ```powershell
 Set-Location 'E:/Personal/Erdosproblems/1066'
-elan run leanprover/lean4:v4.28.0 lake build
+elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066
 ```
 
 PowerShell-safe source scan:
@@ -52,25 +52,22 @@ Last verification recorded in this file:
 
 ```text
 elan run leanprover/lean4:v4.28.0 lake build
-Build completed successfully (8654 jobs).
+Build completed successfully (8830 jobs).
 
 Lean source forbidden-token scan over ErdosProblems1066/ and
 ErdosProblems1066.lean: clean.
 
-Root import coverage: 627 imported modules for 627 Lean files under
+Root import coverage: 803 imported modules for 803 Lean files under
 ErdosProblems1066/.  No missing, extra, or duplicate root imports.
 
 Trust-source scan for `native_decide`, `trustCompiler`, and `ofReduceBool`:
 clean.
 
-CI-style dependency audit: passed for 752 declarations, including W13-W20
+CI-style dependency audit: passed for 1106 declarations, including W13-W30
 endpoint and gate declarations.  Every checked declaration reports only
 Lean/mathlib base axioms `propext`, `Classical.choice`, and `Quot.sound`.
-W18/W19/W20 endpoint declarations are imported, build-clean, source-scan
-clean, and represented in the CI-style declaration list.
-W21 source-package and KnownBounds-gate files are imported, build-clean, and
-source-scan clean, but their endpoint declarations have not yet been added to
-the CI-style declaration list.
+W18-W30 endpoint declarations are imported, build-clean, source-scan clean,
+trust-source clean, and represented in the CI-style declaration list.
 
 Encoding hygiene is not a proof-state gate.  A broad marker scan reports older
 legacy non-ASCII/mojibake-looking text, so do not use encoding hygiene as
@@ -79,12 +76,12 @@ evidence for or against the current certified bounds route.
 
 ## Active Snapshot
 
-- [x] W13 through W21 route and source-package layers are integrated and root-imported.
-  - Current coverage: 627 imported package modules for 627 Lean files.
-  - Current root target build succeeds with 8654 jobs under
+- [x] W13 through W30 route and source-package layers are integrated and root-imported.
+  - Current coverage: 803 imported package modules for 803 Lean files.
+  - Current root target build succeeds with 8830 jobs under
     `leanprover/lean4:v4.28.0`.
   - Lean-source forbidden-token and trust-source scans are clean.
-  - The W15/W16/W17/W18/W19/W20/W21 final-gate modules are conditional gates, not
+  - The W15-W30 final-gate modules are conditional gates, not
     unconditional final closures.
 
 - [x] W16 proof wave is integrated.
@@ -105,8 +102,9 @@ evidence for or against the current certified bounds route.
     supplied, and `Verified`-namespace conditional wrappers are not completion
     evidence.
   - W16 verification:
-    root build passes at 8654 jobs; coverage is 627/627; forbidden-token scan,
-    trust-source scan, and 752-declaration dependency audit pass.
+    current root build passes at 8830 jobs; coverage is 803/803;
+    forbidden-token scan, trust-source scan, and 1106-declaration dependency
+    audit pass.
   - W16 status:
     the new modules are checked reducers/adapters, not unconditional final
     theorem closures.  Swanepoel still needs a uniform construction of the
@@ -134,8 +132,8 @@ evidence for or against the current certified bounds route.
 - [x] W17 concrete final-input lane is integrated.
   - W17 completed the rooted adapter/reducer layer feeding W16 and W15.
     Every W17 file is imported by `ErdosProblems1066.lean`, targeted-checked,
-    source-scan clean, included in the 8654-job root build, and represented in
-    the 752-declaration dependency audit.
+    source-scan clean, included in the current 8830-job root build, and
+    represented in the 1106-declaration dependency audit.
   - W17 does not close the final paper bounds unconditionally.  It sharpens the
     remaining work to inhabiting concrete input packages rather than proving
     more endpoint wrappers.
@@ -197,39 +195,224 @@ evidence for or against the current certified bounds route.
     source-package inhabitants; they do not close the requested public
     `KnownBounds` wrappers.
 
-- [ ] Concrete source-inhabitation plus W21 endpoint-audit lane is live.
+- [x] W22 source-inhabitation audit surface is integrated and root-imported.
+  - Pach--Toth W22 modules expose the value-matrix, source-field,
+    remaining-separation, small-complement, arbitrary-`n`, and dependency-audit
+    surfaces for the W21/W20 route.
+  - Swanepoel W22 modules expose the no-cut, topology, Lemma 8, Lemma 9,
+    figure-angle, geometry-closure, remaining-source, M8 blocker, and final
+    KnownBounds source-component surfaces.
+  - W22 status:
+    all 20 W22 files are root-imported, build-clean, forbidden-token clean,
+    trust-source clean, and represented in the 1106-declaration CI-style axiom
+    audit.  They remain conditional source-package surfaces.
+
+- [x] W23 concrete route/audit surface is integrated and root-imported.
+  - Pach--Toth W23 modules route concrete value-matrix rows, generated-chain
+    closure/source fields, base-fixing, separation, small-length targets, and
+    KnownBounds-from-rows/audit wrappers.
+  - Swanepoel W23 modules route concrete no-cut, topology/Jordan, Lemma 8,
+    Lemma 9, figure-angle, M8 component lanes, lane-product, KnownBounds, and
+    route-audit wrappers.
+  - W23 status:
+    all 20 W23 files are root-imported and represented in the current
+    CI-style axiom audit.  They are conditional route surfaces, not final
+    unconditional public-bound closures.
+
+- [x] W24 concrete source-package/audit surface is integrated and root-imported.
+  - Pach--Toth W24 modules expose role-free alternative value-matrix routes,
+    direct cross-block/full-metric/free-placement packages, non-role period
+    routes, concrete remainder split bridges, route obstruction facts, and
+    small-length exact target surfaces.
+  - Swanepoel W24 modules expose no-cut blocker elimination, Jordan boundary
+    witness data, Lemma 8 frame/order bridges, Lemma 9 no-early packages,
+    figure-angle E22/E23 bridges, minimal still-open components, lane-product
+    assembly, and W20 source-package concrete bridges.
+  - W24 status:
+    all W24 files are root-imported, build-clean, forbidden-token clean,
+    trust-source clean, and represented in the 1106-declaration CI-style axiom
+    audit.  They remain conditional source-package surfaces.
+
+- [x] W25 source-inhabitation/audit surface is integrated and root-imported.
+  - Pach--Toth W25 modules add generated-closure metric packages,
+    same-family closure sources, reduced-metric fields, free-placement field
+    equivalences, non-role split sources, appended-remainder separation,
+    direct full-metric source packages, closed-placement witness assembly, and
+    W25 route-audit endpoints.
+  - Swanepoel W25 modules add cut-vertex contradiction equivalences,
+    minimal boundary-topology witness inhabitation, Lemma 8 frame rows, Lemma
+    9 no-early obstruction packages, selected figure witnesses, concrete W23
+    component assembly, lane-product final gates, pointwise source-field
+    bridges, planar topology extraction bridges, and W25 route-audit
+    endpoints.
+  - W25 verification:
+    root build passes at 8830 jobs; coverage is 803/803; forbidden-token scan,
+    trust-source scan, and the 1106-declaration dependency audit pass.
+  - W25 status:
+    W25 narrows the remaining proof obligations and adds checked
+    equivalence/adapter layers.  It does not yet close Swanepoel 8/31 or
+    Pach--Toth 5/16 as unconditional public `KnownBounds` theorems.
+
+- [ ] Concrete source-inhabitation beyond W30 is live.
   - Swanepoel target:
     produce an actual
-    `RemainingObligationLedgerW20.RemainingObligationFields`,
-    `PointwiseProducerFamilyFieldsW20.PointwiseSourceFamilyFields`, or
-    `SwanepoelSourcePackageW20.ExactRemainingFields`, and route it through
-    `SwanepoelKnownBoundsGateW21.KnownBoundsExposureGate`.
+    `Swanepoel.SwanepoelW30FinalAssembly.FinalSourceGate`,
+    `Swanepoel.SwanepoelW30FinalAssembly.LaneProductSourceAlternatives`, or
+    `Swanepoel.PointwiseProductDataClosureW30.SourceData`,
+    and route it through the W30 final-source gate without target-to-source
+    shortcuts.
   - Pach--Toth target:
-    produce an actual
-    `ExplicitClosedPlacementInputPackageW20.GeneratedFamilyClosureReducedMetricSourceFields`,
-    `GeneratedChainFamilyProducerW20.SourceFields`, or
-    `ExplicitClosedPlacementProducerW19.InputPackage`, and route it through
-    `ClosedPlacementKnownBoundsGateW21.KnownBoundsExposureGate`.
+    do not target the W27 role-hinged
+    `ConcreteNonConnectorLowerTableFamily` alias as a live source; W27 proves
+    that lane blocked.  Produce actual W30 generated-closure/completion-row
+    data, `PachToth.PositiveChainComponentClosureW30.ExactPositiveChainComponentData`,
+    `PachToth.LargeTailCertificateRowsW30.LargeTailCertificateRows`, or
+    `PachToth.RemainderExactDependencyClosureW30.RemainderSplitExactSourcePackage`,
+    and route it through the W30 exact/arbitrary source gates.
   - Completion gate:
     root-imported declarations build with the pinned toolchain; root coverage
-    is complete; forbidden-token and trust-source scans are clean; W21 endpoint
+    is complete; forbidden-token and trust-source scans are clean; endpoint
     declarations are added to the CI-style axiom audit and report only
     Lean/mathlib base axioms; public `KnownBounds` wrappers are added only
     after the matching internal `*_verified` theorem exists and builds.
+
+- [x] W26 parallel proof wave is integrated and audited.
+  - Pach--Toth workers:
+    `DirectReducedMetricInputW26`,
+    `NonRoleSplitSourceConstructionW26`,
+    `ClosedPlacementConcreteConstructionW26`,
+    `FullToReducedMetricClosureW26`,
+    `ArbitraryNFinalAssemblyW26`,
+    `PositiveExactChainPackageW26`,
+    `ConcreteReducedMetricCertificatesW26`,
+    `PachTothW26RouteAudit`, and
+    `ExactTargetClosureW26`.
+  - Swanepoel workers:
+    `NoCutConcreteEliminationW26`,
+    `ConcreteW23ComponentsInhabitationW26`,
+    `PlanarTopologyActualExtractionW26`,
+    `Lemma8FrameRowsConstructionW26`,
+    `Lemma9NoEarlyConstructionW26`,
+    `FigureWitnessConstructionW26`,
+    `BoundaryWitnessRemainingFieldsW26`,
+    `SwanepoelW26FinalAssembly`, and
+    `BrokenLatticeMinimalFailureConstructionW26`.
+  - Read-only auditors:
+    Lean proof-surface/no-axiom practice audit and Mathlib route audit.
+  - W26 agent inventory is condensed after verification; the checked artifacts
+    above are the durable handoff.
+  - W26 verification:
+    all W26 files are root-imported.  The root build succeeds at 8830 jobs;
+    root import coverage is 803/803; forbidden-token scan and trust-source
+    scan are clean; the expanded CI-style axiom audit passes for 1106
+    declarations.
+  - W26 status:
+    W26 closes several missing-field adapters and exact dependency
+    equivalences.  Pach--Toth now has checked reduced-metric/full-metric
+    handoffs and exact/arbitrary target equivalences, but still needs an
+    actual concrete lower-table/full-metric/free-placement source rather than
+    target repackaging.  Swanepoel now has no-cut, topology, Lemma 8, Lemma 9,
+    figure, boundary-witness, concrete-component, broken-lattice, and final
+    assembly adapters, but still needs actual inhabitants of the concrete
+    component/source packages before a public unconditional `8 / 31` wrapper
+    may be added.
+
+- [x] W27 concrete source/audit wave is integrated and audited.
+  - Pach--Toth W27 modules:
+    concrete closed-orbit/squared-distance adapters, blocked lower-table audit,
+    direct full-metric source construction, finite reduced-metric certificates,
+    free-placement fields, positive exact-chain assembly, large-tail blockers,
+    remainder exact sources, and W27 route/final assembly.
+  - Swanepoel W27 modules:
+    actual selected topology, boundary components, cut/pay-for-cut fields,
+    figure witnesses, lane product, Lemma 8 geometry, Lemma 9 source families,
+    no-cut local deletion, pointwise source fields, and W27 final assembly.
+  - W27 verification:
+    all W27 files are root-imported.  The root build succeeds at 8830 jobs;
+    root import coverage is 803/803; forbidden-token and trust-source scans
+    are clean; the expanded CI-style axiom audit passes for 1106 declarations.
+  - W27 status:
+    Swanepoel made real conditional source-package progress.  Pach--Toth also
+    added useful W27 assembly and obstruction data, but the role-hinged lower
+    table alias is proved blocked and must not be treated as the live source
+    construction route.
+
+- [x] W28 source-inhabitation/audit wave is integrated and audited.
+  - Pach--Toth W28 modules:
+    alternative non-role sources, generated-closure metrics, squared-orbit
+    closure, large-tail exact-source blockers, positive-chain components,
+    remainder split exact sources, finite-row no-go audit, exact/arbitrary
+    source assembly, route audit, and final assembly.
+  - Swanepoel W28 modules:
+    no-cut source construction, side-card/pay-for-cut source fields, outer
+    boundary core construction, selected-face witnesses, Lemma 8 finite
+    geometry rows, Lemma 9 no-early rows, exact figure-angle sources,
+    pointwise product blockers, lane-product final sources, and final assembly.
+  - W28 verification:
+    all W28 files are root-imported.  The current root build succeeds at 8830
+    jobs; root import coverage is 803/803; forbidden-token and trust-source
+    scans are clean; the expanded CI-style axiom audit passes for 1106
+    declarations.
+  - W28 status:
+    W28 adds checked source packages and blocker equivalences.  It still does
+    not close Swanepoel 8/31 or Pach--Toth 5/16 unconditionally, so public
+    `KnownBounds` wrappers remain absent for those two bounds.
+
+- [x] W29 source-inhabitation/audit wave is integrated and audited.
+  - Pach--Toth W29 modules:
+    completion-row sources, squared-orbit closure rows, large-tail fields,
+    positive-chain component data, exact-chain family sources, remainder-split
+    closure, closed-orbit branch assembly, no-fake audit, route audit, and
+    final assembly.
+  - Swanepoel W29 modules:
+    outer-boundary source construction, extracted boundary witnesses, uniform
+    finite geometry rows, concrete no-early source families, exact figure-angle
+    data, pointwise product blockers, lane-product alternatives, no-cut blocker
+    contradiction, route audit, and final assembly.
+  - W29 verification:
+    all W29 files are root-imported.  The root build succeeds at 8830 jobs;
+    root import coverage is 803/803; forbidden-token and trust-source scans
+    are clean; the expanded CI-style axiom audit passes for 1106 declarations.
+  - W29 status:
+    W29 fixes the previous pending blockers and gives the current live final
+    gates.  It does not add public unconditional Swanepoel 8/31 or Pach--Toth
+    5/16 `KnownBounds` wrappers, because the final gates still require actual
+    source-package inhabitants.
+
+- [x] W30 source-inhabitation/audit wave is integrated and audited.
+  - Pach--Toth W30 modules:
+    generated-closure metric rows, completion-row closure, closed-orbit branch
+    sources, exact-chain family closure, positive-chain component closure,
+    large-tail certificate rows, remainder exact-dependency closure, no-fake
+    audit, route audit, and final assembly.
+  - Swanepoel W30 modules:
+    selected-face enclosure sources, extracted-witness components, frame/cyclic
+    order rows, no-early route-data closure, exact figure inequalities,
+    pointwise-product data closure, lane-product final closure, no-cut blocker
+    elimination, route audit, and final assembly.
+  - W30 verification:
+    all W30 files are root-imported.  The root build succeeds at 8830 jobs;
+    root import coverage is 803/803; forbidden-token and trust-source scans
+    are clean; the expanded CI-style axiom audit passes for 1106 declarations.
+  - W30 status:
+    W30 fixed the pending W29/W30 compile/name blockers and is the current
+    live final-gate layer.  It still does not add public unconditional
+    Swanepoel 8/31 or Pach--Toth 5/16 `KnownBounds` wrappers, because actual
+    source-package inhabitants are still required.
 
 ## Current Certified State
 
 - [x] The imported project builds through the pinned Lean toolchain.
   - `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean` imports every
     Lean source module under `E:/Personal/Erdosproblems/1066/ErdosProblems1066`.
-  - Current coverage: 627 imported package modules for 627 Lean files.
-  - Current root target build succeeds with 8654 jobs.  W7/W8/W9/W10/W11/W12 route and matrix modules
+  - Current coverage: 803 imported package modules for 803 Lean files.
+  - Current root target build succeeds with 8830 jobs.  W7/W8/W9/W10/W11/W12 route and matrix modules
     remain included, especially `PachTothRemainingMatrix`,
     `PachTothW8ClosureMatrix`, `ExactLocalTransitionObligationMatrix`,
     `SwanepoelRemainingMatrix`, `SwanepoelW8ClosureMatrix`,
     `M8RefinedInputConcrete`, `MinimalFailureConcreteDataMatrix`,
     `MinimalFailureDirectMatrixW10`, `GeometryRemainingFieldsW10`, and
-    `SwanepoelW10ClosureMatrix`, plus the imported W11/W12/W13/W14/W15/W16/W17/W18/W19/W20/W21
+    `SwanepoelW10ClosureMatrix`, plus the imported W11-W30
     closure, summary, gate, and certificate layers.
 
 - [x] Third parallel proof wave is integrated.
@@ -2644,69 +2827,127 @@ project-local proof obligations.
 - [x] Every `.lean` source file under
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066` is imported by
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`.
-  - Current coverage: 627 imported modules for 627 Lean files, with no missing,
+  - Current coverage: 803 imported modules for 803 Lean files, with no missing,
     extra, or duplicate root imports.
 - [x] Pinned build succeeds.
-  - Current command succeeded for the root target with 8654 jobs.
+  - Current command succeeded for the root target with 8830 jobs.
 - [x] Forbidden-token scan is clean over `ErdosProblems1066` and
   `ErdosProblems1066.lean`.
 - [x] Trust-source scan is clean for `native_decide`, `trustCompiler`, and
   `ofReduceBool`.
-- [x] CI-style axiom audit declaration list covers the current W13-W20
+- [x] CI-style axiom audit declaration list covers the current W13-W30
   endpoint layer.
-  - Current configured audit checks 752 declarations and reports only
+  - Current configured audit checks 1106 declarations and reports only
     `propext`, `Classical.choice`, and `Quot.sound`.
   - Current source-level no-additional-declared-axiom evidence: the full
-    Lean-source forbidden-token scan is clean over the 627-module root surface.
+    Lean-source forbidden-token scan is clean over the 803-module root surface.
 - [x] Add W18/W19/W20 endpoint declarations to the CI-style axiom audit.
   - The configured audit now includes the W18 final/ledger endpoints, the W19
     Pach-Toth closed-placement audit aliases, the W19 Swanepoel
     pointwise/final closure endpoints, and the W20 Pach-Toth/Swanepoel
     endpoint surfaces.
-- [ ] Add W21 KnownBounds-gate endpoint declarations to the CI-style axiom audit.
-  - Current configured audit checks 752 declarations through W20 and has no
-    W21 entries.
-  - Add `ClosedPlacementKnownBoundsGateW21` and
-    `SwanepoelKnownBoundsGateW21` endpoint declarations, then replay the audit
-    before marking W21 endpoint coverage done.
+- [x] Add W21/W22 endpoint declarations to the CI-style axiom audit.
+  - The W21/W22 subset is folded into the current 1106-declaration replayed
+    audit, which passed with only Lean/mathlib base axioms.
+- [x] Add W23/W24/W25/W26/W27/W28 endpoint declarations to the CI-style axiom audit.
+  - The configured audit now includes W23 route/audit wrappers, W24 source and
+    obstruction surfaces, W25 source-inhabitation/audit endpoints, and W26
+    concrete-adapter/final-gate endpoints, plus W27/W28 source/audit endpoints.
+  - The replayed audit passed for 1106 declarations with only Lean/mathlib base
+    axioms.
+- [x] Add W29 endpoint declarations to the CI-style axiom audit.
+  - The configured audit now includes W29 Pach--Toth source/assembly/audit
+    endpoints and W29 Swanepoel source/final-gate endpoints.
+  - The replayed audit passed for 1106 declarations with only Lean/mathlib base
+    axioms.
+- [x] Add W30 endpoint declarations to the CI-style axiom audit.
+  - The configured audit now includes W30 Pach--Toth generated-closure,
+    completion-row, branch/source, large-tail, route-audit, no-fake, and final
+    conditional endpoints, plus W30 Swanepoel selected-face, extracted-witness,
+    frame/cyclic-order, no-cut, no-early, figure, pointwise, route-audit, and
+    final-source endpoints.
+  - The replayed audit passed for 1106 declarations with only Lean/mathlib base
+    axioms.
 - [x] `KnownBounds.lean` exposes only the theorems actually closed in Lean.
   - Next action: add no new public wrappers until the matching internal
     `*_verified` theorem exists and builds.
 
-## Latest W21 Status
+## Latest W30 Status
 
-- [x] W20 wave integrated and verified.
-  - Root surface: 627 Lean files imported by 627 root imports.
-  - Pinned build: `elan run leanprover/lean4:v4.28.0 lake build` succeeded
-    with 8654 jobs.
+- [x] W20-W30 waves integrated and verified.
+  - Root surface: 803 Lean files imported by 803 root imports.
+  - Pinned build: `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+    succeeded with 8830 jobs.
   - Forbidden-token scan, trust-source scan, root import coverage, and the
-    752-declaration CI-style axiom audit all pass.
-  - Pach-Toth W20 reduces the exact and arbitrary `5 / 16` target to an actual
-    inhabitant of `ExplicitClosedPlacementProducerW19.InputPackage`, or
-    equivalently to `GeneratedChainFamilyProducerW20.SourceFields`.  W20 also
-    proves that the role-hinge reduced-metric bypass is empty in the current
-    interface.
-  - Swanepoel W20 reduces the `8 / 31` target to an actual inhabitant of
-    `RemainingObligationLedgerW20.RemainingObligationFields`,
-    `SwanepoelSourcePackageW20.ExactRemainingFields`, or
-    `PointwiseProducerFamilyFieldsW20.PointwiseSourceFamilyFields`.
-  - No public `KnownBounds` wrapper has been added for Swanepoel `8 / 31` or
-    Pach--Toth `5 / 16`, because these W20 source packages are still not
-    inhabited unconditionally.
+    1106-declaration CI-style axiom audit all pass.
+  - W30 fixes the previous audit/name blocker for the selected-face endpoint
+    by using the checked namespace
+    `ErdosProblems1066.Swanepoel.Verified.swanepoelW30_selectedFaceEnclosure_exactly_exactTopologyFields`.
 
-- [x] W21 wave integrated and verified.
-  - All 20 W21 files are root-imported and covered by the current 627/627
-    import surface.
-  - W21 adds conditional KnownBounds exposure gates and sharper source-package
-    routes; it does not prove the final public bounds unconditionally.
-  - W21 endpoint declarations are not yet in the CI-style axiom audit, so the
-    audit task above remains open.
+- [x] W23-W30 waves integrated, root-build verified, and CI-audited.
+  - All W23, W24, W25, W26, W27, W28, W29, and W30 files are root-imported and
+    covered by the current 803/803 import surface.
+  - W23-W30 add concrete route/audit wrappers, source-package equivalences,
+    route obstruction records, and sharper lane/row package names; they do not
+    prove the final public bounds unconditionally.
 
-- [ ] Next action: inhabit the concrete source packages and audit W21 endpoints.
-  - Pach--Toth: build a generated-chain source field package directly; do not
-    reuse the blocked role-hinge route.
-  - Swanepoel: build the remaining-obligation fields from actual minimal
-    failure geometry/topology, not from endpoint aliases.
+- [ ] Next action: inhabit the concrete source packages beyond W30.
+  - Pach--Toth: produce actual completion-row/generated-orbit, positive-chain,
+    large-tail, and remainder-split source data for the W30 final gate; do not
+    target the blocked role-hinged lower-table alias.
+  - Swanepoel: produce actual W30 final-source gate data from minimal failure
+    topology/geometry, no-cut, no-early, finite-row, figure-angle, pointwise,
+    and lane-product data.
   - Public `KnownBounds` wrappers remain closed until the internal
-    `*_verified` theorem builds through the W21 gate and the expanded axiom
+    `*_verified` theorem builds through the W30 gate and the expanded axiom
     audit is clean.
+
+- [x] W30 parallel source-inhabitation wave is integrated and verified.
+  - Pool policy: keep active agents running long enough to do real proof work;
+    prune only agents that are finished or genuinely stale.
+  - Agent pool completed:
+    Laplace/Meitner/Mencius/McClintock/Archimedes/Sagan/Kepler/Raman/
+    Confucius/Rawls own the Pach--Toth W30 tasks; Locke/Boyle/Epicurus/
+    Newton/Kierkegaard/Galileo/Einstein/Ohm/Descartes/Turing own the
+    Swanepoel W30 tasks.
+  - Pach--Toth completed tasks:
+    `GeneratedClosureMetricRowsW30`, `CompletionRowsClosureW30`,
+    `ClosedOrbitBranchSourceW30`, `ExactChainFamilyClosureW30`,
+    `PositiveChainComponentClosureW30`, `LargeTailCertificateRowsW30`,
+    `RemainderExactDependencyClosureW30`, `PachTothW30NoFakeAudit`,
+    `PachTothW30RouteAudit`, and `PachTothW30FinalAssembly`.
+  - Swanepoel completed tasks:
+    `SelectedFaceEnclosureSourceW30`, `ExtractedWitnessComponentsW30`,
+    `FrameCyclicOrderRowsW30`, `NoEarlyRouteDataClosureW30`,
+    `ExactFigureInequalitiesW30`, `PointwiseProductDataClosureW30`,
+    `LaneProductFinalClosureW30`, `NoCutBlockerEliminationW30`,
+    `SwanepoelW30RouteAudit`, and `SwanepoelW30FinalAssembly`.
+  - W30 completion gate:
+    all 20 produced `.lean` files compile with pinned Lean 4.28.0, are
+    root-imported, scan-clean, trust-source clean, included in the 8830-job root
+    build, and covered by the 1106-declaration CI-style axiom audit.
+
+- [ ] W31 parallel source-inhabitation wave is running.
+  - Pool policy: W30 agents were closed only after their work was integrated,
+    root-built, and audited.  Keep W31 agents active long enough to do real
+    Lean work; prune only finished or genuinely stale agents.
+  - Agent pool opened:
+    Popper/Mendel/Leibniz/Plato/Russell/Bacon/Godel/Avicenna/Hegel/Pauli own
+    the Pach--Toth W31 tasks; Pasteur/Curie/Ampere/Faraday/Bohr/Herschel/Gibbs/
+    Volta/Erdos/Parfit own the Swanepoel W31 tasks.
+  - Pach--Toth W31 targets:
+    `GeneratedMetricSourceFieldsW31`, `CompletionRowsInhabitationW31`,
+    `ClosedOrbitConcreteBranchW31`, `ExactChainFamilyInhabitationW31`,
+    `PositiveChainSmallBlocksW31`, `LargeTailRowsRealizationW31`,
+    `RemainderDependencyFinalW31`, `PachTothW31NoFakeAudit`,
+    `PachTothW31RouteAudit`, and `PachTothW31FinalAssembly`.
+  - Swanepoel W31 targets:
+    `SelectedOuterFaceConstructionW31`, `EnclosureAndFaceBoundaryW31`,
+    `ExtractedComponentsInhabitationW31`, `FrameRowsInhabitationW31`,
+    `CyclicOrderRowsInhabitationW31`, `NoEarlyConcreteRowsW31`,
+    `FigureInequalityRowsW31`, `PointwiseLaneProductInhabitationW31`,
+    `SwanepoelW31RouteAudit`, and `SwanepoelW31FinalAssembly`.
+  - W31 completion gate:
+    each produced `.lean` file must compile with pinned Lean 4.28.0 before root
+    import, then the root import surface, source scans, trust scans, root build,
+    and CI-style axiom audit must be expanded and replayed.

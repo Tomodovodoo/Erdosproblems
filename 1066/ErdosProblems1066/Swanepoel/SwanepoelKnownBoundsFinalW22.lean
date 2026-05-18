@@ -202,6 +202,8 @@ end Swanepoel
 
 namespace Verified
 
+open Swanepoel.SwanepoelKnownBoundsFinalW22
+
 abbrev SwanepoelW22RemainingSourceComponents : Type 1 :=
   Swanepoel.SwanepoelKnownBoundsFinalW22.SourceComponents
 
@@ -213,20 +215,19 @@ theorem swanepoelW22_knownBoundsExposureGate_iff_sourceComponents_or_pointwise :
       Nonempty SwanepoelW22RemainingSourceComponents \/
         Nonempty
           Swanepoel.SwanepoelKnownBoundsFinalW22.PointwiseSourceFamilyFields :=
-  Swanepoel.SwanepoelKnownBoundsFinalW22.knownBoundsExposureGate_iff_sourceComponents_or_pointwiseSourceFamilyFields
+  knownBoundsExposureGate_iff_sourceComponents_or_pointwiseSourceFamilyFields
 
 theorem swanepoelW22_sourceComponents_nonempty_iff_minimalStillOpenComponents :
     Nonempty SwanepoelW22RemainingSourceComponents <->
       Nonempty SwanepoelW22MinimalStillOpenComponents :=
-  Swanepoel.SwanepoelKnownBoundsFinalW22.sourceComponents_nonempty_iff_minimalStillOpenComponents
+  sourceComponents_nonempty_iff_minimalStillOpenComponents
 
 theorem lower_bound_eight_thirty_one_of_swanepoel_w22_sourceComponents
     (h : Nonempty SwanepoelW22RemainingSourceComponents)
     (n : Nat) (C : _root_.UDConfig n) :
     Exists fun s : Finset (Fin n) =>
       C.IsIndep s /\ 31 * s.card >= 8 * n :=
-  Swanepoel.SwanepoelKnownBoundsFinalW22.lower_bound_eight_thirty_one_of_nonempty_sourceComponents
-    h n C
+  lower_bound_eight_thirty_one_of_nonempty_sourceComponents h n C
 
 end Verified
 end ErdosProblems1066

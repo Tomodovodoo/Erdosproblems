@@ -25,9 +25,10 @@ noncomputable section
 
 abbrev R2 := Prod Real Real
 
-/-- The complete local finite graph certificate currently available for the
-Pach--Toth Figure 2 block, together with the checked one-step connector
-consequences and the known translation/oriented-grid obstructions. -/
+/-- The complete proof-used local finite graph certificate currently available
+for the Pach--Toth Figure 2 block, together with the checked one-step
+connector consequences and the known translation/oriented-grid obstructions.
+This is not a complete source transcription of every Figure 2 primitive. -/
 structure Figure2LocalFiniteCertificate where
   localVertex_card : Fintype.card LocalVertex = 16
   adj_irrefl : forall v : LocalVertex, adj v v = false

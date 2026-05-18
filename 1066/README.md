@@ -58,30 +58,39 @@ absent from the public facade until their proof terms are fully formalized
 without `axiom`, `sorry`, or `admit`.
 
 Conditional endpoints are allowed to mention the target propositions only when
-their hypotheses carry the remaining input families explicitly. The strongest
-current Pach--Toth routes are
+their hypotheses carry the remaining input families explicitly. The current
+Pach--Toth live handoff is W30's source-package/audit layer:
+`ErdosProblems1066.PachToth.PachTothW30FinalAssembly`,
+`ErdosProblems1066.PachToth.PachTothW30RouteAudit`,
+`ErdosProblems1066.PachToth.PachTothW30NoFakeAudit`,
+`ErdosProblems1066.PachToth.GeneratedClosureMetricRowsW30`,
+`ErdosProblems1066.PachToth.CompletionRowsClosureW30`,
+`ErdosProblems1066.PachToth.ExactChainFamilyClosureW30`,
+`ErdosProblems1066.PachToth.PositiveChainComponentClosureW30`,
+`ErdosProblems1066.PachToth.LargeTailCertificateRowsW30`,
+`ErdosProblems1066.PachToth.RemainderExactDependencyClosureW30`, and
+`ErdosProblems1066.PachToth.ClosedOrbitBranchSourceW30`.  The W27
+role-hinged lower-table alias remains recorded as blocked, so new proof work
+should target non-role/generated-closure, positive-chain, remainder, or
+closed-orbit source data rather than that alias.
+The older equation-transition facades
 `ErdosProblems1066.PachToth.FinalConditional.exactTarget_of_periodSearch_equationTransitions_crossBlock`,
 `ErdosProblems1066.PachToth.FinalConditional.arbitraryTarget_of_periodSearch_equationTransitions_crossBlock`,
 and
-`ErdosProblems1066.PachToth.SplitRealizationFinal.targetUpperConstructionFiveSixteenArbitrary_of_finalConditionalFamily`;
-they still require a uniform
-`FinalConditional.EquationPeriodSearchCrossBlockFamily`, i.e. period-search
-certificates, same/opposite equation transitions, and cross-block lower-bound
-tables for every positive block count. The source-facing compact variants
-`ErdosProblems1066.PachToth.FinalConditional.exactTarget_of_periodSearchData_sqValueCertificate`
-and
-`ErdosProblems1066.PachToth.FinalConditional.arbitraryTarget_of_periodSearchData_sqValueCertificate`
-make the remaining upper-triangle square-value checklist explicit.
+`ErdosProblems1066.PachToth.SplitRealizationFinal.targetUpperConstructionFiveSixteenArbitrary_of_finalConditionalFamily`
+are retained as legacy audit/obstruction surfaces only; do not hand them off as
+live construction targets.
 
-The strongest current Swanepoel routes are
-`ErdosProblems1066.Swanepoel.FinalConditional.targetLowerBoundEightThirtyOne_of_m8SeparatedConstructionEliminator`,
-`ErdosProblems1066.Swanepoel.M8SeparatedConstructionConcrete.targetLowerBoundEightThirtyOne_of_componentPackage`,
-and
-`ErdosProblems1066.Swanepoel.MinimalFailurePaperFactMatrix.targetLowerBoundEightThirtyOne_consumes_exact_inputs`.
+The strongest current Swanepoel handoff is the W30 final-source surface:
+`ErdosProblems1066.Swanepoel.SwanepoelW30FinalAssembly.FinalSourcePackage`,
+fed by W30 selected-face enclosure, extracted-witness components, frame/cyclic
+order rows, no-early route data, exact figure inequalities,
+pointwise-product data, lane-product final closure, no-cut blocker
+elimination, route-audit, and final assembly packages.
 They still require, uniformly for every minimal cleared failure, the remaining
-M8 labels, nonconcave-arc turn bounds, no-early-triple data, and Figure 8/Figure
-9 window-containment/angle inputs packaged by
-`MinimalFailurePaperFactMatrix.TargetLowerBoundEightThirtyOneInputs`.
+M8 labels, nonconcave-arc turn bounds, no-early-triple data, and Figure
+8/Figure 9 window-containment/angle inputs as concrete inhabitants of the
+final source package.
 
 Bridge modules:
 
@@ -158,10 +167,10 @@ Bridge modules:
 - `ErdosProblems1066.PachToth.ClosedChainReduction` packages the final
   Pach--Toth spine as conditional theorems from explicit closed-placement
   certificates; arbitrary remainders are now placed by `RemainderPlacement`.
-- `ErdosProblems1066.PachToth.FinalConditional` assembles the current strongest
-  conditional exact and arbitrary-`n` Pach--Toth facades from explicit
-  period-search/equation-transition/cross-block lower-bound families, plus
-  compact square-value-certificate variants.
+- `ErdosProblems1066.PachToth.FinalConditional` contains legacy
+  equation-transition audit facades plus compact non-rigid certificate
+  wrappers.  Use the non-rigid/source-field routes for live Pach--Toth
+  handoff; the translated four-equation route is obstruction history.
 - `ErdosProblems1066.PachToth.SplitRealizationFinal` routes the exact target
   through checked finite remainders and far-apart translated placement to the
   full arbitrary-`n` conditional target.

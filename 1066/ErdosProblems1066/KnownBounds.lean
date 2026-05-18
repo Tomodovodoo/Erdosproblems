@@ -7,11 +7,9 @@ This module is the public theorem facade. It exposes only unconditional bounds
 whose proof terms are present in this Lean project.
 
 The Swanepoel `8 / 31` lower bound and Pach--Toth `5 / 16` upper
-construction are tracked by conditional internal endpoints such as
-`Swanepoel.FinalConditional.targetLowerBoundEightThirtyOne` and the
-Pach--Toth split-realization final conditional-family route.
-Those theorems still require explicit input families, so they are not declared
-here as public unconditional wrappers.
+construction are tracked by conditional internal W30 gate surfaces.  Those
+theorems still require explicit source-package inhabitants, so they are not
+declared here as public unconditional wrappers.
 -/
 
 namespace ErdosProblems1066

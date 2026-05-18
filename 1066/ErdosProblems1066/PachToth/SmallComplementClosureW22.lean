@@ -165,8 +165,9 @@ theorem smallComplement_iff_nonempty_exactChainThresholdEvidence
     exact Nonempty.intro (exactChainThresholdEvidence_of_smallComplement small)
   case mpr =>
     intro E
-    rcases E with ⟨E⟩
-    exact smallComplement_of_exactChainThresholdEvidence E
+    cases E with
+    | intro E =>
+        exact smallComplement_of_exactChainThresholdEvidence E
 
 theorem smallComplement_iff_nonempty_exactChainTargetsBelowThreshold
     (K0 : Nat) :
@@ -177,9 +178,10 @@ theorem smallComplement_iff_nonempty_exactChainTargetsBelowThreshold
     exact Nonempty.intro (exactChainThresholdEvidence_of_smallComplement small).chain
   case mpr =>
     intro chain
-    rcases chain with ⟨chain⟩
-    exact smallComplement_of_exactChainThresholdEvidence
-      { chain := chain }
+    cases chain with
+    | intro chain =>
+        exact smallComplement_of_exactChainThresholdEvidence
+          { chain := chain }
 
 theorem smallComplement_of_exactChainTargetsBelowThreshold
     {K0 : Nat} (chain : ExactChainTargetsBelowThreshold K0) :
@@ -201,35 +203,35 @@ def smallLengthExactBlockTargetsOfSmallComplementSix
     simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 1
         (by
-          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
+          unfold blockThresholdSix SmallComplementConcreteBlocksW17.blockThresholdSix
           norm_num)
         (by norm_num)
   lengthTwo := by
     simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 2
         (by
-          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
+          unfold blockThresholdSix SmallComplementConcreteBlocksW17.blockThresholdSix
           norm_num)
         (by norm_num)
   lengthThree := by
     simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 3
         (by
-          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
+          unfold blockThresholdSix SmallComplementConcreteBlocksW17.blockThresholdSix
           norm_num)
         (by norm_num)
   lengthFour := by
     simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 4
         (by
-          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
+          unfold blockThresholdSix SmallComplementConcreteBlocksW17.blockThresholdSix
           norm_num)
         (by norm_num)
   lengthFive := by
     simpa [ExactBlockTarget] using
       exactBlockTargetsBelowThreshold_of_smallComplement small 5
         (by
-          rw [SmallComplementConcreteBlocksW17.blockThresholdSix]
+          unfold blockThresholdSix SmallComplementConcreteBlocksW17.blockThresholdSix
           norm_num)
         (by norm_num)
 
@@ -241,10 +243,11 @@ theorem smallComplement_six_iff_nonempty_smallLengthExactBlockTargets :
     exact Nonempty.intro (smallLengthExactBlockTargetsOfSmallComplementSix small)
   case mpr =>
     intro C
-    rcases C with ⟨C⟩
-    exact
-      SmallComplementConcreteBlocksW17.smallComplement_six_of_smallLengthExactBlockTargets
-        C
+    cases C with
+    | intro C =>
+        exact
+          SmallComplementConcreteBlocksW17.smallComplement_six_of_smallLengthExactBlockTargets
+            C
 
 theorem smallComplement_six_of_smallLengthExactBlockTargets
     (C : SmallLengthExactBlockTargets) :

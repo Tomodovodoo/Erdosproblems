@@ -29,10 +29,10 @@ variable {n : Nat}
 
 abbrev CanonicalGraph (C : _root_.UDConfig n) :
     FaceReduction.CanonicalStraightLineUnitDistanceGraph n :=
-  BoundaryTopologySourceW21.CanonicalGraph C
+  JordanTopologyFactsConcrete.canonicalGraph C
 
 abbrev ConcreteTopologyFacts (C : _root_.UDConfig n) :=
-  JordanTopologyFactsConcrete.TopologyFacts C
+  JordanTopologyFactsConcrete.TopologyFacts.{0} C
 
 abbrev TriangleRunSourceFields
     (C : _root_.UDConfig n)
@@ -76,7 +76,7 @@ theorem concreteTopologyFacts_of_frontier
 
 theorem concreteTopologyFacts_of_outerBoundaryCore
     {C : _root_.UDConfig n}
-    (P : OuterBoundaryCore (CanonicalGraph C)) :
+    (P : OuterBoundaryCore.{0} (CanonicalGraph C)) :
     Nonempty (ConcreteTopologyFacts C) :=
   Nonempty.intro (JordanTopologyFactsConcrete.TopologyFacts.ofCore P)
 
@@ -136,16 +136,6 @@ def toW21SourceFields
     rw [JordanTopologyFactsConcrete.TopologyFacts.ofExtractionData_toExtractionData]
     exact P.triangleRun
 
-def toExtractionSourceFields
-    (P : ConcreteJordanBoundaryTriangleRunSourceFields.{u} C hmin) :
-    ConcreteJordanBoundaryExtractionSourceFields.{u} C hmin where
-  topology := P.topology
-  outerAngleBounds := P.outerAngleBounds
-  Subpolygon := P.Subpolygon
-  subpolygonData := P.subpolygonData
-  longArc := P.longArc
-  arcExtraction := P.triangleRun.toFiniteWalkData.toBoundaryArcExtractionFields
-
 def ofW21SourceFields
     (P : TriangleRunSourceFields.{u} C hmin) :
     ConcreteJordanBoundaryTriangleRunSourceFields.{u} C hmin where
@@ -190,7 +180,7 @@ structure ConcreteJordanBoundaryExtractionSourceFields
       (topology.toPlanarBoundaryData outerAngleBounds Subpolygon
         subpolygonData)
   arcExtraction :
-    BoundaryArcExtractionProofW15.BoundaryArcExtractionFields
+    TopologyToBoundaryArcW14.BoundaryArcExtractionFields
       (topology.toPlanarBoundaryData outerAngleBounds Subpolygon
         subpolygonData)
 
@@ -228,7 +218,7 @@ def toW21SourceFields
     exact P.longArc
   arcExtraction := by
     change
-      BoundaryArcExtractionProofW15.BoundaryArcExtractionFields
+      TopologyToBoundaryArcW14.BoundaryArcExtractionFields
         ((JordanTopologyFactsConcrete.TopologyFacts.ofExtractionData
             P.topology.toExtractionData).toPlanarBoundaryData
           P.outerAngleBounds P.Subpolygon P.subpolygonData)
@@ -281,6 +271,23 @@ theorem nonempty_w21SourceFields
 
 end ConcreteJordanBoundaryExtractionSourceFields
 
+namespace ConcreteJordanBoundaryTriangleRunSourceFields
+
+variable {C : _root_.UDConfig n}
+variable {hmin : MinimalGraphFacts.IsMinimalClearedFailure C}
+
+def toExtractionSourceFields
+    (P : ConcreteJordanBoundaryTriangleRunSourceFields.{u} C hmin) :
+    ConcreteJordanBoundaryExtractionSourceFields.{u} C hmin where
+  topology := P.topology
+  outerAngleBounds := P.outerAngleBounds
+  Subpolygon := P.Subpolygon
+  subpolygonData := P.subpolygonData
+  longArc := P.longArc
+  arcExtraction := P.triangleRun.toFiniteWalkData.toBoundaryArcExtractionFields
+
+end ConcreteJordanBoundaryTriangleRunSourceFields
+
 /-! ## Family conversions -/
 
 structure ConcreteJordanBoundaryTriangleRunSourceFamily : Type (u + 1) where
@@ -295,11 +302,6 @@ def toW21SourceFamily
     (F : ConcreteJordanBoundaryTriangleRunSourceFamily.{u}) :
     TriangleRunSourceFamily.{u} where
   row := fun C hmin => (F.row C hmin).toW21SourceFields
-
-def toExtractionSourceFamily
-    (F : ConcreteJordanBoundaryTriangleRunSourceFamily.{u}) :
-    ConcreteJordanBoundaryExtractionSourceFamily.{u} where
-  row := fun C hmin => (F.row C hmin).toExtractionSourceFields
 
 theorem nonempty_w21SourceFamily
     (F : ConcreteJordanBoundaryTriangleRunSourceFamily.{u}) :
@@ -332,6 +334,15 @@ theorem nonempty_w21SourceFamily
   Nonempty.intro F.toW21SourceFamily
 
 end ConcreteJordanBoundaryExtractionSourceFamily
+
+namespace ConcreteJordanBoundaryTriangleRunSourceFamily
+
+def toExtractionSourceFamily
+    (F : ConcreteJordanBoundaryTriangleRunSourceFamily.{u}) :
+    ConcreteJordanBoundaryExtractionSourceFamily.{u} where
+  row := fun C hmin => (F.row C hmin).toExtractionSourceFields
+
+end ConcreteJordanBoundaryTriangleRunSourceFamily
 
 def concreteTriangleRunSourceFamilyOfW21
     (F : TriangleRunSourceFamily.{u}) :
