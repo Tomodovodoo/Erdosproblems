@@ -31,15 +31,15 @@ Last verification recorded in this file:
 
 ```text
 elan run leanprover/lean4:v4.28.0 lake build
-Build completed successfully (8197 jobs).
+Build completed successfully (8240 jobs).
 
 Lean source forbidden-token scan over ErdosProblems1066/ and
 ErdosProblems1066.lean: clean.
 
-Root import coverage: 170 imported modules for 170 Lean files under
+Root import coverage: 213 imported modules for 213 Lean files under
 ErdosProblems1066/.
 
-CI-style axiom audit: passed for 250 declarations; every checked declaration
+CI-style axiom audit: passed for 263 declarations; every checked declaration
 reports only Lean/mathlib base axioms `propext`, `Classical.choice`, and
 `Quot.sound`.
 
@@ -55,22 +55,62 @@ Encoding scan for common mojibake markers in Lean files: clean.
   - Recent non-rigid Pach--Toth route modules imported:
     `PachToth.NonRigidClosedPlacementInterface`,
     `PachToth.RoleHingeTransitionSearch`,
+    `PachToth.RoleHingeConnectorAlgebra`,
+    `PachToth.RoleHingeAngleCertificates`,
+    `PachToth.RoleHingeSameBlockAlgebra`,
+    `PachToth.RoleHingeFiniteFamilyBridge`,
+    `PachToth.RoleHingeConcreteSearch`,
+    `PachToth.RoleHingeInterfaceRefinement`,
     `PachToth.IndexedCrossBlockTableConcrete`,
     `PachToth.CrossBlockDistanceSqReduction`,
+    `PachToth.CrossBlockSqTableSearch`,
+    `PachToth.CrossBlockUpperTriangleConcrete`,
+    `PachToth.CrossBlockPolynomialNormalization`,
+    `PachToth.NonRigidConnectorSeparationFacts`,
     `PachToth.ClosedPlacementNonRigidComponents`,
-    `PachToth.PeriodWordCertificates`, and
-    `PachToth.TranslatedEquationObstruction`.
+    `PachToth.ClosedPlacementComponentsAssembly`,
+    `PachToth.SplitArbitraryNNonRigidBridge`,
+    `PachToth.PeriodWordCertificates`,
+    `PachToth.PeriodEquationConcreteSearch`,
+    `PachToth.ConcretePeriodCandidateSearch`,
+    `PachToth.EventualRoleHingeClosure`, and
+    `PachToth.ExactFiveSixteenRouteMatrix`.
   - Recent Swanepoel M8 assembly modules imported:
     `Swanepoel.M8ConstructionDataBridge`,
     `Swanepoel.MinimalFailureComponentPackage`,
+    `Swanepoel.MinimalFailureFactsFamilyConcrete`,
+    `Swanepoel.M8PaperFactsAssemblyRefined`,
+    `Swanepoel.MinimalFailurePaperFactMatrix`,
     `Swanepoel.M8TurnWindowNoEarlyFinal`,
     `Swanepoel.BoundaryFaceCountingToM8`,
     `Swanepoel.BoundaryLabelExtractionTasks`,
+    `Swanepoel.BoundarySpineConcrete`,
+    `Swanepoel.BoundaryLabelCertificateAssembly`,
     `Swanepoel.CutVertexSlackFromDeletion`,
-    `Swanepoel.JordanBoundaryExtraction`, and
-    `Swanepoel.Lemma8CombinatoricsConcrete`.
+    `Swanepoel.CutVertexPayForCutArithmetic`,
+    `Swanepoel.CutVertexSideCardFromMinimality`,
+    `Swanepoel.JordanBoundaryExtraction`,
+    `Swanepoel.JordanBoundaryConcrete`,
+    `Swanepoel.JordanTopologyFactsConcrete`,
+    `Swanepoel.Lemma8CombinatoricsConcrete`,
+    `Swanepoel.Lemma8NeighborExtractionConcrete`,
+    `Swanepoel.Lemma8ExistenceConcrete`,
+    `Swanepoel.Lemma8CyclicOrderConcrete`,
+    `Swanepoel.Lemma8DegreeSixConcrete`,
+    `Swanepoel.Lemma8ForbiddenDistinctConcrete`,
+    `Swanepoel.BoundarySpineFiniteCertificate`,
+    `Swanepoel.NonconcaveArcConcrete`,
+    `Swanepoel.NonconcaveArcAngleFacts`,
+    `Swanepoel.NonconcaveArcBudgetFromBoundary`,
+    `Swanepoel.NoEarlyTripleFromLemma9`,
+    `Swanepoel.NoEarlyTripleObstructionConcrete`,
+    `Swanepoel.Figure8ContainmentConcrete`,
+    `Swanepoel.Figure8EuclideanFactsConcrete`,
+    `Swanepoel.Figure8ContainmentAngleBudget`,
+    `Swanepoel.Figure9ContainmentConcrete`, and
+    `Swanepoel.Figure9EuclideanFactsConcrete`.
   - Current root target build succeeds and root import coverage is complete:
-    170 imported package modules for 170 Lean files under
+    213 imported package modules for 213 Lean files under
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/`.
 
 - [x] Import and scan the current-wave interface modules.
@@ -91,7 +131,49 @@ Encoding scan for common mojibake markers in Lean files: clean.
     `Swanepoel.M8MinimalFailureEliminatorInterface`,
     `Swanepoel.M8TurnBoundsFromArc`,
     `Swanepoel.M8WindowGeometryFromContainment`,
-    `Swanepoel.PlanarBoundaryClosure`, and
+    `Swanepoel.PlanarBoundaryClosure`,
+    `PachToth.RoleHingeConnectorAlgebra`,
+    `PachToth.RoleHingeAngleCertificates`,
+    `PachToth.RoleHingeSameBlockAlgebra`,
+    `PachToth.RoleHingeFiniteFamilyBridge`,
+    `PachToth.RoleHingeConcreteSearch`,
+    `PachToth.RoleHingeInterfaceRefinement`,
+    `PachToth.CrossBlockSqTableSearch`,
+    `PachToth.CrossBlockUpperTriangleConcrete`,
+    `PachToth.CrossBlockPolynomialNormalization`,
+    `PachToth.NonRigidConnectorSeparationFacts`,
+    `PachToth.PeriodEquationConcreteSearch`,
+    `PachToth.ConcretePeriodCandidateSearch`,
+    `PachToth.EventualRoleHingeClosure`,
+    `PachToth.SplitArbitraryNNonRigidBridge`,
+    `PachToth.ClosedPlacementComponentsAssembly`,
+    `PachToth.ExactFiveSixteenRouteMatrix`,
+    `PachToth.FiniteCertificateObligationSummary`,
+    `Swanepoel.BoundarySpineConcrete`,
+    `Swanepoel.BoundarySpineFiniteCertificate`,
+    `Swanepoel.BoundaryLabelCertificateAssembly`,
+    `Swanepoel.JordanBoundaryConcrete`,
+    `Swanepoel.JordanTopologyFactsConcrete`,
+    `Swanepoel.NonconcaveArcConcrete`,
+    `Swanepoel.NonconcaveArcAngleFacts`,
+    `Swanepoel.NonconcaveArcBudgetFromBoundary`,
+    `Swanepoel.NoEarlyTripleFromLemma9`,
+    `Swanepoel.NoEarlyTripleObstructionConcrete`,
+    `Swanepoel.MinimalFailureFactsFamilyConcrete`,
+    `Swanepoel.M8PaperFactsAssemblyRefined`,
+    `Swanepoel.MinimalFailurePaperFactMatrix`,
+    `Swanepoel.CutVertexPayForCutArithmetic`,
+    `Swanepoel.CutVertexSideCardFromMinimality`,
+    `Swanepoel.Lemma8NeighborExtractionConcrete`,
+    `Swanepoel.Lemma8ExistenceConcrete`,
+    `Swanepoel.Lemma8CyclicOrderConcrete`,
+    `Swanepoel.Lemma8DegreeSixConcrete`,
+    `Swanepoel.Lemma8ForbiddenDistinctConcrete`,
+    `Swanepoel.Figure8ContainmentConcrete`,
+    `Swanepoel.Figure8EuclideanFactsConcrete`,
+    `Swanepoel.Figure8ContainmentAngleBudget`,
+    `Swanepoel.Figure9ContainmentConcrete`,
+    `Swanepoel.Figure9EuclideanFactsConcrete`, and
     `Swanepoel.FinalConditional`.
   - Current scan status: the full-tree forbidden-token scan is clean.
 
@@ -438,6 +520,14 @@ theorem unitDistanceSimpleGraph_noCutVertex_of_minimalFailure
   - Conditional status: this still does not prove the all-cut-vertex slack
     package from minimality; that is the remaining no-cut payload.
 
+- [x] Add cut-vertex pay-for-cut arithmetic reducer.
+  - File:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexPayForCutArithmetic.lean`.
+  - Current state: imported, build-checked, scan-clean, and covered by the
+    current root build surface.
+  - Conditional status: it is arithmetic/reduction plumbing for the remaining
+    cut-vertex slack route; the geometric slack facts still need proof.
+
 #### S4. Build honest outer-boundary and subpolygon data
 
 - [x] Add a lightweight boundary-walk bridge to Mathlib polygons.
@@ -723,12 +813,20 @@ Lemma10WindowGeometry.honestE22_E23_of_leftWindowGeometry
     window-containment lemmas.
 
 - [x] Add containment-to-M8 window geometry adapter.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8WindowGeometryFromContainment.lean`.
-  - Current state: imported, build-checked, scan-clean, and covered by the
-    axiom audit.  It repackages supplied Figure 8/Figure 9 containment
-    interfaces into the window-geometry fields consumed by
-    `M8ConstructionInterface`.
+  - Files:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8WindowGeometryFromContainment.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8ContainmentConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8EuclideanFactsConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8ContainmentAngleBudget.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9EuclideanFactsConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9ContainmentAngleBudget.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9ContainmentConcrete.lean`.
+  - Current state: imported, build-checked, scan-clean, and compatible with
+    the current CI-style axiom audit.  It repackages supplied Figure 8/Figure 9 containment
+    interfaces, concrete contained-witness data, and angle-budget wrappers
+    into the window-geometry fields consumed by `M8ConstructionInterface`;
+    the Figure 9 module now builds after the witness-alias type mismatch was
+    corrected.
   - Conditional status: the concrete containment interfaces and extracted
     distance data still need to be proved from the boundary/broken-lattice
     geometry.
@@ -767,14 +865,20 @@ Lemma10WindowGeometry.honestE22_E23_of_leftWindowGeometry
   - Files:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8LabelsFromBoundaryInterface.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnBoundsFromArc.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcAngleFacts.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcBudgetFromBoundary.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8LateTriplesFromNoEarly.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoEarlyTripleFromLemma9.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoEarlyTripleObstructionConcrete.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8MinimalFailureEliminatorInterface.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/FinalConditional.lean`.
-  - Current state: imported, build-checked, scan-clean, and covered by the
-    axiom audit.  These files package the structural boundary/no-cut/degree
-    context, explicit Lemma 8 labels, nonconcave-arc turn data, no-early
-    triple exclusions, and final separated M8 eliminator into the current
-    conditional Swanepoel target route.
+  - Current state: imported, build-checked, scan-clean, and compatible with
+    the current CI-style axiom audit.  These files package the structural boundary/no-cut/degree
+    context, explicit Lemma 8 labels, concrete nonconcave-arc angle
+    inequalities, boundary-attached turn-budget reducers, Lemma 9-shaped
+    no-early triple exclusions, obstruction bookkeeping, and final separated
+    M8 eliminator into the current conditional Swanepoel target route.
   - Conditional status: the paper Lemma 8 combinatorics, nonconcave arc,
     no-early-triple proof, containment data, and separated M8 construction
     fields still must be constructed from an actual minimal cleared failure.
@@ -783,14 +887,29 @@ Lemma10WindowGeometry.honestE22_E23_of_leftWindowGeometry
   - Files:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8ConstructionDataBridge.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureComponentPackage.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureFactsFamilyConcrete.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnWindowNoEarlyFinal.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryFaceCountingToM8.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryLabelExtractionTasks.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundarySpineConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundarySpineFiniteCertificate.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryLabelCertificateAssembly.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexSlackFromDeletion.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexSideCardFromMinimality.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanBoundaryExtraction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8CombinatoricsConcrete.lean`.
-  - Current state: imported, build-checked, scan-clean, and representative
-    declarations are covered by the axiom audit.
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanBoundaryConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanTopologyFactsConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/PlanarBoundaryFaceDataRefinement.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8CombinatoricsConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8NeighborExtractionConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8ExistenceConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8CyclicOrderConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8DegreeSixConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8ForbiddenDistinctConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8PaperFactsAssemblyRefined.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailurePaperFactMatrix.lean`.
+  - Current state: imported, build-checked, scan-clean, and compatible with
+    the current CI-style axiom audit.
   - Current purpose: the remaining Swanepoel construction has been narrowed to
     the explicit `MinimalFailureM8PaperFacts` fields: positive cardinality,
     cut-vertex slack, planar boundary/Jordan data, the M8 boundary spine,
@@ -1064,13 +1183,23 @@ def concreteSameOppositeTransitionRealization :
 - [x] Add non-rigid/role-hinged transition and closed-placement wrappers.
   - Files:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeTransitionSearch.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeConnectorAlgebra.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeAngleCertificates.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeSameBlockAlgebra.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeFiniteFamilyBridge.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeConcreteSearch.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeInterfaceRefinement.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/NonRigidClosedPlacementInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedPlacementNonRigidComponents.lean`.
-  - Current state: imported, build-checked, scan-clean, and representative
-    declarations are covered by the axiom audit.
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedPlacementNonRigidComponents.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedPlacementComponentsAssembly.lean`.
+  - Current state: imported, build-checked, scan-clean, and compatible with
+    the current CI-style axiom audit.
   - Current purpose: these modules route explicit non-rigid point/orbit
     fields and role-hinged transition facts to closed placements, exact-block
-    targets, and exact-family targets without using the contradictory
+    targets, and exact-family targets; the newest algebra layers expose
+    connector-port unit facts, exact-local same-block square-distance
+    obligations, role-hinge interface refinements, component assembly, and a
+    concrete role-angle search facade without using the contradictory
     translated four-equation data.
   - Conditional status: concrete role-angle maps, same-block preservation,
     successor connector unit edges, and global separation are still fields to
@@ -1163,12 +1292,15 @@ theorem GeneratedClosedChainReduction.targetUpperConstructionFiveSixteen_of_gene
   - Files:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodWordCertificates.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/IndexedCrossBlockTableConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockDistanceSqReduction.lean`.
-  - Current state: imported, build-checked, scan-clean, and representative
-    declarations are covered by the axiom audit.
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockDistanceSqReduction.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/NonRigidConnectorSeparationFacts.lean`.
+  - Current state: imported, build-checked, scan-clean, and compatible with
+    the current CI-style axiom audit.
   - Current purpose: period words/equations and finite indexed cross-block
     inequalities now have direct table-style Lean surfaces, including a
-    squared-distance reducer for generated cross-block lower bounds.
+    squared-distance reducer for generated cross-block lower bounds, plus
+    connector-pair separation so finite tables only have to cover remaining
+    non-connector cross-block pairs.
   - Conditional status: the actual finite period equations and the lower-bound
     inequalities for every distinct block pair remain to be proved.
 
@@ -1193,15 +1325,25 @@ theorem GeneratedClosedChainReduction.targetUpperConstructionFiveSixteen_of_gene
   - Files:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/EquationTransitionClosure.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockLowerBoundsInterface.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockSqTableSearch.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockUpperTriangleConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockPolynomialNormalization.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodCertificateExamples.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodEquationConcreteSearch.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ConcretePeriodCandidateSearch.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/EventualRoleHingeClosure.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ExactFiveSixteenRouteMatrix.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FiniteCertificateObligationSummary.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FinalConditional.lean`.
-  - Current state: imported, build-checked, scan-clean, and covered by the
-    axiom audit.  The files route explicit connector equations, same-block
-    distance preservation, finite period-search certificates, and quantitative
-    cross-block lower-bound tables into the strongest current conditional
+  - Current state: imported, build-checked, scan-clean, and compatible with
+    the current CI-style axiom audit.  The files route explicit connector equations, same-block
+    distance preservation, finite period-search certificates/candidates,
+    normalized cross-block square-distance tables, obligation summaries, and
+    quantitative lower-bound tables into the strongest current conditional
     Pach-Toth exact/arbitrary target facades.
   - Conditional status: they still require actual same/opposite transition
-    data, period certificates, and cross-block lower-bound inequalities.
+    data, period certificates/equations, and cross-block lower-bound
+    inequalities.
 
 - [ ] Prove sufficiently-large closed placement certificates.
   - Best home: `ClosedChainExistence.lean`.
@@ -1250,6 +1392,7 @@ theorem exists_explicitClosedPlacementCertificate
   - Files:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SmallCaseReduction.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SmallCaseCertificates.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SplitArbitraryNNonRigidBridge.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SplitRealizationClosure.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeometricSoundness.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PlacementBridge.lean`.
@@ -1372,14 +1515,14 @@ project-local proof obligations.
 - [x] Every `.lean` source file under
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066` is imported by
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`.
-  - Current coverage: 142 imported modules for 142 Lean files.
+  - Current coverage: 213 imported modules for 213 Lean files.
 - [x] Pinned build succeeds.
-  - Current command succeeded for the root target with 8169 jobs.
+  - Current command succeeded for the root target with 8240 jobs.
 - [x] Forbidden-token scan is clean over `ErdosProblems1066` and
   `ErdosProblems1066.lean`.
 - [x] CI-style axiom audit reports only `propext`, `Classical.choice`, and
   `Quot.sound`.
-  - Current audit: passed for 216 declarations after the current interface
+  - Current audit: passed for 263 declarations after the current interface
     wave was imported, build-checked, and scan-checked.
 - [x] `KnownBounds.lean` exposes only the theorems actually closed in Lean.
   - Next action: add no new public wrappers until the matching internal

@@ -77,6 +77,28 @@ theorem exactLocal_generatedBaseSameBlockIsometry :
   intro u v
   exact BaseTransitionRealization.exactBase_same_block_isometry u v
 
+/-- Any block matching the exact local squared-distance table is a generated
+base same-block isometry. -/
+theorem generatedBaseSameBlockIsometry_of_sqDistances
+    {base : LocalVertex -> R2}
+    (hbase : MatchesExactLocalSqDistances base) :
+    GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base := by
+  intro u v
+  have hdist :=
+    matchesExactLocalDistances_of_sqDistances hbase u v
+  calc
+    _root_.eucDist (base u) (base v) =
+      _root_.eucDist
+        (ExactLocalGeometry.localPoint u)
+        (ExactLocalGeometry.localPoint v) := hdist
+    _ =
+      _root_.eucDist
+        (OneBlockSoundness.oneBlockCertificate.config.pts
+          (BlockPartition.localVertexEquivFin16 u))
+        (OneBlockSoundness.oneBlockCertificate.config.pts
+          (BlockPartition.localVertexEquivFin16 v)) := by
+        exact exactLocal_generatedBaseSameBlockIsometry u v
+
 /-- A transition preserves the exact local squared-distance table on the
 sources that already satisfy that table. -/
 def PreservesExactLocalSqDistances
@@ -175,6 +197,28 @@ def generatedMetricHypotheses_of_exactLocalSqDistances
     generatedSameBlockIsometry_of_exactLocalSqDistances
       O hk base orientation hbase htransition
 
+/-- Reduced generated metric hypotheses when the base block is checked by the
+exact local squared-distance table and the selected transitions preserve all
+same-block distances. -/
+def generatedReducedMetricHypotheses_of_sqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        O hk base orientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+        O) :
+    GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+      O hk base orientation where
+  separated := separated
+  base_same_block_isometry :=
+    generatedBaseSameBlockIsometry_of_sqDistances hbase
+  transition_preserves_same_block_distances := htransition
+
 /-- Role-hinge-search spelling of the exact-local squared-distance obligation. -/
 def RoleHingeTransitionsPreserveExactLocalSqDistances
     (F : RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts) :
@@ -261,6 +305,42 @@ def roleHingeGeneratedMetricHypotheses_of_exactLocalSqDistances
   same_block_isometry :=
     roleHingeGeneratedSameBlockIsometry_of_exactLocalSqDistances
       F hk orientation htransition
+
+/-- Role-hinge-search generated metric hypotheses obtained directly from the
+ordinary same-block preservation fields already stored in the search facts. -/
+def roleHingeGeneratedMetricHypotheses_of_preservesSameBlock
+    (F : RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        F.toFigure2TransitionObligations hk
+        ExactLocalGeometry.localPoint orientation) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      F.toFigure2TransitionObligations hk
+      ExactLocalGeometry.localPoint orientation :=
+  roleHingeGeneratedMetricHypotheses_of_exactLocalSqDistances
+    F hk orientation separated
+    (roleHingeTransitionsPreserveExactLocalSqDistances_of_preservesSameBlock F)
+
+/-- Role-hinge-search reduced metric hypotheses obtained directly from the
+ordinary same-block preservation fields already stored in the search facts. -/
+def roleHingeGeneratedReducedMetricHypotheses_of_preservesSameBlock
+    (F : RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        F.toFigure2TransitionObligations hk
+        ExactLocalGeometry.localPoint orientation) :
+    GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+      F.toFigure2TransitionObligations hk
+      ExactLocalGeometry.localPoint orientation :=
+  generatedReducedMetricHypotheses_of_sqDistances
+    F.toFigure2TransitionObligations hk
+    ExactLocalGeometry.localPoint orientation separated
+    exactLocal_matchesExactLocalSqDistances
+    F.preservesSameBlockDistances
 
 end
 

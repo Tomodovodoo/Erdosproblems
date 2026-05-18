@@ -7,7 +7,7 @@ set_option autoImplicit false
 # Connector-port algebra for role-hinged transitions
 
 This module exposes the connector facts that are automatic for a non-rigid
-role-hinged transition.  Once a connector target is realized as a unit hinge
+role-hinged transition. Once a connector target is realized as a unit hinge
 point from its named source, the corresponding connector edge has length one.
 
 For the two pairs of connector ports sharing a source, the remaining
@@ -87,11 +87,7 @@ theorem hinge_ports_unit_iff_cos_sub_eq_half
         (UnitVectorGeometry.hingePoint center phi) = 1 <->
       Real.cos (theta - phi) = 1 / 2 := by
   rw [HingeAlgebra.root_eucDist_hingePoint_hingePoint_eq_one_iff]
-  constructor
-  · intro h
-    nlinarith
-  · intro h
-    nlinarith
+  constructor <;> intro h <;> nlinarith
 
 /-- The two `p` connector ports are a unit edge exactly when the two `p`
 role angles satisfy the equilateral cosine equation. -/

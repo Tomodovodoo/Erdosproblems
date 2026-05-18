@@ -148,9 +148,9 @@ theorem E23_of_containmentInterface
 /-! ## Honest M8 projections -/
 
 /-- Honest M8 specialization of the explicit contained-witness predicate. -/
-def HonestFigure9AdjacentLeftContainedWitnesses
+abbrev HonestFigure9AdjacentLeftContainedWitnesses
     {V : Type u} {G : LocalGraph V}
-    (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Type :=
+    (P : M8HonestLocalPredicates G) (turn : Nat -> Real) :=
   Figure9AdjacentLeftContainedWitnesses
     (M8BrokenLatticeGood P.data) turn
 
@@ -161,7 +161,8 @@ def honestLeftWindowGeometry_of_containedWitnesses
     {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
     (H : HonestFigure9AdjacentLeftContainedWitnesses P turn) :
     HonestFigure9AdjacentLeftWindowGeometry P turn :=
-  leftWindowGeometry_of_containedWitnesses H
+  @leftWindowGeometry_of_containedWitnesses
+    (M8BrokenLatticeGood P.data) turn H
 
 /-- Honest M8 contained witnesses imply the named E23 lower-bound hypothesis. -/
 theorem honestE23_of_containedWitnesses

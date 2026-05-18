@@ -17,6 +17,7 @@ namespace PachToth
 namespace EventualRoleHingeClosure
 
 open FiniteGraph
+open GeneratedClosedChainEventualReduction
 
 noncomputable section
 
@@ -50,7 +51,7 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_and_s
           targetUpperConstructionFiveSixteenSmallUpTo N0) :
     targetUpperConstructionFiveSixteenArbitrary := by
   exact
-    GeneratedClosedChainEventualReduction.targetUpperConstructionFiveSixteenArbitrary_of_eventual_generated_chains_base_transitions
+    targetUpperConstructionFiveSixteenArbitrary_of_eventual_generated_chains_base_transitions
       K0
       (fun _k _hK _hk => T.toFigure2TransitionObligations)
       (fun _k _hK _hk => BaseTransitionRealization.exactBase)
@@ -139,7 +140,7 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_exist
 
 /-- Large-period existence form with small cases supplied by exact-chain
 certificates. -/
-theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_exists_and_exactChainSmallCases
+theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_exists_exactCases
     (K0 : Nat)
     (T : RoleHingeTransitions)
     (Hlarge :

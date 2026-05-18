@@ -1,0 +1,280 @@
+import ErdosProblems1066.Swanepoel.Figure8EuclideanFactsConcrete
+
+set_option autoImplicit false
+
+/-!
+# Figure 8 containment angle budget
+
+This file is a small projection layer over the concrete Figure 8 Euclidean
+facts.  The metric part proves that the central Figure 8 angle is at least
+`pi / 3`; the extra budget input is exactly that this central angle is
+contained in the separated turn window.  Together they give the separated
+turn lower bounds used as E22.
+-/
+
+noncomputable section
+
+namespace ErdosProblems1066
+namespace Swanepoel
+namespace Figure8ContainmentAngleBudget
+
+open AngleContainmentInterface
+open AngleBridgeFacts
+open AngleGeometry
+open Figure8ContainmentConcrete
+open Figure8EuclideanFactsConcrete
+open Lemma10AnalyticBridge
+open Lemma10Bridge
+open Lemma10EuclideanBridge
+open Lemma10Inequalities
+open Lemma10WindowGeometry
+open LocalConfigurations
+open M8ConstructionInterface
+open M8WindowGeometryFromContainment
+open MinimalGraphFacts
+
+universe u
+
+abbrev Point : Type :=
+  AngleGeometry.Point
+
+/-! ## Minimal angle-budget arithmetic -/
+
+/-- If a central angle is at least `pi / 3` and is contained in the separated
+turn window, then that separated turn window has the E22 lower bound. -/
+lemma pi_div_three_le_separatedTurn_of_central_angle_contained
+    {turn : Nat -> Real} {i j : Nat} {p qi qj : Point}
+    (hangle : Real.pi / 3 <= angleAt qi p qj)
+    (hcontained : angleAt qi p qj <= separatedTurn turn i j) :
+    Real.pi / 3 <= separatedTurn turn i j :=
+  le_trans hangle hcontained
+
+/-- Figure 8 distance data supplies the central-angle lower bound, so central
+angle containment is enough to force the separated turn lower bound. -/
+lemma separatedTurn_lower_of_distanceData_and_central_containment
+    {turn : Nat -> Real} {i j : Nat} {p qi qj s r : Point}
+    (D : Figure8DistanceData p qi qj s r)
+    (hcontained : angleAt qi p qj <= separatedTurn turn i j) :
+    Real.pi / 3 <= separatedTurn turn i j :=
+  pi_div_three_le_separatedTurn_of_central_angle_contained
+    (Figure8EuclideanFactsConcrete.central_angle_lower D)
+    hcontained
+
+/-! ## Pointwise central-angle budget -/
+
+/-- A single separated pair with Figure 8 distance data and the only remaining
+turn-budget input: containment of the central angle in the separated turn
+window. -/
+structure Figure8CentralAngleBudget
+    (turn : Nat -> Real) (i j : Nat) where
+  p : Point
+  qi : Point
+  qj : Point
+  s : Point
+  r : Point
+  distanceData : Figure8DistanceData p qi qj s r
+  central_angle_le_separatedTurn :
+    angleAt qi p qj <= separatedTurn turn i j
+
+namespace Figure8CentralAngleBudget
+
+variable {turn : Nat -> Real} {i j : Nat}
+
+/-- The metric part of a pointwise Figure 8 budget gives the central angle
+lower bound. -/
+theorem central_angle_lower (B : Figure8CentralAngleBudget turn i j) :
+    Real.pi / 3 <= angleAt B.qi B.p B.qj :=
+  Figure8EuclideanFactsConcrete.central_angle_lower B.distanceData
+
+/-- A pointwise Figure 8 central-angle budget gives the separated turn lower
+bound. -/
+theorem separatedTurn_lower (B : Figure8CentralAngleBudget turn i j) :
+    Real.pi / 3 <= separatedTurn turn i j :=
+  separatedTurn_lower_of_distanceData_and_central_containment
+    (p := B.p) (qi := B.qi) (qj := B.qj) (s := B.s) (r := B.r)
+    B.distanceData B.central_angle_le_separatedTurn
+
+/-- Forget the pointwise angle budget to the existing contained-data record. -/
+def toContainedData (B : Figure8CentralAngleBudget turn i j) :
+    Figure8SeparatedContainedData turn i j where
+  p := B.p
+  qi := B.qi
+  qj := B.qj
+  s := B.s
+  r := B.r
+  distanceData := B.distanceData
+  central_angle_le_separatedTurn := B.central_angle_le_separatedTurn
+
+end Figure8CentralAngleBudget
+
+/-! ## Uniform separated-window budget -/
+
+/-- Uniform pointwise Figure 8 central-angle budgets for every separated pair
+of failed comparisons. -/
+structure Figure8SeparatedAngleBudget
+    (good : Nat -> Prop) (turn : Nat -> Real) where
+  budget :
+    forall {i j : Nat},
+      1 <= i -> i + 1 < j -> j <= 10 ->
+      Not (good i) -> Not (good j) ->
+        Figure8CentralAngleBudget turn i j
+
+namespace Figure8SeparatedAngleBudget
+
+variable {good : Nat -> Prop} {turn : Nat -> Real}
+
+/-- Select the pointwise budget at one separated bad pair. -/
+def data (H : Figure8SeparatedAngleBudget good turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (good i)) (hbad_j : Not (good j)) :
+    Figure8CentralAngleBudget turn i j :=
+  H.budget hi hsep hj hbad_i hbad_j
+
+/-- Forget the uniform angle-budget package to the existing Figure 8
+contained-window facade. -/
+def toWindowContainment
+    (H : Figure8SeparatedAngleBudget good turn) :
+    Figure8SeparatedWindowContainment good turn where
+  containedData := by
+    intro i j hi hsep hj hbad_i hbad_j
+    exact (H.data hi hsep hj hbad_i hbad_j).toContainedData
+
+/-- Convert an existing selected-containment facade into the pointwise
+angle-budget package. -/
+def ofWindowContainment
+    (H : Figure8SeparatedWindowContainment good turn) :
+    Figure8SeparatedAngleBudget good turn where
+  budget := by
+    intro i j hi hsep hj hbad_i hbad_j
+    let D := H.data hi hsep hj hbad_i hbad_j
+    exact
+      { p := D.p
+        qi := D.qi
+        qj := D.qj
+        s := D.s
+        r := D.r
+        distanceData := D.distanceData
+        central_angle_le_separatedTurn :=
+          D.central_angle_le_separatedTurn }
+
+/-- Convert the concrete containment interface into the pointwise
+angle-budget package. -/
+def ofContainmentInterface
+    (H : Figure8SeparatedContainmentInterface good turn) :
+    Figure8SeparatedAngleBudget good turn :=
+  ofWindowContainment
+    (Figure8SeparatedWindowContainment.ofContainmentInterface H)
+
+/-- The uniform Figure 8 central-angle budgets give E22. -/
+theorem E22 (H : Figure8SeparatedAngleBudget good turn) :
+    Figure8SeparatedWindowLowerE22 good turn := by
+  intro i j hi hsep hj hbad_i hbad_j
+  exact (H.data hi hsep hj hbad_i hbad_j).separatedTurn_lower
+
+/-- Pointwise form of the E22 projection. -/
+theorem E22_apply
+    (H : Figure8SeparatedAngleBudget good turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (good i)) (hbad_j : Not (good j)) :
+    Real.pi / 3 <= separatedTurn turn i j :=
+  H.E22 hi hsep hj hbad_i hbad_j
+
+/-- E22 as the raw separated-failures turn-force interface. -/
+theorem separatedFailuresForceTurn
+    (H : Figure8SeparatedAngleBudget good turn) :
+    SeparatedFailuresForceTurn good turn :=
+  separatedFailuresForceTurn_of_E22 H.E22
+
+/-- Existing explicit Euclidean facts from `Figure8EuclideanFactsConcrete`
+also give E22 through this budget layer. -/
+theorem E22_of_explicitEuclideanFacts
+    (H : Figure8ExplicitEuclideanFacts good turn) :
+    Figure8SeparatedWindowLowerE22 good turn :=
+  H.E22
+
+/-- Existing explicit Euclidean facts also give the raw separated-failures
+turn-force interface. -/
+theorem separatedFailuresForceTurn_of_explicitEuclideanFacts
+    (H : Figure8ExplicitEuclideanFacts good turn) :
+    SeparatedFailuresForceTurn good turn :=
+  separatedFailuresForceTurn_of_E22 H.E22
+
+end Figure8SeparatedAngleBudget
+
+/-! ## `m = 8` specializations -/
+
+/-- Uniform Figure 8 angle budgets specialized to the local `m = 8`
+predicate package. -/
+def M8Figure8SeparatedAngleBudget
+    {V : Type u} {G : LocalGraph V}
+    (P : BrokenLatticePredicates G 8) (turn : Nat -> Real) : Type :=
+  Figure8SeparatedAngleBudget (M8BrokenLatticeGood P) turn
+
+/-- Uniform Figure 8 angle budgets specialized to an honest local `m = 8`
+package. -/
+def HonestFigure8SeparatedAngleBudget
+    {V : Type u} {G : LocalGraph V}
+    (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Type :=
+  M8Figure8SeparatedAngleBudget P.data turn
+
+/-- Local `m = 8` Figure 8 angle budgets give the local E22 hypothesis. -/
+theorem m8Figure8SeparatedWindowLowerE22_of_angleBudget
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure8SeparatedAngleBudget P turn) :
+    M8Figure8SeparatedWindowLowerE22 P turn :=
+  H.E22
+
+/-- Honest Figure 8 angle budgets give the honest E22 hypothesis. -/
+theorem honestFigure8SeparatedWindowLowerE22_of_angleBudget
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedAngleBudget P turn) :
+    HonestFigure8SeparatedWindowLowerE22 P turn :=
+  H.E22
+
+/-- Local `m = 8` Figure 8 angle budgets give the raw separated-failures
+turn-force interface. -/
+theorem m8SeparatedFailuresForceTurn_of_angleBudget
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure8SeparatedAngleBudget P turn) :
+    SeparatedFailuresForceTurn (M8BrokenLatticeGood P) turn :=
+  H.separatedFailuresForceTurn
+
+/-! ## Projections from existing M8 window-containment packages -/
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {localLabels : M8LocalLabels C}
+variable {turnBounds : M8TurnBounds}
+
+/-- The Figure 8 part of an M8 window-containment package as a uniform
+central-angle budget. -/
+def honestAngleBudget_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure8SeparatedAngleBudget
+      localLabels.predicates turnBounds.turn :=
+  Figure8SeparatedAngleBudget.ofWindowContainment
+    (Figure8ContainmentConcrete.honestContainment_of_m8WindowContainment W)
+
+/-- Projection to honest E22 through the angle-budget facade. -/
+theorem honestFigure8SeparatedWindowLowerE22_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure8SeparatedWindowLowerE22
+      localLabels.predicates turnBounds.turn :=
+  (honestAngleBudget_of_m8WindowContainment W).E22
+
+/-- Projection to the raw separated-failures turn-force interface through the
+angle-budget facade. -/
+theorem honestSeparatedFailuresForceTurn_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    SeparatedFailuresForceTurn
+      (M8BrokenLatticeGood localLabels.predicates.data)
+      turnBounds.turn :=
+  (honestAngleBudget_of_m8WindowContainment W).separatedFailuresForceTurn
+
+end Figure8ContainmentAngleBudget
+end Swanepoel
+end ErdosProblems1066
+
+end

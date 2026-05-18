@@ -1,0 +1,1523 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{titlesec}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=blue!60!black,
+  urlcolor=blue!60!black
+}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.6em}{}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newlist{lamport}{enumerate}{6}
+\setlist[lamport,1]{label=\textbf{\textless1\textgreater\arabic*.}, leftmargin=2.8em, itemsep=0.25em}
+\setlist[lamport,2]{label=\textbf{\textless2\textgreater\arabic*.}, leftmargin=2.8em, itemsep=0.2em}
+\setlist[lamport,3]{label=\textbf{\textless3\textgreater\arabic*.}, leftmargin=2.8em, itemsep=0.15em}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\om}{\omega}
+\newcommand{\Nb}{N}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\title{A Lamport-Style Proof Package for the Bound\\ $\boldsymbol{g(n)\ge \lceil 7n/27\rceil}$}
+\author{Prepared as a standalone proof document}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A Euclidean minimum-distance graph is the unit-distance graph of a finite point set in $\R^2$ whose pairwise distances are all at least $1$.  Let $g(n)$ be the minimum, over all such graphs on $n$ vertices, of the independence number.  This document gives a complete Lamport-style proof, relative to Swanepoel's published broken-lattice inputs, that every Euclidean minimum-distance graph $G$ satisfies
+\[
+  \alpha(G)\ge \frac{7}{27}|V(G)|.
+\]
+Equivalently,
+\[
+  g(n)\ge \left\lceil \frac{7n}{27}\right\rceil .
+\]
+The proof uses Swanepoel's structural theorem and Lemmas 8--10, specialized to $m=7$, and supplies the finite Euclidean incidence ledger needed to remove the unique possible $m=7$ broken-lattice obstruction.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Definitions and theorem}
+
+\begin{definition}[Euclidean minimum-distance graph]
+A graph $G$ is a Euclidean minimum-distance graph if its vertices are represented by a finite set $P\subset\R^2$ such that
+\[
+  |x-y|\ge 1\qquad(x,y\in P,\ x\ne y),
+\]
+and two vertices are adjacent exactly when their Euclidean distance is $1$.
+\end{definition}
+
+\begin{definition}[Open neighbourhood]
+For $S\subseteq V(G)$, let
+\[
+  N(S)=\{v\in V(G)\setminus S: v\text{ has a neighbour in }S\}
+\]
+be the open neighbourhood of $S$.
+\end{definition}
+
+\begin{definition}
+Let
+\[
+  g(n)=\min \alpha(G),
+\]
+where the minimum is over all Euclidean minimum-distance graphs on $n$ vertices.
+\end{definition}
+
+\begin{theorem}\label{thm:main}
+Every Euclidean minimum-distance graph $G$ satisfies
+\[
+  \alpha(G)\ge \frac{7}{27}|V(G)|.
+\]
+Consequently,
+\[
+  \alpha(G)\ge \left\lceil \frac{7|V(G)|}{27}\right\rceil
+\]
+and
+\[
+  g(n)\ge \left\lceil \frac{7n}{27}\right\rceil .
+\]
+\end{theorem}
+
+\section{Published Swanepoel input}
+
+The proof imports exactly the following Swanepoel facts from \cite{Swanepoel2002}.  The notation follows Swanepoel's broken-lattice proof.
+
+\begin{proposition}[Swanepoel package]\label{prop:swanepoel}
+Let $m\ge 5$, and let $G$ be a smallest counterexample to
+\[
+  \alpha(G)\ge \frac{m}{4m-1}|V(G)|.
+\]
+Then the following hold.
+
+\begin{lamport}
+\item There is a nonconcave boundary arc
+\[
+  p_0,p_1,\ldots,p_{2m-3}
+\]
+with total turn
+\[
+  \tau_1+\cdots+\tau_{2m-3}<\frac{\pi}{3}.
+\]
+Moreover,
+\[
+  \deg(p_0)=3,
+\]
+and
+\[
+  \deg(p_i)=4\qquad(1\le i\le 2m-3).
+\]
+For each edge $p_ip_{i+1}$ there is a unique common neighbour $q_i$.
+
+\item For $1\le i\le 2m-5$, Swanepoel's Lemma 8 gives exactly two neighbours $r_i,s_i$ of $q_i$ outside
+\[
+  \{p_i,p_{i+1},q_{i-1},q_{i+1}\},
+\]
+with unavailable endpoint $q$-terms omitted.
+
+\item If
+\[
+  s_i=r_{i+1}\qquad(i=a,a+1,a+2),
+\]
+then
+\[
+  a\ge 2m-10.
+\]
+This is the triple obstruction from Swanepoel's Theorem 4 / Lemma 9.
+
+\item The proof of Swanepoel's Lemma 9 also gives the cap
+\[
+ \left|N(s_{a+1})\setminus\{s_a,s_{a+2},q_{a+1},q_{a+2}\}\right|\le 2
+\]
+under the same three consecutive equalities.
+
+\item In the Euclidean plane, Swanepoel's Lemma 10 gives
+\[
+  s_i=r_{i+1}\qquad(1\le i\le 2m-6)
+\]
+for all but at most one index.  If $s_i\ne r_{i+1}$, then
+\[
+  \tau_i+2\tau_{i+1}+\tau_{i+2}\ge \frac{\pi}{3}.
+\]
+\end{lamport}
+\end{proposition}
+
+\begin{remark}
+The cap in item 4 is used below only for $t_5,t_6,t_7$.  It is a fact extracted from the proof of Swanepoel's Lemma 9, not from a separate theorem statement.  This distinction is important for the bookkeeping in the finite ledger.  The other background references are Pach--Toth's upper construction \cite{PachToth1996}, Csizmadia's earlier lower bound \cite{Csizmadia1998}, and Pollack's one-page note \cite{Pollack1985}.
+\end{remark}
+
+\section{Minimal-counterexample deletion criterion}
+
+\begin{lemma}[Deletion criterion]\label{lem:deletion}
+Let $G$ be a smallest counterexample to
+\[
+  \alpha(G)\ge \frac{7}{27}|V(G)|.
+\]
+If $S\subseteq V(G)$ is independent and
+\[
+  |N(S)|\le \floor{\frac{20|S|}{7}},
+\]
+then $G$ is not a counterexample.
+\end{lemma}
+
+\begin{proof}
+\begin{lamport}
+\item Let $n=|V(G)|$.
+\item Put
+\[
+  G'=G-(S\cup N(S)).
+\]
+\item By minimality,
+\[
+  \alpha(G')\ge \frac{7}{27}|V(G')|.
+\]
+\item Since $S$ has no edge to $G'$, an independent set in $G'$ can be joined with $S$. Hence
+\[
+  \alpha(G)\ge |S|+\alpha(G').
+\]
+\item Also,
+\[
+  |V(G')|=n-|S|-|N(S)|.
+\]
+\item Therefore
+\[
+\begin{aligned}
+  \alpha(G)
+  &\ge |S|+\frac{7}{27}(n-|S|-|N(S)|)\\
+  &=\frac{7n}{27}+\frac{20|S|-7|N(S)|}{27}.
+\end{aligned}
+\]
+\item If
+\[
+  |N(S)|\le \frac{20|S|}{7},
+\]
+then
+\[
+  20|S|-7|N(S)|\ge 0.
+\]
+\item Hence
+\[
+  \alpha(G)\ge \frac{7n}{27},
+\]
+contradiction.
+\end{lamport}
+\end{proof}
+
+\section{The m=7 broken-lattice setup}
+
+Assume, for contradiction, that $G$ is a smallest counterexample to Theorem~\ref{thm:main}.  Apply Proposition~\ref{prop:swanepoel} with $m=7$.  Then
+\[
+  2m-3=11,
+\]
+\[
+  2m-6=8,
+\]
+and
+\[
+  2m-10=4.
+\]
+Thus the boundary arc is
+\[
+  p_0,p_1,\ldots,p_{11}.
+\]
+
+\begin{lemma}[Unique $m=7$ break]\label{lem:unique-break}
+The unique possible failed equality among
+\[
+  s_i=r_{i+1}\qquad(1\le i\le 8)
+\]
+is
+\[
+  s_3\ne r_4.
+\]
+Consequently,
+\[
+  s_i=r_{i+1}\qquad i=1,2,4,5,6,7,8.
+\]
+\end{lemma}
+
+\begin{proof}
+\begin{lamport}
+\item By Proposition~\ref{prop:swanepoel}, at most one equality among
+\[
+  s_i=r_{i+1}\qquad(1\le i\le 8)
+\]
+fails.
+\item By the triple obstruction, a true triple beginning at $a$ forces
+\[
+  a\ge 4.
+\]
+\item Hence true triples beginning at $a=1,2,3$ are impossible.
+\item These triples are
+\[
+  (1,2,3),\quad (2,3,4),\quad (3,4,5).
+\]
+\item A single failed equality must hit all three triples.
+\item The only common index of these three triples is $3$.
+\item Hence the unique possible failed equality is
+\[
+  s_3\ne r_4.
+\]
+\end{lamport}
+\end{proof}
+
+Whenever $s_i=r_{i+1}$, write
+\[
+  t_i=s_i=r_{i+1}.
+\]
+Thus $t_i$ is defined for
+\[
+  i=1,2,4,5,6,7,8.
+\]
+
+\section{Coordinate conventions and elementary geometry}
+
+Identify $\R^2$ with $\C$, and put
+\[
+  \omega=e^{i\pi/3}.
+\]
+Let
+\[
+  e_i=p_{i+1}-p_i,
+  \qquad |e_i|=1.
+\]
+Orient the boundary arc so that
+\[
+  q_i=p_i+\omega e_i.
+\]
+Use the turn convention
+\[
+  e_{i+1}=e_i e^{-i\tau_{i+1}},
+  \qquad \tau_{i+1}\ge 0.
+\]
+The total turn is
+\[
+  \tau_1+\cdots+\tau_{11}<\frac{\pi}{3}.
+\]
+
+\begin{lemma}[Degree bound]\label{lem:degree-bound}
+Every vertex of $G$ has degree at most $6$.
+\end{lemma}
+
+\begin{proof}
+\begin{lamport}
+\item Let $v\in V(G)$.
+\item Every neighbour of $v$ lies on the unit circle centered at $v$.
+\item If $x,y\in N(v)$ are distinct, then $|x-y|\ge 1$.
+\item Let $\theta$ be the smaller angular separation between $x$ and $y$ about $v$. Then
+\[
+  |x-y|=2\sin(\theta/2).
+\]
+\item Hence
+\[
+  2\sin(\theta/2)\ge 1,
+\]
+so
+\[
+  \theta\ge \frac{\pi}{3}.
+\]
+\item At most six directions around a circle can have pairwise angular separation at least $\pi/3$.
+\item Therefore $\deg(v)\le 6$.
+\end{lamport}
+\end{proof}
+
+\begin{lemma}[Equality-strip coordinates]\label{lem:coordinates}
+If $s_i=r_{i+1}$, then
+\[
+  t_i=p_i+\omega(e_i+e_{i+1}).
+\]
+Moreover,
+\[
+  q_iq_{i+1}\in E(G) \iff \tau_{i+1}=0,
+\]
+and
+\[
+  t_it_{i+1}\in E(G) \iff \tau_{i+1}+\tau_{i+2}=0.
+\]
+\end{lemma}
+
+\begin{proof}
+\begin{lamport}
+\item Since $q_i=p_i+\omega e_i$, the two intersections of the unit circles centered at $q_i$ and $q_{i+1}$ are $p_{i+1}$ and
+\[
+  q_i+q_{i+1}-p_{i+1}.
+\]
+\item Therefore, on an equality strip,
+\[
+\begin{aligned}
+  t_i
+  &=q_i+q_{i+1}-p_{i+1}\\
+  &=(p_i+\omega e_i)+(p_{i+1}+\omega e_{i+1})-p_{i+1}\\
+  &=p_i+\omega(e_i+e_{i+1}).
+\end{aligned}
+\]
+\item Next,
+\[
+\begin{aligned}
+  q_{i+1}-q_i
+  &=e_i+\omega e_{i+1}-\omega e_i\\
+  &=(1-\omega)e_i+\omega e_{i+1}\\
+  &=\bar\omega e_i+\omega e_{i+1}.
+\end{aligned}
+\]
+\item The two summands are unit vectors. Their angle is
+\[
+  \frac{2\pi}{3}-\tau_{i+1}.
+\]
+\item Since $0\le \tau_{i+1}<\pi/3$, the sum has length $1$ exactly when this angle is $2\pi/3$, i.e. exactly when $\tau_{i+1}=0$.
+\item Thus
+\[
+  q_iq_{i+1}\in E(G)\iff \tau_{i+1}=0.
+\]
+\item Similarly,
+\[
+\begin{aligned}
+  t_{i+1}-t_i
+  &=p_{i+1}+\omega(e_{i+1}+e_{i+2})-p_i-\omega(e_i+e_{i+1})\\
+  &=e_i-\omega e_i+\omega e_{i+2}\\
+  &=\bar\omega e_i+\omega e_{i+2}.
+\end{aligned}
+\]
+\item The angle between these two unit summands is
+\[
+  \frac{2\pi}{3}-(\tau_{i+1}+\tau_{i+2}).
+\]
+\item Hence
+\[
+  t_it_{i+1}\in E(G)\iff \tau_{i+1}+\tau_{i+2}=0.
+\]
+\end{lamport}
+\end{proof}
+
+\begin{corollary}\label{cor:t4t5}
+If $t_4t_5\in E(G)$, then
+\[
+  \tau_5=\tau_6=0.
+\]
+After this, the following cases are exhaustive:
+\[
+  \tau_7>0,
+\]
+\[
+  \tau_7=0,\quad \tau_8+\tau_9>0,
+\]
+and
+\[
+  \tau_7=\tau_8=\tau_9=0.
+\]
+\end{corollary}
+
+\begin{proof}
+By Lemma~\ref{lem:coordinates},
+\[
+  t_4t_5\in E(G)\iff \tau_5+\tau_6=0.
+\]
+Since $\tau_5,\tau_6\ge0$, this is equivalent to $\tau_5=\tau_6=0$. The displayed trichotomy is the complete trichotomy for the nonnegative later turns $\tau_7,\tau_8,\tau_9$.
+\end{proof}
+
+\begin{lemma}[Forward cone]\label{lem:forward-cone}
+Rotate so that $e_a=1$. For every $j\ge a$, there exists $\phi_j\in[0,\pi/3)$ such that
+\[
+  e_j=e^{-i\phi_j}.
+\]
+Consequently,
+\[
+  \Re(e_j)>\frac12,
+\]
+and
+\[
+  \Re(\omega e_j)\ge\frac12.
+\]
+\end{lemma}
+
+\begin{proof}
+The total turn is $<\pi/3$, and all turns are nonnegative. Therefore every later edge direction is obtained from $e_a$ by a clockwise turn $\phi_j\in[0,\pi/3)$. Thus $e_j=e^{-i\phi_j}$. Hence $\Re(e_j)=\cos\phi_j>1/2$. Also $\omega e_j=e^{i(\pi/3-\phi_j)}$, with $0\le \pi/3-\phi_j\le \pi/3$, so $\Re(\omega e_j)\ge1/2$.
+\end{proof}
+
+\begin{lemma}[Triangular-lattice units]\label{lem:tri-units}
+Let
+\[
+  z=a+b\omega,
+  \qquad a,b\in\mathbb Z.
+\]
+Then
+\[
+  |z|^2=a^2+ab+b^2.
+\]
+The equation $|z|=1$ has exactly the six solutions
+\[
+  z\in\{\pm1,\pm\omega,\pm\omega^2\}.
+\]
+\end{lemma}
+
+\begin{proof}
+Since $\omega+\bar\omega=1$,
+\[
+\begin{aligned}
+  |a+b\omega|^2
+  &=(a+b\omega)(a+b\bar\omega)\\
+  &=a^2+ab(\omega+\bar\omega)+b^2\\
+  &=a^2+ab+b^2.
+\end{aligned}
+\]
+If $a^2+ab+b^2=1$, then
+\[
+  a^2+ab+b^2=\left(a+\frac b2\right)^2+\frac34b^2,
+\]
+so $|b|\le1$. If $b=0$, then $a=\pm1$. If $b=1$, then $a^2+a=0$, so $a=0$ or $a=-1$, giving $\omega$ or $\omega^2$. If $b=-1$, then $a^2-a=0$, so $a=0$ or $a=1$, giving $-\omega$ or $-\omega^2$. These are exactly the six listed vectors.
+\end{proof}
+
+\section{Boundary and endpoint neighbourhoods}
+
+\begin{lemma}\label{lem:boundary-neighborhoods}
+For $1\le i\le 10$,
+\[
+  N(p_i)=\{p_{i-1},p_{i+1},q_{i-1},q_i\}.
+\]
+Also, for some vertex $p_{-1}$,
+\[
+  N(p_0)=\{p_{-1},p_1,q_0\},
+\]
+and
+\[
+  N(p_{11})\subseteq \{p_{10},q_{10}\}\cup U_{11},
+  \qquad |U_{11}|\le2.
+\]
+\end{lemma}
+
+\begin{proof}
+For $1\le i\le10$, Proposition~\ref{prop:swanepoel} gives $\deg(p_i)=4$. The four displayed vertices are neighbours of $p_i$. We prove that they are distinct.
+
+First,
+\[
+  p_{i+1}-p_{i-1}=e_{i-1}+e_i.
+\]
+If $p_{i+1}=p_{i-1}$, then $e_i=-e_{i-1}$, requiring a turn of $\pi$, impossible because total turn is $<\pi/3$.
+
+Next,
+\[
+  q_{i-1}=p_{i-1}+\omega e_{i-1}=p_i+(\omega-1)e_{i-1}=p_i+\omega^2e_{i-1},
+\]
+so $q_{i-1}\ne p_i$. Similarly $q_i=p_i+\omega e_i\ne p_i$. Also $q_{i-1}-p_{i-1}=\omega e_{i-1}\ne0$ and $q_i-p_{i+1}=\omega^2e_i\ne0$.
+
+If $q_i=p_{i-1}$, then $\omega e_i=-e_{i-1}$, so $e_i=e^{2\pi i/3}e_{i-1}$, a counterclockwise turn $2\pi/3$, impossible. If $q_{i-1}=p_{i+1}$, then $e_i=\omega^2e_{i-1}$, again a counterclockwise turn $2\pi/3$, impossible. If $q_{i-1}=q_i$, then $e_i=\omega e_{i-1}$, a counterclockwise turn $\pi/3$, impossible.
+
+Thus the four displayed neighbours are distinct. Since $\deg(p_i)=4$, they are exactly all neighbours of $p_i$.
+
+For $p_0$, Proposition~\ref{prop:swanepoel} gives $\deg(p_0)=3$. The vertices $p_1,q_0$ are neighbours, so let $p_{-1}$ be the third neighbour. Then $N(p_0)=\{p_{-1},p_1,q_0\}$.
+
+For $p_{11}$, Proposition~\ref{prop:swanepoel} gives $\deg(p_{11})=4$. The vertices $p_{10},q_{10}$ are neighbours, so at most two further neighbours exist. Hence the stated inclusion.
+\end{proof}
+
+\begin{lemma}[Endpoint $q$-caps]\label{lem:endpoint-q-caps}
+\[
+  N(q_1)\subseteq \{p_1,p_2,q_0,q_2,t_1\}\cup U_1,
+  \qquad |U_1|\le1.
+\]
+Also,
+\[
+  N(q_9)\subseteq \{p_9,p_{10},q_8,q_{10},t_8\}\cup U_9,
+  \qquad |U_9|\le1.
+\]
+\end{lemma}
+
+\begin{proof}
+By Swanepoel Lemma 8, $q_1$ has exactly two extra neighbours outside $\{p_1,p_2,q_0,q_2\}$. One is $t_1=s_1=r_2$. Thus at most one extra neighbour remains, proving the first inclusion.
+
+Similarly, $q_9$ has exactly two extra neighbours outside $\{p_9,p_{10},q_8,q_{10}\}$. One is $t_8=s_8=r_9$. Thus at most one extra neighbour remains, proving the second inclusion.
+\end{proof}
+
+\section{Separation lemmas}
+
+\begin{lemma}[Boundary-boundary separation]\label{lem:bb-sep}
+If $b-a\ge2$, then
+\[
+  |p_b-p_a|>1.
+\]
+\end{lemma}
+
+\begin{proof}
+If $b=a+2$, then $p_b-p_a=e_a+e_{a+1}$, so
+\[
+  |p_b-p_a|=2\cos(\tau_{a+1}/2)>\sqrt3>1.
+\]
+If $b-a\ge3$, then $p_b-p_a=e_a+e_{a+1}+\cdots+e_{b-1}$. Project onto $e_a$. The first three terms contribute $1$, $>1/2$, and $>1/2$, so the projection is $>2>1$. Hence $|p_b-p_a|>1$.
+\end{proof}
+
+\begin{lemma}[Boundary-to-$q$ separation]\label{lem:bq-sep}
+If $a\notin\{b,b+1\}$, then
+\[
+  |p_a-q_b|>1.
+\]
+\end{lemma}
+
+\begin{proof}
+If $a<b$, then $q_b-p_a=e_a+\cdots+e_{b-1}+\omega e_b$. Project onto $e_a$. The $e_a$ term contributes $1$, and $\omega e_b$ contributes at least $1/2$. Hence the projection is $>1$.
+
+If $a>b+1$, then
+\[
+  p_a-q_b=e_b+\cdots+e_{a-1}-\omega e_b=\bar\omega e_b+e_{b+1}+\cdots+e_{a-1}.
+\]
+For $a=b+2$, the angle between $\bar\omega e_b$ and $e_{b+1}$ is $\pi/3-\tau_{b+1}\in[0,\pi/3]$, giving squared length at least $3$. For $a\ge b+3$, project onto $e_b$: the first three terms $\bar\omega e_b,e_{b+1},e_{b+2}$ contribute $1/2,>1/2,>1/2$, so the projection is $>3/2>1$.
+\end{proof}
+
+\begin{lemma}[Boundary-to-$t$ separation]\label{lem:bt-sep}
+Let
+\[
+  t_b=p_b+\omega(e_b+e_{b+1}).
+\]
+If $p_a$ is not one of the explicitly displayed local neighbours of $t_b$, then
+\[
+  |p_a-t_b|>1.
+\]
+\end{lemma}
+
+\begin{proof}
+If $a<b$, then
+\[
+  t_b-p_a=e_a+\cdots+e_{b-1}+\omega e_b+\omega e_{b+1}.
+\]
+Projecting onto $e_a$, the first $e$-term contributes $1$ and the two $\omega e$ terms each contribute at least $1/2$, so the projection is at least $2>1$.
+
+If $a=b$, then $t_b-p_b=\omega(e_b+e_{b+1})$, whose length is $2\cos(\tau_{b+1}/2)>\sqrt3>1$.
+
+If $a=b+1$, then
+\[
+  p_{b+1}-t_b=\bar\omega e_b-\omega e_{b+1}.
+\]
+Writing $e_{b+1}=e_b e^{-i\tau_{b+1}}$, this squared length is
+\[
+  2-2\cos\left(\frac{2\pi}{3}-\tau_{b+1}\right)>1,
+\]
+because $0\le\tau_{b+1}<\pi/3$.
+
+If $a=b+2$, then
+\[
+  p_{b+2}-t_b=\bar\omega(e_b+e_{b+1}),
+\]
+which has length $>\sqrt3$.
+
+If $a>b+2$, then
+\[
+  p_a-t_b=\bar\omega e_b+\bar\omega e_{b+1}+e_{b+2}+\cdots+e_{a-1}.
+\]
+Project onto $e_{b+2}$. The terms $e_{b+2}$, $\bar\omega e_{b+1}$, and $\bar\omega e_b$ contribute at least $1$, $1/2$, and $1/2$, respectively. Later terms have nonnegative projection. Hence the projection is at least $2>1$.
+\end{proof}
+
+\begin{lemma}[$q_7t_5$ separation]\label{lem:q7t5}
+If $t_4t_5\notin E(G)$, then
+\[
+  |q_7-t_5|>1.
+\]
+\end{lemma}
+
+\begin{proof}
+We prove $|q_7-t_5|\ge\sqrt3$. Since
+\[
+  q_7=p_7+\omega e_7
+\]
+and
+\[
+  t_5=p_5+\omega(e_5+e_6),
+\]
+we have
+\[
+  q_7-t_5=e_5+e_6+\omega e_7-\omega e_5-\omega e_6=\bar\omega(e_5+e_6)+\omega e_7.
+\]
+Rotate so $e_5=1$, and write
+\[
+  e_6=e^{-ia},\qquad e_7=e^{-i(a+b)},
+\]
+with $a,b\ge0$ and $a+b<\pi/3$. Multiplying by $\omega$ preserves length, so
+\[
+  |q_7-t_5|=|1+e^{-ia}+\omega^2e^{-i(a+b)}|.
+\]
+Let
+\[
+  F(a,b)=1+e^{-ia}+\omega^2e^{-i(a+b)}.
+\]
+Then
+\[
+  |F(a,b)|^2=3+2H(a,b),
+\]
+where
+\[
+  H(a,b)=\cos a+\cos\left(\frac{2\pi}{3}-b\right)+\cos\left(\frac{2\pi}{3}-a-b\right).
+\]
+For fixed $a$,
+\[
+  \frac{\partial H}{\partial b}=\sin\left(\frac{2\pi}{3}-b\right)+\sin\left(\frac{2\pi}{3}-a-b\right)\ge0,
+\]
+because both arguments lie in $(\pi/3,2\pi/3]$. Thus $H(a,b)$ is minimized at $b=0$.
+
+Now
+\[
+\begin{aligned}
+  H(a,0)
+  &=\cos a-\frac12+\cos\left(\frac{2\pi}{3}-a\right)\\
+  &=\frac12\cos a-\frac12+\frac{\sqrt3}{2}\sin a.
+\end{aligned}
+\]
+Therefore
+\[
+  2H(a,0)=\cos a+\sqrt3\sin a-1=2\cos(a-\pi/3)-1\ge0,
+\]
+because $0\le a<\pi/3$. Hence $H(a,b)\ge0$, so $|F(a,b)|^2\ge3$.
+\end{proof}
+
+\section{Cap lemmas}
+
+\begin{lemma}[Swanepoel $t$-caps]\label{lem:t-caps}
+\[
+  |N(t_5)\setminus\{t_4,t_6,q_5,q_6\}|\le2,
+\]
+\[
+  |N(t_6)\setminus\{t_5,t_7,q_6,q_7\}|\le2,
+\]
+and
+\[
+  |N(t_7)\setminus\{t_6,t_8,q_7,q_8\}|\le2.
+\]
+\end{lemma}
+
+\begin{proof}
+Apply the Swanepoel Lemma 9 cap from Proposition~\ref{prop:swanepoel} to the equality triples $(4,5,6)$, $(5,6,7)$, and $(6,7,8)$.
+
+For $t_5=s_5$, the cap set is $\{s_4,s_6,q_5,q_6\}=\{t_4,t_6,q_5,q_6\}$.
+For $t_6=s_6$, the cap set is $\{s_5,s_7,q_6,q_7\}=\{t_5,t_7,q_6,q_7\}$.
+For $t_7=s_7$, the cap set is $\{s_6,s_8,q_7,q_8\}=\{t_6,t_8,q_7,q_8\}$.
+\end{proof}
+
+\begin{lemma}[Fully flat port cap]\label{lem:flat-port}
+In the fully flat branch, every extra neighbour of $t_i$, $i=5,6,7$, outside the strip-neighbour set lies in one closed $60^\circ$-port. If the port is not saturated, it contributes at most one extra neighbour. If one endpoint is already present and the port is not saturated, it contributes no further extra neighbour. Consecutive saturated ports share one endpoint.
+\end{lemma}
+
+\begin{proof}
+Place $t_i=(0,0)$. The four forced strip-neighbour directions are
+\[
+  0^\circ,
+  \quad 180^\circ,
+  \quad 240^\circ,
+  \quad 300^\circ.
+\]
+An extra unit neighbour must be separated by at least $60^\circ$ from all four directions. The forbidden arcs are
+\[
+  (-60^\circ,60^\circ),
+\]
+\[
+  (120^\circ,240^\circ),
+\]
+\[
+  (180^\circ,300^\circ),
+\]
+and
+\[
+  (240^\circ,360^\circ).
+\]
+The only remaining arc is $[60^\circ,120^\circ]$. Thus every extra neighbour lies in that port.
+
+If two extra neighbours lie in that port, their angular separation is at most $60^\circ$. Since their mutual distance must be at least $1$, their angular separation is exactly $60^\circ$, so they are the two endpoints.
+
+If one endpoint is already present and another extra neighbour existed, then either it would be the other endpoint, saturating the port, or it would be an interior point at angular separation $<60^\circ$ from the endpoint, hence at distance $<1$, impossible. Therefore no further extra neighbour exists in that case.
+
+Finally,
+\[
+  t_i+\left(\frac12,\frac{\sqrt3}{2}\right)=t_{i+1}+\left(-\frac12,\frac{\sqrt3}{2}\right).
+\]
+Thus consecutive saturated ports share one endpoint.
+\end{proof}
+
+\begin{lemma}[Branch-qualified degree caps]\label{lem:degree-caps}
+In the fully flat branch, if the $t_7$-port is saturated, then
+\[
+  N(t_8)\subseteq \{q_8,q_9,t_7,x_7\}\cup U_8,
+  \qquad |U_8|\le2.
+\]
+In the all-saturated branch,
+\[
+  N(x_6)\subseteq \{t_6,t_7,x_5,x_7\}\cup V_6,
+  \qquad |V_6|\le2.
+\]
+In the branch where $t_6,t_7$ are saturated but $t_5$ is not,
+\[
+  N(x_6)\subseteq \{t_6,t_7,y_6,x_7\}\cup V_6,
+  \qquad |V_6|\le2.
+\]
+\end{lemma}
+
+\begin{proof}
+In fully flat coordinates,
+\[
+  t_8=3+2\omega.
+\]
+If the $t_7$-port is saturated, then $x_7=2+3\omega$. The vertices
+\[
+  q_8=3+\omega,
+  \quad q_9=4+\omega,
+  \quad t_7=2+2\omega,
+  \quad x_7=2+3\omega
+\]
+are at distance $1$ from $t_8$, since their differences from $t_8$ are $-\omega$, $1-\omega$, $-1$, and $-1+\omega$.  Since $\deg(t_8)\le6$, there are at most two further neighbours.
+
+For $x_6=1+3\omega$, in the all-saturated branch the vertices
+\[
+  t_6=1+2\omega,
+  \quad t_7=2+2\omega,
+  \quad x_5=3\omega,
+  \quad x_7=2+3\omega
+\]
+are at distance $1$ from $x_6$. Their differences are $-\omega$, $1-\omega$, $-1$, and $1$. Hence the degree-six bound gives at most two further neighbours.
+
+If $t_6,t_7$ are saturated but $t_5$ is not, then the actual left endpoint adjacent to $x_6$ is $y_6=3\omega$, not an actual saturated-port vertex $x_5$. The four known neighbours of $x_6$ are $t_6,t_7,y_6,x_7$, again with differences $-\omega$, $1-\omega$, $-1$, and $1$. Hence the degree-six bound gives at most two further neighbours.
+\end{proof}
+
+\begin{lemma}[Neighbourhood inclusion bookkeeping]\label{lem:inclusion}
+Let $S$ be independent. Suppose that for every $v\in S$,
+\[
+  N(v)\subseteq A\cup C_1\cup\cdots\cup C_r\cup S.
+\]
+Then
+\[
+  N(S)\subseteq A\cup C_1\cup\cdots\cup C_r.
+\]
+Consequently,
+\[
+  |N(S)|\le |A|+\sum_{j=1}^{r}|C_j|.
+\]
+\end{lemma}
+
+\begin{proof}
+If $x\in N(S)$, then $x\notin S$ and $x\in N(v)$ for some $v\in S$.  By the assumed inclusion, $x\in A\cup C_1\cup\cdots\cup C_r\cup S$. Since $x\notin S$, $x\in A\cup C_1\cup\cdots\cup C_r$.
+\end{proof}
+
+\section{The t4t5-absent branch}
+
+\begin{lemma}\label{lem:S0}
+If $t_4t_5\notin E(G)$, then
+\[
+  S_0=\{p_0,p_2,p_4,p_6,p_9,q_7,t_5\}
+\]
+is independent and
+\[
+  |N(S_0)|\le20.
+\]
+\end{lemma}
+
+\begin{proof}
+The selected boundary vertices are mutually nonadjacent by Lemma~\ref{lem:bb-sep}. They are nonadjacent to $q_7$ by Lemma~\ref{lem:bq-sep}, and nonadjacent to $t_5$ by Lemma~\ref{lem:bt-sep}. Finally, $q_7t_5\notin E(G)$ by Lemma~\ref{lem:q7t5}. Hence $S_0$ is independent.
+
+The selected boundary vertices contribute only
+\[
+  p_{-1},p_1,p_3,p_5,p_7,p_8,p_{10},q_0,q_1,q_2,q_3,q_4,q_5,q_6,q_8,q_9.
+\]
+The vertex $q_7$ contributes only
+\[
+  p_7,p_8,q_6,q_8,t_6,t_7.
+\]
+The vertex $t_5$ has displayed possible neighbours $t_4,t_6,q_5,q_6$, but $t_4t_5$ is absent. Thus it contributes $t_6,q_5,q_6$ plus at most two further neighbours by Lemma~\ref{lem:t-caps}.
+
+Let
+\[
+\begin{aligned}
+A_0=\{&p_{-1},p_1,p_3,p_5,p_7,p_8,p_{10},q_0,q_1,q_2,q_3,q_4,q_5,q_6,q_8,q_9,t_6,t_7\}.
+\end{aligned}
+\]
+Then $|A_0|\le18$, and
+\[
+  N(S_0)\subseteq A_0\cup C_5,
+  \qquad |C_5|\le2.
+\]
+Therefore
+\[
+  |N(S_0)|\le18+2=20.
+\]
+\end{proof}
+
+\section{The t4t5-present branch with tau7 positive}
+
+\begin{lemma}\label{lem:S1}
+Assume $t_4t_5\in E(G)$ and $\tau_7>0$. Then
+\[
+  S_1=\{p_6,p_8,q_4,t_5,t_6,t_7\}
+\]
+is independent and
+\[
+  |N(S_1)|\le17.
+\]
+\end{lemma}
+
+\begin{proof}
+By Corollary~\ref{cor:t4t5}, $\tau_5=\tau_6=0$. The boundary pair $p_6,p_8$ is nonadjacent by Lemma~\ref{lem:bb-sep}. They are nonadjacent to $q_4$ by Lemma~\ref{lem:bq-sep}, and nonadjacent to $t_5,t_6,t_7$ by Lemma~\ref{lem:bt-sep}.
+
+The unique break inequality gives
+\[
+  \tau_3+2\tau_4+\tau_5\ge\frac{\pi}{3}.
+\]
+Since $\tau_5=0$ and the total turn is $<\pi/3$, $\tau_4>0$. Hence $q_3q_4\notin E(G)$. By Swanepoel Lemma 8,
+\[
+  N(q_4)\subseteq \{p_4,p_5,q_3,q_5,r_4,s_4\}.
+\]
+Since $q_3q_4$ is absent and $s_4=t_4$,
+\[
+  N(q_4)\subseteq\{p_4,p_5,q_5,r_4,t_4\}.
+\]
+
+Normalize $p_4=0$ and $e_4=e_5=e_6=1$. Let $a=\tau_7>0$, $b=\tau_8\ge0$, with $a+b<\pi/3$. Then
+\[
+  q_4=\omega,
+\]
+\[
+  t_5=1+2\omega,
+\]
+\[
+  t_6=2+\omega(1+e^{-ia}),
+\]
+\[
+  t_7=3+\omega(e^{-ia}+e^{-i(a+b)}).
+\]
+Now $|t_5-q_4|=|1+\omega|=\sqrt3>1$. Also $t_6-q_4=2+\omega e^{-ia}$ has real part $2+\cos(\pi/3-a)>1$, so $|t_6-q_4|>1$. Likewise $t_7-q_4=3-\omega+\omega e^{-ia}+\omega e^{-i(a+b)}$ has real part $3-1/2+\cos(\pi/3-a)+\cos(\pi/3-a-b)>1$.
+
+By Lemma~\ref{lem:coordinates}, $t_5t_6$ is absent because $\tau_6+\tau_7>0$, and $t_6t_7$ is absent because $\tau_7+\tau_8>0$. Finally,
+\[
+  t_7-t_5=2\bar\omega+\omega(e^{-ia}+e^{-i(a+b)}).
+\]
+Projection in the $e_5$ direction gives
+\[
+  2\cos(\pi/3)+\cos(\pi/3-a)+\cos(\pi/3-a-b)>2.
+\]
+Hence $|t_7-t_5|>1$. So $S_1$ is independent.
+
+Let
+\[
+  A_1=\{p_4,p_5,p_7,p_9,q_5,q_6,q_7,q_8,r_4,t_4,t_8\}.
+\]
+Then $|A_1|\le11$. The non-capped neighbours lie in $A_1$, and $t_5,t_6,t_7$ have Swanepoel caps $C_5,C_6,C_7$, each of size at most $2$. Thus
+\[
+  N(S_1)\subseteq A_1\cup C_5\cup C_6\cup C_7,
+\]
+and
+\[
+  |N(S_1)|\le11+2+2+2=17.
+\]
+\end{proof}
+
+\section{The t4t5-present branch with tau7 zero and a later turn}
+
+\begin{lemma}\label{lem:S2}
+Assume $t_4t_5\in E(G)$, $\tau_7=0$, and $\tau_8+\tau_9>0$. Then
+\[
+  S_2=\{p_0,p_3,p_5,p_8,q_1,q_6,t_7\}
+\]
+is independent and
+\[
+  |N(S_2)|\le20.
+\]
+\end{lemma}
+
+\begin{proof}
+By Corollary~\ref{cor:t4t5}, $\tau_5=\tau_6=0$. The selected boundary vertices are mutually nonadjacent by Lemma~\ref{lem:bb-sep}. They are nonadjacent to $q_1,q_6$ by Lemma~\ref{lem:bq-sep}, and nonadjacent to $t_7$ by Lemma~\ref{lem:bt-sep}.
+
+Rotate so $e_1=1$. We have
+\[
+  q_6-q_1=e_1+e_2+e_3+e_4+e_5+\omega e_6-\omega e_1.
+\]
+Therefore
+\[
+  \Re(q_6-q_1)\ge5\cdot\frac12+\frac12-\frac12=\frac52>1.
+\]
+Thus $q_1q_6$ is absent.
+
+Next,
+\[
+  t_7-q_1=e_1+e_2+e_3+e_4+e_5+e_6+\omega e_7+\omega e_8-\omega e_1.
+\]
+Therefore
+\[
+  \Re(t_7-q_1)\ge6\cdot\frac12+\frac12+\frac12-\frac12=\frac72>1.
+\]
+Thus $q_1t_7$ is absent.
+
+Since $\tau_6=\tau_7=0$, $e_6=e_7$, and
+\[
+  t_7-q_6=e_6+\omega e_8.
+\]
+The angle between $e_6$ and $\omega e_8$ is $\pi/3-\tau_8$, so
+\[
+  |t_7-q_6|^2=2+2\cos(\pi/3-\tau_8)\ge3>1.
+\]
+Thus $q_6t_7$ is absent, and $S_2$ is independent.
+
+By Lemma~\ref{lem:endpoint-q-caps},
+\[
+  N(q_1)\subseteq\{p_1,p_2,q_0,q_2,t_1\}\cup U_1,
+  \qquad |U_1|\le1.
+\]
+Also,
+\[
+  N(q_6)\subseteq\{p_6,p_7,q_5,q_7,t_5,t_6\}.
+\]
+Because $\tau_8+\tau_9>0$, Lemma~\ref{lem:coordinates} gives $t_7t_8\notin E(G)$. By Lemma~\ref{lem:t-caps},
+\[
+  N(t_7)\subseteq\{q_7,q_8,t_6\}\cup C_7,
+  \qquad |C_7|\le2.
+\]
+Let
+\[
+\begin{aligned}
+A_2=\{&p_{-1},p_1,p_2,p_4,p_6,p_7,p_9,q_0,q_2,q_3,q_4,q_5,q_7,q_8,t_1,t_5,t_6\}.
+\end{aligned}
+\]
+Then $|A_2|\le17$ and
+\[
+  N(S_2)\subseteq A_2\cup U_1\cup C_7.
+\]
+Therefore
+\[
+  |N(S_2)|\le17+1+2=20.
+\]
+\end{proof}
+
+\section{Fully flat branch}
+
+Assume
+\[
+  \tau_7=\tau_8=\tau_9=0.
+\]
+Normalize
+\[
+  p_5=0,
+  \qquad e_5=e_6=e_7=e_8=e_9=1.
+\]
+Then
+\[
+  p_6=1,
+  \quad p_7=2,
+  \quad p_8=3,
+  \quad p_9=4,
+  \quad p_{10}=5,
+\]
+\[
+  q_5=\omega,
+  \quad q_6=1+\omega,
+  \quad q_7=2+\omega,
+  \quad q_8=3+\omega,
+  \quad q_9=4+\omega,
+\]
+and
+\[
+  t_5=2\omega,
+  \quad t_6=1+2\omega,
+  \quad t_7=2+2\omega,
+  \quad t_8=3+2\omega.
+\]
+Also,
+\[
+  p_{11}=5+e^{-i\theta},
+  \qquad 0\le\theta<\frac{\pi}{3}.
+\]
+When a port is saturated, write
+\[
+  x_i=t_i+\omega,
+  \qquad y_i=t_i+\omega^2.
+\]
+Thus
+\[
+  x_5=3\omega,
+  \quad x_6=1+3\omega,
+  \quad x_7=2+3\omega,
+\]
+and
+\[
+  y_6=x_5,
+  \qquad y_7=x_6.
+\]
+
+\begin{lemma}\label{lem:t5t7-implies-t6}
+If $t_5$ and $t_7$ are saturated, then $t_6$ is saturated.
+\end{lemma}
+
+\begin{proof}
+Saturation at $t_5$ supplies $x_5=y_6$, one endpoint of the $t_6$ port. Saturation at $t_7$ supplies $x_6=y_7$, the other endpoint. Hence both endpoints of the $t_6$ port are present, so $t_6$ is saturated.
+\end{proof}
+
+Thus the possible non-all-saturated patterns are exactly
+\[
+  \varnothing,
+  \quad t_5,
+  \quad t_6,
+  \quad t_7,
+  \quad t_5t_6,
+  \quad t_6t_7.
+\]
+
+\subsection{Six non-all-saturated rows}
+
+\paragraph{Row 1: no saturated port.}
+Let
+\[
+  S_{\varnothing}=\{p_6,p_8,p_{11},q_9,t_5,t_7\}.
+\]
+The selected-pair distances are greater than $1$: the lattice differences are not in the six unit vectors of Lemma~\ref{lem:tri-units}, except where their length is displayed directly as $2$ or $\sqrt3$; for pairs involving $p_{11}$,
+\[
+\Re(p_{11}-q_9)=1+\cos\theta-\frac12>1,
+\]
+\[
+\Re(p_{11}-t_5)=5+\cos\theta-1=4+\cos\theta>1,
+\]
+\[
+\Re(p_{11}-t_7)=3+\cos\theta-1=2+\cos\theta>1,
+\]
+\[
+\Re(p_{11}-p_6)=4+\cos\theta>1,
+\]
+and
+\[
+\Re(p_{11}-p_8)=2+\cos\theta>1.
+\]
+Thus $S_{\varnothing}$ is independent.
+
+Let
+\[
+A_{\varnothing}=\{p_5,p_7,p_9,p_{10},q_5,q_6,q_7,q_8,q_{10},t_4,t_6,t_8\}.
+\]
+Then $|A_{\varnothing}|\le12$. With caps $|U_{11}|\le2$, $|U_9|\le1$, $|C_5|\le1$, and $|C_7|\le1$,
+\[
+N(S_{\varnothing})\subseteq A_{\varnothing}\cup U_{11}\cup U_9\cup C_5\cup C_7.
+\]
+Hence
+\[
+  |N(S_{\varnothing})|\le17.
+\]
+
+\paragraph{Row 2: only $t_5$ saturated.}
+Let
+\[
+  S_5=\{p_5,p_8,p_{11},q_6,q_9,t_7\}.
+\]
+The selected-pair distances not involving $p_{11}$ are again direct flat-coordinate checks. For $p_{11}$,
+\[
+\Re(p_{11}-p_5)=5+\cos\theta>1,
+\]
+\[
+\Re(p_{11}-p_8)=2+\cos\theta>1,
+\]
+\[
+\Re(p_{11}-q_6)=4+\cos\theta-\frac12>1,
+\]
+\[
+\Re(p_{11}-q_9)=1+\cos\theta-\frac12>1,
+\]
+and
+\[
+\Re(p_{11}-t_7)=3+\cos\theta-1=2+\cos\theta>1.
+\]
+Thus $S_5$ is independent.
+
+Let
+\[
+A_5=\{p_4,p_6,p_7,p_9,p_{10},q_4,q_5,q_7,q_8,q_{10},t_5,t_6,t_8\}.
+\]
+Then $|A_5|\le13$, and
+\[
+N(S_5)\subseteq A_5\cup U_{11}\cup U_9\cup C_7,
+\]
+where $|U_{11}|\le2$, $|U_9|\le1$, and $|C_7|\le1$. Hence
+\[
+  |N(S_5)|\le17.
+\]
+
+\paragraph{Row 3: only $t_6$ saturated.}
+Use
+\[
+  S_6=\{p_5,p_8,p_{11},q_6,q_9,t_7\}.
+\]
+It is independent by Row 2. Let
+\[
+A_6=\{p_4,p_6,p_7,p_9,p_{10},q_4,q_5,q_7,q_8,q_{10},t_5,t_6,t_8,x_6\}.
+\]
+Then $|A_6|\le14$. The $t_7$ port is not saturated, and $x_6=y_7$ is already supplied by the saturated $t_6$ port. By Lemma~\ref{lem:flat-port}, there is no further $t_7$ port neighbour. Thus
+\[
+N(S_6)\subseteq A_6\cup U_{11}\cup U_9,
+\]
+and
+\[
+  |N(S_6)|\le14+2+1=17.
+\]
+
+\paragraph{Row 4: only $t_7$ saturated.}
+Let
+\[
+  S_7=\{p_0,p_3,p_6,q_1,q_4,t_5\}.
+\]
+Boundary-boundary, boundary-to-$q$, and boundary-to-$t$ nonadjacencies follow from Lemmas~\ref{lem:bb-sep}, \ref{lem:bq-sep}, and \ref{lem:bt-sep}. The remaining auxiliary pairs satisfy
+\[
+\Re(q_4-q_1)\ge\frac32>1,
+\]
+\[
+\Re(t_5-q_1)\ge\frac52>1,
+\]
+and, after normalizing $p_4=0$, $q_4=\omega$ and $t_5=1+2\omega$, so
+\[
+  |t_5-q_4|=|1+\omega|=\sqrt3>1.
+\]
+Thus $S_7$ is independent.
+
+Let
+\[
+A_7=\{p_{-1},p_1,p_2,p_4,p_5,p_7,q_0,q_2,q_3,q_5,q_6,r_4,t_1,t_4,t_6\}.
+\]
+Then $|A_7|\le15$, and
+\[
+N(S_7)\subseteq A_7\cup U_1\cup C_5,
+\]
+where $|U_1|\le1$ and $|C_5|\le1$. Hence
+\[
+  |N(S_7)|\le17.
+\]
+
+\paragraph{Row 5: $t_5,t_6$ saturated.}
+Use
+\[
+  S_{56}=\{p_5,p_8,p_{11},q_6,q_9,t_7\}.
+\]
+It is independent by Row 2. Let
+\[
+A_{56}=\{p_4,p_6,p_7,p_9,p_{10},q_4,q_5,q_7,q_8,q_{10},t_5,t_6,t_8,x_6\}.
+\]
+Then $|A_{56}|\le14$. The $t_7$ port is not saturated, and $x_6=y_7$ is already supplied by the saturated $t_6$ port. Thus $t_7$ has no further port neighbour. Hence
+\[
+N(S_{56})\subseteq A_{56}\cup U_{11}\cup U_9,
+\]
+and
+\[
+  |N(S_{56})|\le17.
+\]
+
+\paragraph{Row 6: $t_6,t_7$ saturated.}
+Let
+\[
+  S_{67}=\{p_6,p_9,q_7,t_5,t_8,x_6\}.
+\]
+In flat coordinates,
+\[
+  p_6=1,
+  \quad p_9=4,
+  \quad q_7=2+\omega,
+  \quad t_5=2\omega,
+  \quad t_8=3+2\omega,
+  \quad x_6=1+3\omega.
+\]
+The selected-pair differences are
+\[
+3,
+\quad 1+\omega,
+\quad 2\omega-1,
+\quad 2+2\omega,
+\quad 3\omega,
+\quad -2+\omega,
+\]
+\[
+2\omega-4,
+\quad -1+2\omega,
+\quad -3+3\omega,
+\quad \omega-2,
+\quad 1+\omega,
+\quad -1+2\omega,
+\]
+\[
+3,
+\quad 1+\omega,
+\quad -2+\omega.
+\]
+None is one of $\pm1,\pm\omega,\pm\omega^2$. Since all graph distances are at least $1$, every selected-pair distance is $>1$. Hence $S_{67}$ is independent.
+
+Let
+\[
+A_{67}=\{p_5,p_7,p_8,p_{10},q_5,q_6,q_8,q_9,t_4,t_6,t_7,y_6,x_7\}.
+\]
+Then $|A_{67}|\le13$. By Lemma~\ref{lem:degree-caps},
+\[
+  N(t_8)\subseteq A_{67}\cup U_8,
+  \qquad |U_8|\le2,
+\]
+and
+\[
+  N(x_6)\subseteq A_{67}\cup V_6,
+  \qquad |V_6|\le2.
+\]
+Moreover, $y_6=x_5$ is already an endpoint of the non-saturated $t_5$ port, so Lemma~\ref{lem:flat-port} gives no further $t_5$ port neighbour. Therefore
+\[
+N(S_{67})\subseteq A_{67}\cup U_8\cup V_6,
+\]
+and
+\[
+  |N(S_{67})|\le13+2+2=17.
+\]
+
+\section{All-saturated branch}
+
+Assume $t_5,t_6,t_7$ are all saturated. Define
+\[
+  S_3=\{p_0,p_3,p_6,p_9,q_1,q_4,q_7,t_5,t_8,x_6\}.
+\]
+
+\begin{lemma}\label{lem:S3}
+The set $S_3$ is independent and
+\[
+  |N(S_3)|\le28.
+\]
+\end{lemma}
+
+\begin{proof}
+Boundary-boundary, boundary-to-$q$, and boundary-to-$t$ nonadjacencies follow from Lemmas~\ref{lem:bb-sep}, \ref{lem:bq-sep}, and \ref{lem:bt-sep}.
+
+For $x_6$ against selected boundary vertices, note that
+\[
+  x_6=p_6+3\omega e_6.
+\]
+Thus $|x_6-p_6|=3$. In flat coordinates, $x_6-p_9=-3+3\omega$, so $|x_6-p_9|=3$. For $p_3$,
+\[
+  x_6-p_3=e_3+e_4+e_5+3\omega e_6,
+\]
+and, rotating so $e_3=1$,
+\[
+  \Re(x_6-p_3)>1+\frac12+\frac12+3\cdot\frac12=3>1.
+\]
+For $p_0$,
+\[
+  x_6-p_0=e_0+e_1+e_2+e_3+e_4+e_5+3\omega e_6,
+\]
+and, rotating so $e_0=1$,
+\[
+  \Re(x_6-p_0)>1+5\cdot\frac12+3\cdot\frac12=5>1.
+\]
+
+For pairs involving $q_1$:
+\[
+\Re(q_4-q_1)\ge\frac32>1,
+\]
+\[
+\Re(q_7-q_1)\ge3>1,
+\]
+\[
+\Re(t_5-q_1)\ge\frac52>1,
+\]
+\[
+\Re(t_8-q_1)\ge\frac72>1,
+\]
+\[
+\Re(x_6-q_1)\ge\frac72>1.
+\]
+
+For $q_4$, the break inequality gives $\tau_4>0$, so $q_3q_4$ is absent. In fully flat coordinates,
+\[
+  p_4=-1,
+  \quad q_4=-1+\omega,
+\]
+and
+\[
+  q_7=2+\omega,
+  \quad t_5=2\omega,
+  \quad t_8=3+2\omega,
+  \quad x_6=1+3\omega.
+\]
+Therefore
+\[
+|q_7-q_4|=3>1,
+\]
+\[
+|t_5-q_4|=|1+\omega|=\sqrt3>1,
+\]
+\[
+|t_8-q_4|=|4+\omega|>1,
+\]
+and
+\[
+|x_6-q_4|=|2+2\omega|=2\sqrt3>1.
+\]
+
+Among $q_7,t_5,t_8,x_6$, the differences are
+\[
+\omega-2,
+\quad 1+\omega,
+\quad -1+2\omega,
+\quad 3,
+\quad 1+\omega,
+\quad -2+\omega.
+\]
+None is a triangular-lattice unit vector, so all corresponding distances are $>1$. Hence $S_3$ is independent.
+
+Now define
+\[
+\begin{aligned}
+A_3=\{&p_{-1},p_1,p_2,p_4,p_5,p_7,p_8,p_{10},q_0,q_2,q_3,q_5,q_6,q_8,q_9,\\
+&r_4,t_1,t_4,t_6,t_7,x_5,x_7,y_5\}.
+\end{aligned}
+\]
+Then $|A_3|\le23$.
+
+The neighbourhood inclusions are:
+\[
+N(p_0),N(p_3),N(p_6),N(p_9)\subseteq A_3.
+\]
+Also,
+\[
+N(q_1)\subseteq A_3\cup U_1,
+\qquad |U_1|\le1.
+\]
+Since $q_3q_4$ is absent and $s_4=t_4$,
+\[
+N(q_4)\subseteq A_3.
+\]
+Also,
+\[
+N(q_7)\subseteq A_3,
+\]
+and, because $t_5$ is saturated,
+\[
+N(t_5)\subseteq A_3.
+\]
+By Lemma~\ref{lem:degree-caps},
+\[
+N(t_8)\subseteq A_3\cup U_8,
+\qquad |U_8|\le2,
+\]
+and
+\[
+N(x_6)\subseteq A_3\cup V_6,
+\qquad |V_6|\le2.
+\]
+Thus
+\[
+N(S_3)\subseteq A_3\cup U_1\cup U_8\cup V_6,
+\]
+and
+\[
+|N(S_3)|\le23+1+2+2=28.
+\]
+\end{proof}
+
+\section{Final proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Let $G$ be a smallest counterexample. By Lemma~\ref{lem:deletion}, every independent set $S$ in $G$ must violate
+\[
+  |N(S)|\le \floor{\frac{20|S|}{7}}.
+\]
+
+By Lemma~\ref{lem:unique-break}, the unique possible break is $s_3\ne r_4$, and the equality vertices $t_i$ exist for $i=1,2,4,5,6,7,8$.
+
+If $t_4t_5\notin E(G)$, Lemma~\ref{lem:S0} gives an independent $S_0$ with
+\[
+  |S_0|=7,
+  \qquad |N(S_0)|\le20=\floor{\frac{20\cdot7}{7}},
+\]
+contradiction.
+
+Therefore $t_4t_5\in E(G)$, and by Corollary~\ref{cor:t4t5},
+\[
+  \tau_5=\tau_6=0.
+\]
+
+If $\tau_7>0$, Lemma~\ref{lem:S1} gives an independent $S_1$ with
+\[
+  |S_1|=6,
+  \qquad |N(S_1)|\le17=\floor{\frac{20\cdot6}{7}},
+\]
+contradiction.
+
+If $\tau_7=0$ and $\tau_8+\tau_9>0$, Lemma~\ref{lem:S2} gives an independent $S_2$ with
+\[
+  |S_2|=7,
+  \qquad |N(S_2)|\le20=\floor{\frac{20\cdot7}{7}},
+\]
+contradiction.
+
+Thus
+\[
+  \tau_7=\tau_8=\tau_9=0.
+\]
+
+In the fully flat branch, if not all ports at $t_5,t_6,t_7$ are saturated, one of the six row sets above gives an independent set $S$ with
+\[
+  |S|=6,
+  \qquad |N(S)|\le17=\floor{\frac{20\cdot6}{7}},
+\]
+contradiction.
+
+Hence all three ports are saturated. Lemma~\ref{lem:S3} gives an independent set $S_3$ with
+\[
+  |S_3|=10,
+  \qquad |N(S_3)|\le28=\floor{\frac{20\cdot10}{7}},
+\]
+contradiction.
+
+Every branch contradicts minimality. Therefore no smallest counterexample exists. Hence every Euclidean minimum-distance graph $G$ satisfies
+\[
+  \alpha(G)\ge \frac{7}{27}|V(G)|.
+\]
+Since $\alpha(G)$ is integer-valued,
+\[
+  \alpha(G)\ge \ceil{\frac{7|V(G)|}{27}}.
+\]
+Taking the minimum over all $n$-vertex Euclidean minimum-distance graphs gives
+\[
+  g(n)\ge \ceil{\frac{7n}{27}}.
+\]
+\end{proof}
+
+\newpage
+\begin{thebibliography}{9}
+
+\bibitem{Csizmadia1998}
+G. Csizmadia,
+\textit{On the independence number of minimum distance graphs},
+Discrete \& Computational Geometry 20 (1998), 179--187.
+
+\bibitem{PachToth1996}
+J. Pach and G. T\'oth,
+\textit{On the independence number of coin graphs},
+Geombinatorics 6 (1996), 30--33.
+
+\bibitem{Pollack1985}
+R. Pollack,
+\textit{Increasing the minimum distance of a set of points},
+Journal of Combinatorial Theory, Series A 40 (1985), 450.
+
+\bibitem{Swanepoel2002}
+K. J. Swanepoel,
+\textit{Independence numbers of planar contact graphs},
+Discrete \& Computational Geometry 28 (2002), 649--670.
+DOI: \href{https://doi.org/10.1007/s00454-002-2897-y}{10.1007/s00454-002-2897-y}.
+PDF: \url{https://link.springer.com/content/pdf/10.1007/s00454-002-2897-y.pdf}.
+
+\bibitem{Erdos1066}
+T. Bloom, \textit{Erd\H{o}s Problems, Problem 1066},
+\url{https://www.erdosproblems.com/1066}.
+Accessed May 2026.
+
+\end{thebibliography}
+
+\end{document}
