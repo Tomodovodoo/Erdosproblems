@@ -292,6 +292,28 @@ jobs:
           #print axioms ErdosProblems1066.Swanepoel.TriangleAngleFacts.dotAt_origin_of_concrete_equilateral
           #print axioms ErdosProblems1066.Swanepoel.targetLowerBoundEightThirtyOne_of_clearedBound
           #print axioms ErdosProblems1066.Swanepoel.targetLowerBoundEightThirtyOne_of_pipelineCleared
+          #print axioms ErdosProblems1066.PachToth.NonRigidClosedPlacementInterface.ExplicitCyclicPointEdgeData.targetUpperConstructionFiveSixteenAt_exactBlock
+          #print axioms ErdosProblems1066.PachToth.NonRigidClosedPlacementInterface.targetUpperConstructionFiveSixteenArbitrary_of_sameOppositeCyclicOrbitData
+          #print axioms ErdosProblems1066.PachToth.ClosedPlacementNonRigidComponents.Components.exactBlockTarget
+          #print axioms ErdosProblems1066.PachToth.ClosedPlacementNonRigidComponents.targetUpperConstructionFiveSixteen_of_components
+          #print axioms ErdosProblems1066.PachToth.RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts.preservesSameBlockDistances
+          #print axioms ErdosProblems1066.PachToth.RoleHingeTransitionSearch.GeneratedClosureSearchFamily.targetUpperConstructionFiveSixteen
+          #print axioms ErdosProblems1066.PachToth.IndexedCrossBlockTableConcrete.IndexedCrossBlockLowerTableFamily.targetUpperConstructionFiveSixteenArbitrary
+          #print axioms ErdosProblems1066.PachToth.IndexedCrossBlockTableConcrete.IndexedConcreteCrossBlockFamily.targetUpperConstructionFiveSixteenArbitrary
+          #print axioms ErdosProblems1066.PachToth.CrossBlockDistanceSqReduction.IndexedCrossBlockSqDistanceTableFamily.targetUpperConstructionFiveSixteenArbitrary
+          #print axioms ErdosProblems1066.PachToth.TranslatedEquationObstruction.no_sameOppositeFourEquationTranslatedRoute
+          #print axioms ErdosProblems1066.PachToth.PeriodWordCertificates.generatedPeriodEquationOfWord
+          #print axioms ErdosProblems1066.Swanepoel.M8ConstructionInterface.M8ConstructionData.toM8SeparatedConstructionFields
+          #print axioms ErdosProblems1066.Swanepoel.M8ConstructionDataBridge.separatedConstructionEliminator_of_constructionDataEliminator
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureComponentPackage.MinimalFailureM8PaperFactsFamily.targetLowerBoundEightThirtyOne
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureComponentPackage.MinimalFailureM8PaperFacts.contradiction
+          #print axioms ErdosProblems1066.Swanepoel.M8TurnWindowNoEarlyFinal.M8TurnWindowNoEarlyPackage.contradiction
+          #print axioms ErdosProblems1066.Swanepoel.BoundaryFaceCountingToM8.M8BoundaryRouteData.contradiction
+          #print axioms ErdosProblems1066.Swanepoel.BoundaryLabelExtractionTasks.M8Lemma8Combinatorics.r_neighbor_holds
+          #print axioms ErdosProblems1066.Swanepoel.CutVertexSlackFromDeletion.remainingNoCutSlackFact_iff_deletionSlackFact
+          #print axioms ErdosProblems1066.Swanepoel.JordanBoundaryExtraction.Data.finalBoundaryAngleCountInequality
+          #print axioms ErdosProblems1066.Swanepoel.Lemma8CombinatoricsConcrete.false_of_extra_neighbor_ne_r_ne_s
+          #print axioms ErdosProblems1066.Swanepoel.PlanarBoundaryFinal.PlanarBoundaryData.faceCountingTheorems_of_concreteData
           EOF
           )
           expected_axiom_checks="${{ inputs.expected_axiom_checks }}"

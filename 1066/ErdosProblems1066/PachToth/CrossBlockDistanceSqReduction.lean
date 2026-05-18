@@ -152,7 +152,7 @@ structure IndexedCrossBlockSqDistanceTable
 namespace IndexedCrossBlockSqDistanceTable
 
 /-- The square-distance table induces the existing Euclidean lower table by
-using the constant lower bound `1`. -/
+using the fixed lower bound `1`. -/
 def toLowerTable
     {F : RoleHingedPeriodSearchFamily}
     {k : Nat} {hk : 0 < k}
@@ -168,7 +168,7 @@ def toLowerTable
       (one_le_indexedGenerated_eucDist_iff_sqDist F hk i u j v).2
         (T.sqDist_ge_one i u j v hij)
 
-/-- The induced lower table has the expected constant value. -/
+/-- The induced lower table has the expected fixed value. -/
 @[simp]
 theorem toLowerTable_lower
     {F : RoleHingedPeriodSearchFamily}

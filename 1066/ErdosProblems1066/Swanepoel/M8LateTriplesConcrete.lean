@@ -1,6 +1,8 @@
 import ErdosProblems1066.Swanepoel.M8LateTriplesFromNoEarly
 import ErdosProblems1066.Swanepoel.M8TurnBoundsFromArc
 
+set_option linter.unusedDecidableInType false
+
 /-!
 # Concrete M8 late-triples bridge
 
@@ -83,20 +85,19 @@ theorem lateTriples
 /-- The turn-combinatorics part supplies Lemma 10's at-most-one-failure
 field. -/
 theorem atMostOneFailure
-    (D : M8NoEarlyTurnData P) :
-    P.AtMostOneFailure := by
-  classical
-  exact D.arcAngleData.atMostOneFailure
+    (D : M8NoEarlyTurnData P)
+    [DecidablePred (M8BrokenLatticeGood P.data)] :
+    P.AtMostOneFailure :=
+  D.arcAngleData.atMostOneFailure
 
 /-- No-early triples plus the turn-combinatorics package close the local
 `m = 8` finite contradiction. -/
 theorem contradiction
-    (D : M8NoEarlyTurnData P) :
-    False := by
-  classical
-  exact
-    Lemma10Bridge.M8HonestLocalPredicates.contradiction P
-      D.atMostOneFailure D.lateTriples
+    (D : M8NoEarlyTurnData P)
+    [DecidablePred (M8BrokenLatticeGood P.data)] :
+    False :=
+  Lemma10Bridge.M8HonestLocalPredicates.contradiction P
+    D.atMostOneFailure D.lateTriples
 
 end M8NoEarlyTurnData
 
@@ -108,10 +109,10 @@ the two. -/
 theorem contradiction_of_noEarlyTripleEquality_and_arcAngleData
     (P : M8HonestLocalPredicates G)
     (hno : M8NoEarlyTripleEquality P.data)
-    (D : M8TurnBoundsFromArc.M8ArcAngleData P) :
-    False := by
-  classical
-  exact (M8NoEarlyTurnData.mk hno D).contradiction
+    (D : M8TurnBoundsFromArc.M8ArcAngleData P)
+    [DecidablePred (M8BrokenLatticeGood P.data)] :
+    False :=
+  (M8NoEarlyTurnData.mk hno D).contradiction
 
 end M8LateTriplesConcrete
 end Swanepoel

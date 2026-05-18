@@ -182,10 +182,10 @@ theorem not_forbidden_of_ne_all (S : M8BoundarySpine H)
     Not (S.forbiddenExtraNeighbor i x) := by
   intro hforbidden
   rcases hforbidden with h | h | h | h
-  exact hleft h
-  exact hright h
-  exact hprev h
-  exact hnext h
+  · exact hleft h
+  · exact hright h
+  · exact hprev h
+  · exact hnext h
 
 theorem ne_leftP_of_not_forbidden (S : M8BoundarySpine H)
     {i : M8ExtraIndex} {x : Fin n}

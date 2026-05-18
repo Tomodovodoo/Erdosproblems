@@ -31,51 +31,46 @@ Last verification recorded in this file:
 
 ```text
 elan run leanprover/lean4:v4.28.0 lake build
-Build completed successfully (8169 jobs).
+Build completed successfully (8197 jobs).
 
 Lean source forbidden-token scan over ErdosProblems1066/ and
 ErdosProblems1066.lean: clean.
 
-Root import coverage: 142 imported modules for 142 Lean files under
+Root import coverage: 170 imported modules for 170 Lean files under
 ErdosProblems1066/.
 
-CI-style axiom audit: passed for 216 declarations; every checked declaration
+CI-style axiom audit: passed for 250 declarations; every checked declaration
 reports only Lean/mathlib base axioms `propext`, `Classical.choice`, and
 `Quot.sound`.
+
+Encoding scan for common mojibake markers in Lean files: clean.
 ```
 
 ## Current Certified State
 
 - [x] The imported project builds through the pinned Lean toolchain.
   - Root import file: `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`.
-  - Current root imports include `Swanepoel.MinimalFailureClosure`,
-    connectedness extraction/closure modules, boundary/subpolygon/angle
-    interfaces, `Swanepoel.CutVertexClosure`,
-    `Swanepoel.Lemma10WindowGeometry`,
-    `Swanepoel.BrokenLatticeMinimalFailure`,
-    `PachToth.ClosedChainReduction`,
-    `PachToth.BaseTransitionRealization`,
-    `PachToth.GeneratedPeriodClosure`, `PachToth.SmallCaseCertificates`,
-    `PachToth.SplitRealizationClosure`, and
-    `PachToth.ClosedPlacementClosure`, plus the newly imported
-    `Swanepoel.BoundaryAngleRealization`, `Swanepoel.TurnBoundsInterface`,
-    `Swanepoel.LateTriplesInterface`, `Swanepoel.M8PipelineClosure`,
-    `Swanepoel.BoundaryWalkConstruction`,
-    `PachToth.GeneratedMetricClosure`, `PachToth.PeriodSearchInterface`,
-    `PachToth.EquationTransitionClosure`,
-    `PachToth.CrossBlockLowerBoundsInterface`,
-    `PachToth.PeriodCertificateExamples`,
-    `PachToth.FinalConditional`,
-    `Swanepoel.CutVertexFromConnectedness`,
-    `Swanepoel.M8LabelsFromBoundaryInterface`,
-    `Swanepoel.M8LateTriplesFromNoEarly`,
-    `Swanepoel.M8MinimalFailureEliminatorInterface`,
-    `Swanepoel.M8TurnBoundsFromArc`,
-    `Swanepoel.M8WindowGeometryFromContainment`,
-    `Swanepoel.PlanarBoundaryClosure`, and
-    `Swanepoel.FinalConditional`.
+  - Current root imports include every Lean source module under
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/`.
+  - Recent non-rigid Pach--Toth route modules imported:
+    `PachToth.NonRigidClosedPlacementInterface`,
+    `PachToth.RoleHingeTransitionSearch`,
+    `PachToth.IndexedCrossBlockTableConcrete`,
+    `PachToth.CrossBlockDistanceSqReduction`,
+    `PachToth.ClosedPlacementNonRigidComponents`,
+    `PachToth.PeriodWordCertificates`, and
+    `PachToth.TranslatedEquationObstruction`.
+  - Recent Swanepoel M8 assembly modules imported:
+    `Swanepoel.M8ConstructionDataBridge`,
+    `Swanepoel.MinimalFailureComponentPackage`,
+    `Swanepoel.M8TurnWindowNoEarlyFinal`,
+    `Swanepoel.BoundaryFaceCountingToM8`,
+    `Swanepoel.BoundaryLabelExtractionTasks`,
+    `Swanepoel.CutVertexSlackFromDeletion`,
+    `Swanepoel.JordanBoundaryExtraction`, and
+    `Swanepoel.Lemma8CombinatoricsConcrete`.
   - Current root target build succeeds and root import coverage is complete:
-    142 imported package modules for 142 Lean files under
+    170 imported package modules for 170 Lean files under
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/`.
 
 - [x] Import and scan the current-wave interface modules.
@@ -99,6 +94,15 @@ reports only Lean/mathlib base axioms `propext`, `Classical.choice`, and
     `Swanepoel.PlanarBoundaryClosure`, and
     `Swanepoel.FinalConditional`.
   - Current scan status: the full-tree forbidden-token scan is clean.
+
+- [x] Record the Pach--Toth translated-equation obstruction.
+  - File:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/TranslatedEquationObstruction.lean`.
+  - Current state: the four-equation translated connector route is formally
+    uninhabited.  Treat equation-carried final facades as audit/obstruction
+    material, not as the live constructive proof path.
+  - Live Pach--Toth path: non-rigid/role-hinged transition data, explicit
+    period words/equations, and indexed cross-block lower tables.
 
 - [x] `TurnBoundsInterface.lean` is imported and build-checked.
   - File:
@@ -775,6 +779,26 @@ Lemma10WindowGeometry.honestE22_E23_of_leftWindowGeometry
     no-early-triple proof, containment data, and separated M8 construction
     fields still must be constructed from an actual minimal cleared failure.
 
+- [x] Add concrete M8 assembly and reducer modules.
+  - Files:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8ConstructionDataBridge.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureComponentPackage.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnWindowNoEarlyFinal.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryFaceCountingToM8.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryLabelExtractionTasks.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexSlackFromDeletion.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanBoundaryExtraction.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8CombinatoricsConcrete.lean`.
+  - Current state: imported, build-checked, scan-clean, and representative
+    declarations are covered by the axiom audit.
+  - Current purpose: the remaining Swanepoel construction has been narrowed to
+    the explicit `MinimalFailureM8PaperFacts` fields: positive cardinality,
+    cut-vertex slack, planar boundary/Jordan data, the M8 boundary spine,
+    Lemma 8 extra-neighbor combinatorics, nonconcave-arc turn data, no-early
+    triples, and Figure 8/Figure 9 containment.
+  - Conditional status: these fields are still paper facts to prove, not
+    completed Lean constructions.
+
 - [ ] Prove the minimal-failure `m = 8` construction eliminator.
   - Existing conditional home:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BrokenLatticeMinimalFailure.lean`.
@@ -804,8 +828,8 @@ theorem BrokenLatticePipeline.exists_m8_honestLocalPredicates_of_minimalFailure
 ```
 
   - Next action: combine S4-S7 into the `M8ConstructionData` package, then
-    apply
-    `BrokenLatticeMinimalFailure.no_minimalClearedFailure_of_m8ConstructionEliminator`.
+    apply `M8ConstructionDataBridge.separatedConstructionEliminator_of_constructionDataEliminator`
+    or `MinimalFailureComponentPackage.MinimalFailureM8PaperFactsFamily.targetLowerBoundEightThirtyOne`.
 
 - [ ] Prove no minimal cleared failure.
   - Best home: new `MinimalFailureContradiction.lean` or
@@ -901,7 +925,13 @@ finite small-case certificates are supplied.
   - Files:
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockGeometry.lean`,
     `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/OrientedCrossBlockGeometry.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RealTranslationObstruction.lean`.
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RealTranslationObstruction.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/TranslatedEquationObstruction.lean`.
+  - Current state: the stronger four-equation translated connector route is
+    also formally uninhabited.  Do not use
+    `FinalConditional.EquationPeriodSearchCrossBlockFamily` as the live proof
+    route; keep it only as an audited conditional surface over inconsistent
+    equation-transition data.
 
 - [x] Remainder construction and far-apart translated placement.
   - Files:
@@ -1031,6 +1061,21 @@ def concreteSameOppositeTransitionRealization :
     distance preservation for each next block, and discharge the connector
     role equations through the hinge lemmas.
 
+- [x] Add non-rigid/role-hinged transition and closed-placement wrappers.
+  - Files:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeTransitionSearch.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/NonRigidClosedPlacementInterface.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedPlacementNonRigidComponents.lean`.
+  - Current state: imported, build-checked, scan-clean, and representative
+    declarations are covered by the axiom audit.
+  - Current purpose: these modules route explicit non-rigid point/orbit
+    fields and role-hinged transition facts to closed placements, exact-block
+    targets, and exact-family targets without using the contradictory
+    translated four-equation data.
+  - Conditional status: concrete role-angle maps, same-block preservation,
+    successor connector unit edges, and global separation are still fields to
+    prove.
+
 - [ ] Prove same-block unit edges for the hinged block.
   - Target theorem:
 
@@ -1113,6 +1158,19 @@ theorem GeneratedClosedChainReduction.targetUpperConstructionFiveSixteen_of_gene
     certificates for later verified algebraic/search outputs.
   - Conditional status: the actual period certificates, global separation, and
     concrete metric data remain open.
+
+- [x] Add finite period-word and indexed cross-block table reducers.
+  - Files:
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodWordCertificates.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/IndexedCrossBlockTableConcrete.lean`,
+    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockDistanceSqReduction.lean`.
+  - Current state: imported, build-checked, scan-clean, and representative
+    declarations are covered by the axiom audit.
+  - Current purpose: period words/equations and finite indexed cross-block
+    inequalities now have direct table-style Lean surfaces, including a
+    squared-distance reducer for generated cross-block lower bounds.
+  - Conditional status: the actual finite period equations and the lower-bound
+    inequalities for every distinct block pair remain to be proved.
 
 - [x] Add orientation-word, connector-equation, far-apart, and
   exact-family closure modules.

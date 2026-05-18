@@ -26,6 +26,7 @@ namespace SplitRealizationFinal
 
 open Arithmetic
 open FiniteGraph
+open GeneratedSeparationFarApart
 
 noncomputable section
 
@@ -112,7 +113,7 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_period_crossBlockDistance
           (O k hk) hk (base k hk) (orientation k hk) (lower k hk)) :
     targetUpperConstructionFiveSixteenArbitrary := by
   let exactTarget :=
-    GeneratedSeparationFarApart.targetUpperConstructionFiveSixteen_of_period_crossBlockDistanceLowerBounds_reduced
+    targetUpperConstructionFiveSixteen_of_period_crossBlockDistanceLowerBounds_reduced
       O base orientation period base_same_block_isometry
       transition_preserves_same_block_distances lower hge_one hlower
   exact
