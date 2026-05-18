@@ -1,0 +1,19 @@
+name = "ErdosProblems1066"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["ErdosProblems1066"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints function arrows
+autoImplicit = false
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "8f9d9cff6bd728b17a24e163c9402775d9e6a365"
+
+[[lean_lib]]
+name = "ErdosProblems1066"

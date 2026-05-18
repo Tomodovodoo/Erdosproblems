@@ -1,0 +1,303 @@
+name: Lean Action CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      expected_axiom_checks:
+        description: "Expected number of #print axioms declarations to check; leave blank to count automatically."
+        required: false
+        default: ""
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read # Read access to repository contents
+  pages: write # Write access to GitHub Pages
+  id-token: write # Write access to ID tokens
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+      - name: Reject unimported Lean source modules
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import sys
+
+          root = Path("ErdosProblems1066.lean")
+          imports = {
+              line.split()[1]
+              for line in root.read_text().splitlines()
+              if line.startswith("import ErdosProblems1066.")
+          }
+          modules = {
+              "ErdosProblems1066." + ".".join(path.with_suffix("").parts[1:])
+              for path in Path("ErdosProblems1066").rglob("*.lean")
+          }
+          missing = sorted(modules - imports)
+          if missing:
+              print("Lean source modules missing from ErdosProblems1066.lean:")
+              for module in missing:
+                  print(module)
+              sys.exit(1)
+          PY
+      - name: Reject trusted placeholders
+        run: |
+          set -euo pipefail
+          scan_status=0
+          rg -n -i -e '\baxiom\b' -e '\bconstant\b' -e '\bsorry\b' -e '\badmit\b' -e 'unsafe' -e 'opaque' -e 'implemented_by' -e '#check' -e '#print' -e '#eval' ErdosProblems1066 ErdosProblems1066.lean --glob '*.lean' || scan_status=$?
+          if [ "$scan_status" -eq 0 ]; then
+            echo "Trusted placeholder or debug command found in Lean source."
+            exit 1
+          fi
+          if [ "$scan_status" -ne 1 ]; then
+            exit "$scan_status"
+          fi
+      - name: Check public theorem dependencies
+        run: |
+          set -euo pipefail
+          lean_axiom_input=$(cat <<'EOF'
+          import ErdosProblems1066
+          #print axioms ErdosProblems1066.Verified.upper_bound_third
+          #print axioms ErdosProblems1066.Verified.lower_bound_quarter
+          #print axioms ErdosProblems1066.PollackPach.lower_bound_quarter
+          #print axioms ErdosProblems1066.PachToth.ConditionalUpper.independent_card_le_five_mul
+          #print axioms ErdosProblems1066.PachToth.ConditionalUpper.exists_config_with_independent_card_le_five_mul
+          #print axioms ErdosProblems1066.PachToth.ConditionalUpper.exists_config_with_independent_card_le_floor_ratio
+          #print axioms ErdosProblems1066.PachToth.IndexedChain.independent_card_le_five_mul
+          #print axioms ErdosProblems1066.PachToth.IndexedChain.exists_config_with_independent_card_le_five_mul
+          #print axioms ErdosProblems1066.PachToth.IndexedChain.exists_config_with_independent_card_le_floor_ratio
+          #print axioms ErdosProblems1066.PachToth.ExactLocalGeometry.exact_local_realization
+          #print axioms ErdosProblems1066.PachToth.Arithmetic.cyclicSucc_iterate_val
+          #print axioms ErdosProblems1066.PachToth.Arithmetic.cyclicSucc_iterate_card
+          #print axioms ErdosProblems1066.PachToth.AffineLocalGeometry.distSq_translate_translate
+          #print axioms ErdosProblems1066.PachToth.AffineLocalGeometry.UDConfig.isIndep_translate
+          #print axioms ErdosProblems1066.PachToth.AffineLocalGeometry.translatedLocal_adj_unit_distance
+          #print axioms ErdosProblems1066.PachToth.AffineLocalGeometry.translatedLocal_root_adj_unit_distance
+          #print axioms ErdosProblems1066.PachToth.ConnectorEquationFacts.not_all_four_connector_equations
+          #print axioms ErdosProblems1066.PachToth.ConnectorEquationFacts.eq211_eq212_eq400_false
+          #print axioms ErdosProblems1066.PachToth.CrossBlockGeometry.no_single_translation_realizes_all_connector_units
+          #print axioms ErdosProblems1066.PachToth.CrossBlockGeometry.t2ConnectorOffsetA_unit_T1_1
+          #print axioms ErdosProblems1066.PachToth.OrientedCrossBlockGeometry.no_oriented_grid_placement_realizes_all_connector_units
+          #print axioms ErdosProblems1066.PachToth.OrientedCrossBlockGeometry.orientedLocal_adj_unit_distance
+          #print axioms ErdosProblems1066.PachToth.OneBlockSoundness.oneBlock_separated
+          #print axioms ErdosProblems1066.PachToth.OneBlockSoundness.oneBlock_adj_unit_distance
+          #print axioms ErdosProblems1066.PachToth.OneBlockSoundness.oneBlock_local_adj_unit_distance
+          #print axioms ErdosProblems1066.PachToth.DeformedPlacement.ClosedPlacement.toExplicitEdgeSoundness
+          #print axioms ErdosProblems1066.PachToth.DeformedPlacement.ClosedPlacement.toIndexedChainRealization
+          #print axioms ErdosProblems1066.PachToth.DeformedPlacement.targetUpperConstructionFiveSixteen_of_deformedPlacements
+          #print axioms ErdosProblems1066.PachToth.DeformedOrientationBridge.toDeformedClosedPlacement
+          #print axioms ErdosProblems1066.PachToth.DeformedOrientationBridge.targetUpperConstructionFiveSixteen_of_orientedClosedChainPlacements
+          #print axioms ErdosProblems1066.PachToth.ClosedPlacementAlgebra.iteratedTransitionBlock_eq_point_iterate
+          #print axioms ErdosProblems1066.PachToth.ClosedPlacementAlgebra.iteratedTransitionBlock_eq_point_of_index_period
+          #print axioms ErdosProblems1066.PachToth.ClosedChainExistence.SuccessorCompatibleCyclicPointOrbit.exists_closedPlacement_of_successorCompatibleCyclicPointOrbit
+          #print axioms ErdosProblems1066.PachToth.ClosedChainExistence.IsometricSuccessorCompatibleCyclicPointOrbit.exists_closedPlacement_of_isometricSuccessorCompatibleCyclicPointOrbit
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChain.exists_closedPlacement_of_generated_closed_chain
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChain.generatedPoint_same_block_isometry
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChain.generatedBlock_eq_closedPlacementAlgebra_iterated_from_zero
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChain.isometricSuccessorCompatibleCyclicPointOrbitOfGenerated_point
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChain.isometricSuccessorCompatibleCyclicPointOrbitOfGenerated_step
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChainReduction.targetUpperConstructionFiveSixteenAt_exactBlock_of_generated_closed_chain
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChainReduction.targetUpperConstructionFiveSixteen_of_generated_closed_chains
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChainReduction.targetUpperConstructionFiveSixteenAt_exactBlock_of_generated_closed_chain_reducedSameBlock
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChainReduction.targetUpperConstructionFiveSixteen_of_generated_closed_chains_reducedSameBlock
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChainEventualReduction.targetUpperConstructionFiveSixteenArbitrary_of_eventual_generated_closed_chains_and_small
+          #print axioms ErdosProblems1066.PachToth.GeneratedClosedChainEventualReduction.targetUpperConstructionFiveSixteenArbitrary_of_eventual_generated_chains_base_transitions
+          #print axioms ErdosProblems1066.PachToth.ClosedChainConstruction.explicitCertificateOfClosedChainPlacement
+          #print axioms ErdosProblems1066.PachToth.ClosedChainConstruction.explicitTransitionCertificateOfSameOppositeIsometry
+          #print axioms ErdosProblems1066.PachToth.ClosedChainReduction.targetUpperConstructionFiveSixteen_of_explicitClosedPlacementCertificates
+          #print axioms ErdosProblems1066.PachToth.ClosedChainReduction.targetUpperConstructionFiveSixteenArbitrary_of_explicitClosedPlacementCertificates
+          #print axioms ErdosProblems1066.PachToth.ClosedChainReduction.targetUpperConstructionFiveSixteenEventually_of_eventualExplicitClosedPlacementCertificates
+          #print axioms ErdosProblems1066.PachToth.ClosedChainReduction.targetUpperConstructionFiveSixteenArbitrary_of_eventualExplicitClosedPlacement_and_small
+          #print axioms ErdosProblems1066.PachToth.ClosedPlacementInterface.exists_closedPlacement_of_explicit_certificate
+          #print axioms ErdosProblems1066.PachToth.ClosedPlacementInterface.exists_closedPlacement_of_explicit_transition_certificate
+          #print axioms ErdosProblems1066.PachToth.UnitVectorGeometry.eucDist_center_hingePoint
+          #print axioms ErdosProblems1066.PachToth.HingeAlgebra.connectorUnitEdges_of_hinge_target_eqs
+          #print axioms ErdosProblems1066.PachToth.HingeAlgebra.translated_T2_2_T1_1_unit_iff_eq211
+          #print axioms ErdosProblems1066.PachToth.ConnectorEquationClosure.equationPlaceNext_connector_unit_edges_of_equations
+          #print axioms ErdosProblems1066.PachToth.EquationTransitionClosure.targetUpperConstructionFiveSixteen_of_equationTransitions
+          #print axioms ErdosProblems1066.PachToth.BaseTransitionRealization.exactBase_same_block_isometry
+          #print axioms ErdosProblems1066.PachToth.BaseTransitionRealization.BaseSameOppositeTransitionRealization.toMetricObligations
+          #print axioms ErdosProblems1066.PachToth.HingedTransitionInterface.SameOppositeTransitionMetricObligations.generatedPoint_same_block_isometry
+          #print axioms ErdosProblems1066.PachToth.PeriodSearchInterface.PeriodSearchCertificate.toGeneratedPeriod
+          #print axioms ErdosProblems1066.PachToth.PeriodCertificateExamples.periodSearchCertificateOfFin_period
+          #print axioms ErdosProblems1066.PachToth.GeneratedSeparationInterface.targetUpperConstructionFiveSixteen_of_family_reduced
+          #print axioms ErdosProblems1066.PachToth.GeneratedSeparationInterface.targetUpperConstructionFiveSixteenArbitrary_of_eventual_family_and_small_reduced
+          #print axioms ErdosProblems1066.PachToth.GeneratedSeparationFarApart.targetUpperConstructionFiveSixteen_of_period_crossBlockDistanceLowerBounds_reduced
+          #print axioms ErdosProblems1066.PachToth.GeneratedPeriodClosure.targetUpperConstructionFiveSixteen_of_period_separation_reducedSameBlock
+          #print axioms ErdosProblems1066.PachToth.ClosedPlacementClosure.exists_closedPlacement_and_target_of_generatedClosure_family_reduced
+          #print axioms ErdosProblems1066.PachToth.CrossBlockLowerBoundsInterface.CrossBlockLowerBounds.targetUpperConstructionFiveSixteenArbitrary
+          #print axioms ErdosProblems1066.PachToth.FinalConditional.arbitraryTarget_of_periodSearch_equationTransitions_crossBlock
+          #print axioms ErdosProblems1066.PachToth.SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_sixteen
+          #print axioms ErdosProblems1066.PachToth.SplitRealizationClosure.exists_canonicalSplitRealization_of_generated_closed_chain_farApart
+          #print axioms ErdosProblems1066.PachToth.SplitRealizationClosure.targetUpperConstructionFiveSixteenAt_of_generated_closed_chain_farApart
+          #print axioms ErdosProblems1066.PachToth.ExactFamilyClosure.targetUpperConstructionFiveSixteenArbitrary_of_periodSearch_crossBlockLowerBounds
+          #print axioms ErdosProblems1066.PachToth.Arithmetic.cyclicSucc_iterate_zero_eq_mk_of_lt
+          #print axioms ErdosProblems1066.PachToth.Arithmetic.cyclicSucc_iterate_zero_eq_zero_of_dvd
+          #print axioms ErdosProblems1066.PachToth.Figure2Certificate.figure2LocalFiniteCertificate
+          #print axioms ErdosProblems1066.PachToth.Figure2Certificate.SameOppositeTransitionObligations.toOrientedClosedChainPlacement
+          #print axioms ErdosProblems1066.PachToth.OrientationData.TransitionCertificate.connector_unit_target
+          #print axioms ErdosProblems1066.PachToth.OrientationData.OrientedClosedChainPlacement.toIndexedChainRealization
+          #print axioms ErdosProblems1066.PachToth.PlacementBridge.ClosedChainPlacement.toExplicitEdgeSoundness
+          #print axioms ErdosProblems1066.PachToth.PlacementBridge.TranslatedClosedChainPlacement.toIndexedChainRealization
+          #print axioms ErdosProblems1066.PachToth.RealTranslationObstruction.no_real_translation_realizes_all_connector_units
+          #print axioms ErdosProblems1066.PachToth.RealTranslationObstruction.no_translated_closed_chain_placement
+          #print axioms ErdosProblems1066.PachToth.Remainder.independent_card_le_of_split
+          #print axioms ErdosProblems1066.PachToth.RemainderConstruction.exists_remainder_config
+          #print axioms ErdosProblems1066.PachToth.RemainderConstruction.exists_remainder_config_mod_sixteen
+          #print axioms ErdosProblems1066.PachToth.RemainderPlacement.farApartRemainderCertificate
+          #print axioms ErdosProblems1066.PachToth.RemainderPlacement.canonicalSplitRealizationOfExactChainTranslatedRemainder
+          #print axioms ErdosProblems1066.PachToth.RemainderPlacement.targetUpperConstructionFiveSixteenAt_of_exactChain_translatedRemainder
+          #print axioms ErdosProblems1066.PachToth.SplitCertificateBridge.exactChainUpperOfClosedPlacement
+          #print axioms ErdosProblems1066.PachToth.SplitCertificateBridge.exists_canonicalSplitRealization_of_closedPlacement_farApart
+          #print axioms ErdosProblems1066.PachToth.SplitCertificateBridge.targetUpperConstructionFiveSixteenAt_of_closedPlacement_farApart
+          #print axioms ErdosProblems1066.PachToth.GeometricSoundness.mem_blockSelection_iff
+          #print axioms ErdosProblems1066.PachToth.GeometricSoundness.globalVertex_ne_of_local_ne
+          #print axioms ErdosProblems1066.PachToth.GeometricSoundness.nextConnector_ne
+          #print axioms ErdosProblems1066.PachToth.GeometricSoundness.ExplicitEdgeSoundness.blocks_independent_of_independent
+          #print axioms ErdosProblems1066.PachToth.GeometricSoundness.ExplicitEdgeSoundness.cross_independent_of_independent
+          #print axioms ErdosProblems1066.PachToth.GeometricSoundness.ExplicitEdgeSoundness.toIndexedChainRealization
+          #print axioms ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen_of_indexedChainRealizations
+          #print axioms ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen_of_explicitEdgeSoundness
+          #print axioms ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary_of_eventually_and_small
+          #print axioms ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenAt_of_explicitSplitConstruction
+          #print axioms ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary_of_explicitSplitConstructions
+          #print axioms ErdosProblems1066.PachToth.SplitSoundness.independent_card_le_five_sixteen
+          #print axioms ErdosProblems1066.PachToth.SplitSoundness.targetUpperConstructionFiveSixteenAt_of_canonicalSplitRealization
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10Bridge.contradiction_of_atMostOneFailure_and_lateTriples
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10Bridge.M8HonestLocalPredicates.contradiction
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10Inequalities.failureSet_card_le_one_of_turn_hypotheses
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10Inequalities.card_le_one_failures_of_turn_hypotheses
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10Pipeline.contradiction_of_turn_hypotheses
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10Pipeline.honestContradiction_of_turn_hypotheses
+          #print axioms ErdosProblems1066.Swanepoel.AngleArithmetic.card_le_one_failures_of_window_lowers
+          #print axioms ErdosProblems1066.Swanepoel.AngleArithmetic.separated_failures_impossible_of_weightedTurn
+          #print axioms ErdosProblems1066.Swanepoel.AngleBridgeFacts.dotAt_eq_half_of_eucUnit_equilateral
+          #print axioms ErdosProblems1066.Swanepoel.AngleBridgeFacts.one_le_sqDist_iff_dotAt_le_half_of_eucUnit_sides
+          #print axioms ErdosProblems1066.Swanepoel.AngleGeometry.pi_div_three_le_angleAt_of_eucUnit_sides_eucSeparated_base
+          #print axioms ErdosProblems1066.Swanepoel.AngleGeometry.angleAt_origin_of_concrete_equilateral
+          #print axioms ErdosProblems1066.Swanepoel.BoundaryCounting.BoundaryCounts.boundary_angle_count_inequality
+          #print axioms ErdosProblems1066.Swanepoel.BoundaryCounting.SubpolygonDegreeCounts.subpolygon_low_degree_inequality
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10AnalyticBridge.honestContradiction_of_E22_E23
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10EuclideanBridge.E22_E23_of_euclideanBridges
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10AngleToTurn.E22_E23_of_angleToTurnBridges
+          #print axioms ErdosProblems1066.Swanepoel.AngleContainmentInterface.Figure8SeparatedContainmentInterface.separatedWindowLowerE22
+          #print axioms ErdosProblems1066.Swanepoel.AngleContainmentInterface.Figure9AdjacentLeftContainmentInterface.adjacentWindowLowerE23
+          #print axioms ErdosProblems1066.Swanepoel.AngleContainmentInterface.AngleContainmentBridges.E22_E23
+          #print axioms ErdosProblems1066.Swanepoel.AngleContainmentInterface.AngleContainmentBridges.E22
+          #print axioms ErdosProblems1066.Swanepoel.AngleContainmentInterface.AngleContainmentBridges.E23
+          #print axioms ErdosProblems1066.Swanepoel.CommonNeighborGeometry.no_three_commonNeighbors_unitDistanceLocalGraph
+          #print axioms ErdosProblems1066.Swanepoel.CommonNeighborGeometry.unitDistance_commonNeighborFinset_card_le_two
+          #print axioms ErdosProblems1066.Swanepoel.CommonNeighborGeometry.not_hasK23_unitDistanceLocalGraph
+          #print axioms ErdosProblems1066.Swanepoel.LocalExclusions.LocalGraph.commonNeighborFinset_card_le_two_of_not_hasK23
+          #print axioms ErdosProblems1066.Swanepoel.LocalExclusions.UnitDistance.unitDistanceLocalGraph_degree_le_six
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalDeletionCertificate.hasCleared_of_minimalFailure
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalDeletionCertificate.false_of_minimalFailure
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalDeletionCertificate.not_nonempty_localDeletionCertificate_of_minimalFailure
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalClosedNeighborhoodDeletion.exists_degreeLocalDeletionCertificate
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalClosedNeighborhoodDeletion.induced_card_lt_original
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalClosedNeighborhoodDeletion.hasCleared_of_minimalFailure
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalClosedNeighborhoodDeletion.false_of_minimalFailure
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.patternDegreeReducible_of_localClosedNeighborhoodDeletion
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.K23DegreeReducible_of_localClosedNeighborhoodDeletion
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.K23DegreeReducible_of_localClosedNeighborhoodK23Deletion
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.hasCleared_of_minimalFailure_and_degreeLocalDeletionCertificate
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.not_hasK23_of_minimalFailure_and_K23DegreeReducible
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.finiteLocalExclusionPackage_of_unitDistanceConfig
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.commonNeighborFinset_card_le_two_of_unitDistanceConfig
+          #print axioms ErdosProblems1066.Swanepoel.LocalDeletionConstructors.localClosedNeighborhoodDeletionEliminator_of_exists_localClosedNeighborhoodDeletion
+          #print axioms ErdosProblems1066.Swanepoel.LocalDeletionConstructors.no_minimalClearedFailure_of_localClosedNeighborhoodDeletionEliminator
+          #print axioms ErdosProblems1066.Swanepoel.LocalDeletionConstructors.hasCleared_of_localClosedNeighborhoodDeletionEliminator
+          #print axioms ErdosProblems1066.Swanepoel.LocalDeletionConstructors.targetLowerBoundEightThirtyOne_of_localClosedNeighborhoodDeletionEliminator
+          #print axioms ErdosProblems1066.Swanepoel.LocalDeletionWithCardBound.exists_localDeletionCertificate_of_data
+          #print axioms ErdosProblems1066.Swanepoel.LocalDeletionEliminatorWithCardBound.targetLowerBoundEightThirtyOne_of_tupledDirectCardBoundDeletionData
+          #print axioms ErdosProblems1066.Swanepoel.SmallIndependentNeighborhood.isClosedNeighborhood_closedNeighborhoodOf
+          #print axioms ErdosProblems1066.Swanepoel.SmallIndependentNeighborhood.closedNeighborhoodOf_eq_union
+          #print axioms ErdosProblems1066.Swanepoel.SmallIndependentNeighborhood.closedNeighborhoodOf_card_eq_add_outsideNeighborhoodOf_card
+          #print axioms ErdosProblems1066.Swanepoel.SmallIndependentNeighborhood.closedNeighborhoodOf_card_le_four_mul_sub_one_of_outside_card_add_one_le
+          #print axioms ErdosProblems1066.Swanepoel.DeficientNeighborhood.exists_localDeletionCertificate_of_deficientNeighborhood
+          #print axioms ErdosProblems1066.Swanepoel.DeficientNeighborhood.outsideNeighborhood_card_ge_three_mul_of_minimalFailure
+          #print axioms ErdosProblems1066.Swanepoel.closedNeighborhoodOf_singleton_eq_closedUnitNeighborhood
+          #print axioms ErdosProblems1066.Swanepoel.outsideNeighborhoodOf_singleton_eq_unitDistanceNeighborSet
+          #print axioms ErdosProblems1066.Swanepoel.MinimumDegree.unitDistanceNeighborSet_card_ge_three_of_minimalClearedFailure
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureDegreeRange.unitDistanceNeighborSet_card_between_three_and_six_of_minimalClearedFailure
+          #print axioms ErdosProblems1066.Swanepoel.ConnectednessSeparator.FinAnticompletePartition.hasCleared_of_induced_hasCleared
+          #print axioms ErdosProblems1066.Swanepoel.ConnectednessSeparator.FinAnticompletePartition.contradiction_of_induced_hasCleared
+          #print axioms ErdosProblems1066.Swanepoel.ConnectednessSeparator.FinAnticompletePartition.contradiction_of_minimalClearedFailure
+          #print axioms ErdosProblems1066.Swanepoel.ConnectednessExtraction.finAnticompletePartition_of_not_preconnected
+          #print axioms ErdosProblems1066.Swanepoel.ConnectednessExtraction.finAnticompletePartition_of_not_connected
+          #print axioms ErdosProblems1066.Swanepoel.ConnectednessExtractionClosure.preconnected_of_minimalClearedFailure
+          #print axioms ErdosProblems1066.Swanepoel.MinimalConnectednessClosure.unitDistanceSimpleGraph_connected_of_minimalClearedFailure
+          #print axioms ErdosProblems1066.Swanepoel.CutVertexClosure.noCutVertexCertificate_of_minimalFailure_allCutVertexSlack
+          #print axioms ErdosProblems1066.Swanepoel.BrokenLatticePipeline.M8HonestLocalPredicates.contradiction_of_labelFailures_and_labelLateTriples
+          #print axioms ErdosProblems1066.Swanepoel.TurnBoundsInterface.M8HonestTurnPackage.contradiction_of_minimalFailure
+          #print axioms ErdosProblems1066.Swanepoel.LateTriplesInterface.M8HonestLateTriplesPackage.lateTriples
+          #print axioms ErdosProblems1066.Swanepoel.Lemma10WindowGeometry.honestE22_E23_of_leftWindowGeometry
+          #print axioms ErdosProblems1066.Swanepoel.M8ConstructionInterface.M8ConstructionData.toBrokenLatticeMinimalFailure
+          #print axioms ErdosProblems1066.Swanepoel.M8PipelineClosure.no_minimalClearedFailure_of_separatedConstructionEliminator
+          #print axioms ErdosProblems1066.Swanepoel.M8MinimalFailureEliminatorInterface.targetLowerBoundEightThirtyOne_of_m8MinimalFailureEliminator
+          #print axioms ErdosProblems1066.Swanepoel.M8LabelsFromBoundaryInterface.M8LabelsFromBoundaryData.toM8ConstructionData
+          #print axioms ErdosProblems1066.Swanepoel.M8LateTriplesFromNoEarly.m8ConstructionLateTriples_of_noEarlyTripleEquality
+          #print axioms ErdosProblems1066.Swanepoel.M8TurnBoundsFromArc.M8ArcContainmentData.toM8ConstructionData
+          #print axioms ErdosProblems1066.Swanepoel.M8WindowGeometryFromContainment.M8ConstructionDataFromContainment.toM8ConstructionData
+          #print axioms ErdosProblems1066.Swanepoel.PlanarBoundaryClosure.PlanarBoundaryData.faceCountingTheorems
+          #print axioms ErdosProblems1066.Swanepoel.CutVertexFromConnectedness.connectedNoCutVertexCertificate_of_minimalFailure_allCutVertexSlack
+          #print axioms ErdosProblems1066.Swanepoel.FinalConditional.targetLowerBoundEightThirtyOne_of_m8SeparatedConstructionEliminator
+          #print axioms ErdosProblems1066.Swanepoel.BrokenLatticeMinimalFailure.no_minimalClearedFailure_of_m8ConstructionEliminator
+          #print axioms ErdosProblems1066.Swanepoel.CounterexamplePipeline.DeletionReinsertionData.hasCleared_of_deletionReinsertion
+          #print axioms ErdosProblems1066.Swanepoel.CounterexamplePipeline.DeletionReinsertionData.hasCleared_of_deletionReinsertion_graphSmall
+          #print axioms ErdosProblems1066.Swanepoel.CounterexamplePipeline.DeletionReinsertionData.graphHasCleared_of_deletionReinsertion
+          #print axioms ErdosProblems1066.Swanepoel.CounterexamplePipeline.e1_pipeline_of_explicit_deletion
+          #print axioms ErdosProblems1066.Swanepoel.CounterexamplePipeline.e5_pipeline_of_explicit_deletion_graphSmall
+          #print axioms ErdosProblems1066.Swanepoel.DegreeBound.UDConfig.unitDistanceNeighborSet_card_le_six
+          #print axioms ErdosProblems1066.Swanepoel.DegreePipeline.closedUnitNeighborhood_card_le_seven
+          #print axioms ErdosProblems1066.Swanepoel.DegreePipeline.e1_pipeline_of_degree_deletion
+          #print axioms ErdosProblems1066.Swanepoel.FaceReduction.unitDistanceEdges_pairwiseNoncrossing
+          #print axioms ErdosProblems1066.Swanepoel.FaceReduction.UnitDistanceFaceBoundaryHypotheses.toFaceBoundaryHypotheses
+          #print axioms ErdosProblems1066.Swanepoel.FaceCountingBridge.boundaryAngleCountInequalityOfCanonicalFaces
+          #print axioms ErdosProblems1066.Swanepoel.FaceCountingBridge.subpolygonLowDegreeInequalityOfCanonicalFaces
+          #print axioms ErdosProblems1066.Swanepoel.GraphBridge.isIndep_iff_simpleGraph_isIndepSet
+          #print axioms ErdosProblems1066.Swanepoel.InducedSubconfiguration.Induced.image_indep_iff
+          #print axioms ErdosProblems1066.Swanepoel.InducedSubconfiguration.ofFinset
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryInterface.OuterBoundaryPackage.boundaryAngleCountInequality_viaFaceCountingBridge
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryInterface.OuterBoundaryPackage.subpolygonLowDegreeInequality_viaFaceCountingBridge
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryInterface.BoundaryCycle.edge_dist_eq_one
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryInterface.BoundaryCycle.toPolygon_edgeSet
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryInterface.SimplePolygon.separated_edges_do_not_cross'
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryReduction.BoundaryCycle.toSimplePolygon
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryReduction.OuterBoundaryConstruction.boundaryAngleCountInequality
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryReduction.OuterBoundaryConstruction.subpolygonLowDegreeInequality
+          #print axioms ErdosProblems1066.Swanepoel.BoundaryAngleRealization.OuterBoundaryAngleRealization.boundaryAngleCountInequality
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryAssembly.boundaryAngleCountInequalityOfCore
+          #print axioms ErdosProblems1066.Swanepoel.OuterBoundaryAngleClosure.OuterBoundaryRealizedAngleData.boundaryAngleCountInequality
+          #print axioms ErdosProblems1066.Swanepoel.BoundaryWalkConstruction.BoundaryWalkBookkeeping.toBoundaryCountsRealization
+          #print axioms ErdosProblems1066.Swanepoel.SubpolygonAngleRealization.lowDegreeInequality_of_concreteAngleBounds
+          #print axioms ErdosProblems1066.Swanepoel.SubpolygonAssembly.e13LowDegreeInequality_of_explicitCycleCountAngleData
+          #print axioms ErdosProblems1066.Swanepoel.PlanarInterface.StraightLineUnitDistanceGraph.adj_geometry_dist_eq_one
+          #print axioms ErdosProblems1066.Swanepoel.PlanarInterface.FaceBoundaryHypotheses.boundary_edge_root_dist_eq_one
+          #print axioms ErdosProblems1066.Swanepoel.MinimalGraphFacts.exists_smallerBound_data_of_minimalFailure_and_two_le_reinsertion
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureClosure.hasCleared_of_no_minimalClearedFailure
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureClosure.targetLowerBoundEightThirtyOne_of_no_minimalClearedFailure
+          #print axioms ErdosProblems1066.Swanepoel.NoncrossingUnitEdges.separated_unit_edges_not_cross
+          #print axioms ErdosProblems1066.Swanepoel.NoncrossingUnitEdges.unitDistanceEdges_not_cross
+          #print axioms ErdosProblems1066.Swanepoel.TriangleAngleFacts.dotAt_eq_half_of_equilateral_unit
+          #print axioms ErdosProblems1066.Swanepoel.TriangleAngleFacts.one_le_sqDist_of_unit_sides_dotAt_le_half
+          #print axioms ErdosProblems1066.Swanepoel.TriangleAngleFacts.dotAt_origin_of_concrete_equilateral
+          #print axioms ErdosProblems1066.Swanepoel.targetLowerBoundEightThirtyOne_of_clearedBound
+          #print axioms ErdosProblems1066.Swanepoel.targetLowerBoundEightThirtyOne_of_pipelineCleared
+          EOF
+          )
+          expected_axiom_checks="${{ inputs.expected_axiom_checks }}"
+          if [ -z "$expected_axiom_checks" ]; then
+            expected_axiom_checks="$(grep -c '^#print axioms ' <<< "$lean_axiom_input")"
+          fi
+          export EXPECTED_AXIOM_CHECKS="$expected_axiom_checks"
+          lake env lean --stdin <<< "$lean_axiom_input" | python3 .github/scripts/check_lean_axioms.py
+      - uses: leanprover-community/docgen-action@v1

@@ -1,0 +1,14 @@
+/.lake/
+/build/
+/.cache/
+/tmp/
+*.olean
+*.ilean
+*.trace
+*.pdf
+Solution.tex
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
