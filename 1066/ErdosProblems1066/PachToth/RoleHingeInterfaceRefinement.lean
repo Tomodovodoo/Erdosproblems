@@ -95,6 +95,102 @@ def generatedMetricHypotheses_of_orbitSqDistances
     generatedSameBlockIsometry_of_orbitSqDistances
       O hk base orientation horbit
 
+/-- One-chain metric hypotheses using orbit-level exact-local squared
+distances instead of arbitrary-source same-block preservation. -/
+structure GeneratedOrbitSqDistanceMetricHypotheses
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation) where
+  separated :
+    GeneratedSeparationInterface.GeneratedGlobalSeparation
+      O hk base orientation
+  orbit_sq_distances :
+    GeneratedOrbitMatchesExactLocalSqDistances O hk base orientation
+
+namespace GeneratedOrbitSqDistanceMetricHypotheses
+
+/-- Convert orbit-level exact-local squared-distance metric data to the full
+generated-chain metric facade. -/
+def toMetricHypotheses
+    {O : Figure2Certificate.SameOppositeTransitionObligations}
+    {k : Nat} {hk : 0 < k}
+    {base : LocalVertex -> R2}
+    {orientation : Fin k -> OrientationData.BlockOrientation}
+    (H : GeneratedOrbitSqDistanceMetricHypotheses O hk base orientation) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      O hk base orientation :=
+  generatedMetricHypotheses_of_orbitSqDistances
+    O hk base orientation H.separated H.orbit_sq_distances
+
+end GeneratedOrbitSqDistanceMetricHypotheses
+
+/-- Generated-period bridge to the explicit closed-placement certificate using
+orbit-level exact-local squared distances. -/
+def explicitTransitionClosedPlacementCertificate_of_generatedPeriod_orbitSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedOrbitSqDistanceMetricHypotheses O hk base orientation) :
+    ClosedPlacementInterface.ExplicitTransitionClosedPlacementCertificate
+      k hk :=
+  GeneratedSeparationInterface.explicitTransitionClosedPlacementCertificate
+    O hk base orientation period H.toMetricHypotheses
+
+/-- Build the closed placement from generated-period data and orbit-level
+exact-local squared distances. -/
+def closedPlacement_of_generatedPeriod_orbitSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedOrbitSqDistanceMetricHypotheses O hk base orientation) :
+    DeformedPlacement.ClosedPlacement k hk :=
+  (explicitTransitionClosedPlacementCertificate_of_generatedPeriod_orbitSqDistances
+    O hk base orientation period H).toClosedPlacement
+
+/-- Generated-period closed-placement existence bridge using orbit-level
+exact-local squared distances. -/
+theorem exists_closedPlacement_of_generatedPeriod_orbitSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedOrbitSqDistanceMetricHypotheses O hk base orientation) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = GeneratedClosedChain.generatedPoint O hk base orientation := by
+  exact
+    Exists.intro
+      (closedPlacement_of_generatedPeriod_orbitSqDistances
+        O hk base orientation period H)
+      rfl
+
+/-- Exact-block target facade for generated-period data and orbit-level
+exact-local squared distances. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriod_orbitSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedOrbitSqDistanceMetricHypotheses O hk base orientation) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    GeneratedSeparationInterface.targetUpperConstructionFiveSixteenAt_exactBlock
+      O hk base orientation period H.toMetricHypotheses
+
 /-- Exact-block target bridge using algebraic closure and the orbit-level
 same-block invariant. -/
 theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_orbitSqDistances
@@ -164,6 +260,17 @@ def toMetricHypotheses
       (H.separated k hk) (H.orbit_sq_distances k hk)
 
 end GeneratedChainFamilyOrbitSqDistanceHypotheses
+
+/-- Generated periods and orbit-level same-block hypotheses imply the
+finite-family Pach--Toth target through the generated-chain facade. -/
+theorem targetUpperConstructionFiveSixteen_of_generatedPeriod_family_orbitSqDistances
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : F.Periods)
+    (H : GeneratedChainFamilyOrbitSqDistanceHypotheses F) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    GeneratedSeparationInterface.targetUpperConstructionFiveSixteen_of_family
+      F period H.toMetricHypotheses
 
 /-- Generated closure and orbit-level same-block hypotheses imply the
 finite-family Pach--Toth target. -/
@@ -335,6 +442,57 @@ theorem generatedOrbitSqDistances_exactBase_of_transitionExactLocalSqDistances
       RoleHingeSameBlockAlgebra.exactLocal_matchesExactLocalSqDistances
       htransition
 
+/-- Generated-period exact-block target bridge for refined role-hinge
+transitions whose same-block metric is supplied directly on the generated
+orbit. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_roleHingeGeneratedPeriod_orbitSqDistances
+    (T : SameOppositeRoleHingeOrbitTransitionFacts)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (horbit :
+      GeneratedOrbitMatchesExactLocalSqDistances
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriod_orbitSqDistances
+      T.toFigure2TransitionObligations hk BaseTransitionRealization.exactBase
+      orientation period
+      { separated := separated
+        orbit_sq_distances := horbit }
+
+/-- Generated-period exact-block target bridge when the role-hinge orbit
+invariant is obtained by propagating exact-local squared distances. -/
+theorem exactBlock_of_roleHingeGeneratedPeriod_transitionSqDistances
+    (T : SameOppositeRoleHingeOrbitTransitionFacts)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (htransition :
+      RoleHingeSameBlockAlgebra.GeneratedTransitionsPreserveExactLocalSqDistances
+        T.toFigure2TransitionObligations) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_roleHingeGeneratedPeriod_orbitSqDistances
+      T hk orientation period separated
+      (generatedOrbitSqDistances_exactBase_of_transitionExactLocalSqDistances
+        T hk orientation htransition)
+
 /-- Exact-block target bridge for refined role-hinge transitions whose
 same-block metric is certified only by exact-local orbit preservation. -/
 theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_roleHingeOrbitSqDistances
@@ -382,6 +540,58 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_roleHingeTransitionEx
       T hk orientation closure separated
       (generatedOrbitSqDistances_exactBase_of_transitionExactLocalSqDistances
         T hk orientation htransition)
+
+/-- Exact-block target bridge for the current concrete connector-only
+transition obligations.  The same-block metric is supplied only on the
+generated orbit, so this route avoids the impossible arbitrary-source
+`PreservesSameBlockDistances` field. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_concreteTransitionObligations_orbitSqDistances
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (horbit :
+      GeneratedOrbitMatchesExactLocalSqDistances
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        BaseTransitionRealization.exactBase orientation) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_orbitSqDistances
+      RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+      BaseTransitionRealization.exactBase orientation closure separated horbit
+
+/-- Exact-block target bridge for the current concrete connector-only
+transition obligations, deriving the orbit same-block metric from exact-local
+squared-distance preservation of the selected concrete transitions. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_concreteTransitionObligations_transitionExactLocalSqDistances
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (htransition :
+      RoleHingeSameBlockAlgebra.GeneratedTransitionsPreserveExactLocalSqDistances
+        RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_concreteTransitionObligations_orbitSqDistances
+      hk orientation closure separated
+      (by
+        simpa [GeneratedOrbitMatchesExactLocalSqDistances] using
+          RoleHingeSameBlockAlgebra.generatedOrbit_exactBase_matchesExactLocalSqDistances
+            RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
+            hk orientation htransition)
 
 /-- Named obstruction: the concrete fixed-angle role-hinge override cannot
 satisfy the old arbitrary-source same-block preservation interface. -/

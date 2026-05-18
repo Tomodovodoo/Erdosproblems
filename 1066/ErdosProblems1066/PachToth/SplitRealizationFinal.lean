@@ -39,6 +39,111 @@ def checkedRemainderUpper (r : Nat) : SplitSoundness.RemainderUpper r where
   independent_card_le_ceil_third :=
     Classical.choose_spec (RemainderConstruction.exists_remainder_config r)
 
+/-- Exact-chain data plus the checked remainder and an explicit far-apart
+combined placement give the named canonical split-realization existence
+proposition. -/
+theorem exists_canonicalSplitRealization_of_exactChain_checkedRemainder_farApart
+    {k r : Nat}
+    (chain : SplitSoundness.ExactChainUpper k)
+    (F :
+      SplitCertificateBridge.FarApartRemainderCertificate
+        chain.config
+        (checkedRemainderUpper r).config) :
+    SplitCertificateBridge.exists_canonicalSplitRealization k r := by
+  exact
+    SplitCertificateBridge.exists_canonicalSplitRealization_of_exactChain_farApart
+      chain
+      (checkedRemainderUpper r)
+      F
+
+/-- Exact-chain data plus the checked remainder and an explicit far-apart
+combined placement route through split soundness to the target at
+`16 * k + r`. -/
+theorem targetUpperConstructionFiveSixteenAt_of_exactChain_checkedRemainder_farApart
+    {k r : Nat} (hr : r < 16)
+    (chain : SplitSoundness.ExactChainUpper k)
+    (F :
+      SplitCertificateBridge.FarApartRemainderCertificate
+        chain.config
+        (checkedRemainderUpper r).config) :
+    targetUpperConstructionFiveSixteenAt (16 * k + r) := by
+  exact
+    SplitCertificateBridge.targetUpperConstructionFiveSixteenAt_of_exists_canonicalSplitRealization
+      hr
+      (exists_canonicalSplitRealization_of_exactChain_checkedRemainder_farApart
+        chain F)
+
+/-- Exact-chain data and the checked remainder give the named canonical
+split-realization existence proposition after translating the remainder far
+away from the chain. -/
+theorem exists_canonicalSplitRealization_of_exactChain_translatedCheckedRemainder
+    {k r : Nat}
+    (chain : SplitSoundness.ExactChainUpper k) :
+    SplitCertificateBridge.exists_canonicalSplitRealization k r := by
+  exact
+    Exists.intro
+      (RemainderPlacement.canonicalSplitRealizationOfExactChainTranslatedRemainder
+        chain
+        (checkedRemainderUpper r))
+      True.intro
+
+/-- Exact-chain data and the checked translated remainder route through
+split soundness to the target at `16 * k + r`. -/
+theorem targetUpperConstructionFiveSixteenAt_of_exactChain_translatedCheckedRemainder
+    {k r : Nat} (hr : r < 16)
+    (chain : SplitSoundness.ExactChainUpper k) :
+    targetUpperConstructionFiveSixteenAt (16 * k + r) := by
+  exact
+    RemainderPlacement.targetUpperConstructionFiveSixteenAt_of_exactChain_translatedRemainder
+      hr
+      chain
+      (checkedRemainderUpper r)
+
+/-- Exact `16 * k` target data supplies the div/mod exact-chain block, and
+an explicit far-apart placement of the checked remainder gives the named
+canonical split-realization existence proposition. -/
+theorem exists_canonicalSplitRealization_divMod_of_exactTarget_checkedRemainder_farApart
+    (Hexact : targetUpperConstructionFiveSixteen) (n : Nat)
+    (F :
+      SplitCertificateBridge.FarApartRemainderCertificate
+        (SplitSoundness.exactChainUpperOfTarget Hexact (n / 16)).config
+        (checkedRemainderUpper (n % 16)).config) :
+    SplitCertificateBridge.exists_canonicalSplitRealization (n / 16) (n % 16) := by
+  exact
+    exists_canonicalSplitRealization_of_exactChain_checkedRemainder_farApart
+      (SplitSoundness.exactChainUpperOfTarget Hexact (n / 16))
+      F
+
+/-- Exact `16 * k` target data supplies the div/mod exact-chain block, and
+the translated checked remainder gives the named canonical split-realization
+existence proposition. -/
+theorem exists_canonicalSplitRealization_divMod_of_exactTarget_translatedCheckedRemainder
+    (Hexact : targetUpperConstructionFiveSixteen) (n : Nat) :
+    SplitCertificateBridge.exists_canonicalSplitRealization (n / 16) (n % 16) := by
+  exact
+    exists_canonicalSplitRealization_of_exactChain_translatedCheckedRemainder
+      (SplitSoundness.exactChainUpperOfTarget Hexact (n / 16))
+
+/-- Exact `16 * k` target data extends to `n` when the div/mod checked
+remainder is supplied with an explicit far-apart placement. -/
+theorem targetUpperConstructionFiveSixteenAt_of_exactTarget_checkedRemainder_farApart
+    (Hexact : targetUpperConstructionFiveSixteen) (n : Nat)
+    (F :
+      SplitCertificateBridge.FarApartRemainderCertificate
+        (SplitSoundness.exactChainUpperOfTarget Hexact (n / 16)).config
+        (checkedRemainderUpper (n % 16)).config) :
+    targetUpperConstructionFiveSixteenAt n := by
+  have hr : n % 16 < 16 := Nat.mod_lt n (by norm_num)
+  have hsplit : n = 16 * (n / 16) + n % 16 := by
+    have h := Nat.mod_add_div n 16
+    omega
+  rw [hsplit]
+  exact
+    SplitCertificateBridge.targetUpperConstructionFiveSixteenAt_of_exists_canonicalSplitRealization
+      hr
+      (exists_canonicalSplitRealization_divMod_of_exactTarget_checkedRemainder_farApart
+        Hexact n F)
+
 /-- Exact `16 * k` target data extends to every vertex count by appending the
 checked remainder block and translating it far away from the exact chain. -/
 theorem targetUpperConstructionFiveSixteenAt_of_exactTarget_remainderFarApart

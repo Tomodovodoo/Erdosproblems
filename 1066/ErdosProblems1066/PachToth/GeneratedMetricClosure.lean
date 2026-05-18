@@ -110,6 +110,543 @@ theorem generatedReducedMetricHypotheses_transitionPreserves
   let H := generatedReducedMetricHypotheses T hk orientation separated
   exact H.transition_preserves_same_block_distances
 
+/-- Reduced generated metric hypotheses also give the full metric facade
+needed by the closed-placement route. -/
+def generatedMetricHypotheses_of_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      O hk base orientation where
+  separated := H.separated
+  same_block_isometry :=
+    GeneratedSeparationInterface.same_block_isometry_of_reduced
+      O hk base orientation H
+
+/-- Full generated metric hypotheses obtained from the reduced exact-base
+role-hinge package. -/
+def generatedMetricHypotheses
+    (T : RoleHingeTransitions)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      T.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase orientation :=
+  generatedMetricHypotheses_of_reduced
+    T.toFigure2TransitionObligations hk
+    BaseTransitionRealization.exactBase orientation
+    (generatedReducedMetricHypotheses T hk orientation separated)
+
+@[simp]
+theorem generatedMetricHypotheses_separated
+    (T : RoleHingeTransitions)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation) :
+    (generatedMetricHypotheses T hk orientation separated).separated =
+      separated :=
+  rfl
+
+/-- Coordinate squared distance for exact-local same-block certificates. -/
+def sqDist (p q : R2) : Real :=
+  (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2
+
+/-- A placed block realizes the exact local squared-distance table. -/
+def MatchesExactLocalSqDistances (point : LocalVertex -> R2) : Prop :=
+  forall u v : LocalVertex,
+    sqDist (point u) (point v) =
+      ((ExactLocalGeometry.localNorm4 u v : Int) : Real) / 4
+
+/-- The exact generated base block realizes the exact local squared-distance
+table. -/
+theorem exactBase_matchesExactLocalSqDistances :
+    MatchesExactLocalSqDistances BaseTransitionRealization.exactBase := by
+  intro u v
+  simpa [BaseTransitionRealization.exactBase] using
+    ExactLocalGeometry.local_sqDist' u v
+
+/-- Exact local squared-distance data gives the corresponding Euclidean
+same-block distance table. -/
+theorem matchesExactLocalDistances_of_sqDistances
+    {point : LocalVertex -> R2}
+    (hpoint : MatchesExactLocalSqDistances point)
+    (u v : LocalVertex) :
+    _root_.eucDist (point u) (point v) =
+      _root_.eucDist
+        (ExactLocalGeometry.localPoint u)
+        (ExactLocalGeometry.localPoint v) := by
+  have hsq := hpoint u v
+  unfold _root_.eucDist
+  unfold sqDist at hsq
+  rw [hsq, ExactLocalGeometry.local_sqDist' u v]
+
+/-- Any base block matching the exact local squared-distance table has the
+checked one-block same-block metric. -/
+theorem generatedBaseSameBlockIsometry_of_sqDistances
+    {base : LocalVertex -> R2}
+    (hbase : MatchesExactLocalSqDistances base) :
+    GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base := by
+  intro u v
+  calc
+    _root_.eucDist (base u) (base v) =
+      _root_.eucDist
+        (ExactLocalGeometry.localPoint u)
+        (ExactLocalGeometry.localPoint v) := by
+        exact matchesExactLocalDistances_of_sqDistances hbase u v
+    _ =
+      _root_.eucDist
+        (OneBlockSoundness.oneBlockCertificate.config.pts
+          (BlockPartition.localVertexEquivFin16 u))
+        (OneBlockSoundness.oneBlockCertificate.config.pts
+          (BlockPartition.localVertexEquivFin16 v)) := by
+        exact exactBase_generatedBaseSameBlockIsometry u v
+
+/-- A transition preserves exact-local squared distances on sources that
+already realize the exact local table. -/
+def PreservesExactLocalSqDistances
+    (placeNext : (LocalVertex -> R2) -> LocalVertex -> R2) : Prop :=
+  forall source : LocalVertex -> R2,
+    MatchesExactLocalSqDistances source ->
+      MatchesExactLocalSqDistances (placeNext source)
+
+/-- Arbitrary-source same-block distance preservation implies exact-local
+squared-distance preservation on exact-local sources. -/
+theorem preservesExactLocalSqDistances_of_preservesSameBlockDistances
+    {placeNext : (LocalVertex -> R2) -> LocalVertex -> R2}
+    (hpreserve :
+      HingedTransitionInterface.PreservesSameBlockDistances placeNext) :
+    PreservesExactLocalSqDistances placeNext := by
+  intro source hsource u v
+  have hsourceDist :=
+    matchesExactLocalDistances_of_sqDistances hsource u v
+  have htargetDist :
+      _root_.eucDist (placeNext source u) (placeNext source v) =
+        _root_.eucDist
+          (ExactLocalGeometry.localPoint u)
+          (ExactLocalGeometry.localPoint v) := by
+    calc
+      _root_.eucDist (placeNext source u) (placeNext source v) =
+        _root_.eucDist (source u) (source v) := by
+          exact hpreserve source u v
+      _ =
+        _root_.eucDist
+          (ExactLocalGeometry.localPoint u)
+          (ExactLocalGeometry.localPoint v) := hsourceDist
+  have hsq :
+      _root_.eucDist (placeNext source u) (placeNext source v) ^ 2 =
+        _root_.eucDist
+          (ExactLocalGeometry.localPoint u)
+          (ExactLocalGeometry.localPoint v) ^ 2 := by
+    rw [htargetDist]
+  rw [_root_.eucDist_sq, _root_.eucDist_sq] at hsq
+  simpa [sqDist, ExactLocalGeometry.local_sqDist' u v] using hsq
+
+/-- The selected same/opposite transitions preserve the exact local
+squared-distance table along exact-local sources. -/
+def GeneratedTransitionsPreserveExactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations) : Prop :=
+  forall (orientation : OrientationData.BlockOrientation)
+      (source : LocalVertex -> R2),
+    MatchesExactLocalSqDistances source ->
+      MatchesExactLocalSqDistances
+        ((O.transitionFor orientation).placeNext source)
+
+/-- Branchwise exact-local squared-distance preservation gives the selected
+same/opposite preservation obligation. -/
+theorem generatedTransitionsPreserveExactLocalSqDistances_of_branches
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    (hsame : PreservesExactLocalSqDistances O.samePlaceNext)
+    (hopposite : PreservesExactLocalSqDistances O.oppositePlaceNext) :
+    GeneratedTransitionsPreserveExactLocalSqDistances O := by
+  intro orientation source hsource
+  cases orientation
+  case same =>
+    exact hsame source hsource
+  case opposite =>
+    exact hopposite source hsource
+
+/-- Strong role-hinged transition packages also preserve exact-local
+squared distances on generated-orbit sources. -/
+theorem roleHingeTransitions_preserveExactLocalSqDistances
+    (T : RoleHingeTransitions) :
+    GeneratedTransitionsPreserveExactLocalSqDistances
+      T.toFigure2TransitionObligations := by
+  exact
+    generatedTransitionsPreserveExactLocalSqDistances_of_branches
+      T.toFigure2TransitionObligations
+      (preservesExactLocalSqDistances_of_preservesSameBlockDistances
+        T.same.preserves_same_block_distances)
+      (preservesExactLocalSqDistances_of_preservesSameBlockDistances
+        T.opposite.preserves_same_block_distances)
+
+/-- The exact-local squared-distance invariant propagates along every
+generated block. -/
+theorem generatedBlock_matchesExactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    forall n : Nat,
+      MatchesExactLocalSqDistances
+        (GeneratedClosedChain.generatedBlock O hk base orientation n) := by
+  intro n
+  induction n with
+  | zero =>
+      simpa using hbase
+  | succ n ih =>
+      exact
+        htransition
+          (GeneratedClosedChain.orientationAt hk orientation n)
+          (GeneratedClosedChain.generatedBlock O hk base orientation n)
+          ih
+
+/-- The exact-local squared-distance table holds on every generated point
+block. -/
+theorem generatedPoint_matchesExactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O)
+    (i : Fin k) :
+    MatchesExactLocalSqDistances
+      (GeneratedClosedChain.generatedPoint O hk base orientation i) := by
+  simpa [GeneratedClosedChain.generatedPoint] using
+    generatedBlock_matchesExactLocalSqDistances
+      O hk base orientation hbase htransition i.val
+
+/-- Exact-base generated orbits inherit the exact-local squared-distance
+table from selected transition preservation. -/
+theorem generatedOrbit_exactBase_matchesExactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    forall i : Fin k,
+      MatchesExactLocalSqDistances
+        (GeneratedClosedChain.generatedPoint O hk
+          BaseTransitionRealization.exactBase orientation i) := by
+  intro i
+  exact
+    generatedPoint_matchesExactLocalSqDistances
+      O hk BaseTransitionRealization.exactBase orientation
+      exactBase_matchesExactLocalSqDistances htransition i
+
+/-- Exact-local squared-distance preservation supplies the generated
+same-block isometry needed by closed placement. -/
+theorem generatedSameBlockIsometry_of_exactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    GeneratedSeparationInterface.GeneratedSameBlockIsometry
+      O hk base orientation := by
+  intro i u v
+  have hblock :
+      MatchesExactLocalSqDistances
+        (GeneratedClosedChain.generatedPoint O hk base orientation i) := by
+    exact
+      generatedPoint_matchesExactLocalSqDistances
+        O hk base orientation hbase htransition i
+  calc
+    _root_.eucDist
+        (GeneratedClosedChain.generatedPoint O hk base orientation i u)
+        (GeneratedClosedChain.generatedPoint O hk base orientation i v) =
+      _root_.eucDist
+        (ExactLocalGeometry.localPoint u)
+        (ExactLocalGeometry.localPoint v) := by
+        exact matchesExactLocalDistances_of_sqDistances hblock u v
+    _ =
+      _root_.eucDist
+        (OneBlockSoundness.oneBlockCertificate.config.pts
+          (BlockPartition.localVertexEquivFin16 u))
+        (OneBlockSoundness.oneBlockCertificate.config.pts
+          (BlockPartition.localVertexEquivFin16 v)) := by
+        exact exactBase_generatedBaseSameBlockIsometry u v
+
+/-- Package global separation and exact-local squared-distance preservation
+as the full generated metric hypotheses. -/
+def generatedMetricHypotheses_of_exactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        O hk base orientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      O hk base orientation where
+  separated := separated
+  same_block_isometry :=
+    generatedSameBlockIsometry_of_exactLocalSqDistances
+      O hk base orientation hbase htransition
+
+@[simp]
+theorem generatedMetricHypotheses_of_exactLocalSqDistances_separated
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        O hk base orientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    (generatedMetricHypotheses_of_exactLocalSqDistances
+        O hk base orientation separated hbase htransition).separated =
+      separated :=
+  rfl
+
+/-- Exact-base role-hinge metric hypotheses from exact-local squared-distance
+preservation.  This is the full metric facade, not the reduced facade: the
+reduced transition field still asks for arbitrary-source distance
+preservation. -/
+def roleHingeGeneratedMetricHypotheses_of_exactLocalSqDistances
+    (T : RoleHingeTransitions)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances
+        T.toFigure2TransitionObligations) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      T.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase orientation :=
+  generatedMetricHypotheses_of_exactLocalSqDistances
+    T.toFigure2TransitionObligations hk
+    BaseTransitionRealization.exactBase orientation separated
+    exactBase_matchesExactLocalSqDistances htransition
+
+/-- Exact-base role-hinge metric hypotheses from the strong same-block
+preservation fields, routed through the exact-local squared-distance bridge. -/
+def roleHingeGeneratedMetricHypotheses_of_preservesSameBlock
+    (T : RoleHingeTransitions)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      T.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase orientation :=
+  roleHingeGeneratedMetricHypotheses_of_exactLocalSqDistances
+    T hk orientation separated
+    (roleHingeTransitions_preserveExactLocalSqDistances T)
+
+/-- Closed-placement certificate from algebraic closure, separation, and
+exact-local squared-distance preservation. -/
+def explicitTransitionClosedPlacementCertificate_of_exactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        O hk base orientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    ClosedPlacementInterface.ExplicitTransitionClosedPlacementCertificate
+      k hk :=
+  ClosedPlacementClosure.explicitTransitionClosedPlacementCertificate_of_generatedClosure
+    O hk base orientation closure
+    (generatedMetricHypotheses_of_exactLocalSqDistances
+      O hk base orientation separated hbase htransition)
+
+/-- Closed placement from algebraic closure, separation, and exact-local
+squared-distance preservation. -/
+def closedPlacement_of_exactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        O hk base orientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    DeformedPlacement.ClosedPlacement k hk :=
+  ClosedPlacementClosure.closedPlacement_of_generatedClosure
+    O hk base orientation closure
+    (generatedMetricHypotheses_of_exactLocalSqDistances
+      O hk base orientation separated hbase htransition)
+
+/-- Existence form of the closed placement obtained from exact-local
+squared-distance preservation. -/
+theorem exists_closedPlacement_of_exactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        O hk base orientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point = GeneratedClosedChain.generatedPoint O hk base orientation := by
+  exact
+    ClosedPlacementClosure.exists_closedPlacement_of_generatedClosure
+      O hk base orientation closure
+      (generatedMetricHypotheses_of_exactLocalSqDistances
+        O hk base orientation separated hbase htransition)
+
+/-- Exact-block target from algebraic closure, separation, and exact-local
+squared-distance preservation. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_exactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        O hk base orientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    ClosedPlacementClosure.targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedClosure
+      O hk base orientation closure
+      (generatedMetricHypotheses_of_exactLocalSqDistances
+        O hk base orientation separated hbase htransition)
+
+/-- Exact-base role-hinge closed-placement certificate from exact-local
+squared-distance preservation. -/
+def explicitTransitionClosedPlacementCertificate_of_roleHingeExactLocalSqDistances
+    (T : RoleHingeTransitions)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances
+        T.toFigure2TransitionObligations) :
+    ClosedPlacementInterface.ExplicitTransitionClosedPlacementCertificate
+      k hk :=
+  explicitTransitionClosedPlacementCertificate_of_exactLocalSqDistances
+    T.toFigure2TransitionObligations hk
+    BaseTransitionRealization.exactBase orientation closure separated
+    exactBase_matchesExactLocalSqDistances htransition
+
+/-- Exact-base role-hinge closed placement from exact-local squared-distance
+preservation. -/
+def closedPlacement_of_roleHingeExactLocalSqDistances
+    (T : RoleHingeTransitions)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances
+        T.toFigure2TransitionObligations) :
+    DeformedPlacement.ClosedPlacement k hk :=
+  closedPlacement_of_exactLocalSqDistances
+    T.toFigure2TransitionObligations hk
+    BaseTransitionRealization.exactBase orientation closure separated
+    exactBase_matchesExactLocalSqDistances htransition
+
+/-- Existence form of the exact-base role-hinge closed placement obtained
+from exact-local squared-distance preservation. -/
+theorem exists_closedPlacement_of_roleHingeExactLocalSqDistances
+    (T : RoleHingeTransitions)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances
+        T.toFigure2TransitionObligations) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P.point =
+        GeneratedClosedChain.generatedPoint T.toFigure2TransitionObligations
+          hk BaseTransitionRealization.exactBase orientation := by
+  exact
+    exists_closedPlacement_of_exactLocalSqDistances
+      T.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase orientation closure separated
+      exactBase_matchesExactLocalSqDistances htransition
+
+/-- Exact-block target from exact-base role-hinge closure, separation, and
+exact-local squared-distance preservation. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_roleHingeExactLocalSqDistances
+    (T : RoleHingeTransitions)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (separated :
+      GeneratedSeparationInterface.GeneratedGlobalSeparation
+        T.toFigure2TransitionObligations hk
+        BaseTransitionRealization.exactBase orientation)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances
+        T.toFigure2TransitionObligations) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_exactLocalSqDistances
+      T.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase orientation closure separated
+      exactBase_matchesExactLocalSqDistances htransition
+
 /-- The explicit transition closed-placement certificate obtained from a
 role-hinged generated closure. -/
 def explicitTransitionClosedPlacementCertificate

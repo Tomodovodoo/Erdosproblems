@@ -53,6 +53,78 @@ structure RoleHingePortPairUnitEdges (T : RoleHingeTransition) : Prop where
       _root_.eucDist
         (T.placeNext source T0_0) (T.placeNext source T0_2) = 1
 
+/-- The `p` angle equation gives the raw `p` port-pair unit edge. -/
+theorem p_ports_unit_of_angleEquations_realizes
+    (placeNext : (LocalVertex -> R2) -> LocalVertex -> R2)
+    (roleAngle : ConnectorRole -> Real)
+    (realizes_role :
+      forall (source : LocalVertex -> R2) (u v : LocalVertex)
+        (role : ConnectorRole),
+        nextConnectorRole u v = some role ->
+          placeNext source v =
+            UnitVectorGeometry.hingePoint (source u) (roleAngle role))
+    (A : RoleHingeAngleEquations roleAngle)
+    (source : LocalVertex -> R2) :
+    _root_.eucDist
+      (placeNext source T1_1) (placeNext source T1_2) = 1 := by
+  rw [realizes_role source T2_2 T1_1 NextConnectorRole.pToUpper rfl]
+  rw [realizes_role source T2_2 T1_2 NextConnectorRole.pToLower rfl]
+  exact
+    (RoleHingeConnectorAlgebra.hinge_ports_unit_iff_cos_sub_eq_half
+      (source T2_2)
+      (roleAngle NextConnectorRole.pToUpper)
+      (roleAngle NextConnectorRole.pToLower)).mpr A.p_cos_sub_eq_half
+
+/-- The `q` angle equation gives the raw `q` port-pair unit edge. -/
+theorem q_ports_unit_of_angleEquations_realizes
+    (placeNext : (LocalVertex -> R2) -> LocalVertex -> R2)
+    (roleAngle : ConnectorRole -> Real)
+    (realizes_role :
+      forall (source : LocalVertex -> R2) (u v : LocalVertex)
+        (role : ConnectorRole),
+        nextConnectorRole u v = some role ->
+          placeNext source v =
+            UnitVectorGeometry.hingePoint (source u) (roleAngle role))
+    (A : RoleHingeAngleEquations roleAngle)
+    (source : LocalVertex -> R2) :
+    _root_.eucDist
+      (placeNext source T0_0) (placeNext source T0_2) = 1 := by
+  rw [realizes_role source T4_0 T0_0 NextConnectorRole.qToUpper rfl]
+  rw [realizes_role source T4_0 T0_2 NextConnectorRole.qToLower rfl]
+  exact
+    (RoleHingeConnectorAlgebra.hinge_ports_unit_iff_cos_sub_eq_half
+      (source T4_0)
+      (roleAngle NextConnectorRole.qToUpper)
+      (roleAngle NextConnectorRole.qToLower)).mpr A.q_cos_sub_eq_half
+
+/-- The two raw role-realization equations and angle equations give both
+same-source port-pair unit-edge facts. -/
+theorem portPairUnitEdges_of_angleEquations_realizes
+    (placeNext : (LocalVertex -> R2) -> LocalVertex -> R2)
+    (roleAngle : ConnectorRole -> Real)
+    (realizes_role :
+      forall (source : LocalVertex -> R2) (u v : LocalVertex)
+        (role : ConnectorRole),
+        nextConnectorRole u v = some role ->
+          placeNext source v =
+            UnitVectorGeometry.hingePoint (source u) (roleAngle role))
+    (A : RoleHingeAngleEquations roleAngle) :
+    And
+      (forall source : LocalVertex -> R2,
+        _root_.eucDist
+          (placeNext source T1_1) (placeNext source T1_2) = 1)
+      (forall source : LocalVertex -> R2,
+        _root_.eucDist
+          (placeNext source T0_0) (placeNext source T0_2) = 1) := by
+  exact
+    And.intro
+      (fun source =>
+        p_ports_unit_of_angleEquations_realizes
+          placeNext roleAngle realizes_role A source)
+      (fun source =>
+        q_ports_unit_of_angleEquations_realizes
+          placeNext roleAngle realizes_role A source)
+
 /-- The `p` angle equation gives the `p` port-pair unit edge. -/
 theorem p_ports_unit_of_angleEquations
     (T : RoleHingeTransition)
@@ -136,6 +208,38 @@ def oppositeEquilateralRoleAngle : ConnectorRole -> Real
   | .qToUpper => -2 * Real.pi / 3
   | .qToLower => -Real.pi
 
+/-- The same-branch `p` roles differ by `-pi / 3`. -/
+theorem sameEquilateralRoleAngle_p_sub_eq_neg_pi_div_three :
+    sameEquilateralRoleAngle NextConnectorRole.pToUpper -
+      sameEquilateralRoleAngle NextConnectorRole.pToLower =
+        -(Real.pi / 3) := by
+  dsimp [sameEquilateralRoleAngle]
+  ring
+
+/-- The same-branch `q` roles differ by `-pi / 3`. -/
+theorem sameEquilateralRoleAngle_q_sub_eq_neg_pi_div_three :
+    sameEquilateralRoleAngle NextConnectorRole.qToUpper -
+      sameEquilateralRoleAngle NextConnectorRole.qToLower =
+        -(Real.pi / 3) := by
+  dsimp [sameEquilateralRoleAngle]
+  ring
+
+/-- The opposite-branch `p` roles differ by `pi / 3`. -/
+theorem oppositeEquilateralRoleAngle_p_sub_eq_pi_div_three :
+    oppositeEquilateralRoleAngle NextConnectorRole.pToUpper -
+      oppositeEquilateralRoleAngle NextConnectorRole.pToLower =
+        Real.pi / 3 := by
+  dsimp [oppositeEquilateralRoleAngle]
+  ring
+
+/-- The opposite-branch `q` roles differ by `pi / 3`. -/
+theorem oppositeEquilateralRoleAngle_q_sub_eq_pi_div_three :
+    oppositeEquilateralRoleAngle NextConnectorRole.qToUpper -
+      oppositeEquilateralRoleAngle NextConnectorRole.qToLower =
+        Real.pi / 3 := by
+  dsimp [oppositeEquilateralRoleAngle]
+  ring
+
 /-- The same-branch concrete angles satisfy the two port-pair equations. -/
 theorem sameEquilateralRoleAngle_angleEquations :
     RoleHingeAngleEquations sameEquilateralRoleAngle := by
@@ -157,6 +261,98 @@ theorem oppositeEquilateralRoleAngle_angleEquations :
     ring
   · dsimp [oppositeEquilateralRoleAngle]
     ring
+
+/-- Any role-angle assignment equal to the same-branch concrete angles
+satisfies the two port-pair equations. -/
+theorem angleEquations_of_eq_sameEquilateralRoleAngle
+    {roleAngle : ConnectorRole -> Real}
+    (h : roleAngle = sameEquilateralRoleAngle) :
+    RoleHingeAngleEquations roleAngle := by
+  rw [h]
+  exact sameEquilateralRoleAngle_angleEquations
+
+/-- Any role-angle assignment equal to the opposite-branch concrete angles
+satisfies the two port-pair equations. -/
+theorem angleEquations_of_eq_oppositeEquilateralRoleAngle
+    {roleAngle : ConnectorRole -> Real}
+    (h : roleAngle = oppositeEquilateralRoleAngle) :
+    RoleHingeAngleEquations roleAngle := by
+  rw [h]
+  exact oppositeEquilateralRoleAngle_angleEquations
+
+/-- Same/opposite concrete role angles satisfy the two port-pair equation
+facts. -/
+theorem sameOppositeEquilateralRoleAngle_angleEquations :
+    And
+      (RoleHingeAngleEquations sameEquilateralRoleAngle)
+      (RoleHingeAngleEquations oppositeEquilateralRoleAngle) := by
+  exact
+    And.intro
+      sameEquilateralRoleAngle_angleEquations
+      oppositeEquilateralRoleAngle_angleEquations
+
+/-- A transition whose role angles are the same-branch concrete angles has both
+same-source port-pair unit edges. -/
+theorem portPairUnitEdges_of_eq_sameEquilateralRoleAngle
+    (T : RoleHingeTransition)
+    (h : T.roleAngle = sameEquilateralRoleAngle) :
+    RoleHingePortPairUnitEdges T :=
+  portPairUnitEdges_of_angleEquations T
+    (angleEquations_of_eq_sameEquilateralRoleAngle h)
+
+/-- A transition whose role angles are the opposite-branch concrete angles has
+both same-source port-pair unit edges. -/
+theorem portPairUnitEdges_of_eq_oppositeEquilateralRoleAngle
+    (T : RoleHingeTransition)
+    (h : T.roleAngle = oppositeEquilateralRoleAngle) :
+    RoleHingePortPairUnitEdges T :=
+  portPairUnitEdges_of_angleEquations T
+    (angleEquations_of_eq_oppositeEquilateralRoleAngle h)
+
+/-- Raw same/opposite role-hinge maps using the concrete equilateral angles
+have all four same-source port-pair unit-edge facts. -/
+theorem sameOppositePortPairUnitEdges_of_equilateralRoleAngles
+    (samePlaceNext oppositePlaceNext :
+      (LocalVertex -> R2) -> LocalVertex -> R2)
+    (same_realizes_role :
+      forall (source : LocalVertex -> R2) (u v : LocalVertex)
+        (role : ConnectorRole),
+        nextConnectorRole u v = some role ->
+          samePlaceNext source v =
+            UnitVectorGeometry.hingePoint
+              (source u) (sameEquilateralRoleAngle role))
+    (opposite_realizes_role :
+      forall (source : LocalVertex -> R2) (u v : LocalVertex)
+        (role : ConnectorRole),
+        nextConnectorRole u v = some role ->
+          oppositePlaceNext source v =
+            UnitVectorGeometry.hingePoint
+              (source u) (oppositeEquilateralRoleAngle role)) :
+    And
+      (And
+        (forall source : LocalVertex -> R2,
+          _root_.eucDist
+            (samePlaceNext source T1_1) (samePlaceNext source T1_2) = 1)
+        (forall source : LocalVertex -> R2,
+          _root_.eucDist
+            (samePlaceNext source T0_0) (samePlaceNext source T0_2) = 1))
+      (And
+        (forall source : LocalVertex -> R2,
+          _root_.eucDist
+            (oppositePlaceNext source T1_1)
+            (oppositePlaceNext source T1_2) = 1)
+        (forall source : LocalVertex -> R2,
+          _root_.eucDist
+            (oppositePlaceNext source T0_0)
+            (oppositePlaceNext source T0_2) = 1)) := by
+  exact
+    And.intro
+      (portPairUnitEdges_of_angleEquations_realizes
+        samePlaceNext sameEquilateralRoleAngle same_realizes_role
+        sameEquilateralRoleAngle_angleEquations)
+      (portPairUnitEdges_of_angleEquations_realizes
+        oppositePlaceNext oppositeEquilateralRoleAngle opposite_realizes_role
+        oppositeEquilateralRoleAngle_angleEquations)
 
 end RoleHingeAngleCertificates
 end PachToth

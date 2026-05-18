@@ -56,6 +56,88 @@ theorem planarFaceBoundary_eq (D : OuterFaceData G) :
     D.planarFaceBoundary = D.faceBoundary.toFaceBoundaryHypotheses :=
   rfl
 
+/-- Repackage selected-face data for the extraction facade. -/
+def toExtractionOuterFaceData (D : OuterFaceData G) :
+    JordanBoundaryExtraction.OuterFaceData G where
+  faceBoundary := D.faceBoundary
+  outerFace := D.outerFace
+  outerFace_isOuter := D.outerFace_isOuter
+
+@[simp]
+theorem toExtractionOuterFaceData_faceBoundary (D : OuterFaceData G) :
+    D.toExtractionOuterFaceData.faceBoundary = D.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toExtractionOuterFaceData_outerFace (D : OuterFaceData G) :
+    D.toExtractionOuterFaceData.outerFace = D.outerFace :=
+  rfl
+
+theorem toExtractionOuterFaceData_outerFace_isOuter (D : OuterFaceData G) :
+    D.toExtractionOuterFaceData.faceBoundary.IsOuterFace
+      D.toExtractionOuterFaceData.outerFace :=
+  D.outerFace_isOuter
+
+/-- Repackage extraction selected-face data in the concrete topology namespace. -/
+def ofExtractionOuterFaceData
+    (D : JordanBoundaryExtraction.OuterFaceData G) :
+    OuterFaceData G where
+  faceBoundary := D.faceBoundary
+  outerFace := D.outerFace
+  outerFace_isOuter := D.outerFace_isOuter
+
+@[simp]
+theorem ofExtractionOuterFaceData_faceBoundary
+    (D : JordanBoundaryExtraction.OuterFaceData G) :
+    (ofExtractionOuterFaceData D).faceBoundary = D.faceBoundary :=
+  rfl
+
+@[simp]
+theorem ofExtractionOuterFaceData_outerFace
+    (D : JordanBoundaryExtraction.OuterFaceData G) :
+    (ofExtractionOuterFaceData D).outerFace = D.outerFace :=
+  rfl
+
+theorem ofExtractionOuterFaceData_outerFace_isOuter
+    (D : JordanBoundaryExtraction.OuterFaceData G) :
+    (ofExtractionOuterFaceData D).faceBoundary.IsOuterFace
+      (ofExtractionOuterFaceData D).outerFace :=
+  D.outerFace_isOuter
+
+@[simp]
+theorem ofExtractionOuterFaceData_toExtractionOuterFaceData
+    (D : OuterFaceData G) :
+    ofExtractionOuterFaceData D.toExtractionOuterFaceData = D := by
+  cases D
+  rfl
+
+@[simp]
+theorem toExtractionOuterFaceData_ofExtractionOuterFaceData
+    (D : JordanBoundaryExtraction.OuterFaceData G) :
+    (ofExtractionOuterFaceData D).toExtractionOuterFaceData = D := by
+  cases D
+  rfl
+
+/-- Repackage an already checked core as selected outer-face data. -/
+def ofCore (P : OuterBoundaryCore G) : OuterFaceData G where
+  faceBoundary := P.faceBoundary
+  outerFace := P.outerFace
+  outerFace_isOuter := P.outerFace_isOuter
+
+@[simp]
+theorem ofCore_faceBoundary (P : OuterBoundaryCore G) :
+    (ofCore P).faceBoundary = P.faceBoundary :=
+  rfl
+
+@[simp]
+theorem ofCore_outerFace (P : OuterBoundaryCore G) :
+    (ofCore P).outerFace = P.outerFace :=
+  rfl
+
+theorem ofCore_outerFace_isOuter (P : OuterBoundaryCore G) :
+    (ofCore P).faceBoundary.IsOuterFace (ofCore P).outerFace :=
+  P.outerFace_isOuter
+
 /-- The canonical graph supplies the noncrossing theorem; it is not topology input. -/
 theorem pairwiseNoncrossing (_D : OuterFaceData G) :
     PlanarInterface.PairwiseNoncrossing G.config G.edgeSet :=
@@ -179,6 +261,83 @@ theorem toCore_outerEnclosure (E : EnclosureData D) :
     E.toCore.outerEnclosure = E.outerEnclosure :=
   rfl
 
+/-- Repackage enclosure data for the extraction facade. -/
+def toExtractionEnclosureData (E : EnclosureData D) :
+    JordanBoundaryExtraction.EnclosureData
+      D.toExtractionOuterFaceData where
+  outerEnclosure := E.outerEnclosure
+
+@[simp]
+theorem toExtractionEnclosureData_outerEnclosure
+    (E : EnclosureData D) :
+    E.toExtractionEnclosureData.outerEnclosure =
+      E.outerEnclosure :=
+  rfl
+
+/-- Repackage extraction enclosure data in the concrete topology namespace. -/
+def ofExtractionEnclosureData
+    (D : JordanBoundaryExtraction.OuterFaceData G)
+    (E : JordanBoundaryExtraction.EnclosureData D) :
+    EnclosureData (OuterFaceData.ofExtractionOuterFaceData D) where
+  outerEnclosure := E.outerEnclosure
+
+@[simp]
+theorem ofExtractionEnclosureData_outerEnclosure
+    (D : JordanBoundaryExtraction.OuterFaceData G)
+    (E : JordanBoundaryExtraction.EnclosureData D) :
+    (ofExtractionEnclosureData D E).outerEnclosure =
+      E.outerEnclosure :=
+  rfl
+
+/-- Repackage selected-face and enclosure data as extraction data. -/
+def toExtractionData (E : EnclosureData D) :
+    JordanBoundaryExtraction.Data G where
+  faceBoundary := D.faceBoundary
+  outerFace := D.outerFace
+  outerFace_isOuter := D.outerFace_isOuter
+  outerEnclosure := E.outerEnclosure
+
+@[simp]
+theorem toExtractionData_faceBoundary (E : EnclosureData D) :
+    E.toExtractionData.faceBoundary = D.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toExtractionData_outerFace (E : EnclosureData D) :
+    E.toExtractionData.outerFace = D.outerFace :=
+  rfl
+
+theorem toExtractionData_outerFace_isOuter (E : EnclosureData D) :
+    E.toExtractionData.faceBoundary.IsOuterFace
+      E.toExtractionData.outerFace :=
+  D.outerFace_isOuter
+
+@[simp]
+theorem toExtractionData_outerEnclosure (E : EnclosureData D) :
+    E.toExtractionData.outerEnclosure = E.outerEnclosure :=
+  rfl
+
+@[simp]
+theorem toExtractionData_toCore (E : EnclosureData D) :
+    E.toExtractionData.toCore = E.toCore :=
+  rfl
+
+/-- Repackage an already checked core as enclosure data. -/
+def ofCore (P : OuterBoundaryCore G) :
+    EnclosureData (OuterFaceData.ofCore P) where
+  outerEnclosure := P.outerEnclosure
+
+@[simp]
+theorem ofCore_outerEnclosure (P : OuterBoundaryCore G) :
+    (ofCore P).outerEnclosure = P.outerEnclosure :=
+  rfl
+
+@[simp]
+theorem ofCore_toCore (P : OuterBoundaryCore G) :
+    (ofCore P).toCore = P := by
+  cases P
+  rfl
+
 /-- Boundary vertices satisfy the supplied boundary predicate. -/
 theorem boundary_vertex_onBoundary
     (E : EnclosureData D)
@@ -231,6 +390,132 @@ theorem exists_outerCycle_of_onBoundary
     (hv : E.outerEnclosure.onBoundary v) :
     Exists fun k : Fin D.outerCycle.length => D.outerCycle.vertex k = v :=
   (E.onBoundary_iff_outer_cycle v).1 hv
+
+/-! ## Planar-boundary closure bridge -/
+
+/-- Extend the selected outer face and enclosure by angle/subpolygon data to
+the full planar-boundary package. -/
+def toPlanarBoundaryData
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G where
+  core := E.toCore
+  outerAngleBounds := outerAngleBounds
+  Subpolygon := Subpolygon
+  subpolygonData := subpolygonData
+
+@[simp]
+theorem toPlanarBoundaryData_core
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).core =
+      E.toCore :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_faceBoundary
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).faceBoundary =
+      D.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_planarFaceBoundary
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).planarFaceBoundary =
+      D.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerFace
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).outerFace =
+      D.outerFace :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerCycle
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).outerCycle =
+      D.outerCycle :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerBoundaryCounts
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).outerBoundaryCounts =
+      outerAngleBounds.counts :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_Subpolygon
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).Subpolygon =
+      Subpolygon :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_subpolygonData
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).subpolygonData =
+      subpolygonData :=
+  rfl
+
+/-- The full planar-boundary theorem summary obtained from the assembled data. -/
+theorem toPlanarBoundaryData_faceCountingTheorems
+    (E : EnclosureData D)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    PlanarBoundaryClosure.PlanarBoundaryData.FaceCountingTheorems
+      (E.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData) :=
+  (E.toPlanarBoundaryData outerAngleBounds Subpolygon
+    subpolygonData).faceCountingTheorems
 
 end EnclosureData
 
@@ -295,6 +580,28 @@ def toMissingTopologyFacts (T : TopologyFacts C) :
 def toCore (T : TopologyFacts C) : OuterBoundaryCore (canonicalGraph C) :=
   T.enclosureData.toCore
 
+/-- Build concrete topology facts from the extraction facade. -/
+def ofExtractionData
+    (D : JordanBoundaryExtraction.Data (canonicalGraph C)) :
+    TopologyFacts C where
+  outerFaceData :=
+    OuterFaceData.ofExtractionOuterFaceData D.toOuterFaceData
+  enclosureData :=
+    EnclosureData.ofExtractionEnclosureData
+      D.toOuterFaceData D.toEnclosureData
+
+/-- Build concrete topology facts from the older missing-topology package. -/
+def ofMissingTopologyFacts
+    (D : JordanBoundaryConcrete.MissingTopologyFacts C) :
+    TopologyFacts C :=
+  ofExtractionData D.toExtractionData
+
+/-- Build concrete topology facts from an already checked outer-boundary core. -/
+def ofCore (P : OuterBoundaryCore (canonicalGraph C)) :
+    TopologyFacts C where
+  outerFaceData := OuterFaceData.ofCore P
+  enclosureData := EnclosureData.ofCore P
+
 @[simp]
 theorem toExtractionData_faceBoundary (T : TopologyFacts C) :
     T.toExtractionData.faceBoundary = T.faceBoundary :=
@@ -353,6 +660,55 @@ theorem toCore_outerFace_isOuter (T : TopologyFacts C) :
 theorem toCore_outerEnclosure (T : TopologyFacts C) :
     T.toCore.outerEnclosure = T.outerEnclosure :=
   rfl
+
+@[simp]
+theorem toExtractionData_ofExtractionData
+    (D : JordanBoundaryExtraction.Data (canonicalGraph C)) :
+    (ofExtractionData D).toExtractionData = D := by
+  cases D
+  rfl
+
+@[simp]
+theorem ofExtractionData_toExtractionData (T : TopologyFacts C) :
+    ofExtractionData T.toExtractionData = T := by
+  cases T with
+  | mk D E =>
+    cases D
+    cases E
+    rfl
+
+@[simp]
+theorem toMissingTopologyFacts_ofMissingTopologyFacts
+    (D : JordanBoundaryConcrete.MissingTopologyFacts C) :
+    (ofMissingTopologyFacts D).toMissingTopologyFacts = D := by
+  cases D
+  rfl
+
+@[simp]
+theorem ofMissingTopologyFacts_toMissingTopologyFacts
+    (T : TopologyFacts C) :
+    ofMissingTopologyFacts T.toMissingTopologyFacts = T := by
+  cases T with
+  | mk D E =>
+    cases D
+    cases E
+    rfl
+
+@[simp]
+theorem toCore_ofCore
+    (P : OuterBoundaryCore (canonicalGraph C)) :
+    (ofCore P).toCore = P := by
+  cases P
+  rfl
+
+@[simp]
+theorem ofCore_toCore (T : TopologyFacts C) :
+    ofCore T.toCore = T := by
+  cases T with
+  | mk D E =>
+    cases D
+    cases E
+    rfl
 
 /-! ## Concrete projections -/
 
@@ -467,6 +823,268 @@ theorem pairwiseNoncrossing (T : TopologyFacts C) :
     PlanarInterface.PairwiseNoncrossing
       (canonicalGraph C).config (canonicalGraph C).edgeSet :=
   T.outerFaceData.pairwiseNoncrossing
+
+/-! ## Conversion compatibility and planar-boundary closure bridge -/
+
+@[simp]
+theorem toExtractionData_toCore (T : TopologyFacts C) :
+    T.toExtractionData.toCore = T.toCore :=
+  rfl
+
+@[simp]
+theorem toMissingTopologyFacts_toCore (T : TopologyFacts C) :
+    T.toMissingTopologyFacts.toCore = T.toCore :=
+  rfl
+
+@[simp]
+theorem toCore_toFaceBoundaryHypotheses (T : TopologyFacts C) :
+    T.toCore.toFaceBoundaryHypotheses = T.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem toCore_outerCycle (T : TopologyFacts C) :
+    T.toCore.outerCycle = T.outerCycle :=
+  rfl
+
+@[simp]
+theorem toExtractionData_outerCycle (T : TopologyFacts C) :
+    T.toExtractionData.outerCycle = T.outerCycle :=
+  rfl
+
+@[simp]
+theorem toMissingTopologyFacts_outerCycle (T : TopologyFacts C) :
+    T.toMissingTopologyFacts.outerCycle = T.outerCycle :=
+  rfl
+
+@[simp]
+theorem toCore_outerSimplePolygon (T : TopologyFacts C) :
+    T.toCore.outerSimplePolygon = T.outerSimplePolygon :=
+  rfl
+
+@[simp]
+theorem toExtractionData_planarFaceBoundary (T : TopologyFacts C) :
+    T.toExtractionData.planarFaceBoundary = T.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem toMissingTopologyFacts_planarFaceBoundary (T : TopologyFacts C) :
+    T.toMissingTopologyFacts.planarFaceBoundary = T.planarFaceBoundary :=
+  rfl
+
+/-- Extend the concrete topology facts by angle/subpolygon data to the full
+planar-boundary package. -/
+def toPlanarBoundaryData
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} (canonicalGraph C) :=
+  T.enclosureData.toPlanarBoundaryData
+    outerAngleBounds Subpolygon subpolygonData
+
+@[simp]
+theorem toPlanarBoundaryData_core
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).core =
+      T.toCore :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_faceBoundary
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).faceBoundary =
+      T.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_planarFaceBoundary
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).planarFaceBoundary =
+      T.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerFace
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).outerFace =
+      T.outerFace :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerCycle
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).outerCycle =
+      T.outerCycle :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerBoundaryCounts
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).outerBoundaryCounts =
+      outerAngleBounds.counts :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_Subpolygon
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).Subpolygon =
+      Subpolygon :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_subpolygonData
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).subpolygonData =
+      subpolygonData :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerAngleData_core
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).outerAngleData.core =
+      T.toCore :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerAngleData_angleBounds
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData).outerAngleData.angleBounds =
+      outerAngleBounds :=
+  rfl
+
+/-- The full planar-boundary theorem summary obtained from concrete topology
+facts plus angle and subpolygon data. -/
+theorem toPlanarBoundaryData_faceCountingTheorems
+    (T : TopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryClosure.PlanarBoundaryData.FaceCountingTheorems
+      (T.toPlanarBoundaryData outerAngleBounds Subpolygon subpolygonData) :=
+  (T.toPlanarBoundaryData outerAngleBounds Subpolygon
+    subpolygonData).faceCountingTheorems
+
+/-! ## Direct adapters from older topology packages to planar-boundary data -/
+
+/-- Convert the older missing-topology package directly to full
+planar-boundary data once angle/subpolygon data is supplied. -/
+def planarBoundaryDataOfMissingTopologyFacts
+    (D : JordanBoundaryConcrete.MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} (canonicalGraph C) :=
+  (ofMissingTopologyFacts D).toPlanarBoundaryData
+    outerAngleBounds Subpolygon subpolygonData
+
+@[simp]
+theorem planarBoundaryDataOfMissingTopologyFacts_core
+    (D : JordanBoundaryConcrete.MissingTopologyFacts C)
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (planarBoundaryDataOfMissingTopologyFacts
+      D outerAngleBounds Subpolygon subpolygonData).core = D.toCore :=
+  rfl
+
+/-- Convert extraction data directly to full planar-boundary data once
+angle/subpolygon data is supplied. -/
+def planarBoundaryDataOfExtractionData
+    (D : JordanBoundaryExtraction.Data (canonicalGraph C))
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} (canonicalGraph C) :=
+  (ofExtractionData D).toPlanarBoundaryData
+    outerAngleBounds Subpolygon subpolygonData
+
+@[simp]
+theorem planarBoundaryDataOfExtractionData_core
+    (D : JordanBoundaryExtraction.Data (canonicalGraph C))
+    (outerAngleBounds :
+      OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u})
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon ->
+        SubpolygonAssembly.SubpolygonCycleCountAngleData (canonicalGraph C)) :
+    (planarBoundaryDataOfExtractionData
+      D outerAngleBounds Subpolygon subpolygonData).core = D.toCore :=
+  rfl
 
 end TopologyFacts
 

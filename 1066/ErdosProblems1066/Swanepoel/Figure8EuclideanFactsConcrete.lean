@@ -108,6 +108,187 @@ lemma separatedTurn_lower_of_central_containment
   Lemma10WindowGeometry.separatedTurn_lower_of_figure8DistanceData
     D hcontained
 
+/-! ## Selected separated-window Euclidean facts -/
+
+/-- Dot-product, square-distance, and angle consequences extracted from a
+concrete Figure 8 distance package. -/
+structure Figure8DistanceEuclideanFacts (p qi qj s r : Point) : Prop where
+  dotFacts : Figure8DotFacts p qi qj s r
+  central_left_sqDist_eq_one : sqDist qi p = 1
+  central_right_sqDist_eq_one : sqDist qj p = 1
+  central_sqDist_ge_one : 1 <= sqDist qi qj
+  comparison_sqDist_ge_one : 1 <= sqDist s r
+  central_dotAt_le_half : dotAt qi p qj <= 1 / 2
+  central_angle_lower : Real.pi / 3 <= angleAt qi p qj
+
+/-- Figure 8 distance data supplies all reusable Euclidean facts needed by the
+separated-window route. -/
+def euclideanFacts_of_distanceData {p qi qj s r : Point}
+    (D : Figure8DistanceData p qi qj s r) :
+    Figure8DistanceEuclideanFacts p qi qj s r where
+  dotFacts := dotFacts D
+  central_left_sqDist_eq_one := central_left_sqDist_eq_one D
+  central_right_sqDist_eq_one := central_right_sqDist_eq_one D
+  central_sqDist_ge_one := central_sqDist_ge_one D
+  comparison_sqDist_ge_one := comparison_sqDist_ge_one D
+  central_dotAt_le_half := central_dotAt_le_half D
+  central_angle_lower := central_angle_lower D
+
+/-- A selected Figure 8 separated witness together with its derived Euclidean
+facts and the explicit central-angle containment in the separated turn
+window. -/
+structure Figure8SeparatedEuclideanFacts
+    (turn : Nat -> Real) (i j : Nat) where
+  p : Point
+  qi : Point
+  qj : Point
+  s : Point
+  r : Point
+  distanceData : Figure8DistanceData p qi qj s r
+  euclideanFacts : Figure8DistanceEuclideanFacts p qi qj s r
+  central_angle_le_separatedTurn :
+    angleAt qi p qj <= separatedTurn turn i j
+
+/-- Build the selected separated Figure 8 fact package from raw distance data
+and the existing central-angle containment proof. -/
+def separatedFacts_of_distanceContainment
+    {turn : Nat -> Real} {i j : Nat} {p qi qj s r : Point}
+    (D : Figure8DistanceData p qi qj s r)
+    (hcontained : angleAt qi p qj <= separatedTurn turn i j) :
+    Figure8SeparatedEuclideanFacts turn i j where
+  p := p
+  qi := qi
+  qj := qj
+  s := s
+  r := r
+  distanceData := D
+  euclideanFacts := euclideanFacts_of_distanceData D
+  central_angle_le_separatedTurn := hcontained
+
+namespace Figure8SeparatedEuclideanFacts
+
+/-- The derived central-angle lower bound carried by a selected Figure 8 fact
+package. -/
+theorem central_angle_lower {turn : Nat -> Real} {i j : Nat}
+    (D : Figure8SeparatedEuclideanFacts turn i j) :
+    Real.pi / 3 <= angleAt D.qi D.p D.qj :=
+  D.euclideanFacts.central_angle_lower
+
+/-- The selected Figure 8 package implies the local separated-window lower
+bound. -/
+theorem separatedTurn_lower {turn : Nat -> Real} {i j : Nat}
+    (D : Figure8SeparatedEuclideanFacts turn i j) :
+    Real.pi / 3 <= separatedTurn turn i j :=
+  le_trans D.central_angle_lower D.central_angle_le_separatedTurn
+
+/-- Forget the selected Euclidean fact package to the contained-data record
+used by the existing Figure 8 containment layer. -/
+def toContainedData {turn : Nat -> Real} {i j : Nat}
+    (D : Figure8SeparatedEuclideanFacts turn i j) :
+    Figure8SeparatedContainedData turn i j where
+  p := D.p
+  qi := D.qi
+  qj := D.qj
+  s := D.s
+  r := D.r
+  distanceData := D.distanceData
+  central_angle_le_separatedTurn := D.central_angle_le_separatedTurn
+
+/-- Forget the selected package to the existential window-geometry witness. -/
+def toWindowWitness {turn : Nat -> Real} {i j : Nat}
+    (D : Figure8SeparatedEuclideanFacts turn i j) :
+    Exists fun p : Point =>
+    Exists fun qi : Point =>
+    Exists fun qj : Point =>
+    Exists fun s : Point =>
+    Exists fun r : Point =>
+      Figure8DistanceData p qi qj s r /\
+        angleAt qi p qj <= separatedTurn turn i j :=
+  Figure8ContainmentConcrete.windowWitness_of_containedData
+    D.toContainedData
+
+end Figure8SeparatedEuclideanFacts
+
+/-- Extract selected Figure 8 Euclidean facts from an already-contained
+Figure 8 separated witness. -/
+def separatedFacts_of_containedData
+    {turn : Nat -> Real} {i j : Nat}
+    (D : Figure8SeparatedContainedData turn i j) :
+    Figure8SeparatedEuclideanFacts turn i j where
+  p := D.p
+  qi := D.qi
+  qj := D.qj
+  s := D.s
+  r := D.r
+  distanceData := D.distanceData
+  euclideanFacts := euclideanFacts_of_distanceData D.distanceData
+  central_angle_le_separatedTurn := D.central_angle_le_separatedTurn
+
+/-- Uniform selected Figure 8 Euclidean facts for every separated failed pair
+in the Lemma 10 window. -/
+def Figure8SeparatedEuclideanFactWitnesses
+    (good : Nat -> Prop) (turn : Nat -> Real) : Type :=
+  forall {i j : Nat},
+    1 <= i -> i + 1 < j -> j <= 10 ->
+    Not (good i) -> Not (good j) ->
+      Figure8SeparatedEuclideanFacts turn i j
+
+/-- Forget selected Euclidean fact witnesses to the contained-witness
+predicate from `Figure8ContainmentConcrete`. -/
+def containedWitnesses_of_euclideanFactWitnesses
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedEuclideanFactWitnesses good turn) :
+    Figure8SeparatedContainedWitnesses good turn :=
+  fun {i j} hi hsep hj hbad_i hbad_j =>
+    (H (i := i) (j := j) hi hsep hj hbad_i hbad_j).toContainedData
+
+/-- Uniform selected Euclidean fact witnesses supply the Figure 8 separated
+window-geometry predicate. -/
+def windowGeometry_of_euclideanFactWitnesses
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedEuclideanFactWitnesses good turn) :
+    Figure8SeparatedWindowGeometry good turn :=
+  Figure8ContainmentConcrete.windowGeometry_of_containedWitnesses
+    (containedWitnesses_of_euclideanFactWitnesses H)
+
+/-- Uniform selected Euclidean fact witnesses imply the named E22 lower-bound
+hypothesis. -/
+theorem E22_of_euclideanFactWitnesses
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedEuclideanFactWitnesses good turn) :
+    Figure8SeparatedWindowLowerE22 good turn :=
+  Figure8ContainmentConcrete.E22_of_containedWitnesses
+    (containedWitnesses_of_euclideanFactWitnesses H)
+
+/-- The same E22 conclusion, proved directly from each selected witness's
+central-angle lower bound and containment proof. -/
+theorem E22_of_euclideanFactWitnesses_direct
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedEuclideanFactWitnesses good turn) :
+    Figure8SeparatedWindowLowerE22 good turn := by
+  intro i j hi hsep hj hbad_i hbad_j
+  exact
+    (H (i := i) (j := j) hi hsep hj hbad_i hbad_j).separatedTurn_lower
+
+/-- Convert explicit selected Figure 8 containment into selected Euclidean
+fact witnesses. -/
+def euclideanFactWitnesses_of_windowContainment
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedWindowContainment good turn) :
+    Figure8SeparatedEuclideanFactWitnesses good turn :=
+  fun {i j} hi hsep hj hbad_i hbad_j =>
+    separatedFacts_of_containedData
+      (H.data (i := i) (j := j) hi hsep hj hbad_i hbad_j)
+
+/-- Convert the stronger containment interface into selected Euclidean fact
+witnesses. -/
+def euclideanFactWitnesses_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedContainmentInterface good turn) :
+    Figure8SeparatedEuclideanFactWitnesses good turn :=
+  euclideanFactWitnesses_of_windowContainment
+    (Figure8SeparatedWindowContainment.ofContainmentInterface H)
+
 /-! ## Minimal explicit package for the remaining containment fact -/
 
 /-- Explicit Figure 8 Euclidean data for separated failures, together with the
@@ -219,6 +400,20 @@ def HonestFigure8ExplicitEuclideanFacts
     (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Prop :=
   M8Figure8ExplicitEuclideanFacts P.data turn
 
+/-- Selected Figure 8 Euclidean fact witnesses specialized to the local
+`m = 8` predicate package. -/
+def M8Figure8SeparatedEuclideanFactWitnesses
+    {V : Type u} {G : LocalGraph V}
+    (P : BrokenLatticePredicates G 8) (turn : Nat -> Real) : Type :=
+  Figure8SeparatedEuclideanFactWitnesses (M8BrokenLatticeGood P) turn
+
+/-- Selected Figure 8 Euclidean fact witnesses specialized to an honest local
+`m = 8` package. -/
+abbrev HonestFigure8SeparatedEuclideanFactWitnesses
+    {V : Type u} {G : LocalGraph V}
+    (P : M8HonestLocalPredicates G) (turn : Nat -> Real) :=
+  M8Figure8SeparatedEuclideanFactWitnesses P.data turn
+
 /-- Explicit `m = 8` Figure 8 facts give the local E22 hypothesis. -/
 theorem m8Figure8SeparatedWindowLowerE22_of_explicitEuclideanFacts
     {V : Type u} {G : LocalGraph V}
@@ -235,6 +430,174 @@ theorem honestFigure8SeparatedWindowLowerE22_of_explicitEuclideanFacts
     HonestFigure8SeparatedWindowLowerE22 P turn :=
   H.E22
 
+/-- Selected `m = 8` Figure 8 Euclidean fact witnesses give the local E22
+hypothesis. -/
+theorem m8Figure8SeparatedWindowLowerE22_of_euclideanFactWitnesses
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure8SeparatedEuclideanFactWitnesses P turn) :
+    M8Figure8SeparatedWindowLowerE22 P turn :=
+  E22_of_euclideanFactWitnesses H
+
+/-- Selected honest Figure 8 Euclidean fact witnesses give the honest E22
+hypothesis. -/
+theorem honestFigure8SeparatedWindowLowerE22_of_euclideanFactWitnesses
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedEuclideanFactWitnesses P turn) :
+    HonestFigure8SeparatedWindowLowerE22 P turn :=
+  E22_of_euclideanFactWitnesses H
+
+/-! ## Failed-label adapters for honest `m = 8` packages -/
+
+/-- A failed honest label equality is a failed named local comparison. -/
+theorem not_m8BrokenLatticeGood_of_not_m8LabelGood
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {i : Nat}
+    (hbad : Not (M8LabelGood P.data.labels i)) :
+    Not (M8BrokenLatticeGood P.data i) := by
+  intro hgood
+  exact hbad ((P.good_iff_labelGood i).1 hgood)
+
+/-- Select Figure 8 Euclidean facts from separated failed label
+equalities. -/
+def honestSeparatedEuclideanFacts_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedEuclideanFactWitnesses P turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_j : Not (M8LabelGood P.data.labels j)) :
+    Figure8SeparatedEuclideanFacts turn i j :=
+  H hi hsep hj
+    (not_m8BrokenLatticeGood_of_not_m8LabelGood hbad_i)
+    (not_m8BrokenLatticeGood_of_not_m8LabelGood hbad_j)
+
+/-- Convert honest Figure 8 window containment into selected Euclidean facts
+at separated failed label equalities. -/
+def honestSeparatedEuclideanFacts_of_windowContainment_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedWindowContainment P turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_j : Not (M8LabelGood P.data.labels j)) :
+    Figure8SeparatedEuclideanFacts turn i j :=
+  honestSeparatedEuclideanFacts_of_labelFailures
+    (euclideanFactWitnesses_of_windowContainment H)
+    hi hsep hj hbad_i hbad_j
+
+/-- Select Figure 8 contained data from separated failed label equalities. -/
+def honestContainedData_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedWindowContainment P turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_j : Not (M8LabelGood P.data.labels j)) :
+    Figure8SeparatedContainedData turn i j :=
+  (honestSeparatedEuclideanFacts_of_windowContainment_labelFailures H
+    hi hsep hj hbad_i hbad_j).toContainedData
+
+/-- Project the raw Figure 8 distance witness selected by separated failed
+label equalities. -/
+def honestExtractedData_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedWindowContainment P turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_j : Not (M8LabelGood P.data.labels j)) :
+    Figure8SeparatedExtractedData where
+  p := (honestContainedData_of_labelFailures H hi hsep hj
+    hbad_i hbad_j).p
+  qi := (honestContainedData_of_labelFailures H hi hsep hj
+    hbad_i hbad_j).qi
+  qj := (honestContainedData_of_labelFailures H hi hsep hj
+    hbad_i hbad_j).qj
+  s := (honestContainedData_of_labelFailures H hi hsep hj
+    hbad_i hbad_j).s
+  r := (honestContainedData_of_labelFailures H hi hsep hj
+    hbad_i hbad_j).r
+  distanceData := (honestContainedData_of_labelFailures H hi hsep hj
+    hbad_i hbad_j).distanceData
+
+/-- Project the concrete Figure 8 distance package selected by separated
+failed label equalities. -/
+theorem honestDistanceData_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedWindowContainment P turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_j : Not (M8LabelGood P.data.labels j)) :
+    Figure8DistanceData
+      (honestContainedData_of_labelFailures H hi hsep hj
+        hbad_i hbad_j).p
+      (honestContainedData_of_labelFailures H hi hsep hj
+        hbad_i hbad_j).qi
+      (honestContainedData_of_labelFailures H hi hsep hj
+        hbad_i hbad_j).qj
+      (honestContainedData_of_labelFailures H hi hsep hj
+        hbad_i hbad_j).s
+      (honestContainedData_of_labelFailures H hi hsep hj
+        hbad_i hbad_j).r :=
+  (honestContainedData_of_labelFailures H hi hsep hj
+    hbad_i hbad_j).distanceData
+
+/-- Project the central-angle containment selected by separated failed label
+equalities. -/
+theorem honest_central_angle_le_separatedTurn_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedWindowContainment P turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_j : Not (M8LabelGood P.data.labels j)) :
+    angleAt
+        (honestContainedData_of_labelFailures H hi hsep hj
+          hbad_i hbad_j).qi
+        (honestContainedData_of_labelFailures H hi hsep hj
+          hbad_i hbad_j).p
+        (honestContainedData_of_labelFailures H hi hsep hj
+          hbad_i hbad_j).qj <=
+      separatedTurn turn i j :=
+  (honestContainedData_of_labelFailures H hi hsep hj
+    hbad_i hbad_j).central_angle_le_separatedTurn
+
+/-- The selected Figure 8 distance package from separated failed labels gives
+the central-angle lower bound. -/
+theorem honestCentralAngle_lower_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedWindowContainment P turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_j : Not (M8LabelGood P.data.labels j)) :
+    Real.pi / 3 <=
+      angleAt
+        (honestContainedData_of_labelFailures H hi hsep hj
+          hbad_i hbad_j).qi
+        (honestContainedData_of_labelFailures H hi hsep hj
+          hbad_i hbad_j).p
+        (honestContainedData_of_labelFailures H hi hsep hj
+          hbad_i hbad_j).qj :=
+  (honestSeparatedEuclideanFacts_of_windowContainment_labelFailures H
+    hi hsep hj hbad_i hbad_j).central_angle_lower
+
+/-- Separated failed label equalities force the honest Figure 8 E22 lower
+bound pointwise. -/
+theorem honestSeparatedTurn_lower_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedWindowContainment P turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_j : Not (M8LabelGood P.data.labels j)) :
+    Real.pi / 3 <= separatedTurn turn i j :=
+  (honestSeparatedEuclideanFacts_of_windowContainment_labelFailures H
+    hi hsep hj hbad_i hbad_j).separatedTurn_lower
+
 /-! ## Projections from existing containment packages -/
 
 variable {n : Nat} {C : _root_.UDConfig n}
@@ -249,12 +612,148 @@ def honestExplicitEuclideanFacts_of_m8WindowContainment
       localLabels.predicates turnBounds.turn :=
   Figure8ExplicitEuclideanFacts.ofContainmentInterface W.figure8
 
+/-- The Figure 8 part of an M8 window-containment package as selected
+Euclidean fact witnesses. -/
+def honestEuclideanFactWitnesses_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure8SeparatedEuclideanFactWitnesses
+      localLabels.predicates turnBounds.turn :=
+  euclideanFactWitnesses_of_containmentInterface W.figure8
+
+/-- Select Figure 8 Euclidean facts from an M8 window-containment package
+using separated failed label equalities. -/
+def honestSeparatedEuclideanFacts_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_j :
+      Not (M8LabelGood localLabels.predicates.data.labels j)) :
+    Figure8SeparatedEuclideanFacts turnBounds.turn i j :=
+  honestSeparatedEuclideanFacts_of_labelFailures
+    (honestEuclideanFactWitnesses_of_m8WindowContainment W)
+    hi hsep hj hbad_i hbad_j
+
+/-- Select Figure 8 contained data from an M8 window-containment package using
+separated failed label equalities. -/
+def honestContainedData_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_j :
+      Not (M8LabelGood localLabels.predicates.data.labels j)) :
+    Figure8SeparatedContainedData turnBounds.turn i j :=
+  (honestSeparatedEuclideanFacts_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).toContainedData
+
+/-- Project the raw Figure 8 distance witness from an M8 window-containment
+package using separated failed label equalities. -/
+def honestExtractedData_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_j :
+      Not (M8LabelGood localLabels.predicates.data.labels j)) :
+    Figure8SeparatedExtractedData where
+  p := (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).p
+  qi := (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).qi
+  qj := (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).qj
+  s := (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).s
+  r := (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).r
+  distanceData := (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).distanceData
+
+/-- Project the concrete Figure 8 distance package from an M8
+window-containment package using separated failed label equalities. -/
+theorem honestDistanceData_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_j :
+      Not (M8LabelGood localLabels.predicates.data.labels j)) :
+    Figure8DistanceData
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hsep hj hbad_i hbad_j).p
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hsep hj hbad_i hbad_j).qi
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hsep hj hbad_i hbad_j).qj
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hsep hj hbad_i hbad_j).s
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hsep hj hbad_i hbad_j).r :=
+  (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).distanceData
+
+/-- Project the selected central-angle containment from an M8
+window-containment package using separated failed label equalities. -/
+theorem
+    honest_central_angle_le_separatedTurn_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_j :
+      Not (M8LabelGood localLabels.predicates.data.labels j)) :
+    angleAt
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hsep hj hbad_i hbad_j).qi
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hsep hj hbad_i hbad_j).p
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hsep hj hbad_i hbad_j).qj <=
+      separatedTurn turnBounds.turn i j :=
+  (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).central_angle_le_separatedTurn
+
+/-- The selected Figure 8 distance package from an M8 window-containment
+package and separated failed label equalities gives the central-angle lower
+bound. -/
+theorem honestCentralAngle_lower_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_j :
+      Not (M8LabelGood localLabels.predicates.data.labels j)) :
+    Real.pi / 3 <=
+      angleAt
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hsep hj hbad_i hbad_j).qi
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hsep hj hbad_i hbad_j).p
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hsep hj hbad_i hbad_j).qj :=
+  (honestSeparatedEuclideanFacts_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).central_angle_lower
+
 /-- Projection to honest E22 through the explicit Euclidean fact package. -/
 theorem honestFigure8SeparatedWindowLowerE22_of_m8WindowContainment
     (W : M8WindowContainment localLabels turnBounds) :
     HonestFigure8SeparatedWindowLowerE22
       localLabels.predicates turnBounds.turn :=
   (honestExplicitEuclideanFacts_of_m8WindowContainment W).E22
+
+/-- Pointwise honest E22 projection from an M8 window-containment package,
+stated for separated failed label equalities. -/
+theorem honestFigure8SeparatedWindowLowerE22_apply_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_j :
+      Not (M8LabelGood localLabels.predicates.data.labels j)) :
+    Real.pi / 3 <= separatedTurn turnBounds.turn i j :=
+  (honestSeparatedEuclideanFacts_of_m8WindowContainment_labelFailures W
+    hi hsep hj hbad_i hbad_j).separatedTurn_lower
 
 /-- The same E22 projection agrees with the existing Figure 8 containment
 facade. -/

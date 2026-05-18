@@ -1,5 +1,6 @@
 import ErdosProblems1066.PachToth.BaseTransitionRealization
 import ErdosProblems1066.PachToth.HingeAlgebra
+import ErdosProblems1066.PachToth.RoleHingeAngleCertificates
 import ErdosProblems1066.PachToth.RoleHingeTransitionSearch
 import ErdosProblems1066.PachToth.UnitVectorGeometry
 
@@ -124,6 +125,104 @@ theorem concreteRoleHingePlace_realizes_role
       simp [Figure2EdgeTable.nextConnectorRole, concreteRoleHingePlace,
         T, T0_2, T4_0] at hrole ⊢
 
+/-- The same-branch concrete angles are the existing equilateral role angles. -/
+theorem sameRoleAngle_eq_sameEquilateralRoleAngle :
+    sameRoleAngle =
+      RoleHingeAngleCertificates.sameEquilateralRoleAngle := by
+  funext role
+  cases role <;> rfl
+
+/-- The opposite-branch concrete angles are the existing equilateral role
+angles. -/
+theorem oppositeRoleAngle_eq_oppositeEquilateralRoleAngle :
+    oppositeRoleAngle =
+      RoleHingeAngleCertificates.oppositeEquilateralRoleAngle := by
+  funext role
+  cases role <;> rfl
+
+/-- The same-branch concrete angles satisfy the two port-pair angle equations. -/
+theorem sameRoleAngle_angleEquations :
+    RoleHingeAngleCertificates.RoleHingeAngleEquations sameRoleAngle :=
+  RoleHingeAngleCertificates.angleEquations_of_eq_sameEquilateralRoleAngle
+    sameRoleAngle_eq_sameEquilateralRoleAngle
+
+/-- The opposite-branch concrete angles satisfy the two port-pair angle
+equations. -/
+theorem oppositeRoleAngle_angleEquations :
+    RoleHingeAngleCertificates.RoleHingeAngleEquations oppositeRoleAngle :=
+  RoleHingeAngleCertificates.angleEquations_of_eq_oppositeEquilateralRoleAngle
+    oppositeRoleAngle_eq_oppositeEquilateralRoleAngle
+
+/-- The same-branch concrete map has both same-source connector-port pair unit
+edges. -/
+theorem same_port_pair_unit_edges :
+    And
+      (forall source : LocalVertex -> R2,
+        _root_.eucDist
+          (samePlaceNext source T1_1) (samePlaceNext source T1_2) = 1)
+      (forall source : LocalVertex -> R2,
+        _root_.eucDist
+          (samePlaceNext source T0_0) (samePlaceNext source T0_2) = 1) := by
+  exact
+    RoleHingeAngleCertificates.portPairUnitEdges_of_angleEquations_realizes
+      samePlaceNext sameRoleAngle
+      (concreteRoleHingePlace_realizes_role sameRoleAngle)
+      sameRoleAngle_angleEquations
+
+/-- The opposite-branch concrete map has both same-source connector-port pair
+unit edges. -/
+theorem opposite_port_pair_unit_edges :
+    And
+      (forall source : LocalVertex -> R2,
+        _root_.eucDist
+          (oppositePlaceNext source T1_1)
+          (oppositePlaceNext source T1_2) = 1)
+      (forall source : LocalVertex -> R2,
+        _root_.eucDist
+          (oppositePlaceNext source T0_0)
+          (oppositePlaceNext source T0_2) = 1) := by
+  exact
+    RoleHingeAngleCertificates.portPairUnitEdges_of_angleEquations_realizes
+      oppositePlaceNext oppositeRoleAngle
+      (concreteRoleHingePlace_realizes_role oppositeRoleAngle)
+      oppositeRoleAngle_angleEquations
+
+/-- Same/opposite concrete maps have all four same-source connector-port pair
+unit-edge facts. -/
+theorem sameOpposite_port_pair_unit_edges :
+    And
+      (And
+        (forall source : LocalVertex -> R2,
+          _root_.eucDist
+            (samePlaceNext source T1_1) (samePlaceNext source T1_2) = 1)
+        (forall source : LocalVertex -> R2,
+          _root_.eucDist
+            (samePlaceNext source T0_0) (samePlaceNext source T0_2) = 1))
+      (And
+        (forall source : LocalVertex -> R2,
+          _root_.eucDist
+            (oppositePlaceNext source T1_1)
+            (oppositePlaceNext source T1_2) = 1)
+        (forall source : LocalVertex -> R2,
+          _root_.eucDist
+            (oppositePlaceNext source T0_0)
+            (oppositePlaceNext source T0_2) = 1)) := by
+  exact And.intro same_port_pair_unit_edges opposite_port_pair_unit_edges
+
+/-- Any concrete role-hinge map realizes every successor connector as a unit
+edge, independently of the same-block field. -/
+theorem concreteRoleHingePlace_connector_unit_edges
+    (angle : ConnectorRole -> Real) :
+    HingedTransitionInterface.ConnectorUnitEdges
+      (concreteRoleHingePlace angle) := by
+  intro source u v hconn
+  rcases Figure2EdgeTable.nextConnector_has_role u v hconn with ⟨role, hrole⟩
+  exact
+    RoleHingeConnectorAlgebra.role_port_unit_of_realizes
+      (concreteRoleHingePlace angle) angle
+      (concreteRoleHingePlace_realizes_role angle)
+      source u v role hrole
+
 /-- One concrete branch, reduced to the algebraic same-block equations. -/
 def concreteRoleHingeTransitionFacts
     (angle : ConnectorRole -> Real)
@@ -192,17 +291,34 @@ theorem concreteBaseSameOppositeTransitionRealization_opposite_placeNext
       oppositePlaceNext :=
   rfl
 
-theorem same_connector_unit_edges
-    (R : ConcreteSameOppositeRemainingEquations) :
-    HingedTransitionInterface.ConnectorUnitEdges samePlaceNext := by
-  simpa using
-    (concreteSameOppositeRoleHingeTransitionFacts R).same_connector_unit_edges
+theorem same_connector_unit_edges :
+    HingedTransitionInterface.ConnectorUnitEdges samePlaceNext :=
+  concreteRoleHingePlace_connector_unit_edges sameRoleAngle
 
-theorem opposite_connector_unit_edges
-    (R : ConcreteSameOppositeRemainingEquations) :
-    HingedTransitionInterface.ConnectorUnitEdges oppositePlaceNext := by
-  simpa using
-    (concreteSameOppositeRoleHingeTransitionFacts R).opposite_connector_unit_edges
+theorem opposite_connector_unit_edges :
+    HingedTransitionInterface.ConnectorUnitEdges oppositePlaceNext :=
+  concreteRoleHingePlace_connector_unit_edges oppositeRoleAngle
+
+/-- The unconditional connector-only transition obligations for the concrete
+same/opposite role-hinge maps. -/
+def concreteSameOppositeTransitionObligations :
+    Figure2Certificate.SameOppositeTransitionObligations where
+  samePlaceNext := samePlaceNext
+  oppositePlaceNext := oppositePlaceNext
+  same_connector_unit_edges := same_connector_unit_edges
+  opposite_connector_unit_edges := opposite_connector_unit_edges
+
+@[simp]
+theorem concreteSameOppositeTransitionObligations_samePlaceNext :
+    concreteSameOppositeTransitionObligations.samePlaceNext =
+      samePlaceNext :=
+  rfl
+
+@[simp]
+theorem concreteSameOppositeTransitionObligations_oppositePlaceNext :
+    concreteSameOppositeTransitionObligations.oppositePlaceNext =
+      oppositePlaceNext :=
+  rfl
 
 def collapsedSource : LocalVertex -> R2 :=
   fun _ => (0, 0)
@@ -248,6 +364,32 @@ theorem not_algebraicSameBlockEquations_concreteRoleHingePlace
   exact
     not_preservesSameBlockDistances_concreteRoleHingePlace angle
       (preservesSameBlockDistances_of_algebraic h)
+
+/-- No strong search-facing role-hinge transition fact can use this concrete
+place map, because the strong same-block field would require arbitrary-source
+distance preservation. -/
+theorem not_roleHingeTransitionFacts_concreteRoleHingePlace
+    (angle : ConnectorRole -> Real) :
+    Not
+      (exists F : RoleHingeTransitionSearch.RoleHingeTransitionFacts,
+        F.placeNext = concreteRoleHingePlace angle) := by
+  rintro ⟨F, hplace⟩
+  exact
+    not_preservesSameBlockDistances_concreteRoleHingePlace angle
+      (by simpa [hplace] using F.preserves_same_block_distances)
+
+/-- Consequently the concrete same/opposite maps cannot inhabit the old strong
+same/opposite role-hinge search interface. -/
+theorem not_sameOppositeRoleHingeTransitionFacts_for_concrete_places :
+    Not
+      (exists F :
+        RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts,
+        F.same.placeNext = samePlaceNext ∧
+          F.opposite.placeNext = oppositePlaceNext) := by
+  rintro ⟨F, hsame, _hopposite⟩
+  exact
+    not_roleHingeTransitionFacts_concreteRoleHingePlace sameRoleAngle
+      ⟨F.same, by simpa [samePlaceNext] using hsame⟩
 
 theorem no_concreteSameOppositeRemainingEquations :
     Not ConcreteSameOppositeRemainingEquations := by

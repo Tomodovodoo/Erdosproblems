@@ -1,4 +1,5 @@
 import ErdosProblems1066.PachToth.ClosedPlacementNonRigidComponents
+import ErdosProblems1066.PachToth.ClosedPlacementClosure
 import ErdosProblems1066.PachToth.SplitArbitraryNNonRigidBridge
 
 set_option autoImplicit false
@@ -50,6 +51,70 @@ structure ComponentFamilyFields where
 
 namespace ComponentFamilyFields
 
+/-- Repackage an already checked family of closed placements as component
+family fields. -/
+def ofClosedPlacements
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        DeformedPlacement.ClosedPlacement k hk) :
+    ComponentFamilyFields where
+  point := fun k hk => (H k hk).point
+  separated := fun k hk => (H k hk).separated
+  same_block_edges_unit := fun k hk => (H k hk).same_block_edges_unit
+  successor_connector_edges_unit := fun k hk =>
+    (H k hk).cross_connector_edges_unit
+
+/-- If each point block is realized by some checked closed placement, all
+component-family metric fields are inherited from that placement. -/
+def of_exists_closedPlacement_eq
+    (point :
+      forall (k : Nat) (_hk : 0 < k), Fin k -> LocalVertex -> R2)
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        exists P : DeformedPlacement.ClosedPlacement k hk,
+          P.point = point k hk) :
+    ComponentFamilyFields where
+  point := point
+  separated := by
+    intro k hk i u j v hne
+    cases H k hk with
+    | intro P hP =>
+        simpa [hP] using P.separated i u j v hne
+  same_block_edges_unit := by
+    intro k hk i u v huv hadj
+    cases H k hk with
+    | intro P hP =>
+        simpa [hP] using P.same_block_edges_unit i u v huv hadj
+  successor_connector_edges_unit := by
+    intro k hk i u v hconn
+    cases H k hk with
+    | intro P hP =>
+        simpa [hP] using P.cross_connector_edges_unit i u v hconn
+
+/-- Repackage a generated-closure family with full metric hypotheses as
+component-family fields. -/
+def of_generatedClosure_family
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    ComponentFamilyFields :=
+  ofClosedPlacements
+    (ClosedPlacementClosure.closedPlacementFamily_of_generatedClosure
+      F closure H)
+
+/-- Repackage a generated-closure family with reduced metric hypotheses as
+component-family fields. -/
+def of_generatedClosure_family_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    ComponentFamilyFields :=
+  ofClosedPlacements
+    (ClosedPlacementClosure.closedPlacementFamily_of_generatedClosure_reduced
+      F closure H)
+
 /-- Repackage the family fields as the component bundle for one block count. -/
 def components (H : ComponentFamilyFields)
     (k : Nat) (hk : 0 < k) :
@@ -81,6 +146,92 @@ theorem targetUpperConstructionFiveSixteenArbitrary
     SplitArbitraryNNonRigidBridge.targetUpperConstructionFiveSixteenArbitrary_of_components
       H.components
 
+/-- Exact block-form target from any family of checked closed placements,
+routed through the component-family facade. -/
+theorem targetUpperConstructionFiveSixteen_of_closedPlacements
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        DeformedPlacement.ClosedPlacement k hk) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen := by
+  exact (ofClosedPlacements H).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary-vertex target from any family of checked closed placements,
+routed through the component-family facade. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_closedPlacements
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        DeformedPlacement.ClosedPlacement k hk) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact (ofClosedPlacements H).targetUpperConstructionFiveSixteenArbitrary
+
+/-- Exact block-form target from pointwise closed-placement existence. -/
+theorem targetUpperConstructionFiveSixteen_of_exists_closedPlacement_eq
+    (point :
+      forall (k : Nat) (_hk : 0 < k), Fin k -> LocalVertex -> R2)
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        exists P : DeformedPlacement.ClosedPlacement k hk,
+          P.point = point k hk) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen := by
+  exact
+    (of_exists_closedPlacement_eq point H).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary-vertex target from pointwise closed-placement existence. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_exists_closedPlacement_eq
+    (point :
+      forall (k : Nat) (_hk : 0 < k), Fin k -> LocalVertex -> R2)
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        exists P : DeformedPlacement.ClosedPlacement k hk,
+          P.point = point k hk) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    (of_exists_closedPlacement_eq point H).targetUpperConstructionFiveSixteenArbitrary
+
+/-- Exact block-form target from all-positive generated closure and full
+metric hypotheses, routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteen_of_generatedClosure_family
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen := by
+  exact
+    (of_generatedClosure_family F closure H).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary-vertex target from all-positive generated closure and full
+metric hypotheses, routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedClosure_family
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    (of_generatedClosure_family F closure H).targetUpperConstructionFiveSixteenArbitrary
+
+/-- Exact block-form target from all-positive generated closure and reduced
+metric hypotheses, routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteen_of_generatedClosure_family_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteen := by
+  exact
+    (of_generatedClosure_family_reduced F closure H).targetUpperConstructionFiveSixteen
+
+/-- Arbitrary-vertex target from all-positive generated closure and reduced
+metric hypotheses, routed through component-family fields. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedClosure_family_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    (of_generatedClosure_family_reduced F closure H).targetUpperConstructionFiveSixteenArbitrary
+
 end ComponentFamilyFields
 
 /-- Bundled-field exact block-form wrapper. -/
@@ -94,6 +245,54 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_componentFamilyFields
     (H : ComponentFamilyFields) :
     targetUpperConstructionFiveSixteenArbitrary := by
   exact H.targetUpperConstructionFiveSixteenArbitrary
+
+/-- Generated-closure exact block-form wrapper through component-family
+fields, using full metric hypotheses. -/
+theorem targetUpperConstructionFiveSixteen_of_generatedClosure_family
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    ComponentFamilyFields.targetUpperConstructionFiveSixteen_of_generatedClosure_family
+      F closure H
+
+/-- Generated-closure arbitrary-vertex wrapper through component-family
+fields, using full metric hypotheses. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedClosure_family
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  exact
+    ComponentFamilyFields.targetUpperConstructionFiveSixteenArbitrary_of_generatedClosure_family
+      F closure H
+
+/-- Generated-closure exact block-form wrapper through component-family
+fields, using reduced metric hypotheses. -/
+theorem targetUpperConstructionFiveSixteen_of_generatedClosure_family_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    ComponentFamilyFields.targetUpperConstructionFiveSixteen_of_generatedClosure_family_reduced
+      F closure H
+
+/-- Generated-closure arbitrary-vertex wrapper through component-family
+fields, using reduced metric hypotheses. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedClosure_family_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (closure : ClosedPlacementClosure.GeneratedChainFamilyClosures F)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  let Hcomp :=
+    ComponentFamilyFields.of_generatedClosure_family_reduced F closure H
+  exact Hcomp.targetUpperConstructionFiveSixteenArbitrary
 
 /-- Raw-field exact block-form wrapper. -/
 theorem targetUpperConstructionFiveSixteen_of_fields

@@ -146,6 +146,56 @@ def exactTwoExtraNeighbors_of_combinatorics
       ((mem_extraNeighborFinset S i x).1 hx).1
       ((mem_extraNeighborFinset S i x).1 hx).2
 
+@[simp]
+theorem exactTwoExtraNeighbors_of_combinatorics_r
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    (exactTwoExtraNeighbors_of_combinatorics E i).r = E.r i :=
+  rfl
+
+@[simp]
+theorem exactTwoExtraNeighbors_of_combinatorics_s
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    (exactTwoExtraNeighbors_of_combinatorics E i).s = E.s i :=
+  rfl
+
+/-- The `r_i` label supplied by Lemma 8 is a member of the concrete
+extra-neighbor finset. -/
+theorem combinatorics_r_mem_extraNeighborFinset
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    E.r i ∈ extraNeighborFinset S i := by
+  simpa using (exactTwoExtraNeighbors_of_combinatorics E i).r_mem
+
+/-- The `s_i` label supplied by Lemma 8 is a member of the concrete
+extra-neighbor finset. -/
+theorem combinatorics_s_mem_extraNeighborFinset
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    E.s i ∈ extraNeighborFinset S i := by
+  simpa using (exactTwoExtraNeighbors_of_combinatorics E i).s_mem
+
+/-- Lemma 8 exhaustiveness, expressed directly as a finset membership
+case split. -/
+theorem extraNeighborFinset_mem_eq_r_or_s_of_combinatorics
+    (E : M8Lemma8Combinatorics S) {i : M8ExtraIndex} {x : Fin n}
+    (hx : x ∈ extraNeighborFinset S i) :
+    x = E.r i ∨ x = E.s i := by
+  simpa using (exactTwoExtraNeighbors_of_combinatorics E i).all_mem x hx
+
+/-- The concrete extra-neighbor finset is exactly the two Lemma 8 labels. -/
+theorem extraNeighborFinset_eq_pair_of_combinatorics
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    extraNeighborFinset S i = ({E.r i, E.s i} : Finset (Fin n)) := by
+  classical
+  apply Finset.Subset.antisymm
+  · intro x hx
+    rcases extraNeighborFinset_mem_eq_r_or_s_of_combinatorics E hx with h | h
+    · simp [h]
+    · simp [h]
+  · intro x hx
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+    rcases hx with h | h
+    · simpa [h] using combinatorics_r_mem_extraNeighborFinset E i
+    · simpa [h] using combinatorics_s_mem_extraNeighborFinset E i
+
 /-- Lemma 8 combinatorics makes the extra-neighbor finset have cardinality
 two. -/
 theorem extraNeighborFinset_card_eq_two_of_combinatorics
@@ -163,6 +213,17 @@ theorem centerDegree_eq_six_of_combinatorics_and_forbiddenFrame
     centerDegree S i = 6 :=
   (centerDegree_eq_six_iff_extraNeighborFinset_card_eq_two F).2
     (extraNeighborFinset_card_eq_two_of_combinatorics E i)
+
+/-- Lemma 8 combinatorics plus the forbidden-neighbor frame gives both the
+honest degree-six conclusion and the exact concrete extra-neighbor finset. -/
+theorem centerDegree_eq_six_and_extraNeighborFinset_eq_pair_of_combinatorics_and_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    (F : FourForbiddenNeighborFrame S i) :
+    centerDegree S i = 6 ∧
+      extraNeighborFinset S i = ({E.r i, E.s i} : Finset (Fin n)) :=
+  And.intro
+    (centerDegree_eq_six_of_combinatorics_and_forbiddenFrame E F)
+    (extraNeighborFinset_eq_pair_of_combinatorics E i)
 
 /-! ## The isolated non-cyclic degree-six fields -/
 
@@ -186,6 +247,16 @@ theorem forbiddenFrame_holds
     (D : M8DegreeSixNoncyclicFields S) (i : M8ExtraIndex) :
     FourForbiddenNeighborFrame S i :=
   D.forbiddenFrame i
+
+/-- Repackage an already supplied Lemma 8 combinatorics record and a
+forbidden-frame family as the non-cyclic degree-six fields. -/
+def ofLemma8CombinatoricsAndForbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame S i) :
+    M8DegreeSixNoncyclicFields S where
+  centerDegreeSix := fun i =>
+    centerDegree_eq_six_of_combinatorics_and_forbiddenFrame E (F i)
+  forbiddenFrame := F
 
 /-- The isolated non-cyclic fields force exactly two extra neighbors at every
 `q_i`. -/
@@ -272,6 +343,123 @@ theorem toLemma8Combinatorics_s
   rfl
 
 end M8DegreeSixNoncyclicFields
+
+/-! ## Exact degree-six data preserving named Lemma 8 pairs -/
+
+/-- Degree-six data together with a specified exact pair of extra neighbors at
+every `q_i`.
+
+Unlike `M8DegreeSixNoncyclicFields.pair`, this record can preserve an existing
+Lemma 8 choice of labels definitionally. -/
+structure M8DegreeSixExactExtraNeighborData
+    (S : M8BoundarySpine H) where
+  centerDegreeSix : forall i : M8ExtraIndex, centerDegree S i = 6
+  forbiddenFrame : forall i : M8ExtraIndex, FourForbiddenNeighborFrame S i
+  pair : forall i : M8ExtraIndex, ExactTwoExtraNeighbors S i
+
+namespace M8DegreeSixExactExtraNeighborData
+
+/-- Forget the specified exact pairs back to the non-cyclic degree-six fields.
+-/
+def toNoncyclicFields
+    (D : M8DegreeSixExactExtraNeighborData S) :
+    M8DegreeSixNoncyclicFields S where
+  centerDegreeSix := D.centerDegreeSix
+  forbiddenFrame := D.forbiddenFrame
+
+/-- Add the deterministic exact pairs to the non-cyclic degree-six fields. -/
+def ofNoncyclicFields
+    (D : M8DegreeSixNoncyclicFields S) :
+    M8DegreeSixExactExtraNeighborData S where
+  centerDegreeSix := D.centerDegreeSix
+  forbiddenFrame := D.forbiddenFrame
+  pair := fun i => D.pair i
+
+/-- Build exact degree-six data from Lemma 8 combinatorics and the
+forbidden-neighbor frame family, preserving the Lemma 8 labels as the exact
+pair. -/
+def ofLemma8CombinatoricsAndForbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame S i) :
+    M8DegreeSixExactExtraNeighborData S where
+  centerDegreeSix := fun i =>
+    centerDegree_eq_six_of_combinatorics_and_forbiddenFrame E (F i)
+  forbiddenFrame := F
+  pair := fun i => exactTwoExtraNeighbors_of_combinatorics E i
+
+/-- The specified exact pair gives the concrete cardinality-two conclusion. -/
+theorem extraNeighborFinset_card_eq_two
+    (D : M8DegreeSixExactExtraNeighborData S) (i : M8ExtraIndex) :
+    (extraNeighborFinset S i).card = 2 :=
+  extraNeighborFinset_card_eq_two_of_exactTwo (D.pair i)
+
+/-- The specified exact pairs produce the non-cyclic extraction record. -/
+def toExtraNeighborData
+    (D : M8DegreeSixExactExtraNeighborData S) :
+    M8ExtraNeighborData S where
+  r := fun i => (D.pair i).r
+  s := fun i => (D.pair i).s
+  r_neighbor := fun i => (D.pair i).r_neighbor
+  s_neighbor := fun i => (D.pair i).s_neighbor
+  r_not_forbidden := fun i => (D.pair i).r_not_forbidden
+  s_not_forbidden := fun i => (D.pair i).s_not_forbidden
+  r_ne_s := fun i => (D.pair i).r_ne_s
+  all_extra_neighbors_are_named := fun i _x hadj hnot =>
+    (D.pair i).named_of_extra_neighbor hadj hnot
+
+@[simp]
+theorem toExtraNeighborData_r
+    (D : M8DegreeSixExactExtraNeighborData S) (i : M8ExtraIndex) :
+    D.toExtraNeighborData.r i = (D.pair i).r :=
+  rfl
+
+@[simp]
+theorem toExtraNeighborData_s
+    (D : M8DegreeSixExactExtraNeighborData S) (i : M8ExtraIndex) :
+    D.toExtraNeighborData.s i = (D.pair i).s :=
+  rfl
+
+/-- The extracted record preserves the exact local witness predicate. -/
+theorem toExtraNeighborData_extraNeighborWitness
+    (D : M8DegreeSixExactExtraNeighborData S) (i : M8ExtraIndex) :
+    D.toExtraNeighborData.extraNeighborWitness i :=
+  D.toExtraNeighborData.extraNeighborWitness_holds i
+
+@[simp]
+theorem ofLemma8CombinatoricsAndForbiddenFrame_pair_r
+    (E : M8Lemma8Combinatorics S)
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    ((ofLemma8CombinatoricsAndForbiddenFrame E F).pair i).r = E.r i :=
+  rfl
+
+@[simp]
+theorem ofLemma8CombinatoricsAndForbiddenFrame_pair_s
+    (E : M8Lemma8Combinatorics S)
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    ((ofLemma8CombinatoricsAndForbiddenFrame E F).pair i).s = E.s i :=
+  rfl
+
+@[simp]
+theorem ofLemma8CombinatoricsAndForbiddenFrame_toExtraNeighborData_r
+    (E : M8Lemma8Combinatorics S)
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    (ofLemma8CombinatoricsAndForbiddenFrame E F).toExtraNeighborData.r i =
+      E.r i :=
+  rfl
+
+@[simp]
+theorem ofLemma8CombinatoricsAndForbiddenFrame_toExtraNeighborData_s
+    (E : M8Lemma8Combinatorics S)
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    (ofLemma8CombinatoricsAndForbiddenFrame E F).toExtraNeighborData.s i =
+      E.s i :=
+  rfl
+
+end M8DegreeSixExactExtraNeighborData
 
 /-! ## A single packaged interface toward `M8Lemma8Combinatorics` -/
 

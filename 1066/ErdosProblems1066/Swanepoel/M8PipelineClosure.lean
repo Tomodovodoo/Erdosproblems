@@ -1,22 +1,24 @@
 import ErdosProblems1066.Swanepoel.BrokenLatticeMinimalFailure
+import ErdosProblems1066.Swanepoel.LateTriplesInterface
 import ErdosProblems1066.Swanepoel.Lemma10WindowGeometry
+import ErdosProblems1066.Swanepoel.M8ConstructionInterface
 
 set_option autoImplicit false
 
 /-!
 # M8 pipeline closure
 
-This file is the strongest checked closure available from the separated
-construction fields currently present in the tree.  `Lemma10WindowGeometry`
-supplies the route from explicit Figure 8/Figure 9 window geometry to E22/E23;
-`BrokenLatticeMinimalFailure` supplies the final contradiction once the
-`M8ConstructionData` package is assembled.
+This file is the strongest checked closure available from the construction
+fields currently present in the tree.  `Lemma10WindowGeometry` supplies the
+route from explicit Figure 8/Figure 9 window geometry to E22/E23;
+`LateTriplesInterface` supplies the route from no-early triples to late
+triples; and `BrokenLatticeMinimalFailure` supplies the final contradiction
+once the `M8ConstructionData` package is assembled.
 
 The construction of the honest local predicates, the turn bounds, the
-window-geometry witnesses, and the late-triple fact remains explicit data.
-There is no project-local `M8ConstructionInterface`, `TurnBoundsInterface`, or
-`LateTriplesInterface` module in this checkout, so this file does not pretend
-those fields have been discharged elsewhere.
+window-geometry or E22/E23 witnesses, and the no-early/late-triple facts
+remains explicit data.  This file only checks the assembly and contradiction
+routes.
 -/
 
 namespace ErdosProblems1066
@@ -124,6 +126,162 @@ theorem contradiction
 
 end M8SeparatedConstructionFields
 
+/-! ## Direct E22/E23 plus no-early route -/
+
+/-- Direct analytic/no-early construction data for one fixed minimal cleared
+failure.
+
+This is the smallest interface in this file for the final broken-lattice
+contradiction: callers provide honest local predicates, turn bounds, the named
+E22/E23 turn-window hypotheses, and the no-early-triple fact.  The late-triple
+field is derived here by `LateTriplesInterface`.
+-/
+structure M8E22E23NoEarlyConstructionFields {n : Nat}
+    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) where
+  predicates : M8HonestLocalPredicates (unitDistanceLocalGraph C)
+  turn : Nat -> Real
+  turnBounds : M8TurnBounds turn
+  figure8_E22 : HonestFigure8SeparatedWindowLowerE22 predicates turn
+  figure9_E23 : HonestFigure9AdjacentWindowLowerE23 predicates turn
+  noEarlyTripleEquality :
+    LateTriplesInterface.M8NoEarlyTripleEquality predicates.data
+
+namespace M8E22E23NoEarlyConstructionFields
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {hmin : IsMinimalClearedFailure C}
+
+/-- The no-early field supplies the honest late-triples predicate. -/
+theorem lateTriples
+    (D : M8E22E23NoEarlyConstructionFields C hmin) :
+    D.predicates.LateTriples :=
+  LateTriplesInterface.M8HonestLocalPredicates.lateTriples_of_noEarlyTripleEquality
+    D.predicates D.noEarlyTripleEquality
+
+/-- The no-early field packaged in the late-triples field used by the
+separated closure. -/
+def lateTriplesField
+    (D : M8E22E23NoEarlyConstructionFields C hmin) :
+    M8LateTriplesField D.predicates where
+  lateTriples := D.lateTriples
+
+/-- Assemble direct E22/E23 plus no-early data into the existing
+broken-lattice minimal-failure construction package. -/
+def toConstructionData
+    (D : M8E22E23NoEarlyConstructionFields C hmin) :
+    BrokenLatticeMinimalFailure.M8ConstructionData C hmin where
+  predicates := D.predicates
+  turn := D.turn
+  turn_nonnegative := D.turnBounds.nonnegative
+  total_turn_lt_pi_div_three := D.turnBounds.total_lt_pi_div_three
+  figure8_E22 := D.figure8_E22
+  figure9_E23 := D.figure9_E23
+  lateTriples := D.lateTriples
+
+/-- A fixed minimal cleared failure with direct E22/E23 and no-early fields is
+contradictory. -/
+theorem contradiction
+    (D : M8E22E23NoEarlyConstructionFields C hmin) :
+    False :=
+  D.toConstructionData.contradiction
+
+end M8E22E23NoEarlyConstructionFields
+
+/-! ## Window geometry plus no-early route -/
+
+/-- Window-geometry/no-early construction data for one fixed minimal cleared
+failure.
+
+This variant keeps the Figure 8/Figure 9 geometric witnesses explicit and
+derives both E22/E23 and late triples before entering the final contradiction.
+-/
+structure M8WindowNoEarlyConstructionFields {n : Nat}
+    (C : _root_.UDConfig n) (hmin : IsMinimalClearedFailure C) where
+  predicates : M8HonestLocalPredicates (unitDistanceLocalGraph C)
+  turn : Nat -> Real
+  turnBounds : M8TurnBounds turn
+  windowGeometry : M8WindowGeometry predicates turn
+  noEarlyTripleEquality :
+    LateTriplesInterface.M8NoEarlyTripleEquality predicates.data
+
+namespace M8WindowNoEarlyConstructionFields
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {hmin : IsMinimalClearedFailure C}
+
+/-- The no-early field supplies the late-triples field required by
+`M8SeparatedConstructionFields`. -/
+def lateTriplesField
+    (D : M8WindowNoEarlyConstructionFields C hmin) :
+    M8LateTriplesField D.predicates where
+  lateTriples :=
+    LateTriplesInterface.M8HonestLocalPredicates.lateTriples_of_noEarlyTripleEquality
+      D.predicates D.noEarlyTripleEquality
+
+/-- Forget window geometry plus no-early fields to the direct E22/E23
+no-early interface. -/
+def toE22E23NoEarlyConstructionFields
+    (D : M8WindowNoEarlyConstructionFields C hmin) :
+    M8E22E23NoEarlyConstructionFields C hmin where
+  predicates := D.predicates
+  turn := D.turn
+  turnBounds := D.turnBounds
+  figure8_E22 := D.windowGeometry.figure8_E22
+  figure9_E23 := D.windowGeometry.figure9_E23
+  noEarlyTripleEquality := D.noEarlyTripleEquality
+
+/-- Forget window geometry plus no-early fields to the separated construction
+fields used by the existing closure. -/
+def toSeparatedConstructionFields
+    (D : M8WindowNoEarlyConstructionFields C hmin) :
+    M8SeparatedConstructionFields C hmin where
+  predicates := D.predicates
+  turn := D.turn
+  turnBounds := D.turnBounds
+  windowGeometry := D.windowGeometry
+  lateTriples := D.lateTriplesField
+
+/-- A fixed minimal cleared failure with window geometry and no-early fields
+is contradictory. -/
+theorem contradiction
+    (D : M8WindowNoEarlyConstructionFields C hmin) :
+    False :=
+  D.toE22E23NoEarlyConstructionFields.contradiction
+
+end M8WindowNoEarlyConstructionFields
+
+/-! ## Clean construction-interface route -/
+
+/-- Repackage the clean construction-interface data as the separated fields
+used by this closure. -/
+def separatedConstructionFields_of_constructionInterfaceData
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8ConstructionInterface.M8ConstructionData C hmin) :
+    M8SeparatedConstructionFields C hmin where
+  predicates := D.localLabels.predicates
+  turn := D.turnBounds.turn
+  turnBounds := {
+    nonnegative := D.turnBounds.turn_nonnegative
+    total_lt_pi_div_three := D.turnBounds.total_turn_lt_pi_div_three
+  }
+  windowGeometry := {
+    figure8_separated := D.windowGeometry.figure8
+    figure9_adjacent_left := D.windowGeometry.figure9_left
+  }
+  lateTriples := {
+    lateTriples := D.lateTriples.toHonestLateTriples
+  }
+
+/-- Clean construction-interface data contradicts its indexed minimal cleared
+failure. -/
+theorem contradiction_of_constructionInterfaceData
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8ConstructionInterface.M8ConstructionData C hmin) :
+    False :=
+  (separatedConstructionFields_of_constructionInterfaceData D).contradiction
+
 /-! ## Uniform eliminator and final closure -/
 
 /-- A uniform eliminator that supplies the separated construction fields for
@@ -161,6 +319,98 @@ theorem no_minimalClearedFailure_of_separatedConstructionEliminator
       Not (IsMinimalClearedFailure C) := by
   exact no_minimalClearedFailure_of_m8ConstructionEliminator
     (m8ConstructionEliminator_of_separatedConstructionEliminator hbuild)
+
+/-! ## Alternative uniform eliminators -/
+
+/-- A uniform eliminator that supplies direct E22/E23 plus no-early fields for
+every minimal cleared failure. -/
+def MinimalFailureM8E22E23NoEarlyConstructionEliminator : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C),
+      Nonempty (M8E22E23NoEarlyConstructionFields C hmin)
+
+/-- A uniform E22/E23 plus no-early eliminator supplies the existing
+`BrokenLatticeMinimalFailure` construction eliminator. -/
+theorem m8ConstructionEliminator_of_E22E23NoEarlyConstructionEliminator
+    (hbuild : MinimalFailureM8E22E23NoEarlyConstructionEliminator) :
+    MinimalFailureM8ConstructionEliminator := by
+  intro n C hmin
+  cases hbuild C hmin with
+  | intro D =>
+      exact Nonempty.intro D.toConstructionData
+
+/-- Direct E22/E23 plus no-early fields rule out every minimal cleared
+failure. -/
+theorem no_minimalClearedFailure_of_E22E23NoEarlyConstructionEliminator
+    (hbuild : MinimalFailureM8E22E23NoEarlyConstructionEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) := by
+  exact no_minimalClearedFailure_of_m8ConstructionEliminator
+    (m8ConstructionEliminator_of_E22E23NoEarlyConstructionEliminator hbuild)
+
+/-- A uniform eliminator that supplies window geometry plus no-early fields
+for every minimal cleared failure. -/
+def MinimalFailureM8WindowNoEarlyConstructionEliminator : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C),
+      Nonempty (M8WindowNoEarlyConstructionFields C hmin)
+
+/-- Window geometry plus no-early fields can be viewed as direct E22/E23 plus
+no-early fields. -/
+theorem E22E23NoEarlyConstructionEliminator_of_windowNoEarlyConstructionEliminator
+    (hbuild : MinimalFailureM8WindowNoEarlyConstructionEliminator) :
+    MinimalFailureM8E22E23NoEarlyConstructionEliminator := by
+  intro n C hmin
+  cases hbuild C hmin with
+  | intro D =>
+      exact Nonempty.intro D.toE22E23NoEarlyConstructionFields
+
+/-- Window geometry plus no-early fields can also be viewed as the separated
+construction fields used by the original closure. -/
+theorem separatedConstructionEliminator_of_windowNoEarlyConstructionEliminator
+    (hbuild : MinimalFailureM8WindowNoEarlyConstructionEliminator) :
+    MinimalFailureM8SeparatedConstructionEliminator := by
+  intro n C hmin
+  cases hbuild C hmin with
+  | intro D =>
+      exact Nonempty.intro D.toSeparatedConstructionFields
+
+/-- Window geometry plus no-early fields rule out every minimal cleared
+failure. -/
+theorem no_minimalClearedFailure_of_windowNoEarlyConstructionEliminator
+    (hbuild : MinimalFailureM8WindowNoEarlyConstructionEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) := by
+  exact no_minimalClearedFailure_of_separatedConstructionEliminator
+    (separatedConstructionEliminator_of_windowNoEarlyConstructionEliminator hbuild)
+
+/-- A uniform eliminator that supplies the clean construction-interface data
+for every minimal cleared failure. -/
+def MinimalFailureM8ConstructionInterfaceEliminator : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C),
+      Nonempty (M8ConstructionInterface.M8ConstructionData C hmin)
+
+/-- A clean construction-interface eliminator supplies the separated-field
+eliminator. -/
+theorem separatedConstructionEliminator_of_constructionInterfaceEliminator
+    (hbuild : MinimalFailureM8ConstructionInterfaceEliminator) :
+    MinimalFailureM8SeparatedConstructionEliminator := by
+  intro n C hmin
+  cases hbuild C hmin with
+  | intro D =>
+      exact
+        Nonempty.intro
+          (separatedConstructionFields_of_constructionInterfaceData D)
+
+/-- Clean construction-interface data rules out every minimal cleared
+failure. -/
+theorem no_minimalClearedFailure_of_constructionInterfaceEliminator
+    (hbuild : MinimalFailureM8ConstructionInterfaceEliminator) :
+    forall {n : Nat} (C : _root_.UDConfig n),
+      Not (IsMinimalClearedFailure C) := by
+  exact no_minimalClearedFailure_of_separatedConstructionEliminator
+    (separatedConstructionEliminator_of_constructionInterfaceEliminator hbuild)
 
 end
 

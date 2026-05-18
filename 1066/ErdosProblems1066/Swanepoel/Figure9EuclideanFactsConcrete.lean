@@ -32,6 +32,7 @@ open Lemma10Inequalities
 open Lemma10WindowGeometry
 open LocalConfigurations
 open M8ConstructionInterface
+open M8WindowGeometryFromContainment
 open MinimalGraphFacts
 open TriangleAngleFacts
 
@@ -41,6 +42,94 @@ abbrev Point : Type :=
   AngleGeometry.Point
 
 /-! ## Reusable Euclidean/trigonometric consequences -/
+
+/-- The left side of the Figure 9 central angle is unit squared-distance. -/
+lemma central_left_sqDist_eq_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    sqDist qi p = 1 :=
+  sqDist_eq_one_of_eucUnit (eucUnit_comm D.p_qi)
+
+/-- The right side of the Figure 9 central angle is unit squared-distance. -/
+lemma central_right_sqDist_eq_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    sqDist qj p = 1 :=
+  sqDist_eq_one_of_eucUnit (eucUnit_comm D.p_qj)
+
+/-- The first side of the Figure 9 left comparison angle is unit
+squared-distance. -/
+lemma left_first_sqDist_eq_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    sqDist p qi = 1 :=
+  sqDist_eq_one_of_eucUnit D.p_qi
+
+/-- The second side of the Figure 9 left comparison angle is unit
+squared-distance. -/
+lemma left_second_sqDist_eq_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    sqDist s qi = 1 :=
+  sqDist_eq_one_of_eucUnit (eucUnit_comm D.qi_s)
+
+/-- The first side of the Figure 9 right comparison angle is unit
+squared-distance. -/
+lemma right_first_sqDist_eq_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    sqDist p qj = 1 :=
+  sqDist_eq_one_of_eucUnit D.p_qj
+
+/-- The second side of the Figure 9 right comparison angle is unit
+squared-distance. -/
+lemma right_second_sqDist_eq_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    sqDist r qj = 1 :=
+  sqDist_eq_one_of_eucUnit (eucUnit_comm D.qj_r)
+
+/-- The Figure 9 central chord has squared-distance at least one. -/
+lemma central_sqDist_ge_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    1 <= sqDist qi qj :=
+  one_le_sqDist_of_eucSeparated D.qi_qj_sep
+
+/-- The Figure 9 left comparison chord has squared-distance at least one. -/
+lemma left_sqDist_ge_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    1 <= sqDist p s :=
+  D.left_base_sqDist_ge_one
+
+/-- The Figure 9 right comparison chord has squared-distance at least one. -/
+lemma right_sqDist_ge_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    1 <= sqDist p r :=
+  D.right_base_sqDist_ge_one
+
+/-- The Figure 9 comparison chord has squared-distance at least one. -/
+lemma comparison_sqDist_ge_one {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    1 <= sqDist s r :=
+  D.comparison_chord_sqDist_ge_one
+
+/-- The central Figure 9 dot product is at most `1 / 2`. -/
+lemma central_dotAt_le_half {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    dotAt qi p qj <= 1 / 2 :=
+  D.central_dotAt_le_half
+
+/-- The left Figure 9 comparison dot product is at most `1 / 2`. -/
+lemma left_dotAt_le_half {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    dotAt p qi s <= 1 / 2 :=
+  D.left_comparison_dotAt_le_half
+
+/-- The right Figure 9 comparison dot product is at most `1 / 2`. -/
+lemma right_dotAt_le_half {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    dotAt p qj r <= 1 / 2 :=
+  D.right_comparison_dotAt_le_half
+
+/-- Bundle the available Figure 9 dot/squared-distance consequences. -/
+lemma dotFacts {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r) :
+    Figure9DotFacts p qi qj s r :=
+  figure9DotFacts_of_distanceData D
 
 /-- The dot-product, square-distance, and angle lower-bound facts extracted
 from a concrete Figure 9 distance package. -/
@@ -144,6 +233,15 @@ def adjacentLeftFacts_of_distanceContainment
   euclideanFacts := euclideanFacts_of_distanceData D
   left_angle_le_adjacentTurn := hcontained
 
+/-- Build the selected adjacent-left fact package from the contained-data
+record used by the Figure 9 containment layer. -/
+def adjacentLeftFacts_of_containedData
+    {turn : Nat -> Real} {i : Nat}
+    (D : Figure9AdjacentLeftContainedData turn i) :
+    Figure9AdjacentLeftEuclideanFacts turn i :=
+  adjacentLeftFacts_of_distanceContainment
+    D.distanceData D.left_angle_le_adjacentTurn
+
 namespace Figure9AdjacentLeftEuclideanFacts
 
 /-- The derived left-angle lower bound carried by a selected Figure 9
@@ -206,6 +304,35 @@ def containedWitnesses_of_euclideanFactWitnesses
   fun {i} hi hi_next hbad_i hbad_next =>
     (H (i := i) hi hi_next hbad_i hbad_next).toContainedData
 
+/-- Upgrade explicit contained witnesses to selected Euclidean fact witnesses.
+This direction extracts only facts already present in the contained distance
+package and keeps the angle containment as an explicit input. -/
+def euclideanFactWitnesses_of_containedWitnesses
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftContainedWitnesses good turn) :
+    Figure9AdjacentLeftEuclideanFactWitnesses good turn :=
+  fun {i} hi hi_next hbad_i hbad_next =>
+    adjacentLeftFacts_of_containedData
+      (H (i := i) hi hi_next hbad_i hbad_next)
+
+/-- Upgrade the selected containment facade from failed adjacent comparisons
+to selected Euclidean fact witnesses. -/
+def euclideanFactWitnesses_of_windowContainment
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftWindowContainment good turn) :
+    Figure9AdjacentLeftEuclideanFactWitnesses good turn :=
+  euclideanFactWitnesses_of_containedWitnesses H.toContainedWitnesses
+
+/-- Upgrade a Figure 9 left-containment interface to selected Euclidean fact
+witnesses. -/
+def euclideanFactWitnesses_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure9AdjacentLeftEuclideanFactWitnesses good turn := by
+  intro i hi hi_next hbad_i hbad_next
+  exact adjacentLeftFacts_of_containedData
+    (H.containedData (i := i) hi hi_next hbad_i hbad_next)
+
 /-- Uniform selected Euclidean fact witnesses supply the Figure 9 adjacent-left
 window-geometry predicate. -/
 def leftWindowGeometry_of_euclideanFactWitnesses
@@ -232,6 +359,32 @@ theorem E23_of_euclideanFactWitnesses_direct
     Figure9AdjacentWindowLowerE23 good turn := by
   intro i hi hi_next hbad_i hbad_next
   exact (H (i := i) hi hi_next hbad_i hbad_next).adjacentTurn_lower
+
+/-- Contained witnesses imply E23 through the Euclidean fact package. -/
+theorem E23_of_containedWitnesses_via_euclideanFacts
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftContainedWitnesses good turn) :
+    Figure9AdjacentWindowLowerE23 good turn :=
+  E23_of_euclideanFactWitnesses_direct
+    (euclideanFactWitnesses_of_containedWitnesses H)
+
+/-- A Figure 9 selected containment facade implies E23 through the Euclidean
+fact package. -/
+theorem E23_of_windowContainment_via_euclideanFacts
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftWindowContainment good turn) :
+    Figure9AdjacentWindowLowerE23 good turn :=
+  E23_of_euclideanFactWitnesses_direct
+    (euclideanFactWitnesses_of_windowContainment H)
+
+/-- A Figure 9 left-containment interface implies E23 through the Euclidean
+fact package. -/
+theorem E23_of_containmentInterface_via_euclideanFacts
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure9AdjacentWindowLowerE23 good turn :=
+  E23_of_euclideanFactWitnesses_direct
+    (euclideanFactWitnesses_of_containmentInterface H)
 
 /-! ## Honest M8 projections -/
 
@@ -261,6 +414,168 @@ theorem honestE23_of_euclideanFactWitnesses
     HonestFigure9AdjacentWindowLowerE23 P turn :=
   honestFigure9AdjacentWindowLowerE23_of_leftWindowGeometry
     (honestLeftWindowGeometry_of_euclideanFactWitnesses H)
+
+/-! ## Failed-label projections from existing containment packages -/
+
+/-- Honest selected containment witnesses, indexed by failed local
+comparisons, upgraded to selected Figure 9 Euclidean fact witnesses. -/
+def honestEuclideanFactWitnesses_of_windowContainment
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn) :
+    HonestFigure9AdjacentLeftEuclideanFactWitnesses P turn :=
+  euclideanFactWitnesses_of_windowContainment H
+
+/-- Select the Figure 9 adjacent-left Euclidean fact package determined by
+adjacent failed honest labels.  The labels only select the existing contained
+witness; the metric and angle facts come from that witness. -/
+def honestAdjacentLeftEuclideanFacts_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Figure9AdjacentLeftEuclideanFacts turn i :=
+  adjacentLeftFacts_of_containedData
+    (Figure9ContainmentConcrete.honestContainedData_of_labelFailures
+      H hi hi_next hbad_i hbad_next)
+
+/-- The concrete Figure 9 distance package selected by adjacent failed honest
+labels. -/
+theorem honestDistanceData_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Figure9DistanceData
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).p
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).qi
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).qj
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).s
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).r :=
+  (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+    hi hi_next hbad_i hbad_next).distanceData
+
+/-- The full Euclidean fact bundle selected by adjacent failed honest labels. -/
+theorem honestEuclideanFacts_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Figure9DistanceEuclideanFacts
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).p
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).qi
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).qj
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).s
+      (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+        hi hi_next hbad_i hbad_next).r :=
+  (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+    hi hi_next hbad_i hbad_next).euclideanFacts
+
+/-- Adjacent failed honest labels select a Figure 9 left-angle lower bound. -/
+theorem honest_left_angle_lower_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Real.pi / 3 <=
+      angleAt
+        (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+          hi hi_next hbad_i hbad_next).p
+        (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+          hi hi_next hbad_i hbad_next).qi
+        (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+          hi hi_next hbad_i hbad_next).s :=
+  (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+    hi hi_next hbad_i hbad_next).left_angle_lower
+
+/-- Adjacent failed honest labels, with the selected Figure 9 containment
+witness, give the local adjacent-window lower bound. -/
+theorem honestAdjacentTurn_lower_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Real.pi / 3 <= adjacentTurn turn i :=
+  (honestAdjacentLeftEuclideanFacts_of_labelFailures H
+    hi hi_next hbad_i hbad_next).adjacentTurn_lower
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {localLabels : M8LocalLabels C}
+variable {turnBounds : M8TurnBounds}
+
+/-- The Figure 9 field of an M8 window-containment package as selected
+Euclidean fact witnesses. -/
+def honestEuclideanFactWitnesses_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure9AdjacentLeftEuclideanFactWitnesses
+      localLabels.predicates turnBounds.turn :=
+  euclideanFactWitnesses_of_containmentInterface W.figure9_left
+
+/-- Select Figure 9 adjacent-left Euclidean facts from an M8 window-containment
+package using adjacent failed honest labels. -/
+def honestAdjacentLeftEuclideanFacts_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_next :
+      Not (M8LabelGood localLabels.predicates.data.labels (i + 1))) :
+    Figure9AdjacentLeftEuclideanFacts turnBounds.turn i :=
+  adjacentLeftFacts_of_containedData
+    (Figure9ContainmentConcrete.honestContainedData_of_m8WindowContainment_labelFailures
+      W hi hi_next hbad_i hbad_next)
+
+/-- Adjacent failed honest labels select a Figure 9 left-angle lower bound from
+an M8 window-containment package. -/
+theorem honest_left_angle_lower_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_next :
+      Not (M8LabelGood localLabels.predicates.data.labels (i + 1))) :
+    Real.pi / 3 <=
+      angleAt
+        (honestAdjacentLeftEuclideanFacts_of_m8WindowContainment_labelFailures
+          W hi hi_next hbad_i hbad_next).p
+        (honestAdjacentLeftEuclideanFacts_of_m8WindowContainment_labelFailures
+          W hi hi_next hbad_i hbad_next).qi
+        (honestAdjacentLeftEuclideanFacts_of_m8WindowContainment_labelFailures
+          W hi hi_next hbad_i hbad_next).s :=
+  (honestAdjacentLeftEuclideanFacts_of_m8WindowContainment_labelFailures
+    W hi hi_next hbad_i hbad_next).left_angle_lower
+
+/-- Adjacent failed honest labels, selected through an M8 window-containment
+package, give the local adjacent-window lower bound. -/
+theorem honestAdjacentTurn_lower_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_next :
+      Not (M8LabelGood localLabels.predicates.data.labels (i + 1))) :
+    Real.pi / 3 <= adjacentTurn turnBounds.turn i :=
+  (honestAdjacentLeftEuclideanFacts_of_m8WindowContainment_labelFailures
+    W hi hi_next hbad_i hbad_next).adjacentTurn_lower
 
 end Figure9EuclideanFactsConcrete
 end Swanepoel

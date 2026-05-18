@@ -74,6 +74,55 @@ theorem root_eucDist_hingePoint_center (center : R2) (theta : Real) :
   simpa [geometry_eucDist_eq_root_eucDist] using
     UnitVectorGeometry.eucDist_hingePoint_center center theta
 
+theorem root_eucDist_eq_one_of_distSq_eq_one
+    {p q : R2}
+    (h : distSq p q = 1) :
+    _root_.eucDist p q = 1 := by
+  exact (root_eucDist_eq_one_iff_distSq p q).2 h
+
+theorem distSq_center_target_of_unit_delta
+    {center target : R2} {dx dy : Real}
+    (hx : target.1 = center.1 + dx)
+    (hy : target.2 = center.2 + dy) :
+    distSq center target = dx ^ 2 + dy ^ 2 := by
+  dsimp [distSq]
+  rw [hx, hy]
+  ring
+
+theorem root_eucDist_center_target_of_unit_delta
+    {center target : R2} {dx dy : Real}
+    (hx : target.1 = center.1 + dx)
+    (hy : target.2 = center.2 + dy)
+    (hunit : dx ^ 2 + dy ^ 2 = 1) :
+    _root_.eucDist center target = 1 := by
+  apply root_eucDist_eq_one_of_distSq_eq_one
+  rw [distSq_center_target_of_unit_delta hx hy]
+  exact hunit
+
+theorem hingePoint_eq_of_coords
+    {center target : R2} {theta : Real}
+    (hx : target.1 = center.1 + Real.cos theta)
+    (hy : target.2 = center.2 + Real.sin theta) :
+    target = hingePoint center theta := by
+  ext <;> simp [hingePoint, add, unitVec, hx, hy]
+
+theorem root_eucDist_center_target_of_cos_sin_coords
+    {center target : R2} {theta : Real}
+    (hx : target.1 = center.1 + Real.cos theta)
+    (hy : target.2 = center.2 + Real.sin theta) :
+    _root_.eucDist center target = 1 := by
+  exact
+    root_eucDist_center_target_of_unit_delta hx hy
+      (Real.cos_sq_add_sin_sq theta)
+
+theorem distSq_center_target_of_cos_sin_coords
+    {center target : R2} {theta : Real}
+    (hx : target.1 = center.1 + Real.cos theta)
+    (hy : target.2 = center.2 + Real.sin theta) :
+    distSq center target = 1 := by
+  rw [distSq_center_target_of_unit_delta hx hy]
+  exact Real.cos_sq_add_sin_sq theta
+
 theorem distSq_unitVec_unitVec (theta phi : Real) :
     distSq (unitVec theta) (unitVec phi) =
       2 - 2 * Real.cos (theta - phi) := by
@@ -257,6 +306,64 @@ theorem connectorUnitEdges_of_hinge_target_eqs
       rw [h.left, h.right]
       rw [h402]
       exact root_eucDist_center_hingePoint (source T4_0) (angle402 source)
+
+/-- Coordinate form of `connectorUnitEdges_of_hinge_target_eqs`: it is enough
+to prove the two component equations for each named connector target. -/
+theorem connectorUnitEdges_of_hinge_target_coord_eqs
+    (placeNext : (LocalVertex -> R2) -> LocalVertex -> R2)
+    (angle211 angle212 angle400 angle402 :
+      (LocalVertex -> R2) -> Real)
+    (h211x :
+      forall source : LocalVertex -> R2,
+        (placeNext source T1_1).1 =
+          (source T2_2).1 + Real.cos (angle211 source))
+    (h211y :
+      forall source : LocalVertex -> R2,
+        (placeNext source T1_1).2 =
+          (source T2_2).2 + Real.sin (angle211 source))
+    (h212x :
+      forall source : LocalVertex -> R2,
+        (placeNext source T1_2).1 =
+          (source T2_2).1 + Real.cos (angle212 source))
+    (h212y :
+      forall source : LocalVertex -> R2,
+        (placeNext source T1_2).2 =
+          (source T2_2).2 + Real.sin (angle212 source))
+    (h400x :
+      forall source : LocalVertex -> R2,
+        (placeNext source T0_0).1 =
+          (source T4_0).1 + Real.cos (angle400 source))
+    (h400y :
+      forall source : LocalVertex -> R2,
+        (placeNext source T0_0).2 =
+          (source T4_0).2 + Real.sin (angle400 source))
+    (h402x :
+      forall source : LocalVertex -> R2,
+        (placeNext source T0_2).1 =
+          (source T4_0).1 + Real.cos (angle402 source))
+    (h402y :
+      forall source : LocalVertex -> R2,
+        (placeNext source T0_2).2 =
+          (source T4_0).2 + Real.sin (angle402 source)) :
+    HingedTransitionInterface.ConnectorUnitEdges placeNext := by
+  intro source u v hconn
+  match nextConnector_cases hconn with
+  | Or.inl h =>
+      rw [h.left, h.right]
+      exact root_eucDist_center_target_of_cos_sin_coords
+        (h211x source) (h211y source)
+  | Or.inr (Or.inl h) =>
+      rw [h.left, h.right]
+      exact root_eucDist_center_target_of_cos_sin_coords
+        (h212x source) (h212y source)
+  | Or.inr (Or.inr (Or.inl h)) =>
+      rw [h.left, h.right]
+      exact root_eucDist_center_target_of_cos_sin_coords
+        (h400x source) (h400y source)
+  | Or.inr (Or.inr (Or.inr h)) =>
+      rw [h.left, h.right]
+      exact root_eucDist_center_target_of_cos_sin_coords
+        (h402x source) (h402y source)
 
 theorem translated_T2_2_T1_1_unit_iff_eq211
     (offset : R2) :

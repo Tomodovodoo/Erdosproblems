@@ -92,6 +92,15 @@ theorem toNeighborCyclicOrder_positiveCyclicOrderAt :
       O.positiveCyclicOrderAt :=
   rfl
 
+/-- The converted extraction cyclic-order record carries the same positive
+cyclic-order proposition. -/
+theorem toNeighborCyclicOrder_positiveCyclicOrder
+    (i : M8ExtraIndex) :
+    O.toNeighborCyclicOrder.positiveCyclicOrderAt i
+      (D.s i) (D.r i) (S.prevQ i)
+      (S.leftP i) (S.rightP i) (S.nextQ i) :=
+  O.positiveCyclicOrder i
+
 @[simp]
 theorem toLemma8Combinatorics_r (i : M8ExtraIndex) :
     O.toLemma8Combinatorics.r i = D.r i :=
@@ -115,6 +124,15 @@ theorem toLemma8Combinatorics_positiveCyclicOrder
       (O.toLemma8Combinatorics.s i) (O.toLemma8Combinatorics.r i)
       (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i) :=
   O.toLemma8Combinatorics.positiveCyclicOrder_holds i
+
+/-- The assembled package also exposes the cyclic order on the extracted
+labels directly. -/
+theorem toLemma8Combinatorics_positiveCyclicOrder_extracted
+    (i : M8ExtraIndex) :
+    O.toLemma8Combinatorics.positiveCyclicOrderAt i
+      (D.s i) (D.r i) (S.prevQ i)
+      (S.leftP i) (S.rightP i) (S.nextQ i) := by
+  simpa using O.toLemma8Combinatorics_positiveCyclicOrder i
 
 /-- The assembled package preserves the extracted `r_i` adjacency field. -/
 theorem toLemma8Combinatorics_r_neighbor (i : M8ExtraIndex) :
@@ -180,6 +198,15 @@ theorem cyclicAssumptionsOfNeighborCyclicOrder_positiveCyclicOrderAt
       O.positiveCyclicOrderAt :=
   rfl
 
+/-- Repackaging the extraction cyclic-order record preserves the positive
+cyclic-order proposition. -/
+theorem cyclicAssumptionsOfNeighborCyclicOrder_positiveCyclicOrder
+    (O : M8ExtraNeighborData.CyclicOrder D) (i : M8ExtraIndex) :
+    (cyclicAssumptionsOfNeighborCyclicOrder O).positiveCyclicOrderAt i
+      (D.s i) (D.r i) (S.prevQ i)
+      (S.leftP i) (S.rightP i) (S.nextQ i) :=
+  O.positiveCyclicOrder i
+
 /-- Both cyclic-order records carry the same data. -/
 theorem nonempty_cyclicAssumptions_iff :
     Nonempty (M8CyclicOrderAssumptions D) <->
@@ -210,6 +237,32 @@ theorem toLemma8CombinatoricsFromCyclicAssumptions_s
     (O : M8CyclicOrderAssumptions D) (i : M8ExtraIndex) :
     (toLemma8CombinatoricsFromCyclicAssumptions O).s i = D.s i :=
   rfl
+
+@[simp]
+theorem toLemma8CombinatoricsFromCyclicAssumptions_positiveCyclicOrderAt
+    (O : M8CyclicOrderAssumptions D) :
+    (toLemma8CombinatoricsFromCyclicAssumptions O).positiveCyclicOrderAt =
+      O.positiveCyclicOrderAt :=
+  rfl
+
+/-- The Lemma 8 package assembled from cyclic assumptions keeps the positive
+cyclic order in package-label form. -/
+theorem toLemma8CombinatoricsFromCyclicAssumptions_positiveCyclicOrder
+    (O : M8CyclicOrderAssumptions D) (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsFromCyclicAssumptions O).positiveCyclicOrderAt i
+      ((toLemma8CombinatoricsFromCyclicAssumptions O).s i)
+      ((toLemma8CombinatoricsFromCyclicAssumptions O).r i)
+      (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i) :=
+  O.toLemma8Combinatorics_positiveCyclicOrder i
+
+/-- The Lemma 8 package assembled from cyclic assumptions keeps the positive
+cyclic order on the original extracted labels. -/
+theorem toLemma8CombinatoricsFromCyclicAssumptions_positiveCyclicOrder_extracted
+    (O : M8CyclicOrderAssumptions D) (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsFromCyclicAssumptions O).positiveCyclicOrderAt i
+      (D.s i) (D.r i) (S.prevQ i)
+      (S.leftP i) (S.rightP i) (S.nextQ i) := by
+  simpa using O.positiveCyclicOrder i
 
 end M8ExtraNeighborData
 
@@ -291,6 +344,16 @@ theorem toCyclicOrderAssumptions_positiveCyclicOrderAt :
       E.positiveCyclicOrderAt :=
   rfl
 
+/-- Forgetting an existing Lemma 8 package preserves the stored positive
+cyclic-order proposition. -/
+theorem toCyclicOrderAssumptions_positiveCyclicOrder
+    (i : M8ExtraIndex) :
+    (toCyclicOrderAssumptions E).positiveCyclicOrderAt i
+      ((M8ExtraNeighborData.ofLemma8Combinatorics E).s i)
+      ((M8ExtraNeighborData.ofLemma8Combinatorics E).r i)
+      (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i) := by
+  simpa using E.positiveCyclicOrder_holds i
+
 /-- Existing Lemma 8 combinatorics decomposes into neighbor extraction plus
 the isolated cyclic-order assumption. -/
 theorem exists_extraction_and_cyclic_order_assumptions
@@ -348,6 +411,60 @@ theorem combinatoricsOfPositiveCyclicOrderAt_s
     (combinatoricsOfPositiveCyclicOrderAt
       D positiveCyclicOrderAt positiveCyclicOrder).s i = D.s i :=
   rfl
+
+@[simp]
+theorem combinatoricsOfPositiveCyclicOrderAt_positiveCyclicOrderAt
+    (D : M8ExtraNeighborData S)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i (D.s i) (D.r i) (S.prevQ i)
+          (S.leftP i) (S.rightP i) (S.nextQ i)) :
+    (combinatoricsOfPositiveCyclicOrderAt
+      D positiveCyclicOrderAt positiveCyclicOrder).positiveCyclicOrderAt =
+        positiveCyclicOrderAt :=
+  rfl
+
+/-- The direct constructor exposes its positive cyclic order on the assembled
+Lemma 8 labels. -/
+theorem combinatoricsOfPositiveCyclicOrderAt_positiveCyclicOrder
+    (D : M8ExtraNeighborData S)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i (D.s i) (D.r i) (S.prevQ i)
+          (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    (combinatoricsOfPositiveCyclicOrderAt
+      D positiveCyclicOrderAt positiveCyclicOrder).positiveCyclicOrderAt i
+      ((combinatoricsOfPositiveCyclicOrderAt
+        D positiveCyclicOrderAt positiveCyclicOrder).s i)
+      ((combinatoricsOfPositiveCyclicOrderAt
+        D positiveCyclicOrderAt positiveCyclicOrder).r i)
+      (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i) := by
+  simpa using positiveCyclicOrder i
+
+/-- The direct constructor exposes its positive cyclic order on the original
+extracted labels. -/
+theorem combinatoricsOfPositiveCyclicOrderAt_positiveCyclicOrder_extracted
+    (D : M8ExtraNeighborData S)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i (D.s i) (D.r i) (S.prevQ i)
+          (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    (combinatoricsOfPositiveCyclicOrderAt
+      D positiveCyclicOrderAt positiveCyclicOrder).positiveCyclicOrderAt i
+      (D.s i) (D.r i) (S.prevQ i)
+      (S.leftP i) (S.rightP i) (S.nextQ i) := by
+  simpa using positiveCyclicOrder i
 
 end
 

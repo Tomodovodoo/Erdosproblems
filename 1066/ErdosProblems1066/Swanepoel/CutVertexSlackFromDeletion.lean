@@ -198,6 +198,68 @@ theorem deletionSlackFact_of_minimalFailure_missingArithmetic
   exact Nonempty.intro
     ((sideSurplusData_of_minimalFailure hmin P).toGluingData (harith P))
 
+/-! ## Minimality obstruction for deletion slack -/
+
+/-- If a cut partition is supplied in a minimal cleared failure, a
+partition-level deletion slack fact immediately contradicts the uncleared
+ambient configuration. -/
+theorem deletionSlackFact_false_of_minimalFailure_partition
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (hslack : CutVertexDeletionSlackFact C)
+    (P : CutVertexPartition C) :
+    False := by
+  rcases hslack P with ⟨D⟩
+  exact MinimalGraphFacts.not_hasCleared_of_minimalClearedFailure hmin
+    (CutVertexPartition.hasCleared_of_cutVertexSlack P D)
+
+/-- Thus, for an actual supplied cut partition, minimality refutes any
+all-partitions deletion slack fact. -/
+theorem deletionSlackFact_not_of_minimalFailure_partition
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (P : CutVertexPartition C) :
+    ¬ CutVertexDeletionSlackFact C := by
+  intro hslack
+  exact deletionSlackFact_false_of_minimalFailure_partition hmin hslack P
+
+/-- The same obstruction specialized to the side witnesses chosen from
+minimality: their missing pay-for-cut arithmetic cannot be derived in the
+presence of a supplied cut partition. -/
+theorem missingArithmetic_false_of_minimalFailure_partition
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (harith : CutVertexDeletionMissingArithmetic hmin)
+    (P : CutVertexPartition C) :
+    False :=
+  deletionSlackFact_false_of_minimalFailure_partition hmin
+    (deletionSlackFact_of_minimalFailure_missingArithmetic hmin harith) P
+
+/-- A supplied cut partition is incompatible with the universal missing
+pay-for-cut arithmetic for the minimality-selected side witnesses. -/
+theorem missingArithmetic_not_of_minimalFailure_partition
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (P : CutVertexPartition C) :
+    ¬ CutVertexDeletionMissingArithmetic hmin := by
+  intro harith
+  exact missingArithmetic_false_of_minimalFailure_partition hmin harith P
+
+/-- Direct no-cut route from a deletion slack fact, avoiding any connectedness
+or positive-cardinality facade. -/
+theorem noCutVertex_of_minimalFailure_deletionSlackFact_core
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (hslack : CutVertexDeletionSlackFact C) :
+    CutVertexInterface.NoCutVertex C := by
+  rintro ⟨P⟩
+  exact deletionSlackFact_false_of_minimalFailure_partition hmin hslack P
+
+/-- Direct no-cut route from the missing arithmetic, showing that this
+arithmetic is already as strong as the remaining no-cut input when paired with
+minimality. -/
+theorem noCutVertex_of_minimalFailure_missingArithmetic_core
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (harith : CutVertexDeletionMissingArithmetic hmin) :
+    CutVertexInterface.NoCutVertex C := by
+  rintro ⟨P⟩
+  exact missingArithmetic_false_of_minimalFailure_partition hmin harith P
+
 /-- Data projection from the Prop-level remaining slack fact to the uniform
 cut-vertex slack package used by `CutVertexClosure`. -/
 def allCutVertexSlackGluingData_of_deletionSlackFact

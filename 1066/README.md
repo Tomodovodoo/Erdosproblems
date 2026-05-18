@@ -53,9 +53,9 @@ The public facade is namespace-scoped:
 - `ErdosProblems1066.PollackPach.lower_bound_quarter`
 
 The Swanepoel `8 / 31` lower bound and Pach--Toth `5 / 16` upper construction
-are not declared as Lean theorems yet. They will remain absent from the public
-facade until their proof terms are fully formalized without `axiom`, `sorry`,
-or `admit`.
+are not exposed as unconditional public theorem wrappers yet. They will remain
+absent from the public facade until their proof terms are fully formalized
+without `axiom`, `sorry`, or `admit`.
 
 Bridge modules:
 
@@ -230,13 +230,13 @@ Run:
 
 ```powershell
 elan run leanprover/lean4:v4.28.0 lake build
-rg -n -i -e '\baxiom\b' -e '\bconstant\b' -e '\bsorry\b' -e '\badmit\b' -e 'unsafe' -e 'opaque' -e 'implemented_by' -e '#check' -e '#print' -e '#eval' ErdosProblems1066 --glob '*.lean'
+rg -n -i -e '\baxiom\b' -e '\bconstant\b' -e '\bsorry\b' -e '\badmit\b' -e 'unsafe' -e 'opaque' -e 'implemented_by' -e '#check' -e '#print' -e '#eval' ErdosProblems1066 ErdosProblems1066.lean --glob '*.lean'
 ```
 
 `rg` exits with code `1` when there are no matches; that is the clean result.
 The source scan is intentionally restricted to Lean files under
-`ErdosProblems1066`; docs and CI helper scripts may contain audit commands such
-as `#print axioms`.
+`ErdosProblems1066` plus the root import file; docs and CI helper scripts may
+contain audit commands such as `#print axioms`.
 
 The CI workflow is the source of truth for the full axiom-audit list. It
 auto-counts the `#print axioms` declarations and checks their output with

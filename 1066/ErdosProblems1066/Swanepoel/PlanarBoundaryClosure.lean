@@ -70,6 +70,88 @@ structure FaceCountingBridgeData
   subpolygon_faceBoundary_eq :
     forall S : Subpolygon, (subpolygonCounts S).faceBoundary = faceBoundary
 
+namespace FaceCountingBridgeData
+
+variable {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
+
+/-- The outer-boundary counts retained by a bridge package. -/
+def outerCounts (H : FaceCountingBridgeData.{u} G) :
+    BoundaryCounts :=
+  H.boundaryCounts.counts
+
+/-- The subpolygon counts retained by a bridge package. -/
+def subpolygonDegreeCounts
+    (H : FaceCountingBridgeData.{u} G) (S : H.Subpolygon) :
+    SubpolygonDegreeCounts :=
+  (H.subpolygonCounts S).counts
+
+/-- E12 for the outer-boundary counts retained by a bridge package. -/
+theorem boundaryAngleCount
+    (H : FaceCountingBridgeData.{u} G) :
+    H.outerCounts.d5 + 2 * H.outerCounts.d6 +
+        H.outerCounts.b + H.outerCounts.B + 6 <=
+      H.outerCounts.d3 :=
+  H.boundaryCounts.boundaryAngleCountInequality
+
+/-- The negative-element E12 form for the outer-boundary counts retained by a
+bridge package. -/
+theorem boundaryNegativeCount
+    (H : FaceCountingBridgeData.{u} G) :
+    H.outerCounts.negativeCount + H.outerCounts.B + 6 <=
+      H.outerCounts.d3 :=
+  H.boundaryCounts.boundaryNegativeCountInequality
+
+/-- E13 with high-degree slack for the subpolygon counts retained by a bridge
+package. -/
+theorem subpolygonLowDegreeWithHighDegreeSlack
+    (H : FaceCountingBridgeData.{u} G) (S : H.Subpolygon) :
+    (H.subpolygonDegreeCounts S).D5 +
+        2 * (H.subpolygonDegreeCounts S).D6 + 6 <=
+      2 * (H.subpolygonDegreeCounts S).D2 +
+        (H.subpolygonDegreeCounts S).D3 :=
+  (H.subpolygonCounts S).subpolygonLowDegreeWithHighDegreeSlack
+
+/-- Swanepoel Lemma 4's low-degree conclusion for the subpolygon counts
+retained by a bridge package. -/
+theorem subpolygonLowDegree
+    (H : FaceCountingBridgeData.{u} G) (S : H.Subpolygon) :
+    6 <= 2 * (H.subpolygonDegreeCounts S).D2 +
+      (H.subpolygonDegreeCounts S).D3 :=
+  (H.subpolygonCounts S).subpolygonLowDegreeInequality
+
+/-- Proposition-valued summary of the checked counting conclusions available
+from a face-counting bridge package. -/
+structure CountingTheorems (H : FaceCountingBridgeData.{u} G) : Prop where
+  boundaryAngleCount :
+    H.outerCounts.d5 + 2 * H.outerCounts.d6 +
+        H.outerCounts.b + H.outerCounts.B + 6 <=
+      H.outerCounts.d3
+  boundaryNegativeCount :
+    H.outerCounts.negativeCount + H.outerCounts.B + 6 <=
+      H.outerCounts.d3
+  subpolygonLowDegreeWithHighDegreeSlack :
+    forall S : H.Subpolygon,
+      (H.subpolygonDegreeCounts S).D5 +
+          2 * (H.subpolygonDegreeCounts S).D6 + 6 <=
+        2 * (H.subpolygonDegreeCounts S).D2 +
+          (H.subpolygonDegreeCounts S).D3
+  subpolygonLowDegree :
+    forall S : H.Subpolygon,
+      6 <= 2 * (H.subpolygonDegreeCounts S).D2 +
+        (H.subpolygonDegreeCounts S).D3
+
+/-- Bundle the bridge package's checked E12/E13 conclusions. -/
+theorem countingTheorems
+    (H : FaceCountingBridgeData.{u} G) :
+    CountingTheorems H where
+  boundaryAngleCount := H.boundaryAngleCount
+  boundaryNegativeCount := H.boundaryNegativeCount
+  subpolygonLowDegreeWithHighDegreeSlack :=
+    H.subpolygonLowDegreeWithHighDegreeSlack
+  subpolygonLowDegree := H.subpolygonLowDegree
+
+end FaceCountingBridgeData
+
 namespace PlanarBoundaryData
 
 variable {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
@@ -237,6 +319,79 @@ def toFaceCountingBridgeData (D : PlanarBoundaryData.{u} G) :
   subpolygon_faceBoundary_eq :=
     D.canonicalSubpolygonCountHypotheses_faceBoundary
 
+@[simp]
+theorem toFaceCountingBridgeData_faceBoundary
+    (D : PlanarBoundaryData.{u} G) :
+    D.toFaceCountingBridgeData.faceBoundary = D.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_planarFaceBoundary
+    (D : PlanarBoundaryData.{u} G) :
+    D.toFaceCountingBridgeData.planarFaceBoundary = D.planarFaceBoundary :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_boundaryCounts
+    (D : PlanarBoundaryData.{u} G) :
+    D.toFaceCountingBridgeData.boundaryCounts =
+      D.canonicalBoundaryCountHypotheses :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_outerCounts
+    (D : PlanarBoundaryData.{u} G) :
+    D.toFaceCountingBridgeData.outerCounts = D.outerBoundaryCounts :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_boundaryCounts_faceBoundary
+    (D : PlanarBoundaryData.{u} G) :
+    D.toFaceCountingBridgeData.boundaryCounts.faceBoundary =
+      D.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_boundaryCounts_counts
+    (D : PlanarBoundaryData.{u} G) :
+    D.toFaceCountingBridgeData.boundaryCounts.counts =
+      D.outerBoundaryCounts :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_Subpolygon
+    (D : PlanarBoundaryData.{u} G) :
+    D.toFaceCountingBridgeData.Subpolygon = D.Subpolygon :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_subpolygonCounts
+    (D : PlanarBoundaryData.{u} G) (S : D.Subpolygon) :
+    D.toFaceCountingBridgeData.subpolygonCounts S =
+      D.canonicalSubpolygonCountHypotheses S :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_subpolygonDegreeCounts
+    (D : PlanarBoundaryData.{u} G) (S : D.Subpolygon) :
+    D.toFaceCountingBridgeData.subpolygonDegreeCounts S =
+      (D.subpolygonData S).counts :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_subpolygonCounts_faceBoundary
+    (D : PlanarBoundaryData.{u} G) (S : D.Subpolygon) :
+    (D.toFaceCountingBridgeData.subpolygonCounts S).faceBoundary =
+      D.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toFaceCountingBridgeData_subpolygonCounts_counts
+    (D : PlanarBoundaryData.{u} G) (S : D.Subpolygon) :
+    (D.toFaceCountingBridgeData.subpolygonCounts S).counts =
+      (D.subpolygonData S).counts :=
+  rfl
+
 /-- Proposition-valued summary of the strongest checked counting conclusions
 available from the explicit planar-boundary data. -/
 structure FaceCountingTheorems (D : PlanarBoundaryData.{u} G) : Prop where
@@ -258,6 +413,45 @@ structure FaceCountingTheorems (D : PlanarBoundaryData.{u} G) : Prop where
       6 <= 2 * (D.subpolygonData S).counts.D2 +
         (D.subpolygonData S).counts.D3
 
+namespace FaceCountingTheorems
+
+variable {D : PlanarBoundaryData.{u} G}
+
+/-- Re-index the planar-boundary theorem summary to the assembled bridge
+package. -/
+theorem toBridgeCountingTheorems
+    (H : FaceCountingTheorems D) :
+    FaceCountingBridgeData.CountingTheorems D.toFaceCountingBridgeData where
+  boundaryAngleCount := by
+    simpa using H.boundaryAngleCount
+  boundaryNegativeCount := by
+    simpa using H.boundaryNegativeCount
+  subpolygonLowDegreeWithHighDegreeSlack := by
+    intro S
+    simpa using H.subpolygonLowDegreeWithHighDegreeSlack S
+  subpolygonLowDegree := by
+    intro S
+    simpa using H.subpolygonLowDegree S
+
+/-- Re-index a bridge theorem summary back to the planar-boundary count
+fields. -/
+theorem ofBridgeCountingTheorems
+    (H : FaceCountingBridgeData.CountingTheorems
+      D.toFaceCountingBridgeData) :
+    FaceCountingTheorems D where
+  boundaryAngleCount := by
+    simpa using H.boundaryAngleCount
+  boundaryNegativeCount := by
+    simpa using H.boundaryNegativeCount
+  subpolygonLowDegreeWithHighDegreeSlack := by
+    intro S
+    simpa using H.subpolygonLowDegreeWithHighDegreeSlack S
+  subpolygonLowDegree := by
+    intro S
+    simpa using H.subpolygonLowDegree S
+
+end FaceCountingTheorems
+
 /--
 The combined conditional planar-boundary theorem: explicit face/Jordan-style
 outer-boundary data, realized outer angle bounds, and supplied subpolygon
@@ -271,6 +465,20 @@ theorem faceCountingTheorems (D : PlanarBoundaryData.{u} G) :
   subpolygonLowDegreeWithHighDegreeSlack :=
     D.subpolygonLowDegreeWithHighDegreeSlack
   subpolygonLowDegree := D.subpolygonLowDegreeInequality
+
+/-- The theorem summary from planar-boundary data, re-indexed to the assembled
+face-counting bridge package. -/
+theorem faceCountingTheorems_toBridgeCountingTheorems
+    (D : PlanarBoundaryData.{u} G) :
+    FaceCountingBridgeData.CountingTheorems D.toFaceCountingBridgeData :=
+  D.faceCountingTheorems.toBridgeCountingTheorems
+
+/-- The generic bridge theorem package obtained from the assembled
+face-counting bridge data. -/
+theorem toFaceCountingBridgeData_countingTheorems
+    (D : PlanarBoundaryData.{u} G) :
+    FaceCountingBridgeData.CountingTheorems D.toFaceCountingBridgeData :=
+  D.toFaceCountingBridgeData.countingTheorems
 
 end PlanarBoundaryData
 

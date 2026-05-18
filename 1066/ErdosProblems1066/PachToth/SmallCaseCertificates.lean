@@ -33,6 +33,40 @@ theorem targetUpperConstructionFiveSixteenAt_remainder
       (SplitSoundness.remainderUpperOfConstruction r)
   simpa using h
 
+/-- Alias exposing the checked remainder route as the fixed-`n` small case
+below sixteen. -/
+theorem targetUpperConstructionFiveSixteenAt_of_lt_sixteen
+    {n : Nat} (hn : n < 16) :
+    targetUpperConstructionFiveSixteenAt n :=
+  targetUpperConstructionFiveSixteenAt_remainder hn
+
+/-- A quotient exact-chain certificate and the checked finite remainder
+certificate discharge the target at an arbitrary vertex count. -/
+theorem targetUpperConstructionFiveSixteenAt_of_exactChainQuotient
+    (n : Nat) (chain : SplitSoundness.ExactChainUpper (n / 16)) :
+    targetUpperConstructionFiveSixteenAt n := by
+  have hr : n % 16 < 16 := Nat.mod_lt n (by norm_num)
+  have hsplit : n = 16 * (n / 16) + n % 16 := by
+    have h := Nat.mod_add_div n 16
+    omega
+  have htarget :
+      targetUpperConstructionFiveSixteenAt (16 * (n / 16) + n % 16) :=
+    RemainderPlacement.targetUpperConstructionFiveSixteenAt_of_exactChain_translatedRemainder
+      hr
+      chain
+      (SplitSoundness.remainderUpperOfConstruction (n % 16))
+  rwa [hsplit]
+
+/-- Exact-block target data plus the checked remainder construction gives the
+fixed-`n` target.  Positive quotients are supplied only by the exact-target
+hypothesis; quotient zero is the empty chain. -/
+theorem targetUpperConstructionFiveSixteenAt_of_exactTarget
+    (Hexact : targetUpperConstructionFiveSixteen) (n : Nat) :
+    targetUpperConstructionFiveSixteenAt n := by
+  exact
+    targetUpperConstructionFiveSixteenAt_of_exactChainQuotient n
+      (SplitSoundness.exactChainUpperOfTarget Hexact (n / 16))
+
 /-- Exact-chain data for the small range below sixteen. -/
 def exactChainCertificatesUpToSixteen :
     SmallCaseReduction.ExactChainSmallCaseCertificates 16 where
@@ -41,12 +75,74 @@ def exactChainCertificatesUpToSixteen :
     have hdiv : n / 16 = 0 := Nat.div_eq_of_lt hn
     simpa [hdiv] using SplitSoundness.emptyExactChainUpper
 
+/-- Exact-chain data for any cutoff bounded by sixteen. -/
+def exactChainCertificatesUpTo_of_le_sixteen
+    (N0 : Nat) (hN : N0 <= 16) :
+    SmallCaseReduction.ExactChainSmallCaseCertificates N0 where
+  chain := by
+    intro n hn
+    have hn16 : n < 16 := Nat.lt_of_lt_of_le hn hN
+    have hdiv : n / 16 = 0 := Nat.div_eq_of_lt hn16
+    simpa [hdiv] using SplitSoundness.emptyExactChainUpper
+
 /-- The small-case reduction is discharged for all vertex counts below sixteen. -/
 theorem targetUpperConstructionFiveSixteenSmallUpTo_sixteen :
     targetUpperConstructionFiveSixteenSmallUpTo 16 := by
   exact
     SmallCaseReduction.targetUpperConstructionFiveSixteenSmallUpTo_of_exactChainCertificates
       exactChainCertificatesUpToSixteen
+
+/-- The checked remainder certificates discharge every smaller cutoff as well. -/
+theorem targetUpperConstructionFiveSixteenSmallUpTo_of_le_sixteen
+    {N0 : Nat} (hN : N0 <= 16) :
+    targetUpperConstructionFiveSixteenSmallUpTo N0 := by
+  exact
+    SmallCaseReduction.targetUpperConstructionFiveSixteenSmallUpTo_of_exactChainCertificates
+      (exactChainCertificatesUpTo_of_le_sixteen N0 hN)
+
+/-- Exact-block target data supplies exact-chain small-case certificates for
+any finite cutoff requested by an eventual arbitrary-`n` route. -/
+def exactChainSmallCaseCertificatesOfExactTarget
+    (Hexact : targetUpperConstructionFiveSixteen) (N0 : Nat) :
+    SmallCaseReduction.ExactChainSmallCaseCertificates N0 where
+  chain := by
+    intro n _hn
+    exact SplitSoundness.exactChainUpperOfTarget Hexact (n / 16)
+
+/-- Exact-block target data discharges the finite small-case obligation at any
+cutoff by the checked translated-remainder split. -/
+theorem targetUpperConstructionFiveSixteenSmallUpTo_of_exactTarget
+    (Hexact : targetUpperConstructionFiveSixteen) (N0 : Nat) :
+    targetUpperConstructionFiveSixteenSmallUpTo N0 := by
+  intro n _hn
+  by_cases hn16 : n < 16
+  case pos =>
+    exact targetUpperConstructionFiveSixteenAt_of_lt_sixteen hn16
+  case neg =>
+    exact targetUpperConstructionFiveSixteenAt_of_exactTarget Hexact n
+
+/-- Exact-block target data, paired with the checked below-sixteen
+certificates, gives the full arbitrary-`n` target. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_exactTarget
+    (Hexact : targetUpperConstructionFiveSixteen) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  intro n
+  by_cases hn16 : n < 16
+  case pos =>
+    exact targetUpperConstructionFiveSixteenAt_of_lt_sixteen hn16
+  case neg =>
+    exact targetUpperConstructionFiveSixteenAt_of_exactTarget Hexact n
+
+/-- Callback form of the previous projection, matching the eventual-route
+small-case hook.  The supplied large-case theorem is not needed because the
+exact-block target already gives the required exact-chain certificates. -/
+theorem smallCaseCallback_of_exactTarget
+    (Hexact : targetUpperConstructionFiveSixteen) :
+    forall N0 : Nat,
+      (forall n : Nat, N0 <= n -> targetUpperConstructionFiveSixteenAt n) ->
+        targetUpperConstructionFiveSixteenSmallUpTo N0 := by
+  intro N0 _Hlarge
+  exact targetUpperConstructionFiveSixteenSmallUpTo_of_exactTarget Hexact N0
 
 theorem targetUpperConstructionFiveSixteenAt_r0 :
     targetUpperConstructionFiveSixteenAt 0 := by

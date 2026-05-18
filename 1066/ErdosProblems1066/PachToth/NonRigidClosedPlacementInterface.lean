@@ -2,6 +2,7 @@ import ErdosProblems1066.PachToth.DeformedPlacement
 import ErdosProblems1066.PachToth.ClosedPlacementInterface
 import ErdosProblems1066.PachToth.ClosedChainExistence
 import ErdosProblems1066.PachToth.ClosedPlacementAlgebra
+import ErdosProblems1066.PachToth.GeneratedSeparationInterface
 import ErdosProblems1066.PachToth.RemainderPlacement
 
 set_option autoImplicit false
@@ -276,6 +277,298 @@ def exactChainUpper
 
 end SameOppositeCyclicOrbitData
 
+/-- Same-block isometry against the checked one-block certificate gives the
+unit same-block edge field required by the non-rigid point interfaces. -/
+theorem generated_same_block_edges_unit_of_isometry
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (same_block_isometry :
+      GeneratedSeparationInterface.GeneratedSameBlockIsometry
+        O hk base orientation) :
+    forall (i : Fin k) (u v : LocalVertex),
+      Ne u v ->
+      adj u v = true ->
+        _root_.eucDist
+          (GeneratedClosedChain.generatedPoint O hk base orientation i u)
+          (GeneratedClosedChain.generatedPoint O hk base orientation i v) =
+            1 := by
+  intro i u v _huv hadj
+  calc
+    _root_.eucDist
+        (GeneratedClosedChain.generatedPoint O hk base orientation i u)
+        (GeneratedClosedChain.generatedPoint O hk base orientation i v) =
+          _root_.eucDist
+            (OneBlockSoundness.oneBlockCertificate.config.pts
+              (BlockPartition.localVertexEquivFin16 u))
+            (OneBlockSoundness.oneBlockCertificate.config.pts
+              (BlockPartition.localVertexEquivFin16 v)) :=
+        same_block_isometry i u v
+    _ = 1 :=
+        OneBlockSoundness.oneBlockCertificate.same_block_edges_unit u v hadj
+
+/-- Generated-period data with full metric hypotheses supplies the
+same/opposite cyclic-orbit interface. -/
+def sameOppositeCyclicOrbitData_of_generatedPeriod
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation) :
+    SameOppositeCyclicOrbitData O k hk where
+  point := GeneratedClosedChain.generatedPoint O hk base orientation
+  orientation := orientation
+  successor_eq :=
+    GeneratedClosedChain.generatedPoint_successor_compatible
+      O hk base orientation period
+  separated := H.separated
+  same_block_edges_unit :=
+    generated_same_block_edges_unit_of_isometry
+      O hk base orientation H.same_block_isometry
+
+/-- Generated-period data with reduced same-block hypotheses supplies the
+same/opposite cyclic-orbit interface. -/
+def sameOppositeCyclicOrbitData_of_generatedPeriod_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    SameOppositeCyclicOrbitData O k hk :=
+  sameOppositeCyclicOrbitData_of_generatedPeriod
+    O hk base orientation period
+    { separated := H.separated
+      same_block_isometry :=
+        GeneratedSeparationInterface.same_block_isometry_of_reduced
+          O hk base orientation H }
+
+@[simp]
+theorem sameOppositeCyclicOrbitData_of_generatedPeriod_point
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    (sameOppositeCyclicOrbitData_of_generatedPeriod
+      O hk base orientation period H).point i v =
+        GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
+/-- Generated-period data with full metric hypotheses supplies the explicit
+successor-orbit edge interface. -/
+def explicitCyclicOrbitEdgeData_of_generatedPeriod
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation) :
+    ExplicitCyclicOrbitEdgeData k hk where
+  point := GeneratedClosedChain.generatedPoint O hk base orientation
+  step := GeneratedClosedChain.generatedStep O orientation
+  successor_eq :=
+    GeneratedClosedChain.generatedPoint_successor_compatible
+      O hk base orientation period
+  connector_unit_edges := by
+    intro i u v hconn
+    exact
+      Figure2Certificate.SameOppositeTransitionObligations.transitionFor_connector_unit_edges
+        O (orientation i)
+        (GeneratedClosedChain.generatedPoint O hk base orientation i)
+        u v hconn
+  separated := H.separated
+  same_block_edges_unit :=
+    generated_same_block_edges_unit_of_isometry
+      O hk base orientation H.same_block_isometry
+
+/-- Generated-period data with reduced same-block hypotheses supplies the
+explicit successor-orbit edge interface. -/
+def explicitCyclicOrbitEdgeData_of_generatedPeriod_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    ExplicitCyclicOrbitEdgeData k hk :=
+  explicitCyclicOrbitEdgeData_of_generatedPeriod
+    O hk base orientation period
+    { separated := H.separated
+      same_block_isometry :=
+        GeneratedSeparationInterface.same_block_isometry_of_reduced
+          O hk base orientation H }
+
+@[simp]
+theorem explicitCyclicOrbitEdgeData_of_generatedPeriod_point
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    (explicitCyclicOrbitEdgeData_of_generatedPeriod
+      O hk base orientation period H).point i v =
+        GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
+/-- Generated-period data with full metric hypotheses supplies the direct
+cyclic point/edge interface. -/
+def explicitCyclicPointEdgeData_of_generatedPeriod
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation) :
+    ExplicitCyclicPointEdgeData k hk :=
+  (explicitCyclicOrbitEdgeData_of_generatedPeriod
+    O hk base orientation period H).toExplicitCyclicPointEdgeData
+
+/-- Generated-period data with reduced same-block hypotheses supplies the
+direct cyclic point/edge interface. -/
+def explicitCyclicPointEdgeData_of_generatedPeriod_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    ExplicitCyclicPointEdgeData k hk :=
+  (explicitCyclicOrbitEdgeData_of_generatedPeriod_reduced
+    O hk base orientation period H).toExplicitCyclicPointEdgeData
+
+@[simp]
+theorem explicitCyclicPointEdgeData_of_generatedPeriod_point
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    (explicitCyclicPointEdgeData_of_generatedPeriod
+      O hk base orientation period H).point i v =
+        GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
+/-- Generated-period data with full metric hypotheses builds the checked
+non-rigid closed placement. -/
+def closedPlacement_of_generatedPeriod
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation) :
+    DeformedPlacement.ClosedPlacement k hk :=
+  (explicitCyclicPointEdgeData_of_generatedPeriod
+    O hk base orientation period H).toClosedPlacement
+
+/-- Generated-period data with reduced same-block hypotheses builds the
+checked non-rigid closed placement. -/
+def closedPlacement_of_generatedPeriod_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    DeformedPlacement.ClosedPlacement k hk :=
+  (explicitCyclicPointEdgeData_of_generatedPeriod_reduced
+    O hk base orientation period H).toClosedPlacement
+
+@[simp]
+theorem closedPlacement_of_generatedPeriod_point
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) (v : LocalVertex) :
+    (closedPlacement_of_generatedPeriod
+      O hk base orientation period H).point i v =
+        GeneratedClosedChain.generatedPoint O hk base orientation i v :=
+  rfl
+
+/-- Exact-block target from generated-period data and full metric
+hypotheses, routed through the direct non-rigid point/edge interface. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriod
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedMetricHypotheses
+        O hk base orientation) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    ExplicitCyclicPointEdgeData.targetUpperConstructionFiveSixteenAt_exactBlock
+      (explicitCyclicPointEdgeData_of_generatedPeriod
+        O hk base orientation period H)
+
+/-- Exact-block target from generated-period data with same-block metric
+control reduced to base-block isometry and transition preservation. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriod_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period :
+      GeneratedSeparationInterface.GeneratedPeriod O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    ExplicitCyclicPointEdgeData.targetUpperConstructionFiveSixteenAt_exactBlock
+      (explicitCyclicPointEdgeData_of_generatedPeriod_reduced
+        O hk base orientation period H)
+
 /-- Exact target wrapper for any family of checked non-rigid closed
 placements. -/
 theorem targetUpperConstructionFiveSixteen_of_closedPlacements
@@ -368,6 +661,63 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_sameOppositeCyclicOrbitDa
     targetUpperConstructionFiveSixteenArbitrary :=
   targetUpperConstructionFiveSixteenArbitrary_of_closedPlacements
     (fun k hk => (H k hk).toClosedPlacement)
+
+/-- A generated-period family plus full generated metric hypotheses gives
+the exact Pach--Toth target through the non-rigid point/edge interface. -/
+theorem targetUpperConstructionFiveSixteen_of_generatedPeriodFamily
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : F.Periods)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    targetUpperConstructionFiveSixteen :=
+  targetUpperConstructionFiveSixteen_of_explicitCyclicPointEdgeData
+    (fun k hk =>
+      explicitCyclicPointEdgeData_of_generatedPeriod
+        (F.O k hk) hk (F.base k hk) (F.orientation k hk)
+        (period k hk) (H.metric k hk))
+
+/-- A generated-period family gives the exact target when same-block metric
+control is reduced to base-block isometry and transition preservation. -/
+theorem targetUpperConstructionFiveSixteen_of_generatedPeriodFamily_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : F.Periods)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    targetUpperConstructionFiveSixteen :=
+  targetUpperConstructionFiveSixteen_of_explicitCyclicPointEdgeData
+    (fun k hk =>
+      explicitCyclicPointEdgeData_of_generatedPeriod_reduced
+        (F.O k hk) hk (F.base k hk) (F.orientation k hk)
+        (period k hk) (H.metric k hk))
+
+/-- A generated-period family plus full generated metric hypotheses gives
+the arbitrary vertex-count target through the non-rigid split route. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedPeriodFamily
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : F.Periods)
+    (H : GeneratedSeparationInterface.GeneratedChainFamily.MetricHypotheses F) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_explicitCyclicPointEdgeData
+    (fun k hk =>
+      explicitCyclicPointEdgeData_of_generatedPeriod
+        (F.O k hk) hk (F.base k hk) (F.orientation k hk)
+        (period k hk) (H.metric k hk))
+
+/-- A generated-period family gives the arbitrary vertex-count target when
+same-block metric control is reduced to base-block isometry and transition
+preservation. -/
+theorem targetUpperConstructionFiveSixteenArbitrary_of_generatedPeriodFamily_reduced
+    (F : GeneratedSeparationInterface.GeneratedChainFamily)
+    (period : F.Periods)
+    (H :
+      GeneratedSeparationInterface.GeneratedChainFamily.ReducedMetricHypotheses
+        F) :
+    targetUpperConstructionFiveSixteenArbitrary :=
+  targetUpperConstructionFiveSixteenArbitrary_of_explicitCyclicPointEdgeData
+    (fun k hk =>
+      explicitCyclicPointEdgeData_of_generatedPeriod_reduced
+        (F.O k hk) hk (F.base k hk) (F.orientation k hk)
+        (period k hk) (H.metric k hk))
 
 end
 

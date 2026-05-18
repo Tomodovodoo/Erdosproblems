@@ -107,6 +107,39 @@ def PreservesExactLocalSqDistances
     MatchesExactLocalSqDistances source ->
       MatchesExactLocalSqDistances (placeNext source)
 
+/-- Ordinary same-block distance preservation is stronger than exact-local
+squared-distance preservation on sources that already match the exact local
+table. -/
+theorem preservesExactLocalSqDistances_of_preservesSameBlockDistances
+    {placeNext : (LocalVertex -> R2) -> LocalVertex -> R2}
+    (hpreserve :
+      HingedTransitionInterface.PreservesSameBlockDistances placeNext) :
+    PreservesExactLocalSqDistances placeNext := by
+  intro source hsource u v
+  have hsourceDist :=
+    matchesExactLocalDistances_of_sqDistances hsource u v
+  have htargetDist :
+      _root_.eucDist (placeNext source u) (placeNext source v) =
+        _root_.eucDist
+          (ExactLocalGeometry.localPoint u)
+          (ExactLocalGeometry.localPoint v) := by
+    calc
+      _root_.eucDist (placeNext source u) (placeNext source v) =
+        _root_.eucDist (source u) (source v) := by
+          exact hpreserve source u v
+      _ =
+        _root_.eucDist
+          (ExactLocalGeometry.localPoint u)
+          (ExactLocalGeometry.localPoint v) := hsourceDist
+  have hsq :
+      _root_.eucDist (placeNext source u) (placeNext source v) ^ 2 =
+        _root_.eucDist
+          (ExactLocalGeometry.localPoint u)
+          (ExactLocalGeometry.localPoint v) ^ 2 := by
+    rw [htargetDist]
+  rw [_root_.eucDist_sq, _root_.eucDist_sq] at hsq
+  simpa [sqDist, ExactLocalGeometry.local_sqDist' u v] using hsq
+
 /-- The same exact-local squared-distance preservation obligation, after
 selecting same/opposite transitions from a generated-chain interface. -/
 def GeneratedTransitionsPreserveExactLocalSqDistances
@@ -116,6 +149,18 @@ def GeneratedTransitionsPreserveExactLocalSqDistances
     MatchesExactLocalSqDistances source ->
       MatchesExactLocalSqDistances
         ((O.transitionFor orientation).placeNext source)
+
+/-- Branchwise exact-local squared-distance preservation implies the selected
+same/opposite generated-transition obligation. -/
+theorem generatedTransitionsPreserveExactLocalSqDistances_of_branches
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    (hsame : PreservesExactLocalSqDistances O.samePlaceNext)
+    (hopposite : PreservesExactLocalSqDistances O.oppositePlaceNext) :
+    GeneratedTransitionsPreserveExactLocalSqDistances O := by
+  intro orientation source hsource
+  cases orientation
+  · exact hsame source hsource
+  · exact hopposite source hsource
 
 /-- The exact-local squared-distance invariant propagates along every
 generated block. -/
@@ -141,6 +186,58 @@ theorem generatedBlock_matchesExactLocalSqDistances
           (GeneratedClosedChain.generatedBlock O hk base orientation n)
           ih
 
+/-- Pointwise generated-orbit version of
+`generatedBlock_matchesExactLocalSqDistances`. -/
+theorem generatedPoint_matchesExactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O)
+    (i : Fin k) :
+    MatchesExactLocalSqDistances
+      (GeneratedClosedChain.generatedPoint O hk base orientation i) := by
+  simpa [GeneratedClosedChain.generatedPoint] using
+    generatedBlock_matchesExactLocalSqDistances
+      O hk base orientation hbase htransition i.val
+
+/-- The exact-local squared-distance table holds on every block of the
+generated orbit. -/
+theorem generatedOrbit_matchesExactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    forall i : Fin k,
+      MatchesExactLocalSqDistances
+        (GeneratedClosedChain.generatedPoint O hk base orientation i) := by
+  intro i
+  exact
+    generatedPoint_matchesExactLocalSqDistances
+      O hk base orientation hbase htransition i
+
+/-- Exact-base generated orbits inherit the exact-local squared-distance table
+from transition preservation alone. -/
+theorem generatedOrbit_exactBase_matchesExactLocalSqDistances
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (htransition :
+      GeneratedTransitionsPreserveExactLocalSqDistances O) :
+    forall i : Fin k,
+      MatchesExactLocalSqDistances
+        (GeneratedClosedChain.generatedPoint O hk
+          BaseTransitionRealization.exactBase orientation i) := by
+  simpa [BaseTransitionRealization.exactBase] using
+    generatedOrbit_matchesExactLocalSqDistances
+      O hk ExactLocalGeometry.localPoint orientation
+      exactLocal_matchesExactLocalSqDistances htransition
+
 /-- Exact-local squared-distance preservation is enough to recover the full
 same-block isometry required by generated closed chains. -/
 theorem generatedSameBlockIsometry_of_exactLocalSqDistances
@@ -157,9 +254,9 @@ theorem generatedSameBlockIsometry_of_exactLocalSqDistances
   have hblock :
       MatchesExactLocalSqDistances
         (GeneratedClosedChain.generatedPoint O hk base orientation i) := by
-    simpa [GeneratedClosedChain.generatedPoint] using
-      generatedBlock_matchesExactLocalSqDistances
-        O hk base orientation hbase htransition i.val
+    exact
+      generatedPoint_matchesExactLocalSqDistances
+        O hk base orientation hbase htransition i
   have hdist :=
     matchesExactLocalDistances_of_sqDistances hblock u v
   calc
@@ -226,48 +323,82 @@ def RoleHingeTransitionsPreserveExactLocalSqDistances
   GeneratedTransitionsPreserveExactLocalSqDistances
     F.toFigure2TransitionObligations
 
+/-- A single strong role-hinge transition fact preserves the exact-local
+squared-distance table on exact-local sources. -/
+theorem roleHingeTransitionFacts_preservesExactLocalSqDistances
+    (F : RoleHingeTransitionSearch.RoleHingeTransitionFacts) :
+    PreservesExactLocalSqDistances F.placeNext :=
+  preservesExactLocalSqDistances_of_preservesSameBlockDistances
+    F.preserves_same_block_distances
+
+/-- Branchwise exact-local squared-distance facts for search-facing role-hinge
+transitions imply the selected same/opposite generated-transition obligation. -/
+theorem roleHingeTransitionsPreserveExactLocalSqDistances_of_branches
+    (F : RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts)
+    (hsame : PreservesExactLocalSqDistances F.same.placeNext)
+    (hopposite : PreservesExactLocalSqDistances F.opposite.placeNext) :
+    RoleHingeTransitionsPreserveExactLocalSqDistances F := by
+  apply generatedTransitionsPreserveExactLocalSqDistances_of_branches
+  · simpa using hsame
+  · simpa using hopposite
+
 /-- The arbitrary-source same-block preservation fields in
 `RoleHingeTransitionSearch` imply the exact-local squared-distance obligation
 used by this reduction. -/
 theorem roleHingeTransitionsPreserveExactLocalSqDistances_of_preservesSameBlock
     (F : RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts) :
     RoleHingeTransitionsPreserveExactLocalSqDistances F := by
-  intro orientation source hsource u v
-  have hsourceDist :=
-    matchesExactLocalDistances_of_sqDistances hsource u v
-  have htargetDist :
-      _root_.eucDist
-          ((F.toFigure2TransitionObligations.transitionFor orientation).placeNext
-            source u)
-          ((F.toFigure2TransitionObligations.transitionFor orientation).placeNext
-            source v) =
-        _root_.eucDist
-          (ExactLocalGeometry.localPoint u)
-          (ExactLocalGeometry.localPoint v) := by
-    calc
-      _root_.eucDist
-          ((F.toFigure2TransitionObligations.transitionFor orientation).placeNext
-            source u)
-          ((F.toFigure2TransitionObligations.transitionFor orientation).placeNext
-            source v) =
-        _root_.eucDist (source u) (source v) := by
-          exact F.preservesSameBlockDistances orientation source u v
-      _ =
-        _root_.eucDist
-          (ExactLocalGeometry.localPoint u)
-          (ExactLocalGeometry.localPoint v) := hsourceDist
-  have hsq :
-      _root_.eucDist
-          ((F.toFigure2TransitionObligations.transitionFor orientation).placeNext
-            source u)
-          ((F.toFigure2TransitionObligations.transitionFor orientation).placeNext
-            source v) ^ 2 =
-        _root_.eucDist
-          (ExactLocalGeometry.localPoint u)
-          (ExactLocalGeometry.localPoint v) ^ 2 := by
-    rw [htargetDist]
-  rw [_root_.eucDist_sq, _root_.eucDist_sq] at hsq
-  simpa [sqDist, ExactLocalGeometry.local_sqDist' u v] using hsq
+  exact
+    roleHingeTransitionsPreserveExactLocalSqDistances_of_branches F
+      (roleHingeTransitionFacts_preservesExactLocalSqDistances F.same)
+      (roleHingeTransitionFacts_preservesExactLocalSqDistances F.opposite)
+
+/-- Role-hinge-search specialization of generated orbit exact-local
+squared-distance propagation. -/
+theorem roleHingeGeneratedOrbit_matchesExactLocalSqDistances
+    (F : RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (hbase : MatchesExactLocalSqDistances base)
+    (htransition :
+      RoleHingeTransitionsPreserveExactLocalSqDistances F) :
+    forall i : Fin k,
+      MatchesExactLocalSqDistances
+        (GeneratedClosedChain.generatedPoint F.toFigure2TransitionObligations
+          hk base orientation i) :=
+  generatedOrbit_matchesExactLocalSqDistances
+    F.toFigure2TransitionObligations hk base orientation hbase htransition
+
+/-- Exact-base role-hinge generated orbits inherit the exact-local
+squared-distance table from transition preservation alone. -/
+theorem roleHingeGeneratedOrbit_exactBase_matchesExactLocalSqDistances
+    (F : RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (htransition :
+      RoleHingeTransitionsPreserveExactLocalSqDistances F) :
+    forall i : Fin k,
+      MatchesExactLocalSqDistances
+        (GeneratedClosedChain.generatedPoint F.toFigure2TransitionObligations
+          hk BaseTransitionRealization.exactBase orientation i) :=
+  generatedOrbit_exactBase_matchesExactLocalSqDistances
+    F.toFigure2TransitionObligations hk orientation htransition
+
+/-- Exact-base role-hinge generated orbits inherit the exact-local
+squared-distance table directly from the strong same-block preservation fields
+already present in search facts. -/
+theorem roleHingeGeneratedOrbit_exactBase_matchesExactLocalSqDistances_of_preservesSameBlock
+    (F : RoleHingeTransitionSearch.SameOppositeRoleHingeTransitionFacts)
+    {k : Nat} (hk : 0 < k)
+    (orientation : Fin k -> OrientationData.BlockOrientation) :
+    forall i : Fin k,
+      MatchesExactLocalSqDistances
+        (GeneratedClosedChain.generatedPoint F.toFigure2TransitionObligations
+          hk BaseTransitionRealization.exactBase orientation i) :=
+  roleHingeGeneratedOrbit_exactBase_matchesExactLocalSqDistances
+    F hk orientation
+    (roleHingeTransitionsPreserveExactLocalSqDistances_of_preservesSameBlock F)
 
 /-- Role-hinge-search version of the exact-local same-block isometry
 reduction, based at `ExactLocalGeometry.localPoint`. -/

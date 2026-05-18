@@ -25,6 +25,7 @@ open BoundaryFaceCountingToM8
 open BoundarySpineConcrete
 open CutVertexClosure
 open GraphBridge
+open M8BoundaryLabelsConcrete
 open M8ConstructionInterface
 open M8LabelsFromBoundaryInterface
 open MinimalGraphFacts
@@ -314,6 +315,26 @@ theorem toM8BoundaryRouteData_context
   rfl
 
 @[simp]
+theorem toM8BoundaryRouteData_planarBoundary
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    (K.toM8BoundaryRouteData connectedNoCut hmin lemma8).planarBoundary =
+      D :=
+  rfl
+
+@[simp]
+theorem toM8BoundaryRouteData_connectedNoCut
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    (K.toM8BoundaryRouteData connectedNoCut hmin lemma8).connectedNoCut =
+      connectedNoCut :=
+  rfl
+
+@[simp]
 theorem toM8BoundaryRouteData_spine
     (K : M8FinitePQSpineCertificate D)
     (lemma8 :
@@ -322,6 +343,49 @@ theorem toM8BoundaryRouteData_spine
     (K.toM8BoundaryRouteData connectedNoCut hmin lemma8).spine =
       K.toM8BoundarySpine connectedNoCut hmin :=
   rfl
+
+@[simp]
+theorem toM8BoundaryRouteData_lemma8
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    (K.toM8BoundaryRouteData connectedNoCut hmin lemma8).lemma8 =
+      lemma8 :=
+  rfl
+
+theorem toM8BoundaryRouteData_boundaryEdge
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toM8BoundaryRouteData
+      connectedNoCut hmin lemma8).toBoundaryLabelPackage.predicates.data.boundaryEdge
+        i :=
+  K.boundaryEdge i
+
+theorem toM8BoundaryRouteData_triangleWitness
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toM8BoundaryRouteData
+      connectedNoCut hmin lemma8).toBoundaryLabelPackage.predicates.data.triangleWitness
+        i :=
+  K.triangleWitness i
+
+theorem toM8BoundaryRouteData_extraNeighborWitness
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8ExtraIndex) :
+    (K.toM8BoundaryRouteData
+      connectedNoCut hmin lemma8).toBoundaryLabelPackage.predicates.data.extraNeighborWitness
+        i :=
+  lemma8.extraNeighborWitness_holds i
 
 @[simp]
 theorem toM8BoundaryRouteData_labels_p
@@ -346,6 +410,258 @@ theorem toM8BoundaryRouteData_labels_q
       i =
       K.q i :=
   rfl
+
+/-- Forget the finite certificate route to the concrete M8 boundary-label
+package. -/
+def toBoundaryLabelPackage
+    (K : M8FinitePQSpineCertificate D)
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    M8BoundaryLabelPackage C :=
+  (K.toM8BoundaryRouteData connectedNoCut hmin lemma8).toBoundaryLabelPackage
+
+@[simp]
+theorem toBoundaryLabelPackage_context
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).context =
+      K.context connectedNoCut hmin :=
+  rfl
+
+@[simp]
+theorem toBoundaryLabelPackage_spine
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).spine =
+      K.toM8BoundarySpine connectedNoCut hmin :=
+  rfl
+
+@[simp]
+theorem toBoundaryLabelPackage_lemma8
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).lemma8 =
+      lemma8 :=
+  rfl
+
+@[simp]
+theorem toBoundaryLabelPackage_labels_p
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8BoundaryIndex) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).labels.p i =
+      K.p i :=
+  rfl
+
+@[simp]
+theorem toBoundaryLabelPackage_labels_q
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).labels.q i =
+      K.q i :=
+  rfl
+
+@[simp]
+theorem toBoundaryLabelPackage_labels_r
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8ExtraIndex) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).labels.r i =
+      lemma8.r i :=
+  rfl
+
+@[simp]
+theorem toBoundaryLabelPackage_labels_s
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8ExtraIndex) :
+    (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).labels.s i =
+      lemma8.s i :=
+  rfl
+
+theorem toBoundaryLabelPackage_boundaryEdge
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toBoundaryLabelPackage
+      connectedNoCut hmin lemma8).predicates.data.boundaryEdge i :=
+  K.boundaryEdge i
+
+theorem toBoundaryLabelPackage_triangleWitness
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toBoundaryLabelPackage
+      connectedNoCut hmin lemma8).predicates.data.triangleWitness i :=
+  K.triangleWitness i
+
+theorem toBoundaryLabelPackage_extraNeighborWitness
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8ExtraIndex) :
+    (K.toBoundaryLabelPackage
+      connectedNoCut hmin lemma8).predicates.data.extraNeighborWitness i :=
+  lemma8.extraNeighborWitness_holds i
+
+theorem toBoundaryLabelPackage_named_of_extra_neighbor
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    {i : M8ExtraIndex} {x : Fin n}
+    (hadj :
+      (unitDistanceLocalGraph C).Adj
+        ((K.toM8BoundarySpine connectedNoCut hmin).centerQ i) x)
+    (hnot :
+      Not
+        ((K.toM8BoundarySpine
+          connectedNoCut hmin).forbiddenExtraNeighbor i x)) :
+    x = lemma8.r i \/ x = lemma8.s i :=
+  lemma8.named_of_extra_neighbor hadj hnot
+
+theorem toBoundaryLabelPackage_positiveCyclicOrder
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8ExtraIndex) :
+    lemma8.positiveCyclicOrderAt i
+      (lemma8.s i) (lemma8.r i)
+      ((K.toM8BoundarySpine connectedNoCut hmin).prevQ i)
+      ((K.toM8BoundarySpine connectedNoCut hmin).leftP i)
+      ((K.toM8BoundarySpine connectedNoCut hmin).rightP i)
+      ((K.toM8BoundarySpine connectedNoCut hmin).nextQ i) :=
+  lemma8.positiveCyclicOrder_holds i
+
+/-- The local-label field determined by finite boundary labels and the
+explicit Lemma 8 package. -/
+def toM8LocalLabels
+    (K : M8FinitePQSpineCertificate D)
+    (connectedNoCut : PreconnectedNoCutVertexCertificate C)
+    (hmin : IsMinimalClearedFailure C)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    M8LocalLabels C :=
+  (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).toM8LocalLabels
+
+@[simp]
+theorem toM8LocalLabels_eq
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    K.toM8LocalLabels connectedNoCut hmin lemma8 =
+      (K.toM8BoundaryRouteData connectedNoCut hmin lemma8).toM8LocalLabels :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_labels
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin)) :
+    (K.toM8LocalLabels connectedNoCut hmin lemma8).labels =
+      (K.toBoundaryLabelPackage connectedNoCut hmin lemma8).labels :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_labels_p
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8BoundaryIndex) :
+    (K.toM8LocalLabels connectedNoCut hmin lemma8).labels.p i =
+      K.p i :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_labels_q
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toM8LocalLabels connectedNoCut hmin lemma8).labels.q i =
+      K.q i :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_labels_r
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8ExtraIndex) :
+    (K.toM8LocalLabels connectedNoCut hmin lemma8).labels.r i =
+      lemma8.r i :=
+  rfl
+
+@[simp]
+theorem toM8LocalLabels_labels_s
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8ExtraIndex) :
+    (K.toM8LocalLabels connectedNoCut hmin lemma8).labels.s i =
+      lemma8.s i :=
+  rfl
+
+theorem toM8LocalLabels_boundaryEdge
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toM8LocalLabels
+      connectedNoCut hmin lemma8).predicates.data.boundaryEdge i :=
+  K.boundaryEdge i
+
+theorem toM8LocalLabels_triangleWitness
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8TriangleIndex) :
+    (K.toM8LocalLabels
+      connectedNoCut hmin lemma8).predicates.data.triangleWitness i :=
+  K.triangleWitness i
+
+theorem toM8LocalLabels_extraNeighborWitness
+    (K : M8FinitePQSpineCertificate D)
+    (lemma8 :
+      M8Lemma8Combinatorics
+        (K.toM8BoundarySpine connectedNoCut hmin))
+    (i : M8ExtraIndex) :
+    (K.toM8LocalLabels
+      connectedNoCut hmin lemma8).predicates.data.extraNeighborWitness i :=
+  lemma8.extraNeighborWitness_holds i
 
 /-- The route preserves the selected planar-boundary face-counting context. -/
 theorem route_faceCounting_outerBoundary

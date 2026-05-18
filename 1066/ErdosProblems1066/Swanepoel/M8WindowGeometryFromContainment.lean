@@ -110,6 +110,30 @@ theorem E22_E23_of_angleContainmentBridges_via_windowGeometry
     (figure8SeparatedWindowGeometry_of_containmentInterface H.figure8)
     (figure9AdjacentLeftWindowGeometry_of_containmentInterface H.figure9)
 
+/-- Separately supplied Figure 8/Figure 9 containment interfaces forget to
+the pair of window-geometry predicates. -/
+def windowGeometryPair_of_containmentInterfaces
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (figure8 : Figure8SeparatedContainmentInterface good turn)
+    (figure9_left : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure8SeparatedWindowGeometry good turn /\
+      Figure9AdjacentLeftWindowGeometry good turn :=
+  And.intro
+    (figure8SeparatedWindowGeometry_of_containmentInterface figure8)
+    (figure9AdjacentLeftWindowGeometry_of_containmentInterface figure9_left)
+
+/-- Separately supplied Figure 8/Figure 9 containment interfaces give the
+paired E22/E23 lower-bound data consumed downstream. -/
+theorem E22_E23_of_containmentInterfaces
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (figure8 : Figure8SeparatedContainmentInterface good turn)
+    (figure9_left : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure8SeparatedWindowLowerE22 good turn /\
+      Figure9AdjacentWindowLowerE23 good turn :=
+  E22_E23_of_leftWindowGeometry
+    (figure8SeparatedWindowGeometry_of_containmentInterface figure8)
+    (figure9AdjacentLeftWindowGeometry_of_containmentInterface figure9_left)
+
 /-! ## Honest M8 specializations -/
 
 /-- Figure 8 containment specialized to the honest M8 predicate package. -/
@@ -153,6 +177,35 @@ theorem honestFigure9AdjacentWindowLowerE23_of_leftContainmentInterface
     HonestFigure9AdjacentWindowLowerE23 P turn :=
   honestFigure9AdjacentWindowLowerE23_of_leftWindowGeometry
     (honestFigure9AdjacentLeftWindowGeometry_of_containmentInterface H)
+
+/-- Honest M8 specialization of the two-interface window-geometry adapter. -/
+def honestWindowGeometryPair_of_containmentInterfaces
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (figure8 :
+      Figure8SeparatedContainmentInterface
+        (M8BrokenLatticeGood P.data) turn)
+    (figure9_left :
+      Figure9AdjacentLeftContainmentInterface
+        (M8BrokenLatticeGood P.data) turn) :
+    HonestFigure8SeparatedWindowGeometry P turn /\
+      HonestFigure9AdjacentLeftWindowGeometry P turn :=
+  windowGeometryPair_of_containmentInterfaces figure8 figure9_left
+
+/-- Honest M8 specialization of the paired E22/E23 lower-bound adapter from
+separately supplied containment interfaces. -/
+theorem honestE22_E23_of_containmentInterfaces
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (figure8 :
+      Figure8SeparatedContainmentInterface
+        (M8BrokenLatticeGood P.data) turn)
+    (figure9_left :
+      Figure9AdjacentLeftContainmentInterface
+        (M8BrokenLatticeGood P.data) turn) :
+    HonestFigure8SeparatedWindowLowerE22 P turn /\
+      HonestFigure9AdjacentWindowLowerE23 P turn :=
+  E22_E23_of_containmentInterfaces figure8 figure9_left
 
 /-! ## M8 construction-interface packaging -/
 
@@ -220,6 +273,15 @@ def toM8WindowGeometry
   figure8 := W.figure8WindowGeometry
   figure9_left := W.figure9LeftWindowGeometry
 
+/-- The two containment fields converted to the honest window-geometry pair. -/
+def windowGeometryPair
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure8SeparatedWindowGeometry
+        localLabels.predicates turnBounds.turn /\
+      HonestFigure9AdjacentLeftWindowGeometry
+        localLabels.predicates turnBounds.turn :=
+  honestWindowGeometryPair_of_containmentInterfaces W.figure8 W.figure9_left
+
 /-- Projection of the E22 lower-bound field after conversion. -/
 theorem figure8_E22
     (W : M8WindowContainment localLabels turnBounds) :
@@ -235,6 +297,15 @@ theorem figure9_E23
       localLabels.predicates turnBounds.turn :=
   M8ConstructionInterface.M8WindowGeometry.figure9_E23
     W.toM8WindowGeometry
+
+/-- Projection of the paired E22/E23 lower-bound data after conversion. -/
+theorem E22_E23
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure8SeparatedWindowLowerE22
+        localLabels.predicates turnBounds.turn /\
+      HonestFigure9AdjacentWindowLowerE23
+        localLabels.predicates turnBounds.turn :=
+  honestE22_E23_of_containmentInterfaces W.figure8 W.figure9_left
 
 end M8WindowContainment
 
@@ -257,6 +328,26 @@ def windowGeometry
     (D : M8ConstructionDataFromContainment C hmin) :
     M8ConstructionInterface.M8WindowGeometry D.localLabels D.turnBounds :=
   D.windowContainment.toM8WindowGeometry
+
+/-- The containment package supplies the honest Figure 8/Figure 9
+window-geometry pair for the construction data. -/
+def windowGeometryPair
+    (D : M8ConstructionDataFromContainment C hmin) :
+    HonestFigure8SeparatedWindowGeometry
+        D.localLabels.predicates D.turnBounds.turn /\
+      HonestFigure9AdjacentLeftWindowGeometry
+        D.localLabels.predicates D.turnBounds.turn :=
+  D.windowContainment.windowGeometryPair
+
+/-- The containment package supplies the paired E22/E23 lower-bound data for
+the construction data. -/
+theorem E22_E23
+    (D : M8ConstructionDataFromContainment C hmin) :
+    HonestFigure8SeparatedWindowLowerE22
+        D.localLabels.predicates D.turnBounds.turn /\
+      HonestFigure9AdjacentWindowLowerE23
+        D.localLabels.predicates D.turnBounds.turn :=
+  D.windowContainment.E22_E23
 
 /-- Forget explicit containment into the clean
 `M8ConstructionInterface.M8ConstructionData` package. -/

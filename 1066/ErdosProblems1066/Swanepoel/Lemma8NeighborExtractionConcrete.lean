@@ -1,5 +1,6 @@
 import ErdosProblems1066.Swanepoel.BoundarySpineConcrete
 import ErdosProblems1066.Swanepoel.Lemma8CombinatoricsConcrete
+import ErdosProblems1066.Swanepoel.Lemma8ExistenceConcrete
 import ErdosProblems1066.Swanepoel.LocalExclusions
 import ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions
 
@@ -28,6 +29,7 @@ open BoundarySpineConcrete
 open BoundaryFaceCountingToM8
 open GraphBridge
 open Lemma8CombinatoricsConcrete
+open Lemma8ExistenceConcrete
 open LocalConfigurations
 open M8BoundaryLabelsConcrete
 open M8LabelsFromBoundaryInterface
@@ -391,6 +393,243 @@ theorem exists_extraction_and_cyclic_order
     Exists fun D : M8ExtraNeighborData S => Nonempty (CyclicOrder D) :=
   Exists.intro (ofLemma8Combinatorics E) <|
     Nonempty.intro (cyclicOrderOfLemma8Combinatorics E)
+
+/-! ## Adapters from concrete existence witnesses -/
+
+/-- Convert a family of exact-two finite witnesses into the non-cyclic
+neighbor-extraction record. -/
+def ofExactTwoExtraNeighborFamily
+    (P : forall i : M8ExtraIndex, ExactTwoExtraNeighbors S i) :
+    M8ExtraNeighborData S where
+  r := fun i => (P i).r
+  s := fun i => (P i).s
+  r_neighbor := fun i => (P i).r_neighbor
+  s_neighbor := fun i => (P i).s_neighbor
+  r_not_forbidden := fun i => (P i).r_not_forbidden
+  s_not_forbidden := fun i => (P i).s_not_forbidden
+  r_ne_s := fun i => (P i).r_ne_s
+  all_extra_neighbors_are_named := fun i _x hadj hnot =>
+    (P i).named_of_extra_neighbor hadj hnot
+
+@[simp]
+theorem ofExactTwoExtraNeighborFamily_r
+    (P : forall i : M8ExtraIndex, ExactTwoExtraNeighbors S i)
+    (i : M8ExtraIndex) :
+    (ofExactTwoExtraNeighborFamily P).r i = (P i).r :=
+  rfl
+
+@[simp]
+theorem ofExactTwoExtraNeighborFamily_s
+    (P : forall i : M8ExtraIndex, ExactTwoExtraNeighbors S i)
+    (i : M8ExtraIndex) :
+    (ofExactTwoExtraNeighborFamily P).s i = (P i).s :=
+  rfl
+
+/-- Exact-two witness families still expose the local witness predicate after
+conversion to neighbor-extraction data. -/
+theorem ofExactTwoExtraNeighborFamily_extraNeighborWitness
+    (P : forall i : M8ExtraIndex, ExactTwoExtraNeighbors S i)
+    (i : M8ExtraIndex) :
+    (ofExactTwoExtraNeighborFamily P).extraNeighborWitness i :=
+  (ofExactTwoExtraNeighborFamily P).extraNeighborWitness_holds i
+
+/-- Forget finite existence conditions to their non-cyclic extracted
+neighbor data. -/
+def ofFiniteExistenceConditions
+    (E : M8Lemma8FiniteExistenceConditions S) :
+    M8ExtraNeighborData S :=
+  ofExactTwoExtraNeighborFamily E.pair
+
+@[simp]
+theorem ofFiniteExistenceConditions_r
+    (E : M8Lemma8FiniteExistenceConditions S) (i : M8ExtraIndex) :
+    (ofFiniteExistenceConditions E).r i = (E.pair i).r :=
+  rfl
+
+@[simp]
+theorem ofFiniteExistenceConditions_s
+    (E : M8Lemma8FiniteExistenceConditions S) (i : M8ExtraIndex) :
+    (ofFiniteExistenceConditions E).s i = (E.pair i).s :=
+  rfl
+
+/-- Extract the cyclic-order record carried by finite existence conditions. -/
+def cyclicOrderOfFiniteExistenceConditions
+    (E : M8Lemma8FiniteExistenceConditions S) :
+    CyclicOrder (ofFiniteExistenceConditions E) where
+  positiveCyclicOrderAt := E.positiveCyclicOrderAt
+  positiveCyclicOrder := E.positiveCyclicOrder
+
+/-- Reassemble `M8Lemma8Combinatorics` through the neighbor-extraction
+adapter from finite existence conditions. -/
+def toLemma8CombinatoricsOfFiniteExistenceConditions
+    (E : M8Lemma8FiniteExistenceConditions S) :
+    M8Lemma8Combinatorics S :=
+  (ofFiniteExistenceConditions E).toLemma8Combinatorics
+    (cyclicOrderOfFiniteExistenceConditions E)
+
+@[simp]
+theorem toLemma8CombinatoricsOfFiniteExistenceConditions_r
+    (E : M8Lemma8FiniteExistenceConditions S) (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsOfFiniteExistenceConditions E).r i =
+      (E.pair i).r :=
+  rfl
+
+@[simp]
+theorem toLemma8CombinatoricsOfFiniteExistenceConditions_s
+    (E : M8Lemma8FiniteExistenceConditions S) (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsOfFiniteExistenceConditions E).s i =
+      (E.pair i).s :=
+  rfl
+
+/-- Forget the exact missing-existence package to extracted non-cyclic
+neighbor data. -/
+def ofMissingExistenceConditions
+    (E : M8Lemma8MissingExistenceConditions S) :
+    M8ExtraNeighborData S :=
+  ofFiniteExistenceConditions E.toFiniteExistenceConditions
+
+@[simp]
+theorem ofMissingExistenceConditions_r
+    (E : M8Lemma8MissingExistenceConditions S) (i : M8ExtraIndex) :
+    (ofMissingExistenceConditions E).r i =
+      (E.toFiniteExistenceConditions.pair i).r :=
+  rfl
+
+@[simp]
+theorem ofMissingExistenceConditions_s
+    (E : M8Lemma8MissingExistenceConditions S) (i : M8ExtraIndex) :
+    (ofMissingExistenceConditions E).s i =
+      (E.toFiniteExistenceConditions.pair i).s :=
+  rfl
+
+/-- Extract the cyclic-order record carried by the exact missing-existence
+package. -/
+def cyclicOrderOfMissingExistenceConditions
+    (E : M8Lemma8MissingExistenceConditions S) :
+    CyclicOrder (ofMissingExistenceConditions E) :=
+  cyclicOrderOfFiniteExistenceConditions E.toFiniteExistenceConditions
+
+/-- Reassemble `M8Lemma8Combinatorics` through the neighbor-extraction
+adapter from the exact missing-existence package. -/
+def toLemma8CombinatoricsOfMissingExistenceConditions
+    (E : M8Lemma8MissingExistenceConditions S) :
+    M8Lemma8Combinatorics S :=
+  (ofMissingExistenceConditions E).toLemma8Combinatorics
+    (cyclicOrderOfMissingExistenceConditions E)
+
+/-- Degree-six plus a four-forbidden-neighbor frame family determines the
+non-cyclic extraction data by the concrete exact-two finset construction. -/
+def ofDegreeSixForbiddenFrame
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i) :
+    M8ExtraNeighborData S :=
+  ofExactTwoExtraNeighborFamily fun i =>
+    (forbiddenFrame i).exactTwoExtraNeighbors_of_centerDegree_eq_six
+      (hdegree i)
+
+@[simp]
+theorem ofDegreeSixForbiddenFrame_r
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i =
+      ((forbiddenFrame i).exactTwoExtraNeighbors_of_centerDegree_eq_six
+        (hdegree i)).r :=
+  rfl
+
+@[simp]
+theorem ofDegreeSixForbiddenFrame_s
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (i : M8ExtraIndex) :
+    (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i =
+      ((forbiddenFrame i).exactTwoExtraNeighbors_of_centerDegree_eq_six
+        (hdegree i)).s :=
+  rfl
+
+/-- Attach the remaining cyclic-order assertion to the degree-six/frame
+extraction record. -/
+def cyclicOrderOfDegreeSixForbiddenFrame
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i)) :
+    CyclicOrder (ofDegreeSixForbiddenFrame hdegree forbiddenFrame) where
+  positiveCyclicOrderAt := positiveCyclicOrderAt
+  positiveCyclicOrder := positiveCyclicOrder
+
+/-- Direct neighbor-extraction adapter from degree-six/forbidden-frame data
+and the remaining cyclic-order assertion to `M8Lemma8Combinatorics`. -/
+def toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i)) :
+    M8Lemma8Combinatorics S :=
+  (ofDegreeSixForbiddenFrame hdegree forbiddenFrame).toLemma8Combinatorics
+    (cyclicOrderOfDegreeSixForbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder)
+
+@[simp]
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_r
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).r i =
+      ((forbiddenFrame i).exactTwoExtraNeighbors_of_centerDegree_eq_six
+        (hdegree i)).r :=
+  rfl
+
+@[simp]
+theorem toLemma8CombinatoricsOfDegreeSixForbiddenFrame_s
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n ->
+        Prop)
+    (positiveCyclicOrder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).s i)
+          ((ofDegreeSixForbiddenFrame hdegree forbiddenFrame).r i)
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    (toLemma8CombinatoricsOfDegreeSixForbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt positiveCyclicOrder).s i =
+      ((forbiddenFrame i).exactTwoExtraNeighbors_of_centerDegree_eq_six
+        (hdegree i)).s :=
+  rfl
 
 end M8ExtraNeighborData
 

@@ -242,6 +242,63 @@ theorem m8SeparatedFailuresForceTurn_of_angleBudget
     SeparatedFailuresForceTurn (M8BrokenLatticeGood P) turn :=
   H.separatedFailuresForceTurn
 
+/-! ## Strict budget contradiction forms -/
+
+/-- Any legal separated turn window lies strictly below `pi / 3` under the
+honest `m = 8` turn budget. -/
+theorem separatedTurn_lt_pi_div_three_of_m8TurnBounds
+    (T : M8TurnBounds) {i j : Nat} (hi : 1 <= i) (hj : j <= 10) :
+    separatedTurn T.turn i j < Real.pi / 3 :=
+  lt_of_le_of_lt
+    (Lemma10Inequalities.separatedTurn_le_totalTurn hi hj
+      T.turn_nonnegative)
+    T.total_turn_lt_pi_div_three
+
+/-- A contained Figure 8 central angle contradicts the strict `m = 8` turn
+budget for the same separated window. -/
+theorem false_of_distanceData_and_central_containment_m8TurnBounds
+    (T : M8TurnBounds) {i j : Nat} {p qi qj s r : Point}
+    (hi : 1 <= i) (hj : j <= 10)
+    (D : Figure8DistanceData p qi qj s r)
+    (hcontained : angleAt qi p qj <= separatedTurn T.turn i j) :
+    False := by
+  have hlower : Real.pi / 3 <= separatedTurn T.turn i j :=
+    separatedTurn_lower_of_distanceData_and_central_containment
+      (turn := T.turn) (i := i) (j := j) D hcontained
+  have hupper : separatedTurn T.turn i j < Real.pi / 3 :=
+    separatedTurn_lt_pi_div_three_of_m8TurnBounds T hi hj
+  linarith
+
+/-- A pointwise Figure 8 central-angle budget is incompatible with the strict
+`m = 8` turn budget on the same legal separated window. -/
+theorem false_of_centralAngleBudget_m8TurnBounds
+    (T : M8TurnBounds) {i j : Nat}
+    (hi : 1 <= i) (hj : j <= 10)
+    (B : Figure8CentralAngleBudget T.turn i j) :
+    False := by
+  have hlower : Real.pi / 3 <= separatedTurn T.turn i j :=
+    B.separatedTurn_lower
+  have hupper : separatedTurn T.turn i j < Real.pi / 3 :=
+    separatedTurn_lt_pi_div_three_of_m8TurnBounds T hi hj
+  linarith
+
+/-- Uniform local `m = 8` Figure 8 angle budgets rule out any separated pair
+of broken-lattice failures under the strict turn budget. -/
+theorem m8_separated_failures_impossible_of_angleBudget
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8}
+    (T : M8TurnBounds)
+    (H : M8Figure8SeparatedAngleBudget P T.turn)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8BrokenLatticeGood P i))
+    (hbad_j : Not (M8BrokenLatticeGood P j)) :
+    False := by
+  have hlower : Real.pi / 3 <= separatedTurn T.turn i j :=
+    H.E22 hi hsep hj hbad_i hbad_j
+  have hupper : separatedTurn T.turn i j < Real.pi / 3 :=
+    separatedTurn_lt_pi_div_three_of_m8TurnBounds T hi hj
+  linarith
+
 /-! ## Projections from existing M8 window-containment packages -/
 
 variable {n : Nat} {C : _root_.UDConfig n}
@@ -272,6 +329,77 @@ theorem honestSeparatedFailuresForceTurn_of_m8WindowContainment
       (M8BrokenLatticeGood localLabels.predicates.data)
       turnBounds.turn :=
   (honestAngleBudget_of_m8WindowContainment W).separatedFailuresForceTurn
+
+/-- Pointwise honest E22 projection from an M8 window-containment package. -/
+theorem honestFigure8SeparatedWindowLowerE22_apply_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8BrokenLatticeGood localLabels.predicates.data i))
+    (hbad_j : Not (M8BrokenLatticeGood localLabels.predicates.data j)) :
+    Real.pi / 3 <= separatedTurn turnBounds.turn i j :=
+  honestFigure8SeparatedWindowLowerE22_of_m8WindowContainment W
+    hi hsep hj hbad_i hbad_j
+
+/-- The full M8 window-containment package supplies both honest analytic
+lower bounds, with the Figure 8 side routed through the angle-budget facade. -/
+theorem honestE22_E23_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure8SeparatedWindowLowerE22
+        localLabels.predicates turnBounds.turn /\
+      HonestFigure9AdjacentWindowLowerE23
+        localLabels.predicates turnBounds.turn :=
+  And.intro
+    (honestFigure8SeparatedWindowLowerE22_of_m8WindowContainment W)
+    (M8WindowContainment.figure9_E23 W)
+
+/-- M8 window-containment rules out any separated pair of broken-lattice
+failures under the same strict turn budget. -/
+theorem honest_separated_failures_impossible_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds)
+    {i j : Nat} (hi : 1 <= i) (hsep : i + 1 < j) (hj : j <= 10)
+    (hbad_i : Not (M8BrokenLatticeGood localLabels.predicates.data i))
+    (hbad_j : Not (M8BrokenLatticeGood localLabels.predicates.data j)) :
+    False := by
+  have hlower : Real.pi / 3 <= separatedTurn turnBounds.turn i j :=
+    honestFigure8SeparatedWindowLowerE22_apply_of_m8WindowContainment W
+      hi hsep hj hbad_i hbad_j
+  have hupper : separatedTurn turnBounds.turn i j < Real.pi / 3 :=
+    separatedTurn_lt_pi_div_three_of_m8TurnBounds turnBounds hi hj
+  linarith
+
+/-- The M8 window-containment package gives the Lemma 10 at-most-one-failure
+conclusion after combining the Figure 8 angle-budget E22 projection with the
+existing Figure 9 E23 projection. -/
+theorem honestAtMostOneFailure_of_m8WindowContainment
+    [DecidablePred
+      (M8BrokenLatticeGood localLabels.predicates.data)]
+    (W : M8WindowContainment localLabels turnBounds) :
+    localLabels.predicates.AtMostOneFailure :=
+  m8_atMostOneFailure_of_E22_E23 localLabels.predicates.data
+    turnBounds.turn turnBounds.turn_nonnegative
+    turnBounds.total_turn_lt_pi_div_three
+    (honestFigure8SeparatedWindowLowerE22_of_m8WindowContainment W)
+    (M8WindowContainment.figure9_E23 W)
+
+/-- Honest late triples plus M8 window containment close the local finite
+contradiction. -/
+theorem honestContradiction_of_m8WindowContainment_and_honestLateTriples
+    (W : M8WindowContainment localLabels turnBounds)
+    (hlate : localLabels.predicates.LateTriples) :
+    False :=
+  honestContradiction_of_E22_E23 localLabels.predicates turnBounds.turn
+    turnBounds.turn_nonnegative turnBounds.total_turn_lt_pi_div_three
+    (honestFigure8SeparatedWindowLowerE22_of_m8WindowContainment W)
+    (M8WindowContainment.figure9_E23 W) hlate
+
+/-- Label-level late triples plus M8 window containment close the local finite
+contradiction through the honest predicate package. -/
+theorem honestContradiction_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds)
+    (lateTriples : M8LateTriples localLabels) :
+    False :=
+  honestContradiction_of_m8WindowContainment_and_honestLateTriples W
+    lateTriples.toHonestLateTriples
 
 end Figure8ContainmentAngleBudget
 end Swanepoel

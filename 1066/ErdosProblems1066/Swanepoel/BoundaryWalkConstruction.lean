@@ -1,5 +1,7 @@
 import ErdosProblems1066.Swanepoel.BoundaryWalkBridge
 import ErdosProblems1066.Swanepoel.OuterBoundaryCore
+import ErdosProblems1066.Swanepoel.OuterBoundaryAngleClosure
+import ErdosProblems1066.Swanepoel.PlanarBoundaryClosure
 import ErdosProblems1066.Swanepoel.BoundaryClassification
 
 /-!
@@ -582,6 +584,98 @@ theorem countsRealization_counts
     D.toBoundaryCountsRealization.toBoundaryCounts = D.counts :=
   rfl
 
+/--
+Universe-polymorphic finite bookkeeping induced by the boundary walk.
+
+The actual representatives are still the concrete boundary indices; `ULift`
+only lets the record live in the same universe as later planar-boundary and
+subpolygon packages.
+-/
+def toBoundaryBookkeepingLift
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    BoundaryBookkeeping.{u} where
+  degree3Vertices := ULift.{u} D.degree3Indices
+  degree4Vertices := ULift.{u} D.degree4Indices
+  degree5Vertices := ULift.{u} D.degree5Indices
+  degree6Vertices := ULift.{u} D.degree6Indices
+  triangleEdges := ULift.{u} D.triangleEdgeIndices
+  nontriangleEdges := ULift.{u} D.nontriangleEdgeIndices
+  longArcs := ULift.{u} D.longArcIndices
+  degree3Fintype := inferInstance
+  degree4Fintype := inferInstance
+  degree5Fintype := inferInstance
+  degree6Fintype := inferInstance
+  triangleEdgeFintype := inferInstance
+  nontriangleEdgeFintype := inferInstance
+  longArcFintype := inferInstance
+
+@[simp]
+theorem toBoundaryBookkeepingLift_d3
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryBookkeepingLift.d3 = D.counts.d3 := by
+  simp [toBoundaryBookkeepingLift, counts, BoundaryBookkeeping.d3]
+
+@[simp]
+theorem toBoundaryBookkeepingLift_d4
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryBookkeepingLift.d4 = D.counts.d4 := by
+  simp [toBoundaryBookkeepingLift, counts, BoundaryBookkeeping.d4]
+
+@[simp]
+theorem toBoundaryBookkeepingLift_d5
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryBookkeepingLift.d5 = D.counts.d5 := by
+  simp [toBoundaryBookkeepingLift, counts, BoundaryBookkeeping.d5]
+
+@[simp]
+theorem toBoundaryBookkeepingLift_d6
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryBookkeepingLift.d6 = D.counts.d6 := by
+  simp [toBoundaryBookkeepingLift, counts, BoundaryBookkeeping.d6]
+
+@[simp]
+theorem toBoundaryBookkeepingLift_b
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryBookkeepingLift.b = D.counts.b := by
+  simp [toBoundaryBookkeepingLift, counts, BoundaryBookkeeping.b]
+
+@[simp]
+theorem toBoundaryBookkeepingLift_B
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryBookkeepingLift.longArcCount = D.counts.B := by
+  simp [toBoundaryBookkeepingLift, counts, BoundaryBookkeeping.longArcCount]
+
+@[simp]
+theorem toBoundaryBookkeepingLift_toBoundaryCounts
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryBookkeepingLift.toBoundaryCounts = D.counts := by
+  ext <;> simp [BoundaryBookkeeping.toBoundaryCounts]
+
+/-- Universe-polymorphic realization of the boundary counts computed from the
+walk. -/
+def toBoundaryCountsRealizationLift
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    BoundaryCountsRealization.{u} where
+  bookkeeping := D.toBoundaryBookkeepingLift
+  counts := D.counts
+  realizes := D.toBoundaryBookkeepingLift_toBoundaryCounts
+
+@[simp]
+theorem toBoundaryCountsRealizationLift_counts
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryCountsRealizationLift.toBoundaryCounts = D.counts :=
+  rfl
+
 /-- The nontriangle contribution sum is exactly the projected `b` count. -/
 theorem nontriangleContribution_sum_eq_b
     (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
@@ -619,6 +713,22 @@ theorem degreeNegativeContribution_sum_eq_d5_add_d6
   rw [Finset.sum_boole, Finset.sum_boole]
   norm_num
 
+/-- The long-arc indicator sum is exactly the projected `B` count. -/
+theorem longArcIndicator_sum_eq_B
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    (Finset.univ.sum fun k : Fin C.length =>
+      if D.longArc k then 1 else 0) = D.counts.B := by
+  classical
+  change
+    (Finset.univ.sum fun k : Fin C.length =>
+      if D.longArc k then 1 else 0) =
+        Fintype.card D.longArcIndices
+  unfold longArcIndices
+  rw [Fintype.card_subtype]
+  rw [Finset.sum_boole]
+  norm_num
+
 /-- Edge and degree indicator sums realize the negative-element count. -/
 theorem contribution_sum_eq_negativeCount
     (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
@@ -631,6 +741,35 @@ theorem contribution_sum_eq_negativeCount
   rw [D.nontriangleContribution_sum_eq_b,
     D.degreeNegativeContribution_sum_eq_d5_add_d6]
   simp [BoundaryCounts.negativeCount, Nat.add_assoc]
+
+/-- Edge, high-degree, and long-arc indicators realize `negativeCount + B`. -/
+theorem contribution_sum_add_longArc_eq_negativeCount_add_B
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    (Finset.univ.sum fun k : Fin C.length =>
+      BoundaryEdgeClass.nontriangleContribution (D.edgeKind k)) +
+      (Finset.univ.sum fun k : Fin C.length =>
+        BoundaryDegreeClass.negativeContribution (D.vertexKind k)) +
+      (Finset.univ.sum fun k : Fin C.length =>
+        if D.longArc k then 1 else 0) =
+        D.counts.negativeCount + D.counts.B := by
+  rw [D.contribution_sum_eq_negativeCount, D.longArcIndicator_sum_eq_B]
+
+/-- The negative-count E12 conclusion written directly in boundary-index
+indicator sums. -/
+theorem contribution_sum_add_longArc_add_six_le_d3
+    (D : BoundaryWalkBookkeeping C IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (angleLowerBound : D.counts.AngleLowerBound) :
+    (Finset.univ.sum fun k : Fin C.length =>
+      BoundaryEdgeClass.nontriangleContribution (D.edgeKind k)) +
+      (Finset.univ.sum fun k : Fin C.length =>
+        BoundaryDegreeClass.negativeContribution (D.vertexKind k)) +
+      (Finset.univ.sum fun k : Fin C.length =>
+        if D.longArc k then 1 else 0) + 6 <=
+        D.counts.d3 := by
+  rw [D.contribution_sum_add_longArc_eq_negativeCount_add_B]
+  exact BoundaryCounts.boundary_negative_count_inequality D.counts angleLowerBound
 
 end BoundaryWalkBookkeeping
 
@@ -674,6 +813,96 @@ def toBoundaryCountsRealization
       IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
     BoundaryCountsRealization.{0} :=
   D.data.toBoundaryCountsRealization
+
+/-- Universe-polymorphic finite bookkeeping induced by the selected outer
+boundary walk. -/
+def toBoundaryBookkeepingLift
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    BoundaryBookkeeping.{u} :=
+  D.data.toBoundaryBookkeepingLift
+
+/-- Universe-polymorphic count realization induced by the selected outer
+boundary walk. -/
+def toBoundaryCountsRealizationLift
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    BoundaryCountsRealization.{u} :=
+  D.data.toBoundaryCountsRealizationLift
+
+@[simp]
+theorem toBoundaryBookkeepingLift_toBoundaryCounts
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryBookkeepingLift.toBoundaryCounts = D.counts :=
+  D.data.toBoundaryBookkeepingLift_toBoundaryCounts
+
+@[simp]
+theorem toBoundaryCountsRealizationLift_counts
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6) :
+    D.toBoundaryCountsRealizationLift.toBoundaryCounts = D.counts :=
+  rfl
+
+/--
+Package the boundary-walk counts with explicit angle comparisons in the exact
+form consumed by `PlanarBoundaryClosure` and
+`PlanarBoundaryFaceDataRefinement`.
+-/
+def toBoundaryBookkeepingAngleBounds
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum) :
+    OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.{u} where
+  countsRealization := D.toBoundaryCountsRealizationLift
+  geometricAngleSum := geometricAngleSum
+  forced_le_geometric := forced_le_geometric
+  geometric_le_polygon := geometric_le_polygon
+
+@[simp]
+theorem toBoundaryBookkeepingAngleBounds_counts
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum) :
+    (D.toBoundaryBookkeepingAngleBounds geometricAngleSum
+      forced_le_geometric geometric_le_polygon).counts = D.counts :=
+  rfl
+
+@[simp]
+theorem toBoundaryBookkeepingAngleBounds_bookkeeping
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum) :
+    (D.toBoundaryBookkeepingAngleBounds geometricAngleSum
+      forced_le_geometric geometric_le_polygon).countsRealization.bookkeeping =
+        D.toBoundaryBookkeepingLift :=
+  rfl
+
+@[simp]
+theorem toBoundaryBookkeepingAngleBounds_angleLowerBound
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum) :
+    (D.toBoundaryBookkeepingAngleBounds geometricAngleSum
+      forced_le_geometric geometric_le_polygon).counts.AngleLowerBound :=
+  (D.toBoundaryBookkeepingAngleBounds geometricAngleSum
+    forced_le_geometric geometric_le_polygon).angleLowerBound
 
 /-- Edge certificate for the selected outer boundary. -/
 def edgeCertificate
@@ -792,6 +1021,96 @@ def toOuterBoundaryConstruction
   P.toOuterBoundaryConstruction
     D.counts angleLowerBound Subpolygon subpolygonData
 
+/--
+Extend an outer-boundary core to the planar-boundary package using the counts
+and angle comparisons constructed from the selected boundary walk.
+-/
+def toPlanarBoundaryData
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    PlanarBoundaryClosure.PlanarBoundaryData.{u} G where
+  core := P
+  outerAngleBounds :=
+    D.toBoundaryBookkeepingAngleBounds geometricAngleSum
+      forced_le_geometric geometric_le_polygon
+  Subpolygon := Subpolygon
+  subpolygonData := subpolygonData
+
+@[simp]
+theorem toPlanarBoundaryData_core
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (D.toPlanarBoundaryData geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData).core = P :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerBoundaryCounts
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (D.toPlanarBoundaryData geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData).outerBoundaryCounts =
+        D.counts :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_outerAngleBounds_bookkeeping
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (D.toPlanarBoundaryData geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData).outerAngleBounds
+        .countsRealization.bookkeeping = D.toBoundaryBookkeepingLift :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundaryData_Subpolygon
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (geometricAngleSum : Real)
+    (forced_le_geometric :
+      D.counts.forcedBoundaryAngleSum <= geometricAngleSum)
+    (geometric_le_polygon :
+      geometricAngleSum <= D.counts.polygonAngleSum)
+    (Subpolygon : Type u)
+    (subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G) :
+    (D.toPlanarBoundaryData geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData).Subpolygon =
+        Subpolygon :=
+  rfl
+
 /-- The constructed counts satisfy E12 when the angle lower bound is supplied. -/
 theorem boundaryAngleCountInequality
     (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
@@ -809,6 +1128,21 @@ theorem boundaryNegativeCountInequality
     (angleLowerBound : D.counts.AngleLowerBound) :
     D.counts.negativeCount + D.counts.B + 6 <= D.counts.d3 :=
   (D.toCanonicalBoundaryCountHypotheses angleLowerBound).boundaryNegativeCountInequality
+
+/-- The negative-count E12 conclusion for the selected outer boundary, stated
+directly as sums over its boundary-walk indices. -/
+theorem contribution_sum_add_longArc_add_six_le_d3
+    (D : OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+      IsDegree3 IsDegree4 IsDegree5 IsDegree6)
+    (angleLowerBound : D.counts.AngleLowerBound) :
+    (Finset.univ.sum fun k : Fin P.outerCycle.length =>
+      BoundaryEdgeClass.nontriangleContribution (D.data.edgeKind k)) +
+      (Finset.univ.sum fun k : Fin P.outerCycle.length =>
+        BoundaryDegreeClass.negativeContribution (D.data.vertexKind k)) +
+      (Finset.univ.sum fun k : Fin P.outerCycle.length =>
+        if D.data.longArc k then 1 else 0) + 6 <=
+        D.counts.d3 :=
+  D.data.contribution_sum_add_longArc_add_six_le_d3 angleLowerBound
 
 end OuterBoundaryWalkBookkeeping
 

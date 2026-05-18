@@ -1,4 +1,5 @@
 import ErdosProblems1066.PachToth.CrossBlockDistanceSqReduction
+import ErdosProblems1066.PachToth.NonRigidConnectorSeparationFacts
 
 set_option autoImplicit false
 
@@ -32,6 +33,18 @@ abbrev IndexedCrossBlockSqDistanceTable :=
 
 abbrev IndexedCrossBlockSqDistanceTableFamily :=
   CrossBlockDistanceSqReduction.IndexedCrossBlockSqDistanceTableFamily
+
+abbrev IndexedNonConnectorCrossBlockSqDistanceTable :=
+  NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTable
+
+abbrev IndexedNonConnectorCrossBlockSqDistanceTableFamily :=
+  NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTableFamily
+
+abbrev IndexedCyclicConnectorPair
+    {k : Nat} (hk : 0 < k)
+    (i : Fin k) (u : LocalVertexIndex)
+    (j : Fin k) (v : LocalVertexIndex) : Prop :=
+  NonRigidConnectorSeparationFacts.IndexedCyclicConnectorPair hk i u j v
 
 /-- Coordinate polynomial for the squared distance between two generated
 finite-indexed vertices. -/
@@ -76,6 +89,33 @@ theorem indexedGeneratedSqPolynomial_comm
       indexedGeneratedSqPolynomial F hk j v i u := by
   simpa using indexedGeneratedSqDist_comm F hk i u j v
 
+/-- The finite-index cyclic connector-pair predicate is symmetric in its two
+endpoints. -/
+theorem indexedCyclicConnectorPair_comm
+    {k : Nat} (hk : 0 < k)
+    (i : Fin k) (u : LocalVertexIndex)
+    (j : Fin k) (v : LocalVertexIndex) :
+    IndexedCyclicConnectorPair hk i u j v <->
+      IndexedCyclicConnectorPair hk j v i u := by
+  dsimp [IndexedCyclicConnectorPair,
+    NonRigidConnectorSeparationFacts.IndexedCyclicConnectorPair,
+    NonRigidConnectorSeparationFacts.CyclicConnectorPair]
+  constructor
+  · intro h
+    exact Or.symm h
+  · intro h
+    exact Or.symm h
+
+/-- Symmetric spelling for non-connector side conditions. -/
+theorem not_indexedCyclicConnectorPair_comm
+    {k : Nat} (hk : 0 < k)
+    (i : Fin k) (u : LocalVertexIndex)
+    (j : Fin k) (v : LocalVertexIndex)
+    (hnot : Not (IndexedCyclicConnectorPair hk i u j v)) :
+    Not (IndexedCyclicConnectorPair hk j v i u) := by
+  intro hswap
+  exact hnot ((indexedCyclicConnectorPair_comm hk i u j v).2 hswap)
+
 /-- Upper-triangular square-distance table.  It stores only block pairs with
 strictly increasing finite indices; symmetry supplies the reverse direction. -/
 structure UpperTriangleSqDistanceTable
@@ -103,6 +143,17 @@ def toSqDistanceTable
     · exact T.sqDist_ge_one_lt i u j v hlt
     · rw [indexedGeneratedSqDist_comm F hk i u j v]
       exact T.sqDist_ge_one_lt j v i u hgt
+
+/-- A full upper-triangle table also supplies the non-connector table used
+when successor connector pairs are discharged separately. -/
+def toNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleSqDistanceTable F k hk) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk where
+  sqDist_ge_one := by
+    intro i u j v hij _hnot_connector
+    exact T.toSqDistanceTable.sqDist_ge_one i u j v hij
 
 theorem generatedGlobalSeparation
     {F : RoleHingedPeriodSearchFamily}
@@ -147,6 +198,15 @@ def toSqDistanceTable
     (T : UpperTrianglePolynomialTable F k hk) :
     IndexedCrossBlockSqDistanceTable F k hk :=
   T.toUpperTriangleSqDistanceTable.toSqDistanceTable
+
+/-- Coordinate-polynomial tables can be consumed by the non-connector route
+without asking for a separate certificate format. -/
+def toNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTrianglePolynomialTable F k hk) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk :=
+  T.toUpperTriangleSqDistanceTable.toNonConnectorSqDistanceTable
 
 theorem generatedGlobalSeparation
     {F : RoleHingedPeriodSearchFamily}
@@ -197,6 +257,14 @@ def toSqDistanceTable
     IndexedCrossBlockSqDistanceTable F k hk :=
   T.toPolynomialTable.toSqDistanceTable
 
+/-- Exact value tables can be consumed by the non-connector route. -/
+def toNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleSqValueTable F k hk) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk :=
+  T.toPolynomialTable.toNonConnectorSqDistanceTable
+
 theorem generatedGlobalSeparation
     {F : RoleHingedPeriodSearchFamily}
     {k : Nat} {hk : 0 < k}
@@ -224,6 +292,12 @@ def toSqDistanceTableFamily
     IndexedCrossBlockSqDistanceTableFamily F where
   table := fun k hk => (T.table k hk).toSqDistanceTable
 
+def toNonConnectorSqDistanceTableFamily
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTrianglePolynomialTableFamily F) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily F where
+  table := fun k hk => (T.table k hk).toNonConnectorSqDistanceTable
+
 def toCrossBlockLowerBounds
     {F : RoleHingedPeriodSearchFamily}
     (T : UpperTrianglePolynomialTableFamily F) :
@@ -235,6 +309,12 @@ theorem targetUpperConstructionFiveSixteen
     (T : UpperTrianglePolynomialTableFamily F) :
     PachToth.targetUpperConstructionFiveSixteen :=
   T.toSqDistanceTableFamily.targetUpperConstructionFiveSixteen
+
+theorem targetUpperConstructionFiveSixteen_nonConnector
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTrianglePolynomialTableFamily F) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  T.toNonConnectorSqDistanceTableFamily.targetUpperConstructionFiveSixteen
 
 theorem targetUpperConstructionFiveSixteenArbitrary
     {F : RoleHingedPeriodSearchFamily}
@@ -266,6 +346,12 @@ def toSqDistanceTableFamily
     IndexedCrossBlockSqDistanceTableFamily F :=
   T.toPolynomialTableFamily.toSqDistanceTableFamily
 
+def toNonConnectorSqDistanceTableFamily
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTriangleSqValueTableFamily F) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily F :=
+  T.toPolynomialTableFamily.toNonConnectorSqDistanceTableFamily
+
 def toCrossBlockLowerBounds
     {F : RoleHingedPeriodSearchFamily}
     (T : UpperTriangleSqValueTableFamily F) :
@@ -278,6 +364,12 @@ theorem targetUpperConstructionFiveSixteen
     PachToth.targetUpperConstructionFiveSixteen :=
   T.toSqDistanceTableFamily.targetUpperConstructionFiveSixteen
 
+theorem targetUpperConstructionFiveSixteen_nonConnector
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTriangleSqValueTableFamily F) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  T.toNonConnectorSqDistanceTableFamily.targetUpperConstructionFiveSixteen
+
 theorem targetUpperConstructionFiveSixteenArbitrary
     {F : RoleHingedPeriodSearchFamily}
     (T : UpperTriangleSqValueTableFamily F) :
@@ -285,6 +377,193 @@ theorem targetUpperConstructionFiveSixteenArbitrary
   T.toSqDistanceTableFamily.targetUpperConstructionFiveSixteenArbitrary
 
 end UpperTriangleSqValueTableFamily
+
+/-! ## Native non-connector upper-triangle tables -/
+
+/-- Upper-triangular square-distance table for only the cross-block pairs not
+handled by the cyclic connector facts. -/
+structure UpperTriangleNonConnectorSqDistanceTable
+    (F : RoleHingedPeriodSearchFamily)
+    (k : Nat) (hk : 0 < k) where
+  sqDist_ge_one_lt :
+    forall (i : Fin k) (u : LocalVertexIndex)
+      (j : Fin k) (v : LocalVertexIndex),
+        i.val < j.val ->
+          Not (IndexedCyclicConnectorPair hk i u j v) ->
+            1 <= indexedGeneratedSqDist F hk i u j v
+
+namespace UpperTriangleNonConnectorSqDistanceTable
+
+/-- Expand an upper-triangular non-connector table to the finite
+non-connector square-distance table expected downstream. -/
+def toNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleNonConnectorSqDistanceTable F k hk) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk where
+  sqDist_ge_one := by
+    intro i u j v hij hnot_connector
+    have horder : i.val < j.val \/ j.val < i.val := by
+      omega
+    rcases horder with hlt | hgt
+    · exact T.sqDist_ge_one_lt i u j v hlt hnot_connector
+    · rw [indexedGeneratedSqDist_comm F hk i u j v]
+      exact T.sqDist_ge_one_lt j v i u hgt
+        (not_indexedCyclicConnectorPair_comm hk i u j v hnot_connector)
+
+theorem generatedGlobalSeparation
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleNonConnectorSqDistanceTable F k hk) :
+    GeneratedSeparationInterface.GeneratedGlobalSeparation
+      F.transitions.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase (F.orientation k hk) :=
+  T.toNonConnectorSqDistanceTable.generatedGlobalSeparation
+
+end UpperTriangleNonConnectorSqDistanceTable
+
+/-- Upper-triangular coordinate-polynomial table for only non-connector
+cross-block pairs.  This is the smallest polynomial target for the
+connector-separated route. -/
+structure UpperTriangleNonConnectorPolynomialTable
+    (F : RoleHingedPeriodSearchFamily)
+    (k : Nat) (hk : 0 < k) where
+  polynomial_ge_one_lt :
+    forall (i : Fin k) (u : LocalVertexIndex)
+      (j : Fin k) (v : LocalVertexIndex),
+        i.val < j.val ->
+          Not (IndexedCyclicConnectorPair hk i u j v) ->
+            1 <= indexedGeneratedSqPolynomial F hk i u j v
+
+namespace UpperTriangleNonConnectorPolynomialTable
+
+def toUpperTriangleNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleNonConnectorPolynomialTable F k hk) :
+    UpperTriangleNonConnectorSqDistanceTable F k hk where
+  sqDist_ge_one_lt := by
+    intro i u j v hlt hnot_connector
+    simpa using
+      T.polynomial_ge_one_lt i u j v hlt hnot_connector
+
+def toNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleNonConnectorPolynomialTable F k hk) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk :=
+  T.toUpperTriangleNonConnectorSqDistanceTable.toNonConnectorSqDistanceTable
+
+theorem generatedGlobalSeparation
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleNonConnectorPolynomialTable F k hk) :
+    GeneratedSeparationInterface.GeneratedGlobalSeparation
+      F.transitions.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase (F.orientation k hk) :=
+  T.toNonConnectorSqDistanceTable.generatedGlobalSeparation
+
+end UpperTriangleNonConnectorPolynomialTable
+
+/-- Computed-value table for only non-connector upper-triangle entries. -/
+structure UpperTriangleNonConnectorSqValueTable
+    (F : RoleHingedPeriodSearchFamily)
+    (k : Nat) (hk : 0 < k) where
+  value : Fin k -> LocalVertexIndex -> Fin k -> LocalVertexIndex -> Real
+  value_eq_polynomial_lt :
+    forall (i : Fin k) (u : LocalVertexIndex)
+      (j : Fin k) (v : LocalVertexIndex),
+        i.val < j.val ->
+          Not (IndexedCyclicConnectorPair hk i u j v) ->
+            value i u j v = indexedGeneratedSqPolynomial F hk i u j v
+  value_ge_one_lt :
+    forall (i : Fin k) (u : LocalVertexIndex)
+      (j : Fin k) (v : LocalVertexIndex),
+        i.val < j.val ->
+          Not (IndexedCyclicConnectorPair hk i u j v) ->
+            1 <= value i u j v
+
+namespace UpperTriangleNonConnectorSqValueTable
+
+def toPolynomialTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleNonConnectorSqValueTable F k hk) :
+    UpperTriangleNonConnectorPolynomialTable F k hk where
+  polynomial_ge_one_lt := by
+    intro i u j v hlt hnot_connector
+    simpa [T.value_eq_polynomial_lt i u j v hlt hnot_connector] using
+      T.value_ge_one_lt i u j v hlt hnot_connector
+
+def toNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleNonConnectorSqValueTable F k hk) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk :=
+  T.toPolynomialTable.toNonConnectorSqDistanceTable
+
+theorem generatedGlobalSeparation
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : UpperTriangleNonConnectorSqValueTable F k hk) :
+    GeneratedSeparationInterface.GeneratedGlobalSeparation
+      F.transitions.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase (F.orientation k hk) :=
+  T.toNonConnectorSqDistanceTable.generatedGlobalSeparation
+
+end UpperTriangleNonConnectorSqValueTable
+
+/-- A family of upper-triangular non-connector polynomial tables. -/
+structure UpperTriangleNonConnectorPolynomialTableFamily
+    (F : RoleHingedPeriodSearchFamily) where
+  table :
+    forall (k : Nat) (hk : 0 < k),
+      UpperTriangleNonConnectorPolynomialTable F k hk
+
+namespace UpperTriangleNonConnectorPolynomialTableFamily
+
+def toNonConnectorSqDistanceTableFamily
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTriangleNonConnectorPolynomialTableFamily F) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily F where
+  table := fun k hk => (T.table k hk).toNonConnectorSqDistanceTable
+
+theorem targetUpperConstructionFiveSixteen
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTriangleNonConnectorPolynomialTableFamily F) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  T.toNonConnectorSqDistanceTableFamily.targetUpperConstructionFiveSixteen
+
+end UpperTriangleNonConnectorPolynomialTableFamily
+
+/-- A family of upper-triangular non-connector computed-value tables. -/
+structure UpperTriangleNonConnectorSqValueTableFamily
+    (F : RoleHingedPeriodSearchFamily) where
+  table :
+    forall (k : Nat) (hk : 0 < k),
+      UpperTriangleNonConnectorSqValueTable F k hk
+
+namespace UpperTriangleNonConnectorSqValueTableFamily
+
+def toPolynomialTableFamily
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTriangleNonConnectorSqValueTableFamily F) :
+    UpperTriangleNonConnectorPolynomialTableFamily F where
+  table := fun k hk => (T.table k hk).toPolynomialTable
+
+def toNonConnectorSqDistanceTableFamily
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTriangleNonConnectorSqValueTableFamily F) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily F :=
+  T.toPolynomialTableFamily.toNonConnectorSqDistanceTableFamily
+
+theorem targetUpperConstructionFiveSixteen
+    {F : RoleHingedPeriodSearchFamily}
+    (T : UpperTriangleNonConnectorSqValueTableFamily F) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  T.toNonConnectorSqDistanceTableFamily.targetUpperConstructionFiveSixteen
+
+end UpperTriangleNonConnectorSqValueTableFamily
 
 end
 

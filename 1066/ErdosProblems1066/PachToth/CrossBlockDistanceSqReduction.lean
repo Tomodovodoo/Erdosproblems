@@ -51,6 +51,13 @@ theorem one_le_root_eucDist_of_one_le_sqDist {p q : R2}
     1 <= _root_.eucDist p q :=
   (one_le_root_eucDist_iff_one_le_sqDist p q).2 h
 
+/-- Root Euclidean separation at threshold `1` gives coordinate
+square-distance separation at threshold `1`. -/
+theorem one_le_sqDist_of_one_le_root_eucDist {p q : R2}
+    (h : 1 <= _root_.eucDist p q) :
+    1 <= sqDist p q :=
+  (one_le_root_eucDist_iff_one_le_sqDist p q).1 h
+
 /-- The translated exact cross-block integer norm is the explicit grid
 polynomial in the translation offset and the two local grid coordinates. -/
 theorem crossNorm4_eq_grid_polynomial
@@ -139,6 +146,53 @@ theorem one_le_indexedGenerated_eucDist_iff_sqDist
   exact one_le_root_eucDist_iff_one_le_sqDist
     (indexedGeneratedPoint F hk i u) (indexedGeneratedPoint F hk j v)
 
+/-- Generated finite-index coordinate square-distance separation gives the
+Euclidean lower bound used by the indexed cross-block interfaces. -/
+theorem one_le_indexedGenerated_eucDist_of_one_le_sqDist
+    (F : RoleHingedPeriodSearchFamily)
+    {k : Nat} (hk : 0 < k)
+    (i : Fin k) (u : LocalVertexIndex)
+    (j : Fin k) (v : LocalVertexIndex)
+    (h : 1 <= indexedGeneratedSqDist F hk i u j v) :
+    1 <=
+      _root_.eucDist
+        (indexedGeneratedPoint F hk i u)
+        (indexedGeneratedPoint F hk j v) :=
+  (one_le_indexedGenerated_eucDist_iff_sqDist F hk i u j v).2 h
+
+/-- Generated finite-index Euclidean separation at threshold `1` gives the
+coordinate square-distance inequality. -/
+theorem one_le_indexedGenerated_sqDist_of_one_le_eucDist
+    (F : RoleHingedPeriodSearchFamily)
+    {k : Nat} (hk : 0 < k)
+    (i : Fin k) (u : LocalVertexIndex)
+    (j : Fin k) (v : LocalVertexIndex)
+    (h :
+      1 <=
+        _root_.eucDist
+          (indexedGeneratedPoint F hk i u)
+          (indexedGeneratedPoint F hk j v)) :
+    1 <= indexedGeneratedSqDist F hk i u j v :=
+  (one_le_indexedGenerated_eucDist_iff_sqDist F hk i u j v).1 h
+
+/-- Any stored or normalized square-distance value equal to the raw indexed
+square distance can be used as a sqrt-free certificate for the Euclidean
+lower bound. -/
+theorem one_le_indexedGenerated_eucDist_of_sqDist_eq
+    (F : RoleHingedPeriodSearchFamily)
+    {k : Nat} (hk : 0 < k)
+    (i : Fin k) (u : LocalVertexIndex)
+    (j : Fin k) (v : LocalVertexIndex)
+    {D : Real}
+    (hD : indexedGeneratedSqDist F hk i u j v = D)
+    (hD_ge_one : 1 <= D) :
+    1 <=
+      _root_.eucDist
+        (indexedGeneratedPoint F hk i u)
+        (indexedGeneratedPoint F hk j v) :=
+  one_le_indexedGenerated_eucDist_of_one_le_sqDist F hk i u j v (by
+    rwa [hD])
+
 /-- A generated finite-index cross-block table stated only in squared
 coordinate distances. -/
 structure IndexedCrossBlockSqDistanceTable
@@ -150,6 +204,47 @@ structure IndexedCrossBlockSqDistanceTable
         Ne i j -> 1 <= indexedGeneratedSqDist F hk i u j v
 
 namespace IndexedCrossBlockSqDistanceTable
+
+/-- A square-distance table entry gives the concrete Euclidean separation for
+the corresponding indexed generated points. -/
+theorem eucDist_ge_one
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : IndexedCrossBlockSqDistanceTable F k hk)
+    (i : Fin k) (u : LocalVertexIndex)
+    (j : Fin k) (v : LocalVertexIndex)
+    (hij : Ne i j) :
+    1 <=
+      _root_.eucDist
+        (indexedGeneratedPoint F hk i u)
+        (indexedGeneratedPoint F hk j v) :=
+  one_le_indexedGenerated_eucDist_of_one_le_sqDist F hk i u j v
+    (T.sqDist_ge_one i u j v hij)
+
+/-- The all-one local cross-block lower table is pointwise at least
+`1`. -/
+theorem oneLower_ge_one
+    {k : Nat} :
+    GeneratedSeparationFarApart.GeneratedCrossBlockLowerBoundsAtLeastOne
+      (fun (_i : Fin k) (_u : LocalVertex)
+        (_j : Fin k) (_v : LocalVertex) => (1 : Real)) := by
+  intro _i _u _j _v _hij
+  norm_num
+
+/-- A square-distance table gives the fixed-one local Euclidean cross-block
+lower-bound predicate directly. -/
+theorem oneLower_bound
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (T : IndexedCrossBlockSqDistanceTable F k hk) :
+    GeneratedSeparationFarApart.GeneratedCrossBlockDistanceLowerBounds
+      F.transitions.toFigure2TransitionObligations hk
+      BaseTransitionRealization.exactBase (F.orientation k hk)
+      (fun (_i : Fin k) (_u : LocalVertex)
+        (_j : Fin k) (_v : LocalVertex) => (1 : Real)) := by
+  intro i u j v hij
+  simpa [indexedGeneratedPoint] using
+    T.eucDist_ge_one i (localVertexIndex u) j (localVertexIndex v) hij
 
 /-- The square-distance table induces the existing Euclidean lower table by
 using the fixed lower bound `1`. -/
@@ -164,9 +259,7 @@ def toLowerTable
     norm_num
   lower_bound := by
     intro i u j v hij
-    exact
-      (one_le_indexedGenerated_eucDist_iff_sqDist F hk i u j v).2
-        (T.sqDist_ge_one i u j v hij)
+    exact T.eucDist_ge_one i u j v hij
 
 /-- The induced lower table has the expected fixed value. -/
 @[simp]

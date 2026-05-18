@@ -44,6 +44,24 @@ def toVec (p : Point) : Vec2 :=
 def angleAt (a b c : Point) : Real :=
   InnerProductGeometry.angle (toVec (vsub a b)) (toVec (vsub c b))
 
+lemma angleAt_nonneg (a b c : Point) :
+    0 <= angleAt a b c := by
+  exact InnerProductGeometry.angle_nonneg _ _
+
+lemma angleAt_le_pi (a b c : Point) :
+    angleAt a b c <= Real.pi := by
+  exact InnerProductGeometry.angle_le_pi _ _
+
+lemma angleAt_mem_Icc_zero_pi (a b c : Point) :
+    Set.Icc 0 Real.pi (angleAt a b c) := by
+  exact Set.mem_Icc.mpr
+    (And.intro (angleAt_nonneg a b c) (angleAt_le_pi a b c))
+
+lemma pi_div_three_mem_Icc_zero_pi :
+    Set.Icc 0 Real.pi (Real.pi / 3) := by
+  exact Set.mem_Icc.mpr
+    (And.intro (by linarith [Real.pi_pos]) (by linarith [Real.pi_pos]))
+
 lemma inner_toVec_eq_dot (u v : Point) :
     inner Real (toVec u) (toVec v) = dot u v := by
   rw [EuclideanSpace.inner_toLp_toLp]
@@ -66,6 +84,21 @@ lemma norm_toVec_vsub_eq_one_of_sqDist_eq_one {p q : Point}
     (hpq : sqDist p q = 1) :
     norm (toVec (vsub p q)) = 1 := by
   exact norm_toVec_eq_one_of_sqNorm_eq_one hpq
+
+lemma cos_angleAt_eq_dotAt_of_unit_sides
+    {a b c : Point} (hab : sqDist a b = 1) (hcb : sqDist c b = 1) :
+    Real.cos (angleAt a b c) = dotAt a b c := by
+  unfold angleAt
+  rw [show
+      Real.cos
+          (InnerProductGeometry.angle
+            (toVec (vsub a b)) (toVec (vsub c b))) =
+        inner Real (toVec (vsub a b)) (toVec (vsub c b)) from
+        (InnerProductGeometry.inner_eq_cos_angle_of_norm_eq_one
+          (norm_toVec_vsub_eq_one_of_sqDist_eq_one hab)
+          (norm_toVec_vsub_eq_one_of_sqDist_eq_one hcb)).symm,
+    inner_toVec_eq_dot]
+  rfl
 
 /-- Abstract mathlib angle estimate: two unit vectors with inner product at most
 `1 / 2` have angle at least `pi / 3`. -/
@@ -128,6 +161,16 @@ lemma pi_div_three_le_angleAt_of_unit_sides_dotAt_le_half
     (norm_toVec_vsub_eq_one_of_sqDist_eq_one hcb) ?_
   rwa [inner_toVec_eq_dot]
 
+lemma angleAt_eq_pi_div_three_of_unit_sides_dotAt_eq_half
+    {a b c : Point} (hab : sqDist a b = 1) (hcb : sqDist c b = 1)
+    (hdot : dotAt a b c = 1 / 2) :
+    angleAt a b c = Real.pi / 3 := by
+  unfold angleAt
+  refine angle_eq_pi_div_three_of_unit_inner_eq_half
+    (norm_toVec_vsub_eq_one_of_sqDist_eq_one hab)
+    (norm_toVec_vsub_eq_one_of_sqDist_eq_one hcb) ?_
+  rwa [inner_toVec_eq_dot]
+
 /-- The distance form most often used in minimum-distance graphs: if the two
 sides from `b` are unit and the base is at least unit squared-distance, then
 the mathlib angle at `b` is at least `pi / 3`. -/
@@ -138,18 +181,59 @@ lemma pi_div_three_le_angleAt_of_unit_sides_sqDist_ge_one
   pi_div_three_le_angleAt_of_unit_sides_dotAt_le_half hab hcb
     (dotAt_le_half_of_unit_sides_sqDist_ge_one hab hcb hbase)
 
+structure AngleAtPiDivThreePrereqs (a b c : Point) : Prop where
+  left_sqDist_eq_one : sqDist a b = 1
+  right_sqDist_eq_one : sqDist c b = 1
+  dotAt_le_half : dotAt a b c <= 1 / 2
+
+namespace AngleAtPiDivThreePrereqs
+
+theorem angle_lower {a b c : Point}
+    (H : AngleAtPiDivThreePrereqs a b c) :
+    Real.pi / 3 <= angleAt a b c :=
+  pi_div_three_le_angleAt_of_unit_sides_dotAt_le_half
+    H.left_sqDist_eq_one H.right_sqDist_eq_one H.dotAt_le_half
+
+end AngleAtPiDivThreePrereqs
+
+def AngleAtContainedIn (a b c : Point) (window : Real) : Prop :=
+  angleAt a b c <= window
+
+lemma pi_div_three_le_of_angleAt_containedIn
+    {a b c : Point} {window : Real}
+    (hangle : Real.pi / 3 <= angleAt a b c)
+    (hcontained : AngleAtContainedIn a b c window) :
+    Real.pi / 3 <= window :=
+  le_trans hangle hcontained
+
+lemma pi_div_three_le_window_of_unit_sides_dotAt_le_half
+    {a b c : Point} {window : Real}
+    (hab : sqDist a b = 1) (hcb : sqDist c b = 1)
+    (hdot : dotAt a b c <= 1 / 2)
+    (hcontained : AngleAtContainedIn a b c window) :
+    Real.pi / 3 <= window :=
+  pi_div_three_le_of_angleAt_containedIn
+    (pi_div_three_le_angleAt_of_unit_sides_dotAt_le_half hab hcb hdot)
+    hcontained
+
+lemma pi_div_three_le_window_of_unit_sides_sqDist_ge_one
+    {a b c : Point} {window : Real}
+    (hab : sqDist a b = 1) (hcb : sqDist c b = 1)
+    (hbase : 1 <= sqDist a c)
+    (hcontained : AngleAtContainedIn a b c window) :
+    Real.pi / 3 <= window :=
+  pi_div_three_le_of_angleAt_containedIn
+    (pi_div_three_le_angleAt_of_unit_sides_sqDist_ge_one hab hcb hbase)
+    hcontained
+
 /-- Equilateral unit triangles have mathlib angle exactly `pi / 3` at the
 chosen vertex. -/
 lemma angleAt_eq_pi_div_three_of_equilateral_unit
     {a b c : Point}
     (hab : sqDist a b = 1) (hcb : sqDist c b = 1) (hac : sqDist a c = 1) :
-    angleAt a b c = Real.pi / 3 := by
-  unfold angleAt
-  refine angle_eq_pi_div_three_of_unit_inner_eq_half
-    (norm_toVec_vsub_eq_one_of_sqDist_eq_one hab)
-    (norm_toVec_vsub_eq_one_of_sqDist_eq_one hcb) ?_
-  rw [inner_toVec_eq_dot]
-  exact dotAt_eq_half_of_equilateral_unit hab hcb hac
+    angleAt a b c = Real.pi / 3 :=
+  angleAt_eq_pi_div_three_of_unit_sides_dotAt_eq_half hab hcb
+    (dotAt_eq_half_of_equilateral_unit hab hcb hac)
 
 /-- Euclidean-distance-facing wrapper using `AngleBridgeFacts`: two unit edges
 from `b` and a separated base force angle at least `pi / 3`. -/
@@ -164,6 +248,18 @@ lemma pi_div_three_le_angleAt_of_eucUnit_sides_eucSeparated_base
     (AngleBridgeFacts.sqDist_eq_one_of_eucUnit hcb)
     (AngleBridgeFacts.dotAt_le_half_of_eucUnit_sides_eucSeparated_base
       hab hcb hac)
+
+lemma pi_div_three_le_window_of_eucUnit_sides_eucSeparated_base
+    {a b c : Point} {window : Real}
+    (hab : AngleBridgeFacts.EucUnit a b)
+    (hcb : AngleBridgeFacts.EucUnit c b)
+    (hac : AngleBridgeFacts.EucSeparated a c)
+    (hcontained : AngleAtContainedIn a b c window) :
+    Real.pi / 3 <= window :=
+  pi_div_three_le_of_angleAt_containedIn
+    (pi_div_three_le_angleAt_of_eucUnit_sides_eucSeparated_base
+      hab hcb hac)
+    hcontained
 
 /-- Concrete check on the explicit equilateral triangle from
 `TriangleAngleFacts`. -/

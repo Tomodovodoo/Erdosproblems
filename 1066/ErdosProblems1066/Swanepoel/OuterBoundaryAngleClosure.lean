@@ -155,6 +155,12 @@ theorem angleLowerBound
   simpa [counts, A.angle_counts_eq_realized] using
     A.angleRealization.angleLowerBound
 
+/-- The angle lower bound pulled back to the projected bookkeeping counts. -/
+theorem projected_angleLowerBound
+    (A : BoundaryBookkeepingAngleRealization.{u}) :
+    A.countsRealization.bookkeeping.toBoundaryCounts.AngleLowerBound :=
+  A.countsRealization.projected_angleLowerBound A.angleLowerBound
+
 /-- Package the matched realization for the canonical face-counting bridge. -/
 def toCanonicalBoundaryCountHypotheses
     {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
@@ -266,6 +272,12 @@ theorem angleLowerBound
     D.counts.AngleLowerBound := by
   simpa [counts] using D.angleRealization.angleLowerBound
 
+/-- The angle lower bound pulled back to the projected bookkeeping counts. -/
+theorem projected_angleLowerBound
+    (D : OuterBoundaryRealizedAngleData.{u} G) :
+    D.angleRealization.countsRealization.bookkeeping.toBoundaryCounts.AngleLowerBound :=
+  D.angleRealization.projected_angleLowerBound
+
 /-- Package the closure data for the canonical face-counting bridge. -/
 def toCanonicalBoundaryCountHypotheses
     (D : OuterBoundaryRealizedAngleData.{u} G) :
@@ -337,6 +349,54 @@ theorem boundaryAngleCountInequality_of_outerBoundaryCore_bookkeeping
       geometricAngleSum hforced hpolygon
 
 /--
+Direct counting-layer angle lower bound from realized finite bookkeeping and a
+matched explicit per-class angle realization.
+-/
+theorem angleLowerBound_of_angleRealization
+    (countsRealization :
+      BoundaryClassification.BoundaryCountsRealization.{u})
+    (angleRealization :
+      BoundaryAngleRealization.OuterBoundaryAngleRealization)
+    (hcounts :
+      angleRealization.counts = countsRealization.toBoundaryCounts) :
+    countsRealization.toBoundaryCounts.AngleLowerBound := by
+  simpa [hcounts] using angleRealization.angleLowerBound
+
+/--
+Direct counting-layer angle lower bound for canonical finite bookkeeping from a
+matched explicit per-class angle realization.
+-/
+theorem angleLowerBound_of_bookkeeping_angleRealization
+    (bookkeeping : BoundaryClassification.BoundaryBookkeeping.{u})
+    (angleRealization :
+      BoundaryAngleRealization.OuterBoundaryAngleRealization)
+    (hcounts :
+      angleRealization.counts = bookkeeping.toBoundaryCounts) :
+    bookkeeping.toBoundaryCounts.AngleLowerBound := by
+  simpa using
+    angleLowerBound_of_angleRealization
+      (BoundaryClassification.BoundaryCountsRealization.canonical bookkeeping)
+      angleRealization hcounts
+
+/--
+Canonical face-counting hypotheses from an outer-boundary core, realized finite
+bookkeeping, and a matched explicit per-class angle realization.
+-/
+def canonicalBoundaryCountHypotheses_of_outerBoundaryCore_angleRealization
+    {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
+    (core : OuterBoundaryCore G)
+    (countsRealization :
+      BoundaryClassification.BoundaryCountsRealization.{u})
+    (angleRealization :
+      BoundaryAngleRealization.OuterBoundaryAngleRealization)
+    (hcounts :
+      angleRealization.counts = countsRealization.toBoundaryCounts) :
+    FaceCountingBridge.CanonicalBoundaryCountHypotheses G :=
+  core.toCanonicalBoundaryCountHypotheses
+    countsRealization.toBoundaryCounts
+    (angleLowerBound_of_angleRealization countsRealization angleRealization hcounts)
+
+/--
 Direct closure from an outer-boundary core, realized finite bookkeeping, and
 an explicit per-class angle realization matched to those counts.
 -/
@@ -354,11 +414,30 @@ theorem boundaryAngleCountInequality_of_outerBoundaryCore_angleRealization
           countsRealization.toBoundaryCounts.b +
           countsRealization.toBoundaryCounts.B + 6 <=
         countsRealization.toBoundaryCounts.d3 := by
-  have hangle :
-      countsRealization.toBoundaryCounts.AngleLowerBound := by
-    simpa [hcounts] using angleRealization.angleLowerBound
-  exact core.boundaryAngleCountInequality
-    countsRealization.toBoundaryCounts hangle
+  exact
+    (canonicalBoundaryCountHypotheses_of_outerBoundaryCore_angleRealization
+      (n := n) core countsRealization angleRealization hcounts).boundaryAngleCountInequality
+
+/--
+Negative-element closure from an outer-boundary core, realized finite
+bookkeeping, and an explicit per-class angle realization matched to those
+counts.
+-/
+theorem boundaryNegativeCountInequality_of_outerBoundaryCore_angleRealization
+    {G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n}
+    (core : OuterBoundaryCore G)
+    (countsRealization :
+      BoundaryClassification.BoundaryCountsRealization.{u})
+    (angleRealization :
+      BoundaryAngleRealization.OuterBoundaryAngleRealization)
+    (hcounts :
+      angleRealization.counts = countsRealization.toBoundaryCounts) :
+    countsRealization.toBoundaryCounts.negativeCount +
+          countsRealization.toBoundaryCounts.B + 6 <=
+        countsRealization.toBoundaryCounts.d3 := by
+  exact
+    (canonicalBoundaryCountHypotheses_of_outerBoundaryCore_angleRealization
+      (n := n) core countsRealization angleRealization hcounts).boundaryNegativeCountInequality
 
 /--
 Direct closure for canonical finite boundary bookkeeping and a matched

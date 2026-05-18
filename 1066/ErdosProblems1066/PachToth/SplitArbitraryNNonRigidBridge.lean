@@ -120,6 +120,36 @@ theorem targetUpperConstructionFiveSixteenAt_of_components_translatedRemainder
     targetUpperConstructionFiveSixteenAt_of_closedPlacement_translatedRemainder
       hr C.toClosedPlacement
 
+/-- Select the exact-chain certificate at the quotient `n / 16`, using the
+empty exact chain when the quotient is zero. -/
+def exactChainUpperOfClosedPlacementsDiv
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        DeformedPlacement.ClosedPlacement k hk)
+    (n : Nat) :
+    SplitSoundness.ExactChainUpper (n / 16) := by
+  by_cases hk : 0 < n / 16
+  case pos =>
+    exact exactChainUpperOfClosedPlacement (H (n / 16) hk)
+  case neg =>
+    have hk0 : n / 16 = 0 := Nat.eq_zero_of_not_pos hk
+    rw [hk0]
+    exact SplitSoundness.emptyExactChainUpper
+
+/-- A family of checked non-rigid closed placements gives the split target for
+the canonical `div`/`mod` decomposition of `n`. -/
+theorem targetUpperConstructionFiveSixteenAt_divMod_of_closedPlacements
+    (H :
+      forall (k : Nat) (hk : 0 < k),
+        DeformedPlacement.ClosedPlacement k hk)
+    (n : Nat) :
+    targetUpperConstructionFiveSixteenAt (16 * (n / 16) + n % 16) := by
+  exact
+    RemainderPlacement.targetUpperConstructionFiveSixteenAt_of_exactChain_translatedRemainder
+      (Nat.mod_lt n (by norm_num))
+      (exactChainUpperOfClosedPlacementsDiv H n)
+      (SplitSoundness.remainderUpperOfConstruction (n % 16))
+
 /-- A family of checked non-rigid closed placements gives the full arbitrary
 vertex-count target.  For `k = n / 16 = 0`, the exact chain is empty and the
 checked remainder construction handles all vertices. -/
@@ -129,26 +159,11 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_closedPlacements
         DeformedPlacement.ClosedPlacement k hk) :
     targetUpperConstructionFiveSixteenArbitrary := by
   intro n
-  have hr : n % 16 < 16 := Nat.mod_lt n (by norm_num)
   have hsplit : n = 16 * (n / 16) + n % 16 := by
     have h := Nat.mod_add_div n 16
     omega
   rw [hsplit]
-  by_cases hk : 0 < n / 16
-  case pos =>
-    exact
-      targetUpperConstructionFiveSixteenAt_of_closedPlacement_translatedRemainder
-        hr (H (n / 16) hk)
-  case neg =>
-    have hk0 : n / 16 = 0 := Nat.eq_zero_of_not_pos hk
-    have htarget :
-        targetUpperConstructionFiveSixteenAt (16 * 0 + n % 16) := by
-      exact
-        RemainderPlacement.targetUpperConstructionFiveSixteenAt_of_exactChain_translatedRemainder
-          hr
-          SplitSoundness.emptyExactChainUpper
-          (SplitSoundness.remainderUpperOfConstruction (n % 16))
-    simpa [hk0] using htarget
+  exact targetUpperConstructionFiveSixteenAt_divMod_of_closedPlacements H n
 
 /-- A family of direct cyclic point/edge data gives the full arbitrary
 vertex-count target via the checked translated remainder split. -/

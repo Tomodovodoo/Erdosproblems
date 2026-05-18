@@ -145,6 +145,148 @@ theorem E23_of_containmentInterface
   E23_of_leftWindowGeometry
     (leftWindowGeometry_of_containmentInterface H)
 
+/-! ## Selected adjacent-left containment from failed labels -/
+
+/-- Explicit Figure 9 adjacent-left containment data for every adjacent pair
+of failed Lemma 10 comparisons. -/
+structure Figure9AdjacentLeftWindowContainment
+    (good : Nat -> Prop) (turn : Nat -> Real) where
+  containedData :
+    forall {i : Nat},
+      1 <= i -> i + 1 <= 10 ->
+      Not (good i) -> Not (good (i + 1)) ->
+        Figure9AdjacentLeftContainedData turn i
+
+namespace Figure9AdjacentLeftWindowContainment
+
+variable {good : Nat -> Prop} {turn : Nat -> Real}
+
+/-- The selected Figure 9 contained witness at one adjacent bad pair. -/
+def data (H : Figure9AdjacentLeftWindowContainment good turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (good i)) (hbad_next : Not (good (i + 1))) :
+    Figure9AdjacentLeftContainedData turn i :=
+  H.containedData hi hi_next hbad_i hbad_next
+
+/-- Project the selected raw Figure 9 distance witness. -/
+def extractedData (H : Figure9AdjacentLeftWindowContainment good turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (good i)) (hbad_next : Not (good (i + 1))) :
+    Figure9AdjacentExtractedData where
+  p := (H.data hi hi_next hbad_i hbad_next).p
+  qi := (H.data hi hi_next hbad_i hbad_next).qi
+  qj := (H.data hi hi_next hbad_i hbad_next).qj
+  s := (H.data hi hi_next hbad_i hbad_next).s
+  r := (H.data hi hi_next hbad_i hbad_next).r
+  distanceData := (H.data hi hi_next hbad_i hbad_next).distanceData
+
+/-- Project the selected Figure 9 distance data. -/
+theorem distanceData (H : Figure9AdjacentLeftWindowContainment good turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (good i)) (hbad_next : Not (good (i + 1))) :
+    Figure9DistanceData
+      (H.data hi hi_next hbad_i hbad_next).p
+      (H.data hi hi_next hbad_i hbad_next).qi
+      (H.data hi hi_next hbad_i hbad_next).qj
+      (H.data hi hi_next hbad_i hbad_next).s
+      (H.data hi hi_next hbad_i hbad_next).r :=
+  (H.data hi hi_next hbad_i hbad_next).distanceData
+
+/-- Project the selected left-angle containment. -/
+theorem left_angle_le_adjacentTurn
+    (H : Figure9AdjacentLeftWindowContainment good turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (good i)) (hbad_next : Not (good (i + 1))) :
+    angleAt
+        (H.data hi hi_next hbad_i hbad_next).p
+        (H.data hi hi_next hbad_i hbad_next).qi
+        (H.data hi hi_next hbad_i hbad_next).s <=
+      adjacentTurn turn i :=
+  (H.data hi hi_next hbad_i hbad_next).left_angle_le_adjacentTurn
+
+/-- The selected Figure 9 distance data gives the left-angle lower bound. -/
+theorem left_angle_lower
+    (H : Figure9AdjacentLeftWindowContainment good turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (good i)) (hbad_next : Not (good (i + 1))) :
+    Real.pi / 3 <=
+      angleAt
+        (H.data hi hi_next hbad_i hbad_next).p
+        (H.data hi hi_next hbad_i hbad_next).qi
+        (H.data hi hi_next hbad_i hbad_next).s :=
+  figure9LeftAngle_lower_of_distanceData
+    (H.distanceData hi hi_next hbad_i hbad_next)
+
+/-- The selected Figure 9 distance and containment data gives the local E23
+turn-window lower bound. -/
+theorem adjacentTurn_lower
+    (H : Figure9AdjacentLeftWindowContainment good turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (good i)) (hbad_next : Not (good (i + 1))) :
+    Real.pi / 3 <= adjacentTurn turn i :=
+  (H.data hi hi_next hbad_i hbad_next).adjacentTurn_lower
+
+/-- Forget selected containment data to the uniform contained-witness
+predicate. -/
+def toContainedWitnesses
+    (H : Figure9AdjacentLeftWindowContainment good turn) :
+    Figure9AdjacentLeftContainedWitnesses good turn :=
+  fun {_i} hi hi_next hbad_i hbad_next =>
+    H.data hi hi_next hbad_i hbad_next
+
+/-- Forget explicit selected data to the existential Figure 9 left-window
+geometry predicate used by `Lemma10WindowGeometry`. -/
+def toWindowGeometry
+    (H : Figure9AdjacentLeftWindowContainment good turn) :
+    Figure9AdjacentLeftWindowGeometry good turn :=
+  leftWindowGeometry_of_containedWitnesses H.toContainedWitnesses
+
+/-- Reduction from explicit Figure 9 adjacent-left containment to E23. -/
+theorem E23
+    (H : Figure9AdjacentLeftWindowContainment good turn) :
+    Figure9AdjacentWindowLowerE23 good turn :=
+  E23_of_containedWitnesses H.toContainedWitnesses
+
+/-- Direct pointwise form of the E23 reduction. -/
+theorem E23_apply
+    (H : Figure9AdjacentLeftWindowContainment good turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (good i)) (hbad_next : Not (good (i + 1))) :
+    Real.pi / 3 <= adjacentTurn turn i :=
+  H.E23 hi hi_next hbad_i hbad_next
+
+/-- E23 as the raw adjacent-failures turn-force interface. -/
+theorem adjacentFailuresForceTurn
+    (H : Figure9AdjacentLeftWindowContainment good turn) :
+    AdjacentFailuresForceTurn good turn :=
+  adjacentFailuresForceTurn_of_E23 H.E23
+
+/-- Convert uniform contained witnesses to the selected-window facade. -/
+def ofContainedWitnesses
+    (H : Figure9AdjacentLeftContainedWitnesses good turn) :
+    Figure9AdjacentLeftWindowContainment good turn where
+  containedData := by
+    intro i hi hi_next hbad_i hbad_next
+    exact H (i := i) hi hi_next hbad_i hbad_next
+
+/-- Convert the stronger uniform interface from `AngleContainmentInterface` to
+the selected-data facade in this module. -/
+def ofContainmentInterface
+    (H : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure9AdjacentLeftWindowContainment good turn where
+  containedData := by
+    intro i hi hi_next hbad_i hbad_next
+    exact H.containedData hi hi_next hbad_i hbad_next
+
+/-- The Figure 9 containment interface reduces to E23 through the selected
+window-geometry facade. -/
+theorem E23_of_containmentInterface
+    (H : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure9AdjacentWindowLowerE23 good turn :=
+  (ofContainmentInterface H).E23
+
+end Figure9AdjacentLeftWindowContainment
+
 /-! ## Honest M8 projections -/
 
 /-- Honest M8 specialization of the explicit contained-witness predicate. -/
@@ -185,6 +327,147 @@ theorem honestE23_of_containmentInterface
   honestFigure9AdjacentWindowLowerE23_of_leftWindowGeometry
     (leftWindowGeometry_of_containmentInterface H)
 
+/-- Figure 9 adjacent-left containment specialized to the local `m = 8`
+predicate package. -/
+def M8Figure9AdjacentLeftWindowContainment
+    {V : Type u} {G : LocalGraph V}
+    (P : BrokenLatticePredicates G 8) (turn : Nat -> Real) : Type :=
+  Figure9AdjacentLeftWindowContainment (M8BrokenLatticeGood P) turn
+
+/-- Figure 9 adjacent-left containment specialized to an honest local `m = 8`
+package. -/
+def HonestFigure9AdjacentLeftWindowContainment
+    {V : Type u} {G : LocalGraph V}
+    (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Type :=
+  M8Figure9AdjacentLeftWindowContainment P.data turn
+
+/-- Explicit `m = 8` Figure 9 containment gives the local E23 hypothesis. -/
+theorem m8Figure9AdjacentWindowLowerE23_of_containment
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure9AdjacentLeftWindowContainment P turn) :
+    M8Figure9AdjacentWindowLowerE23 P turn :=
+  H.E23
+
+/-- Explicit honest Figure 9 containment gives the honest E23 hypothesis. -/
+theorem honestFigure9AdjacentWindowLowerE23_of_containment
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn) :
+    HonestFigure9AdjacentWindowLowerE23 P turn :=
+  H.E23
+
+/-- Explicit `m = 8` Figure 9 containment gives the raw adjacent-failures
+turn-force interface. -/
+theorem m8AdjacentFailuresForceTurn_of_containment
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure9AdjacentLeftWindowContainment P turn) :
+    AdjacentFailuresForceTurn (M8BrokenLatticeGood P) turn :=
+  H.adjacentFailuresForceTurn
+
+/-- Explicit honest Figure 9 containment gives the raw adjacent-failures
+turn-force interface. -/
+theorem honestAdjacentFailuresForceTurn_of_containment
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn) :
+    AdjacentFailuresForceTurn (M8BrokenLatticeGood P.data) turn :=
+  H.adjacentFailuresForceTurn
+
+/-- A failed honest label equality is a failed named local comparison. -/
+theorem not_m8BrokenLatticeGood_of_not_m8LabelGood
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {i : Nat}
+    (hbad : Not (M8LabelGood P.data.labels i)) :
+    Not (M8BrokenLatticeGood P.data i) := by
+  intro hgood
+  exact hbad ((P.good_iff_labelGood i).1 hgood)
+
+/-- Select honest Figure 9 contained data from adjacent failed label
+equalities. -/
+def honestContainedData_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Figure9AdjacentLeftContainedData turn i :=
+  H.data hi hi_next
+    (not_m8BrokenLatticeGood_of_not_m8LabelGood hbad_i)
+    (not_m8BrokenLatticeGood_of_not_m8LabelGood hbad_next)
+
+/-- Project the raw Figure 9 distance witness selected by adjacent failed
+label equalities. -/
+def honestExtractedData_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Figure9AdjacentExtractedData :=
+  H.extractedData hi hi_next
+    (not_m8BrokenLatticeGood_of_not_m8LabelGood hbad_i)
+    (not_m8BrokenLatticeGood_of_not_m8LabelGood hbad_next)
+
+/-- Project the concrete Figure 9 distance package selected by adjacent failed
+label equalities. -/
+theorem honestDistanceData_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Figure9DistanceData
+      (honestContainedData_of_labelFailures H hi hi_next
+        hbad_i hbad_next).p
+      (honestContainedData_of_labelFailures H hi hi_next
+        hbad_i hbad_next).qi
+      (honestContainedData_of_labelFailures H hi hi_next
+        hbad_i hbad_next).qj
+      (honestContainedData_of_labelFailures H hi hi_next
+        hbad_i hbad_next).s
+      (honestContainedData_of_labelFailures H hi hi_next
+        hbad_i hbad_next).r :=
+  (honestContainedData_of_labelFailures H hi hi_next
+    hbad_i hbad_next).distanceData
+
+/-- Project the left-angle containment selected by adjacent failed label
+equalities. -/
+theorem honest_left_angle_le_adjacentTurn_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    angleAt
+        (honestContainedData_of_labelFailures H hi hi_next
+          hbad_i hbad_next).p
+        (honestContainedData_of_labelFailures H hi hi_next
+          hbad_i hbad_next).qi
+        (honestContainedData_of_labelFailures H hi hi_next
+          hbad_i hbad_next).s <=
+      adjacentTurn turn i :=
+  (honestContainedData_of_labelFailures H hi hi_next
+    hbad_i hbad_next).left_angle_le_adjacentTurn
+
+/-- Adjacent failed label equalities force the honest Figure 9 E23 lower
+bound pointwise. -/
+theorem honestAdjacentTurn_lower_of_labelFailures
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftWindowContainment P turn)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8LabelGood P.data.labels i))
+    (hbad_next : Not (M8LabelGood P.data.labels (i + 1))) :
+    Real.pi / 3 <= adjacentTurn turn i :=
+  (honestContainedData_of_labelFailures H hi hi_next
+    hbad_i hbad_next).adjacentTurn_lower
+
 /-- Projection of the Figure 9 E23 field from the concrete M8 window
 containment package. -/
 theorem honestE23_of_windowContainment
@@ -213,6 +496,140 @@ theorem honestE23_of_containmentInterfaces
   honestFigure9_E23_of_containmentInterfaces
     (localLabels := localLabels) (turnBounds := turnBounds)
     figure8 figure9_left
+
+/-! ## Projections from the existing M8 window-containment package -/
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {localLabels : M8LocalLabels C}
+variable {turnBounds : M8TurnBounds}
+
+/-- The Figure 9 field of an M8 window-containment package as explicit
+selected adjacent-left containment. -/
+def honestContainment_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure9AdjacentLeftWindowContainment
+      localLabels.predicates turnBounds.turn :=
+  Figure9AdjacentLeftWindowContainment.ofContainmentInterface W.figure9_left
+
+/-- Select Figure 9 contained data from an M8 window-containment package using
+adjacent failed label equalities. -/
+def honestContainedData_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_next :
+      Not (M8LabelGood localLabels.predicates.data.labels (i + 1))) :
+    Figure9AdjacentLeftContainedData turnBounds.turn i :=
+  honestContainedData_of_labelFailures
+    (honestContainment_of_m8WindowContainment W)
+    hi hi_next hbad_i hbad_next
+
+/-- Project the raw Figure 9 distance witness from an M8 window-containment
+package using adjacent failed label equalities. -/
+def honestExtractedData_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_next :
+      Not (M8LabelGood localLabels.predicates.data.labels (i + 1))) :
+    Figure9AdjacentExtractedData :=
+  honestExtractedData_of_labelFailures
+    (honestContainment_of_m8WindowContainment W)
+    hi hi_next hbad_i hbad_next
+
+/-- Project the concrete Figure 9 distance package from an M8
+window-containment package using adjacent failed label equalities. -/
+theorem honestDistanceData_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_next :
+      Not (M8LabelGood localLabels.predicates.data.labels (i + 1))) :
+    Figure9DistanceData
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hi_next hbad_i hbad_next).p
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hi_next hbad_i hbad_next).qi
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hi_next hbad_i hbad_next).qj
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hi_next hbad_i hbad_next).s
+      (honestContainedData_of_m8WindowContainment_labelFailures W
+        hi hi_next hbad_i hbad_next).r :=
+  (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hi_next hbad_i hbad_next).distanceData
+
+/-- Project the selected left-angle containment from an M8 window-containment
+package using adjacent failed label equalities. -/
+theorem honest_left_angle_le_adjacentTurn_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_next :
+      Not (M8LabelGood localLabels.predicates.data.labels (i + 1))) :
+    angleAt
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hi_next hbad_i hbad_next).p
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hi_next hbad_i hbad_next).qi
+        (honestContainedData_of_m8WindowContainment_labelFailures W
+          hi hi_next hbad_i hbad_next).s <=
+      adjacentTurn turnBounds.turn i :=
+  (honestContainedData_of_m8WindowContainment_labelFailures W
+    hi hi_next hbad_i hbad_next).left_angle_le_adjacentTurn
+
+/-- Projection to honest E23 through the Figure 9-only containment facade. -/
+theorem honestFigure9AdjacentWindowLowerE23_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure9AdjacentWindowLowerE23
+      localLabels.predicates turnBounds.turn :=
+  (honestContainment_of_m8WindowContainment W).E23
+
+/-- Projection to the raw adjacent-failures turn-force interface through the
+Figure 9-only containment facade. -/
+theorem honestAdjacentFailuresForceTurn_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds) :
+    AdjacentFailuresForceTurn
+      (M8BrokenLatticeGood localLabels.predicates.data)
+      turnBounds.turn :=
+  (honestContainment_of_m8WindowContainment W).adjacentFailuresForceTurn
+
+/-- Pointwise honest E23 projection from an M8 window-containment package. -/
+theorem honestFigure9AdjacentWindowLowerE23_apply_of_m8WindowContainment
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i : Not (M8BrokenLatticeGood localLabels.predicates.data i))
+    (hbad_next :
+      Not (M8BrokenLatticeGood localLabels.predicates.data (i + 1))) :
+    Real.pi / 3 <= adjacentTurn turnBounds.turn i :=
+  honestFigure9AdjacentWindowLowerE23_of_m8WindowContainment W
+    hi hi_next hbad_i hbad_next
+
+/-- Pointwise honest E23 projection from an M8 window-containment package,
+stated for failed label equalities. -/
+theorem honestFigure9AdjacentWindowLowerE23_apply_of_m8WindowContainment_labelFailures
+    (W : M8WindowContainment localLabels turnBounds)
+    {i : Nat} (hi : 1 <= i) (hi_next : i + 1 <= 10)
+    (hbad_i :
+      Not (M8LabelGood localLabels.predicates.data.labels i))
+    (hbad_next :
+      Not (M8LabelGood localLabels.predicates.data.labels (i + 1))) :
+    Real.pi / 3 <= adjacentTurn turnBounds.turn i :=
+  honestAdjacentTurn_lower_of_labelFailures
+    (honestContainment_of_m8WindowContainment W)
+    hi hi_next hbad_i hbad_next
+
+/-- The same M8 E23 projection, routed through
+`M8WindowGeometryConcrete`. -/
+theorem honestFigure9AdjacentWindowLowerE23_of_m8WindowContainment_concrete
+    (W : M8WindowContainment localLabels turnBounds) :
+    HonestFigure9AdjacentWindowLowerE23
+      localLabels.predicates turnBounds.turn :=
+  M8WindowGeometryConcrete.honestFigure9_E23_of_containment W
 
 end Figure9ContainmentConcrete
 end Swanepoel

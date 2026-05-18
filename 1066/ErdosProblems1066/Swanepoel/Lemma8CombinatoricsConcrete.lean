@@ -1,3 +1,4 @@
+import ErdosProblems1066.Swanepoel.Lemma8ForbiddenDistinctConcrete
 import ErdosProblems1066.Swanepoel.M8BoundaryLabelsConcrete
 
 set_option autoImplicit false
@@ -19,6 +20,8 @@ namespace Swanepoel
 namespace Lemma8CombinatoricsConcrete
 
 open GraphBridge
+open Lemma8ExistenceConcrete
+open Lemma8ForbiddenDistinctConcrete
 open LocalConfigurations
 open M8BoundaryLabelsConcrete
 open M8LabelsFromBoundaryInterface
@@ -266,6 +269,145 @@ theorem named_cases_reduce_to_s
   | inl h => exact False.elim (hne h)
   | inr h => exact h
 
+/-! ## Degree-six and forbidden-frame closure -/
+
+/-- The exact ordered pair of extra neighbors determined by a Lemma 8 package.
+-/
+def exactTwoExtraNeighbors_of_combinatorics
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    ExactTwoExtraNeighbors S i where
+  r := E.r i
+  s := E.s i
+  r_mem := by
+    exact (mem_extraNeighborFinset S i (E.r i)).2
+      (And.intro (E.r_neighbor i) (E.r_not_forbidden i))
+  s_mem := by
+    exact (mem_extraNeighborFinset S i (E.s i)).2
+      (And.intro (E.s_neighbor i) (E.s_not_forbidden i))
+  r_ne_s := E.r_ne_s i
+  all_mem := by
+    intro x hx
+    exact E.named_of_extra_neighbor
+      ((mem_extraNeighborFinset S i x).1 hx).1
+      ((mem_extraNeighborFinset S i x).1 hx).2
+
+@[simp]
+theorem exactTwoExtraNeighbors_of_combinatorics_r
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    (exactTwoExtraNeighbors_of_combinatorics E i).r = E.r i :=
+  rfl
+
+@[simp]
+theorem exactTwoExtraNeighbors_of_combinatorics_s
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    (exactTwoExtraNeighbors_of_combinatorics E i).s = E.s i :=
+  rfl
+
+/-- Lemma 8 combinatorics, viewed as the finite-existence package with the
+same ordered labels and cyclic-order predicate. -/
+def finiteExistenceConditions_of_combinatorics
+    (E : M8Lemma8Combinatorics S) :
+    M8Lemma8FiniteExistenceConditions S where
+  pair := fun i => exactTwoExtraNeighbors_of_combinatorics E i
+  positiveCyclicOrderAt := E.positiveCyclicOrderAt
+  positiveCyclicOrder := E.positiveCyclicOrder
+
+@[simp]
+theorem finiteExistenceConditions_of_combinatorics_pair_r
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    ((finiteExistenceConditions_of_combinatorics E).pair i).r = E.r i :=
+  rfl
+
+@[simp]
+theorem finiteExistenceConditions_of_combinatorics_pair_s
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    ((finiteExistenceConditions_of_combinatorics E).pair i).s = E.s i :=
+  rfl
+
+/-- The concrete extra-neighbor finset is exactly the two Lemma 8 labels. -/
+theorem extraNeighborFinset_eq_pair_of_combinatorics
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    extraNeighborFinset S i = ({E.r i, E.s i} : Finset (Fin n)) := by
+  classical
+  refine Finset.Subset.antisymm ?subset ?supset
+  case subset =>
+    intro x hx
+    cases (exactTwoExtraNeighbors_of_combinatorics E i).all_mem x hx with
+    | inl h => simp [h]
+    | inr h => simp [h]
+  case supset =>
+    intro x hx
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+    cases hx with
+    | inl h =>
+        subst x
+        exact (exactTwoExtraNeighbors_of_combinatorics E i).r_mem
+    | inr h =>
+        subst x
+        exact (exactTwoExtraNeighbors_of_combinatorics E i).s_mem
+
+/-- Lemma 8 combinatorics makes the concrete extra-neighbor finset have
+cardinality two. -/
+theorem extraNeighborFinset_card_eq_two_of_combinatorics
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    (extraNeighborFinset S i).card = 2 := by
+  classical
+  rw [extraNeighborFinset_eq_pair_of_combinatorics E i]
+  simp [E.r_ne_s i]
+
+/-- A negated cardinality-two conclusion contradicts the stored Lemma 8
+combinatorics. -/
+theorem false_of_extraNeighborFinset_card_ne_two_of_combinatorics
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex)
+    (hne : Not ((extraNeighborFinset S i).card = 2)) :
+    False :=
+  hne (extraNeighborFinset_card_eq_two_of_combinatorics E i)
+
+/-- Lemma 8 combinatorics plus a genuine four-forbidden-neighbor frame forces
+degree six at the center. -/
+theorem centerDegree_eq_six_of_combinatorics_and_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame S i) :
+    centerDegree S i = 6 := by
+  have hcard := extraNeighborFinset_card_eq_two_of_combinatorics E i
+  have hdecomp : centerDegree S i = 4 + (extraNeighborFinset S i).card := by
+    have hneighbor := F.neighborFinset_card_eq_forbidden_add_extra
+    have hforbidden := F.forbidden_card_eq_four
+    simpa [centerDegree, LocalExclusions.LocalGraph.degree, hforbidden]
+      using hneighbor
+  omega
+
+/-- The combined degree-six and exact-pair conclusion from Lemma 8
+combinatorics plus the forbidden-neighbor frame. -/
+theorem centerDegree_eq_six_and_extraNeighborFinset_eq_pair_of_combinatorics_and_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame S i) :
+    centerDegree S i = 6 /\
+      extraNeighborFinset S i = ({E.r i, E.s i} : Finset (Fin n)) :=
+  And.intro
+    (centerDegree_eq_six_of_combinatorics_and_forbiddenFrame E F)
+    (extraNeighborFinset_eq_pair_of_combinatorics E i)
+
+/-- A negated center-degree-six conclusion contradicts Lemma 8 combinatorics
+and the forbidden-neighbor frame. -/
+theorem false_of_centerDegree_ne_six_of_combinatorics_and_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame S i)
+    (hne : Not (centerDegree S i = 6)) :
+    False :=
+  hne (centerDegree_eq_six_of_combinatorics_and_forbiddenFrame E F)
+
+/-- The forbidden-neighbor frame also gives the compact pairwise-distinct
+forbidden-label package used by cyclic-order consumers. -/
+theorem forbiddenLabelsPairwiseDistinct_of_forbiddenFrame
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame S i) :
+    FourForbiddenLabelsPairwiseDistinct S i :=
+  FourForbiddenLabelsPairwiseDistinct.ofFrame F
+
 /-! ## Cyclic-order field routing -/
 
 /-- The cyclic-order field as a reusable routed proposition. -/
@@ -279,6 +421,117 @@ theorem cyclicOrderRoute_holds
     (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
     cyclicOrderRoute E i :=
   E.positiveCyclicOrder i
+
+/-- Distinctness facts for the six arguments in the routed cyclic-order
+statement, with the forbidden-label distinctness kept as one compact field. -/
+structure CyclicOrderArgumentsDistinct
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) : Prop where
+  s_ne_r : Not (E.s i = E.r i)
+  s_ne_prevQ : Not (E.s i = S.prevQ i)
+  s_ne_leftP : Not (E.s i = S.leftP i)
+  s_ne_rightP : Not (E.s i = S.rightP i)
+  s_ne_nextQ : Not (E.s i = S.nextQ i)
+  r_ne_prevQ : Not (E.r i = S.prevQ i)
+  r_ne_leftP : Not (E.r i = S.leftP i)
+  r_ne_rightP : Not (E.r i = S.rightP i)
+  r_ne_nextQ : Not (E.r i = S.nextQ i)
+  forbiddenDistinct : FourForbiddenLabelsPairwiseDistinct S i
+
+/-- Build the cyclic-order argument distinctness package from Lemma 8
+non-forbidden fields and a forbidden-label distinctness certificate. -/
+theorem cyclicOrderArgumentsDistinct_of_forbiddenDistinct
+    (E : M8Lemma8Combinatorics S)
+    {i : M8ExtraIndex}
+    (D : FourForbiddenLabelsPairwiseDistinct S i) :
+    CyclicOrderArgumentsDistinct E i where
+  s_ne_r := Lemma8CombinatoricsConcrete.s_ne_r E i
+  s_ne_prevQ := Lemma8CombinatoricsConcrete.s_ne_prevQ E i
+  s_ne_leftP := Lemma8CombinatoricsConcrete.s_ne_leftP E i
+  s_ne_rightP := Lemma8CombinatoricsConcrete.s_ne_rightP E i
+  s_ne_nextQ := Lemma8CombinatoricsConcrete.s_ne_nextQ E i
+  r_ne_prevQ := Lemma8CombinatoricsConcrete.r_ne_prevQ E i
+  r_ne_leftP := Lemma8CombinatoricsConcrete.r_ne_leftP E i
+  r_ne_rightP := Lemma8CombinatoricsConcrete.r_ne_rightP E i
+  r_ne_nextQ := Lemma8CombinatoricsConcrete.r_ne_nextQ E i
+  forbiddenDistinct := D
+
+/-- The forbidden-neighbor frame is enough to build the cyclic-order argument
+distinctness package. -/
+theorem cyclicOrderArgumentsDistinct_of_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame S i) :
+    CyclicOrderArgumentsDistinct E i :=
+  cyclicOrderArgumentsDistinct_of_forbiddenDistinct E
+    (forbiddenLabelsPairwiseDistinct_of_forbiddenFrame F)
+
+/-- The compact per-index closure facts obtained by combining cyclic order,
+degree six, and forbidden distinctness. -/
+structure M8Lemma8IndexClosureFacts
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) : Prop where
+  centerDegreeSix : centerDegree S i = 6
+  extraNeighborCardTwo : (extraNeighborFinset S i).card = 2
+  cyclicOrder : cyclicOrderRoute E i
+  argumentsDistinct : CyclicOrderArgumentsDistinct E i
+
+/-- Build the compact per-index closure facts from a Lemma 8 package and the
+four-forbidden-neighbor frame. -/
+theorem indexClosureFacts_of_combinatorics_and_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame S i) :
+    M8Lemma8IndexClosureFacts E i where
+  centerDegreeSix :=
+    centerDegree_eq_six_of_combinatorics_and_forbiddenFrame E F
+  extraNeighborCardTwo :=
+    extraNeighborFinset_card_eq_two_of_combinatorics E i
+  cyclicOrder := cyclicOrderRoute_holds E i
+  argumentsDistinct :=
+    cyclicOrderArgumentsDistinct_of_forbiddenFrame E F
+
+/-- A failure of the compact closure facts is already a contradiction once the
+Lemma 8 package and forbidden-neighbor frame are supplied. -/
+theorem false_of_not_indexClosureFacts_of_combinatorics_and_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame S i)
+    (hbad : Not (M8Lemma8IndexClosureFacts E i)) :
+    False :=
+  hbad (indexClosureFacts_of_combinatorics_and_forbiddenFrame E F)
+
+/-- Witness version of the per-index closure: the exact extra-neighbor pair is
+kept together with the combined closure facts. -/
+structure M8Lemma8IndexClosureWitness
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) where
+  pair : ExactTwoExtraNeighbors S i
+  pair_r : pair.r = E.r i
+  pair_s : pair.s = E.s i
+  facts : M8Lemma8IndexClosureFacts E i
+
+/-- Build the per-index closure witness from Lemma 8 combinatorics and a
+forbidden-neighbor frame. -/
+def indexClosureWitness_of_combinatorics_and_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame S i) :
+    M8Lemma8IndexClosureWitness E i where
+  pair := exactTwoExtraNeighbors_of_combinatorics E i
+  pair_r := rfl
+  pair_s := rfl
+  facts := indexClosureFacts_of_combinatorics_and_forbiddenFrame E F
+
+/-- Family version of the closure witness over all Lemma 8 indices. -/
+structure M8Lemma8ClosureWitness
+    (E : M8Lemma8Combinatorics S) where
+  index : forall i : M8ExtraIndex, M8Lemma8IndexClosureWitness E i
+
+/-- Build all per-index closure witnesses from a frame family. -/
+def closureWitness_of_combinatorics_and_forbiddenFrame
+    (E : M8Lemma8Combinatorics S)
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame S i) :
+    M8Lemma8ClosureWitness E where
+  index := fun i =>
+    indexClosureWitness_of_combinatorics_and_forbiddenFrame E (F i)
 
 namespace M8LabelsFromBoundaryData
 
@@ -326,6 +579,36 @@ theorem eq_s_of_extra_neighbor_ne_r
   simpa [M8LabelsFromBoundaryData.labels] using
     Lemma8CombinatoricsConcrete.eq_s_of_extra_neighbor_ne_r
       D.lemma8 hadj hnot hne
+
+/-- Route the exact extra-neighbor pair through boundary-derived data. -/
+def exactTwoExtraNeighbors
+    (i : M8ExtraIndex) :
+    ExactTwoExtraNeighbors D.spine i :=
+  Lemma8CombinatoricsConcrete.exactTwoExtraNeighbors_of_combinatorics
+    D.lemma8 i
+
+/-- Route the compact closure facts through boundary-derived data. -/
+theorem indexClosureFacts_of_forbiddenFrame
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame D.spine i) :
+    M8Lemma8IndexClosureFacts D.lemma8 i :=
+  Lemma8CombinatoricsConcrete.indexClosureFacts_of_combinatorics_and_forbiddenFrame
+    D.lemma8 F
+
+/-- Route the compact closure witness through boundary-derived data. -/
+def indexClosureWitness_of_forbiddenFrame
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame D.spine i) :
+    M8Lemma8IndexClosureWitness D.lemma8 i :=
+  Lemma8CombinatoricsConcrete.indexClosureWitness_of_combinatorics_and_forbiddenFrame
+    D.lemma8 F
+
+/-- Route the all-index closure witness through boundary-derived data. -/
+def closureWitness_of_forbiddenFrame
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame D.spine i) :
+    M8Lemma8ClosureWitness D.lemma8 :=
+  Lemma8CombinatoricsConcrete.closureWitness_of_combinatorics_and_forbiddenFrame
+    D.lemma8 F
 
 end M8LabelsFromBoundaryData
 
@@ -386,6 +669,40 @@ theorem eq_s_of_extra_neighbor_ne_r
     M8LabelsFromBoundaryData.labels] using
     Lemma8CombinatoricsConcrete.eq_s_of_extra_neighbor_ne_r
       D.lemma8 hadj hnot hne
+
+/-- Route the exact extra-neighbor pair through the concrete boundary-label
+package. -/
+def exactTwoExtraNeighbors
+    (i : M8ExtraIndex) :
+    ExactTwoExtraNeighbors D.spine i :=
+  Lemma8CombinatoricsConcrete.exactTwoExtraNeighbors_of_combinatorics
+    D.lemma8 i
+
+/-- Route the compact closure facts through the concrete boundary-label
+package. -/
+theorem indexClosureFacts_of_forbiddenFrame
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame D.spine i) :
+    M8Lemma8IndexClosureFacts D.lemma8 i :=
+  Lemma8CombinatoricsConcrete.indexClosureFacts_of_combinatorics_and_forbiddenFrame
+    D.lemma8 F
+
+/-- Route the compact closure witness through the concrete boundary-label
+package. -/
+def indexClosureWitness_of_forbiddenFrame
+    {i : M8ExtraIndex}
+    (F : FourForbiddenNeighborFrame D.spine i) :
+    M8Lemma8IndexClosureWitness D.lemma8 i :=
+  Lemma8CombinatoricsConcrete.indexClosureWitness_of_combinatorics_and_forbiddenFrame
+    D.lemma8 F
+
+/-- Route the all-index closure witness through the concrete boundary-label
+package. -/
+def closureWitness_of_forbiddenFrame
+    (F : forall i : M8ExtraIndex, FourForbiddenNeighborFrame D.spine i) :
+    M8Lemma8ClosureWitness D.lemma8 :=
+  Lemma8CombinatoricsConcrete.closureWitness_of_combinatorics_and_forbiddenFrame
+    D.lemma8 F
 
 end M8BoundaryLabelPackage
 

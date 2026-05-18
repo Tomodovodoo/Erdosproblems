@@ -1,5 +1,6 @@
 import ErdosProblems1066.PachToth.ConcretePeriodSearchFamily
 import ErdosProblems1066.PachToth.CrossBlockSqTableSearch
+import ErdosProblems1066.PachToth.NonRigidConnectorSeparationFacts
 
 set_option autoImplicit false
 
@@ -24,6 +25,7 @@ open CrossBlockDistanceSqReduction
 open CrossBlockLowerBoundsInterface
 open CrossBlockSqTableSearch
 open ConcretePeriodSearchFamily
+open NonRigidConnectorSeparationFacts
 
 noncomputable section
 
@@ -50,6 +52,12 @@ abbrev IndexedCrossBlockSqDistanceTable :=
 
 abbrev IndexedCrossBlockSqDistanceTableFamily :=
   CrossBlockDistanceSqReduction.IndexedCrossBlockSqDistanceTableFamily
+
+abbrev IndexedNonConnectorCrossBlockSqDistanceTable :=
+  NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTable
+
+abbrev IndexedNonConnectorCrossBlockSqDistanceTableFamily :=
+  NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTableFamily
 
 /-- One packed upper-triangle table position: a pair of distinct block
 indices in increasing order, together with the two local `Fin 16` vertices. -/
@@ -168,6 +176,18 @@ def toSqDistanceTable
     IndexedCrossBlockSqDistanceTable F k hk :=
   C.toSqValueTable.toSqDistanceTable
 
+/-- Vector-backed certificates also feed the non-connector square-distance
+table used by the connector-separated route.  The certificate proves the
+stronger all-cross-block table, so the connector side condition is ignored. -/
+def toNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k} {n : Nat}
+    (C : UpperTriangleVectorCertificate F k hk n) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk where
+  sqDist_ge_one := by
+    intro i u j v hij _hnot_connector
+    exact (C.toSqDistanceTable).sqDist_ge_one i u j v hij
+
 theorem generatedGlobalSeparation
     {F : RoleHingedPeriodSearchFamily}
     {k : Nat} {hk : 0 < k} {n : Nat}
@@ -226,6 +246,22 @@ def indexedCrossBlockSqDistanceTableOfVector
     IndexedCrossBlockSqDistanceTable F k hk :=
   (upperTriangleSqValueTableOfVector hk
     values index value_eq_polynomial value_ge_one).toSqDistanceTable
+
+/-- Constructor form for vector-backed non-connector square-distance tables. -/
+def indexedNonConnectorCrossBlockSqDistanceTableOfVector
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} (hk : 0 < k) {n : Nat}
+    (values : Vector Real n)
+    (index : UpperTrianglePosition k -> Fin n)
+    (value_eq_polynomial :
+      forall p : UpperTrianglePosition k,
+        values.get (index p) = p.polynomial F hk)
+    (value_ge_one :
+      forall p : UpperTrianglePosition k,
+        1 <= values.get (index p)) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk :=
+  (UpperTriangleVectorCertificate.mk
+    values index value_eq_polynomial value_ge_one).toNonConnectorSqDistanceTable
 
 /-- A list-backed upper-triangle certificate.  The `index` field is a finite
 index into the supplied list, so the list length obligation stays visible. -/
@@ -305,6 +341,18 @@ def toSqDistanceTable
     IndexedCrossBlockSqDistanceTable F k hk :=
   C.toSqValueTable.toSqDistanceTable
 
+/-- List-backed certificates also feed the non-connector square-distance
+table used by the connector-separated route.  The certificate proves the
+stronger all-cross-block table, so the connector side condition is ignored. -/
+def toNonConnectorSqDistanceTable
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} {hk : 0 < k}
+    (C : UpperTriangleListCertificate F k hk) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk where
+  sqDist_ge_one := by
+    intro i u j v hij _hnot_connector
+    exact (C.toSqDistanceTable).sqDist_ge_one i u j v hij
+
 theorem generatedGlobalSeparation
     {F : RoleHingedPeriodSearchFamily}
     {k : Nat} {hk : 0 < k}
@@ -364,6 +412,22 @@ def indexedCrossBlockSqDistanceTableOfList
   (upperTriangleSqValueTableOfList hk
     values index value_eq_polynomial value_ge_one).toSqDistanceTable
 
+/-- Constructor form for list-backed non-connector square-distance tables. -/
+def indexedNonConnectorCrossBlockSqDistanceTableOfList
+    {F : RoleHingedPeriodSearchFamily}
+    {k : Nat} (hk : 0 < k)
+    (values : List Real)
+    (index : UpperTrianglePosition k -> Fin values.length)
+    (value_eq_polynomial :
+      forall p : UpperTrianglePosition k,
+        values.get (index p) = p.polynomial F hk)
+    (value_ge_one :
+      forall p : UpperTrianglePosition k,
+        1 <= values.get (index p)) :
+    IndexedNonConnectorCrossBlockSqDistanceTable F k hk :=
+  (UpperTriangleListCertificate.mk
+    values index value_eq_polynomial value_ge_one).toNonConnectorSqDistanceTable
+
 /-- A family of vector-backed upper-triangle certificates.  The vector length
 may depend on the block count. -/
 structure UpperTriangleVectorCertificateFamily
@@ -392,6 +456,15 @@ def toSqDistanceTableFamily
     (C : UpperTriangleVectorCertificateFamily F) :
     IndexedCrossBlockSqDistanceTableFamily F :=
   C.toSqValueTableFamily.toSqDistanceTableFamily
+
+/-- Vector-backed certificate families provide the non-connector
+square-distance table family used when connector pairs are handled separately. -/
+def toNonConnectorSqDistanceTableFamily
+    {F : RoleHingedPeriodSearchFamily}
+    (C : UpperTriangleVectorCertificateFamily F) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily F where
+  table := fun k hk =>
+    (C.table k hk).toNonConnectorSqDistanceTable
 
 def toCrossBlockLowerBounds
     {F : RoleHingedPeriodSearchFamily}
@@ -440,6 +513,15 @@ def toSqDistanceTableFamily
     IndexedCrossBlockSqDistanceTableFamily F :=
   C.toSqValueTableFamily.toSqDistanceTableFamily
 
+/-- List-backed certificate families provide the non-connector
+square-distance table family used when connector pairs are handled separately. -/
+def toNonConnectorSqDistanceTableFamily
+    {F : RoleHingedPeriodSearchFamily}
+    (C : UpperTriangleListCertificateFamily F) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily F where
+  table := fun k hk =>
+    (C.table k hk).toNonConnectorSqDistanceTable
+
 def toCrossBlockLowerBounds
     {F : RoleHingedPeriodSearchFamily}
     (C : UpperTriangleListCertificateFamily F) :
@@ -485,6 +567,12 @@ def toSqDistanceTableFamily
     IndexedCrossBlockSqDistanceTableFamily C.toRoleHingedPeriodSearchFamily :=
   C.tables.toSqDistanceTableFamily
 
+def toNonConnectorSqDistanceTableFamily
+    (C : VectorConcreteCrossBlockFamily) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily
+      C.toRoleHingedPeriodSearchFamily :=
+  C.tables.toNonConnectorSqDistanceTableFamily
+
 def toCrossBlockLowerBounds
     (C : VectorConcreteCrossBlockFamily) :
     CrossBlockLowerBoundsInterface.CrossBlockLowerBounds
@@ -527,6 +615,12 @@ def toSqDistanceTableFamily
     (C : ListConcreteCrossBlockFamily) :
     IndexedCrossBlockSqDistanceTableFamily C.toRoleHingedPeriodSearchFamily :=
   C.tables.toSqDistanceTableFamily
+
+def toNonConnectorSqDistanceTableFamily
+    (C : ListConcreteCrossBlockFamily) :
+    IndexedNonConnectorCrossBlockSqDistanceTableFamily
+      C.toRoleHingedPeriodSearchFamily :=
+  C.tables.toNonConnectorSqDistanceTableFamily
 
 def toCrossBlockLowerBounds
     (C : ListConcreteCrossBlockFamily) :

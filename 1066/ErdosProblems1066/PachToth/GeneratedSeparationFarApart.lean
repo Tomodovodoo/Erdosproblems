@@ -1,4 +1,5 @@
 import ErdosProblems1066.PachToth.GeneratedPeriodClosure
+import ErdosProblems1066.PachToth.UnitVectorGeometry
 
 set_option autoImplicit false
 
@@ -70,6 +71,46 @@ def GeneratedCrossBlockLowerBoundsAtLeastOne
   forall (i : Fin k) (u : LocalVertex) (j : Fin k) (v : LocalVertex),
     Ne i j -> 1 <= lower i u j v
 
+/-- A per-pair quantitative squared-distance lower bound for distinct
+generated vertices. -/
+def GeneratedPairSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real) : Prop :=
+  forall (i : Fin k) (u : LocalVertex) (j : Fin k) (v : LocalVertex),
+    Ne (i, u) (j, v) ->
+      lower i u j v <=
+        UnitVectorGeometry.sqDist
+          (GeneratedClosedChain.generatedPoint O hk base orientation i u)
+          (GeneratedClosedChain.generatedPoint O hk base orientation j v)
+
+/-- A cross-block-only quantitative squared-distance lower bound. -/
+def GeneratedCrossBlockSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real) : Prop :=
+  forall (i : Fin k) (u : LocalVertex) (j : Fin k) (v : LocalVertex),
+    Ne i j ->
+      lower i u j v <=
+        UnitVectorGeometry.sqDist
+          (GeneratedClosedChain.generatedPoint O hk base orientation i u)
+          (GeneratedClosedChain.generatedPoint O hk base orientation j v)
+
+/-- A table entry bounded below by `1` and above by squared distance gives the
+root-distance separation used by generated chains. -/
+theorem one_le_eucDist_of_sqDistanceLowerBound {p q : R2} {lower : Real}
+    (hge_one : 1 <= lower)
+    (hlower : lower <= UnitVectorGeometry.sqDist p q) :
+    1 <= _root_.eucDist p q := by
+  rw [_root_.eucDist_ge_one_iff]
+  exact le_trans hge_one (by
+    simpa [UnitVectorGeometry.sqDist, UnitVectorGeometry.sqNorm,
+      UnitVectorGeometry.sub] using hlower)
+
 /-- Quantitative pairwise lower bounds imply generated global separation. -/
 theorem generatedGlobalSeparation_of_pairDistanceLowerBounds
     (O : Figure2Certificate.SameOppositeTransitionObligations)
@@ -84,6 +125,24 @@ theorem generatedGlobalSeparation_of_pairDistanceLowerBounds
       O hk base orientation := by
   intro i u j v hne
   exact le_trans (hge_one i u j v hne) (hlower i u j v hne)
+
+/-- Pairwise squared-distance lower bounds imply generated global
+separation. -/
+theorem generatedGlobalSeparation_of_pairSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedPairLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedPairSqDistanceLowerBounds O hk base orientation lower) :
+    GeneratedSeparationInterface.GeneratedGlobalSeparation
+      O hk base orientation := by
+  intro i u j v hne
+  exact
+    one_le_eucDist_of_sqDistanceLowerBound
+      (hge_one i u j v hne) (hlower i u j v hne)
 
 /-- Uniform quantitative lower bounds imply generated global separation. -/
 theorem generatedGlobalSeparation_of_uniformDistanceLowerBound
@@ -163,6 +222,59 @@ theorem generatedGlobalSeparation_of_crossBlockDistanceLowerBounds
   case neg =>
     exact le_trans (hge_one i u j v hij) (hlower i u j v hij)
 
+/-- Cross-block squared-distance lower bounds imply separation for every
+cross-block pair. -/
+theorem generatedCrossBlockSeparation_of_crossBlockSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedCrossBlockLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedCrossBlockSqDistanceLowerBounds O hk base orientation lower) :
+    forall (i : Fin k) (u : LocalVertex) (j : Fin k) (v : LocalVertex),
+      Ne i j ->
+        1 <=
+          _root_.eucDist
+            (GeneratedClosedChain.generatedPoint O hk base orientation i u)
+            (GeneratedClosedChain.generatedPoint O hk base orientation j v) := by
+  intro i u j v hij
+  exact
+    one_le_eucDist_of_sqDistanceLowerBound
+      (hge_one i u j v hij) (hlower i u j v hij)
+
+/-- Cross-block squared-distance lower bounds, plus finite same-block
+separation, imply generated global separation. -/
+theorem generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (same_block_isometry :
+      GeneratedSeparationInterface.GeneratedSameBlockIsometry
+        O hk base orientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedCrossBlockLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedCrossBlockSqDistanceLowerBounds O hk base orientation lower) :
+    GeneratedSeparationInterface.GeneratedGlobalSeparation
+      O hk base orientation := by
+  intro i u j v hne
+  by_cases hij : i = j
+  case pos =>
+    subst j
+    have huv : Ne u v := by
+      intro huv
+      exact hne (Prod.ext rfl huv)
+    exact
+      generatedSameBlockSeparation_of_sameBlockIsometry
+        O hk base orientation same_block_isometry i u v huv
+  case neg =>
+    exact
+      generatedCrossBlockSeparation_of_crossBlockSqDistanceLowerBounds
+        O hk base orientation lower hge_one hlower i u j v hij
+
 /-- Uniform cross-block lower bounds, plus finite same-block separation, imply
 generated global separation. -/
 theorem generatedGlobalSeparation_of_uniformCrossBlockDistanceLowerBound
@@ -216,6 +328,32 @@ theorem generatedGlobalSeparation_of_crossBlockDistanceLowerBounds_reduced
         transition_preserves_same_block_distances)
       lower hge_one hlower
 
+/-- Cross-block squared-distance lower bounds with reduced same-block
+hypotheses. -/
+theorem generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (base_same_block_isometry :
+      GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base)
+    (transition_preserves_same_block_distances :
+      GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+        O)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedCrossBlockLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedCrossBlockSqDistanceLowerBounds O hk base orientation lower) :
+    GeneratedSeparationInterface.GeneratedGlobalSeparation
+      O hk base orientation := by
+  exact
+    generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds
+      O hk base orientation
+      (GeneratedClosedChain.generatedPoint_same_block_isometry
+        O hk base orientation base_same_block_isometry
+        transition_preserves_same_block_distances)
+      lower hge_one hlower
+
 /-- Uniform cross-block lower bounds with reduced same-block hypotheses. -/
 theorem generatedGlobalSeparation_of_uniformCrossBlockDistanceLowerBound_reduced
     (O : Figure2Certificate.SameOppositeTransitionObligations)
@@ -246,6 +384,23 @@ theorem generatedGlobalSeparation_of_uniformCrossBlockDistanceLowerBound_reduced
         transition_preserves_same_block_distances)
       hdelta hlower
 
+/-- Reduced generated metric hypotheses can be promoted to the full metric
+facade by deriving same-block isometry along the generated orbit. -/
+def generatedMetricHypotheses_of_reducedMetricHypotheses
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      O hk base orientation where
+  separated := H.separated
+  same_block_isometry :=
+    GeneratedSeparationInterface.same_block_isometry_of_reduced
+      O hk base orientation H
+
 /-- Package full generated metric hypotheses from per-pair lower bounds. -/
 def generatedMetricHypotheses_of_pairDistanceLowerBounds
     (O : Figure2Certificate.SameOppositeTransitionObligations)
@@ -263,6 +418,27 @@ def generatedMetricHypotheses_of_pairDistanceLowerBounds
       O hk base orientation where
   separated :=
     generatedGlobalSeparation_of_pairDistanceLowerBounds
+      O hk base orientation lower hge_one hlower
+  same_block_isometry := same_block_isometry
+
+/-- Package full generated metric hypotheses from per-pair squared-distance
+lower bounds. -/
+def generatedMetricHypotheses_of_pairSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (same_block_isometry :
+      GeneratedSeparationInterface.GeneratedSameBlockIsometry
+        O hk base orientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedPairLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedPairSqDistanceLowerBounds O hk base orientation lower) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      O hk base orientation where
+  separated :=
+    generatedGlobalSeparation_of_pairSqDistanceLowerBounds
       O hk base orientation lower hge_one hlower
   same_block_isometry := same_block_isometry
 
@@ -290,6 +466,31 @@ def generatedReducedMetricHypotheses_of_pairDistanceLowerBounds
   transition_preserves_same_block_distances :=
     transition_preserves_same_block_distances
 
+/-- Package reduced generated metric hypotheses from per-pair squared-distance
+lower bounds. -/
+def generatedReducedMetricHypotheses_of_pairSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (base_same_block_isometry :
+      GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base)
+    (transition_preserves_same_block_distances :
+      GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+        O)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedPairLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedPairSqDistanceLowerBounds O hk base orientation lower) :
+    GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+      O hk base orientation where
+  separated :=
+    generatedGlobalSeparation_of_pairSqDistanceLowerBounds
+      O hk base orientation lower hge_one hlower
+  base_same_block_isometry := base_same_block_isometry
+  transition_preserves_same_block_distances :=
+    transition_preserves_same_block_distances
+
 /-- Package full generated metric hypotheses from cross-block lower bounds,
 using finite same-block separation for pairs in the same block. -/
 def generatedMetricHypotheses_of_crossBlockDistanceLowerBounds
@@ -308,6 +509,27 @@ def generatedMetricHypotheses_of_crossBlockDistanceLowerBounds
       O hk base orientation where
   separated :=
     generatedGlobalSeparation_of_crossBlockDistanceLowerBounds
+      O hk base orientation same_block_isometry lower hge_one hlower
+  same_block_isometry := same_block_isometry
+
+/-- Package full generated metric hypotheses from cross-block squared-distance
+lower bounds, using finite same-block separation for pairs in the same block. -/
+def generatedMetricHypotheses_of_crossBlockSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (same_block_isometry :
+      GeneratedSeparationInterface.GeneratedSameBlockIsometry
+        O hk base orientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedCrossBlockLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedCrossBlockSqDistanceLowerBounds O hk base orientation lower) :
+    GeneratedSeparationInterface.GeneratedMetricHypotheses
+      O hk base orientation where
+  separated :=
+    generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds
       O hk base orientation same_block_isometry lower hge_one hlower
   same_block_isometry := same_block_isometry
 
@@ -331,6 +553,33 @@ def generatedReducedMetricHypotheses_of_crossBlockDistanceLowerBounds
       O hk base orientation where
   separated :=
     generatedGlobalSeparation_of_crossBlockDistanceLowerBounds_reduced
+      O hk base orientation base_same_block_isometry
+      transition_preserves_same_block_distances lower hge_one hlower
+  base_same_block_isometry := base_same_block_isometry
+  transition_preserves_same_block_distances :=
+    transition_preserves_same_block_distances
+
+/-- Package reduced generated metric hypotheses from cross-block
+squared-distance lower bounds, using finite same-block separation for pairs in
+the same block. -/
+def generatedReducedMetricHypotheses_of_crossBlockSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (base_same_block_isometry :
+      GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base)
+    (transition_preserves_same_block_distances :
+      GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+        O)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedCrossBlockLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedCrossBlockSqDistanceLowerBounds O hk base orientation lower) :
+    GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+      O hk base orientation where
+  separated :=
+    generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds_reduced
       O hk base orientation base_same_block_isometry
       transition_preserves_same_block_distances lower hge_one hlower
   base_same_block_isometry := base_same_block_isometry
@@ -384,6 +633,53 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_pairDistanceLowerBoun
         O hk base orientation base_same_block_isometry
         transition_preserves_same_block_distances lower hge_one hlower)
 
+/-- Exact-block target from one period equation, same-block isometry, and
+per-pair squared-distance lower bounds. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_pairSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period : PeriodInterface.GeneratedPeriodEquation O hk base orientation)
+    (same_block_isometry :
+      GeneratedSeparationInterface.GeneratedSameBlockIsometry
+        O hk base orientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedPairLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedPairSqDistanceLowerBounds O hk base orientation lower) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation
+      O hk base orientation period
+      (generatedMetricHypotheses_of_pairSqDistanceLowerBounds
+        O hk base orientation same_block_isometry lower hge_one hlower)
+
+/-- Exact-block target from one period equation, reduced same-block data, and
+per-pair squared-distance lower bounds. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_pairSqDistanceLowerBounds_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period : PeriodInterface.GeneratedPeriodEquation O hk base orientation)
+    (base_same_block_isometry :
+      GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base)
+    (transition_preserves_same_block_distances :
+      GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+        O)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedPairLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedPairSqDistanceLowerBounds O hk base orientation lower) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation_reduced
+      O hk base orientation period
+      (generatedReducedMetricHypotheses_of_pairSqDistanceLowerBounds
+        O hk base orientation base_same_block_isometry
+        transition_preserves_same_block_distances lower hge_one hlower)
+
 /-- Exact-block target from one period equation and cross-block lower bounds.
 Same-block separation is obtained from the checked finite block. -/
 theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_crossBlockDistanceLowerBounds
@@ -428,6 +724,54 @@ theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_crossBlockDistanceLow
     targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation_reduced
       O hk base orientation period
       (generatedReducedMetricHypotheses_of_crossBlockDistanceLowerBounds
+        O hk base orientation base_same_block_isometry
+        transition_preserves_same_block_distances lower hge_one hlower)
+
+/-- Exact-block target from one period equation and cross-block
+squared-distance lower bounds.  Same-block separation is obtained from the
+checked finite block. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_crossBlockSqDistanceLowerBounds
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period : PeriodInterface.GeneratedPeriodEquation O hk base orientation)
+    (same_block_isometry :
+      GeneratedSeparationInterface.GeneratedSameBlockIsometry
+        O hk base orientation)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedCrossBlockLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedCrossBlockSqDistanceLowerBounds O hk base orientation lower) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation
+      O hk base orientation period
+      (generatedMetricHypotheses_of_crossBlockSqDistanceLowerBounds
+        O hk base orientation same_block_isometry lower hge_one hlower)
+
+/-- Exact-block target from one period equation, reduced same-block data, and
+cross-block squared-distance lower bounds. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock_of_crossBlockSqDistanceLowerBounds_reduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (period : PeriodInterface.GeneratedPeriodEquation O hk base orientation)
+    (base_same_block_isometry :
+      GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry base)
+    (transition_preserves_same_block_distances :
+      GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+        O)
+    (lower : Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one : GeneratedCrossBlockLowerBoundsAtLeastOne lower)
+    (hlower :
+      GeneratedCrossBlockSqDistanceLowerBounds O hk base orientation lower) :
+    targetUpperConstructionFiveSixteenAt (16 * k) := by
+  exact
+    targetUpperConstructionFiveSixteenAt_exactBlock_of_generatedPeriodEquation_reduced
+      O hk base orientation period
+      (generatedReducedMetricHypotheses_of_crossBlockSqDistanceLowerBounds
         O hk base orientation base_same_block_isometry
         transition_preserves_same_block_distances lower hge_one hlower)
 
@@ -512,6 +856,88 @@ theorem targetUpperConstructionFiveSixteen_of_period_pairDistanceLowerBounds_red
       base_same_block_isometry
       transition_preserves_same_block_distances
 
+/-- Exact Pach--Toth target from generated period equations and per-pair
+squared-distance lower bounds for every positive block count. -/
+theorem targetUpperConstructionFiveSixteen_of_period_pairSqDistanceLowerBounds
+    (O :
+      forall (k : Nat), 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base : forall (k : Nat), 0 < k -> LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hk) hk (base k hk) (orientation k hk))
+    (same_block_isometry :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedSameBlockIsometry
+          (O k hk) hk (base k hk) (orientation k hk))
+    (lower :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedPairLowerBoundsAtLeastOne (lower k hk))
+    (hlower :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedPairSqDistanceLowerBounds
+          (O k hk) hk (base k hk) (orientation k hk) (lower k hk)) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    GeneratedPeriodClosure.targetUpperConstructionFiveSixteen_of_period_separation_sameBlock
+      O base orientation period
+      (fun k hk =>
+        generatedGlobalSeparation_of_pairSqDistanceLowerBounds
+          (O k hk) hk (base k hk) (orientation k hk) (lower k hk)
+          (hge_one k hk) (hlower k hk))
+      same_block_isometry
+
+/-- Exact Pach--Toth target from generated period equations, reduced
+same-block data, and per-pair squared-distance lower bounds for every positive
+block count. -/
+theorem targetUpperConstructionFiveSixteen_of_period_pairSqDistanceLowerBounds_reduced
+    (O :
+      forall (k : Nat), 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base : forall (k : Nat), 0 < k -> LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hk) hk (base k hk) (orientation k hk))
+    (base_same_block_isometry :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry
+          (base k hk))
+    (transition_preserves_same_block_distances :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+          (O k hk))
+    (lower :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedPairLowerBoundsAtLeastOne (lower k hk))
+    (hlower :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedPairSqDistanceLowerBounds
+          (O k hk) hk (base k hk) (orientation k hk) (lower k hk)) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    GeneratedPeriodClosure.targetUpperConstructionFiveSixteen_of_period_separation_reducedSameBlock
+      O base orientation period
+      (fun k hk =>
+        generatedGlobalSeparation_of_pairSqDistanceLowerBounds
+          (O k hk) hk (base k hk) (orientation k hk) (lower k hk)
+          (hge_one k hk) (hlower k hk))
+      base_same_block_isometry
+      transition_preserves_same_block_distances
+
 /-- Exact Pach--Toth target from generated period equations and cross-block
 lower bounds for every positive block count. -/
 theorem targetUpperConstructionFiveSixteen_of_period_crossBlockDistanceLowerBounds
@@ -589,6 +1015,91 @@ theorem targetUpperConstructionFiveSixteen_of_period_crossBlockDistanceLowerBoun
       O base orientation period
       (fun k hk =>
         generatedGlobalSeparation_of_crossBlockDistanceLowerBounds_reduced
+          (O k hk) hk (base k hk) (orientation k hk)
+          (base_same_block_isometry k hk)
+          (transition_preserves_same_block_distances k hk)
+          (lower k hk) (hge_one k hk) (hlower k hk))
+      base_same_block_isometry
+      transition_preserves_same_block_distances
+
+/-- Exact Pach--Toth target from generated period equations and cross-block
+squared-distance lower bounds for every positive block count. -/
+theorem targetUpperConstructionFiveSixteen_of_period_crossBlockSqDistanceLowerBounds
+    (O :
+      forall (k : Nat), 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base : forall (k : Nat), 0 < k -> LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hk) hk (base k hk) (orientation k hk))
+    (same_block_isometry :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedSameBlockIsometry
+          (O k hk) hk (base k hk) (orientation k hk))
+    (lower :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedCrossBlockLowerBoundsAtLeastOne (lower k hk))
+    (hlower :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedCrossBlockSqDistanceLowerBounds
+          (O k hk) hk (base k hk) (orientation k hk) (lower k hk)) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    GeneratedPeriodClosure.targetUpperConstructionFiveSixteen_of_period_separation_sameBlock
+      O base orientation period
+      (fun k hk =>
+        generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds
+          (O k hk) hk (base k hk) (orientation k hk)
+          (same_block_isometry k hk) (lower k hk)
+          (hge_one k hk) (hlower k hk))
+      same_block_isometry
+
+/-- Exact Pach--Toth target from generated period equations, reduced
+same-block data, and cross-block squared-distance lower bounds for every
+positive block count. -/
+theorem targetUpperConstructionFiveSixteen_of_period_crossBlockSqDistanceLowerBounds_reduced
+    (O :
+      forall (k : Nat), 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base : forall (k : Nat), 0 < k -> LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hk) hk (base k hk) (orientation k hk))
+    (base_same_block_isometry :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry
+          (base k hk))
+    (transition_preserves_same_block_distances :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+          (O k hk))
+    (lower :
+      forall (k : Nat) (_hk : 0 < k),
+        Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedCrossBlockLowerBoundsAtLeastOne (lower k hk))
+    (hlower :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedCrossBlockSqDistanceLowerBounds
+          (O k hk) hk (base k hk) (orientation k hk) (lower k hk)) :
+    targetUpperConstructionFiveSixteen := by
+  exact
+    GeneratedPeriodClosure.targetUpperConstructionFiveSixteen_of_period_separation_reducedSameBlock
+      O base orientation period
+      (fun k hk =>
+        generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds_reduced
           (O k hk) hk (base k hk) (orientation k hk)
           (base_same_block_isometry k hk)
           (transition_preserves_same_block_distances k hk)
@@ -715,6 +1226,126 @@ theorem targetArbitrary_of_eventual_period_pairDistanceLowerBounds_and_small_red
       Hsmall
 
 /-- Arbitrary-`n` Pach--Toth target from eventual generated period equations,
+same-block isometry, per-pair squared-distance lower bounds, and the supplied
+small cases. -/
+theorem targetArbitrary_of_eventual_period_pairSqDistanceLowerBounds_and_small
+    (K0 : Nat)
+    (O :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk))
+    (same_block_isometry :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedSameBlockIsometry
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk))
+    (lower :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedPairLowerBoundsAtLeastOne (lower k hK hk))
+    (hlower :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedPairSqDistanceLowerBounds
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+          (lower k hK hk))
+    (Hsmall :
+      forall N0 : Nat,
+        (forall n : Nat, N0 <= n -> targetUpperConstructionFiveSixteenAt n) ->
+          targetUpperConstructionFiveSixteenSmallUpTo N0) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  let F : GeneratedSeparationInterface.EventualGeneratedChainFamily K0 :=
+    { O := O
+      base := base
+      orientation := orientation }
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_eventual_family_and_small
+      F
+      (fun k hK hk =>
+        GeneratedPeriodClosure.generatedPeriod_of_generatedPeriodEquation
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+          (period k hK hk))
+      { metric := fun k hK hk =>
+          { separated :=
+              generatedGlobalSeparation_of_pairSqDistanceLowerBounds
+                (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+                (lower k hK hk) (hge_one k hK hk) (hlower k hK hk)
+            same_block_isometry := same_block_isometry k hK hk } }
+      Hsmall
+
+/-- Arbitrary-`n` Pach--Toth target from eventual generated period equations,
+reduced same-block data, per-pair squared-distance lower bounds, and the
+supplied small cases. -/
+theorem targetArbitrary_of_eventual_period_pairSqDistanceLowerBounds_and_small_reduced
+    (K0 : Nat)
+    (O :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk))
+    (base_same_block_isometry :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry
+          (base k hK hk))
+    (transition_preserves_same_block_distances :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+          (O k hK hk))
+    (lower :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedPairLowerBoundsAtLeastOne (lower k hK hk))
+    (hlower :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedPairSqDistanceLowerBounds
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+          (lower k hK hk))
+    (Hsmall :
+      forall N0 : Nat,
+        (forall n : Nat, N0 <= n -> targetUpperConstructionFiveSixteenAt n) ->
+          targetUpperConstructionFiveSixteenSmallUpTo N0) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  let F : GeneratedSeparationInterface.EventualGeneratedChainFamily K0 :=
+    { O := O
+      base := base
+      orientation := orientation }
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_eventual_family_and_small_reduced
+      F
+      (fun k hK hk =>
+        GeneratedPeriodClosure.generatedPeriod_of_generatedPeriodEquation
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+          (period k hK hk))
+      { metric := fun k hK hk =>
+          { separated :=
+              generatedGlobalSeparation_of_pairSqDistanceLowerBounds
+                (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+                (lower k hK hk) (hge_one k hK hk) (hlower k hK hk)
+            base_same_block_isometry := base_same_block_isometry k hK hk
+            transition_preserves_same_block_distances :=
+              transition_preserves_same_block_distances k hK hk } }
+      Hsmall
+
+/-- Arbitrary-`n` Pach--Toth target from eventual generated period equations,
 same-block isometry, cross-block lower bounds, and the supplied small cases. -/
 theorem targetArbitrary_of_eventual_period_crossBlockDistanceLowerBounds_and_small
     (K0 : Nat)
@@ -827,6 +1458,129 @@ theorem targetArbitrary_of_eventual_period_crossBlockDistanceLowerBounds_and_sma
       { metric := fun k hK hk =>
           { separated :=
               generatedGlobalSeparation_of_crossBlockDistanceLowerBounds_reduced
+                (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+                (base_same_block_isometry k hK hk)
+                (transition_preserves_same_block_distances k hK hk)
+                (lower k hK hk) (hge_one k hK hk) (hlower k hK hk)
+            base_same_block_isometry := base_same_block_isometry k hK hk
+            transition_preserves_same_block_distances :=
+              transition_preserves_same_block_distances k hK hk } }
+      Hsmall
+
+/-- Arbitrary-`n` Pach--Toth target from eventual generated period equations,
+same-block isometry, cross-block squared-distance lower bounds, and the
+supplied small cases. -/
+theorem targetArbitrary_of_eventual_period_crossBlockSqDistanceLowerBounds_and_small
+    (K0 : Nat)
+    (O :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk))
+    (same_block_isometry :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedSameBlockIsometry
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk))
+    (lower :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedCrossBlockLowerBoundsAtLeastOne (lower k hK hk))
+    (hlower :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedCrossBlockSqDistanceLowerBounds
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+          (lower k hK hk))
+    (Hsmall :
+      forall N0 : Nat,
+        (forall n : Nat, N0 <= n -> targetUpperConstructionFiveSixteenAt n) ->
+          targetUpperConstructionFiveSixteenSmallUpTo N0) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  let F : GeneratedSeparationInterface.EventualGeneratedChainFamily K0 :=
+    { O := O
+      base := base
+      orientation := orientation }
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_eventual_family_and_small
+      F
+      (fun k hK hk =>
+        GeneratedPeriodClosure.generatedPeriod_of_generatedPeriodEquation
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+          (period k hK hk))
+      { metric := fun k hK hk =>
+          { separated :=
+              generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds
+                (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+                (same_block_isometry k hK hk) (lower k hK hk)
+                (hge_one k hK hk) (hlower k hK hk)
+            same_block_isometry := same_block_isometry k hK hk } }
+      Hsmall
+
+/-- Arbitrary-`n` Pach--Toth target from eventual generated period equations,
+reduced same-block data, cross-block squared-distance lower bounds, and the
+supplied small cases. -/
+theorem targetArbitrary_of_eventual_period_crossBlockSqDistanceLowerBounds_and_small_reduced
+    (K0 : Nat)
+    (O :
+      forall (k : Nat), K0 <= k -> 0 < k ->
+        Figure2Certificate.SameOppositeTransitionObligations)
+    (base :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        LocalVertex -> R2)
+    (orientation :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        Fin k -> OrientationData.BlockOrientation)
+    (period :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        PeriodInterface.GeneratedPeriodEquation
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk))
+    (base_same_block_isometry :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedBaseSameBlockIsometry
+          (base k hK hk))
+    (transition_preserves_same_block_distances :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedTransitionsPreserveSameBlockDistances
+          (O k hK hk))
+    (lower :
+      forall (k : Nat) (_hK : K0 <= k) (_hk : 0 < k),
+        Fin k -> LocalVertex -> Fin k -> LocalVertex -> Real)
+    (hge_one :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedCrossBlockLowerBoundsAtLeastOne (lower k hK hk))
+    (hlower :
+      forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
+        GeneratedCrossBlockSqDistanceLowerBounds
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+          (lower k hK hk))
+    (Hsmall :
+      forall N0 : Nat,
+        (forall n : Nat, N0 <= n -> targetUpperConstructionFiveSixteenAt n) ->
+          targetUpperConstructionFiveSixteenSmallUpTo N0) :
+    targetUpperConstructionFiveSixteenArbitrary := by
+  let F : GeneratedSeparationInterface.EventualGeneratedChainFamily K0 :=
+    { O := O
+      base := base
+      orientation := orientation }
+  exact
+    targetUpperConstructionFiveSixteenArbitrary_of_eventual_family_and_small_reduced
+      F
+      (fun k hK hk =>
+        GeneratedPeriodClosure.generatedPeriod_of_generatedPeriodEquation
+          (O k hK hk) hk (base k hK hk) (orientation k hK hk)
+          (period k hK hk))
+      { metric := fun k hK hk =>
+          { separated :=
+              generatedGlobalSeparation_of_crossBlockSqDistanceLowerBounds_reduced
                 (O k hK hk) hk (base k hK hk) (orientation k hK hk)
                 (base_same_block_isometry k hK hk)
                 (transition_preserves_same_block_distances k hK hk)

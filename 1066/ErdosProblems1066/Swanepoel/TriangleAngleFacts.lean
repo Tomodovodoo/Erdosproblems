@@ -160,10 +160,133 @@ lemma sqDist_le_one_of_unit_sides_half_le_dotAt
   have h := sqDist_eq_two_sub_two_dotAt_of_unit_sides hab hcb
   nlinarith
 
+/-- For two unit sides from `b`, a separated base is equivalent to the
+dot-product bound used by the angle API. -/
+lemma one_le_sqDist_iff_dotAt_le_half_of_unit_sides
+    {a b c : Point} (hab : sqDist a b = 1) (hcb : sqDist c b = 1) :
+    1 <= sqDist a c <-> dotAt a b c <= 1 / 2 := by
+  constructor
+  · intro hbase
+    exact dotAt_le_half_of_unit_sides_sqDist_ge_one hab hcb hbase
+  · intro hdot
+    exact one_le_sqDist_of_unit_sides_dotAt_le_half hab hcb hdot
+
+/-- For two unit sides from `b`, a base of squared length at most one is
+equivalent to dot product at least `1 / 2`. -/
+lemma sqDist_le_one_iff_half_le_dotAt_of_unit_sides
+    {a b c : Point} (hab : sqDist a b = 1) (hcb : sqDist c b = 1) :
+    sqDist a c <= 1 <-> 1 / 2 <= dotAt a b c := by
+  constructor
+  · intro hbase
+    exact half_le_dotAt_of_unit_sides_sqDist_le_one hab hcb hbase
+  · intro hdot
+    exact sqDist_le_one_of_unit_sides_half_le_dotAt hab hcb hdot
+
+/-- For two unit sides from `b`, the base is unit exactly when the dot product
+is `1 / 2`. -/
+lemma sqDist_eq_one_iff_dotAt_eq_half_of_unit_sides
+    {a b c : Point} (hab : sqDist a b = 1) (hcb : sqDist c b = 1) :
+    sqDist a c = 1 <-> dotAt a b c = 1 / 2 := by
+  constructor
+  · intro hbase
+    exact dotAt_eq_half_of_equilateral_unit hab hcb hbase
+  · intro hdot
+    have h := sqDist_eq_two_sub_two_dotAt_of_unit_sides hab hcb
+    nlinarith
+
+/-- Symmetric orientation of
+`sqDist_eq_one_iff_dotAt_eq_half_of_unit_sides`. -/
+lemma dotAt_eq_half_iff_sqDist_eq_one_of_unit_sides
+    {a b c : Point} (hab : sqDist a b = 1) (hcb : sqDist c b = 1) :
+    dotAt a b c = 1 / 2 <-> sqDist a c = 1 :=
+  Iff.symm (sqDist_eq_one_iff_dotAt_eq_half_of_unit_sides hab hcb)
+
 /-- Squared distance version of the geometry module's unit-distance predicate. -/
 lemma geometry_eucDist_eq_one_iff_sqDist_eq_one (p q : Point) :
     Geometry.Distance.eucDist p q = 1 <-> sqDist p q = 1 := by
   rw [Geometry.Distance.eucDist_eq_one_iff, sqDist_eq]
+
+/-- Squared distance version of the geometry module's separation predicate. -/
+lemma geometry_eucDist_ge_one_iff_one_le_sqDist (p q : Point) :
+    1 <= Geometry.Distance.eucDist p q <-> 1 <= sqDist p q := by
+  rw [Geometry.Distance.eucDist_ge_one_iff, sqDist_eq]
+
+lemma sqDist_eq_one_of_geometry_eucDist_eq_one
+    {p q : Point} (h : Geometry.Distance.eucDist p q = 1) :
+    sqDist p q = 1 :=
+  (geometry_eucDist_eq_one_iff_sqDist_eq_one p q).mp h
+
+lemma geometry_eucDist_eq_one_of_sqDist_eq_one
+    {p q : Point} (h : sqDist p q = 1) :
+    Geometry.Distance.eucDist p q = 1 :=
+  (geometry_eucDist_eq_one_iff_sqDist_eq_one p q).mpr h
+
+lemma one_le_sqDist_of_geometry_eucDist_ge_one
+    {p q : Point} (h : 1 <= Geometry.Distance.eucDist p q) :
+    1 <= sqDist p q :=
+  (geometry_eucDist_ge_one_iff_one_le_sqDist p q).mp h
+
+lemma geometry_eucDist_ge_one_of_one_le_sqDist
+    {p q : Point} (h : 1 <= sqDist p q) :
+    1 <= Geometry.Distance.eucDist p q :=
+  (geometry_eucDist_ge_one_iff_one_le_sqDist p q).mpr h
+
+/-- Raw `Geometry.Distance.eucDist` wrapper for the Figure 8/9 dot-product
+bridge: two unit sides and a separated base force dot product at most
+`1 / 2`. -/
+lemma dotAt_le_half_of_geometry_unit_sides_geometry_separated_base
+    {a b c : Point}
+    (hab : Geometry.Distance.eucDist a b = 1)
+    (hcb : Geometry.Distance.eucDist c b = 1)
+    (hac : 1 <= Geometry.Distance.eucDist a c) :
+    dotAt a b c <= 1 / 2 :=
+  dotAt_le_half_of_unit_sides_sqDist_ge_one
+    (sqDist_eq_one_of_geometry_eucDist_eq_one hab)
+    (sqDist_eq_one_of_geometry_eucDist_eq_one hcb)
+    (one_le_sqDist_of_geometry_eucDist_ge_one hac)
+
+/-- Converse raw-distance wrapper: with two unit sides, the dot-product bound
+forces the endpoints to be separated by Euclidean distance at least one. -/
+lemma geometry_separated_base_of_geometry_unit_sides_dotAt_le_half
+    {a b c : Point}
+    (hab : Geometry.Distance.eucDist a b = 1)
+    (hcb : Geometry.Distance.eucDist c b = 1)
+    (hdot : dotAt a b c <= 1 / 2) :
+    1 <= Geometry.Distance.eucDist a c :=
+  geometry_eucDist_ge_one_of_one_le_sqDist
+    (one_le_sqDist_of_unit_sides_dotAt_le_half
+      (sqDist_eq_one_of_geometry_eucDist_eq_one hab)
+      (sqDist_eq_one_of_geometry_eucDist_eq_one hcb)
+      hdot)
+
+/-- Raw-distance equilateral wrapper: three unit Euclidean sides force the
+dot product at the chosen vertex to be `1 / 2`. -/
+lemma dotAt_eq_half_of_geometry_equilateral_unit
+    {a b c : Point}
+    (hab : Geometry.Distance.eucDist a b = 1)
+    (hcb : Geometry.Distance.eucDist c b = 1)
+    (hac : Geometry.Distance.eucDist a c = 1) :
+    dotAt a b c = 1 / 2 :=
+  dotAt_eq_half_of_equilateral_unit
+    (sqDist_eq_one_of_geometry_eucDist_eq_one hab)
+    (sqDist_eq_one_of_geometry_eucDist_eq_one hcb)
+    (sqDist_eq_one_of_geometry_eucDist_eq_one hac)
+
+/-- With two Euclidean unit sides from `b`, the base is Euclidean-unit exactly
+when the dot product at `b` is `1 / 2`. -/
+lemma geometry_eucDist_eq_one_iff_dotAt_eq_half_of_geometry_unit_sides
+    {a b c : Point}
+    (hab : Geometry.Distance.eucDist a b = 1)
+    (hcb : Geometry.Distance.eucDist c b = 1) :
+    Geometry.Distance.eucDist a c = 1 <-> dotAt a b c = 1 / 2 := by
+  constructor
+  · intro hac
+    exact dotAt_eq_half_of_geometry_equilateral_unit hab hcb hac
+  · intro hdot
+    exact geometry_eucDist_eq_one_of_sqDist_eq_one
+      ((dotAt_eq_half_iff_sqDist_eq_one_of_unit_sides
+        (sqDist_eq_one_of_geometry_eucDist_eq_one hab)
+        (sqDist_eq_one_of_geometry_eucDist_eq_one hcb)).mp hdot)
 
 /-- Concrete equilateral unit triangle: base points `(0,0)`, `(1,0)` and
 third point `(1/2, sqrt 3 / 2)`. -/

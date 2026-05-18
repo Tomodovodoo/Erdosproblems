@@ -1,4 +1,6 @@
 import ErdosProblems1066.Swanepoel.AngleGeometry
+import ErdosProblems1066.Swanepoel.AngleContainmentInterface
+import ErdosProblems1066.Swanepoel.BrokenLatticeMinimalFailure
 import ErdosProblems1066.Swanepoel.Lemma10EuclideanBridge
 
 /-!
@@ -17,12 +19,16 @@ namespace Swanepoel
 namespace Lemma10WindowGeometry
 
 open AngleBridgeFacts
+open AngleContainmentInterface
 open AngleGeometry
+open BrokenLatticeMinimalFailure
 open Lemma10AnalyticBridge
+open Lemma10AngleToTurn
 open Lemma10Bridge
 open Lemma10EuclideanBridge
 open Lemma10Inequalities
 open LocalConfigurations
+open MinimalGraphFacts
 open TriangleAngleFacts
 
 universe u
@@ -296,6 +302,116 @@ theorem E22_E23_of_leftWindowGeometry
     (figure8SeparatedWindowLowerE22_of_windowGeometry H8)
     (figure9AdjacentWindowLowerE23_of_leftWindowGeometry H9)
 
+/-! Angle-to-turn and containment interfaces as window geometry. -/
+
+def figure8SeparatedWindowGeometry_of_angleToTurnBridge
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedAngleToTurnBridge good turn) :
+    Figure8SeparatedWindowGeometry good turn := by
+  intro i j hi hsep hj hbad_i hbad_j
+  match H.distance_data hi hsep hj hbad_i hbad_j with
+  | Exists.intro p hp =>
+    match hp with
+    | Exists.intro qi hqi =>
+      match hqi with
+      | Exists.intro qj hqj =>
+        match hqj with
+        | Exists.intro s hs =>
+          match hs with
+          | Exists.intro r D =>
+            exact Exists.intro p <|
+              Exists.intro qi <|
+                Exists.intro qj <|
+                  Exists.intro s <|
+                    Exists.intro r <|
+                      And.intro D
+                        (H.central_angle_le_separatedTurn
+                          hi hsep hj hbad_i hbad_j D)
+
+def figure9AdjacentLeftWindowGeometry_of_angleToTurnBridge
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftAngleToTurnBridge good turn) :
+    Figure9AdjacentLeftWindowGeometry good turn := by
+  intro i hi hi_next hbad_i hbad_next
+  match H.distance_data hi hi_next hbad_i hbad_next with
+  | Exists.intro p hp =>
+    match hp with
+    | Exists.intro qi hqi =>
+      match hqi with
+      | Exists.intro qj hqj =>
+        match hqj with
+        | Exists.intro s hs =>
+          match hs with
+          | Exists.intro r D =>
+            exact Exists.intro p <|
+              Exists.intro qi <|
+                Exists.intro qj <|
+                  Exists.intro s <|
+                    Exists.intro r <|
+                      And.intro D
+                        (H.left_angle_le_adjacentTurn
+                          hi hi_next hbad_i hbad_next D)
+
+theorem figure8SeparatedWindowLowerE22_of_angleToTurnBridge_via_windowGeometry
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedAngleToTurnBridge good turn) :
+    Figure8SeparatedWindowLowerE22 good turn :=
+  figure8SeparatedWindowLowerE22_of_windowGeometry
+    (figure8SeparatedWindowGeometry_of_angleToTurnBridge H)
+
+theorem figure9AdjacentWindowLowerE23_of_leftAngleToTurnBridge_via_windowGeometry
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftAngleToTurnBridge good turn) :
+    Figure9AdjacentWindowLowerE23 good turn :=
+  figure9AdjacentWindowLowerE23_of_leftWindowGeometry
+    (figure9AdjacentLeftWindowGeometry_of_angleToTurnBridge H)
+
+def figure8SeparatedWindowGeometry_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedContainmentInterface good turn) :
+    Figure8SeparatedWindowGeometry good turn :=
+  figure8SeparatedWindowGeometry_of_angleToTurnBridge
+    H.toAngleToTurnBridge
+
+def figure9AdjacentLeftWindowGeometry_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure9AdjacentLeftWindowGeometry good turn :=
+  figure9AdjacentLeftWindowGeometry_of_angleToTurnBridge
+    H.toAngleToTurnBridge
+
+theorem figure8SeparatedWindowLowerE22_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedContainmentInterface good turn) :
+    Figure8SeparatedWindowLowerE22 good turn :=
+  figure8SeparatedWindowLowerE22_of_angleToTurnBridge_via_windowGeometry
+    H.toAngleToTurnBridge
+
+theorem figure9AdjacentWindowLowerE23_of_leftContainmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure9AdjacentWindowLowerE23 good turn :=
+  figure9AdjacentWindowLowerE23_of_leftAngleToTurnBridge_via_windowGeometry
+    H.toAngleToTurnBridge
+
+def windowGeometryPair_of_angleContainmentBridges
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : AngleContainmentBridges good turn) :
+    Figure8SeparatedWindowGeometry good turn /\
+      Figure9AdjacentLeftWindowGeometry good turn :=
+  And.intro
+    (figure8SeparatedWindowGeometry_of_containmentInterface H.figure8)
+    (figure9AdjacentLeftWindowGeometry_of_containmentInterface H.figure9)
+
+theorem E22_E23_of_angleContainmentBridges_via_windowGeometry
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : AngleContainmentBridges good turn) :
+    Figure8SeparatedWindowLowerE22 good turn /\
+      Figure9AdjacentWindowLowerE23 good turn :=
+  E22_E23_of_leftWindowGeometry
+    (figure8SeparatedWindowGeometry_of_containmentInterface H.figure8)
+    (figure9AdjacentLeftWindowGeometry_of_containmentInterface H.figure9)
+
 /-! Specializations to the local m equals 8 and honest packages. -/
 
 def M8Figure8SeparatedWindowGeometry
@@ -307,6 +423,21 @@ def M8Figure9AdjacentLeftWindowGeometry
     {V : Type u} {G : LocalGraph V}
     (P : BrokenLatticePredicates G 8) (turn : Nat -> Real) : Prop :=
   Figure9AdjacentLeftWindowGeometry (M8BrokenLatticeGood P) turn
+
+def M8Figure8SeparatedContainmentInterface
+    {V : Type u} {G : LocalGraph V}
+    (P : BrokenLatticePredicates G 8) (turn : Nat -> Real) : Type :=
+  Figure8SeparatedContainmentInterface (M8BrokenLatticeGood P) turn
+
+def M8Figure9AdjacentLeftContainmentInterface
+    {V : Type u} {G : LocalGraph V}
+    (P : BrokenLatticePredicates G 8) (turn : Nat -> Real) : Type :=
+  Figure9AdjacentLeftContainmentInterface (M8BrokenLatticeGood P) turn
+
+def M8AngleContainmentBridges
+    {V : Type u} {G : LocalGraph V}
+    (P : BrokenLatticePredicates G 8) (turn : Nat -> Real) : Type :=
+  AngleContainmentBridges (M8BrokenLatticeGood P) turn
 
 theorem m8Figure8SeparatedWindowLowerE22_of_windowGeometry
     {V : Type u} {G : LocalGraph V}
@@ -333,6 +464,50 @@ theorem m8E22_E23_of_leftWindowGeometry
     (m8Figure8SeparatedWindowLowerE22_of_windowGeometry H8)
     (m8Figure9AdjacentWindowLowerE23_of_leftWindowGeometry H9)
 
+def m8Figure8SeparatedWindowGeometry_of_containmentInterface
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure8SeparatedContainmentInterface P turn) :
+    M8Figure8SeparatedWindowGeometry P turn :=
+  figure8SeparatedWindowGeometry_of_containmentInterface H
+
+def m8Figure9AdjacentLeftWindowGeometry_of_containmentInterface
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure9AdjacentLeftContainmentInterface P turn) :
+    M8Figure9AdjacentLeftWindowGeometry P turn :=
+  figure9AdjacentLeftWindowGeometry_of_containmentInterface H
+
+theorem m8Figure8SeparatedWindowLowerE22_of_containmentInterface
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure8SeparatedContainmentInterface P turn) :
+    M8Figure8SeparatedWindowLowerE22 P turn :=
+  figure8SeparatedWindowLowerE22_of_containmentInterface H
+
+theorem m8Figure9AdjacentWindowLowerE23_of_leftContainmentInterface
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8Figure9AdjacentLeftContainmentInterface P turn) :
+    M8Figure9AdjacentWindowLowerE23 P turn :=
+  figure9AdjacentWindowLowerE23_of_leftContainmentInterface H
+
+def m8WindowGeometryPair_of_angleContainmentBridges
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8AngleContainmentBridges P turn) :
+    M8Figure8SeparatedWindowGeometry P turn /\
+      M8Figure9AdjacentLeftWindowGeometry P turn :=
+  windowGeometryPair_of_angleContainmentBridges H
+
+theorem m8E22_E23_of_angleContainmentBridges
+    {V : Type u} {G : LocalGraph V}
+    {P : BrokenLatticePredicates G 8} {turn : Nat -> Real}
+    (H : M8AngleContainmentBridges P turn) :
+    M8Figure8SeparatedWindowLowerE22 P turn /\
+      M8Figure9AdjacentWindowLowerE23 P turn :=
+  E22_E23_of_angleContainmentBridges_via_windowGeometry H
+
 def HonestFigure8SeparatedWindowGeometry
     {V : Type u} {G : LocalGraph V}
     (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Prop :=
@@ -342,6 +517,21 @@ def HonestFigure9AdjacentLeftWindowGeometry
     {V : Type u} {G : LocalGraph V}
     (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Prop :=
   M8Figure9AdjacentLeftWindowGeometry P.data turn
+
+def HonestFigure8SeparatedContainmentInterface
+    {V : Type u} {G : LocalGraph V}
+    (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Type :=
+  M8Figure8SeparatedContainmentInterface P.data turn
+
+def HonestFigure9AdjacentLeftContainmentInterface
+    {V : Type u} {G : LocalGraph V}
+    (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Type :=
+  M8Figure9AdjacentLeftContainmentInterface P.data turn
+
+def HonestAngleContainmentBridges
+    {V : Type u} {G : LocalGraph V}
+    (P : M8HonestLocalPredicates G) (turn : Nat -> Real) : Type :=
+  M8AngleContainmentBridges P.data turn
 
 theorem honestFigure8SeparatedWindowLowerE22_of_windowGeometry
     {V : Type u} {G : LocalGraph V}
@@ -367,6 +557,58 @@ theorem honestE22_E23_of_leftWindowGeometry
   And.intro
     (honestFigure8SeparatedWindowLowerE22_of_windowGeometry H8)
     (honestFigure9AdjacentWindowLowerE23_of_leftWindowGeometry H9)
+
+def honestFigure8SeparatedWindowGeometry_of_containmentInterface
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedContainmentInterface P turn) :
+    HonestFigure8SeparatedWindowGeometry P turn :=
+  m8Figure8SeparatedWindowGeometry_of_containmentInterface H
+
+def honestFigure9AdjacentLeftWindowGeometry_of_containmentInterface
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftContainmentInterface P turn) :
+    HonestFigure9AdjacentLeftWindowGeometry P turn :=
+  m8Figure9AdjacentLeftWindowGeometry_of_containmentInterface H
+
+theorem honestFigure8SeparatedWindowLowerE22_of_containmentInterface
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure8SeparatedContainmentInterface P turn) :
+    HonestFigure8SeparatedWindowLowerE22 P turn :=
+  m8Figure8SeparatedWindowLowerE22_of_containmentInterface H
+
+theorem honestFigure9AdjacentWindowLowerE23_of_leftContainmentInterface
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestFigure9AdjacentLeftContainmentInterface P turn) :
+    HonestFigure9AdjacentWindowLowerE23 P turn :=
+  m8Figure9AdjacentWindowLowerE23_of_leftContainmentInterface H
+
+def honestWindowGeometryPair_of_angleContainmentBridges
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestAngleContainmentBridges P turn) :
+    HonestFigure8SeparatedWindowGeometry P turn /\
+      HonestFigure9AdjacentLeftWindowGeometry P turn :=
+  m8WindowGeometryPair_of_angleContainmentBridges H
+
+theorem honestE22_E23_of_angleContainmentBridges
+    {V : Type u} {G : LocalGraph V}
+    {P : M8HonestLocalPredicates G} {turn : Nat -> Real}
+    (H : HonestAngleContainmentBridges P turn) :
+    HonestFigure8SeparatedWindowLowerE22 P turn /\
+      HonestFigure9AdjacentWindowLowerE23 P turn :=
+  m8E22_E23_of_angleContainmentBridges H
+
+theorem honestE22_E23_of_m8ConstructionData
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8ConstructionData C hmin) :
+    HonestFigure8SeparatedWindowLowerE22 D.predicates D.turn /\
+      HonestFigure9AdjacentWindowLowerE23 D.predicates D.turn :=
+  And.intro D.figure8_E22 D.figure9_E23
 
 end Lemma10WindowGeometry
 end Swanepoel

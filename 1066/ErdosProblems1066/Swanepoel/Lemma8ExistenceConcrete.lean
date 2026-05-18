@@ -334,7 +334,67 @@ theorem named_of_extra_neighbor
     x = P.r \/ x = P.s :=
   P.all_mem x ((mem_extraNeighborFinset S i x).2 ⟨hadj, hnot⟩)
 
+/-- The concrete extra-neighbor finset is exactly the two chosen witnesses. -/
+theorem extraNeighborFinset_eq_pair
+    (P : ExactTwoExtraNeighbors S i) :
+    extraNeighborFinset S i = ({P.r, P.s} : Finset (Fin n)) := by
+  classical
+  apply Finset.Subset.antisymm
+  · intro x hx
+    rcases P.all_mem x hx with h | h
+    · simp [h]
+    · simp [h]
+  · intro x hx
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+    rcases hx with h | h
+    · simpa [h] using P.r_mem
+    · simpa [h] using P.s_mem
+
+/-- Membership in the extra-neighbor finset is the same as being one of the
+two chosen witnesses. -/
+theorem mem_extraNeighborFinset_iff_eq_pair
+    (P : ExactTwoExtraNeighbors S i) (x : Fin n) :
+    x ∈ extraNeighborFinset S i <-> x = P.r \/ x = P.s := by
+  classical
+  rw [P.extraNeighborFinset_eq_pair]
+  simp
+
+/-- Exact-two witness data certifies cardinality two of the concrete
+extra-neighbor finset. -/
+theorem extraNeighborFinset_card_eq_two
+    (P : ExactTwoExtraNeighbors S i) :
+    (extraNeighborFinset S i).card = 2 := by
+  classical
+  rw [P.extraNeighborFinset_eq_pair]
+  simp [P.r_ne_s]
+
 end ExactTwoExtraNeighbors
+
+namespace FourForbiddenNeighborFrame
+
+variable {i : M8ExtraIndex}
+
+/-- Under degree six, a four-forbidden-neighbor frame canonically chooses the
+two concrete extra neighbors. -/
+def exactTwoExtraNeighbors_of_centerDegree_eq_six
+    (F : FourForbiddenNeighborFrame S i)
+    (hdegree : centerDegree S i = 6) :
+    ExactTwoExtraNeighbors S i :=
+  ExactTwoExtraNeighbors.of_card_eq_two
+    (F.extraNeighborFinset_card_eq_two_of_centerDegree_eq_six hdegree)
+
+/-- The canonical exact-two witnesses from a degree-six frame exhaust the
+extra-neighbor finset. -/
+theorem extraNeighborFinset_eq_pair_of_centerDegree_eq_six
+    (F : FourForbiddenNeighborFrame S i)
+    (hdegree : centerDegree S i = 6) :
+    extraNeighborFinset S i =
+      ({(F.exactTwoExtraNeighbors_of_centerDegree_eq_six hdegree).r,
+        (F.exactTwoExtraNeighbors_of_centerDegree_eq_six hdegree).s} :
+        Finset (Fin n)) :=
+  (F.exactTwoExtraNeighbors_of_centerDegree_eq_six hdegree).extraNeighborFinset_eq_pair
+
+end FourForbiddenNeighborFrame
 
 /-- The finite existence conditions that exactly build
 `M8Lemma8Combinatorics`: an ordered pair of extra neighbors for each `i`, plus
@@ -390,6 +450,103 @@ def finiteExistenceConditions_of_card_eq_two
   pair := fun i => ExactTwoExtraNeighbors.of_card_eq_two (hcard i)
   positiveCyclicOrderAt := positiveCyclicOrderAt
   positiveCyclicOrder := horder
+
+/-- Direct finite-condition constructor from the degree-six field and the
+four-forbidden-neighbor frame family. -/
+def finiteExistenceConditions_of_degreeSix_forbiddenFrame
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Prop)
+    (horder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          (ExactTwoExtraNeighbors.of_card_eq_two
+            ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+              (hdegree i))).s
+          (ExactTwoExtraNeighbors.of_card_eq_two
+            ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+              (hdegree i))).r
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i)) :
+    M8Lemma8FiniteExistenceConditions S :=
+  finiteExistenceConditions_of_card_eq_two
+    (fun i =>
+      (forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+        (hdegree i))
+    positiveCyclicOrderAt horder
+
+/-- Direct adapter from degree-six/forbidden-frame data and the remaining
+cyclic-order assertion to the original Lemma 8 combinatorics package. -/
+def lemma8Combinatorics_of_degreeSix_forbiddenFrame
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Prop)
+    (horder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          (ExactTwoExtraNeighbors.of_card_eq_two
+            ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+              (hdegree i))).s
+          (ExactTwoExtraNeighbors.of_card_eq_two
+            ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+              (hdegree i))).r
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i)) :
+    M8Lemma8Combinatorics S :=
+  (finiteExistenceConditions_of_degreeSix_forbiddenFrame
+    hdegree forbiddenFrame positiveCyclicOrderAt horder).toLemma8Combinatorics
+
+@[simp]
+theorem lemma8Combinatorics_of_degreeSix_forbiddenFrame_r
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Prop)
+    (horder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          (ExactTwoExtraNeighbors.of_card_eq_two
+            ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+              (hdegree i))).s
+          (ExactTwoExtraNeighbors.of_card_eq_two
+            ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+              (hdegree i))).r
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    (lemma8Combinatorics_of_degreeSix_forbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt horder).r i =
+      (ExactTwoExtraNeighbors.of_card_eq_two
+        ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+          (hdegree i))).r :=
+  rfl
+
+@[simp]
+theorem lemma8Combinatorics_of_degreeSix_forbiddenFrame_s
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6)
+    (forbiddenFrame : forall i : M8ExtraIndex,
+      FourForbiddenNeighborFrame S i)
+    (positiveCyclicOrderAt :
+      M8ExtraIndex -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Fin n -> Prop)
+    (horder :
+      forall i : M8ExtraIndex,
+        positiveCyclicOrderAt i
+          (ExactTwoExtraNeighbors.of_card_eq_two
+            ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+              (hdegree i))).s
+          (ExactTwoExtraNeighbors.of_card_eq_two
+            ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+              (hdegree i))).r
+          (S.prevQ i) (S.leftP i) (S.rightP i) (S.nextQ i))
+    (i : M8ExtraIndex) :
+    (lemma8Combinatorics_of_degreeSix_forbiddenFrame
+      hdegree forbiddenFrame positiveCyclicOrderAt horder).s i =
+      (ExactTwoExtraNeighbors.of_card_eq_two
+        ((forbiddenFrame i).extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
+          (hdegree i))).s :=
+  rfl
 
 /-! ## Exact remaining existence conditions -/
 
