@@ -2,6 +2,7 @@ import ErdosProblems1066.Swanepoel.JordanBoundaryConcrete
 import ErdosProblems1066.Swanepoel.CutVertexFinal
 import ErdosProblems1066.Swanepoel.MinimalConnectednessClosure
 import ErdosProblems1066.Swanepoel.BoundaryWalkBridge
+import Mathlib.GroupTheory.Perm.Cycle.Factors
 
 set_option autoImplicit false
 
@@ -1349,6 +1350,22 @@ theorem endpointPair_injective :
       subst head'
       rfl
 
+theorem ext_endpoints {d e : UnitDistanceDart C}
+    (htail : d.tail = e.tail) (hhead : d.head = e.head) :
+    d = e :=
+  endpointPair_injective (by simp [endpointPair, htail, hhead])
+
+theorem eq_ofBoundary_of_tail_head
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (k : Fin B.length) (d : UnitDistanceDart C)
+    (htail : d.tail = B.vertex k)
+    (hhead :
+      d.head =
+        B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) :
+    d = ofBoundary B k := by
+  apply endpointPair_injective
+  simp [endpointPair, htail, hhead]
+
 instance instFinite : Finite (UnitDistanceDart C) :=
   Finite.of_injective (endpointPair (C := C)) endpointPair_injective
 
@@ -1813,22 +1830,52 @@ theorem nonempty_of_finiteUnitNeighborRotationSource
 /-- The next outgoing dart in the cyclic order around the same tail vertex. -/
 def nextAround (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) : UnitDistanceDart C :=
-  ((R.rotationAt d.tail).next d.outgoing).1
+  let e := (R.rotationAt d.tail).next d.outgoing
+  { tail := d.tail
+    head := e.1.head
+    adj := by simpa [e.2] using e.1.adj }
 
 /-- The previous outgoing dart in the cyclic order around the same tail vertex. -/
 def prevAround (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) : UnitDistanceDart C :=
-  ((R.rotationAt d.tail).prev d.outgoing).1
+  let e := (R.rotationAt d.tail).prev d.outgoing
+  { tail := d.tail
+    head := e.1.head
+    adj := by simpa [e.2] using e.1.adj }
 
+@[simp]
 theorem nextAround_tail_eq (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) :
     (R.nextAround d).tail = d.tail :=
-  ((R.rotationAt d.tail).next d.outgoing).2
+  rfl
 
+@[simp]
 theorem prevAround_tail_eq (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) :
     (R.prevAround d).tail = d.tail :=
-  ((R.rotationAt d.tail).prev d.outgoing).2
+  rfl
+
+@[simp]
+theorem nextAround_outgoing (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (R.nextAround d).outgoing =
+      (R.rotationAt d.tail).next d.outgoing := by
+  apply Subtype.ext
+  apply UnitDistanceDart.endpointPair_injective
+  apply Prod.ext
+  · exact ((R.rotationAt d.tail).next d.outgoing).2.symm
+  · rfl
+
+@[simp]
+theorem prevAround_outgoing (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (R.prevAround d).outgoing =
+      (R.rotationAt d.tail).prev d.outgoing := by
+  apply Subtype.ext
+  apply UnitDistanceDart.endpointPair_injective
+  apply Prod.ext
+  · exact ((R.rotationAt d.tail).prev d.outgoing).2.symm
+  · rfl
 
 theorem nextAround_adj (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) :
@@ -1842,6 +1889,22 @@ theorem prevAround_adj (R : UnitDistanceRotationSystem C)
       (R.prevAround d).tail (R.prevAround d).head :=
   (R.prevAround d).adj
 
+theorem prevAround_nextAround (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    R.prevAround (R.nextAround d) = d := by
+  have h :
+      (R.prevAround (R.nextAround d)).outgoing = d.outgoing := by
+    simpa using (R.rotationAt d.tail).prev_next d.outgoing
+  exact congrArg Subtype.val h
+
+theorem nextAround_prevAround (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    R.nextAround (R.prevAround d) = d := by
+  have h :
+      (R.nextAround (R.prevAround d)).outgoing = d.outgoing := by
+    simpa using (R.rotationAt d.tail).next_prev d.outgoing
+  exact congrArg Subtype.val h
+
 /-- The face successor of a dart: reverse it, then advance around the new tail. -/
 def faceSucc (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) : UnitDistanceDart C :=
@@ -1850,7 +1913,7 @@ def faceSucc (R : UnitDistanceRotationSystem C)
 theorem faceSucc_tail_eq_head (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) :
     (R.faceSucc d).tail = d.head := by
-  simpa [faceSucc] using R.nextAround_tail_eq d.reverse
+  simp [faceSucc]
 
 theorem faceSucc_adj (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) :
@@ -1868,6 +1931,239 @@ theorem faceSucc_canonicalAdj (R : UnitDistanceRotationSystem C)
     (d : UnitDistanceDart C) :
     (canonicalGraph C).Adj (R.faceSucc d).tail (R.faceSucc d).head :=
   (R.faceSucc d).canonicalAdj
+
+theorem endpoint_chaining_of_faceSucc_eq_next
+    (R : UnitDistanceRotationSystem C)
+    {d e : UnitDistanceDart C}
+    (h : R.faceSucc d = e) :
+    d.head = e.tail := by
+  rw [← h]
+  exact (R.faceSucc_tail_eq_head d).symm
+
+/-- The face predecessor of a dart: move back around the tail, then reverse. -/
+def facePred (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) : UnitDistanceDart C :=
+  (R.prevAround d).reverse
+
+@[simp]
+theorem facePred_faceSucc (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    R.facePred (R.faceSucc d) = d := by
+  simp [facePred, faceSucc, R.prevAround_nextAround d.reverse]
+
+@[simp]
+theorem faceSucc_facePred (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    R.faceSucc (R.facePred d) = d := by
+  simp [facePred, faceSucc, R.nextAround_prevAround d]
+
+/-- The face-successor map as a permutation of unit-distance darts. -/
+def faceSuccPerm (R : UnitDistanceRotationSystem C) :
+    Equiv.Perm (UnitDistanceDart C) where
+  toFun := R.faceSucc
+  invFun := R.facePred
+  left_inv := R.facePred_faceSucc
+  right_inv := R.faceSucc_facePred
+
+/-- A finite permutation orbit has a least positive return time at each
+point.  This is the finite-period row used by the S2 face-successor orbit
+construction. -/
+theorem perm_exists_pos_min_period {α : Type u} [Finite α]
+    (f : Equiv.Perm α) (x : α) :
+    Exists fun p : Nat =>
+      0 < p ∧ (f ^ p) x = x ∧
+        forall q : Nat, 0 < q -> (f ^ q) x = x -> p <= q := by
+  classical
+  letI : DecidableRel f.SameCycle := Classical.decRel _
+  refine Exists.intro (orderOf (f.cycleOf x)) ?_
+  constructor
+  · exact orderOf_pos (f.cycleOf x)
+  constructor
+  · rw [← Equiv.Perm.cycleOf_pow_apply_self f x,
+      pow_orderOf_eq_one]
+    rfl
+  · intro q hq hqx
+    by_cases hx : f x = x
+    · rw [(Equiv.Perm.cycleOf_eq_one_iff f).mpr hx]
+      simpa using hq
+    · have hc : (f.cycleOf x ^ q) x = x := by
+        rwa [Equiv.Perm.cycleOf_pow_apply_self f x]
+      have hpow : f.cycleOf x ^ q = 1 := by
+        exact
+          ((Equiv.Perm.isCycle_cycleOf f hx).pow_eq_one_iff'
+            (by rwa [Equiv.Perm.cycleOf_apply_self])).mpr hc
+      exact orderOf_le_of_pow_eq_one hq hpow
+
+/-- The face-successor permutation has a least positive return time from any
+starting unit-distance dart. -/
+theorem faceSuccPerm_exists_pos_min_period
+    (R : UnitDistanceRotationSystem C) (d : UnitDistanceDart C) :
+    Exists fun p : Nat =>
+      0 < p ∧ (R.faceSuccPerm ^ p) d = d ∧
+        forall q : Nat, 0 < q -> (R.faceSuccPerm ^ q) d = d -> p <= q :=
+  perm_exists_pos_min_period R.faceSuccPerm d
+
+/-- The `cycleOf` component of the face-successor permutation containing the
+chosen starting dart. -/
+noncomputable def faceSuccPermCycle
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    Equiv.Perm (UnitDistanceDart C) := by
+  classical
+  letI : DecidableRel R.faceSuccPerm.SameCycle := Classical.decRel _
+  exact R.faceSuccPerm.cycleOf start
+
+/-- The least positive return time of the face-successor permutation from the
+chosen starting dart, defined as the order of its `cycleOf` component. -/
+noncomputable def faceSuccPermPeriod
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    Nat :=
+  Classical.choose (faceSuccPerm_exists_pos_min_period R start)
+
+@[simp]
+theorem faceSuccPermPeriod_eq_choose
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    faceSuccPermPeriod R start =
+      Classical.choose (faceSuccPerm_exists_pos_min_period R start) :=
+  rfl
+
+theorem faceSuccPermPeriod_pos
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    0 < faceSuccPermPeriod R start :=
+  (Classical.choose_spec
+    (faceSuccPerm_exists_pos_min_period R start)).1
+
+theorem faceSuccPermPeriod_return
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    (R.faceSuccPerm ^ faceSuccPermPeriod R start) start = start :=
+  (Classical.choose_spec
+    (faceSuccPerm_exists_pos_min_period R start)).2.1
+
+theorem faceSuccPermPeriod_minimal
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    forall q : Nat, 0 < q ->
+      (R.faceSuccPerm ^ q) start = start ->
+        faceSuccPermPeriod R start <= q :=
+  (Classical.choose_spec
+    (faceSuccPerm_exists_pos_min_period R start)).2.2
+
+/-- The raw finite orbit of the face-successor permutation from a chosen
+starting dart, with its least positive return time. -/
+structure RawFaceSuccOrbit
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) where
+  period : Nat
+  period_pos : 0 < period
+  dart : Fin period -> UnitDistanceDart C
+  dart_eq_iterate :
+    forall k, dart k = (R.faceSuccPerm ^ k.val) start
+  period_return :
+    (R.faceSuccPerm ^ period) start = start
+  period_minimal :
+    forall q : Nat, 0 < q ->
+      (R.faceSuccPerm ^ q) start = start -> period <= q
+
+namespace RawFaceSuccOrbit
+
+variable {C : _root_.UDConfig n} {R : UnitDistanceRotationSystem C}
+variable {start : UnitDistanceDart C}
+
+/-- Build the raw face-successor orbit using the `cycleOf` order of the
+face-successor permutation at the starting dart. -/
+noncomputable def ofFaceSuccPerm
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    RawFaceSuccOrbit R start where
+  period := faceSuccPermPeriod R start
+  period_pos := faceSuccPermPeriod_pos R start
+  dart := fun k => (R.faceSuccPerm ^ k.val) start
+  dart_eq_iterate := by
+    intro k
+    rfl
+  period_return := faceSuccPermPeriod_return R start
+  period_minimal := faceSuccPermPeriod_minimal R start
+
+@[simp]
+theorem ofFaceSuccPerm_period
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    (ofFaceSuccPerm R start).period =
+      faceSuccPermPeriod R start :=
+  rfl
+
+@[simp]
+theorem ofFaceSuccPerm_dart
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C)
+    (k : Fin (ofFaceSuccPerm R start).period) :
+    (ofFaceSuccPerm R start).dart k =
+      (R.faceSuccPerm ^ k.val) start :=
+  rfl
+
+@[simp]
+theorem dart_zero (O : RawFaceSuccOrbit R start) :
+    O.dart ⟨0, O.period_pos⟩ = start := by
+  rw [O.dart_eq_iterate]
+  rfl
+
+theorem period_eq_faceSuccPermPeriod
+    (O : RawFaceSuccOrbit R start) :
+    O.period = faceSuccPermPeriod R start := by
+  apply Nat.le_antisymm
+  · exact O.period_minimal
+      (faceSuccPermPeriod R start)
+      (faceSuccPermPeriod_pos R start)
+      (faceSuccPermPeriod_return R start)
+  · exact faceSuccPermPeriod_minimal R start
+      O.period O.period_pos O.period_return
+
+/-- Every concrete seed for the face-successor permutation has a raw finite
+orbit.  Downstream geometric proofs instantiate `R` with the geometric
+rotation system and `start` with the actual exterior seed. -/
+theorem nonempty
+    (R : UnitDistanceRotationSystem C) (start : UnitDistanceDart C) :
+    Nonempty (RawFaceSuccOrbit R start) :=
+  ⟨ofFaceSuccPerm R start⟩
+
+/-- The raw period orbit carries the expected cyclic face-successor row. -/
+@[simp]
+theorem faceSucc_dart_eq_cyclicSucc
+    (O : RawFaceSuccOrbit R start) (k : Fin O.period) :
+    R.faceSucc (O.dart k) =
+      O.dart (PlanarInterface.cyclicSucc O.period_pos k) := by
+  rw [O.dart_eq_iterate k]
+  rw [O.dart_eq_iterate (PlanarInterface.cyclicSucc O.period_pos k)]
+  change R.faceSuccPerm ((R.faceSuccPerm ^ k.val) start) =
+    (R.faceSuccPerm ^
+      (PlanarInterface.cyclicSucc O.period_pos k).val) start
+  by_cases hnext : k.val + 1 < O.period
+  · have hsucc_val :
+      (PlanarInterface.cyclicSucc O.period_pos k).val = k.val + 1 := by
+      simp [PlanarInterface.cyclicSucc, Nat.mod_eq_of_lt hnext]
+    rw [hsucc_val]
+    rw [← Equiv.Perm.mul_apply]
+    rw [Commute.self_pow]
+    rw [pow_succ]
+  · have hlast : k.val + 1 = O.period :=
+      eq_of_le_of_not_lt (Nat.succ_le_of_lt k.isLt) hnext
+    have hsucc_val :
+      (PlanarInterface.cyclicSucc O.period_pos k).val = 0 := by
+      simp [PlanarInterface.cyclicSucc, hlast]
+    rw [hsucc_val]
+    simp only [pow_zero, Equiv.Perm.coe_one, id_eq]
+    have hstep :
+        R.faceSuccPerm ((R.faceSuccPerm ^ k.val) start) =
+          (R.faceSuccPerm ^ (k.val + 1)) start := by
+      rw [← Equiv.Perm.mul_apply]
+      rw [Commute.self_pow]
+      rw [pow_succ]
+    rw [hstep, hlast]
+    exact O.period_return
+
+/-- Consecutive darts in a raw face-successor orbit are endpoint-chained. -/
+theorem dart_head_eq_cyclicSucc_tail
+    (O : RawFaceSuccOrbit R start) (k : Fin O.period) :
+    (O.dart k).head =
+      (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+  R.endpoint_chaining_of_faceSucc_eq_next
+    (O.faceSucc_dart_eq_cyclicSucc k)
+
+end RawFaceSuccOrbit
 
 /-- At one boundary vertex, swap the incoming boundary dart with the outgoing
 boundary dart and leave all other outgoing darts fixed. -/
@@ -1950,7 +2246,9 @@ noncomputable def ofBoundaryCycle
       B.simple (Classical.choose_spec hmem)
     have hpred : PlanarInterface.cyclicPred B.length_pos j = k := by
       simp [j, PlanarInterface.cyclicPred_cyclicSucc]
-    simp [UnitDistanceRotationSystem.ofBoundaryCycle,
+    apply UnitDistanceDart.endpointPair_injective
+    simp [UnitDistanceDart.endpointPair,
+      UnitDistanceRotationSystem.ofBoundaryCycle,
       UnitDistanceRotationSystem.faceSucc,
       UnitDistanceRotationSystem.nextAround,
       UnitDistanceRotationSystem.boundaryFollowingCyclicOrder,
@@ -2031,6 +2329,35 @@ theorem ofBoundaryFaceSuccRows_dart
       UnitDistanceDart.ofBoundary B k :=
   rfl
 
+/-- Build a concrete face-dart orbit from a raw face-successor period orbit
+once a downstream boundary construction has identified the same cyclic period
+and endpoint rows.  This is the direct bridge from an actual seed orbit to the
+existing `FaceDartOrbit` API; it introduces no additional source package. -/
+def ofRawFaceSuccOrbit
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (hperiod : B.length = O.period)
+    (tail_eq : forall k : Fin B.length,
+      (O.dart (Fin.cast hperiod k)).tail = B.vertex k)
+    (head_eq : forall k : Fin B.length,
+      (O.dart (Fin.cast hperiod k)).head =
+        B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) :
+    FaceDartOrbit C R where
+  boundary := B
+  dart := fun k => O.dart (Fin.cast hperiod k)
+  dart_tail_eq_vertex := tail_eq
+  dart_head_eq_succ_vertex := head_eq
+  faceSucc_eq_next := by
+    intro k
+    have hcast_succ :
+        Fin.cast hperiod (PlanarInterface.cyclicSucc B.length_pos k) =
+          PlanarInterface.cyclicSucc O.period_pos (Fin.cast hperiod k) := by
+      ext
+      simp [PlanarInterface.cyclicSucc, hperiod]
+    rw [hcast_succ]
+    exact O.faceSucc_dart_eq_cyclicSucc (Fin.cast hperiod k)
+
 /-- Every dart in the orbit is an edge of the canonical straight-line graph. -/
 theorem dart_canonicalAdj (O : FaceDartOrbit C R)
     (k : Fin O.boundary.length) :
@@ -2058,6 +2385,26 @@ theorem ofBoundaryFaceSuccRows_dart_injective
     Function.Injective (ofBoundaryFaceSuccRows B rows).dart :=
   (ofBoundaryFaceSuccRows B rows).dart_injective
 
+/-- The endpoint rows in a face orbit identify each stored dart with the
+canonical dart of its recorded boundary edge. -/
+theorem dart_eq_ofBoundary
+    (O : FaceDartOrbit C R) (k : Fin O.boundary.length) :
+    O.dart k = UnitDistanceDart.ofBoundary O.boundary k :=
+  UnitDistanceDart.eq_ofBoundary_of_tail_head O.boundary k (O.dart k)
+    (O.dart_tail_eq_vertex k) (O.dart_head_eq_succ_vertex k)
+
+/-- A face orbit can be forgotten to the concrete boundary face-successor rows
+expected by the older boundary-row interface. -/
+def toUnitDistanceCycleFaceSuccRows
+    (O : FaceDartOrbit C R) :
+    UnitDistanceCycleFaceSuccRows C R O.boundary where
+  faceSucc_eq_next := by
+    intro k
+    rw [← O.dart_eq_ofBoundary k]
+    rw [← O.dart_eq_ofBoundary
+      (PlanarInterface.cyclicSucc O.boundary.length_pos k)]
+    exact O.faceSucc_eq_next k
+
 /-- The face successor lands at the next boundary-cycle vertex. -/
 theorem faceSucc_tail_eq_next_vertex
     (O : FaceDartOrbit C R) (k : Fin O.boundary.length) :
@@ -2073,6 +2420,14 @@ theorem dart_head_eq_faceSucc_tail
     (O.dart k).head = (R.faceSucc (O.dart k)).tail := by
   rw [O.faceSucc_tail_eq_next_vertex k]
   exact O.dart_head_eq_succ_vertex k
+
+/-- Consecutive darts in a face orbit are endpoint-chained. -/
+theorem dart_head_eq_next_tail
+    (O : FaceDartOrbit C R) (k : Fin O.boundary.length) :
+    (O.dart k).head =
+      (O.dart
+        (PlanarInterface.cyclicSucc O.boundary.length_pos k)).tail :=
+  R.endpoint_chaining_of_faceSucc_eq_next (O.faceSucc_eq_next k)
 
 end FaceDartOrbit
 
@@ -2389,6 +2744,55 @@ def selectedFaceDartOrbit
     (rows : UnitDistanceCycleFaceSuccRows C R I.selectedBoundary) :
     FaceDartOrbit C R :=
   FaceDartOrbit.ofBoundaryFaceSuccRows I.selectedBoundary rows
+
+/-- The rotation system obtained by making the selected boundary cycle turn to
+its next displayed boundary edge at every selected boundary vertex.
+
+This is not the identity cyclic order: at each selected boundary vertex it uses
+the boundary-turn swap rows, so the face-successor computation follows the
+chosen cycle. -/
+noncomputable def selectedBoundaryRotation
+    (I : FinitePlanarOuterComponentInputs C) :
+    UnitDistanceRotationSystem C :=
+  UnitDistanceRotationSystem.ofBoundaryCycle I.selectedBoundary
+
+/-- Concrete face-successor rows for the selected input boundary in the
+boundary-following rotation system. -/
+noncomputable def selectedBoundaryFaceSuccRows
+    (I : FinitePlanarOuterComponentInputs C) :
+    UnitDistanceCycleFaceSuccRows
+      C I.selectedBoundaryRotation I.selectedBoundary :=
+  UnitDistanceCycleFaceSuccRows.ofBoundaryCycle I.selectedBoundary
+
+/-- The selected input boundary as a concrete face-dart orbit in the
+boundary-following rotation system. -/
+noncomputable def selectedBoundaryFaceDartOrbit
+    (I : FinitePlanarOuterComponentInputs C) :
+    FaceDartOrbit C I.selectedBoundaryRotation :=
+  I.selectedFaceDartOrbit
+    I.selectedBoundaryRotation I.selectedBoundaryFaceSuccRows
+
+@[simp]
+theorem selectedBoundaryFaceDartOrbit_boundary
+    (I : FinitePlanarOuterComponentInputs C) :
+    I.selectedBoundaryFaceDartOrbit.boundary = I.selectedBoundary :=
+  rfl
+
+@[simp]
+theorem selectedBoundaryFaceDartOrbit_dart
+    (I : FinitePlanarOuterComponentInputs C)
+    (k : Fin I.selectedBoundary.length) :
+    I.selectedBoundaryFaceDartOrbit.dart k =
+      UnitDistanceDart.ofBoundary I.selectedBoundary k :=
+  rfl
+
+/-- The exposed selected-boundary face orbit supplies the older concrete
+face-successor row interface without adding any further geometric assumption. -/
+theorem selectedBoundaryFaceDartOrbit_toFaceSuccRows
+    (I : FinitePlanarOuterComponentInputs C) :
+    I.selectedBoundaryFaceDartOrbit.toUnitDistanceCycleFaceSuccRows =
+      I.selectedBoundaryFaceSuccRows := by
+  rfl
 
 /-- The selected orbit has no repeated darts, by the checked cycle simplicity. -/
 theorem selectedFaceDartOrbit_dart_injective

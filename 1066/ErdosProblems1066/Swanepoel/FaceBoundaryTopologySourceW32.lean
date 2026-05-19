@@ -1599,7 +1599,7 @@ noncomputable def extractedSimpleCyclicOuterBoundaryEnclosureRowsOfMinimalCleare
 
 noncomputable def minimalFailureExtractedSimpleCyclicOuterBoundaryEnclosureRows :
     MinimalFailureExtractedSimpleCyclicOuterBoundaryEnclosureRows :=
-  fun {n} C hmin =>
+  fun C hmin =>
     extractedSimpleCyclicOuterBoundaryEnclosureRowsOfMinimalClearedFailure
       (C := C) hmin
 
@@ -1935,9 +1935,9 @@ target by projecting their core and enclosure to `ExactActualTopologyFields`. -/
 theorem minimalFailureExactActualTopologyFieldsTarget_of_actualOuterBoundaryCycleDataRows
     (rows : MinimalFailureActualOuterBoundaryCycleDataRows) :
     MinimalFailureExactActualTopologyFieldsTarget :=
-  fun C hmin =>
+  fun {n} C hmin =>
     OuterBoundaryExistenceConcrete.exactActualTopologyFields_of_actualOuterBoundaryCycleData
-      (C := C) (rows C hmin)
+      (C := C) (rows (n := n) C hmin)
 
 /-- Simple cyclic boundary/enclosure rows are the shortest honest S2 source
 once supplied for each minimal failure: they project to strong actual
@@ -2162,6 +2162,340 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFronti
   minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
     (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows
         rows)
+    noCutRows
+
+/-- W32 S2 target from actual unbounded-exterior boundary-cycle rows.
+
+This is the shortest current eraser for the source theorem: it still requires
+the honest construction of `ActualBoundaryCycleFrontierEquivalenceRows` for
+each finite planar input package. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_actualBoundaryCycleFrontierEquivalenceRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ActualBoundaryCycleFrontierEquivalenceRows
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_actualBoundaryCycleFrontierEquivalenceRows
+      rows)
+    noCutRows
+
+/-- W32 S2 target from the direct same-`B` raw face-successor boundary handoff.
+
+This consumer only needs the raw orbit tied to a concrete boundary cycle by
+period/tail rows plus raw-tail frontier exactness. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_rawFaceSuccOrbitBoundaryRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Exists fun R :
+              JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem
+                C =>
+            Exists fun start :
+                JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceDart
+                  C =>
+              Exists fun O :
+                  JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem.RawFaceSuccOrbit
+                    R start =>
+                Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+                  Exists fun hperiod : B.length = O.period =>
+                    (forall k : Fin B.length,
+                      (O.dart (Fin.cast hperiod k)).tail = B.vertex k) ∧
+                    (forall v : Fin n,
+                      (JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+                          frontier
+                            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                              C inputs).exterior ↔
+                        Exists fun k : Fin O.period =>
+                          (O.dart k).tail = v))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_rawFaceSuccOrbitBoundaryRows
+      rows)
+    noCutRows
+
+/-- W32 S2 target from the complete exterior boundary-cycle source shape.
+
+This is a consumer route only: the proof-owning source theorem still has to
+construct the boundary cycle and prove frontier exactness, selected boundary
+sides, and incident-edge completeness from
+`FinitePlanarOuterComponentInputs`. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_exists_boundaryCycle_complete
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+                  frontier
+                    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                      C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            (forall k : Fin B.length,
+              (B.vertex k,
+                  B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+                  _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                    C inputs ∨
+                (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+                  B.vertex k) ∈
+                  _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                    C inputs) ∧
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryCycleIncidentFrontierEdgeCompleteness
+              inputs B)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_exists_boundaryCycle_complete
+      rows)
+    noCutRows
+
+/-- W32 S2 target from the primitive local-sector source shape.
+
+This is the direct consumer for the repaired S2 route.  The source theorem
+still has to construct the actual exterior boundary cycle and prove the local
+sector rows; this wrapper only erases those rows through the checked finite
+planar outer-component theorem. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+                  frontier
+                    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                      C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            (forall k : Fin B.length,
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryVertexExteriorSectorRowsAt
+                inputs B k))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_boundaryVertexExteriorSectorRows
+      rows)
+    noCutRows
+
+/-- Concrete-carrier version of the S2 endpoint handoff.  It leaves exactly
+the finite plane-graph rows for the actual unbounded-frontier carrier:
+decidability, connectedness, degree two, and whole-edge-frontier. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_frontierCarrierGraph_wholeRows
+    (hdec :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          DecidableRel
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+              C inputs).Adj)
+    (hconn :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          letI : DecidableRel
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                C inputs).Adj :=
+            hdec C inputs
+          (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+            C inputs).Connected)
+    (hdegree_two :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          letI : DecidableRel
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                C inputs).Adj :=
+            hdec C inputs
+          forall v :
+            {v : Fin n //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+              @SimpleGraph.degree _
+                (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                  C inputs) v
+                ((_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                  C inputs).neighborSetFintype v) =
+                  2)
+    (hwhole :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierEdgeSetWholeOpenSegmentFrontier
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_frontierCarrierGraph_wholeRows
+      hdec hconn hdegree_two hwhole)
+    noCutRows
+
+/-- Concrete-carrier S2 endpoint handoff with decidability discharged by the
+canonical finite frontier carrier.  The remaining rows are exactly the
+geometric/topological connectedness, degree-two, and whole-edge-frontier facts. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_frontierCarrierGraph_geometricRows
+    (hconn :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          letI : DecidableRel
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                C inputs).Adj :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph_decidableAdj
+              C inputs
+          (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+            C inputs).Connected)
+    (hdegree_two :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          letI : DecidableRel
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                C inputs).Adj :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph_decidableAdj
+              C inputs
+          forall v :
+            {v : Fin n //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+              @SimpleGraph.degree _
+                (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                  C inputs) v
+                ((_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                  C inputs).neighborSetFintype v) =
+                  2)
+    (hwhole :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierEdgeSetWholeOpenSegmentFrontier
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_frontierCarrierGraph_geometricRows
+      hconn hdegree_two hwhole)
+    noCutRows
+
+/-- S2 endpoint handoff from cyclic coverage of the concrete carrier plus
+local dart-pair rows.  These rows give connectedness and degree two; whole-edge
+frontier is built into the concrete carrier definition. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_cyclicCoverageDartPairRows
+    (hcycle :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierCyclicCoverageRows
+            C inputs)
+    (hdart :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a :
+            {v : Fin n //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierDartPairAt
+                inputs a)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_cyclicCoverageDartPairRows
+      hcycle hdart)
+    noCutRows
+
+/-- S2 endpoint handoff from the compact concrete-carrier source rows:
+cyclic coverage of the actual unbounded-frontier carrier plus local sector
+rows at every selected carrier vertex. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_cyclicCoverageLocalSectorRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          Nonempty
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierCyclicCoverageRows
+                C inputs ×
+              (forall a :
+                {v : Fin n //
+                  v ∈
+                    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                      C inputs},
+                  _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+                    inputs a)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_cyclicCoverageLocalSectorRows
+      rows)
+    noCutRows
+
+/-- S2 endpoint handoff from the orbit-first exterior face-dart carrier
+package.  The package erases to cyclic coverage and local dart-pair rows inside
+`ExteriorComponentTopology`; the compact displayed route is
+`minimalFailureExactActualTopologyFieldsTarget_of_cyclicCoverageLocalSectorRows`.
+-/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_faceDartOrbitExteriorCarrierRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FaceDartOrbitExteriorCarrierRows
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_faceDartOrbitExteriorCarrierRows
+      rows)
     noCutRows
 
 /-- Minimal-failure exterior cycle/frontier rows close the live exact S2

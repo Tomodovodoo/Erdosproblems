@@ -111,63 +111,139 @@ The S5 compact package is now the preferred final angle handoff.  Atomic
 Figure 8/Figure 9 rows are still useful local proof tasks, but they are not
 the top-level blockers when the compact S5 package is available.
 
-S2 is reduced to one finite planar straight-line theorem.  The checked reducer
-is:
+S2 is reduced to the live actual-boundary theorem for the finite embedded
+unit-edge drawing:
 
 ```text
-JordanTopologyExteriorEnclosure.
-  finitePlanarStraightLineOuterComponentTheorem_of_exterior_cycle_frontier_not_mem
+FinitePlanarOuterComponentInputs C
+  -> unboundedExteriorComponentRows C inputs
+  -> ActualBoundaryCycleFrontierEquivalenceRows C inputs
+     containing:
+       B : UnitDistanceCycleBoundary C
+       + graph vertex on frontier iff boundary-cycle vertex of B
+       + every boundary-cycle edge has open segment on the unbounded exterior frontier
+  -> unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows
+  -> UnboundedExteriorFrontierCycleRows C inputs
 ```
 
-The remaining S2 source theorem must, for every `FinitePlanarOuterComponentInputs C`,
-choose a real exterior `UnitDistanceCycleBoundary C` and an exterior set whose
-frontier contains exactly the chosen cycle vertices on graph vertices, with all
-non-cycle graph vertices outside the exterior.  The reducer then supplies the
-boundary-following rotation system, face orbit, `FinitePlanarStraightLineOuterComponentTheorem`,
-chosen Jordan rows, and finally the exact W32/W33 topology target.
+The drawing layer in `Swanepoel/FinitePlaneDrawing.lean` is checked.  It owns
+closed/compact straight segments, the finite `embeddedEdgeSet`,
+`drawingComplement`, graph-vertex membership in the drawing under
+`FinitePlanarOuterComponentInputs`, and the fact that complement frontiers are
+carried by unit-edge segments.  It also provides the uniqueness/isolation
+lemmas `common_inOpenSegment_ordered_edges_eq`,
+`common_inOpenSegment_closedSegment_ordered_edges_eq`, and
+`exists_ball_inter_embeddedEdgeSet_subset_closedSegment_of_inOpenSegment`: an
+interior point of a canonical edge has a ball in which every drawing point is
+carried by that same edge segment.  It also provides
+`exists_ball_inter_embeddedEdgeSet_subset_incident_closedSegment`, the local
+vertex-star row saying that sufficiently near a graph vertex, every drawing
+point is carried by an incident edge segment.
 
-The first drawing layer is checked in `Swanepoel/FinitePlaneDrawing.lean`.
-It defines `embeddedEdgeSet`, `embeddedEdgePairs`, and `drawingComplement`,
-proves closed segments are compact/closed, proves the embedded drawing is a
-finite compact closed union of unit-edge segments, proves
-`drawingComplement_open`, `drawingComplement_nonempty`, and
-`frontier_drawingComplement_subset_embeddedEdgeSet`, and proves
-`vertex_mem_embeddedEdgeSet_of_inputs`: every graph vertex is on the embedded
-unit-edge drawing under `FinitePlanarOuterComponentInputs`.  It also constructs
-a rightward x-axis ray outside the compact drawing and proves that ray is
-preconnected and unbounded.
+`Swanepoel/ExteriorComponentTopology.lean` owns the unbounded component and the
+current S2 actual-boundary surface.  The concrete unbounded component is
+`unboundedExteriorComponentRows C inputs`.  The shortest checked handoff now
+erases `ActualBoundaryCycleFrontierEquivalenceRows C inputs` directly to
+`UnboundedExteriorFrontierCycleRows C inputs` via
+`unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows`.
 
-`Swanepoel/ExteriorComponentTopology.lean` adds the next checked reduction.
-An `ExteriorComponentRows` exterior is an open subset of `drawingComplement C`,
-so `graph_vertex_not_mem_exterior` proves all graph vertices are outside it.
-`drawingComplementRows` supplies the whole open complement as the weakest
-candidate.  Therefore `ExteriorFrontierCycleRows` only has to choose the
-exterior unit-distance cycle and prove `frontier_iff_cycle_vertex`; the
-off-cycle not-in-exterior row is automatic.  `ExteriorConnectedComponentRows`
-packages connected components of the drawing complement and proves they are
-open, connected, contained in the complement, and have frontier contained in
-the embedded drawing.  `unboundedExteriorComponentRows` now constructs the
-unbounded component using the x-axis ray outside the compact drawing; graph
-vertices are proved outside it, and its frontier is carried by the embedded
-drawing.  The helper `unboundedExteriorFrontierCycleRowsOfBoundary` reduces the
-remaining proof to choosing the simple unit-distance outer cycle for that
-component and proving `frontier_iff_cycle_vertex`.  `FaceBoundaryTopologySourceW32`
-now consumes a family of those rows directly to produce
-`MinimalFailureExactActualTopologyFieldsTarget`.
+The carrier route remains checked and useful for building those rows, but it
+is no longer the shortest final eraser.  The existing
+`ExteriorComponentTopology.exteriorFrontierCarrierRows_of_inputs` consumes a
+chosen boundary cycle and its geometric/frontier rows; it is a checked
+consumer, not the input-only source.  The current boundary-edge carrier objects
+are `unboundedFrontierVertexSet`, `unboundedFrontierEdgeSet`, and
+`unboundedFrontierCarrierGraph`.
 
-The sharpest checked S2 reducer is now
-`ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_connected_two_regular_frontier_graph`.
-It avoids adding another target: if the actual unbounded-frontier edge carrier
-is presented as a finite connected two-regular graph `F`, with an injective
-homomorphism `F -> GraphBridge.unitDistanceSimpleGraph C` whose vertex image is
-exactly the graph vertices on
-`frontier (unboundedExteriorComponentRows C inputs).exterior`, then Lean builds
-the required `UnboundedExteriorFrontierCycleRows C inputs`.  The exact blocker
-is therefore the finite plane-graph theorem constructing this boundary-edge
-carrier and proving connectedness, degree two, and the frontier vertex iff.
-Do not replace this by the induced graph on all frontier vertices: chords
-between frontier vertices can make that induced graph have degree greater than
-two, even when the exterior boundary itself is a simple cycle.
+The checked reducers consume honest boundary-cycle/frontier rows and erase them
+to either the direct actual-boundary package or the concrete carrier package.
+They do not construct the exterior cycle or prove outerness.  Relevant checked
+handoffs include:
+
+```text
+ExteriorComponentTopology.ActualBoundaryCycleFrontierEquivalenceRows
+ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows
+ExteriorComponentTopology.unboundedFrontierCarrierGraph_adj_iff
+ExteriorComponentTopology.unboundedFrontierCarrierGraph_adj_canonicalAdj
+ExteriorComponentTopology.unboundedFrontierCarrierGraph_openSegment_frontier_of_adj
+ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_carrier
+ExteriorComponentTopology.cyclicCoverageLocalSectorRows_of_boundaryVertexExteriorSectorRows
+ExteriorComponentTopology.exteriorFrontierCarrierRows_nonempty_of_boundaryVertexExteriorSectorRows
+FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_faceDartOrbitExteriorCarrierRows
+FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_cyclicCoverageLocalSectorRows
+```
+
+Additional checked local handoffs for the face-orbit proof:
+
+```text
+FinitePlaneDrawing.isPreconnected_inOpenSegment
+ExteriorComponentTopology.graph_vertex_mem_unboundedExterior_frontier_iff_mem_closure
+ExteriorComponentTopology.exists_ball_forall_unboundedExterior_frontier_mem_incident_closedSegment_of_vertex
+ExteriorComponentTopology.unboundedFrontierEdgeSet_or_symm_of_adj_openSegment_frontier
+ExteriorComponentTopology.cutVertexPartition_of_unreachable_after_delete
+ExteriorComponentTopology.repeatedExteriorBoundarySeparationRows_of_unreachable_after_delete
+GeometricRotationSystem.geometricUnitDistanceRotationSystem_nextAround_getElem_succ
+GeometricRotationSystem.geometricUnitDistanceRotationSystem_nextAround_getElem_last
+```
+
+The active final proof path is:
+
+```text
+actual exterior boundary cycle B
+  + frontier iff B.vertex
+  + boundary edge open-segment frontier
+  -> ActualBoundaryCycleFrontierEquivalenceRows C inputs
+  -> UnboundedExteriorFrontierCycleRows C inputs
+  -> finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows
+  -> FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+```
+
+The carrier/geometric support path is:
+
+```text
+GeometricBoundarySuccessorRows
+  + graph vertex on frontier iff boundary-cycle vertex
+  + boundary-edge open-segment frontier
+  + BoundaryCycleIncidentFrontierEdgeCompleteness
+  -> ExteriorComponentTopology.exteriorFrontierCarrierRows_of_inputs
+     (checked consumer of the four rows)
+  -> ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_carrier
+```
+
+The primitive exterior-sector branch is checked as well: a boundary cycle,
+the frontier-vertex iff row, and pointwise
+`BoundaryVertexExteriorSectorRowsAt` feed
+`ExteriorComponentTopology.exteriorFrontierCarrierRows_nonempty_of_boundaryVertexExteriorSectorRows`.
+Those sector rows also project to `GeometricBoundarySuccessorRows`, pointwise
+local-sector rows, and `BoundaryCycleIncidentFrontierEdgeCompleteness`.
+
+Under that route, the reducers already supply finiteness, connectedness,
+two-regularity, graph injection, frontier-vertex coverage, and frontier-edge
+honesty to the final carrier handoff.  Do not restate those reducer outputs as
+independent S2 source targets.  The compact open proof obligations are now:
+
+1. construct the actual exterior boundary cycle `B :
+   JordanBoundaryConcrete.UnitDistanceCycleBoundary C`;
+2. prove graph vertices on the unbounded exterior frontier iff they are
+   boundary-cycle vertices of `B`;
+3. prove every boundary-cycle edge of `B` has its open segment on the unbounded
+   exterior frontier, using the checked boundary-edge open-segment frontier
+   wrapper where applicable;
+4. if using the carrier/geometric support path, prove
+   `GeometricBoundarySuccessorRows` and
+   `BoundaryCycleIncidentFrontierEdgeCompleteness`: every incident
+   unbounded-frontier edge at a boundary-cycle vertex is one of the two cycle
+   edges, using `inputs.noCutVertex` where needed to rule out repeated
+   exterior-boundary vertices via the existing repeated-boundary separation and
+   injectivity reducers.
+
+Do not replace the actual boundary-edge carrier by the induced graph on all
+frontier vertices: chords between frontier vertices can make that graph have
+larger degree.  Do not use synthetic enclosure rows, convex-hull edges, an
+arbitrary spanning cycle, identity angular-order rows, or any numbered
+compatibility layer as the live method.  Do not add a new W-facade or duplicate
+source package for S2; use the existing `ExteriorComponentTopology` carrier
+surface.
 
 ### Swanepoel Guardrails
 
