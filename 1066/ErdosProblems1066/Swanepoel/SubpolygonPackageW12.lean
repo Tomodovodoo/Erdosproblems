@@ -399,6 +399,98 @@ theorem lowDegree
 
 end HonestSubpolygonAnglePackage
 
+/-! ## Actual angle realizations over honest packages -/
+
+/-- An honest subpolygon package plus explicit pointwise real angle data
+realizing the E13 lower bound for its computed induced counts. -/
+structure HonestSubpolygonAngleRealizationPackage
+    (G : CanonicalStraightLineUnitDistanceGraph n) where
+  package : HonestSubpolygonPackage G
+  angleRealization :
+    SubpolygonAngleRealization.ConcreteAngleRealization G
+      package.boundary package.vertexSet
+
+namespace HonestSubpolygonAngleRealizationPackage
+
+variable {G : CanonicalStraightLineUnitDistanceGraph n}
+
+/-- The computed E13 counts carried by the package. -/
+def counts (A : HonestSubpolygonAngleRealizationPackage G) :
+    SubpolygonDegreeCounts :=
+  A.package.counts
+
+/-- Forget explicit pointwise angle data to the aggregate honest angle package. -/
+def toHonestSubpolygonAnglePackage
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    HonestSubpolygonAnglePackage G where
+  package := A.package
+  geometricAngleSum := A.angleRealization.geometricAngleSum
+  forced_le_geometric := by
+    simpa [counts, HonestSubpolygonPackage.counts] using
+      A.angleRealization.forced_le_geometricAngleSum
+  geometric_le_polygon := by
+    simpa [counts, HonestSubpolygonPackage.counts] using
+      A.angleRealization.geometric_le_polygon
+
+/-- Projection to `SubpolygonAssembly`'s honest angle package. -/
+def toAssemblyAngleData
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    HonestGeometricSubpolygonAngleData G :=
+  A.toHonestSubpolygonAnglePackage.toAssemblyAngleData
+
+/-- Projection to the cycle/count/angle data consumed by planar-boundary
+assembly. -/
+def toSubpolygonCycleCountAngleData
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    SubpolygonCycleCountAngleData G :=
+  A.toAssemblyAngleData.toSubpolygonCycleCountAngleData
+
+@[simp]
+theorem toHonestSubpolygonAnglePackage_counts
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    A.toHonestSubpolygonAnglePackage.counts = A.counts :=
+  rfl
+
+@[simp]
+theorem toSubpolygonCycleCountAngleData_counts
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    A.toSubpolygonCycleCountAngleData.counts = A.counts :=
+  rfl
+
+/-- The angle lower bound for the computed induced counts. -/
+theorem angleLowerBound
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    A.counts.AngleLowerBound := by
+  simpa [counts] using A.toHonestSubpolygonAnglePackage.angleLowerBound
+
+/-- Projection to the core package. -/
+def toSubpolygonPackage
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    SubpolygonPackage G :=
+  A.package.toSubpolygonPackage A.angleLowerBound
+
+@[simp]
+theorem toSubpolygonPackage_counts
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    A.toSubpolygonPackage.counts = A.counts :=
+  rfl
+
+/-- E13 with high-degree slack for the computed induced counts. -/
+theorem lowDegreeWithHighDegreeSlack
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    A.counts.D5 + 2 * A.counts.D6 + 6 <=
+      2 * A.counts.D2 + A.counts.D3 := by
+  simpa [counts] using
+    A.toHonestSubpolygonAnglePackage.lowDegreeWithHighDegreeSlack
+
+/-- Swanepoel's E13 low-degree conclusion for the computed counts. -/
+theorem lowDegree
+    (A : HonestSubpolygonAngleRealizationPackage G) :
+    6 <= 2 * A.counts.D2 + A.counts.D3 := by
+  simpa [counts] using A.toHonestSubpolygonAnglePackage.lowDegree
+
+end HonestSubpolygonAngleRealizationPackage
+
 /-! ## Families feeding `SubpolygonAssembly` -/
 
 /-- A family of honest subpolygon angle packages tied to one face-boundary
@@ -504,6 +596,97 @@ theorem subpolygonLowDegree
     F.toPlanarBoundarySubpolygonInputs.subpolygonLowDegree S
 
 end HonestSubpolygonFamilyPackage
+
+/-! ## Families with actual angle realizations -/
+
+/-- A family of honest subpolygon packages whose E13 lower bounds are supplied
+by explicit pointwise real angle realizations. -/
+structure HonestSubpolygonAngleRealizationFamilyPackage
+    (G : CanonicalStraightLineUnitDistanceGraph n) where
+  faceBoundary : UnitDistanceFaceBoundaryHypotheses G
+  Subpolygon : Type u
+  package : Subpolygon -> HonestSubpolygonAngleRealizationPackage G
+
+namespace HonestSubpolygonAngleRealizationFamilyPackage
+
+variable {G : CanonicalStraightLineUnitDistanceGraph n}
+
+/-- Computed E13 counts for a member of the family. -/
+def subpolygonCounts
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G)
+    (S : F.Subpolygon) :
+    SubpolygonDegreeCounts :=
+  (F.package S).counts
+
+/-- Forget explicit pointwise realizations to the aggregate honest family
+package. -/
+def toHonestSubpolygonFamilyPackage
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G) :
+    HonestSubpolygonFamilyPackage.{u} G where
+  faceBoundary := F.faceBoundary
+  Subpolygon := F.Subpolygon
+  package := fun S => (F.package S).toHonestSubpolygonAnglePackage
+
+/-- The exact subpolygon inputs consumed by `SubpolygonAssembly`. -/
+def toPlanarBoundarySubpolygonInputs
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G) :
+    PlanarBoundarySubpolygonInputs.{u} G :=
+  F.toHonestSubpolygonFamilyPackage.toPlanarBoundarySubpolygonInputs
+
+@[simp]
+theorem toPlanarBoundarySubpolygonInputs_faceBoundary
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G) :
+    F.toPlanarBoundarySubpolygonInputs.faceBoundary = F.faceBoundary :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundarySubpolygonInputs_Subpolygon
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G) :
+    F.toPlanarBoundarySubpolygonInputs.Subpolygon = F.Subpolygon :=
+  rfl
+
+@[simp]
+theorem toPlanarBoundarySubpolygonInputs_subpolygonDegreeCounts
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G)
+    (S : F.Subpolygon) :
+    F.toPlanarBoundarySubpolygonInputs.subpolygonDegreeCounts S =
+      F.subpolygonCounts S :=
+  rfl
+
+/-- The cycle/count/angle data for one member, in assembly shape. -/
+def subpolygonData
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G)
+    (S : F.Subpolygon) :
+    SubpolygonCycleCountAngleData G :=
+  F.toPlanarBoundarySubpolygonInputs.subpolygonData S
+
+@[simp]
+theorem subpolygonData_counts
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G)
+    (S : F.Subpolygon) :
+    (F.subpolygonData S).counts = F.subpolygonCounts S :=
+  rfl
+
+/-- E13 with high-degree slack for every honest subpolygon in the family. -/
+theorem subpolygonLowDegreeWithHighDegreeSlack
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G)
+    (S : F.Subpolygon) :
+    (F.subpolygonCounts S).D5 + 2 * (F.subpolygonCounts S).D6 + 6 <=
+      2 * (F.subpolygonCounts S).D2 + (F.subpolygonCounts S).D3 := by
+  simpa [subpolygonCounts] using
+    F.toPlanarBoundarySubpolygonInputs.subpolygonLowDegreeWithHighDegreeSlack S
+
+/-- Swanepoel's E13 low-degree conclusion for every honest subpolygon in the
+family. -/
+theorem subpolygonLowDegree
+    (F : HonestSubpolygonAngleRealizationFamilyPackage.{u} G)
+    (S : F.Subpolygon) :
+    6 <= 2 * (F.subpolygonCounts S).D2 +
+      (F.subpolygonCounts S).D3 := by
+  simpa [subpolygonCounts] using
+    F.toPlanarBoundarySubpolygonInputs.subpolygonLowDegree S
+
+end HonestSubpolygonAngleRealizationFamilyPackage
 
 end
 

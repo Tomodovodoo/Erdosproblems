@@ -5,6 +5,10 @@ Source document: `../Proof_Files/PaTo96.ps`
 Original paper: J. Pach and G. Toth, "On the independence number of coin
 graphs", Geombinatorics 6 (1996), 30-33.
 
+Current-status note, 2026-05-19: this is a source-paper roadmap, not the live
+Lean handoff.  It should be read for paper structure and obligations; check
+`theorem_dependency_map.md` for current Lean route status before starting work.
+
 Status: proof skeleton only. The paper gives Figure 2 and a deformation
 argument, not exact coordinates. A Lean proof of the 5/16 upper bound requires
 the finite graph data and geometric realization obligations listed below.

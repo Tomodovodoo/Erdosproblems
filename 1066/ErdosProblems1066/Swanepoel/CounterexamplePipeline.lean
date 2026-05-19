@@ -1,4 +1,5 @@
 import ErdosProblems1066.Swanepoel.GraphBridge
+import ErdosProblems1066.Swanepoel.InducedSubconfiguration
 import ErdosProblems1066.Swanepoel.Lemma10Bridge
 import ErdosProblems1066.Swanepoel.MinimalCounterexample
 
@@ -17,6 +18,7 @@ namespace CounterexamplePipeline
 
 open Combinatorics
 open GraphBridge
+open InducedSubconfiguration
 open MinimalCounterexample
 
 noncomputable section
@@ -157,6 +159,144 @@ theorem graphHasCleared_of_deletionReinsertion
     (hasCleared_of_deletionReinsertion D hD hsmall)
 
 end DeletionReinsertionData
+
+/-! ## Concrete induced deletion bridge -/
+
+namespace InducedDeletionBridge
+
+variable {n : Nat} {C : _root_.UDConfig n}
+
+/-- The ambient vertices kept after deleting `deleted`. -/
+def keptVertices (deleted : Finset (Fin n)) : Finset (Fin n) :=
+  (Finset.univ : Finset (Fin n)) \ deleted
+
+lemma keptVertices_disjoint (deleted : Finset (Fin n)) :
+    Disjoint (keptVertices deleted) deleted := by
+  rw [Finset.disjoint_left]
+  intro v hv hdel
+  exact (Finset.mem_sdiff.mp hv).2 hdel
+
+lemma keptVertices_union_deleted (deleted : Finset (Fin n)) :
+    keptVertices deleted ∪ deleted = (Finset.univ : Finset (Fin n)) := by
+  ext v
+  simp [keptVertices]
+
+lemma keptVertices_card_add_deleted_card (deleted : Finset (Fin n)) :
+    (keptVertices deleted).card + deleted.card = n := by
+  have hsubset : deleted <= (Finset.univ : Finset (Fin n)) := by
+    intro v _
+    simp
+  have h := Finset.card_sdiff_add_card_eq_card hsubset
+  simpa [keptVertices, Finset.card_univ, Fintype.card_fin] using h
+
+lemma keptVertices_card_lt_original {deleted : Finset (Fin n)}
+    (hdeleted : deleted.Nonempty) :
+    (keptVertices deleted).card < n := by
+  have hpartition := keptVertices_card_add_deleted_card deleted
+  have hpos : 0 < deleted.card := Finset.card_pos.mpr hdeleted
+  omega
+
+/-- The actual induced smaller configuration on the vertices outside
+`deleted`. -/
+def induced (C : _root_.UDConfig n) (deleted : Finset (Fin n)) :
+    InducedSubconfiguration.Induced
+      (m := (keptVertices deleted).card) C (keptVertices deleted) :=
+  InducedSubconfiguration.ofFinset C (keptVertices deleted)
+
+/-- The deletion/reinsertion data determined by the induced kept-side
+configuration. -/
+def data (C : _root_.UDConfig n) (deleted reinsertion : Finset (Fin n))
+    (small : Finset (Fin (keptVertices deleted).card)) :
+    DeletionReinsertionData C ((induced C deleted).config) where
+  kept := (induced C deleted).embed
+  deleted := deleted
+  reinsertion := reinsertion
+  small := small
+
+/-- Local deletion facts plus the induced kept-side configuration supply the
+full deletion/reinsertion hypotheses, including distance preservation. -/
+lemma hypotheses
+    (deleted reinsertion : Finset (Fin n))
+    (small : Finset (Fin (keptVertices deleted).card))
+    (hclosed : IsClosedNeighborhood C reinsertion deleted)
+    (hdeletedCard :
+      (deleted.card : Int) <= 4 * (reinsertion.card : Int) - 1)
+    (hreinsertionCard : reinsertion.card <= 8)
+    (hreinsertionIndep : C.IsIndep reinsertion) :
+    (data C deleted reinsertion small).Hypotheses where
+  keptInjective := (induced C deleted).embed_injective
+  keptDeletedDisjoint := by
+    have h :
+        Disjoint
+          (((Finset.univ : Finset (Fin (keptVertices deleted).card)).image
+            (induced C deleted).embed) : Finset (Fin n))
+          deleted := by
+      rw [(induced C deleted).image_univ]
+      exact keptVertices_disjoint deleted
+    simpa [data] using h
+  cover := by
+    have h :
+        (((Finset.univ : Finset (Fin (keptVertices deleted).card)).image
+            (induced C deleted).embed) : Finset (Fin n)) ∪ deleted =
+          Finset.univ := by
+      rw [(induced C deleted).image_univ]
+      exact keptVertices_union_deleted deleted
+    simpa [data] using h
+  closedNeighborhood := hclosed
+  deletedCard := hdeletedCard
+  reinsertionCard := hreinsertionCard
+  reinsertionIndep := hreinsertionIndep
+  preservesDistances := by
+    exact (induced C deleted).preservesDistancesOn small
+
+/-- Concrete induced-deletion route: once the smaller induced configuration
+has a cleared independent set, the original configuration is cleared. -/
+theorem hasCleared_of_induced_deletion_hasCleared
+    (deleted reinsertion : Finset (Fin n))
+    (hclosed : IsClosedNeighborhood C reinsertion deleted)
+    (hdeletedCard :
+      (deleted.card : Int) <= 4 * (reinsertion.card : Int) - 1)
+    (hreinsertionCard : reinsertion.card <= 8)
+    (hreinsertionIndep : C.IsIndep reinsertion)
+    (hsmall :
+      HasClearedEightThirtyOneIndependentSet
+        ((induced C deleted).config)) :
+    HasClearedEightThirtyOneIndependentSet C := by
+  rcases hsmall with ⟨small, hsmallIndep, hsmallBound⟩
+  let D := data C deleted reinsertion small
+  have hD : D.Hypotheses :=
+    hypotheses deleted reinsertion small hclosed hdeletedCard
+      hreinsertionCard hreinsertionIndep
+  have hsmallD : D.SmallerBound := by
+    exact
+      { smallIndep := hsmallIndep
+        smallBound := hsmallBound }
+  exact D.hasCleared_of_deletionReinsertion hD hsmallD
+
+/-- Version with the chosen smaller independent set supplied directly. -/
+theorem hasCleared_of_induced_deletion
+    (deleted reinsertion : Finset (Fin n))
+    (small : Finset (Fin (keptVertices deleted).card))
+    (hclosed : IsClosedNeighborhood C reinsertion deleted)
+    (hdeletedCard :
+      (deleted.card : Int) <= 4 * (reinsertion.card : Int) - 1)
+    (hreinsertionCard : reinsertion.card <= 8)
+    (hreinsertionIndep : C.IsIndep reinsertion)
+    (hsmallIndep : ((induced C deleted).config).IsIndep small)
+    (hsmallBound :
+      ClearedEightThirtyOneBound (keptVertices deleted).card small.card) :
+    HasClearedEightThirtyOneIndependentSet C := by
+  let D := data C deleted reinsertion small
+  have hD : D.Hypotheses :=
+    hypotheses deleted reinsertion small hclosed hdeletedCard
+      hreinsertionCard hreinsertionIndep
+  have hsmallD : D.SmallerBound := by
+    exact
+      { smallIndep := hsmallIndep
+        smallBound := hsmallBound }
+  exact D.hasCleared_of_deletionReinsertion hD hsmallD
+
+end InducedDeletionBridge
 
 /-! ## E1/E5-facing aliases -/
 

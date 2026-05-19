@@ -78,6 +78,22 @@ theorem pi_div_three_le_value (A : UnitSeparatedAngle G) :
     AngleGeometry.pi_div_three_le_angleAt_of_eucUnit_sides_eucSeparated_base
       A.left_eucUnit A.right_eucUnit A.endpoints_eucSeparated
 
+/-- The unoriented angle carried by a unit-separated local certificate is
+nonnegative. -/
+theorem value_nonnegative (A : UnitSeparatedAngle G) :
+    0 <= A.value := by
+  simpa [value] using
+    AngleGeometry.angleAt_nonneg
+      (G.point A.left) (G.point A.center) (G.point A.right)
+
+/-- The unoriented angle carried by a unit-separated local certificate is at
+most `pi`. -/
+theorem value_le_pi (A : UnitSeparatedAngle G) :
+    A.value <= Real.pi := by
+  simpa [value] using
+    AngleGeometry.angleAt_le_pi
+      (G.point A.left) (G.point A.center) (G.point A.right)
+
 end UnitSeparatedAngle
 
 /-- A finite angle mass made from `m` concrete local `pi / 3` angle
@@ -94,6 +110,28 @@ variable {m : Nat}
 /-- The actual real angle mass represented by this certificate. -/
 def value (M : AngleMassCertificate G m) : Real :=
   Finset.sum (Finset.univ : Finset (Fin m)) fun i => (M.angle i).value
+
+/-- The angle mass represented by finitely many certified local angles is
+nonnegative. -/
+theorem value_nonnegative (M : AngleMassCertificate G m) :
+    0 <= M.value := by
+  unfold value
+  exact Finset.sum_nonneg
+    (fun i _hi => UnitSeparatedAngle.value_nonnegative (M.angle i))
+
+theorem value_le_pi_mul_card (M : AngleMassCertificate G m) :
+    M.value <= Real.pi * (m : Real) := by
+  unfold value
+  calc
+    Finset.sum (Finset.univ : Finset (Fin m))
+        (fun i => (M.angle i).value) <=
+        Finset.sum (Finset.univ : Finset (Fin m))
+          (fun _ => Real.pi) := by
+      exact Finset.sum_le_sum
+        (s := (Finset.univ : Finset (Fin m)))
+        (fun i _hi => (M.angle i).value_le_pi)
+    _ = Real.pi * (m : Real) := by
+      simp [Finset.sum_const, nsmul_eq_mul, mul_comm]
 
 theorem sum_pi_div_three_le_value (M : AngleMassCertificate G m) :
     Finset.sum (Finset.univ : Finset (Fin m)) (fun _ => Real.pi / 3) <=

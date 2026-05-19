@@ -3,6 +3,7 @@ import ErdosProblems1066.PachToth.ExactLocalBranchSolverSurface
 import ErdosProblems1066.PachToth.UnitVectorParameterizationSearch
 import ErdosProblems1066.PachToth.RoleHingeCandidateSearchSurface
 import ErdosProblems1066.PachToth.FlexibleExactLocalTransition
+import ErdosProblems1066.PachToth.NonRigidPeriodCandidateW10
 
 set_option autoImplicit false
 
@@ -390,6 +391,21 @@ structure CompleteNonRigidFamilyFields extends CandidatePeriodFields where
 
 namespace CompleteNonRigidFamilyFields
 
+/-- The complete W10 non-rigid fields project to the flexible exact-local
+family interface without asking for arbitrary-source same-block preservation. -/
+def toFlexibleFamilyFields
+    (F : CompleteNonRigidFamilyFields) :
+    NonRigidPeriodCandidateW10.FlexibleFamilyFields F.candidate :=
+  NonRigidPeriodCandidateW10.FlexibleFamilyFields.ofSearchSurfaceMetricData
+    F.metricData
+
+/-- Direct flexible generated-closure family obtained from the supplied
+candidate, period, and cross-block metric fields. -/
+def toFlexibleGeneratedClosureFamily
+    (F : CompleteNonRigidFamilyFields) :
+    FlexibleExactLocalTransition.GeneratedClosureFamily :=
+  F.toFlexibleFamilyFields.toFlexibleGeneratedClosureFamily
+
 /-- Full family metric hypotheses projected from the supplied cross-block
 metric fields. -/
 def toFamilyMetricHypotheses
@@ -403,7 +419,7 @@ def toFamilyMetricHypotheses
 theorem targetUpperConstructionFiveSixteen
     (F : CompleteNonRigidFamilyFields) :
     PachToth.targetUpperConstructionFiveSixteen :=
-  F.metricData.targetUpperConstructionFiveSixteen
+  F.toFlexibleGeneratedClosureFamily.targetUpperConstructionFiveSixteen
 
 end CompleteNonRigidFamilyFields
 

@@ -63,7 +63,8 @@ theorem subpolygonData_counts
 theorem subpolygonData_angleLowerBound
     (F : ConcreteFamily.{u} (D := D)) (S : F.Subpolygon) :
     (F.subpolygonData S).counts.AngleLowerBound := by
-  simpa using F.subpolygonAngleLowerBound S
+  rw [subpolygonData_counts]
+  exact F.subpolygonAngleLowerBound S
 
 /-- The count bridge package for one concrete subpolygon. -/
 def canonicalCountHypotheses
@@ -246,7 +247,8 @@ def faceCountingBridge
 theorem subpolygonAngleLowerBound
     (P : ConcreteFamilyPackage.{u} C) (S : P.Subpolygon) :
     (P.subpolygonData S).counts.AngleLowerBound := by
-  simpa using P.family.subpolygonAngleLowerBound S
+  rw [subpolygonData_counts]
+  exact P.family.subpolygonAngleLowerBound S
 
 /-- E13 with high-degree slack for the topology-facing package. -/
 theorem lowDegreeWithHighDegreeSlack
@@ -404,7 +406,8 @@ theorem boundaryNegativeCount
 theorem subpolygonAngleLowerBound
     (P : SubpolygonBoundaryPackage.{u} C) (S : P.Subpolygon) :
     (P.subpolygonData S).counts.AngleLowerBound := by
-  simpa using P.family.subpolygonAngleLowerBound S
+  rw [subpolygonData_counts]
+  exact P.family.subpolygonAngleLowerBound S
 
 /-- The concrete subpolygon family gives E13 with high-degree slack. -/
 theorem lowDegreeWithHighDegreeSlack

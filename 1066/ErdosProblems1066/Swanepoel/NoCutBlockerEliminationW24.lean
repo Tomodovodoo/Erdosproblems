@@ -91,6 +91,23 @@ abbrev MinimalFailureSideCardExactFamily : Prop :=
     (hmin : IsMinimalClearedFailure C),
       CutVertexSlackFromDeletion.CutVertexDeletionSideCardExactFact hmin
 
+/-- Direct plus-side avoidance payload from the corrected Lemma 3 route:
+for every supplied cut partition, one of the minimality-cleared witnesses on
+`left ∪ {cut}` or `right ∪ {cut}` avoids the cut vertex and glues with the
+opposite side. -/
+abbrev MinimalFailureCutPartitionPlusSideAvoidsCutData : Prop :=
+  CutVertexSlackFromDeletion.MinimalFailureCutPartitionPlusSideAvoidsCutData
+
+/-- Named-witness source for the plus-side route: one of the two selected
+minimality witnesses on a plus side avoids the cut vertex. -/
+abbrev MinimalFailureCutPartitionPlusSideMinimalityWitnessAvoidsCut : Prop :=
+  CutVertexSlackFromDeletion.MinimalFailureCutPartitionPlusSideMinimalityWitnessAvoidsCut
+
+/-- Exact obstruction source for the corrected plus-side route: simultaneous
+cut-forcing on the two plus sides is impossible in a minimal cleared failure. -/
+abbrev MinimalFailureNoBothPlusSidesCutForcedData : Prop :=
+  CutVertexSlackFromDeletion.MinimalFailureNoBothPlusSidesCutForcedData
+
 variable {n : Nat} {C : _root_.UDConfig n}
 
 /-- A blocker is exactly a minimal cleared failure with a supplied cut-vertex
@@ -231,6 +248,17 @@ theorem not_blocker_of_remainingSlackFamily
     Not MinimalCutVertexBlockerExists :=
   not_blocker_iff_remainingSlackFamily.2 H
 
+/-- Direct paper-side route from deletion slack to uniform no-cut: for a
+supplied cut partition, the slack data glues the two minimality-cleared sides
+and contradicts the ambient minimal failure. -/
+theorem noCutVertexFamily_of_deletionSlackFamily
+    (H : MinimalFailureDeletionSlackFamily) :
+    MinimalFailureNoCutVertexFamily := by
+  intro n C hmin
+  exact
+    CutVertexSlackFromDeletion.noCutVertex_of_minimalFailure_deletionSlackFact_core
+      (C := C) hmin (H C hmin)
+
 /-- The Prop-valued deletion slack family has the same content as no-cut, in
 minimal cleared failures. -/
 theorem deletionSlackFamily_iff_noCutVertexFamily :
@@ -238,10 +266,7 @@ theorem deletionSlackFamily_iff_noCutVertexFamily :
       MinimalFailureNoCutVertexFamily := by
   constructor
   case mp =>
-    intro H n C hmin
-    exact
-      (CutVertexSlackFromDeletion.deletionSlackFact_iff_noCutVertex_of_minimalFailure
-        (C := C) hmin).1 (H C hmin)
+    exact noCutVertexFamily_of_deletionSlackFamily
   case mpr =>
     intro H n C hmin
     exact
@@ -278,14 +303,24 @@ theorem missingArithmetic_iff_noCutVertex_of_minimalFailure
   case mpr =>
     exact missingArithmetic_of_noCutVertex (C := C) hmin
 
+/-- Direct paper-side route from the retained pay-for-cut arithmetic to
+uniform no-cut.  This uses the minimality-selected side witnesses themselves:
+if a cut partition were supplied, the pay-for-cut field would glue those sides
+into a cleared ambient set. -/
+theorem noCutVertexFamily_of_missingArithmeticFamily
+    (H : MinimalFailureMissingArithmeticFamily) :
+    MinimalFailureNoCutVertexFamily := by
+  intro n C hmin
+  exact
+    CutVertexSlackFromDeletion.noCutVertex_of_minimalFailure_missingArithmetic_core
+      (C := C) hmin (H C hmin)
+
 theorem missingArithmeticFamily_iff_noCutVertexFamily :
     MinimalFailureMissingArithmeticFamily <->
       MinimalFailureNoCutVertexFamily := by
   constructor
   case mp =>
-    intro H n C hmin
-    exact (missingArithmetic_iff_noCutVertex_of_minimalFailure
-      (C := C) hmin).1 (H C hmin)
+    exact noCutVertexFamily_of_missingArithmeticFamily
   case mpr =>
     intro H n C hmin
     exact (missingArithmetic_iff_noCutVertex_of_minimalFailure
@@ -317,14 +352,23 @@ theorem sideCardExactFact_iff_noCutVertex_of_minimalFailure
   case mpr =>
     exact sideCardExactFact_of_noCutVertex (C := C) hmin
 
+/-- Direct paper-side route from the wrapper-free side-cardinality lemma to
+uniform no-cut.  A supplied cut partition plus this cardinality bound gives a
+cleared glued side set, contradicting minimality. -/
+theorem noCutVertexFamily_of_sideCardExactFamily
+    (H : MinimalFailureSideCardExactFamily) :
+    MinimalFailureNoCutVertexFamily := by
+  intro n C hmin
+  exact
+    CutVertexSlackFromDeletion.noCutVertex_of_minimalFailure_sideCardExactFact
+      (C := C) hmin (H C hmin)
+
 theorem sideCardExactFamily_iff_noCutVertexFamily :
     MinimalFailureSideCardExactFamily <->
       MinimalFailureNoCutVertexFamily := by
   constructor
   case mp =>
-    intro H n C hmin
-    exact (sideCardExactFact_iff_noCutVertex_of_minimalFailure
-      (C := C) hmin).1 (H C hmin)
+    exact noCutVertexFamily_of_sideCardExactFamily
   case mpr =>
     intro H n C hmin
     exact (sideCardExactFact_iff_noCutVertex_of_minimalFailure
@@ -335,6 +379,87 @@ theorem not_blocker_iff_sideCardExactFamily :
       MinimalFailureSideCardExactFamily :=
   not_blocker_iff_noCutVertexFamily.trans
     sideCardExactFamily_iff_noCutVertexFamily.symm
+
+/-- Corrected non-side-card Lemma 3 branch: the plus-side avoidance payload
+eliminates every minimal cut-vertex blocker by a direct glued independent-set
+contradiction. -/
+theorem noCutVertexFamily_of_plusSideAvoidsCutData
+    (H : MinimalFailureCutPartitionPlusSideAvoidsCutData) :
+    MinimalFailureNoCutVertexFamily :=
+  CutVertexSlackFromDeletion.minimalFailureNoCutVertexFamily_of_plusSideAvoidsCutData
+    H
+
+theorem plusSideAvoidsCutData_of_plusSideMinimalityWitnessAvoidsCut
+    (H : MinimalFailureCutPartitionPlusSideMinimalityWitnessAvoidsCut) :
+    MinimalFailureCutPartitionPlusSideAvoidsCutData :=
+  CutVertexSlackFromDeletion.minimalFailureCutPartitionPlusSideAvoidsCutData_of_minimalityWitnessAvoidsCut
+    H
+
+theorem noCutVertexFamily_of_plusSideMinimalityWitnessAvoidsCut
+    (H : MinimalFailureCutPartitionPlusSideMinimalityWitnessAvoidsCut) :
+    MinimalFailureNoCutVertexFamily :=
+  CutVertexSlackFromDeletion.minimalFailureNoCutVertexFamily_of_plusSideMinimalityWitnessAvoidsCut
+    H
+
+theorem noBothPlusSidesCutForcedData_of_minimalFailure :
+    MinimalFailureNoBothPlusSidesCutForcedData :=
+  CutVertexSlackFromDeletion.noBothPlusSidesCutForcedData_of_minimalFailure
+
+theorem noCutVertexFamily_of_noBothPlusSidesCutForcedData
+    (H : MinimalFailureNoBothPlusSidesCutForcedData) :
+    MinimalFailureNoCutVertexFamily :=
+  CutVertexSlackFromDeletion.minimalFailureNoCutVertexFamily_of_noBothPlusSidesCutForcedData
+    H
+
+theorem plusSideAvoidsCutData_of_noBothPlusSidesCutForcedData
+    (H : MinimalFailureNoBothPlusSidesCutForcedData) :
+    MinimalFailureCutPartitionPlusSideAvoidsCutData :=
+  CutVertexSlackFromDeletion.plusSideAvoidsCutData_of_noBothPlusSidesCutForcedData
+    H
+
+theorem noCutVertexFamily_of_refuting_bothPlusSidesCutForced :
+    MinimalFailureNoCutVertexFamily :=
+  CutVertexSlackFromDeletion.minimalFailureNoCutVertexFamily_of_refuting_bothPlusSidesCutForced
+
+theorem plusSideAvoidsCutData_of_noCutVertexFamily
+    (H : MinimalFailureNoCutVertexFamily) :
+    MinimalFailureCutPartitionPlusSideAvoidsCutData :=
+  CutVertexSlackFromDeletion.plusSideAvoidsCutData_of_minimalFailureNoCutVertexFamily
+    H
+
+theorem plusSideAvoidsCutData_iff_noCutVertexFamily :
+    MinimalFailureCutPartitionPlusSideAvoidsCutData <->
+      MinimalFailureNoCutVertexFamily :=
+  CutVertexSlackFromDeletion.plusSideAvoidsCutData_iff_minimalFailureNoCutVertexFamily
+
+theorem not_blocker_iff_plusSideAvoidsCutData :
+    Not MinimalCutVertexBlockerExists <->
+      MinimalFailureCutPartitionPlusSideAvoidsCutData :=
+  not_blocker_iff_noCutVertexFamily.trans
+    plusSideAvoidsCutData_iff_noCutVertexFamily.symm
+
+theorem not_blocker_of_noBothPlusSidesCutForcedData
+    (H : MinimalFailureNoBothPlusSidesCutForcedData) :
+    Not MinimalCutVertexBlockerExists :=
+  not_blocker_iff_noCutVertexFamily.2
+    (noCutVertexFamily_of_noBothPlusSidesCutForcedData H)
+
+theorem not_blocker_of_refuting_bothPlusSidesCutForced :
+    Not MinimalCutVertexBlockerExists :=
+  not_blocker_iff_noCutVertexFamily.2
+    noCutVertexFamily_of_refuting_bothPlusSidesCutForced
+
+theorem not_blocker_of_plusSideAvoidsCutData
+    (H : MinimalFailureCutPartitionPlusSideAvoidsCutData) :
+    Not MinimalCutVertexBlockerExists :=
+  not_blocker_iff_noCutVertexFamily.2
+    (noCutVertexFamily_of_plusSideAvoidsCutData H)
+
+theorem not_blocker_of_plusSideMinimalityWitnessAvoidsCut
+    (H : MinimalFailureCutPartitionPlusSideMinimalityWitnessAvoidsCut) :
+    Not MinimalCutVertexBlockerExists :=
+  not_blocker_iff_noCutVertexFamily.2
+    (noCutVertexFamily_of_plusSideMinimalityWitnessAvoidsCut H)
 
 /-- W20 producer nonemptiness is equivalent to blocker elimination. -/
 theorem nonempty_w20PayForCutSource_iff_not_blocker :

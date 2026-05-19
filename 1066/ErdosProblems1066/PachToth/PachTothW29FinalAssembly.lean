@@ -92,6 +92,106 @@ abbrev W29ArbitraryOnlySourceGate : Prop :=
       ExactChainFamilyDependency \/
         ExactChainFamilySourcePackageGate
 
+/-! ## Small-k plus large-tail source assembly -/
+
+abbrev SmallExplicitTransitionCertificates : Type :=
+  LargeTailFieldsSourceW29.SmallExplicitTransitionCertificates
+
+abbrev SmallClosedPlacementFamilyBelowSix : Type :=
+  LargeTailFieldsSourceW29.SmallClosedPlacementFamilyBelowSix
+
+abbrev LargeClosedPlacementFamilyFromSix : Type :=
+  LargeTailFieldsSourceW29.LargeClosedPlacementFamilyFromSix
+
+abbrev FlexibleGeneratedClosureFamily : Type :=
+  ClosedPlacementSmallKCertificatesW19.FlexibleGeneratedClosureFamily
+
+abbrev FlexibleGeneratedClosureSourceGate : Prop :=
+  Nonempty FlexibleGeneratedClosureFamily
+
+def smallClosedPlacementFamilyBelowSixOfSmallExplicitTransitionCertificates
+    (C : SmallExplicitTransitionCertificates) :
+    SmallClosedPlacementFamilyBelowSix :=
+  LargeTailFieldsSourceW29.smallClosedPlacementFamilyBelowSixOfSmallExplicitTransitionCertificates
+    C
+
+def exactBlocksOneThroughFiveOfSmallExplicitTransitionCertificates
+    (C : SmallExplicitTransitionCertificates) :
+    ExactChainFamilySourceW29.ExactBlocksOneThroughFive :=
+  PositiveChainComponentsSourceW29.exactBlocksOneThroughFive_of_smallLengthExactBlockTargets
+    C.toSmallLengthExactBlockTargets
+
+def exactChainFamilySourcePackageOfSmallExplicitTransitionCertificatesAndLargeTail
+    (small : SmallExplicitTransitionCertificates)
+    (large : LargeClosedPlacementFamilyFromSix) :
+    ExactChainFamilySourceW29.ExactChainFamilySourcePackage :=
+  ExactChainFamilySourceW29.packageOfLargeTailExactSourcePackage
+    (LargeTailExactSourceW28.packageOfLargeClosedPlacementFieldsFromSix
+      (LargeTailFieldsSourceW29.largeClosedPlacementFieldsFromSixOfClosedPlacementFamilyFromSix
+        large))
+    (exactBlocksOneThroughFiveOfSmallExplicitTransitionCertificates small)
+
+theorem exactChainFamilySourcePackageGate_of_smallExplicitTransitionCertificates_and_largeTail
+    (small : SmallExplicitTransitionCertificates)
+    (large : LargeClosedPlacementFamilyFromSix) :
+    ExactChainFamilySourcePackageGate :=
+  Nonempty.intro
+    (exactChainFamilySourcePackageOfSmallExplicitTransitionCertificatesAndLargeTail
+      small large)
+
+theorem w29ArbitraryOnlySourceGate_of_smallExplicitTransitionCertificates_and_largeTail
+    (small : SmallExplicitTransitionCertificates)
+    (large : LargeClosedPlacementFamilyFromSix) :
+    W29ArbitraryOnlySourceGate :=
+  Or.inr
+    (Or.inr
+      (Or.inr
+        (exactChainFamilySourcePackageGate_of_smallExplicitTransitionCertificates_and_largeTail
+          small large)))
+
+theorem arbitraryTarget_of_smallExplicitTransitionCertificates_and_largeTail
+    (small : SmallExplicitTransitionCertificates)
+    (large : LargeClosedPlacementFamilyFromSix) :
+    ArbitraryTarget :=
+  ExactChainFamilySourceW29.arbitraryTarget_of_exactChainFamilySourcePackage
+    (exactChainFamilySourcePackageOfSmallExplicitTransitionCertificatesAndLargeTail
+      small large)
+
+def exactChainFamilySourcePackageOfFlexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    ExactChainFamilySourceW29.ExactChainFamilySourcePackage :=
+  exactChainFamilySourcePackageOfSmallExplicitTransitionCertificatesAndLargeTail
+    (LargeTailFieldsSourceW29.smallExplicitTransitionCertificatesOfFlexibleGeneratedClosureFamily
+      F)
+    (LargeTailFieldsSourceW29.largeClosedPlacementFamilyFromSixOfFlexibleGeneratedClosureFamily
+      F)
+
+theorem exactChainFamilySourcePackageGate_of_flexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    ExactChainFamilySourcePackageGate :=
+  Nonempty.intro (exactChainFamilySourcePackageOfFlexibleGeneratedClosureFamily F)
+
+theorem w29ArbitraryOnlySourceGate_of_flexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    W29ArbitraryOnlySourceGate :=
+  Or.inr
+    (Or.inr
+      (Or.inr
+        (exactChainFamilySourcePackageGate_of_flexibleGeneratedClosureFamily F)))
+
+theorem arbitraryTarget_of_flexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    ArbitraryTarget :=
+  ExactChainFamilySourceW29.arbitraryTarget_of_exactChainFamilySourcePackage
+    (exactChainFamilySourcePackageOfFlexibleGeneratedClosureFamily F)
+
+theorem arbitraryTarget_of_flexibleGeneratedClosureSourceGate
+    (H : FlexibleGeneratedClosureSourceGate) :
+    ArbitraryTarget := by
+  cases H with
+  | intro F =>
+      exact arbitraryTarget_of_flexibleGeneratedClosureFamily F
+
 /-! ## Source-to-endpoint closures -/
 
 theorem exactAndArbitraryTargets_of_anyGeneratedCompletionRowsGate
@@ -310,6 +410,9 @@ abbrev PachTothW29ArbitraryOnlySourceGate : Prop :=
 abbrev PachTothW29RemainingExactAndArbitrarySourceBlocker : Prop :=
   PachToth.PachTothW29FinalAssembly.RemainingExactAndArbitrarySourceBlocker
 
+abbrev PachTothW29FlexibleGeneratedClosureSourceGate : Prop :=
+  PachToth.PachTothW29FinalAssembly.FlexibleGeneratedClosureSourceGate
+
 theorem pachtoth_w29_exactAndArbitraryTargets_of_finalConditionalSourceGate
     (H : PachTothW29FinalConditionalSourceGate) :
     PachToth.PachTothW29FinalAssembly.ExactAndArbitraryTargets :=
@@ -332,6 +435,12 @@ theorem pachtoth_w29_arbitraryTarget_of_arbitraryOnlySourceGate
     (H : PachTothW29ArbitraryOnlySourceGate) :
     PachToth.PachTothW29FinalAssembly.ArbitraryTarget :=
   PachToth.PachTothW29FinalAssembly.arbitraryTarget_of_w29ArbitraryOnlySourceGate
+    H
+
+theorem pachtoth_w29_arbitraryTarget_of_flexibleGeneratedClosureSourceGate
+    (H : PachTothW29FlexibleGeneratedClosureSourceGate) :
+    PachToth.PachTothW29FinalAssembly.ArbitraryTarget :=
+  PachToth.PachTothW29FinalAssembly.arbitraryTarget_of_flexibleGeneratedClosureSourceGate
     H
 
 theorem pachtoth_w29_finalStatus :

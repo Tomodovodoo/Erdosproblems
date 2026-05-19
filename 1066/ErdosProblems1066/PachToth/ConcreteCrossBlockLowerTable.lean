@@ -334,6 +334,78 @@ structure ConcreteNonConnectorLowerTableFamily where
 
 namespace ConcreteNonConnectorLowerTableFamily
 
+def ofVectorCertificateFamily
+    (periodSearch : PeriodSearchData)
+    (C :
+      UpperTriangleNonConnectorVectorCertificateFamily
+        periodSearch.toRoleHingedPeriodSearchFamily) :
+    ConcreteNonConnectorLowerTableFamily where
+  periodSearch := periodSearch
+  tables := NonConnectorLowerTableFamily.ofVectorCertificateFamily C
+
+def ofListCertificateFamily
+    (periodSearch : PeriodSearchData)
+    (C :
+      UpperTriangleNonConnectorListCertificateFamily
+        periodSearch.toRoleHingedPeriodSearchFamily) :
+    ConcreteNonConnectorLowerTableFamily where
+  periodSearch := periodSearch
+  tables := NonConnectorLowerTableFamily.ofListCertificateFamily C
+
+@[simp]
+theorem ofVectorCertificateFamily_periodSearch
+    (periodSearch : PeriodSearchData)
+    (C :
+      UpperTriangleNonConnectorVectorCertificateFamily
+        periodSearch.toRoleHingedPeriodSearchFamily) :
+    (ofVectorCertificateFamily periodSearch C).periodSearch =
+      periodSearch := by
+  rfl
+
+@[simp]
+theorem ofListCertificateFamily_periodSearch
+    (periodSearch : PeriodSearchData)
+    (C :
+      UpperTriangleNonConnectorListCertificateFamily
+        periodSearch.toRoleHingedPeriodSearchFamily) :
+    (ofListCertificateFamily periodSearch C).periodSearch =
+      periodSearch := by
+  rfl
+
+theorem nonempty_iff_exists_periodSearch_tables :
+    Nonempty ConcreteNonConnectorLowerTableFamily <->
+      Exists fun periodSearch : PeriodSearchData =>
+        Nonempty
+          (NonConnectorLowerTableFamily
+            periodSearch.toRoleHingedPeriodSearchFamily) := by
+  constructor
+  · intro H
+    cases H with
+    | intro C =>
+        exact Exists.intro C.periodSearch (Nonempty.intro C.tables)
+  · intro H
+    cases H with
+    | intro periodSearch HT =>
+        cases HT with
+        | intro tables =>
+            exact Nonempty.intro
+              { periodSearch := periodSearch
+                tables := tables }
+
+theorem nonempty_periodSearch_of_nonempty
+    (H : Nonempty ConcreteNonConnectorLowerTableFamily) :
+    Nonempty PeriodSearchData := by
+  cases H with
+  | intro C =>
+      exact Nonempty.intro C.periodSearch
+
+theorem nonempty_roleHingedPeriodSearchFamily_of_nonempty
+    (H : Nonempty ConcreteNonConnectorLowerTableFamily) :
+    Nonempty RoleHingedPeriodSearchFamily := by
+  cases H with
+  | intro C =>
+      exact Nonempty.intro C.periodSearch.toRoleHingedPeriodSearchFamily
+
 def toRoleHingedPeriodSearchFamily
     (C : ConcreteNonConnectorLowerTableFamily) :
     RoleHingedPeriodSearchFamily :=

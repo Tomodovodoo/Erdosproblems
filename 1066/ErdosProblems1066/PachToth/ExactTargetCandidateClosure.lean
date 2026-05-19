@@ -1,6 +1,7 @@
 import ErdosProblems1066.PachToth.NonRigidConnectorSeparationFacts
 import ErdosProblems1066.PachToth.PeriodWordCertificates
 import ErdosProblems1066.PachToth.RoleHingeInterfaceRefinement
+import ErdosProblems1066.PachToth.RoleHingeExactLocalFinite
 
 set_option autoImplicit false
 
@@ -37,6 +38,36 @@ noncomputable section
 
 abbrev R2 := Prod Real Real
 abbrev LocalVertexIndex := CrossBlockLowerBoundsInterface.LocalVertexIndex
+
+/-- The same-branch residual exact-local rows left after the role-angle port
+pairs are discharged. -/
+abbrev SameExactLocalResidualField : Prop :=
+  forall source : LocalVertex -> R2,
+    RoleHingeSameBlockAlgebra.MatchesExactLocalSqDistances source ->
+      forall u v : LocalVertex,
+        Not (RoleHingeAngleCertificates.IsRoleAnglePortPair u v) ->
+          RoleHingeSameBlockAlgebra.sqDist
+              (RoleHingeConcreteSearch.samePlaceNext source u)
+              (RoleHingeConcreteSearch.samePlaceNext source v) =
+            ((ExactLocalGeometry.localNorm4 u v : Int) : Real) / 4
+
+/-- The opposite-branch residual exact-local rows left after the role-angle
+port pairs are discharged. -/
+abbrev OppositeExactLocalResidualField : Prop :=
+  forall source : LocalVertex -> R2,
+    RoleHingeSameBlockAlgebra.MatchesExactLocalSqDistances source ->
+      forall u v : LocalVertex,
+        Not (RoleHingeAngleCertificates.IsRoleAnglePortPair u v) ->
+          RoleHingeSameBlockAlgebra.sqDist
+              (RoleHingeConcreteSearch.oppositePlaceNext source u)
+              (RoleHingeConcreteSearch.oppositePlaceNext source v) =
+            ((ExactLocalGeometry.localNorm4 u v : Int) : Real) / 4
+
+/-- The exact-local residual fields required to extend the checked partial
+period/non-connector package to the old full exact-local route. -/
+structure ExactLocalResidualFields where
+  same_rest : SameExactLocalResidualField
+  opposite_rest : OppositeExactLocalResidualField
 
 /-- The concrete connector-only Figure 2 transition obligations. -/
 abbrev concreteObligations :
@@ -105,9 +136,185 @@ structure MinimalExactTargetCertificate where
       (i : Fin k) (u : LocalVertexIndex)
       (j : Fin k) (v : LocalVertexIndex),
         Ne i j ->
+        Not (IndexedCyclicConnectorPair
+            hk i u j v) ->
+            1 <= concreteIndexedGeneratedSqDist word hk i u j v
+
+/-- The checked portion of the exact-target candidate certificate that does
+not include the residual exact-local same-block rows.
+
+This is the usable partial package produced by period-word and non-connector
+table searches.  The residual rows are intentionally supplied only at the final
+extension step, because the current concrete role-hinge maps do not provide
+those fields. -/
+structure MinimalExactTargetPartialCertificate where
+  word : forall (k : Nat), 0 < k -> OrientationWord.Word k
+  equation :
+    forall (k : Nat) (hk : 0 < k),
+      PeriodWordCertificates.AlgebraicEquationsForWord
+        concreteObligations
+        hk
+        BaseTransitionRealization.exactBase
+        (word k hk)
+  nonConnectorSqDist_ge_one :
+    forall (k : Nat) (hk : 0 < k)
+      (i : Fin k) (u : LocalVertexIndex)
+      (j : Fin k) (v : LocalVertexIndex),
+        Ne i j ->
           Not (IndexedCyclicConnectorPair
             hk i u j v) ->
             1 <= concreteIndexedGeneratedSqDist word hk i u j v
+
+namespace MinimalExactTargetPartialCertificate
+
+/-- Extend the checked period/lower-table package to the full minimal
+exact-target certificate when the residual exact-local rows are available. -/
+def withExactLocalResiduals
+    (P : MinimalExactTargetPartialCertificate)
+    (same_rest : SameExactLocalResidualField)
+    (opposite_rest : OppositeExactLocalResidualField) :
+    MinimalExactTargetCertificate where
+  word := P.word
+  equation := P.equation
+  same_rest := same_rest
+  opposite_rest := opposite_rest
+  nonConnectorSqDist_ge_one := P.nonConnectorSqDist_ge_one
+
+/-- Extend a checked partial certificate using the bundled residual fields. -/
+def withExactLocalResidualFields
+    (P : MinimalExactTargetPartialCertificate)
+    (R : ExactLocalResidualFields) :
+    MinimalExactTargetCertificate :=
+  P.withExactLocalResiduals R.same_rest R.opposite_rest
+
+/-- The raw generated-chain orientation extracted from the stored word in the
+partial certificate. -/
+def orientation
+    (P : MinimalExactTargetPartialCertificate)
+    (k : Nat) (hk : 0 < k) :
+    Fin k -> OrientationData.BlockOrientation :=
+  (P.word k hk).toFin
+
+@[simp]
+theorem orientation_apply
+    (P : MinimalExactTargetPartialCertificate)
+    (k : Nat) (hk : 0 < k) (i : Fin k) :
+    P.orientation k hk i = P.word k hk i :=
+  rfl
+
+/-- The indexed algebraic period certificate rebuilt from the partial
+certificate equations. -/
+def indexedCertificate
+    (P : MinimalExactTargetPartialCertificate)
+    (k : Nat) (hk : 0 < k) :
+    PeriodSearchInterface.IndexedAlgebraicPeriodCertificate
+      concreteObligations
+      BaseTransitionRealization.exactBase
+      (PeriodWordCertificates.finiteOrientationWordOfWord hk
+        (P.word k hk)) :=
+  PeriodWordCertificates.indexedAlgebraicCertificateOfWord
+    concreteObligations hk
+    BaseTransitionRealization.exactBase
+    (P.word k hk)
+    (P.equation k hk)
+
+/-- The generated closure equation already follows from the partial
+period-word data. -/
+def closure
+    (P : MinimalExactTargetPartialCertificate)
+    (k : Nat) (hk : 0 < k) :
+    PeriodInterface.GeneratedClosureEquation
+      concreteObligations hk
+      BaseTransitionRealization.exactBase
+      (P.orientation k hk) :=
+  PeriodWordCertificates.generatedClosureEquationOfWord
+    concreteObligations hk
+    BaseTransitionRealization.exactBase
+    (P.word k hk)
+    (P.equation k hk)
+
+/-- The generated final-block period equation already follows from the partial
+period-word data. -/
+def periodEquation
+    (P : MinimalExactTargetPartialCertificate)
+    (k : Nat) (hk : 0 < k) :
+    PeriodInterface.GeneratedPeriodEquation
+      concreteObligations hk
+      BaseTransitionRealization.exactBase
+      (P.orientation k hk) :=
+  PeriodWordCertificates.generatedPeriodEquationOfWord
+    concreteObligations hk
+    BaseTransitionRealization.exactBase
+    (P.word k hk)
+    (P.equation k hk)
+
+/-- The generated-period hypothesis already follows from the partial
+period-word data. -/
+def period
+    (P : MinimalExactTargetPartialCertificate)
+    (k : Nat) (hk : 0 < k) :
+    GeneratedSeparationInterface.GeneratedPeriod
+      concreteObligations hk
+      BaseTransitionRealization.exactBase
+      (P.orientation k hk) :=
+  PeriodWordCertificates.generatedPeriodOfWord
+    concreteObligations hk
+    BaseTransitionRealization.exactBase
+    (P.word k hk)
+    (P.equation k hk)
+
+/-- The stored finite-index square-distance facts in the partial certificate
+give the local non-connector lower-bound predicate with the uniform lower
+table `1`.  This is the strongest separation-side fact available without the
+blocked residual exact-local rows. -/
+theorem nonConnectorLower_bound
+    (P : MinimalExactTargetPartialCertificate)
+    (k : Nat) (hk : 0 < k) :
+    GeneratedNonConnectorCrossBlockDistanceLowerBounds
+        concreteObligations hk
+        BaseTransitionRealization.exactBase
+        (P.orientation k hk)
+        (fun _i _u _j _v => (1 : Real)) := by
+  intro i u j v hij hnot
+  have hnotIndex :
+      Not (IndexedCyclicConnectorPair
+        hk i (CrossBlockLowerBoundsInterface.localVertexIndex u)
+        j (CrossBlockLowerBoundsInterface.localVertexIndex v)) :=
+    not_indexedCyclicConnectorPair_of_not_cyclicConnectorPair
+        hnot
+  have hsq :
+      1 <=
+        concreteIndexedGeneratedSqDist P.word hk i
+          (CrossBlockLowerBoundsInterface.localVertexIndex u)
+          j
+          (CrossBlockLowerBoundsInterface.localVertexIndex v) :=
+    P.nonConnectorSqDist_ge_one k hk i
+      (CrossBlockLowerBoundsInterface.localVertexIndex u)
+      j
+      (CrossBlockLowerBoundsInterface.localVertexIndex v)
+      hij hnotIndex
+  simpa [concreteIndexedGeneratedSqDist, concreteGeneratedPoint,
+    orientation,
+    CrossBlockLowerBoundsInterface.localVertexOfIndex_localVertexIndex] using
+    CrossBlockDistanceSqReduction.one_le_root_eucDist_of_one_le_sqDist hsq
+
+/-- The generated-chain family fixed by the partial certificate's concrete
+transition obligations and stored word family. -/
+def generatedChainFamily
+    (P : MinimalExactTargetPartialCertificate) :
+    GeneratedSeparationInterface.GeneratedChainFamily where
+  O := fun _k _hk => concreteObligations
+  base := fun _k _hk => BaseTransitionRealization.exactBase
+  orientation := P.orientation
+
+/-- Period data for the partial certificate's generated-chain family. -/
+def periods
+    (P : MinimalExactTargetPartialCertificate) :
+    P.generatedChainFamily.Periods := by
+  intro k hk
+  exact P.period k hk
+
+end MinimalExactTargetPartialCertificate
 
 namespace MinimalExactTargetCertificate
 
@@ -344,6 +551,53 @@ theorem targetUpperConstructionFiveSixteen
         C.orbitMetricHypotheses
 
 end MinimalExactTargetCertificate
+
+namespace MinimalExactTargetPartialCertificate
+
+/-- Exact-block target from the checked partial package plus residual
+exact-local rows. -/
+theorem targetUpperConstructionFiveSixteenAt_exactBlock
+    (P : MinimalExactTargetPartialCertificate)
+    (same_rest : SameExactLocalResidualField)
+    (opposite_rest : OppositeExactLocalResidualField)
+    (k : Nat) (hk : 0 < k) :
+    targetUpperConstructionFiveSixteenAt (16 * k) :=
+  (P.withExactLocalResiduals same_rest opposite_rest)
+    |>.targetUpperConstructionFiveSixteenAt_exactBlock k hk
+
+/-- Exact target from the checked partial package plus residual exact-local
+rows. -/
+theorem targetUpperConstructionFiveSixteen
+    (P : MinimalExactTargetPartialCertificate)
+    (same_rest : SameExactLocalResidualField)
+    (opposite_rest : OppositeExactLocalResidualField) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  (P.withExactLocalResiduals same_rest opposite_rest)
+    |>.targetUpperConstructionFiveSixteen
+
+end MinimalExactTargetPartialCertificate
+
+/-- The current concrete same-branch role-hinge map blocks inhabitation of the
+full minimal exact-target certificate: its `same_rest` field is exactly the
+finite residual row family refuted in `RoleHingeExactLocalFinite`. -/
+theorem not_minimalExactTargetCertificate :
+    Not (Nonempty MinimalExactTargetCertificate) := by
+  intro h
+  cases h with
+  | intro C =>
+      exact RoleHingeExactLocalFinite.not_samePlaceNext_full_nonPortPair_rest
+        C.same_rest
+
+/-- The residual-field package needed by the old full exact-local route is
+itself impossible: the same-branch residual field is refuted by the checked
+`T1_1,r` exact-base row. -/
+theorem not_exactLocalResidualFields :
+    Not (Nonempty ExactLocalResidualFields) := by
+  intro h
+  cases h with
+  | intro R =>
+      exact RoleHingeExactLocalFinite.not_samePlaceNext_full_nonPortPair_rest
+        R.same_rest
 
 end
 

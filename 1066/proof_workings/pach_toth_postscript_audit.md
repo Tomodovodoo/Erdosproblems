@@ -6,6 +6,11 @@ Scope: `Proof_Files/PaTo96.ps`, `proof_workings/pach_toth_1996_lean_ready.md`,
 and the current `FiniteGraph`, `ExactLocalGeometry`, `CrossBlockGeometry`
 model.
 
+Current-status note, 2026-05-19: this source audit remains useful for Figure 2
+orientation and non-rigidity facts, but it is not the live Lean handoff.  Check
+`theorem_dependency_map.md` and `nonvacuous_completion_route.md` for the
+current W34 threshold route before turning these findings into tasks.
+
 ## Source findings
 
 The paper prose immediately before Figure 2 gives two construction facts.

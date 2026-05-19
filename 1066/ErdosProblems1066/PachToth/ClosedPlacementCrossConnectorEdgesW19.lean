@@ -362,6 +362,181 @@ def ofConcreteOrbitPeriodEquation
     { separated := separated
       orbit_sq_distances := orbit_sq_distances }
 
+/-! ## Named unit edges from transition and closure certificates -/
+
+/-- A transition certificate supplies the named `T2_2 -> T1_1` connector
+unit edge on its stored target block. -/
+theorem transitionCertificate_t2_2_t1_1
+    {source target : LocalVertex -> R2}
+    (C : OrientationData.TransitionCertificate source target) :
+    _root_.eucDist (source T2_2) (target T1_1) = 1 :=
+  C.connector_unit_target nextConnector_T2_2_T1_1
+
+/-- A transition certificate supplies the named `T2_2 -> T1_2` connector
+unit edge on its stored target block. -/
+theorem transitionCertificate_t2_2_t1_2
+    {source target : LocalVertex -> R2}
+    (C : OrientationData.TransitionCertificate source target) :
+    _root_.eucDist (source T2_2) (target T1_2) = 1 :=
+  C.connector_unit_target nextConnector_T2_2_T1_2
+
+/-- A transition certificate supplies the named `T4_0 -> T0_0` connector
+unit edge on its stored target block. -/
+theorem transitionCertificate_t4_0_t0_0
+    {source target : LocalVertex -> R2}
+    (C : OrientationData.TransitionCertificate source target) :
+    _root_.eucDist (source T4_0) (target T0_0) = 1 :=
+  C.connector_unit_target nextConnector_T4_0_T0_0
+
+/-- A transition certificate supplies the named `T4_0 -> T0_2` connector
+unit edge on its stored target block. -/
+theorem transitionCertificate_t4_0_t0_2
+    {source target : LocalVertex -> R2}
+    (C : OrientationData.TransitionCertificate source target) :
+    _root_.eucDist (source T4_0) (target T0_2) = 1 :=
+  C.connector_unit_target nextConnector_T4_0_T0_2
+
+/-- Same/opposite transition obligations supply the named `T2_2 -> T1_1`
+connector unit edge for any selected orientation. -/
+theorem sameOppositeTransition_t2_2_t1_1
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    (orientation : OrientationData.BlockOrientation)
+    (source : LocalVertex -> R2) :
+    _root_.eucDist (source T2_2)
+      ((O.transitionFor orientation).placeNext source T1_1) = 1 :=
+  O.transitionFor_connector_unit_edges orientation source
+    T2_2 T1_1 nextConnector_T2_2_T1_1
+
+/-- Same/opposite transition obligations supply the named `T2_2 -> T1_2`
+connector unit edge for any selected orientation. -/
+theorem sameOppositeTransition_t2_2_t1_2
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    (orientation : OrientationData.BlockOrientation)
+    (source : LocalVertex -> R2) :
+    _root_.eucDist (source T2_2)
+      ((O.transitionFor orientation).placeNext source T1_2) = 1 :=
+  O.transitionFor_connector_unit_edges orientation source
+    T2_2 T1_2 nextConnector_T2_2_T1_2
+
+/-- Same/opposite transition obligations supply the named `T4_0 -> T0_0`
+connector unit edge for any selected orientation. -/
+theorem sameOppositeTransition_t4_0_t0_0
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    (orientation : OrientationData.BlockOrientation)
+    (source : LocalVertex -> R2) :
+    _root_.eucDist (source T4_0)
+      ((O.transitionFor orientation).placeNext source T0_0) = 1 :=
+  O.transitionFor_connector_unit_edges orientation source
+    T4_0 T0_0 nextConnector_T4_0_T0_0
+
+/-- Same/opposite transition obligations supply the named `T4_0 -> T0_2`
+connector unit edge for any selected orientation. -/
+theorem sameOppositeTransition_t4_0_t0_2
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    (orientation : OrientationData.BlockOrientation)
+    (source : LocalVertex -> R2) :
+    _root_.eucDist (source T4_0)
+      ((O.transitionFor orientation).placeNext source T0_2) = 1 :=
+  O.transitionFor_connector_unit_edges orientation source
+    T4_0 T0_2 nextConnector_T4_0_T0_2
+
+/-- Algebraic generated closure plus reduced metric data carries the four
+named successor connector unit equations for the generated non-rigid chain. -/
+def ofGeneratedClosureReduced
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation) :
+    ExactCrossConnectorUnitCertificate hk
+      (GeneratedClosedChain.generatedPoint O hk base orientation) :=
+  ofGeneratedPeriodReduced O hk base orientation
+    (GeneratedPeriodClosure.generatedPeriod_of_generatedPeriodEquation
+      O hk base orientation
+      (PeriodInterface.generatedPeriodEquation_of_generatedClosureEquation
+        O hk base orientation closure))
+    H
+
+/-- Named `T2_2 -> next T1_1` unit edge from generated closure and reduced
+metric data. -/
+theorem generatedClosureReduced_t2_2_t1_1
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) :
+    _root_.eucDist
+      (GeneratedClosedChain.generatedPoint O hk base orientation i T2_2)
+      (GeneratedClosedChain.generatedPoint O hk base orientation
+        (cyclicSucc hk i) T1_1) = 1 :=
+  (ofGeneratedClosureReduced O hk base orientation closure H).t2_2_t1_1 i
+
+/-- Named `T2_2 -> next T1_2` unit edge from generated closure and reduced
+metric data. -/
+theorem generatedClosureReduced_t2_2_t1_2
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) :
+    _root_.eucDist
+      (GeneratedClosedChain.generatedPoint O hk base orientation i T2_2)
+      (GeneratedClosedChain.generatedPoint O hk base orientation
+        (cyclicSucc hk i) T1_2) = 1 :=
+  (ofGeneratedClosureReduced O hk base orientation closure H).t2_2_t1_2 i
+
+/-- Named `T4_0 -> next T0_0` unit edge from generated closure and reduced
+metric data. -/
+theorem generatedClosureReduced_t4_0_t0_0
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) :
+    _root_.eucDist
+      (GeneratedClosedChain.generatedPoint O hk base orientation i T4_0)
+      (GeneratedClosedChain.generatedPoint O hk base orientation
+        (cyclicSucc hk i) T0_0) = 1 :=
+  (ofGeneratedClosureReduced O hk base orientation closure H).t4_0_t0_0 i
+
+/-- Named `T4_0 -> next T0_2` unit edge from generated closure and reduced
+metric data. -/
+theorem generatedClosureReduced_t4_0_t0_2
+    (O : Figure2Certificate.SameOppositeTransitionObligations)
+    {k : Nat} (hk : 0 < k)
+    (base : LocalVertex -> R2)
+    (orientation : Fin k -> OrientationData.BlockOrientation)
+    (closure :
+      PeriodInterface.GeneratedClosureEquation O hk base orientation)
+    (H :
+      GeneratedSeparationInterface.GeneratedReducedMetricHypotheses
+        O hk base orientation)
+    (i : Fin k) :
+    _root_.eucDist
+      (GeneratedClosedChain.generatedPoint O hk base orientation i T4_0)
+      (GeneratedClosedChain.generatedPoint O hk base orientation
+        (cyclicSucc hk i) T0_2) = 1 :=
+  (ofGeneratedClosureReduced O hk base orientation closure H).t4_0_t0_2 i
+
 /-- Named T2_2 -> next T1_1 unit edge from any checked closed placement. -/
 theorem closedPlacement_t2_2_t1_1
     {k : Nat} {hk : 0 < k}

@@ -2,3 +2,7 @@
 /Aristotle
 __pycache__/
 *.pyc
+/proof_logs/
+/proof_workings/*
+!/proof_workings/
+!/proof_workings/*.md

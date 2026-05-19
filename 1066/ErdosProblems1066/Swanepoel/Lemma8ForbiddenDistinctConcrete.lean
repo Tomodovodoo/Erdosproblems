@@ -209,6 +209,169 @@ theorem ofFrame
 
 end FourForbiddenLabelsPairwiseDistinct
 
+/-! ## Forbidden distinctness reduced to the remaining finite collisions -/
+
+/-- The honest boundary spine already supplies half of the forbidden-label
+distinctness facts.  The full per-index forbidden distinctness package is
+therefore equivalent to the three remaining finite no-collision checks:
+`leftP != nextQ`, `rightP != prevQ`, and `prevQ != nextQ`. -/
+theorem fourForbiddenLabelsPairwiseDistinct_iff_remaining_three
+    {i : M8ExtraIndex} :
+    FourForbiddenLabelsPairwiseDistinct S i <->
+      Not (S.leftP i = S.nextQ i) /\
+      Not (S.rightP i = S.prevQ i) /\
+      Not (S.prevQ i = S.nextQ i) := by
+  constructor
+  · intro D
+    exact ⟨D.left_ne_next, D.right_ne_prev, D.prev_ne_next⟩
+  · intro h
+    exact
+      { left_ne_right := leftP_ne_rightP S i
+        left_ne_prev := leftP_ne_prevQ S i
+        left_ne_next := h.1
+        right_ne_prev := h.2.1
+        right_ne_next := rightP_ne_nextQ S i
+        prev_ne_next := h.2.2 }
+
+/-- Family form: all forbidden-label distinctness fields for the real M8
+spine reduce to one finite family of the three remaining no-collision facts. -/
+theorem fourForbiddenLabelsPairwiseDistinct_family_iff_remaining_three :
+    (forall i : M8ExtraIndex, FourForbiddenLabelsPairwiseDistinct S i) <->
+      forall i : M8ExtraIndex,
+        Not (S.leftP i = S.nextQ i) /\
+        Not (S.rightP i = S.prevQ i) /\
+        Not (S.prevQ i = S.nextQ i) := by
+  constructor
+  · intro h i
+    exact (fourForbiddenLabelsPairwiseDistinct_iff_remaining_three
+      (S := S) (i := i)).1 (h i)
+  · intro h i
+    exact (fourForbiddenLabelsPairwiseDistinct_iff_remaining_three
+      (S := S) (i := i)).2 (h i)
+
+/-- Constructor direction of the family reduction, useful for downstream
+Lemma 8 label packages that only want the concrete distinctness fields. -/
+theorem fourForbiddenLabelsPairwiseDistinct_family_of_remaining_three
+    (h :
+      forall i : M8ExtraIndex,
+        Not (S.leftP i = S.nextQ i) /\
+        Not (S.rightP i = S.prevQ i) /\
+        Not (S.prevQ i = S.nextQ i)) :
+    forall i : M8ExtraIndex, FourForbiddenLabelsPairwiseDistinct S i :=
+  (fourForbiddenLabelsPairwiseDistinct_family_iff_remaining_three
+    (S := S)).2 h
+
+/-! ## Distinctness from the named Lemma 8 extra-neighbor package -/
+
+/-- The Lemma 8 named-extra-neighbor package makes the concrete
+extra-neighbor finset have cardinality two, without using forbidden-label
+distinctness. -/
+theorem extraNeighborFinset_card_eq_two_of_lemma8Combinatorics
+    (E : M8Lemma8Combinatorics S) (i : M8ExtraIndex) :
+    (extraNeighborFinset S i).card = 2 := by
+  classical
+  have hsubset :
+      extraNeighborFinset S i <=
+        ({E.r i, E.s i} : Finset (Fin n)) := by
+    intro x hx
+    have hx' := (mem_extraNeighborFinset S i x).1 hx
+    rcases E.named_of_extra_neighbor hx'.1 hx'.2 with h | h <;> simp [h]
+  have hsupset :
+      ({E.r i, E.s i} : Finset (Fin n)) <=
+        extraNeighborFinset S i := by
+    intro x hx
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+    rcases hx with h | h
+    · subst x
+      exact (mem_extraNeighborFinset S i (E.r i)).2
+        (And.intro (E.r_neighbor i) (E.r_not_forbidden i))
+    · subst x
+      exact (mem_extraNeighborFinset S i (E.s i)).2
+        (And.intro (E.s_neighbor i) (E.s_not_forbidden i))
+  have hset :
+      extraNeighborFinset S i = ({E.r i, E.s i} : Finset (Fin n)) :=
+    Finset.Subset.antisymm hsubset hsupset
+  rw [hset]
+  simp [E.r_ne_s i]
+
+/-- If the Lemma 8 package names exactly two extra neighbors and the center has
+degree six, then the four forbidden labels must occupy four distinct vertices.
+-/
+theorem forbiddenNeighborFinset_card_eq_four_of_lemma8Combinatorics_and_centerDegreeSix
+    (E : M8Lemma8Combinatorics S) {i : M8ExtraIndex}
+    (hdegree : centerDegree S i = 6) :
+    (forbiddenNeighborFinset S i).card = 4 := by
+  classical
+  have hneighbor_subset :
+      LocalExclusions.LocalGraph.neighborFinset
+          (unitDistanceLocalGraph C) (S.centerQ i) <=
+        forbiddenNeighborFinset S i ∪ extraNeighborFinset S i :=
+    FourForbiddenNeighborFrame.neighborFinset_subset_forbidden_union_extra
+      (S := S) (i := i)
+  have hneighbor_card :
+      (LocalExclusions.LocalGraph.neighborFinset
+        (unitDistanceLocalGraph C)
+        (S.q (m8TriangleIndexOfExtra i))).card = 6 := by
+    simpa [centerDegree, LocalExclusions.LocalGraph.degree,
+      M8BoundarySpine.centerQ] using hdegree
+  have hle_union :
+      6 <= (forbiddenNeighborFinset S i ∪ extraNeighborFinset S i).card := by
+    have hcard_le := Finset.card_le_card hneighbor_subset
+    simpa [hneighbor_card] using hcard_le
+  have hdisjoint :
+      Disjoint (forbiddenNeighborFinset S i) (extraNeighborFinset S i) :=
+    FourForbiddenNeighborFrame.disjoint_forbidden_extra (S := S) (i := i)
+  have hunion_card :
+      (forbiddenNeighborFinset S i ∪ extraNeighborFinset S i).card =
+        (forbiddenNeighborFinset S i).card +
+          (extraNeighborFinset S i).card :=
+    Finset.card_union_of_disjoint hdisjoint
+  have hextra :
+      (extraNeighborFinset S i).card = 2 :=
+    extraNeighborFinset_card_eq_two_of_lemma8Combinatorics E i
+  have hge : 4 <= (forbiddenNeighborFinset S i).card := by
+    omega
+  have hle : (forbiddenNeighborFinset S i).card <= 4 := by
+    change
+      ({S.leftP i, S.rightP i, S.prevQ i, S.nextQ i} :
+        Finset (Fin n)).card <= 4
+    exact Finset.card_le_four
+  exact le_antisymm hle hge
+
+/-- Pointwise forbidden-label distinctness follows from the honest center
+degree-six field plus the Lemma 8 named-extra-neighbor package. -/
+theorem fourForbiddenLabelsPairwiseDistinct_of_lemma8Combinatorics_and_centerDegreeSix
+    (E : M8Lemma8Combinatorics S) {i : M8ExtraIndex}
+    (hdegree : centerDegree S i = 6) :
+    FourForbiddenLabelsPairwiseDistinct S i :=
+  FourForbiddenLabelsPairwiseDistinct.of_forbidden_card_eq_four
+    (forbiddenNeighborFinset_card_eq_four_of_lemma8Combinatorics_and_centerDegreeSix
+      (S := S) E hdegree)
+
+/-- Family form of forbidden-label distinctness from the Lemma 8 package and
+the center-degree-six field. -/
+theorem fourForbiddenLabelsPairwiseDistinct_family_of_lemma8Combinatorics_and_centerDegreeSix
+    (E : M8Lemma8Combinatorics S)
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6) :
+    forall i : M8ExtraIndex, FourForbiddenLabelsPairwiseDistinct S i :=
+  fun i =>
+    fourForbiddenLabelsPairwiseDistinct_of_lemma8Combinatorics_and_centerDegreeSix
+      (S := S) E (hdegree i)
+
+/-- The exact remaining no-collision family follows from the Lemma 8 package
+and the center-degree-six field. -/
+theorem remaining_three_noCollision_of_lemma8Combinatorics_and_centerDegreeSix
+    (E : M8Lemma8Combinatorics S)
+    (hdegree : forall i : M8ExtraIndex, centerDegree S i = 6) :
+    forall i : M8ExtraIndex,
+      Not (S.leftP i = S.nextQ i) /\
+      Not (S.rightP i = S.prevQ i) /\
+      Not (S.prevQ i = S.nextQ i) :=
+  (fourForbiddenLabelsPairwiseDistinct_family_iff_remaining_three
+    (S := S)).1
+    (fourForbiddenLabelsPairwiseDistinct_family_of_lemma8Combinatorics_and_centerDegreeSix
+      (S := S) E hdegree)
+
 /-! ## The smallest extra finite frame certificate -/
 
 /--
@@ -433,6 +596,45 @@ theorem extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
 
 end M8FourForbiddenFrameCore
 
+/-! ## Center-degree six from real frame core and Lemma 8 witnesses -/
+
+/-- The honest frame core plus the named Lemma 8 extra-neighbor package closes
+the real center-degree-six field.  Lemma 8 supplies exact cardinality two for
+the non-forbidden neighbors, and the frame core identifies degree six with
+that exact cardinality. -/
+theorem centerDegreeSix_of_lemma8Combinatorics_and_frameCore
+    (E : M8Lemma8Combinatorics S)
+    (F : M8FourForbiddenFrameCore S) :
+    forall i : M8ExtraIndex, centerDegree S i = 6 := by
+  intro i
+  exact (F.centerDegree_eq_six_iff_extraNeighborFinset_card_eq_two i).2
+    (extraNeighborFinset_card_eq_two_of_lemma8Combinatorics E i)
+
+/-- Forbidden-label pairwise distinctness from the same real frame core and
+Lemma 8 witness package, routed through the closed center-degree-six field. -/
+theorem fourForbiddenLabelsPairwiseDistinct_family_of_lemma8Combinatorics_and_frameCore
+    (E : M8Lemma8Combinatorics S)
+    (F : M8FourForbiddenFrameCore S) :
+    forall i : M8ExtraIndex, FourForbiddenLabelsPairwiseDistinct S i :=
+  fourForbiddenLabelsPairwiseDistinct_family_of_lemma8Combinatorics_and_centerDegreeSix
+    (S := S) E
+    (centerDegreeSix_of_lemma8Combinatorics_and_frameCore
+      (S := S) E F)
+
+/-- The remaining finite forbidden-label no-collisions follow from the real
+frame core once the Lemma 8 witnesses are attached. -/
+theorem remaining_three_noCollision_of_lemma8Combinatorics_and_frameCore
+    (E : M8Lemma8Combinatorics S)
+    (F : M8FourForbiddenFrameCore S) :
+    forall i : M8ExtraIndex,
+      Not (S.leftP i = S.nextQ i) /\
+      Not (S.rightP i = S.prevQ i) /\
+      Not (S.prevQ i = S.nextQ i) :=
+  remaining_three_noCollision_of_lemma8Combinatorics_and_centerDegreeSix
+    (S := S) E
+    (centerDegreeSix_of_lemma8Combinatorics_and_frameCore
+      (S := S) E F)
+
 namespace FinitePQSpineRoute
 
 universe u
@@ -515,9 +717,22 @@ theorem extraNeighborFinset_card_eq_two_of_centerDegree_eq_six
     (hdegree : forall i : M8ExtraIndex,
       centerDegree (K.toM8BoundarySpine connectedNoCut hmin) i = 6)
     (i : M8ExtraIndex) :
-    (extraNeighborFinset
-      (K.toM8BoundarySpine connectedNoCut hmin) i).card = 2 :=
+      (extraNeighborFinset
+        (K.toM8BoundarySpine connectedNoCut hmin) i).card = 2 :=
   F.extraNeighborFinset_card_eq_two_of_centerDegree_eq_six hdegree i
+
+/-- The finite-spine frame-core payload is exactly the raw field projection of
+the four-forbidden frame core on the generated spine. -/
+def toFinitePQSpineFrameCoreFields
+    (K : M8FinitePQSpineCertificate D)
+    (F : FourForbiddenFrameCoreFamily
+      (connectedNoCut := connectedNoCut) (hmin := hmin) K) :
+    M8FinitePQSpineFrameCoreFields K connectedNoCut hmin where
+  prev_adj := fun i => M8FourForbiddenFrameCore.prev_adj F i
+  next_adj := fun i => M8FourForbiddenFrameCore.next_adj F i
+  left_ne_next := fun i => M8FourForbiddenFrameCore.left_ne_next F i
+  right_ne_prev := fun i => M8FourForbiddenFrameCore.right_ne_prev F i
+  prev_ne_next := fun i => M8FourForbiddenFrameCore.prev_ne_next F i
 
 end FinitePQSpineRoute
 

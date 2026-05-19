@@ -209,7 +209,8 @@ def checkedTargetFacade
 theorem arbitraryTarget_splitBridge
     (P : ExactGeneratedClosedChainPackage) :
     targetUpperConstructionFiveSixteenArbitrary :=
-  SplitArbitraryNNonRigidBridge.targetUpperConstructionFiveSixteenArbitrary_of_exactGeneratedClosedChainData
+  open SplitArbitraryNNonRigidBridge in
+  targetUpperConstructionFiveSixteenArbitrary_of_exactGeneratedClosedChainData
     P.data
 
 end ExactGeneratedClosedChainPackage
@@ -313,7 +314,8 @@ def ofLargeChainsAndExactBlockSmallCases
   threshold := K0
   largeChain := largeChain
   smallCases :=
-    SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_blockThreshold_of_exactBlockTargets
+    open SmallCaseCertificates in
+    targetUpperConstructionFiveSixteenSmallUpTo_blockThreshold_of_exactBlockTargets
       K0 exactBlock
 
 /-- Build an eventual package when a full exact target supplies the finite
@@ -392,7 +394,8 @@ def targetFacadeOfW10ExactTargetPackage
       ArbitraryNBridgeW10.ExactTargetPackage.targetUpperConstructionFiveSixteenAt_checkedRemainders
         P n
   arbitraryTarget :=
-    ArbitraryNBridgeW10.ExactTargetPackage.targetUpperConstructionFiveSixteenArbitrary_checkedRemainders
+    open ArbitraryNBridgeW10.ExactTargetPackage in
+    targetUpperConstructionFiveSixteenArbitrary_checkedRemainders
       P
 
 /-- W10 positive exact-chain packages as W11 target facades. -/
@@ -401,10 +404,12 @@ def targetFacadeOfW10PositiveExactChainPackage
     ArbitraryNTargetFacade where
   fixedTarget :=
     fun n =>
-      ArbitraryNBridgeW10.PositiveExactChainPackage.targetUpperConstructionFiveSixteenAt_checkedRemainders
+      open ArbitraryNBridgeW10.PositiveExactChainPackage in
+      targetUpperConstructionFiveSixteenAt_checkedRemainders
         P n
   arbitraryTarget :=
-    ArbitraryNBridgeW10.PositiveExactChainPackage.targetUpperConstructionFiveSixteenArbitrary_checkedRemainders
+    open ArbitraryNBridgeW10.PositiveExactChainPackage in
+    targetUpperConstructionFiveSixteenArbitrary_checkedRemainders
       P
 
 end

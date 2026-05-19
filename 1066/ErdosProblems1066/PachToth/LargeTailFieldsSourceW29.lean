@@ -1,3 +1,4 @@
+import ErdosProblems1066.PachToth.ClosedPlacementSmallKCertificatesW19
 import ErdosProblems1066.PachToth.LargeTailExactSourceW28
 
 set_option autoImplicit false
@@ -18,6 +19,7 @@ namespace LargeTailFieldsSourceW29
 
 open Arithmetic
 open FiniteGraph
+open LargeTailExactSourceW28
 
 noncomputable section
 
@@ -72,6 +74,72 @@ abbrev LargeClosedPlacementFamilyFromSix : Type :=
   forall (k : Nat), 6 <= k -> forall hk : 0 < k,
     DeformedPlacement.ClosedPlacement k hk
 
+/-- Source-side closed placements for the finite block counts below the
+threshold used by the large-tail route. -/
+abbrev SmallClosedPlacementFamilyBelowSix : Type :=
+  forall (k : Nat), k < 6 -> forall hk : 0 < k,
+    DeformedPlacement.ClosedPlacement k hk
+
+abbrev SmallExplicitTransitionCertificates : Type :=
+  ClosedPlacementSmallKCertificatesW19.SmallExplicitTransitionCertificates
+
+def smallClosedPlacementFamilyBelowSixOfSmallExplicitTransitionCertificates
+    (C : SmallExplicitTransitionCertificates) :
+    SmallClosedPlacementFamilyBelowSix := by
+  intro k hkSix hk
+  interval_cases k
+  · exact C.lengthOne.toClosedPlacement
+  · exact C.lengthTwo.toClosedPlacement
+  · exact C.lengthThree.toClosedPlacement
+  · exact C.lengthFour.toClosedPlacement
+  · exact C.lengthFive.toClosedPlacement
+
+def smallExplicitTransitionCertificatesOfFlexibleGeneratedClosureFamily
+    (F : ClosedPlacementSmallKCertificatesW19.FlexibleGeneratedClosureFamily) :
+    SmallExplicitTransitionCertificates :=
+  ClosedPlacementSmallKCertificatesW19.smallExplicitTransitionCertificatesOfFlexibleGeneratedClosureFamily
+    F
+
+def smallClosedPlacementFamilyBelowSixOfFlexibleGeneratedClosureFamily
+    (F : ClosedPlacementSmallKCertificatesW19.FlexibleGeneratedClosureFamily) :
+    SmallClosedPlacementFamilyBelowSix :=
+  smallClosedPlacementFamilyBelowSixOfSmallExplicitTransitionCertificates
+    (smallExplicitTransitionCertificatesOfFlexibleGeneratedClosureFamily F)
+
+/-- Assemble all positive closed placements from explicit small placements
+below six and a large-tail closed-placement family from six onward. -/
+def closedPlacementFamilyOfSmallAndTail
+    (small : SmallClosedPlacementFamilyBelowSix)
+    (tail : LargeClosedPlacementFamilyFromSix) :
+    ClosedPlacementFamily :=
+  fun k hk =>
+    if hkSix : 6 <= k then
+      tail k hkSix hk
+    else
+      small k (by omega) hk
+
+def largeClosedPlacementFamilyFromSixOfFlexibleGeneratedClosureFamily
+    (F : ClosedPlacementSmallKCertificatesW19.FlexibleGeneratedClosureFamily) :
+    LargeClosedPlacementFamilyFromSix :=
+  fun k _hkSix hk => F.closedPlacementFamily k hk
+
+def closedPlacementFamilyOfFlexibleGeneratedClosureFamily
+    (F : ClosedPlacementSmallKCertificatesW19.FlexibleGeneratedClosureFamily) :
+    ClosedPlacementFamily :=
+  closedPlacementFamilyOfSmallAndTail
+    (smallClosedPlacementFamilyBelowSixOfFlexibleGeneratedClosureFamily F)
+    (largeClosedPlacementFamilyFromSixOfFlexibleGeneratedClosureFamily F)
+
+/-- Existence form of the all-positive closed-placement assembly from finite
+small placements and the threshold-six tail. -/
+theorem exists_closedPlacement_of_smallAndTail
+    (small : SmallClosedPlacementFamilyBelowSix)
+    (tail : LargeClosedPlacementFamilyFromSix)
+    (k : Nat) (hk : 0 < k) :
+    exists P : DeformedPlacement.ClosedPlacement k hk,
+      P = closedPlacementFamilyOfSmallAndTail small tail k hk := by
+  exact ⟨closedPlacementFamilyOfSmallAndTail small tail k hk, rfl⟩
+
 /-- The raw threshold-six coordinate fields underlying W28 large closed
 placements. -/
 structure LargeRawClosedPlacementFieldsFromSix where
@@ -120,6 +188,15 @@ def explicitClosedPlacementCertificateFamilyOfClosedPlacementFamily
     (H : ClosedPlacementFamily) :
     ExplicitClosedPlacementCertificateFamily :=
   fun k hk => explicitClosedPlacementCertificateOfClosedPlacement (H k hk)
+
+/-- The assembled family gives the requested all-positive explicit certificate
+producer. -/
+def explicitClosedPlacementCertificateFamilyOfSmallAndTail
+    (small : SmallClosedPlacementFamilyBelowSix)
+    (tail : LargeClosedPlacementFamilyFromSix) :
+    ExplicitClosedPlacementCertificateFamily :=
+  explicitClosedPlacementCertificateFamilyOfClosedPlacementFamily
+    (closedPlacementFamilyOfSmallAndTail small tail)
 
 def largeClosedPlacementFieldsFromSixOfTailCertificateFamily
     (C : LargeTailCertificateFamily) :
@@ -238,7 +315,7 @@ theorem remainingLargeTailExactSourceBlocker_iff_tailCertificateFamily :
       Nonempty LargeTailCertificateFamily := by
   exact
     Iff.trans
-      LargeTailExactSourceW28.remainingLargeTailExactSourceBlocker_iff_largeClosedPlacementFieldsFromSix
+      remainingLargeTailExactSourceBlocker_iff_largeClosedPlacementFieldsFromSix
       nonempty_largeClosedPlacementFieldsFromSix_iff_tailCertificateFamily
 
 theorem remainingLargeTailExactSourceBlocker_iff_closedPlacementFamilyFromSix :
@@ -246,7 +323,7 @@ theorem remainingLargeTailExactSourceBlocker_iff_closedPlacementFamilyFromSix :
       Nonempty LargeClosedPlacementFamilyFromSix := by
   exact
     Iff.trans
-      LargeTailExactSourceW28.remainingLargeTailExactSourceBlocker_iff_largeClosedPlacementFieldsFromSix
+      remainingLargeTailExactSourceBlocker_iff_largeClosedPlacementFieldsFromSix
       nonempty_largeClosedPlacementFieldsFromSix_iff_closedPlacementFamilyFromSix
 
 theorem remainingLargeTailExactSourceBlocker_iff_rawFieldsFromSix :
@@ -254,7 +331,7 @@ theorem remainingLargeTailExactSourceBlocker_iff_rawFieldsFromSix :
       Nonempty LargeRawClosedPlacementFieldsFromSix := by
   exact
     Iff.trans
-      LargeTailExactSourceW28.remainingLargeTailExactSourceBlocker_iff_largeClosedPlacementFieldsFromSix
+      remainingLargeTailExactSourceBlocker_iff_largeClosedPlacementFieldsFromSix
       nonempty_largeClosedPlacementFieldsFromSix_iff_rawFieldsFromSix
 
 /-! ## Constructors from existing source surfaces -/
@@ -328,6 +405,12 @@ theorem remainingLargeTailExactSourceBlocker_of_closedPlacementFamilyFromSix
   remainingLargeTailExactSourceBlocker_of_largeClosedPlacementFieldsFromSix
     (largeClosedPlacementFieldsFromSixOfClosedPlacementFamilyFromSix H)
 
+theorem remainingLargeTailExactSourceBlocker_of_flexibleGeneratedClosureFamily
+    (F : ClosedPlacementSmallKCertificatesW19.FlexibleGeneratedClosureFamily) :
+    RemainingLargeTailExactSourceBlocker :=
+  remainingLargeTailExactSourceBlocker_of_closedPlacementFamilyFromSix
+    (largeClosedPlacementFamilyFromSixOfFlexibleGeneratedClosureFamily F)
+
 theorem remainingLargeTailExactSourceBlocker_of_rawFieldsFromSix
     (R : LargeRawClosedPlacementFieldsFromSix) :
     RemainingLargeTailExactSourceBlocker :=
@@ -393,6 +476,12 @@ theorem remainingPositiveExactChainBlocker_of_closedPlacementFamilyFromSix
   LargeTailExactSourceW28.remainingBlocker_of_largeClosedPlacementFieldsFromSix
     (largeClosedPlacementFieldsFromSixOfClosedPlacementFamilyFromSix H)
 
+theorem remainingPositiveExactChainBlocker_of_flexibleGeneratedClosureFamily
+    (F : ClosedPlacementSmallKCertificatesW19.FlexibleGeneratedClosureFamily) :
+    RemainingPositiveExactChainBlocker :=
+  remainingPositiveExactChainBlocker_of_closedPlacementFamilyFromSix
+    (largeClosedPlacementFamilyFromSixOfFlexibleGeneratedClosureFamily F)
+
 theorem remainingPositiveExactChainBlocker_of_concreteClosedOrbitFamily
     (F : ConcreteClosedOrbitFamily) :
     RemainingPositiveExactChainBlocker :=
@@ -406,30 +495,50 @@ end PachToth
 
 namespace Verified
 
+open PachToth.LargeTailFieldsSourceW29
+
 abbrev PachTothW29LargeRawClosedPlacementFieldsFromSix : Type :=
   PachToth.LargeTailFieldsSourceW29.LargeRawClosedPlacementFieldsFromSix
 
 abbrev PachTothW29LargeClosedPlacementFamilyFromSix : Type :=
   PachToth.LargeTailFieldsSourceW29.LargeClosedPlacementFamilyFromSix
 
+abbrev PachTothW29SmallClosedPlacementFamilyBelowSix : Type :=
+  PachToth.LargeTailFieldsSourceW29.SmallClosedPlacementFamilyBelowSix
+
 abbrev PachTothW29RemainingLargeTailExactSourceBlocker : Prop :=
   PachToth.LargeTailFieldsSourceW29.RemainingLargeTailExactSourceBlocker
+
+abbrev PachTothW29FlexibleGeneratedClosureFamily : Type :=
+  PachToth.ClosedPlacementSmallKCertificatesW19.FlexibleGeneratedClosureFamily
 
 theorem pachtoth_w29_remainingLargeTailExactSourceBlocker_iff_rawFieldsFromSix :
     PachTothW29RemainingLargeTailExactSourceBlocker <->
       Nonempty PachTothW29LargeRawClosedPlacementFieldsFromSix :=
-  PachToth.LargeTailFieldsSourceW29.remainingLargeTailExactSourceBlocker_iff_rawFieldsFromSix
+  remainingLargeTailExactSourceBlocker_iff_rawFieldsFromSix
 
 theorem pachtoth_w29_remainingLargeTailExactSourceBlocker_iff_closedPlacementFamilyFromSix :
     PachTothW29RemainingLargeTailExactSourceBlocker <->
       Nonempty PachTothW29LargeClosedPlacementFamilyFromSix :=
-  PachToth.LargeTailFieldsSourceW29.remainingLargeTailExactSourceBlocker_iff_closedPlacementFamilyFromSix
+  remainingLargeTailExactSourceBlocker_iff_closedPlacementFamilyFromSix
 
 theorem pachtoth_w29_remainingLargeTailExactSourceBlocker_of_rawFieldsFromSix
     (R : PachTothW29LargeRawClosedPlacementFieldsFromSix) :
     PachTothW29RemainingLargeTailExactSourceBlocker :=
   PachToth.LargeTailFieldsSourceW29.remainingLargeTailExactSourceBlocker_of_rawFieldsFromSix
     R
+
+noncomputable def pachtoth_w29_smallClosedPlacementFamilyBelowSix_of_flexibleGeneratedClosureFamily
+    (F : PachTothW29FlexibleGeneratedClosureFamily) :
+    PachTothW29SmallClosedPlacementFamilyBelowSix :=
+  PachToth.LargeTailFieldsSourceW29.smallClosedPlacementFamilyBelowSixOfFlexibleGeneratedClosureFamily
+    F
+
+theorem pachtoth_w29_remainingLargeTailExactSourceBlocker_of_flexibleGeneratedClosureFamily
+    (F : PachTothW29FlexibleGeneratedClosureFamily) :
+    PachTothW29RemainingLargeTailExactSourceBlocker :=
+  PachToth.LargeTailFieldsSourceW29.remainingLargeTailExactSourceBlocker_of_flexibleGeneratedClosureFamily
+    F
 
 end Verified
 end ErdosProblems1066

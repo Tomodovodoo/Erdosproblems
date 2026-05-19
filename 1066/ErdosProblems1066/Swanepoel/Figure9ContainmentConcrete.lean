@@ -38,6 +38,49 @@ abbrev Point : Type :=
 
 /-! ## Single adjacent-left witness -/
 
+/-- If the middle turn in an adjacent three-turn window is exactly the
+Figure 9 left comparison angle, then nonnegativity of the two neighboring
+turns proves the concrete containment used by the Figure 9 E23 route. -/
+theorem left_angle_le_adjacentTurn_of_middleTurn_eq_angle
+    {turn : Nat -> Real} {i : Nat} {p qi s : Point}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (hmiddle : turn (i + 1) = angleAt p qi s) :
+    angleAt p qi s <= adjacentTurn turn i := by
+  rw [← hmiddle]
+  unfold adjacentTurn
+  exact Finset.single_le_sum (fun k _ => hnonneg k) (by simp)
+
+/-- If the Figure 9 left comparison angle is bounded by the middle turn of an
+adjacent three-turn window, then nonnegativity of the neighboring turns proves
+the concrete containment used by the Figure 9 E23 route. -/
+theorem left_angle_le_adjacentTurn_of_angle_le_middleTurn
+    {turn : Nat -> Real} {i : Nat} {p qi s : Point}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (hangle : angleAt p qi s <= turn (i + 1)) :
+    angleAt p qi s <= adjacentTurn turn i := by
+  refine le_trans hangle ?_
+  unfold adjacentTurn
+  exact Finset.single_le_sum (fun k _ => hnonneg k) (by simp)
+
+/-- Package Figure 9 distance data as contained data when the adjacent turn
+window is realized by the left comparison angle plus nonnegative neighboring
+turns. -/
+def containedData_of_middleTurnAngle
+    {turn : Nat -> Real} {i : Nat} {p qi qj s r : Point}
+    (D : Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (hmiddle : turn (i + 1) = angleAt p qi s) :
+    Figure9AdjacentLeftContainedData turn i where
+  p := p
+  qi := qi
+  qj := qj
+  s := s
+  r := r
+  distanceData := D
+  left_angle_le_adjacentTurn :=
+    left_angle_le_adjacentTurn_of_middleTurn_eq_angle
+      hnonneg hmiddle
+
 /-- Package explicit Figure 9 distance data and left-angle containment as the
 contained-data record used by the containment interface. -/
 def containedData_of_explicitDistanceContainment
@@ -144,6 +187,167 @@ theorem E23_of_containmentInterface
     Figure9AdjacentWindowLowerE23 good turn :=
   E23_of_leftWindowGeometry
     (leftWindowGeometry_of_containmentInterface H)
+
+/-! ## Atomic rows to the real containment interface -/
+
+/-- Raw adjacent-left Figure 9 distance witnesses for every adjacent failed
+pair. -/
+def Figure9AdjacentLeftDistanceWitnessRows
+    (good : Nat -> Prop) : Prop :=
+  forall {i : Nat},
+    1 <= i -> i + 1 <= 10 ->
+    Not (good i) -> Not (good (i + 1)) ->
+      Exists fun p : Point =>
+      Exists fun qi : Point =>
+      Exists fun qj : Point =>
+      Exists fun s : Point =>
+      Exists fun r : Point =>
+        Figure9DistanceData p qi qj s r
+
+/-- The actual adjacent-left Figure 9 angle containment row for every
+compatible distance package at an adjacent failed pair. -/
+def Figure9AdjacentLeftAngleContainmentRows
+    (good : Nat -> Prop) (turn : Nat -> Real) : Prop :=
+  forall {i : Nat} {p qi qj s r : Point},
+    1 <= i -> i + 1 <= 10 ->
+    Not (good i) -> Not (good (i + 1)) ->
+    Figure9DistanceData p qi qj s r ->
+      angleAt p qi s <= adjacentTurn turn i
+
+/-- Concrete realization row: for every compatible Figure 9 distance package
+at an adjacent failed pair, the left comparison angle is the middle turn of
+the adjacent three-turn window. -/
+def Figure9AdjacentLeftMiddleTurnAngleRows
+    (good : Nat -> Prop) (turn : Nat -> Real) : Prop :=
+  forall {i : Nat} {p qi qj s r : Point},
+    1 <= i -> i + 1 <= 10 ->
+    Not (good i) -> Not (good (i + 1)) ->
+    Figure9DistanceData p qi qj s r ->
+      turn (i + 1) = angleAt p qi s
+
+/-- Concrete comparison row: for every compatible Figure 9 distance package
+at an adjacent failed pair, the left comparison angle is bounded by the middle
+turn of the adjacent three-turn window. -/
+def Figure9AdjacentLeftAngleLeMiddleTurnRows
+    (good : Nat -> Prop) (turn : Nat -> Real) : Prop :=
+  forall {i : Nat} {p qi qj s r : Point},
+    1 <= i -> i + 1 <= 10 ->
+    Not (good i) -> Not (good (i + 1)) ->
+    Figure9DistanceData p qi qj s r ->
+      angleAt p qi s <= turn (i + 1)
+
+/-- Project raw distance-witness rows from the real Figure 9 adjacent-left
+containment interface. -/
+theorem distanceWitnessRows_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure9AdjacentLeftDistanceWitnessRows good := by
+  intro i hi hi_next hbad_i hbad_next
+  let D := H.extractedData hi hi_next hbad_i hbad_next
+  exact
+    Exists.intro D.p
+      (Exists.intro D.qi
+        (Exists.intro D.qj
+          (Exists.intro D.s
+            (Exists.intro D.r D.distanceData))))
+
+/-- Project the actual left-angle containment rows from the real Figure 9
+adjacent-left containment interface. -/
+theorem leftAngleContainmentRows_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure9AdjacentLeftContainmentInterface good turn) :
+    Figure9AdjacentLeftAngleContainmentRows good turn := by
+  intro i p qi qj s r hi hi_next hbad_i hbad_next D
+  exact H.left_angle_le_adjacentTurn hi hi_next hbad_i hbad_next D
+
+/-- Middle-turn angle realization rows, together with nonnegative turns,
+prove the actual left-angle containment rows. -/
+theorem leftAngleContainmentRows_of_middleTurnAngleRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9AdjacentLeftMiddleTurnAngleRows good turn) :
+    Figure9AdjacentLeftAngleContainmentRows good turn := by
+  intro i p qi qj s r hi hi_next hbad_i hbad_next D
+  exact left_angle_le_adjacentTurn_of_middleTurn_eq_angle
+    hnonneg (H hi hi_next hbad_i hbad_next D)
+
+/-- A middle-turn upper bound for the left comparison angle, together with
+nonnegative turns, proves the actual left-angle containment rows consumed by
+the selected-frame Euclidean row constructor. -/
+theorem leftAngleContainmentRows_of_angleLeMiddleTurnRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9AdjacentLeftAngleLeMiddleTurnRows good turn) :
+    Figure9AdjacentLeftAngleContainmentRows good turn := by
+  intro i p qi qj s r hi hi_next hbad_i hbad_next D
+  exact left_angle_le_adjacentTurn_of_angle_le_middleTurn
+    hnonneg (H hi hi_next hbad_i hbad_next D)
+
+/-- Raw adjacent-left Figure 9 distance witnesses plus the actual universal
+left-angle containment row build the real containment interface. -/
+def containmentInterface_of_distanceWitnessRowsAndLeftAngleContainment
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows : Figure9AdjacentLeftDistanceWitnessRows good)
+    (leftAngleContainment :
+      Figure9AdjacentLeftAngleContainmentRows good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn where
+  extractedData := by
+    intro i hi hi_next hbad_i hbad_next
+    let hp := distanceRows (i := i) hi hi_next hbad_i hbad_next
+    let p := Classical.choose hp
+    let hqi := Classical.choose_spec hp
+    let qi := Classical.choose hqi
+    let hqj := Classical.choose_spec hqi
+    let qj := Classical.choose hqj
+    let hs := Classical.choose_spec hqj
+    let s := Classical.choose hs
+    let hr := Classical.choose_spec hs
+    let r := Classical.choose hr
+    let D := Classical.choose_spec hr
+    exact
+      { p := p
+        qi := qi
+        qj := qj
+        s := s
+        r := r
+        distanceData := D }
+  left_angle_le_adjacentTurn := by
+    intro i p qi qj s r hi hi_next hbad_i hbad_next D
+    exact leftAngleContainment hi hi_next hbad_i hbad_next D
+
+/-- Raw adjacent-left Figure 9 distance witnesses plus concrete middle-turn
+angle realization rows build the real containment interface consumed by the
+local window-containment constructors. -/
+def containmentInterface_of_distanceWitnessRowsAndMiddleTurnAngleRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows : Figure9AdjacentLeftDistanceWitnessRows good)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (middleTurnRows : Figure9AdjacentLeftMiddleTurnAngleRows good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn :=
+  containmentInterface_of_distanceWitnessRowsAndLeftAngleContainment
+    distanceRows
+    (leftAngleContainmentRows_of_middleTurnAngleRows hnonneg middleTurnRows)
+
+/-- The real Figure 9 adjacent-left containment interface is equivalent to
+the two atomic row families: distance witnesses and left-angle containment. -/
+theorem containmentInterface_nonempty_iff_distanceWitnessRows_and_leftAngleContainmentRows
+    {good : Nat -> Prop} {turn : Nat -> Real} :
+    Nonempty (Figure9AdjacentLeftContainmentInterface good turn) <->
+      Figure9AdjacentLeftDistanceWitnessRows good /\
+        Figure9AdjacentLeftAngleContainmentRows good turn := by
+  constructor
+  case mp =>
+    intro H
+    cases H with
+    | intro H =>
+        exact And.intro
+          (distanceWitnessRows_of_containmentInterface H)
+          (leftAngleContainmentRows_of_containmentInterface H)
+  case mpr =>
+    intro H
+    exact Nonempty.intro
+      (containmentInterface_of_distanceWitnessRowsAndLeftAngleContainment
+        H.1 H.2)
 
 /-! ## Selected adjacent-left containment from failed labels -/
 

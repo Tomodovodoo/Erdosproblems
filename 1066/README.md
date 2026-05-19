@@ -58,39 +58,28 @@ absent from the public facade until their proof terms are fully formalized
 without `axiom`, `sorry`, or `admit`.
 
 Conditional endpoints are allowed to mention the target propositions only when
-their hypotheses carry the remaining input families explicitly. The current
-Pach--Toth live handoff is W30's source-package/audit layer:
-`ErdosProblems1066.PachToth.PachTothW30FinalAssembly`,
-`ErdosProblems1066.PachToth.PachTothW30RouteAudit`,
-`ErdosProblems1066.PachToth.PachTothW30NoFakeAudit`,
-`ErdosProblems1066.PachToth.GeneratedClosureMetricRowsW30`,
-`ErdosProblems1066.PachToth.CompletionRowsClosureW30`,
-`ErdosProblems1066.PachToth.ExactChainFamilyClosureW30`,
-`ErdosProblems1066.PachToth.PositiveChainComponentClosureW30`,
-`ErdosProblems1066.PachToth.LargeTailCertificateRowsW30`,
-`ErdosProblems1066.PachToth.RemainderExactDependencyClosureW30`, and
-`ErdosProblems1066.PachToth.ClosedOrbitBranchSourceW30`.  The W27
-role-hinged lower-table alias remains recorded as blocked, so new proof work
-should target non-role/generated-closure, positive-chain, remainder, or
-closed-orbit source data rather than that alias.
-The older equation-transition facades
-`ErdosProblems1066.PachToth.FinalConditional.exactTarget_of_periodSearch_equationTransitions_crossBlock`,
-`ErdosProblems1066.PachToth.FinalConditional.arbitraryTarget_of_periodSearch_equationTransitions_crossBlock`,
-and
-`ErdosProblems1066.PachToth.SplitRealizationFinal.targetUpperConstructionFiveSixteenArbitrary_of_finalConditionalFamily`
-are retained as legacy audit/obstruction surfaces only; do not hand them off as
-live construction targets.
+their hypotheses carry the remaining input families explicitly.
 
-The strongest current Swanepoel handoff is the W30 final-source surface:
-`ErdosProblems1066.Swanepoel.SwanepoelW30FinalAssembly.FinalSourcePackage`,
-fed by W30 selected-face enclosure, extracted-witness components, frame/cyclic
-order rows, no-early route data, exact figure inequalities,
-pointwise-product data, lane-product final closure, no-cut blocker
-elimination, route-audit, and final assembly packages.
-They still require, uniformly for every minimal cleared failure, the remaining
-M8 labels, nonconcave-arc turn bounds, no-early-triple data, and Figure
-8/Figure 9 window-containment/angle inputs as concrete inhabitants of the
-final source package.
+Status note, 2026-05-19: the current handoff is W32/W34 source-ledger work, not
+the older W30 wave surfaces.  Treat W30/W31 names as historical compatibility
+or audit layers unless `TASK.md` names them for a repair.  The live context
+files are `proof_workings/theorem_dependency_map.md`,
+`proof_workings/current_spines.md`, `proof_workings/remaining_fields_matrix.md`,
+and `proof_workings/nonvacuous_completion_route.md`.
+
+The strongest current Swanepoel handoff is the W34 actual-route-premises
+surface in `ErdosProblems1066.Swanepoel.SwanepoelW32FinalAssembly`.  It is fed
+by W33/W34 exact-topology, sector-order, closure, finite-walk generated-order,
+K23 route-coverage, bad-adjacency, and compact S5 angle-row source packages.
+Those packages still need honest inhabitants before `KnownBounds.lean` can
+expose an unconditional `8 / 31` wrapper.
+
+The current Pach--Toth direction is the W34 threshold/eventual non-rigid route:
+large closed placements from block length six onward, below-threshold exact
+metric certificates for the small lengths, and the checked remainder-split
+closure.  The exact-base all-positive direct-flexible route is now a checked
+no-go surface, so new work should target the threshold/source packages rather
+than another translated or direct-flexible facade.
 
 Bridge modules:
 

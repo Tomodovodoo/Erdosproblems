@@ -1,6 +1,8 @@
 import ErdosProblems1066.PachToth.ClosedChainConstruction
 import ErdosProblems1066.PachToth.ClosedPlacementExactRouteW14
+import ErdosProblems1066.PachToth.ExactTargetCandidateClosure
 import ErdosProblems1066.PachToth.ExactBlocksTwoThroughFiveProducerW18
+import ErdosProblems1066.PachToth.FlexibleExactLocalTransition
 import ErdosProblems1066.PachToth.SmallComplementConcreteBlocksW17
 
 set_option autoImplicit false
@@ -23,6 +25,8 @@ namespace ClosedPlacementSmallKCertificatesW19
 open FiniteGraph
 
 noncomputable section
+
+abbrev R2 := Prod Real Real
 
 abbrev ExplicitClosedPlacementCertificate :=
   ClosedPlacementInterface.ExplicitClosedPlacementCertificate
@@ -62,6 +66,18 @@ abbrev CandidateSmallRowValueRows :=
 
 abbrev ConcreteOneBlockCertificate :=
   ExactBlockCertificateW13.ConcreteOneBlockCertificate
+
+abbrev FlexibleGeneratedClosureData :=
+  FlexibleExactLocalTransition.GeneratedClosureData
+
+abbrev FlexibleGeneratedClosureFamily :=
+  FlexibleExactLocalTransition.GeneratedClosureFamily
+
+abbrev MinimalExactTargetCertificate :=
+  ExactTargetCandidateClosure.MinimalExactTargetCertificate
+
+abbrev DeformedLengthOneGeometry :=
+  DeformedPlacement.LengthOneGeometry
 
 theorem onePositive : 0 < 1 := by
   decide
@@ -195,6 +211,116 @@ def explicitTransitionCertificateOfCandidateValueMatrixFamily
     (FiniteCertificateInstantiationW13.fieldsOfCandidateValueMatrixFamily C)
     k hk
 
+def explicitTransitionCertificateOfFlexibleGeneratedClosureData
+    {k : Nat} {hk : 0 < k}
+    (G : FlexibleGeneratedClosureData k hk) :
+    ExplicitTransitionClosedPlacementCertificate k hk :=
+  G.toExplicitTransitionClosedPlacementCertificate
+
+def lengthOneExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    ExplicitTransitionClosedPlacementCertificate 1 onePositive :=
+  explicitTransitionCertificateOfFlexibleGeneratedClosureData
+    (F.data 1 onePositive)
+
+/-- The extra datum needed to fill the transition-certificate `lengthOne`
+field from the deformed one-block geometry.  The closed-placement route only
+needs `geometry`; the transition-certificate facade also needs a certified
+self-transition for that same point map. -/
+structure DeformedLengthOneTransitionGeometry where
+  geometry : DeformedLengthOneGeometry
+  transition :
+    OrientationData.TransitionCertificate geometry.point geometry.point
+
+def lengthOneClosedPlacementOfDeformedGeometry
+    (geometry : DeformedLengthOneGeometry) :
+    DeformedPlacement.ClosedPlacement 1 onePositive := by
+  have hproof :
+      onePositive = DeformedPlacement.lengthOnePositive :=
+    Subsingleton.elim onePositive DeformedPlacement.lengthOnePositive
+  cases hproof
+  exact geometry.toClosedPlacement
+
+theorem targetUpperConstructionFiveSixteenAt_one_of_deformedGeometry
+    (geometry : DeformedLengthOneGeometry) :
+    targetUpperConstructionFiveSixteenAt (16 * 1) :=
+  targetUpperConstructionFiveSixteenAt_of_closedPlacement
+    (lengthOneClosedPlacementOfDeformedGeometry geometry)
+
+def lengthOneExplicitTransitionCertificateOfDeformedTransitionGeometry
+    (G : DeformedLengthOneTransitionGeometry) :
+    ExplicitTransitionClosedPlacementCertificate 1 onePositive where
+  point := fun _ v => G.geometry.point v
+  transition := by
+    intro _
+    simpa using G.transition
+  separated := by
+    intro i u j v hne
+    have hij : i = j := Subsingleton.elim i j
+    have huv : Ne u v := by
+      intro huv
+      exact hne (by
+        cases hij
+        cases huv
+        rfl)
+    simpa using G.geometry.separated u v huv
+  same_block_edges_unit := by
+    intro _ u v huv hadj
+    exact G.geometry.same_block_edges_unit u v huv hadj
+
+def deformedLengthOneTransitionGeometryOfExplicitTransitionCertificate
+    (C : ExplicitTransitionClosedPlacementCertificate 1 onePositive) :
+    DeformedLengthOneTransitionGeometry where
+  geometry :=
+    DeformedPlacement.lengthOneGeometryOfClosedPlacement C.toClosedPlacement
+  transition := by
+    have hsucc :
+        Arithmetic.cyclicSucc onePositive (0 : Fin 1) = (0 : Fin 1) :=
+      Subsingleton.elim _ _
+    simpa [DeformedPlacement.lengthOneGeometryOfClosedPlacement, hsucc] using
+      C.transition 0
+
+theorem nonempty_lengthOneExplicitTransitionCertificate_iff_deformedTransitionGeometry :
+    Nonempty (ExplicitTransitionClosedPlacementCertificate 1 onePositive) <->
+      Nonempty DeformedLengthOneTransitionGeometry := by
+  constructor
+  case mp =>
+    intro h
+    cases h with
+    | intro C =>
+        exact Nonempty.intro
+          (deformedLengthOneTransitionGeometryOfExplicitTransitionCertificate C)
+  case mpr =>
+    intro h
+    cases h with
+    | intro G =>
+        exact Nonempty.intro
+          (lengthOneExplicitTransitionCertificateOfDeformedTransitionGeometry G)
+
+def lengthTwoExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    ExplicitTransitionClosedPlacementCertificate 2 twoPositive :=
+  explicitTransitionCertificateOfFlexibleGeneratedClosureData
+    (F.data 2 twoPositive)
+
+def lengthThreeExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    ExplicitTransitionClosedPlacementCertificate 3 threePositive :=
+  explicitTransitionCertificateOfFlexibleGeneratedClosureData
+    (F.data 3 threePositive)
+
+def lengthFourExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    ExplicitTransitionClosedPlacementCertificate 4 fourPositive :=
+  explicitTransitionCertificateOfFlexibleGeneratedClosureData
+    (F.data 4 fourPositive)
+
+def lengthFiveExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    ExplicitTransitionClosedPlacementCertificate 5 fivePositive :=
+  explicitTransitionCertificateOfFlexibleGeneratedClosureData
+    (F.data 5 fivePositive)
+
 /-! ## The supported small positive block split -/
 
 structure SmallExplicitTransitionCertificates where
@@ -247,6 +373,92 @@ theorem smallComplement_six
 
 end SmallExplicitTransitionCertificates
 
+structure SmallExplicitTransitionCertificateSource where
+  lengthOne : DeformedLengthOneTransitionGeometry
+  lengthTwo :
+    ExplicitTransitionClosedPlacementCertificate 2 twoPositive
+  lengthThree :
+    ExplicitTransitionClosedPlacementCertificate 3 threePositive
+  lengthFour :
+    ExplicitTransitionClosedPlacementCertificate 4 fourPositive
+  lengthFive :
+    ExplicitTransitionClosedPlacementCertificate 5 fivePositive
+
+namespace SmallExplicitTransitionCertificateSource
+
+def lengthOneClosedPlacement
+    (S : SmallExplicitTransitionCertificateSource) :
+    DeformedPlacement.ClosedPlacement 1 onePositive :=
+  lengthOneClosedPlacementOfDeformedGeometry S.lengthOne.geometry
+
+def toSmallExplicitTransitionCertificates
+    (S : SmallExplicitTransitionCertificateSource) :
+    SmallExplicitTransitionCertificates where
+  lengthOne :=
+    lengthOneExplicitTransitionCertificateOfDeformedTransitionGeometry
+      S.lengthOne
+  lengthTwo := S.lengthTwo
+  lengthThree := S.lengthThree
+  lengthFour := S.lengthFour
+  lengthFive := S.lengthFive
+
+def toSmallLengthExactBlockTargets
+    (S : SmallExplicitTransitionCertificateSource) :
+    SmallLengthExactBlockTargets where
+  lengthOne :=
+    targetUpperConstructionFiveSixteenAt_of_closedPlacement
+      S.lengthOneClosedPlacement
+  lengthTwo :=
+    targetUpperConstructionFiveSixteenAt_of_explicit_transition_certificate
+      S.lengthTwo
+  lengthThree :=
+    targetUpperConstructionFiveSixteenAt_of_explicit_transition_certificate
+      S.lengthThree
+  lengthFour :=
+    targetUpperConstructionFiveSixteenAt_of_explicit_transition_certificate
+      S.lengthFour
+  lengthFive :=
+    targetUpperConstructionFiveSixteenAt_of_explicit_transition_certificate
+      S.lengthFive
+
+theorem smallComplement_six
+    (S : SmallExplicitTransitionCertificateSource) :
+    SmallComplementConcreteBlocksW17.SmallComplement
+      SmallComplementConcreteBlocksW17.blockThresholdSix := by
+  exact
+    SmallComplementConcreteBlocksW17.smallComplement_six_of_smallLengthExactBlockTargets
+      S.toSmallLengthExactBlockTargets
+
+end SmallExplicitTransitionCertificateSource
+
+def smallExplicitTransitionCertificateSourceOfSmallExplicitTransitionCertificates
+    (C : SmallExplicitTransitionCertificates) :
+    SmallExplicitTransitionCertificateSource where
+  lengthOne :=
+    deformedLengthOneTransitionGeometryOfExplicitTransitionCertificate
+      C.lengthOne
+  lengthTwo := C.lengthTwo
+  lengthThree := C.lengthThree
+  lengthFour := C.lengthFour
+  lengthFive := C.lengthFive
+
+theorem nonempty_smallExplicitTransitionCertificates_iff_source :
+    Nonempty SmallExplicitTransitionCertificates <->
+      Nonempty SmallExplicitTransitionCertificateSource := by
+  constructor
+  case mp =>
+    intro h
+    cases h with
+    | intro C =>
+        exact Nonempty.intro
+          (smallExplicitTransitionCertificateSourceOfSmallExplicitTransitionCertificates
+            C)
+  case mpr =>
+    intro h
+    cases h with
+    | intro S =>
+        exact Nonempty.intro S.toSmallExplicitTransitionCertificates
+
 def smallExplicitTransitionCertificatesOfAllPositiveNonConnectorFields
     (C : AllPositiveNonConnectorFields) :
     SmallExplicitTransitionCertificates where
@@ -278,6 +490,35 @@ def smallExplicitTransitionCertificatesOfCandidateValueMatrixFamily
   smallExplicitTransitionCertificatesOfAllPositiveNonConnectorFields
     (FiniteCertificateInstantiationW13.fieldsOfCandidateValueMatrixFamily C)
 
+def smallExplicitTransitionCertificatesOfFlexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    SmallExplicitTransitionCertificates where
+  lengthOne :=
+    lengthOneExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily F
+  lengthTwo :=
+    lengthTwoExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily F
+  lengthThree :=
+    lengthThreeExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily F
+  lengthFour :=
+    lengthFourExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily F
+  lengthFive :=
+    lengthFiveExplicitTransitionCertificateOfFlexibleGeneratedClosureFamily F
+
+def smallExplicitTransitionCertificateSourceOfFlexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    SmallExplicitTransitionCertificateSource :=
+  smallExplicitTransitionCertificateSourceOfSmallExplicitTransitionCertificates
+    (smallExplicitTransitionCertificatesOfFlexibleGeneratedClosureFamily F)
+
+theorem nonempty_smallExplicitTransitionCertificateSource_of_flexibleGeneratedClosureFamily
+    (H : Nonempty FlexibleGeneratedClosureFamily) :
+    Nonempty SmallExplicitTransitionCertificateSource := by
+  cases H with
+  | intro F =>
+      exact
+        Nonempty.intro
+          (smallExplicitTransitionCertificateSourceOfFlexibleGeneratedClosureFamily F)
+
 theorem smallComplement_six_of_allPositiveNonConnectorFields
     (C : AllPositiveNonConnectorFields) :
     SmallComplementConcreteBlocksW17.SmallComplement
@@ -298,6 +539,31 @@ theorem smallComplement_six_of_candidateValueMatrixFamily
       SmallComplementConcreteBlocksW17.blockThresholdSix :=
   (smallExplicitTransitionCertificatesOfCandidateValueMatrixFamily C)
     |>.smallComplement_six
+
+theorem smallComplement_six_of_flexibleGeneratedClosureFamily
+    (F : FlexibleGeneratedClosureFamily) :
+    SmallComplementConcreteBlocksW17.SmallComplement
+      SmallComplementConcreteBlocksW17.blockThresholdSix :=
+  (smallExplicitTransitionCertificatesOfFlexibleGeneratedClosureFamily F)
+    |>.smallComplement_six
+
+abbrev ConcreteExactLocalSameResidualRow : Prop :=
+  forall source : LocalVertex -> R2,
+    RoleHingeSameBlockAlgebra.MatchesExactLocalSqDistances source ->
+      forall u v : LocalVertex,
+        Not (RoleHingeAngleCertificates.IsRoleAnglePortPair u v) ->
+          RoleHingeSameBlockAlgebra.sqDist
+              (RoleHingeConcreteSearch.samePlaceNext source u)
+              (RoleHingeConcreteSearch.samePlaceNext source v) =
+            ((ExactLocalGeometry.localNorm4 u v : Int) : Real) / 4
+
+theorem no_concreteExactLocalSameResidualRow :
+    Not ConcreteExactLocalSameResidualRow :=
+  RoleHingeExactLocalFinite.not_samePlaceNext_full_nonPortPair_rest
+
+theorem not_minimalExactTargetCertificate_currentExactLocalRoute :
+    Not (Nonempty MinimalExactTargetCertificate) :=
+  ExactTargetCandidateClosure.not_minimalExactTargetCertificate
 
 /-! ## Existing exact-block split, sharpened to the same small facade -/
 

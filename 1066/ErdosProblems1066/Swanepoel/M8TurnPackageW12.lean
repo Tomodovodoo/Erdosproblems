@@ -1,4 +1,5 @@
 import ErdosProblems1066.Swanepoel.LongArcGapConcrete
+import ErdosProblems1066.Swanepoel.BoundaryPartitionInstantiation
 import ErdosProblems1066.Swanepoel.M8PipelineClosure
 
 set_option autoImplicit false
@@ -279,12 +280,113 @@ def ofBoundaryLongArcFacts
     BoundaryLongArcM8TurnPackage F.toNonconcaveArcBoundaryBudgetData :=
   ofBoundaryBudgetData F.toNonconcaveArcBoundaryBudgetData
 
+@[simp]
+theorem ofBoundaryLongArcFacts_turnBounds
+    {D0 : PlanarBoundaryClosure.PlanarBoundaryData.{u} G}
+    (F : BoundaryLongArcFacts.{u} D0) :
+    (ofBoundaryLongArcFacts F).turnBounds = F.toM8TurnBounds :=
+  rfl
+
+/-- Build the W12 package from actual boundary-walk long-arc facts. -/
+def ofBoundaryWalkLongArcFacts
+    {P0 : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    {walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping P0
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6}
+    {geometricAngleSum : Real}
+    {forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum}
+    {geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum}
+    {Subpolygon : Type u}
+    {subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G}
+    (F :
+      BoundaryWalkLongArcFacts walk geometricAngleSum forced_le_geometric
+        geometric_le_polygon Subpolygon subpolygonData) :
+    BoundaryLongArcM8TurnPackage F.toNonconcaveArcBoundaryBudgetData :=
+  ofBoundaryBudgetData F.toNonconcaveArcBoundaryBudgetData
+
+@[simp]
+theorem ofBoundaryWalkLongArcFacts_turnBounds
+    {P0 : OuterBoundaryCore G}
+    {IsTriangle IsNontriangle : PlanarInterface.Edge n -> Prop}
+    {IsDegree3 IsDegree4 IsDegree5 IsDegree6 : Fin n -> Prop}
+    {walk :
+      BoundaryWalkConstruction.OuterBoundaryWalkBookkeeping P0
+        IsTriangle IsNontriangle IsDegree3 IsDegree4 IsDegree5 IsDegree6}
+    {geometricAngleSum : Real}
+    {forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum}
+    {geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum}
+    {Subpolygon : Type u}
+    {subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G}
+    (F :
+      BoundaryWalkLongArcFacts walk geometricAngleSum forced_le_geometric
+        geometric_le_polygon Subpolygon subpolygonData) :
+    (ofBoundaryWalkLongArcFacts F).turnBounds = F.toM8TurnBounds :=
+  rfl
+
 /-- Build the W12 package from the concrete long-arc existence fields. -/
 def ofBoundaryLongArcExistenceFields
     {D0 : PlanarBoundaryClosure.PlanarBoundaryData.{u} G}
     (F : LongArcExistenceConcrete.BoundaryLongArcExistenceFields.{u} D0) :
     BoundaryLongArcM8TurnPackage F.toNonconcaveArcBoundaryBudgetData :=
   ofBoundaryBudgetData F.toNonconcaveArcBoundaryBudgetData
+
+@[simp]
+theorem ofBoundaryLongArcExistenceFields_turnBounds
+    {D0 : PlanarBoundaryClosure.PlanarBoundaryData.{u} G}
+    (F : LongArcExistenceConcrete.BoundaryLongArcExistenceFields.{u} D0) :
+    (ofBoundaryLongArcExistenceFields F).turnBounds = F.toM8TurnBounds :=
+  rfl
+
+/-- Build the W12 package directly from concrete classified-boundary
+long-arc fields whose long-arc type is the classified boundary subtype. -/
+def ofClassifiedBoundaryLongArcExistenceFields
+    {P0 : OuterBoundaryCore G}
+    {classification :
+      BoundaryWalkClassificationConcrete.OuterBoundaryClassificationInputs P0}
+    {geometricAngleSum : Real}
+    {forced_le_geometric :
+      classification.counts.forcedBoundaryAngleSum <= geometricAngleSum}
+    {geometric_le_polygon :
+      geometricAngleSum <= classification.counts.polygonAngleSum}
+    {Subpolygon : Type u}
+    {subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G}
+    (F :
+      BoundaryPartitionInstantiation.ClassifiedBoundary.LongArcExistenceFields
+        classification geometricAngleSum forced_le_geometric
+        geometric_le_polygon Subpolygon subpolygonData) :
+    BoundaryLongArcM8TurnPackage
+      F.toBoundaryLongArcExistenceFields.toNonconcaveArcBoundaryBudgetData :=
+  ofBoundaryLongArcExistenceFields F.toBoundaryLongArcExistenceFields
+
+@[simp]
+theorem ofClassifiedBoundaryLongArcExistenceFields_turnBounds
+    {P0 : OuterBoundaryCore G}
+    {classification :
+      BoundaryWalkClassificationConcrete.OuterBoundaryClassificationInputs P0}
+    {geometricAngleSum : Real}
+    {forced_le_geometric :
+      classification.counts.forcedBoundaryAngleSum <= geometricAngleSum}
+    {geometric_le_polygon :
+      geometricAngleSum <= classification.counts.polygonAngleSum}
+    {Subpolygon : Type u}
+    {subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G}
+    (F :
+      BoundaryPartitionInstantiation.ClassifiedBoundary.LongArcExistenceFields
+        classification geometricAngleSum forced_le_geometric
+        geometric_le_polygon Subpolygon subpolygonData) :
+    (ofClassifiedBoundaryLongArcExistenceFields F).turnBounds =
+      F.toBoundaryLongArcExistenceFields.toM8TurnBounds :=
+  rfl
 
 /-- Build the W12 package from the already-assembled count-gap route. -/
 def ofBoundaryCountGapToM8TurnBounds

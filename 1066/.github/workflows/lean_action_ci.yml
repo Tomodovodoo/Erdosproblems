@@ -216,9 +216,9 @@ jobs:
           #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalClosedNeighborhoodDeletion.induced_card_lt_original
           #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalClosedNeighborhoodDeletion.hasCleared_of_minimalFailure
           #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.LocalClosedNeighborhoodDeletion.false_of_minimalFailure
-          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.patternDegreeReducible_of_localClosedNeighborhoodDeletion
-          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.K23DegreeReducible_of_localClosedNeighborhoodDeletion
-          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.K23DegreeReducible_of_localClosedNeighborhoodK23Deletion
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.patternDegreeReducible_of_not_pattern
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.K23DegreeReducible_of_not_hasK23
+          #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.K23DegreeReducible_of_unitDistanceConfig
           #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.hasCleared_of_minimalFailure_and_degreeLocalDeletionCertificate
           #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.not_hasK23_of_minimalFailure_and_K23DegreeReducible
           #print axioms ErdosProblems1066.Swanepoel.MinimalFailureLocalExclusions.finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
@@ -1203,6 +1203,66 @@ jobs:
           #print axioms ErdosProblems1066.Verified.lower_bound_eight_thirty_one_of_swanepoelW31_finalSourceGate
           #print axioms ErdosProblems1066.Verified.swanepoelW31_strongestRouteCertificate_iff_components
           #print axioms ErdosProblems1066.Verified.lower_bound_eight_thirty_one_of_swanepoelW31_routeCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_generatedClosureMetricGate_iff_explicitClosureMetricRowPackage
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_explicitMetricRowsInhabitationCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_completionPayloadsCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_closedOrbitPayloadInhabitationCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_exactChainSourceCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_assemblyCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_closedPlacementRows_of_concreteRowFields
+          #print axioms ErdosProblems1066.PachToth.RemainderSplitSourceClosureW32.remainderSplitSourceClosureCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_noFakeAudit
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_sourceRouteCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_finalStatus
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_finalGateCertificate
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_finalAssemblyStatus
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_targetUpperConstructionFiveSixteen_of_sources
+          #print axioms ErdosProblems1066.Verified.pachtoth_w32_targetUpperConstructionFiveSixteenArbitrary_of_sources
+          #print axioms ErdosProblems1066.Swanepoel.Verified.swanepoelW32_route_exactly_w31FaceBoundaryEnclosureSource
+          #print axioms ErdosProblems1066.Swanepoel.Verified.swanepoelW32_jordanSource_exactly_exactTopologyFields
+          #print axioms ErdosProblems1066.Verified.swanepoelW32_concreteClosure_exactly_w31BoundaryRemainingComponentFamily
+          #print axioms ErdosProblems1066.Verified.swanepoelW32_canonicalBlockerEliminationSource_exactly_noCutDependency
+          #print axioms ErdosProblems1066.Verified.swanepoelW32_routeData_iff_routeCoverage
+          #print axioms ErdosProblems1066.Verified.swanepoelW32_exactE22E23SourceBlocker_of_components
+          #print axioms ErdosProblems1066.Verified.swanepoelW32_finalSourceGate_of_pointwiseLaneComponentSources
+          #print axioms ErdosProblems1066.Verified.lower_bound_eight_thirty_one_of_swanepoelW32_componentSourceData
+          #print axioms ErdosProblems1066.Verified.swanepoelW32_routeSource_nonempty_iff_components
+          #print axioms ErdosProblems1066.Verified.swanepoelW32_currentRouteAuditCertificate
+          #print axioms ErdosProblems1066.Verified.lower_bound_eight_thirty_one_of_swanepoelW32_mainIntegrationGate
+          #print axioms ErdosProblems1066.Verified.swanepoelW32_finalSource_nonempty_iff_finalSourceGate
+          #print axioms ErdosProblems1066.Verified.lower_bound_eight_thirty_one_of_swanepoelW32_finalSourceGate
+          #print axioms ErdosProblems1066.Verified.swanepoelW33_selectedTopologySource_exactly_concreteTopologyFactsRows
+          #print axioms ErdosProblems1066.Verified.swanepoelW33_selectedTopologySource_exactly_missingTopologyFactsRows
+          #print axioms ErdosProblems1066.Verified.swanepoelW33_selectedTopologySource_exactly_topologyBoundaryRows
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_largeSourceSix_of_closedPlacementRows
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_largeSourceSix_of_generatedClosureSeparationFields
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_farApartRemainderSourcePackage_iff_minimalBlocker
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_w12_eventualMetricFieldFamily_of_largeClosedPlacementFields
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_w12_metricFieldFamily_of_largeClosedPlacementFields_atMostOne
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_w12_metricFieldFamily_of_largeClosedPlacementFields_and_below
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_deformedLengthOneSource_of_transitionGeometry
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_not_directFlexibleSourcePayload
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_deformedLengthOne_checkedBlocker
+          #print axioms ErdosProblems1066.Verified.pachtoth_w34_freePlacementSourceFields_iff_metricFieldFamily
+          #print axioms ErdosProblems1066.Verified.targetUpperConstructionFiveSixteen_of_pachtoth_w34_metricFieldFamily
+          #print axioms ErdosProblems1066.Verified.targetUpperConstructionFiveSixteen_of_pachtoth_w34_freePlacementSourceFields
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_routeData_of_selectedThreeCommonNeighborGeometry
+          #print axioms ErdosProblems1066.Swanepoel.K23RouteCoverageSourceW34.routeCoverageAvailable_of_selectedFrameTheorem
+          #print axioms ErdosProblems1066.Swanepoel.K23RouteCoverageSourceW34.routeCoverageAvailable_of_selectedFrameThreeCommonNeighborTheorem
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_exactFigureRowsAssemblyBlocker_iff_localExactAngleData
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_missing_exactFigureRowsAssemblyForFrameCyclicSource_iff_no_localExactAngleData
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_localExactAngleDataExtractionForFrameCyclicSource_nonempty_iff_components
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_missing_exactFigureRowsAssemblyForFrameCyclicSource_iff_no_localExactAngleDataComponents
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_minimalFailureExclusion_of_actualRouteCertificate
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_noCutDependency_of_actualRouteCertificate
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_noCutVertex_of_actualRouteCertificate
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_exactRemainingPremise_iff_actualRouteCertificate
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_noCutMinimalityClosureLedger
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_selectedOuterBoundaryAngleSource_exactly_rows
+          #print axioms ErdosProblems1066.Verified.swanepoelW34_selectedOuterBoundaryAngleSource_exactly_topology_angleWitnessRows
+          #print axioms ErdosProblems1066.Swanepoel.SubpolygonSelectedGeometrySourceW34.nonempty_selectedOuterFaceRealizationSource_iff_angleSource
+          #print axioms ErdosProblems1066.Swanepoel.SubpolygonSelectedGeometrySourceW34.nonempty_selectedOuterFaceHonestFamilySource_iff_angleSource
+          #print axioms ErdosProblems1066.Swanepoel.SubpolygonSelectedGeometrySourceW34.selectedOuterFaceHonestFamilyPackage_counts
           EOF
           )
           expected_axiom_checks="${{ inputs.expected_axiom_checks }}"

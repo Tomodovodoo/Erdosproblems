@@ -269,6 +269,40 @@ end LocalAngleFamilies
 
 /-! ## LongArcGapConcrete-facing instantiation -/
 
+/-- Any concavity predicate on the actual classified long-arc subtype has
+cardinality at most the computed boundary long-arc count. -/
+theorem concaveLongArcCount_le_counts_B_of_subtype
+    (concave : D.longArcIndices -> Prop)
+    [concaveLongArcFintype :
+      Fintype {a : D.longArcIndices // concave a}] :
+    @Fintype.card {a : D.longArcIndices // concave a}
+        concaveLongArcFintype <= D.counts.B := by
+  have hsub :
+      @Fintype.card {a : D.longArcIndices // concave a}
+          concaveLongArcFintype <=
+        @Fintype.card D.longArcIndices inferInstance :=
+    Fintype.card_subtype_le concave
+  have hcard :
+      @Fintype.card D.longArcIndices inferInstance = D.counts.B :=
+    longArcIndex_card_eq_counts_B D
+  rw [hcard] at hsub
+  exact hsub
+
+/-- The canonical raw-turn interpretation of concavity for actual classified
+long-arc indices. -/
+def rawTurnConcave
+    (rawTurn : D.longArcIndices -> Nat -> Real)
+    (a : D.longArcIndices) : Prop :=
+  Real.pi / 3 <= Lemma10Inequalities.totalTurn (rawTurn a)
+
+@[simp]
+theorem rawTurnConcave_iff
+    (rawTurn : D.longArcIndices -> Nat -> Real)
+    (a : D.longArcIndices) :
+    rawTurnConcave D rawTurn a <->
+      Real.pi / 3 <= Lemma10Inequalities.totalTurn (rawTurn a) :=
+  Iff.rfl
+
 /-- Long-arc fields whose finite long-arc type is the concrete classified
 boundary long-arc subtype. -/
 structure LongArcExistenceFields
@@ -329,6 +363,66 @@ theorem planarBoundary_outerBoundaryCounts
     F.planarBoundary.outerBoundaryCounts = D.counts := by
   simp [planarBoundary]
 
+/-- Build the classified-boundary long-arc fields from coverage and the
+raw-turn/concavity interpretation.  The concave-count comparison with
+`D.counts.B` is derived from the actual classified long-arc subtype. -/
+def ofCoverageAndTurns
+    (concave : D.longArcIndices -> Prop)
+    [concaveLongArcFintype :
+      Fintype {a : D.longArcIndices // concave a}]
+    (degreeThree_le_negativeCount_add_longArcCount :
+      D.counts.d3 <= D.counts.negativeCount +
+        @Fintype.card D.longArcIndices inferInstance)
+    (rawTurn : D.longArcIndices -> Nat -> Real)
+    (rawTurn_nonnegative_on_arc :
+      forall a : D.longArcIndices,
+        forall k : Nat, Membership.mem Lemma10Inequalities.turnIndexSet k ->
+          0 <= rawTurn a k)
+    (concave_iff :
+      forall a : D.longArcIndices,
+        concave a <->
+          Real.pi / 3 <= Lemma10Inequalities.totalTurn (rawTurn a)) :
+    LongArcExistenceFields D geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData where
+  concave := concave
+  concaveLongArcFintype := concaveLongArcFintype
+  concaveLongArcCount_le_counts_B :=
+    ClassifiedBoundary.concaveLongArcCount_le_counts_B_of_subtype
+      D concave
+  degreeThree_le_negativeCount_add_longArcCount :=
+    degreeThree_le_negativeCount_add_longArcCount
+  rawTurn := rawTurn
+  rawTurn_nonnegative_on_arc := rawTurn_nonnegative_on_arc
+  concave_iff := concave_iff
+
+/-- Build the classified-boundary long-arc fields from the concrete coverage
+inequality and raw turns, with concavity interpreted definitionally by the raw
+total-turn threshold. -/
+def ofCoverageAndRawTurns
+    (degreeThree_le_negativeCount_add_longArcCount :
+      D.counts.d3 <= D.counts.negativeCount +
+        @Fintype.card D.longArcIndices inferInstance)
+    (rawTurn : D.longArcIndices -> Nat -> Real)
+    (rawTurn_nonnegative_on_arc :
+      forall a : D.longArcIndices,
+        forall k : Nat, Membership.mem Lemma10Inequalities.turnIndexSet k ->
+          0 <= rawTurn a k) :
+    LongArcExistenceFields D geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData := by
+  classical
+  exact
+    ofCoverageAndTurns
+      (D := D) (geometricAngleSum := geometricAngleSum)
+      (forced_le_geometric := forced_le_geometric)
+      (geometric_le_polygon := geometric_le_polygon)
+      (Subpolygon := Subpolygon) (subpolygonData := subpolygonData)
+      (concave := ClassifiedBoundary.rawTurnConcave D rawTurn)
+      degreeThree_le_negativeCount_add_longArcCount rawTurn
+      rawTurn_nonnegative_on_arc
+      (by
+        intro a
+        rfl)
+
 /-- Convert concrete classified long-arc fields to the count-gap input used by
 `LongArcGapConcrete`. -/
 def toBoundaryLongArcExistenceFields
@@ -351,6 +445,35 @@ def toBoundaryLongArcExistenceFields
       D.counts.d3 <= D.counts.negativeCount +
         @Fintype.card D.longArcIndices inferInstance
     exact F.degreeThree_le_negativeCount_add_longArcCount
+  rawTurn := F.rawTurn
+  rawTurn_nonnegative_on_arc := F.rawTurn_nonnegative_on_arc
+  concave_iff := F.concave_iff
+
+/-- The same fields, viewed as actual boundary-walk long-arc facts for the
+classified boundary walk. -/
+def toBoundaryWalkLongArcFacts
+    (F :
+      LongArcExistenceFields D geometricAngleSum forced_le_geometric
+        geometric_le_polygon Subpolygon subpolygonData) :
+    NonconcaveArcBudgetFromBoundary.BoundaryWalkLongArcFacts
+      D.toOuterBoundaryWalkBookkeeping geometricAngleSum
+        forced_le_geometric geometric_le_polygon Subpolygon subpolygonData where
+  concave := F.concave
+  concaveLongArcFintype := F.concaveLongArcFintype
+  concaveLongArcCount_lt_boundaryLongArcCount := by
+    have hgap :
+        @Fintype.card {a : D.longArcIndices // F.concave a}
+          F.concaveLongArcFintype <
+          @Fintype.card D.longArcIndices inferInstance :=
+      F.toBoundaryLongArcExistenceFields.concaveLongArcCount_lt_longArcCount
+    change
+      @Fintype.card {a : D.longArcIndices // F.concave a}
+          F.concaveLongArcFintype < D.counts.B
+    have hcard :
+        @Fintype.card D.longArcIndices inferInstance = D.counts.B :=
+      longArcIndex_card_eq_counts_B D
+    rw [hcard] at hgap
+    exact hgap
   rawTurn := F.rawTurn
   rawTurn_nonnegative_on_arc := F.rawTurn_nonnegative_on_arc
   concave_iff := F.concave_iff

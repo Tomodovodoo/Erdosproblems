@@ -1,51 +1,99 @@
-# Remaining explicit fields matrix
+# Remaining Explicit Fields Matrix
 
-This is a compact handoff map for the remaining explicit data, not a proof
-claim.  "Consumer" means the first Lean facade that projects the field onward;
-downstream modules are listed only when they are the reason that field exists.
+This is a compact handoff map for the remaining explicit data.  "Consumer"
+means the first Lean surface that projects the field onward; downstream
+modules are listed only when they explain why the field exists.
 
-## Swanepoel `MinimalFailureM8PaperFacts`
+Status note, 2026-05-19: this matrix has been updated to the W32/W34 route
+surfaces.  Older `MinimalFailureM8PaperFacts` and W20-W31 ledgers are useful
+history, but the rows below are the current source-package blockers.
 
-Source structure:
-`ErdosProblems1066/Swanepoel/MinimalFailureComponentPackage.lean`.
+## Swanepoel W34 Route Premises
 
-| Field | Meaning | Immediate Lean consumers | Downstream use |
+Live endpoint:
+
+```text
+SwanepoelW32FinalAssembly.W34ActualRoutePremises
+```
+
+Main source surfaces:
+
+```text
+M8ConstructionDataInhabitationW33.StrongestRouteSource
+NoCutMinimalityClosureW34.ExactRemainingPremiseForNoCutMinimalityClosure
+```
+
+| Field/package | Remaining explicit data | Consumer | Downstream use |
 |---|---|---|---|
-| `cutVertex.positiveCard` | Nonempty minimal failure | `MinimalFailureCutVertexFacts.connectedDegreeRange`, `MinimalFailureCutVertexFacts.connectedNoCutDegreeRange` in `Swanepoel.MinimalFailureComponentPackage` | `Swanepoel.CutVertexFinal`, then boundary-label context |
-| `cutVertex.remainingSlack` | Remaining no-cut/cut-vertex slack | `MinimalFailureCutVertexFacts.connectedNoCutDegreeRange`, `preconnectedNoCut` | `Swanepoel.CutVertexFinal`, `Swanepoel.M8BoundaryLabelsConcrete` |
-| `planarBoundary` | Full planar-boundary package for the canonical graph | `concreteFaceCountingData`, `faceCountingTheorems`, `boundaryLabels`, `toM8SeparatedConstructionComponentPackage` | `Swanepoel.PlanarBoundaryFinal`, `Swanepoel.PlanarBoundaryClosure`, `Swanepoel.M8BoundaryLabelsConcrete` |
-| `spine` | Boundary spine in the no-cut/minimal-failure context | `boundaryLabels`, `localLabels`, `toM8ConstructionData` | `Swanepoel.M8BoundaryLabelsConcrete`, `Swanepoel.BoundaryLabelExtractionTasks` |
-| `lemma8` | Lemma 8 boundary-label combinatorics for `spine` | `boundaryLabels`, `localLabels`, `toM8ConstructionData` | `Swanepoel.Lemma8CombinatoricsConcrete`, `Swanepoel.M8BoundaryLabelsConcrete` |
-| `arc` | Nonconcave arc turn data | `turnBounds`, `toM8SeparatedConstructionComponentPackage` | `Swanepoel.M8TurnBoundsConcrete`, `Swanepoel.M8TurnBoundsFromArc`, `Swanepoel.M8PipelineClosure` |
-| `noEarlyTriples` | Lemma 9/no-early-triples input for derived labels | `lateTriples`, `toM8SeparatedConstructionComponentPackage` | `Swanepoel.M8LateTriplesConcrete`, `Swanepoel.M8LateTriplesFromNoEarly`, `Swanepoel.M8PipelineClosure` |
-| `windowContainment` | Figure 8/Figure 9 containment witnesses for labels and turns | `windowGeometry`, `toM8SeparatedConstructionComponentPackage` | `Swanepoel.M8WindowGeometryConcrete`, `Swanepoel.M8WindowGeometryFromContainment`, `Swanepoel.Lemma10WindowGeometry` |
-| `MinimalFailureM8PaperFactsFamily.facts` | Uniform supplier for every minimal cleared failure | `toSeparatedConstructionComponents`, `no_minimalClearedFailure`, `targetLowerBoundEightThirtyOne` | `Swanepoel.M8SeparatedConstructionConcrete`, `Swanepoel.MinimalFailureClosure`, final Swanepoel target |
+| `MinimalFailureExactActualTopologyFieldsTarget` | Honest selected topology/outer-face data from a minimal cleared failure | `SelectedTopologyRowsInhabitationW33`, `FaceBoundaryTopologySourceW32` | Builds the selected topology rows for W34 route premises. |
+| `SelectedNondegenerateTopologyOuterFaceSectorOrderTheorem` | Sector order for the selected nondegenerate outer face | `OuterBoundaryAngleSourceW34` | Lets angle/label rows use a concrete cyclic boundary order. |
+| `ExactActualTopologyClosureMissingFieldPackage` | Closure fields not already present in exact topology rows | `SelectedTopologyRowsInhabitationW33` | Feeds the compact W34 constructor. |
+| Long-arc plus W16 finite p/q source | Nonconcave long-arc budget and finite spine data | expanded `SwanepoelW32FinalAssembly` constructor | Alternative direct route to W34 premises. |
+| `SelectedFiniteWalkFrameCoreGeneratedOrderSourceRows` | Finite-walk generated cyclic-order rows | `FrameCyclicOrderAssemblyW32` | Supplies generated-order input to the route certificate. |
+| `SelectedFrameActualSelectedBoundaryGapTriangleDegree34RealizationCarrierRowsSourceTheorem` | Realization carrier, selected boundary gap, and degree 3/4 route rows | `K23RouteCoverageSourceW34` | Supplies K23 route coverage for selected frame cases. |
+| `SelectedFrameBadAdjacencyCommonNeighborRowsSourceTheorem` | Bad adjacency/common-neighbor exclusions | `K23RouteCoverageSourceW34` | Removes the selected bad-adjacency branch. |
+| `S5AngleRowsForFinitePQSpineGeneratedOrderSource` | Compact label-certificate angle rows for the finite p/q spine and generated order | `ExactFigureWitnessSourceW34` | Supplies the final S5 angle package to W34 route premises. |
 
-## Pach--Toth non-rigid role-hinge/cross-block route
+Completion gate:
 
-Preferred non-vacuous route modules:
-`PachToth.NonRigidClosedPlacementInterface`,
-`PachToth.RoleHingeTransitionSearch`,
-`PachToth.ConcretePeriodSearchFamily`, and
-`PachToth.CrossBlockLowerBoundsInterface`.
+```text
+SwanepoelW32FinalAssembly.
+  w34ActualRoutePremises_of_exactActualTopologyClosureMissingFieldPackage_finiteWalkGeneratedOrder_realizationCarrier_badAdjacency_labelCertificateS5AngleRows
+```
 
-| Field package | Remaining explicit fields | Immediate Lean consumers | Downstream use |
+or, for the expanded long-arc route:
+
+```text
+SwanepoelW32FinalAssembly.
+  w34ActualRoutePremises_of_exactActualTopologyFields_outerFaceSectorOrderTheorem_longArc_w16_finiteWalkGeneratedOrder_realizationCarrier_incidenceRows_labelCertificateS5AngleRows
+```
+
+## Pach--Toth W34 Threshold Route
+
+Live endpoint:
+
+```text
+PachTothRemainingSourceLedgerW34.
+  exactAndArbitraryTargets_of_largeClosedPlacementFieldsSix_and_below
+```
+
+| Field/package | Remaining explicit data | Consumer | Downstream use |
 |---|---|---|---|
-| `ExplicitCyclicPointEdgeData k hk` | `point`, `separated`, `same_block_edges_unit`, `cross_connector_edges_unit` | `toExplicitClosedPlacementCertificate`, `toClosedPlacement` in `PachToth.NonRigidClosedPlacementInterface` | `PachToth.ClosedPlacementInterface`, `PachToth.DeformedPlacement`, exact and arbitrary targets via remainder bridge |
-| `ExplicitCyclicOrbitEdgeData k hk` | `point`, `step`, `successor_eq`, `connector_unit_edges`, `separated`, `same_block_edges_unit` | `toSuccessorCompatibleCyclicPointOrbit`, `toExplicitTransitionClosedPlacementCertificate`, `toClosedPlacement` | `PachToth.ClosedChainExistence`, `PachToth.ClosedPlacementAlgebra`, `PachToth.DeformedPlacement` |
-| `SameOppositeCyclicOrbitData O k hk` | `point`, `orientation`, `successor_eq`, `separated`, `same_block_edges_unit` | `toExplicitTransitionClosedPlacementCertificate`, `toClosedPlacement` | `PachToth.ClosedChainConstruction`, `PachToth.ClosedPlacementAlgebra`, non-rigid target wrappers |
-| `RoleHingeTransitionFacts` | `placeNext`, `roleAngle`, `realizes_role`, `preserves_same_block_distances` | `toRoleHingeTransition`, `connector_unit_edges`, `toTransitionMetricObligations` in `PachToth.RoleHingeTransitionSearch` | `PachToth.HingedTransitionInterface`, `PachToth.BaseTransitionRealization`, `PachToth.GeneratedMetricClosure` |
-| `SameOppositeRoleHingeTransitionFacts` | `same`, `opposite` role-hinged transition facts | `toRoleHingeTransitions`, `toMetricObligations`, `toFigure2TransitionObligations` | `PachToth.GeneratedMetricClosure`, `PachToth.GeneratedSeparationInterface` |
-| `GeneratedClosureSearchData k hk` | `transitions`, `orientation`, `closure`, `separated` | `toRoleHingedGeneratedClosureData`, `toGeneratedReducedMetricHypotheses` | `PachToth.GeneratedMetricClosure`, `PachToth.ClosedPlacementInterface` |
-| `GeneratedClosureSearchFamily` | uniform `transitions`, `orientation`, `closure`, `separated` for every positive `k` | `toRoleHingedGeneratedClosureFamily`, `closedPlacementFamily`, `targetUpperConstructionFiveSixteen` | Exact-multiple Pach--Toth target through `PachToth.GeneratedMetricClosure` |
-| `PeriodSearchData` | `transitions`, finite orientation `word k hk`, indexed algebraic `equation k hk i` | `indexedCertificate`, `closure`, `periodEquation`, `toRoleHingedPeriodSearchFamily` in `PachToth.ConcretePeriodSearchFamily` | `PachToth.PeriodSearchInterface`, `PachToth.PeriodCertificateExamples`, `PachToth.CrossBlockLowerBoundsInterface` |
-| `ConcreteCrossBlockFamily` | `periodSearch`, `lower`, `lower_ge_one`, `lower_bound` | `toCrossBlockLowerBounds`, `separated`, `toRoleHingedGeneratedClosureFamily` | `PachToth.GeneratedSeparationFarApart`, `PachToth.ExactFamilyClosure`, exact and arbitrary targets |
-| `IndexedCrossBlockLowerTable F k hk` | finite-index `lower`, `lower_ge_one`, `lower_bound` over `Fin k x Fin 16` | `toLocalLower`, `toLocalLower_ge_one`, `toLocalLower_bound`, `generatedGlobalSeparation` | `PachToth.CrossBlockLowerBoundsInterface`, then generated separation |
-| `IndexedCrossBlockLowerTableFamily F` | `table k hk` for every positive `k` | `CrossBlockLowerBounds.ofIndexedTables` | `PachToth.CrossBlockLowerBoundsInterface.CrossBlockLowerBounds` |
-| `CrossBlockLowerBounds F` | local-vertex `lower`, pointwise `lower_ge_one`, metric `lower_bound` | `toLowerBoundsAtLeastOne`, `toDistanceLowerBounds`, `separated`, `toExactFamilyClosure` | `PachToth.GeneratedSeparationFarApart`, `PachToth.ExactFamilyClosure`, `PachToth.CrossBlockLowerBoundsInterface.targetUpperConstructionFiveSixteen*` |
+| `LargeClosedPlacementFieldsSix` | Honest closed placements for all block lengths from six onward | `PachTothRemainingSourceLedgerW34`, `AlternativeNonRigidClosedPlacementW34` | Proves large exact block targets. |
+| `BelowThresholdMetricFieldsSix` | Exact metric certificates for lengths below six | `PachTothRemainingSourceLedgerW34` | Closes the small complement to the threshold route. |
+| `DeformedLengthOneExactBlocksTwoThroughFiveSource` | Genuine deformed length-one sources for block counts two through five | `SmallLengthExactTargetsConcreteW24` | Feeds `BelowThresholdMetricFieldsSix`. |
+| `MinimalExactRemainderSplitSourceBlocker` | Remaining exact-to-arbitrary split input | `PachTothRemainingSourceLedgerW34`, `RemainderSplitSourceClosureW32` | Routes exact block targets to arbitrary `n`. |
+| Eventual role-hinge transition data | Non-rigid same/opposite connector geometry | `EventualRoleHingeClosure`, `RoleHingeCandidateSearchSurface` | Supplies the large closed-placement source. |
+| Eventual period data | Orientation words and closure equations | `PeriodSearchInterface`, `EventualPeriodSearchData` | Gives generated-chain closure. |
+| Eventual cross-block metric data | Reduced non-connector square-distance lower bounds | `GeneratedSeparationFarApart`, `EventualCrossBlockMetricData` | Gives global separation for the large route. |
 
-Guardrail: the audited `PachToth.FinalConditional.EquationPeriodSearchCrossBlockFamily`
-is the translated-equation closure route.  The non-vacuous route above should
-feed role-hinged/deformed transition data into period certificates and
-cross-block lower tables, not instantiate the contradictory translated
-connector-equation package.
+Useful closure:
+
+```text
+AlternativeNonRigidClosedPlacementW34.
+  largeExactBlockTargetsFromSix_of_largeClosedPlacementFieldsSix
+```
+
+## Blocked Pach--Toth Fields
+
+The exact-base direct-flexible all-positive lane is not merely unfinished; it
+is checked refuted by:
+
+```text
+FiniteReducedMetricCandidateSearchW33.not_directFlexibleSourceShape
+FlexibleCandidateMetricInhabitationW33.not_nonempty_directFlexibleSourcePayload
+DeformedLengthOneSourceW34.not_nonempty_directFlexibleSourcePayload
+```
+
+Do not add tasks asking workers to inhabit this payload.  Use the threshold
+route above.
+
+## Documentation Rule
+
+If a future file introduces a new final-looking package, it should either:
+
+- directly consume one row in this matrix,
+- replace this matrix with a smaller live matrix, or
+- be documented as legacy/obstruction-only.
+
+Otherwise it is probably another planning layer rather than progress.

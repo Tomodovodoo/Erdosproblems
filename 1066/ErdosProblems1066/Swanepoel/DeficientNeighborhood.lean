@@ -108,6 +108,31 @@ theorem exists_localDeletionCertificate_of_deficientNeighborhood {n : Nat}
         intro small
         exact I.preservesDistancesOn small }
 
+/-- Concrete data for a small independent set whose outside neighborhood is too small. -/
+structure DeficientIndependentSetData {n : Nat} (C : _root_.UDConfig n) where
+  carrier : Finset (Fin n)
+  nonempty : carrier.Nonempty
+  independent : C.IsIndep carrier
+  card_le_eight : carrier.card <= 8
+  outside_card_lt : (outsideNeighborhoodOf C carrier).card < 3 * carrier.card
+
+namespace DeficientIndependentSetData
+
+theorem toExists {n : Nat} {C : _root_.UDConfig n}
+    (D : DeficientIndependentSetData C) :
+    Exists fun S : Finset (Fin n) =>
+      S.Nonempty /\
+      C.IsIndep S /\
+      S.card <= 8 /\
+      (outsideNeighborhoodOf C S).card < 3 * S.card := by
+  exact
+    Exists.intro D.carrier
+      (And.intro D.nonempty
+        (And.intro D.independent
+          (And.intro D.card_le_eight D.outside_card_lt)))
+
+end DeficientIndependentSetData
+
 /-- In a minimal cleared failure, every nonempty independent set of size at
 most eight has outside neighborhood at least three times as large.  Otherwise
 the canonical closed-neighborhood deletion gives a local deletion certificate,
@@ -129,6 +154,35 @@ theorem outsideNeighborhood_card_ge_three_mul_of_minimalFailure {n : Nat}
           (fun Csmall hcert =>
             LocalDeletionCertificate.not_nonempty_localDeletionCertificate_of_minimalFailure
               (Csmall := Csmall) hmin hcert))
+
+/-- A minimal cleared failure has no deficient small independent set.  This is
+the common contradiction used by the no-cut deletion branch and by the
+boundary-walk Lemma 6 deficient-independent-set reduction. -/
+theorem false_of_minimalFailure_deficientIndependentSet {n : Nat}
+    {C : _root_.UDConfig n}
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (hdef :
+      Exists fun S : Finset (Fin n) =>
+        S.Nonempty /\
+        C.IsIndep S /\
+        S.card <= 8 /\
+        (outsideNeighborhoodOf C S).card < 3 * S.card) :
+    False := by
+  rcases hdef with ⟨S, hS, hindep, hupper, houtside_lt⟩
+  exact
+    (not_lt_of_ge
+      (outsideNeighborhood_card_ge_three_mul_of_minimalFailure
+        hmin hS hindep hupper))
+      houtside_lt
+
+theorem false_of_minimalFailure_deficientIndependentSetData {n : Nat}
+    {C : _root_.UDConfig n}
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (D : DeficientIndependentSetData C) :
+    False := by
+  exact
+    false_of_minimalFailure_deficientIndependentSet hmin
+      (DeficientIndependentSetData.toExists D)
 
 end
 

@@ -188,6 +188,30 @@ def dataWitnesses_of_containmentInterface
     Figure8SeparatedWindowData.ofContainedData
       (H.containedData (i := i) (j := j) hi hsep hj hbad_i hbad_j)
 
+/-- Atomic Figure 8 distance witnesses plus the actual central-angle
+containment row give the W12 selected separated-window data. -/
+def dataWitnesses_of_distanceWitnessRowsAndCentralAngleContainmentRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows : Figure8SeparatedDistanceWitnessRows good)
+    (centralAngleRows :
+      Figure8SeparatedCentralAngleContainmentRows good turn) :
+    Figure8SeparatedWindowDataWitnesses good turn :=
+  dataWitnesses_of_containmentInterface
+    (Figure8ContainmentConcrete.containmentInterface_of_distanceWitnessRowsAndCentralAngleContainment
+      distanceRows centralAngleRows)
+
+/-- Atomic Figure 8 distance witnesses plus the actual central-angle
+containment row give the named E22 lower-bound hypothesis. -/
+theorem E22_of_distanceWitnessRowsAndCentralAngleContainmentRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows : Figure8SeparatedDistanceWitnessRows good)
+    (centralAngleRows :
+      Figure8SeparatedCentralAngleContainmentRows good turn) :
+    Figure8SeparatedWindowLowerE22 good turn :=
+  E22_of_dataWitnesses
+    (dataWitnesses_of_distanceWitnessRowsAndCentralAngleContainmentRows
+      distanceRows centralAngleRows)
+
 /-- A Figure 8 containment interface gives E22 through the W12 extracted-data
 facade. -/
 theorem E22_of_containmentInterface

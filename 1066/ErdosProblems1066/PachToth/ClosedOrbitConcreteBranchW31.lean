@@ -1,3 +1,4 @@
+import ErdosProblems1066.PachToth.ConcreteClosedOrbitConstructionW27
 import ErdosProblems1066.PachToth.ClosedOrbitBranchAssemblyW29
 import ErdosProblems1066.PachToth.ClosedOrbitBranchSourceW30
 
@@ -81,6 +82,22 @@ abbrev MinimalFieldsWithOrbitClosure : Type :=
 
 abbrev MinimalFieldsWithOrbitClosureGate : Prop :=
   PachTothW29RouteAudit.MinimalFieldsWithOrbitClosureGate
+
+abbrev PointFamily : Type :=
+  ClosedPlacementConcreteConstructionW27.PointFamily
+
+abbrev StepFamily : Type :=
+  ClosedPlacementConcreteConstructionW27.StepFamily
+
+abbrev SquaredMetricClosureRows
+    (point : PointFamily) (step : StepFamily) : Prop :=
+  ClosedPlacementConcreteConstructionW27.SquaredMetricClosureRows
+    point step
+
+abbrev W27SquaredMetricClosureRowsGate : Prop :=
+  Exists fun point : PointFamily =>
+    Exists fun step : StepFamily =>
+      SquaredMetricClosureRows point step
 
 abbrev ClosedOrbitBranchGate : Prop :=
   PachTothW29RouteAudit.ClosedOrbitBranchGate
@@ -319,6 +336,37 @@ theorem closedOrbitBranchGate_of_concreteClosedOrbitFamily
   closedOrbitBranchGate_of_concreteClosedOrbitFamilyGate
     (Nonempty.intro F)
 
+theorem w27SquaredMetricClosureRowsGate_of_concreteClosedOrbitFamily
+    (F : ConcreteClosedOrbitFamily) :
+    W27SquaredMetricClosureRowsGate :=
+  Exists.intro
+    (ClosedPlacementConcreteConstructionW27.ConcreteClosedOrbitFamily.pointFamily
+      F)
+    (Exists.intro
+      (ClosedPlacementConcreteConstructionW27.ConcreteClosedOrbitFamily.stepFamily
+        F)
+      (ClosedPlacementConcreteConstructionW27.ConcreteClosedOrbitFamily.toSquaredMetricClosureRows
+        F))
+
+theorem w27SquaredMetricClosureRowsGate_of_concreteClosedOrbitFamilyGate
+    (H : ConcreteClosedOrbitFamilyGate) :
+    W27SquaredMetricClosureRowsGate := by
+  cases H with
+  | intro F =>
+      exact w27SquaredMetricClosureRowsGate_of_concreteClosedOrbitFamily F
+
+theorem concreteClosedOrbitFamilyGate_of_w27SquaredMetricClosureRowsGate
+    (H : W27SquaredMetricClosureRowsGate) :
+    ConcreteClosedOrbitFamilyGate :=
+  (ClosedPlacementConcreteConstructionW27.nonempty_concreteClosedOrbitFamily_iff_exists_squaredRows).2
+    H
+
+theorem closedOrbitBranchGate_of_w27SquaredMetricClosureRowsGate
+    (H : W27SquaredMetricClosureRowsGate) :
+    ClosedOrbitBranchGate :=
+  closedOrbitBranchGate_of_concreteClosedOrbitFamilyGate
+    (concreteClosedOrbitFamilyGate_of_w27SquaredMetricClosureRowsGate H)
+
 theorem closedOrbitBranchGate_of_minimalFieldsWithOrbitClosureGate
     (H : MinimalFieldsWithOrbitClosureGate) :
     ClosedOrbitBranchGate :=
@@ -448,8 +496,10 @@ theorem branchReductionSummary :
           (SquaredMinimalFieldsWithOrbitClosure -> ClosedOrbitBranchGate) /\
             (MinimalFieldsWithOrbitClosure -> ClosedOrbitBranchGate) /\
               (ConcreteClosedOrbitFamily -> ClosedOrbitBranchGate) /\
-                (Not ClosedOrbitBranchGate <->
-                  ClosedOrbitBranchPayloadBlockers) := by
+                (W27SquaredMetricClosureRowsGate ->
+                  ClosedOrbitBranchGate) /\
+                  (Not ClosedOrbitBranchGate <->
+                    ClosedOrbitBranchPayloadBlockers) := by
   exact
     And.intro generatedCompletionRowsGate_iff_payloads
       (And.intro generatedCompletionPayloadBlocker_iff_not_gate
@@ -457,7 +507,9 @@ theorem branchReductionSummary :
           (And.intro closedOrbitBranchGate_of_squaredMinimalFieldsWithOrbitClosure
             (And.intro closedOrbitBranchGate_of_minimalFieldsWithOrbitClosure
               (And.intro closedOrbitBranchGate_of_concreteClosedOrbitFamily
-                not_closedOrbitBranchGate_iff_payloadBlockers)))))
+                (And.intro
+                  closedOrbitBranchGate_of_w27SquaredMetricClosureRowsGate
+                  not_closedOrbitBranchGate_iff_payloadBlockers))))))
 
 end
 
@@ -473,6 +525,9 @@ abbrev PachTothW31ClosedOrbitBranchGate : Prop :=
 
 abbrev PachTothW31ClosedOrbitBranchPayloadBlockers : Prop :=
   PachToth.ClosedOrbitConcreteBranchW31.ClosedOrbitBranchPayloadBlockers
+
+abbrev PachTothW31W27SquaredMetricClosureRowsGate : Prop :=
+  PachToth.ClosedOrbitConcreteBranchW31.W27SquaredMetricClosureRowsGate
 
 theorem pachtoth_w31_closedOrbitBranchGate_of_sourceRows
     (S : PachToth.ClosedOrbitConcreteBranchW31.SquaredOrbitClosureSourceRows) :
@@ -490,6 +545,11 @@ theorem pachtoth_w31_closedOrbitBranchGate_of_minimalFields
       PachToth.ClosedOrbitConcreteBranchW31.MinimalFieldsWithOrbitClosure) :
     PachTothW31ClosedOrbitBranchGate :=
   closedOrbitBranchGate_of_minimalFieldsWithOrbitClosure M
+
+theorem pachtoth_w31_closedOrbitBranchGate_of_w27SquaredMetricClosureRowsGate
+    (H : PachTothW31W27SquaredMetricClosureRowsGate) :
+    PachTothW31ClosedOrbitBranchGate :=
+  closedOrbitBranchGate_of_w27SquaredMetricClosureRowsGate H
 
 theorem pachtoth_w31_not_closedOrbitBranchGate_iff_payloadBlockers :
     Not PachTothW31ClosedOrbitBranchGate <->

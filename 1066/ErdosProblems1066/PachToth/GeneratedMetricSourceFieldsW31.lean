@@ -165,6 +165,28 @@ theorem explicitRowsOfGeneratedClosureMetricRowPackage_family
     (explicitRowsOfGeneratedClosureMetricRowPackage P).family = P.family :=
   rfl
 
+def generatedClosureMetricRowPackageOfExplicitGeneratedMetricSourceRows
+    (R : ExplicitGeneratedMetricSourceRows) :
+    GeneratedClosureMetricRowPackage :=
+  R.toGeneratedClosureMetricRowPackage
+
+def squaredOrbitClosureSourceRowsOfExplicitGeneratedMetricSourceRows
+    (R : ExplicitGeneratedMetricSourceRows) :
+    SquaredOrbitClosureSourceRows :=
+  R.toSquaredOrbitClosureSourceRows
+
+theorem generatedClosureMetricGate_of_explicitGeneratedMetricSourceRows
+    (R : ExplicitGeneratedMetricSourceRows) :
+    GeneratedClosureMetricGate :=
+  Nonempty.intro
+    (generatedClosureMetricRowPackageOfExplicitGeneratedMetricSourceRows R)
+
+theorem squaredOrbitClosureSourceRowsGate_of_explicitGeneratedMetricSourceRows
+    (R : ExplicitGeneratedMetricSourceRows) :
+    Nonempty SquaredOrbitClosureSourceRows :=
+  Nonempty.intro
+    (squaredOrbitClosureSourceRowsOfExplicitGeneratedMetricSourceRows R)
+
 /-! ## Exact row-level equivalences -/
 
 theorem reducedMetricHypotheses_iff_explicitMetricRows

@@ -3,6 +3,13 @@
 This folder contains one Lamport-style, Lean-ready Markdown proof plan for each
 source document in `../Proof_Files/`.
 
+Status note, 2026-05-19: the `*_lean_ready.md` files are source-paper roadmaps.
+They should be read for paper structure and missing mathematical obligations,
+not as the current Lean handoff.  Use `theorem_dependency_map.md`,
+`current_spines.md`, `remaining_fields_matrix.md`, and
+`nonvacuous_completion_route.md` for the live route and guardrails before
+taking a task from `../TASK.md`.
+
 - `pollack_1985_lean_ready.md` translates `Po85.pdf`.
 - `csizmadia_1998_lean_ready.md` translates `Cs98.pdf`.
 - `swanepoel_2002_lean_ready.md` translates `Sw02.pdf`.
@@ -10,8 +17,10 @@ source document in `../Proof_Files/`.
 - `pach_toth_postscript_audit.md` records source-level Figure 2 findings from
   `PaTo96.ps`, including the same/opposite orientation and non-rigid
   deformation requirements.
-- `current_frontier.md` records the current Lean/document frontier as of this
-  documentation pass.
+- `current_frontier.md` is a historical Lean/document frontier snapshot.
+- `theorem_dependency_map.md` records the durable dependency graph, live routes,
+  blocked routes, and file-structure policy.  Use it for context before taking
+  a task from `../TASK.md`.
 
 The files are not verbatim paper transcriptions and are not claimed to be
 completed Lean developments. They are structured proof contracts: numbered

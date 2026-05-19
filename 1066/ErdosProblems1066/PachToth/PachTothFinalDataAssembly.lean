@@ -4,6 +4,7 @@ import ErdosProblems1066.PachToth.ConcreteNonConnectorValueMatrix
 import ErdosProblems1066.PachToth.ConcretePeriodWordSearch
 import ErdosProblems1066.PachToth.FlexibleExactLocalTransition
 import ErdosProblems1066.PachToth.PachTothW8ClosureMatrix
+import ErdosProblems1066.PachToth.RoleHingeSameBlockAlgebra
 
 set_option autoImplicit false
 
@@ -25,6 +26,7 @@ namespace PachToth
 namespace PachTothFinalDataAssembly
 
 open FiniteGraph
+open _root_.ErdosProblems1066.PachToth.RoleHingeSameBlockAlgebra
 
 noncomputable section
 
@@ -38,6 +40,46 @@ theorem exactRemainderBridge_present
   exact
     ArbitraryNExactRemainderClosure.arbitrary_of_exactTarget_checkedRemainder
       H
+
+/-! ## Strong role-hinge data as flexible exact-local data -/
+
+/-- A strong role-hinge branch supplies the flexible branch fields: the
+connector-unit part is unchanged, and ordinary same-block distance
+preservation implies the exact-local squared-distance invariant needed by the
+flexible route. -/
+def flexibleBranchOfRoleHingeTransition
+    (T : BaseTransitionRealization.RoleHingeTransition) :
+    FlexibleExactLocalTransition.Branch where
+  connector :=
+    { placeNext := T.placeNext
+      roleAngle := T.roleAngle
+      realizes_role := T.realizes_role }
+  exactLocal :=
+    { preserves_exact_local_sq_distances :=
+        (preservesExactLocalSqDistances_of_preservesSameBlockDistances
+          T.preserves_same_block_distances) }
+
+/-- Strong same/opposite role-hinge transitions forget to the flexible
+exact-local same/opposite interface. -/
+def flexibleSameOppositeOfRoleHingeTransitions
+    (T : GeneratedMetricClosure.RoleHingeTransitions) :
+    FlexibleExactLocalTransition.SameOpposite where
+  same := flexibleBranchOfRoleHingeTransition T.same
+  opposite := flexibleBranchOfRoleHingeTransition T.opposite
+
+@[simp]
+theorem flexibleSameOppositeOfRoleHingeTransitions_same_placeNext
+    (T : GeneratedMetricClosure.RoleHingeTransitions) :
+    (flexibleSameOppositeOfRoleHingeTransitions T).same.placeNext =
+      T.same.placeNext := by
+  rfl
+
+@[simp]
+theorem flexibleSameOppositeOfRoleHingeTransitions_opposite_placeNext
+    (T : GeneratedMetricClosure.RoleHingeTransitions) :
+    (flexibleSameOppositeOfRoleHingeTransitions T).opposite.placeNext =
+      T.opposite.placeNext := by
+  rfl
 
 /-- Period words and cross-block lower tables over a flexible exact-local
 same/opposite branch.
@@ -141,6 +183,15 @@ def toGeneratedClosureFamily
   closure := F.closure
   separated := F.separated
 
+/-- A nonempty lower-table family is already a real flexible
+generated-closure source. -/
+theorem nonempty_generatedClosureFamily
+    (H : Nonempty FlexiblePeriodLowerTableFamily) :
+    Nonempty FlexibleExactLocalTransition.GeneratedClosureFamily := by
+  cases H with
+  | intro F =>
+      exact Nonempty.intro F.toGeneratedClosureFamily
+
 /-- Exact Pach--Toth target from explicit flexible branch, period equations,
 and lower tables. -/
 theorem targetUpperConstructionFiveSixteen
@@ -154,6 +205,89 @@ theorem targetUpperConstructionFiveSixteenArbitrary
     (F : FlexiblePeriodLowerTableFamily) :
     PachToth.targetUpperConstructionFiveSixteenArbitrary :=
   exactRemainderBridge_present F.targetUpperConstructionFiveSixteen
+
+/-! ### Adapters from existing strong period/lower-table data -/
+
+/-- Repackage a concrete role-hinge period-search/lower-table family as a
+flexible exact-local lower-table family.  No numerical field is manufactured:
+the word, period equations, lower table, and cross-block inequalities are the
+ones stored in the concrete family. -/
+def ofConcreteCrossBlockFamily
+    (C : ConcretePeriodSearchFamily.ConcreteCrossBlockFamily) :
+    FlexiblePeriodLowerTableFamily where
+  transitions :=
+    flexibleSameOppositeOfRoleHingeTransitions C.periodSearch.transitions
+  word := C.periodSearch.word
+  period := by
+    intro k hk
+    simpa using C.periodSearch.periodEquation k hk
+  lower := C.lower
+  lower_ge_one := C.toCrossBlockLowerBounds.toLowerBoundsAtLeastOne
+  lower_bound := by
+    intro k hk
+    simpa using C.toCrossBlockLowerBounds.toDistanceLowerBounds k hk
+
+/-- Concrete non-connector lower tables already contain exactly the full
+cross-block lower table required by the flexible route, once the strong
+role-hinge transitions are viewed flexibly. -/
+def ofConcreteNonConnectorLowerTableFamily
+    (C : ConcreteCrossBlockLowerTable.ConcreteNonConnectorLowerTableFamily) :
+    FlexiblePeriodLowerTableFamily where
+  transitions :=
+    flexibleSameOppositeOfRoleHingeTransitions C.periodSearch.transitions
+  word := C.periodSearch.word
+  period := by
+    intro k hk
+    simpa using C.periodSearch.periodEquation k hk
+  lower := C.toCrossBlockLowerBounds.lower
+  lower_ge_one := C.crossBlockLower_ge_one
+  lower_bound := by
+    intro k hk
+    simpa using C.crossBlockDistanceLowerBounds k hk
+
+/-- A concrete value-matrix family gives a flexible lower-table family via
+the existing value-matrix-to-lower-table projection. -/
+def ofConcreteValueMatrixFamily
+    (C : ConcreteNonConnectorValueMatrix.ConcreteValueMatrixFamily) :
+    FlexiblePeriodLowerTableFamily :=
+  ofConcreteNonConnectorLowerTableFamily
+    C.toConcreteNonConnectorLowerTableFamily
+
+theorem nonempty_of_nonempty_concreteNonConnectorLowerTableFamily
+    (H :
+      Nonempty
+        ConcreteCrossBlockLowerTable.ConcreteNonConnectorLowerTableFamily) :
+    Nonempty FlexiblePeriodLowerTableFamily := by
+  cases H with
+  | intro C =>
+      exact Nonempty.intro (ofConcreteNonConnectorLowerTableFamily C)
+
+theorem nonempty_of_nonempty_concreteValueMatrixFamily
+    (H : Nonempty ConcreteNonConnectorValueMatrix.ConcreteValueMatrixFamily) :
+    Nonempty FlexiblePeriodLowerTableFamily := by
+  cases H with
+  | intro C =>
+      exact Nonempty.intro (ofConcreteValueMatrixFamily C)
+
+theorem targetUpperConstructionFiveSixteen_of_concreteCrossBlockFamily
+    (C : ConcretePeriodSearchFamily.ConcreteCrossBlockFamily) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  (ofConcreteCrossBlockFamily C).targetUpperConstructionFiveSixteen
+
+theorem targetUpperConstructionFiveSixteen_of_concreteNonConnectorLowerTableFamily
+    (C : ConcreteCrossBlockLowerTable.ConcreteNonConnectorLowerTableFamily) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  (ofConcreteNonConnectorLowerTableFamily C).targetUpperConstructionFiveSixteen
+
+theorem targetUpperConstructionFiveSixteen_of_concreteValueMatrixFamily
+    (C : ConcreteNonConnectorValueMatrix.ConcreteValueMatrixFamily) :
+    PachToth.targetUpperConstructionFiveSixteen :=
+  (ofConcreteValueMatrixFamily C).targetUpperConstructionFiveSixteen
+
+theorem targetUpperConstructionFiveSixteenArbitrary_of_concreteValueMatrixFamily
+    (C : ConcreteNonConnectorValueMatrix.ConcreteValueMatrixFamily) :
+    PachToth.targetUpperConstructionFiveSixteenArbitrary :=
+  (ofConcreteValueMatrixFamily C).targetUpperConstructionFiveSixteenArbitrary
 
 end FlexiblePeriodLowerTableFamily
 
@@ -199,6 +333,23 @@ def toLowerTableFamily
   lower_ge_one := V.value_ge_one
   lower_bound := V.value_bound
 
+/-- A nonempty value-matrix family is a nonempty lower-table family after
+forgetting the value-matrix naming. -/
+theorem nonempty_lowerTableFamily
+    (H : Nonempty FlexiblePeriodValueMatrixFamily) :
+    Nonempty FlexiblePeriodLowerTableFamily := by
+  cases H with
+  | intro V =>
+      exact Nonempty.intro V.toLowerTableFamily
+
+/-- A nonempty value-matrix family also gives a nonempty flexible
+generated-closure source. -/
+theorem nonempty_generatedClosureFamily
+    (H : Nonempty FlexiblePeriodValueMatrixFamily) :
+    Nonempty FlexibleExactLocalTransition.GeneratedClosureFamily :=
+  FlexiblePeriodLowerTableFamily.nonempty_generatedClosureFamily
+    (nonempty_lowerTableFamily H)
+
 /-- Exact Pach--Toth target from explicit flexible branch, period equations,
 and value matrices. -/
 theorem targetUpperConstructionFiveSixteen
@@ -214,6 +365,42 @@ theorem targetUpperConstructionFiveSixteenArbitrary
   V.toLowerTableFamily.targetUpperConstructionFiveSixteenArbitrary
 
 end FlexiblePeriodValueMatrixFamily
+
+namespace FlexiblePeriodLowerTableFamily
+
+/-- The flexible lower-table and value-matrix packages contain the same
+source data; only the field names differ. -/
+def toValueMatrixFamily
+    (F : FlexiblePeriodLowerTableFamily) :
+    FlexiblePeriodValueMatrixFamily where
+  transitions := F.transitions
+  word := F.word
+  period := F.period
+  value := F.lower
+  value_ge_one := F.lower_ge_one
+  value_bound := F.lower_bound
+
+/-- A nonempty flexible lower-table family is equivalently a nonempty
+flexible value-matrix family after renaming the lower table as `value`. -/
+theorem nonempty_valueMatrixFamily
+    (H : Nonempty FlexiblePeriodLowerTableFamily) :
+    Nonempty FlexiblePeriodValueMatrixFamily := by
+  cases H with
+  | intro F =>
+      exact Nonempty.intro F.toValueMatrixFamily
+
+end FlexiblePeriodLowerTableFamily
+
+/-- Flexible lower-table and flexible value-matrix source families are
+equivalent source obligations in this final assembly layer. -/
+theorem nonempty_flexiblePeriodLowerTableFamily_iff_valueMatrixFamily :
+    Nonempty FlexiblePeriodLowerTableFamily <->
+      Nonempty FlexiblePeriodValueMatrixFamily := by
+  constructor
+  case mp =>
+    exact FlexiblePeriodLowerTableFamily.nonempty_valueMatrixFamily
+  case mpr =>
+    exact FlexiblePeriodValueMatrixFamily.nonempty_lowerTableFamily
 
 /-- The final assembly field shapes.  These are data types, not solved
 theorems; target wrappers below require inhabitants explicitly. -/

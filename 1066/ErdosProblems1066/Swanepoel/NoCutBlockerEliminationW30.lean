@@ -7,8 +7,8 @@ set_option linter.unusedDecidableInType false
 # W30 no-cut blocker elimination source reductions
 
 This file is the W30 reduction layer above `NoCutBlockerContradictionW29`.
-It does not assert an unconditional no-cut theorem.  Instead, it packages the
-small source routes that prove `Not MinimalCutVertexBlockerExists`:
+It packages the small source routes that prove
+`Not MinimalCutVertexBlockerExists`:
 
 * degree deletion;
 * closed-neighborhood deletion/reinsertion data;
@@ -75,6 +75,194 @@ abbrev BlockerTupledDirectCardBoundDeletionSource : Prop :=
 
 abbrev BlockerDeficientNeighborhoodDeletionSource : Prop :=
   NoCutBlockerContradictionW29.BlockerDeficientNeighborhoodDeletionSource
+
+/-! ## Mixed pointwise partition-payload source -/
+
+/-- W30 blocker-local spelling of a mixed concrete deletion payload. -/
+abbrev BlockerDeletionPayloadAlternative
+    (B : MinimalCutVertexBlocker) : Prop :=
+  BlockerClosedDeletionReinsertion B \/
+    BlockerDirectDeletionReinsertion B \/
+      BlockerDeficientDeletion B
+
+/-- Blocker-local source that may choose a different concrete payload branch
+for each live blocker. -/
+abbrev BlockerDeletionPayloadAlternativeSource : Prop :=
+  forall B : MinimalCutVertexBlocker,
+    BlockerDeletionPayloadAlternative B
+
+/-- W27 live cut-partition source, lifted as a W30 elimination source. -/
+abbrev CutPartitionDeletionPayloadAlternativeSource : Prop :=
+  NoCutLocalDeletionConcreteW27.LiveCutPartitionDeletionPayloadSource
+
+/-- Corrected direct Lemma 3 plus-side avoidance source from W24. -/
+abbrev CutPartitionPlusSideAvoidsCutDataSource : Prop :=
+  NoCutBlockerEliminationW24.MinimalFailureCutPartitionPlusSideAvoidsCutData
+
+/-- Named minimality-witness version of the plus-side avoidance source. -/
+abbrev CutPartitionPlusSideMinimalityWitnessAvoidsCutSource : Prop :=
+  NoCutBlockerEliminationW24.MinimalFailureCutPartitionPlusSideMinimalityWitnessAvoidsCut
+
+/-- Exact obstruction source for the corrected plus-side route. -/
+abbrev NoBothPlusSidesCutForcedDataSource : Prop :=
+  NoCutBlockerEliminationW24.MinimalFailureNoBothPlusSidesCutForcedData
+
+/-- The concrete paper-geometry upper-bound source for the deficient
+neighborhood branch. -/
+abbrev CutPartitionCrossPairSideNeighborCardBound : Prop :=
+  NoCutLocalDeletionConcreteW27.CutPartitionCrossPairSideNeighborCardBound
+
+/-- The lower-bound field that follows from minimality and the checked
+both-plus-sides-cut-forced contradiction.  This keeps the old W30 compatibility
+name but no longer imports the W27 side-neighbor lower-bound source. -/
+abbrev CutPartitionCrossPairSideNeighborCardLowerBound : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (_hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (P : CutVertexInterface.CutVertexPartition C)
+    {l r : Fin n}, l ∈ P.left -> r ∈ P.right ->
+      5 <=
+        (P.left.filter fun v => _root_.eucDist (C.pts l) (C.pts v) = 1).card +
+          (P.right.filter fun v => _root_.eucDist (C.pts r) (C.pts v) = 1).card
+
+theorem blockerDeletionPayloadAlternativeSource_of_cutPartition
+    (H : CutPartitionDeletionPayloadAlternativeSource) :
+    BlockerDeletionPayloadAlternativeSource := by
+  intro B
+  exact H B.C B.minimal B.cut
+
+theorem not_minimalCutVertexBlockerExists_of_blockerDeletionPayloadAlternativeSource
+    (H : BlockerDeletionPayloadAlternativeSource) :
+    Not MinimalCutVertexBlockerExists := by
+  intro hblocker
+  cases hblocker with
+  | intro B =>
+      cases H B with
+      | inl Hclosed =>
+          exact false_of_blockerTupledClosedNeighborhoodDeletion B Hclosed
+      | inr Hrest =>
+          cases Hrest with
+          | inl Hdirect =>
+              exact false_of_blockerTupledDirectCardBoundDeletion B Hdirect
+          | inr Hdeficient =>
+              exact false_of_blockerDeficientNeighborhoodDeletion B Hdeficient
+
+theorem not_minimalCutVertexBlockerExists_of_cutPartitionDeletionPayloadAlternativeSource
+    (H : CutPartitionDeletionPayloadAlternativeSource) :
+    Not MinimalCutVertexBlockerExists :=
+  not_minimalCutVertexBlockerExists_of_blockerDeletionPayloadAlternativeSource
+    (blockerDeletionPayloadAlternativeSource_of_cutPartition H)
+
+theorem blockerDeletionPayloadAlternativeSource_of_not_minimalCutVertexBlockerExists
+    (hno : Not MinimalCutVertexBlockerExists) :
+    BlockerDeletionPayloadAlternativeSource := by
+  intro B
+  exact False.elim (hno (Nonempty.intro B))
+
+theorem cutPartitionDeletionPayloadAlternativeSource_of_not_minimalCutVertexBlockerExists
+    (hno : Not MinimalCutVertexBlockerExists) :
+    CutPartitionDeletionPayloadAlternativeSource := by
+  intro n C hmin P
+  exact
+    False.elim
+      (hno
+        (Nonempty.intro
+          { n := n
+            C := C
+            minimal := hmin
+            cut := P }))
+
+theorem cutPartitionDeletionPayloadAlternativeSource_iff_not_minimalCutVertexBlockerExists :
+    CutPartitionDeletionPayloadAlternativeSource <->
+      Not MinimalCutVertexBlockerExists := by
+  constructor
+  case mp =>
+    exact not_minimalCutVertexBlockerExists_of_cutPartitionDeletionPayloadAlternativeSource
+  case mpr =>
+    exact cutPartitionDeletionPayloadAlternativeSource_of_not_minimalCutVertexBlockerExists
+
+theorem not_minimalCutVertexBlockerExists_of_plusSideAvoidsCutDataSource
+    (H : CutPartitionPlusSideAvoidsCutDataSource) :
+    Not MinimalCutVertexBlockerExists :=
+  NoCutBlockerEliminationW24.not_blocker_of_plusSideAvoidsCutData H
+
+theorem cutPartitionPlusSideAvoidsCutDataSource_of_minimalityWitnessAvoidsCutSource
+    (H : CutPartitionPlusSideMinimalityWitnessAvoidsCutSource) :
+    CutPartitionPlusSideAvoidsCutDataSource :=
+  NoCutBlockerEliminationW24.plusSideAvoidsCutData_of_plusSideMinimalityWitnessAvoidsCut
+    H
+
+theorem not_minimalCutVertexBlockerExists_of_plusSideMinimalityWitnessAvoidsCutSource
+    (H : CutPartitionPlusSideMinimalityWitnessAvoidsCutSource) :
+    Not MinimalCutVertexBlockerExists :=
+  NoCutBlockerEliminationW24.not_blocker_of_plusSideMinimalityWitnessAvoidsCut
+    H
+
+theorem noBothPlusSidesCutForcedDataSource :
+    NoBothPlusSidesCutForcedDataSource :=
+  NoCutBlockerEliminationW24.noBothPlusSidesCutForcedData_of_minimalFailure
+
+theorem cutPartitionPlusSideAvoidsCutDataSource_of_noBothPlusSidesCutForcedDataSource
+    (H : NoBothPlusSidesCutForcedDataSource) :
+    CutPartitionPlusSideAvoidsCutDataSource :=
+  NoCutBlockerEliminationW24.plusSideAvoidsCutData_of_noBothPlusSidesCutForcedData
+    H
+
+theorem cutPartitionPlusSideAvoidsCutDataSource_of_refuting_bothPlusSidesCutForced :
+    CutPartitionPlusSideAvoidsCutDataSource :=
+  cutPartitionPlusSideAvoidsCutDataSource_of_noBothPlusSidesCutForcedDataSource
+    noBothPlusSidesCutForcedDataSource
+
+theorem not_minimalCutVertexBlockerExists_of_noBothPlusSidesCutForcedDataSource
+    (H : NoBothPlusSidesCutForcedDataSource) :
+    Not MinimalCutVertexBlockerExists :=
+  NoCutBlockerEliminationW24.not_blocker_of_noBothPlusSidesCutForcedData H
+
+theorem not_minimalCutVertexBlockerExists_of_refuting_bothPlusSidesCutForced :
+    Not MinimalCutVertexBlockerExists :=
+  NoCutBlockerEliminationW24.not_blocker_of_refuting_bothPlusSidesCutForced
+
+theorem cutPartitionPlusSideAvoidsCutDataSource_of_not_minimalCutVertexBlockerExists
+    (hno : Not MinimalCutVertexBlockerExists) :
+    CutPartitionPlusSideAvoidsCutDataSource :=
+  NoCutBlockerEliminationW24.not_blocker_iff_plusSideAvoidsCutData.1 hno
+
+theorem cutPartitionPlusSideAvoidsCutDataSource_iff_not_minimalCutVertexBlockerExists :
+    CutPartitionPlusSideAvoidsCutDataSource <->
+      Not MinimalCutVertexBlockerExists := by
+  constructor
+  · exact not_minimalCutVertexBlockerExists_of_plusSideAvoidsCutDataSource
+  · exact cutPartitionPlusSideAvoidsCutDataSource_of_not_minimalCutVertexBlockerExists
+
+theorem cutPartitionCrossPairSideNeighborCardLowerBound_of_minimalFailure :
+    CutPartitionCrossPairSideNeighborCardLowerBound := by
+  intro n C hmin P l r hl hr
+  exact
+    False.elim
+      (NoCutBlockerEliminationW24.noCutVertexFamily_of_refuting_bothPlusSidesCutForced
+        C hmin (Nonempty.intro P))
+
+/-! ## Concrete partition data as W30 blocker-local sources -/
+
+theorem closedDeletionReinsertionSource_of_cutPartitionTupledClosedNeighborhood
+    (H :
+      NoCutLocalDeletionConcreteW27.CutPartitionTupledClosedNeighborhoodDeletionData) :
+    BlockerClosedDeletionReinsertionSource :=
+  NoCutSourceConstructionW28.blockerTupledClosed_of_cutPartitionTupledClosedNeighborhoodDeletionData
+    H
+
+theorem directDeletionReinsertionSource_of_cutPartitionTupledDirectCardBound
+    (H :
+      NoCutLocalDeletionConcreteW27.CutPartitionTupledDirectCardBoundDeletionData) :
+    BlockerDirectDeletionReinsertionSource :=
+  NoCutSourceConstructionW28.blockerTupledDirect_of_cutPartitionTupledDirectCardBoundDeletionData
+    H
+
+theorem deficientDeletionSource_of_cutPartitionDeficientNeighborhood
+    (H :
+      NoCutLocalDeletionConcreteW27.CutPartitionDeficientNeighborhoodDeletionData) :
+    BlockerDeficientDeletionSource :=
+  NoCutSourceConstructionW28.blockerDeficient_of_cutPartitionDeficientNeighborhoodDeletionData
+    H
 
 theorem blockerLocalClosedSource_of_closedDeletionReinsertionSource
     (H : BlockerClosedDeletionReinsertionSource) :
@@ -167,6 +355,42 @@ abbrev DeletionReinsertionEliminationSource : Prop :=
   BlockerClosedDeletionReinsertionSource \/
     BlockerDirectDeletionReinsertionSource \/
       BlockerDeficientDeletionSource
+
+theorem deletionReinsertionEliminationSource_of_cutPartitionTupledClosedNeighborhood
+    (H :
+      NoCutLocalDeletionConcreteW27.CutPartitionTupledClosedNeighborhoodDeletionData) :
+    DeletionReinsertionEliminationSource :=
+  Or.inl
+    (closedDeletionReinsertionSource_of_cutPartitionTupledClosedNeighborhood H)
+
+theorem deletionReinsertionEliminationSource_of_cutPartitionTupledDirectCardBound
+    (H :
+      NoCutLocalDeletionConcreteW27.CutPartitionTupledDirectCardBoundDeletionData) :
+    DeletionReinsertionEliminationSource :=
+  Or.inr
+    (Or.inl
+      (directDeletionReinsertionSource_of_cutPartitionTupledDirectCardBound H))
+
+theorem deletionReinsertionEliminationSource_of_cutPartitionDeficientNeighborhood
+    (H :
+      NoCutLocalDeletionConcreteW27.CutPartitionDeficientNeighborhoodDeletionData) :
+    DeletionReinsertionEliminationSource :=
+  Or.inr
+    (Or.inr
+      (deficientDeletionSource_of_cutPartitionDeficientNeighborhood H))
+
+theorem deficientDeletionSource_of_sideNeighborCardBound
+    (H : CutPartitionCrossPairSideNeighborCardBound) :
+    BlockerDeficientDeletionSource :=
+  deficientDeletionSource_of_cutPartitionDeficientNeighborhood
+    (NoCutLocalDeletionConcreteW27.cutPartitionDeficientNeighborhoodDeletionData_of_sideNeighborCardBound
+      H)
+
+theorem not_minimalCutVertexBlockerExists_of_sideNeighborCardBound
+    (H : CutPartitionCrossPairSideNeighborCardBound) :
+    Not MinimalCutVertexBlockerExists :=
+  not_minimalCutVertexBlockerExists_of_deficientDeletionSource
+    (deficientDeletionSource_of_sideNeighborCardBound H)
 
 abbrev CanonicalBlockerEliminationSource : Prop :=
   BlockerDegreeDeletionSource \/

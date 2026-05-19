@@ -5,6 +5,10 @@ Source document: `../Proof_Files/Cs98.pdf`
 Paper: G. Csizmadia, "On the Independence Number of Minimum Distance
 Graphs", Discrete & Computational Geometry 20 (1998), 179-187.
 
+Current-status note, 2026-05-19: this is a source-paper roadmap, not the live
+Lean handoff.  It should be read for paper structure and obligations; check
+`theorem_dependency_map.md` for current Lean route status before starting work.
+
 This file is a Lamport-style transcription plan.  It is not a finished
 Lean proof.  Every numbered assertion below is intended to become either:
 

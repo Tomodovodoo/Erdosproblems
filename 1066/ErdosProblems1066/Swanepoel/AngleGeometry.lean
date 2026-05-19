@@ -1,5 +1,7 @@
 import ErdosProblems1066.Swanepoel.AngleBridgeFacts
+import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Oriented.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 
 /-!
@@ -14,11 +16,12 @@ The existing Swanepoel files use `Point = Real x Real` together with hand-rolled
 spaces, so we embed the concrete plane into `EuclideanSpace Real (Fin 2)` and
 state the angle at `b` as the angle between the two embedded side vectors.
 
-What is not done here: oriented angles, polygon interior angles, and angle-sum
-theorems for faces.  Those still require extra geometric hypotheses about the
-cyclic order/noncrossing embedding.  The lemmas below are the reusable local
-fact needed first: unit side vectors with dot product at most `1 / 2` make an
-unoriented angle at least `pi / 3`.
+What is not done here: polygon interior angles and angle-sum theorems for
+faces.  Those still require extra geometric hypotheses about the cyclic
+order/noncrossing embedding.  The lemmas below are the reusable local facts
+needed first: unit side vectors with dot product at most `1 / 2` make an
+unoriented angle at least `pi / 3`, and a checked oriented-angle chain
+telescopes once S3 supplies the actual no-wrap/cyclic-order facts.
 -/
 
 noncomputable section
@@ -28,6 +31,7 @@ namespace Swanepoel
 namespace AngleGeometry
 
 open TriangleAngleFacts
+open scoped EuclideanSpace
 
 abbrev Point : Type :=
   TriangleAngleFacts.Point
@@ -56,6 +60,425 @@ lemma angleAt_mem_Icc_zero_pi (a b c : Point) :
     Set.Icc 0 Real.pi (angleAt a b c) := by
   exact Set.mem_Icc.mpr
     (And.intro (angleAt_nonneg a b c) (angleAt_le_pi a b c))
+
+/-- Real-angle unwrapping for a consecutive gap-angle telescope.
+
+The intended S3 use is: cyclic order/no-crossing supplies the equality in
+`Real.Angle`, and the outer-face half-plane/no-wrap facts supply the interval
+bounds.  This lemma then converts that oriented telescope into an equality of
+ordinary real angle sums. -/
+lemma gapAngleSum_eq_sectorAngle_of_realAngle_eq_no_wrap
+    {m : Nat} (gap : Fin m -> Real) {sector : Real}
+    (hgap_nonneg : forall i, 0 <= gap i)
+    (hsector_nonneg : 0 <= sector)
+    (hsector_le_pi : sector <= Real.pi)
+    (hsum_le_pi : Finset.sum Finset.univ gap <= Real.pi)
+    (hangle :
+      ((Finset.sum Finset.univ gap : Real) : Real.Angle) =
+        (sector : Real.Angle)) :
+    Finset.sum Finset.univ gap = sector := by
+  have hsum_nonneg : 0 <= Finset.sum Finset.univ gap := by
+    exact Finset.sum_nonneg (fun i _ => hgap_nonneg i)
+  have hsum_toReal :
+      (((Finset.sum Finset.univ gap : Real) : Real.Angle).toReal) =
+        Finset.sum Finset.univ gap := by
+    rw [Real.Angle.toReal_coe_eq_self_iff]
+    exact And.intro (by nlinarith [Real.pi_pos, hsum_nonneg]) hsum_le_pi
+  have hsector_toReal : ((sector : Real.Angle).toReal) = sector := by
+    rw [Real.Angle.toReal_coe_eq_self_iff]
+    exact And.intro (by nlinarith [Real.pi_pos, hsector_nonneg]) hsector_le_pi
+  calc
+    Finset.sum Finset.univ gap =
+        (((Finset.sum Finset.univ gap : Real) : Real.Angle).toReal) :=
+      hsum_toReal.symm
+    _ = ((sector : Real.Angle).toReal) := by rw [hangle]
+    _ = sector := hsector_toReal
+
+/-- Inequality form of
+`gapAngleSum_eq_sectorAngle_of_realAngle_eq_no_wrap`, matching the local S3
+sector-containment row. -/
+lemma gapAngleSum_le_sectorAngle_of_realAngle_eq_no_wrap
+    {m : Nat} (gap : Fin m -> Real) {sector : Real}
+    (hgap_nonneg : forall i, 0 <= gap i)
+    (hsector_nonneg : 0 <= sector)
+    (hsector_le_pi : sector <= Real.pi)
+    (hsum_le_pi : Finset.sum Finset.univ gap <= Real.pi)
+    (hangle :
+      ((Finset.sum Finset.univ gap : Real) : Real.Angle) =
+        (sector : Real.Angle)) :
+    Finset.sum Finset.univ gap <= sector :=
+  le_of_eq
+    (gapAngleSum_eq_sectorAngle_of_realAngle_eq_no_wrap
+      gap hgap_nonneg hsector_nonneg hsector_le_pi hsum_le_pi hangle)
+
+/-- Finite oriented-angle telescope for a chain of nonzero rays.
+
+This is deliberately only the algebraic `Real.Angle` statement supplied by
+`Orientation.oangle_add`: S3 still has to prove that the chosen Euclidean rays
+occur in cyclic order and that the resulting real representative does not
+wrap. -/
+lemma oangle_sum_range_succ_eq_oangle
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V]
+    [Fact (Module.finrank Real V = 2)]
+    (o : Orientation Real V (Fin 2)) (ray : Nat -> V) (m : Nat)
+    (hnonzero : (i : Nat) -> i <= m -> ray i ≠ 0) :
+    (Finset.sum (Finset.range m)
+        (fun i => o.oangle (ray i) (ray (i + 1)))) =
+      o.oangle (ray 0) (ray m) := by
+  induction m with
+  | zero =>
+      simp
+  | succ m ih =>
+      have hprev : (i : Nat) -> i <= m -> ray i ≠ 0 := by
+        intro i hi
+        exact hnonzero i (Nat.le_trans hi (Nat.le_succ m))
+      rw [Finset.sum_range_succ, ih hprev]
+      exact o.oangle_add
+        (hnonzero 0 (Nat.zero_le _))
+        (hnonzero m (Nat.le_succ m))
+        (hnonzero (m + 1) le_rfl)
+
+/-- The `Real.Angle` identity behind a consecutive gap-angle telescope.
+
+This is the algebraic part only: each real gap value is identified with the
+oriented angle between consecutive rays, and the sector value is identified
+with the oriented angle between the endpoints. -/
+lemma realAngle_gapAngleSum_eq_sectorAngle_of_oangle_chain
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V]
+    [Fact (Module.finrank Real V = 2)]
+    (o : Orientation Real V (Fin 2)) {m : Nat}
+    (ray : Nat -> V) (gap : Fin m -> Real) {sector : Real}
+    (hray_nonzero : (i : Nat) -> i <= m -> ray i ≠ 0)
+    (hgap_oangle : forall i : Fin m,
+      ((gap i : Real) : Real.Angle) =
+        o.oangle (ray i.val) (ray (i.val + 1)))
+    (hsector_oangle :
+      (sector : Real.Angle) = o.oangle (ray 0) (ray m)) :
+    ((Finset.sum Finset.univ gap : Real) : Real.Angle) =
+      (sector : Real.Angle) := by
+  have hgapAngle :
+      ((Finset.sum Finset.univ gap : Real) : Real.Angle) =
+        Finset.sum Finset.univ
+          (fun i : Fin m => ((gap i : Real) : Real.Angle)) := by
+    exact map_sum Real.Angle.coeHom gap Finset.univ
+  have hfin_to_range :
+      Finset.sum Finset.univ
+          (fun i : Fin m => ((gap i : Real) : Real.Angle)) =
+        Finset.sum (Finset.range m)
+          (fun i => o.oangle (ray i) (ray (i + 1))) := by
+    rw [Finset.sum_range]
+    refine Finset.sum_congr rfl ?_
+    intro i _hi
+    simpa using hgap_oangle i
+  calc
+    ((Finset.sum Finset.univ gap : Real) : Real.Angle)
+        = Finset.sum Finset.univ
+            (fun i : Fin m => ((gap i : Real) : Real.Angle)) := hgapAngle
+    _ = Finset.sum (Finset.range m)
+        (fun i => o.oangle (ray i) (ray (i + 1))) := hfin_to_range
+    _ = o.oangle (ray 0) (ray m) :=
+        oangle_sum_range_succ_eq_oangle o ray m hray_nonzero
+    _ = (sector : Real.Angle) := hsector_oangle.symm
+
+/-- Real no-wrap form of `oangle_sum_range_succ_eq_oangle`.
+
+The hypotheses `hgap_oangle` and `hsector_oangle` are the exact oriented-angle
+facts S3 must obtain from cyclic neighbor order.  The nonnegativity and
+`<= pi` assumptions are only the no-wrap data needed to pass from
+`Real.Angle` back to ordinary real sums. -/
+lemma gapAngleSum_eq_sectorAngle_of_oangle_chain_no_wrap
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V]
+    [Fact (Module.finrank Real V = 2)]
+    (o : Orientation Real V (Fin 2)) {m : Nat}
+    (ray : Nat -> V) (gap : Fin m -> Real) {sector : Real}
+    (hray_nonzero : (i : Nat) -> i <= m -> ray i ≠ 0)
+    (hgap_nonneg : forall i, 0 <= gap i)
+    (hsector_nonneg : 0 <= sector)
+    (hsector_le_pi : sector <= Real.pi)
+    (hsum_le_pi : Finset.sum Finset.univ gap <= Real.pi)
+    (hgap_oangle : forall i : Fin m,
+      ((gap i : Real) : Real.Angle) =
+        o.oangle (ray i.val) (ray (i.val + 1)))
+    (hsector_oangle :
+      (sector : Real.Angle) = o.oangle (ray 0) (ray m)) :
+    Finset.sum Finset.univ gap = sector := by
+  have hangle :
+      ((Finset.sum Finset.univ gap : Real) : Real.Angle) =
+        (sector : Real.Angle) :=
+    realAngle_gapAngleSum_eq_sectorAngle_of_oangle_chain
+      o ray gap hray_nonzero hgap_oangle hsector_oangle
+  exact gapAngleSum_eq_sectorAngle_of_realAngle_eq_no_wrap
+    gap hgap_nonneg hsector_nonneg hsector_le_pi hsum_le_pi hangle
+
+/-- Inequality no-wrap form of `oangle_sum_range_succ_eq_oangle`, matching
+the sector-containment row used by the S3 interval construction. -/
+lemma gapAngleSum_le_sectorAngle_of_oangle_chain_no_wrap
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V]
+    [Fact (Module.finrank Real V = 2)]
+    (o : Orientation Real V (Fin 2)) {m : Nat}
+    (ray : Nat -> V) (gap : Fin m -> Real) {sector : Real}
+    (hray_nonzero : (i : Nat) -> i <= m -> ray i ≠ 0)
+    (hgap_nonneg : forall i, 0 <= gap i)
+    (hsector_nonneg : 0 <= sector)
+    (hsector_le_pi : sector <= Real.pi)
+    (hsum_le_pi : Finset.sum Finset.univ gap <= Real.pi)
+    (hgap_oangle : forall i : Fin m,
+      ((gap i : Real) : Real.Angle) =
+        o.oangle (ray i.val) (ray (i.val + 1)))
+    (hsector_oangle :
+      (sector : Real.Angle) = o.oangle (ray 0) (ray m)) :
+    Finset.sum Finset.univ gap <= sector := by
+  exact gapAngleSum_le_sectorAngle_of_realAngle_eq_no_wrap
+    gap hgap_nonneg hsector_nonneg hsector_le_pi hsum_le_pi
+    (realAngle_gapAngleSum_eq_sectorAngle_of_oangle_chain
+      o ray gap hray_nonzero hgap_oangle hsector_oangle)
+
+/-- Left endpoint of the `i`th consecutive gap in a chain of `m + 1`
+neighbouring rays. -/
+def gapChainLeftIndex (m : Nat) (i : Fin m) : Fin (m + 1) :=
+  ⟨i.1, Nat.lt_trans i.2 (Nat.lt_succ_self m)⟩
+
+/-- Right endpoint of the `i`th consecutive gap in a chain of `m + 1`
+neighbouring rays. -/
+def gapChainRightIndex (m : Nat) (i : Fin m) : Fin (m + 1) :=
+  ⟨i.1 + 1, Nat.succ_lt_succ i.2⟩
+
+/-- Fin-indexed version of `oangle_sum_range_succ_eq_oangle`.
+
+This matches interval data stored as a list of `m + 1` neighbours: the sum of
+the `m` consecutive oriented gaps telescopes to the first-to-last oriented
+sector. -/
+lemma oangle_sum_fin_succ_eq_oangle
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V]
+    [Fact (Module.finrank Real V = 2)]
+    (o : Orientation Real V (Fin 2)) {m : Nat}
+    (ray : Fin (m + 1) -> V)
+    (hray_nonzero : forall i, ray i ≠ 0) :
+    (Finset.sum Finset.univ
+        (fun i : Fin m =>
+          o.oangle (ray (gapChainLeftIndex m i))
+            (ray (gapChainRightIndex m i)))) =
+      o.oangle (ray ⟨0, Nat.succ_pos m⟩)
+        (ray ⟨m, Nat.lt_succ_self m⟩) := by
+  let rayNat : Nat -> V := fun i =>
+    if hi : i <= m then ray ⟨i, Nat.lt_succ_of_le hi⟩
+    else ray ⟨m, Nat.lt_succ_self m⟩
+  have hrayNat_nonzero : (i : Nat) -> i <= m -> rayNat i ≠ 0 := by
+    intro i hi
+    dsimp [rayNat]
+    rw [dif_pos hi]
+    exact hray_nonzero _
+  have hsum :
+      Finset.sum Finset.univ
+          (fun i : Fin m =>
+            o.oangle (ray (gapChainLeftIndex m i))
+              (ray (gapChainRightIndex m i))) =
+        Finset.sum (Finset.range m)
+          (fun i => o.oangle (rayNat i) (rayNat (i + 1))) := by
+    rw [Finset.sum_range]
+    refine Finset.sum_congr rfl ?_
+    intro i _hi
+    have hi_left : i.1 <= m := Nat.le_of_lt i.2
+    have hi_right : i.1 + 1 <= m := Nat.succ_le_of_lt i.2
+    dsimp [rayNat]
+    rw [dif_pos hi_left, dif_pos hi_right]
+    rfl
+  calc
+    Finset.sum Finset.univ
+        (fun i : Fin m =>
+          o.oangle (ray (gapChainLeftIndex m i))
+            (ray (gapChainRightIndex m i)))
+        = Finset.sum (Finset.range m)
+            (fun i => o.oangle (rayNat i) (rayNat (i + 1))) := hsum
+    _ = o.oangle (rayNat 0) (rayNat m) :=
+        oangle_sum_range_succ_eq_oangle o rayNat m hrayNat_nonzero
+    _ = o.oangle (ray ⟨0, Nat.succ_pos m⟩)
+        (ray ⟨m, Nat.lt_succ_self m⟩) := by
+      simp [rayNat]
+
+/-- Fin-indexed `Real.Angle` telescope for consecutive gap values. -/
+lemma realAngle_gapAngleSum_eq_sectorAngle_of_oangle_fin_chain
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V]
+    [Fact (Module.finrank Real V = 2)]
+    (o : Orientation Real V (Fin 2)) {m : Nat}
+    (ray : Fin (m + 1) -> V) (gap : Fin m -> Real) {sector : Real}
+    (hray_nonzero : forall i, ray i ≠ 0)
+    (hgap_oangle : forall i : Fin m,
+      ((gap i : Real) : Real.Angle) =
+        o.oangle (ray (gapChainLeftIndex m i))
+          (ray (gapChainRightIndex m i)))
+    (hsector_oangle :
+      (sector : Real.Angle) =
+        o.oangle (ray ⟨0, Nat.succ_pos m⟩)
+          (ray ⟨m, Nat.lt_succ_self m⟩)) :
+    ((Finset.sum Finset.univ gap : Real) : Real.Angle) =
+      (sector : Real.Angle) := by
+  have hgapAngle :
+      ((Finset.sum Finset.univ gap : Real) : Real.Angle) =
+        Finset.sum Finset.univ
+          (fun i : Fin m => ((gap i : Real) : Real.Angle)) := by
+    exact map_sum Real.Angle.coeHom gap Finset.univ
+  have hfin_to_chain :
+      Finset.sum Finset.univ
+          (fun i : Fin m => ((gap i : Real) : Real.Angle)) =
+        Finset.sum Finset.univ
+          (fun i : Fin m =>
+            o.oangle (ray (gapChainLeftIndex m i))
+              (ray (gapChainRightIndex m i))) := by
+    refine Finset.sum_congr rfl ?_
+    intro i _hi
+    exact hgap_oangle i
+  calc
+    ((Finset.sum Finset.univ gap : Real) : Real.Angle)
+        = Finset.sum Finset.univ
+            (fun i : Fin m => ((gap i : Real) : Real.Angle)) := hgapAngle
+    _ = Finset.sum Finset.univ
+        (fun i : Fin m =>
+          o.oangle (ray (gapChainLeftIndex m i))
+            (ray (gapChainRightIndex m i))) := hfin_to_chain
+    _ = o.oangle (ray ⟨0, Nat.succ_pos m⟩)
+        (ray ⟨m, Nat.lt_succ_self m⟩) :=
+        oangle_sum_fin_succ_eq_oangle o ray hray_nonzero
+    _ = (sector : Real.Angle) := hsector_oangle.symm
+
+/-- Equality no-wrap form for a `Fin (m + 1)` chain of consecutive gap values. -/
+lemma gapAngleSum_eq_sectorAngle_of_oangle_fin_chain_no_wrap
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V]
+    [Fact (Module.finrank Real V = 2)]
+    (o : Orientation Real V (Fin 2)) {m : Nat}
+    (ray : Fin (m + 1) -> V) (gap : Fin m -> Real) {sector : Real}
+    (hray_nonzero : forall i, ray i ≠ 0)
+    (hgap_nonneg : forall i, 0 <= gap i)
+    (hsector_nonneg : 0 <= sector)
+    (hsector_le_pi : sector <= Real.pi)
+    (hsum_le_pi : Finset.sum Finset.univ gap <= Real.pi)
+    (hgap_oangle : forall i : Fin m,
+      ((gap i : Real) : Real.Angle) =
+        o.oangle (ray (gapChainLeftIndex m i))
+          (ray (gapChainRightIndex m i)))
+    (hsector_oangle :
+      (sector : Real.Angle) =
+        o.oangle (ray ⟨0, Nat.succ_pos m⟩)
+          (ray ⟨m, Nat.lt_succ_self m⟩)) :
+    Finset.sum Finset.univ gap = sector := by
+  exact gapAngleSum_eq_sectorAngle_of_realAngle_eq_no_wrap
+    gap hgap_nonneg hsector_nonneg hsector_le_pi hsum_le_pi
+    (realAngle_gapAngleSum_eq_sectorAngle_of_oangle_fin_chain
+      o ray gap hray_nonzero hgap_oangle hsector_oangle)
+
+/-- Inequality no-wrap form for a `Fin (m + 1)` chain of consecutive gap
+values, shaped for sector-containment rows. -/
+lemma gapAngleSum_le_sectorAngle_of_oangle_fin_chain_no_wrap
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V]
+    [Fact (Module.finrank Real V = 2)]
+    (o : Orientation Real V (Fin 2)) {m : Nat}
+    (ray : Fin (m + 1) -> V) (gap : Fin m -> Real) {sector : Real}
+    (hray_nonzero : forall i, ray i ≠ 0)
+    (hgap_nonneg : forall i, 0 <= gap i)
+    (hsector_nonneg : 0 <= sector)
+    (hsector_le_pi : sector <= Real.pi)
+    (hsum_le_pi : Finset.sum Finset.univ gap <= Real.pi)
+    (hgap_oangle : forall i : Fin m,
+      ((gap i : Real) : Real.Angle) =
+        o.oangle (ray (gapChainLeftIndex m i))
+          (ray (gapChainRightIndex m i)))
+    (hsector_oangle :
+      (sector : Real.Angle) =
+        o.oangle (ray ⟨0, Nat.succ_pos m⟩)
+          (ray ⟨m, Nat.lt_succ_self m⟩)) :
+    Finset.sum Finset.univ gap <= sector := by
+  exact gapAngleSum_le_sectorAngle_of_realAngle_eq_no_wrap
+    gap hgap_nonneg hsector_nonneg hsector_le_pi hsum_le_pi
+    (realAngle_gapAngleSum_eq_sectorAngle_of_oangle_fin_chain
+      o ray gap hray_nonzero hgap_oangle hsector_oangle)
+
+/-- Equality form specialized to the real values carried by consecutive
+`angleAt` gaps in a `Fin (m + 1)` neighbour chain around a fixed center. -/
+lemma angleAt_gapAngleSum_eq_angleAt_sector_of_oangle_fin_neighbor_chain_no_wrap
+    (o : Orientation Real Vec2 (Fin 2)) {m : Nat}
+    (center : Point) (neighbor : Fin (m + 1) -> Point)
+    (hray_nonzero :
+      forall i, toVec (vsub (neighbor i) center) ≠ 0)
+    (hsum_le_pi :
+      Finset.sum Finset.univ
+          (fun i : Fin m =>
+            angleAt (neighbor (gapChainLeftIndex m i)) center
+              (neighbor (gapChainRightIndex m i))) <= Real.pi)
+    (hgap_oangle : forall i : Fin m,
+      ((angleAt (neighbor (gapChainLeftIndex m i)) center
+          (neighbor (gapChainRightIndex m i)) : Real) : Real.Angle) =
+        o.oangle (toVec (vsub (neighbor (gapChainLeftIndex m i)) center))
+          (toVec (vsub (neighbor (gapChainRightIndex m i)) center)))
+    (hsector_oangle :
+      (angleAt (neighbor ⟨0, Nat.succ_pos m⟩) center
+          (neighbor ⟨m, Nat.lt_succ_self m⟩) : Real.Angle) =
+        o.oangle (toVec (vsub (neighbor ⟨0, Nat.succ_pos m⟩) center))
+          (toVec (vsub (neighbor ⟨m, Nat.lt_succ_self m⟩) center))) :
+    Finset.sum Finset.univ
+        (fun i : Fin m =>
+          angleAt (neighbor (gapChainLeftIndex m i)) center
+            (neighbor (gapChainRightIndex m i))) =
+      angleAt (neighbor ⟨0, Nat.succ_pos m⟩) center
+        (neighbor ⟨m, Nat.lt_succ_self m⟩) := by
+  exact gapAngleSum_eq_sectorAngle_of_oangle_fin_chain_no_wrap
+    o (fun i => toVec (vsub (neighbor i) center))
+    (fun i : Fin m =>
+      angleAt (neighbor (gapChainLeftIndex m i)) center
+        (neighbor (gapChainRightIndex m i)))
+    hray_nonzero
+    (fun i =>
+      angleAt_nonneg (neighbor (gapChainLeftIndex m i)) center
+        (neighbor (gapChainRightIndex m i)))
+    (angleAt_nonneg (neighbor ⟨0, Nat.succ_pos m⟩) center
+      (neighbor ⟨m, Nat.lt_succ_self m⟩))
+    (angleAt_le_pi (neighbor ⟨0, Nat.succ_pos m⟩) center
+      (neighbor ⟨m, Nat.lt_succ_self m⟩))
+    hsum_le_pi hgap_oangle hsector_oangle
+
+/-- Inequality form specialized to the real values carried by consecutive
+`angleAt` gaps in a `Fin (m + 1)` neighbour chain around a fixed center.  After
+expanding `UnitSeparatedAngle.value`, this is the sector inequality needed for
+cyclic unit-neighbour interval rows. -/
+lemma angleAt_gapAngleSum_le_angleAt_sector_of_oangle_fin_neighbor_chain_no_wrap
+    (o : Orientation Real Vec2 (Fin 2)) {m : Nat}
+    (center : Point) (neighbor : Fin (m + 1) -> Point)
+    (hray_nonzero :
+      forall i, toVec (vsub (neighbor i) center) ≠ 0)
+    (hsum_le_pi :
+      Finset.sum Finset.univ
+          (fun i : Fin m =>
+            angleAt (neighbor (gapChainLeftIndex m i)) center
+              (neighbor (gapChainRightIndex m i))) <= Real.pi)
+    (hgap_oangle : forall i : Fin m,
+      ((angleAt (neighbor (gapChainLeftIndex m i)) center
+          (neighbor (gapChainRightIndex m i)) : Real) : Real.Angle) =
+        o.oangle (toVec (vsub (neighbor (gapChainLeftIndex m i)) center))
+          (toVec (vsub (neighbor (gapChainRightIndex m i)) center)))
+    (hsector_oangle :
+      (angleAt (neighbor ⟨0, Nat.succ_pos m⟩) center
+          (neighbor ⟨m, Nat.lt_succ_self m⟩) : Real.Angle) =
+        o.oangle (toVec (vsub (neighbor ⟨0, Nat.succ_pos m⟩) center))
+          (toVec (vsub (neighbor ⟨m, Nat.lt_succ_self m⟩) center))) :
+    Finset.sum Finset.univ
+        (fun i : Fin m =>
+          angleAt (neighbor (gapChainLeftIndex m i)) center
+            (neighbor (gapChainRightIndex m i))) <=
+      angleAt (neighbor ⟨0, Nat.succ_pos m⟩) center
+        (neighbor ⟨m, Nat.lt_succ_self m⟩) := by
+  exact gapAngleSum_le_sectorAngle_of_oangle_fin_chain_no_wrap
+    o (fun i => toVec (vsub (neighbor i) center))
+    (fun i : Fin m =>
+      angleAt (neighbor (gapChainLeftIndex m i)) center
+        (neighbor (gapChainRightIndex m i)))
+    hray_nonzero
+    (fun i =>
+      angleAt_nonneg (neighbor (gapChainLeftIndex m i)) center
+        (neighbor (gapChainRightIndex m i)))
+    (angleAt_nonneg (neighbor ⟨0, Nat.succ_pos m⟩) center
+      (neighbor ⟨m, Nat.lt_succ_self m⟩))
+    (angleAt_le_pi (neighbor ⟨0, Nat.succ_pos m⟩) center
+      (neighbor ⟨m, Nat.lt_succ_self m⟩))
+    hsum_le_pi hgap_oangle hsector_oangle
 
 lemma pi_div_three_mem_Icc_zero_pi :
     Set.Icc 0 Real.pi (Real.pi / 3) := by

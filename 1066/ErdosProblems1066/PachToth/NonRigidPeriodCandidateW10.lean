@@ -33,6 +33,11 @@ abbrev AlgebraicFamily (T : Candidate) :=
   PeriodFamilyCandidateSearchW9.AlgebraicEquationFamilyData T
 abbrev ClosureFamily (T : Candidate) :=
   PeriodFamilyCandidateSearchW9.ClosureEquationFamilyData T
+abbrev SearchSurfacePeriodData (T : Candidate) :=
+  RoleHingeCandidateSearchSurface.PeriodSearchData T
+abbrev SearchSurfaceCrossBlockMetricData
+    {T : Candidate} (P : SearchSurfacePeriodData T) :=
+  RoleHingeCandidateSearchSurface.CrossBlockMetricData P
 abbrev RoleHingeTransitions :=
   GeneratedMetricClosure.RoleHingeTransitions
 abbrev LocalVertexIndex :=
@@ -338,6 +343,37 @@ structure FlexibleFamilyFields (T : Candidate) where
         (period.orientation k hk)
 
 namespace FlexibleFamilyFields
+
+/-- Build the flexible family fields directly from the non-rigid search
+surface period data and generated separation. -/
+def ofSearchSurfacePeriodData
+    {T : Candidate}
+    (P : SearchSurfacePeriodData T)
+    (separated :
+      forall (k : Nat) (hk : 0 < k),
+        GeneratedSeparationInterface.GeneratedGlobalSeparation
+          T.toFigure2TransitionObligations
+          hk
+          BaseTransitionRealization.exactBase
+          (P.orientation k hk)) :
+    FlexibleFamilyFields T where
+  period :=
+    { word := P.word
+      equations := P.equation }
+  separated := by
+    intro k hk
+    simpa [RoleHingeCandidateSearchSurface.PeriodSearchData.orientation,
+      PeriodFamilyCandidateSearchW9.AlgebraicEquationFamilyData.orientation]
+      using separated k hk
+
+/-- Cross-block metric data on the non-rigid search surface supplies exactly
+the generated-separation field needed by the flexible exact-local route. -/
+def ofSearchSurfaceMetricData
+    {T : Candidate}
+    {P : SearchSurfacePeriodData T}
+    (M : SearchSurfaceCrossBlockMetricData P) :
+    FlexibleFamilyFields T :=
+  ofSearchSurfacePeriodData P M.separated
 
 def orientation
     {T : Candidate}

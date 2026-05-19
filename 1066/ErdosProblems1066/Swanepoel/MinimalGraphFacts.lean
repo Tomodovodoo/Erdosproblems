@@ -366,6 +366,104 @@ lemma exists_smallerBound_data_of_minimalFailure_and_two_le_reinsertion
     (smaller_hasCleared_of_minimalFailure_and_two_le_reinsertion
       D hmin hD htwo)
 
+/-! ## Minimality for induced deletion configurations -/
+
+lemma inducedDeletion_hasCleared_of_minimalFailure_deleted_nonempty
+    {deleted : Finset (Fin n)}
+    (hmin : IsMinimalClearedFailure C)
+    (hdeleted : deleted.Nonempty) :
+    HasClearedEightThirtyOneIndependentSet
+      ((InducedDeletionBridge.induced C deleted).config) :=
+  smaller_hasCleared_of_minimalClearedFailure hmin
+    ((InducedDeletionBridge.induced C deleted).config)
+    (InducedDeletionBridge.keptVertices_card_lt_original hdeleted)
+
+lemma inducedDeletion_hasCleared_of_minimalFailure_reinsertion_nonempty
+    {deleted reinsertion : Finset (Fin n)}
+    (hmin : IsMinimalClearedFailure C)
+    (hclosed : IsClosedNeighborhood C reinsertion deleted)
+    (hreinsertion : reinsertion.Nonempty) :
+    HasClearedEightThirtyOneIndependentSet
+      ((InducedDeletionBridge.induced C deleted).config) :=
+  inducedDeletion_hasCleared_of_minimalFailure_deleted_nonempty hmin
+    (deleted_nonempty_of_center_nonempty hclosed hreinsertion)
+
+/-- A concrete induced deletion in a minimal cleared failure would clear the
+ambient configuration.  The smaller `UDConfig` is the canonical induced
+configuration on the vertices outside `deleted`; minimality supplies its
+cleared independent set, and the induced-subconfiguration bridge supplies the
+distance-preservation hypothesis for reinsertion. -/
+theorem hasCleared_of_minimalFailure_induced_deletion
+    {deleted reinsertion : Finset (Fin n)}
+    (hmin : IsMinimalClearedFailure C)
+    (hdeleted : deleted.Nonempty)
+    (hclosed : IsClosedNeighborhood C reinsertion deleted)
+    (hdeletedCard :
+      (deleted.card : Int) <= 4 * (reinsertion.card : Int) - 1)
+    (hreinsertionCard : reinsertion.card <= 8)
+    (hreinsertionIndep : C.IsIndep reinsertion) :
+    HasClearedEightThirtyOneIndependentSet C :=
+  InducedDeletionBridge.hasCleared_of_induced_deletion_hasCleared
+    deleted reinsertion hclosed hdeletedCard hreinsertionCard
+    hreinsertionIndep
+    (inducedDeletion_hasCleared_of_minimalFailure_deleted_nonempty
+      hmin hdeleted)
+
+/-- Contradiction form of `hasCleared_of_minimalFailure_induced_deletion`. -/
+theorem false_of_minimalFailure_induced_deletion
+    {deleted reinsertion : Finset (Fin n)}
+    (hmin : IsMinimalClearedFailure C)
+    (hdeleted : deleted.Nonempty)
+    (hclosed : IsClosedNeighborhood C reinsertion deleted)
+    (hdeletedCard :
+      (deleted.card : Int) <= 4 * (reinsertion.card : Int) - 1)
+    (hreinsertionCard : reinsertion.card <= 8)
+    (hreinsertionIndep : C.IsIndep reinsertion) :
+    False :=
+  not_hasCleared_of_minimalClearedFailure hmin
+    (hasCleared_of_minimalFailure_induced_deletion hmin hdeleted hclosed
+      hdeletedCard hreinsertionCard hreinsertionIndep)
+
+/-- Degree-bound version: if the deleted set lies in one closed unit
+neighborhood and at least two vertices are reinserted, the degree theorem
+supplies the deleted-card arithmetic needed by the induced deletion bridge. -/
+theorem hasCleared_of_minimalFailure_induced_degree_deletion
+    {deleted reinsertion : Finset (Fin n)}
+    (hmin : IsMinimalClearedFailure C)
+    (hclosed : IsClosedNeighborhood C reinsertion deleted)
+    (hdeletedSubsetClosedUnitNeighborhood :
+      Exists fun center : Fin n => deleted <= closedUnitNeighborhood C center)
+    (hreinsertionCardLower : 2 <= reinsertion.card)
+    (hreinsertionCardUpper : reinsertion.card <= 8)
+    (hreinsertionIndep : C.IsIndep reinsertion) :
+    HasClearedEightThirtyOneIndependentSet C := by
+  have hreinsertionNonempty : reinsertion.Nonempty := by
+    exact Finset.card_pos.mp (by omega)
+  have hdeleted : deleted.Nonempty :=
+    deleted_nonempty_of_center_nonempty hclosed hreinsertionNonempty
+  rcases hdeletedSubsetClosedUnitNeighborhood with ⟨center, hsubset⟩
+  exact
+    hasCleared_of_minimalFailure_induced_deletion hmin hdeleted hclosed
+      (deletedCard_bound_of_subset_closedUnitNeighborhood_and_two_le C
+        (center := center) hsubset hreinsertionCardLower)
+      hreinsertionCardUpper hreinsertionIndep
+
+/-- Contradiction form of the degree-bound induced deletion bridge. -/
+theorem false_of_minimalFailure_induced_degree_deletion
+    {deleted reinsertion : Finset (Fin n)}
+    (hmin : IsMinimalClearedFailure C)
+    (hclosed : IsClosedNeighborhood C reinsertion deleted)
+    (hdeletedSubsetClosedUnitNeighborhood :
+      Exists fun center : Fin n => deleted <= closedUnitNeighborhood C center)
+    (hreinsertionCardLower : 2 <= reinsertion.card)
+    (hreinsertionCardUpper : reinsertion.card <= 8)
+    (hreinsertionIndep : C.IsIndep reinsertion) :
+    False :=
+  not_hasCleared_of_minimalClearedFailure hmin
+    (hasCleared_of_minimalFailure_induced_degree_deletion hmin hclosed
+      hdeletedSubsetClosedUnitNeighborhood hreinsertionCardLower
+      hreinsertionCardUpper hreinsertionIndep)
+
 end
 
 end MinimalGraphFacts

@@ -12,9 +12,11 @@ mentioned in Pollack's Remark 2, not Pollack's literal planarity plus
 four-color-theorem route.
 
 Verification note:
-`elan run leanprover/lean4:v4.28.0 lake build` succeeds. Later Swanepoel and
-Pach-Toth results are not declared as Lean theorems until their proofs are
-fully formalized.
+Current-status note, 2026-05-19: the project already verifies the `1 / 4`
+lower bound through the semicircle/greedy-coloring route.  The
+planarity-plus-four-color material below is source-faithful historical roadmap
+work only.  Current full-root build certification for the whole checkout is
+tracked in `../TASK.md`.
 
 ## 0. Target theorem
 

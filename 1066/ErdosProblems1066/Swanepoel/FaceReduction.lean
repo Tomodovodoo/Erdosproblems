@@ -141,6 +141,132 @@ lemma boundary_edge_root_dist_eq_one (H : UnitDistanceFaceBoundaryHypotheses G)
   simpa [PlanarInterface.geometry_eucDist_eq_root] using
     H.boundary_edge_geometry_dist_eq_one F k
 
+/-! ## Face-boundary surface from an extracted outer-boundary cycle -/
+
+/--
+Package an already extracted simple cyclic outer-boundary row as the
+face-boundary interface used downstream.  This does not construct the cycle:
+the caller supplies the positive length, cyclic adjacency, and injective vertex
+map, and the resulting interface has one selected outer face.
+-/
+def ofOuterBoundaryCycle (G : CanonicalStraightLineUnitDistanceGraph n)
+    {m : Nat} (hm : 0 < m)
+    (vertex : Fin m -> Fin n)
+    (adjacent :
+      forall k : Fin m,
+        G.Adj (vertex k) (vertex (cyclicSucc hm k)))
+    (simple : Function.Injective vertex) :
+    UnitDistanceFaceBoundaryHypotheses G where
+  Face := PUnit
+  IsOuterFace := fun _ => True
+  boundaryLength := fun _ => m
+  boundaryLength_pos := fun _ => hm
+  boundaryVertex := fun _ => vertex
+  boundaryAdjacent := fun _ => adjacent
+  boundarySimple := fun _ => simple
+
+@[simp]
+theorem ofOuterBoundaryCycle_boundaryLength
+    (G : CanonicalStraightLineUnitDistanceGraph n)
+    {m : Nat} (hm : 0 < m)
+    (vertex : Fin m -> Fin n)
+    (adjacent :
+      forall k : Fin m,
+        G.Adj (vertex k) (vertex (cyclicSucc hm k)))
+    (simple : Function.Injective vertex) :
+    (ofOuterBoundaryCycle G hm vertex adjacent simple).boundaryLength PUnit.unit = m :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryCycle_boundaryVertex
+    (G : CanonicalStraightLineUnitDistanceGraph n)
+    {m : Nat} (hm : 0 < m)
+    (vertex : Fin m -> Fin n)
+    (adjacent :
+      forall k : Fin m,
+        G.Adj (vertex k) (vertex (cyclicSucc hm k)))
+    (simple : Function.Injective vertex) :
+    (ofOuterBoundaryCycle G hm vertex adjacent simple).boundaryVertex PUnit.unit = vertex :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryCycle_isOuterFace
+    (G : CanonicalStraightLineUnitDistanceGraph n)
+    {m : Nat} (hm : 0 < m)
+    (vertex : Fin m -> Fin n)
+    (adjacent :
+      forall k : Fin m,
+        G.Adj (vertex k) (vertex (cyclicSucc hm k)))
+    (simple : Function.Injective vertex) :
+    (ofOuterBoundaryCycle G hm vertex adjacent simple).IsOuterFace PUnit.unit :=
+  trivial
+
+/--
+An extracted nondegenerate outer-boundary cycle supplies the selected
+face-boundary rows needed before the separate enclosure field is attached.
+-/
+theorem exists_outerFace_length_ge_three_ofOuterBoundaryCycle
+    (G : CanonicalStraightLineUnitDistanceGraph n)
+    {m : Nat} (hm : 0 < m)
+    (vertex : Fin m -> Fin n)
+    (adjacent :
+      forall k : Fin m,
+        G.Adj (vertex k) (vertex (cyclicSucc hm k)))
+    (simple : Function.Injective vertex)
+    (hlen : 3 <= m) :
+    Exists fun H : UnitDistanceFaceBoundaryHypotheses G =>
+      Exists fun F : H.Face =>
+        H.IsOuterFace F /\ 3 <= H.boundaryLength F := by
+  refine
+    ⟨ofOuterBoundaryCycle G hm vertex adjacent simple, PUnit.unit, ?_, ?_⟩
+  · simp [ofOuterBoundaryCycle]
+  · simpa [ofOuterBoundaryCycle] using hlen
+
+/-! ## Small concrete selected-face surface from one canonical edge -/
+
+/--
+Build the minimal face-boundary surface carried by one actual canonical graph
+edge.  The unique face has the two endpoints as its cyclic boundary.
+-/
+def ofAdjacentPair (G : CanonicalStraightLineUnitDistanceGraph n)
+    {i j : Fin n} (hAdj : G.Adj i j) :
+    UnitDistanceFaceBoundaryHypotheses G where
+  Face := PUnit
+  IsOuterFace := fun _ => True
+  boundaryLength := fun _ => 2
+  boundaryLength_pos := fun _ => by norm_num
+  boundaryVertex := fun _ k => if k = (0 : Fin 2) then i else j
+  boundaryAdjacent := by
+    intro _ k
+    have hAdj_symm : G.Adj j i :=
+      GraphBridge.adjFromEdges_symm G.edgeSet hAdj
+    fin_cases k <;> simp [PlanarInterface.cyclicSucc, hAdj, hAdj_symm]
+  boundarySimple := by
+    intro _ a b h
+    have hij : i = j -> False := by
+      intro hij
+      subst j
+      exact
+        (GraphBridge.adjFromEdges_loopless_of_ordered
+          (edges := G.edgeSet) G.edgeSet_ordered i) hAdj
+    fin_cases a <;> fin_cases b
+    · rfl
+    · exfalso
+      exact hij h
+    · exfalso
+      exact hij h.symm
+    · rfl
+
+theorem exists_unitDistanceAdj_of_selectedFace
+    (H : UnitDistanceFaceBoundaryHypotheses G) (F : H.Face) :
+    Exists fun i : Fin n =>
+      Exists fun j : Fin n => GraphBridge.UnitDistanceAdj G.config i j := by
+  let k : Fin (H.boundaryLength F) := ⟨0, H.boundaryLength_pos F⟩
+  exact
+    ⟨H.boundaryVertex F k,
+      H.boundaryVertex F (cyclicSucc (H.boundaryLength_pos F) k),
+      H.boundary_adj_unitDistanceAdj F k⟩
+
 end UnitDistanceFaceBoundaryHypotheses
 
 end

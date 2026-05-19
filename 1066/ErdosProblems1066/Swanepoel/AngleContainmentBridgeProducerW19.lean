@@ -1,6 +1,7 @@
 import ErdosProblems1066.Swanepoel.FigureContainmentProducerW18
 import ErdosProblems1066.Swanepoel.Figure8ContainmentW12
 import ErdosProblems1066.Swanepoel.Figure9ContainmentW12
+import ErdosProblems1066.Swanepoel.Figure9EuclideanFactsConcrete
 import ErdosProblems1066.Swanepoel.Figure8WindowContainmentW16
 import ErdosProblems1066.Swanepoel.Figure9WindowContainmentW16
 import ErdosProblems1066.Swanepoel.M8WindowGeometryFromContainment
@@ -32,6 +33,7 @@ namespace AngleContainmentBridgeProducerW19
 open AngleContainmentInterface
 open AngleBridgeFacts
 open AngleGeometry
+open Figure8ContainmentConcrete
 open Figure8WindowContainmentW16
 open Figure9WindowContainmentW16
 open Lemma10AnalyticBridge
@@ -42,6 +44,7 @@ open M8ConstructionInterface
 open M8WindowContainmentConcrete
 open M8WindowGeometryFromContainment
 open MinimalGraphFacts
+open TriangleAngleFacts
 
 universe u
 
@@ -68,6 +71,177 @@ abbrev Figure9UniversalLeftAngleContainment
     Not (good i) -> Not (good (i + 1)) ->
     Figure9DistanceData p qi qj s r ->
       angleAt p qi s <= adjacentTurn turn i
+
+/-- A concrete pointwise realization of the Figure 9 left comparison angle as
+the middle turn in the adjacent three-turn window.  Together with
+nonnegative neighboring turns this proves, rather than assumes, the W19
+`left_angle_le_adjacentTurn` containment field. -/
+abbrev Figure9UniversalMiddleTurnAngleRealization
+    (good : Nat -> Prop) (turn : Nat -> Real) : Prop :=
+  forall {i : Nat} {p qi qj s r : Point},
+    1 <= i -> i + 1 <= 10 ->
+    Not (good i) -> Not (good (i + 1)) ->
+    Figure9DistanceData p qi qj s r ->
+      turn (i + 1) = angleAt p qi s
+
+/-- A pointwise Figure 9 row saying the left comparison angle is bounded by
+the middle turn in the adjacent three-turn window.  This is the weaker
+checked source exposed by `Figure9ContainmentConcrete`. -/
+abbrev Figure9UniversalLeftAngleLeMiddleTurnRows
+    (good : Nat -> Prop) (turn : Nat -> Real) : Prop :=
+  forall {i : Nat} {p qi qj s r : Point},
+    1 <= i -> i + 1 <= 10 ->
+    Not (good i) -> Not (good (i + 1)) ->
+    Figure9DistanceData p qi qj s r ->
+      angleAt p qi s <= turn (i + 1)
+
+/-- Pointwise cosine comparisons for Figure 9 after the usual total-turn
+budget supplies the middle-turn range. -/
+abbrev Figure9UniversalLeftCosineComparisonRows
+    (good : Nat -> Prop) (turn : Nat -> Real) : Prop :=
+  forall {i : Nat} {p qi qj s r : Point},
+    1 <= i -> i + 1 <= 10 ->
+    Not (good i) -> Not (good (i + 1)) ->
+    Figure9DistanceData p qi qj s r ->
+      Real.cos (turn (i + 1)) <= dotAt p qi s
+
+/-- Pointwise turn-chord comparisons for Figure 9 after the usual total-turn
+budget supplies the middle-turn range. -/
+abbrev Figure9UniversalLeftTurnChordComparisonRows
+    (good : Nat -> Prop) (turn : Nat -> Real) : Prop :=
+  forall {i : Nat} {p qi qj s r : Point},
+    1 <= i -> i + 1 <= 10 ->
+    Not (good i) -> Not (good (i + 1)) ->
+    Figure9DistanceData p qi qj s r ->
+      sqDist p s <= 2 - 2 * Real.cos (turn (i + 1))
+
+/-- The concrete Figure 9 cosine-turn rows produce the W19 pointwise
+middle-turn upper-bound row.  The cosine row itself carries the needed local
+middle-turn range and dot-product comparison; no containment inequality is
+assumed here. -/
+theorem figure9UniversalLeftAngleLeMiddleTurnRows_of_cosineTurnRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftCosineTurnRows
+        good turn) :
+    Figure9UniversalLeftAngleLeMiddleTurnRows good turn := by
+  intro i p qi qj s r hi hi_next hbad_i hbad_next D
+  exact
+    Figure9EuclideanFactsConcrete.angleLeMiddleTurnRows_of_cosineTurnRows
+      H hi hi_next hbad_i hbad_next D
+
+/-- The concrete Figure 9 chord-turn rows produce the W19 pointwise
+middle-turn upper-bound row through the checked law-of-cosines bridge. -/
+theorem figure9UniversalLeftAngleLeMiddleTurnRows_of_turnChordRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftTurnChordRows
+        good turn) :
+    Figure9UniversalLeftAngleLeMiddleTurnRows good turn := by
+  intro i p qi qj s r hi hi_next hbad_i hbad_next D
+  exact
+    Figure9EuclideanFactsConcrete.angleLeMiddleTurnRows_of_turnChordRows
+      H hi hi_next hbad_i hbad_next D
+
+/-- Total-turn bounds plus pointwise cosine comparisons produce the W19
+middle-turn upper-bound rows through the concrete Figure 9 equivalence layer.
+-/
+theorem figure9UniversalLeftAngleLeMiddleTurnRows_of_totalTurn_and_cosineComparisons
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftCosineComparisonRows good turn) :
+    Figure9UniversalLeftAngleLeMiddleTurnRows good turn :=
+  Figure9EuclideanFactsConcrete.angleLeMiddleTurnRows_of_totalTurn_and_cosineComparisons
+    hnonneg htotal H
+
+/-- Total-turn bounds plus pointwise turn-chord comparisons produce the W19
+middle-turn upper-bound rows through the concrete Figure 9 law-of-cosines
+layer. -/
+theorem figure9UniversalLeftAngleLeMiddleTurnRows_of_totalTurn_and_chordComparisons
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftTurnChordComparisonRows good turn) :
+    Figure9UniversalLeftAngleLeMiddleTurnRows good turn :=
+  Figure9EuclideanFactsConcrete.angleLeMiddleTurnRows_of_totalTurn_and_chordComparisons
+    hnonneg htotal H
+
+/-- Build the Figure 9 universal left-angle containment from the concrete
+middle-turn angle realization and turn nonnegativity. -/
+theorem figure9UniversalLeftAngleContainment_of_middleTurnAngleRealization
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9UniversalMiddleTurnAngleRealization good turn) :
+    Figure9UniversalLeftAngleContainment good turn := by
+  intro i p qi qj s r hi hi_next hbad_i hbad_next D
+  exact Figure9ContainmentConcrete.left_angle_le_adjacentTurn_of_middleTurn_eq_angle
+    hnonneg (H hi hi_next hbad_i hbad_next D)
+
+/-- Build the Figure 9 universal left-angle containment from the pointwise
+middle-turn upper bound and turn nonnegativity. -/
+theorem figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9UniversalLeftAngleLeMiddleTurnRows good turn) :
+    Figure9UniversalLeftAngleContainment good turn := by
+  intro i p qi qj s r hi hi_next hbad_i hbad_next D
+  exact Figure9ContainmentConcrete.left_angle_le_adjacentTurn_of_angle_le_middleTurn
+    hnonneg (H hi hi_next hbad_i hbad_next D)
+
+/-- Concrete Figure 9 cosine-turn rows, plus the existing global turn
+nonnegativity needed to compare the middle turn with the three-turn adjacent
+window, rebuild W19's universal left-angle containment row. -/
+theorem figure9UniversalLeftAngleContainment_of_cosineTurnRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftCosineTurnRows
+        good turn) :
+    Figure9UniversalLeftAngleContainment good turn :=
+  figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows
+    hnonneg
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_cosineTurnRows H)
+
+/-- Concrete Figure 9 chord-turn rows, plus the existing global turn
+nonnegativity needed to compare the middle turn with the three-turn adjacent
+window, rebuild W19's universal left-angle containment row. -/
+theorem figure9UniversalLeftAngleContainment_of_turnChordRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftTurnChordRows
+        good turn) :
+    Figure9UniversalLeftAngleContainment good turn :=
+  figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows
+    hnonneg
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_turnChordRows H)
+
+/-- Total-turn bounds plus pointwise cosine comparisons rebuild W19's
+universal left-angle containment row. -/
+theorem figure9UniversalLeftAngleContainment_of_totalTurn_and_cosineComparisons
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftCosineComparisonRows good turn) :
+    Figure9UniversalLeftAngleContainment good turn :=
+  figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows
+    hnonneg
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_totalTurn_and_cosineComparisons
+      hnonneg htotal H)
+
+/-- Total-turn bounds plus pointwise turn-chord comparisons rebuild W19's
+universal left-angle containment row. -/
+theorem figure9UniversalLeftAngleContainment_of_totalTurn_and_chordComparisons
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftTurnChordComparisonRows good turn) :
+    Figure9UniversalLeftAngleContainment good turn :=
+  figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows
+    hnonneg
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_totalTurn_and_chordComparisons
+      hnonneg htotal H)
 
 /-- W12 Figure 8 selected data plus the exact universal containment proof
 required to reconstruct the Figure 8 angle-containment interface. -/
@@ -107,6 +281,18 @@ def ofContainmentInterface
   witnesses := Figure8ContainmentW12.dataWitnesses_of_containmentInterface F
   central_angle_le_separatedTurn := F.central_angle_le_separatedTurn
 
+/-- Raw selected Figure 8 distance witnesses plus the universal
+central-angle containment row rebuild the exact Figure 8 certificate. -/
+def ofDistanceWitnessRowsAndUniversalContainment
+    (distanceRows :
+      Figure8ContainmentConcrete.Figure8SeparatedDistanceWitnessRows good)
+    (central_angle_le_separatedTurn :
+      Figure8UniversalAngleContainment good turn) :
+    Figure8ExactAngleContainmentCertificate good turn :=
+  ofContainmentInterface
+    (containmentInterface_of_distanceWitnessRowsAndCentralAngleContainment
+      distanceRows central_angle_le_separatedTurn)
+
 /-- The certificate gives the Figure 8 E22 lower-bound field through W12. -/
 theorem E22
     (H : Figure8ExactAngleContainmentCertificate good turn) :
@@ -130,6 +316,18 @@ theorem toContainmentInterface_extractedData
   rfl
 
 end Figure8ExactAngleContainmentCertificate
+
+/-- Raw selected Figure 8 distance witnesses plus the universal central-angle
+containment row build the actual Figure 8 separated-containment interface. -/
+def figure8SeparatedContainmentInterface_of_distanceWitnessRowsAndUniversalContainment
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows :
+      Figure8ContainmentConcrete.Figure8SeparatedDistanceWitnessRows good)
+    (central_angle_le_separatedTurn :
+      Figure8UniversalAngleContainment good turn) :
+    Figure8SeparatedContainmentInterface good turn :=
+  (Figure8ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndUniversalContainment
+    distanceRows central_angle_le_separatedTurn).toContainmentInterface
 
 /-- Forget a W12 Figure 9 datum to the raw extracted-data shape used by
 `AngleContainmentInterface`. -/
@@ -184,6 +382,258 @@ def ofContainmentInterface
   witnesses := Figure9ContainmentW12.witnesses_of_containmentInterface F
   left_angle_le_adjacentTurn := F.left_angle_le_adjacentTurn
 
+/-- Raw selected Figure 9 distance witnesses plus the universal left-angle
+containment row rebuild the exact Figure 9 certificate. -/
+def ofDistanceWitnessRowsAndUniversalContainment
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (left_angle_le_adjacentTurn :
+      Figure9UniversalLeftAngleContainment good turn) :
+    Figure9ExactAngleContainmentCertificate good turn where
+  witnesses := by
+    intro i hi hi_next hbad_i hbad_next
+    let hp := distanceRows (i := i) hi hi_next hbad_i hbad_next
+    let p := Classical.choose hp
+    let hqi := Classical.choose_spec hp
+    let qi := Classical.choose hqi
+    let hqj := Classical.choose_spec hqi
+    let qj := Classical.choose hqj
+    let hs := Classical.choose_spec hqj
+    let s := Classical.choose hs
+    let hr := Classical.choose_spec hs
+    let r := Classical.choose hr
+    let D := Classical.choose_spec hr
+    exact
+      { p := p
+        qi := qi
+        qj := qj
+        s := s
+        r := r
+        distanceData := D
+        left_angle_le_adjacentTurn :=
+          left_angle_le_adjacentTurn hi hi_next hbad_i hbad_next D }
+  left_angle_le_adjacentTurn := left_angle_le_adjacentTurn
+
+/-- Raw selected Figure 9 distance witnesses plus a concrete middle-turn
+realization rebuild the exact Figure 9 certificate, with the containment row
+proved from turn nonnegativity. -/
+def ofDistanceWitnessRowsAndMiddleTurnAngleRealization
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9UniversalMiddleTurnAngleRealization good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofDistanceWitnessRowsAndUniversalContainment
+    distanceRows
+    (figure9UniversalLeftAngleContainment_of_middleTurnAngleRealization
+      hnonneg H)
+
+/-- Raw selected Figure 9 distance witnesses plus pointwise middle-turn upper
+bound rows rebuild the exact Figure 9 certificate, with the containment row
+proved from turn nonnegativity. -/
+def ofDistanceWitnessRowsAndAngleLeMiddleTurnRows
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9UniversalLeftAngleLeMiddleTurnRows good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofDistanceWitnessRowsAndUniversalContainment
+    distanceRows
+    (figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows
+      hnonneg H)
+
+/-- Raw selected Figure 9 distance witnesses plus concrete cosine-turn rows
+rebuild the exact Figure 9 certificate.  The cosine rows supply the pointwise
+middle-turn upper bound; global nonnegativity is still the existing W19 input
+for embedding that middle turn into the adjacent three-turn window. -/
+def ofDistanceWitnessRowsAndCosineTurnRows
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftCosineTurnRows
+        good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofDistanceWitnessRowsAndAngleLeMiddleTurnRows
+    distanceRows hnonneg
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_cosineTurnRows H)
+
+/-- Raw selected Figure 9 distance witnesses plus concrete turn-chord rows
+rebuild the exact Figure 9 certificate through the checked law-of-cosines
+middle-turn upper-bound bridge. -/
+def ofDistanceWitnessRowsAndTurnChordRows
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftTurnChordRows
+        good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofDistanceWitnessRowsAndAngleLeMiddleTurnRows
+    distanceRows hnonneg
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_turnChordRows H)
+
+/-- Raw selected Figure 9 distance witnesses, total-turn bounds, and
+pointwise cosine comparisons rebuild the exact Figure 9 certificate. -/
+def ofDistanceWitnessRowsAndTotalTurnCosineComparisons
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftCosineComparisonRows good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofDistanceWitnessRowsAndCosineTurnRows
+    distanceRows hnonneg
+    (Figure9EuclideanFactsConcrete.cosineTurnRows_of_totalTurn_and_cosineComparisons
+      hnonneg htotal H)
+
+/-- Raw selected Figure 9 distance witnesses, total-turn bounds, and
+pointwise turn-chord comparisons rebuild the exact Figure 9 certificate. -/
+def ofDistanceWitnessRowsAndTotalTurnChordComparisons
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftTurnChordComparisonRows good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofDistanceWitnessRowsAndTurnChordRows
+    distanceRows hnonneg
+    (Figure9EuclideanFactsConcrete.turnChordRows_of_totalTurn_and_chordComparisons
+      hnonneg htotal H)
+
+/-- Build the exact Figure 9 certificate from W12 witnesses and a concrete
+middle-turn realization of the left comparison angle.  The resulting
+`left_angle_le_adjacentTurn` field is proved by adjacent-window arithmetic. -/
+def ofWitnessesAndMiddleTurnAngleRealization
+    (witnesses : Figure9ContainmentW12.AdjacentWindowWitnesses good turn)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9UniversalMiddleTurnAngleRealization good turn) :
+    Figure9ExactAngleContainmentCertificate good turn where
+  witnesses := witnesses
+  left_angle_le_adjacentTurn :=
+    figure9UniversalLeftAngleContainment_of_middleTurnAngleRealization
+      hnonneg H
+
+/-- Build the exact Figure 9 certificate from W12 witnesses and pointwise
+middle-turn upper bound rows for the left comparison angle. -/
+def ofWitnessesAndAngleLeMiddleTurnRows
+    (witnesses : Figure9ContainmentW12.AdjacentWindowWitnesses good turn)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9UniversalLeftAngleLeMiddleTurnRows good turn) :
+    Figure9ExactAngleContainmentCertificate good turn where
+  witnesses := witnesses
+  left_angle_le_adjacentTurn :=
+    figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows
+      hnonneg H
+
+/-- Build the exact Figure 9 certificate from W12 witnesses and concrete
+cosine-turn rows. -/
+def ofWitnessesAndCosineTurnRows
+    (witnesses : Figure9ContainmentW12.AdjacentWindowWitnesses good turn)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftCosineTurnRows
+        good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofWitnessesAndAngleLeMiddleTurnRows
+    witnesses hnonneg
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_cosineTurnRows H)
+
+/-- Build the exact Figure 9 certificate from W12 witnesses and concrete
+turn-chord rows. -/
+def ofWitnessesAndTurnChordRows
+    (witnesses : Figure9ContainmentW12.AdjacentWindowWitnesses good turn)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftTurnChordRows
+        good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofWitnessesAndAngleLeMiddleTurnRows
+    witnesses hnonneg
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_turnChordRows H)
+
+/-- Build the exact Figure 9 certificate from W12 witnesses, total-turn
+bounds, and pointwise cosine comparisons. -/
+def ofWitnessesAndTotalTurnCosineComparisons
+    (witnesses : Figure9ContainmentW12.AdjacentWindowWitnesses good turn)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftCosineComparisonRows good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofWitnessesAndCosineTurnRows
+    witnesses hnonneg
+    (Figure9EuclideanFactsConcrete.cosineTurnRows_of_totalTurn_and_cosineComparisons
+      hnonneg htotal H)
+
+/-- Build the exact Figure 9 certificate from W12 witnesses, total-turn
+bounds, and pointwise turn-chord comparisons. -/
+def ofWitnessesAndTotalTurnChordComparisons
+    (witnesses : Figure9ContainmentW12.AdjacentWindowWitnesses good turn)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftTurnChordComparisonRows good turn) :
+    Figure9ExactAngleContainmentCertificate good turn :=
+  ofWitnessesAndTurnChordRows
+    witnesses hnonneg
+    (Figure9EuclideanFactsConcrete.turnChordRows_of_totalTurn_and_chordComparisons
+      hnonneg htotal H)
+
 /-- The certificate gives the Figure 9 E23 lower-bound field through W12. -/
 theorem E23
     (H : Figure9ExactAngleContainmentCertificate good turn) :
@@ -207,6 +657,157 @@ theorem toContainmentInterface_extractedData
   rfl
 
 end Figure9ExactAngleContainmentCertificate
+
+/-- Raw selected Figure 9 distance witnesses plus the universal left-angle
+containment row build the actual Figure 9 adjacent-left containment interface.
+-/
+def figure9AdjacentLeftContainmentInterface_of_distanceWitnessRowsAndUniversalContainment
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (left_angle_le_adjacentTurn :
+      Figure9UniversalLeftAngleContainment good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn :=
+  (Figure9ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndUniversalContainment
+    distanceRows left_angle_le_adjacentTurn).toContainmentInterface
+
+/-- Raw selected Figure 9 distance witnesses plus a concrete middle-turn
+realization build the actual Figure 9 adjacent-left containment interface
+consumed by local window-containment fields. -/
+def figure9AdjacentLeftContainmentInterface_of_distanceWitnessRowsAndMiddleTurnAngleRealization
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9UniversalMiddleTurnAngleRealization good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn :=
+  (Figure9ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndMiddleTurnAngleRealization
+    distanceRows hnonneg H).toContainmentInterface
+
+/-- Raw selected Figure 9 distance witnesses plus pointwise middle-turn upper
+bound rows build the actual Figure 9 adjacent-left containment interface
+consumed by local window-containment fields. -/
+def figure9AdjacentLeftContainmentInterface_of_distanceWitnessRowsAndAngleLeMiddleTurnRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H : Figure9UniversalLeftAngleLeMiddleTurnRows good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn :=
+  (Figure9ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndAngleLeMiddleTurnRows
+    distanceRows hnonneg H).toContainmentInterface
+
+/-- Raw selected Figure 9 distance witnesses plus concrete cosine-turn rows
+build the actual Figure 9 adjacent-left containment interface. -/
+def figure9AdjacentLeftContainmentInterface_of_distanceWitnessRowsAndCosineTurnRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftCosineTurnRows
+        good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn :=
+  (Figure9ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndCosineTurnRows
+    distanceRows hnonneg H).toContainmentInterface
+
+/-- Raw selected Figure 9 distance witnesses plus concrete turn-chord rows
+build the actual Figure 9 adjacent-left containment interface. -/
+def figure9AdjacentLeftContainmentInterface_of_distanceWitnessRowsAndTurnChordRows
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftTurnChordRows
+        good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn :=
+  (Figure9ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndTurnChordRows
+    distanceRows hnonneg H).toContainmentInterface
+
+/-- Raw selected Figure 9 distance witnesses, total-turn bounds, and
+pointwise cosine comparisons build the actual Figure 9 adjacent-left
+containment interface. -/
+def figure9AdjacentLeftContainmentInterface_of_distanceWitnessRowsAndTotalTurnCosineComparisons
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftCosineComparisonRows good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn :=
+  (Figure9ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndTotalTurnCosineComparisons
+    distanceRows hnonneg htotal H).toContainmentInterface
+
+/-- Raw selected Figure 9 distance witnesses, total-turn bounds, and
+pointwise turn-chord comparisons build the actual Figure 9 adjacent-left
+containment interface. -/
+def figure9AdjacentLeftContainmentInterface_of_distanceWitnessRowsAndTotalTurnChordComparisons
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows :
+      forall {i : Nat},
+        1 <= i -> i + 1 <= 10 ->
+        Not (good i) -> Not (good (i + 1)) ->
+          Exists fun p : Point =>
+          Exists fun qi : Point =>
+          Exists fun qj : Point =>
+          Exists fun s : Point =>
+          Exists fun r : Point =>
+            Figure9DistanceData p qi qj s r)
+    (hnonneg : forall k : Nat, 0 <= turn k)
+    (htotal : totalTurn turn < Real.pi / 3)
+    (H : Figure9UniversalLeftTurnChordComparisonRows good turn) :
+    Figure9AdjacentLeftContainmentInterface good turn :=
+  (Figure9ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndTotalTurnChordComparisons
+    distanceRows hnonneg htotal H).toContainmentInterface
 
 /-- Minimal exact certificate for both Figure 8 and Figure 9 angle
 containment. -/
@@ -442,6 +1043,79 @@ namespace PointwiseFigure9SelectedExactAngleContainmentCertificate
 
 variable {B : PointwiseLemma89Base.{u} C hmin}
 variable (H : PointwiseFigure9SelectedExactAngleContainmentCertificate B)
+
+/-- Build the W16 selected/exact certificate from pointwise middle-turn upper
+bound rows for the Figure 9 left comparison angle. -/
+def ofSelectedAndAngleLeMiddleTurnRows
+    (selected : PointwiseFigure9SelectedWindowContainmentFields B)
+    (hnonneg : forall k : Nat, 0 <= B.turnBounds.turn k)
+    (H :
+      Figure9UniversalLeftAngleLeMiddleTurnRows
+        (M8BrokenLatticeGood B.localLabels.predicates.data)
+        B.turnBounds.turn) :
+    PointwiseFigure9SelectedExactAngleContainmentCertificate B where
+  selected := selected
+  figure9_left_angle_le_adjacentTurn :=
+    figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows
+      hnonneg H
+
+/-- Build the W16 selected/exact certificate from concrete Figure 9
+cosine-turn rows. -/
+def ofSelectedAndCosineTurnRows
+    (selected : PointwiseFigure9SelectedWindowContainmentFields B)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftCosineTurnRows
+        (M8BrokenLatticeGood B.localLabels.predicates.data)
+        B.turnBounds.turn) :
+    PointwiseFigure9SelectedExactAngleContainmentCertificate B :=
+  ofSelectedAndAngleLeMiddleTurnRows
+    selected B.turnBounds.turn_nonnegative
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_cosineTurnRows H)
+
+/-- Build the W16 selected/exact certificate from concrete Figure 9
+turn-chord rows. -/
+def ofSelectedAndTurnChordRows
+    (selected : PointwiseFigure9SelectedWindowContainmentFields B)
+    (H :
+      Figure9EuclideanFactsConcrete.Figure9AdjacentLeftTurnChordRows
+        (M8BrokenLatticeGood B.localLabels.predicates.data)
+        B.turnBounds.turn) :
+    PointwiseFigure9SelectedExactAngleContainmentCertificate B :=
+  ofSelectedAndAngleLeMiddleTurnRows
+    selected B.turnBounds.turn_nonnegative
+    (figure9UniversalLeftAngleLeMiddleTurnRows_of_turnChordRows H)
+
+/-- Build the W16 selected/exact certificate from total-turn bounds already
+carried by the pointwise base row and pointwise cosine comparisons. -/
+def ofSelectedAndTotalTurnCosineComparisons
+    (selected : PointwiseFigure9SelectedWindowContainmentFields B)
+    (H :
+      Figure9UniversalLeftCosineComparisonRows
+        (M8BrokenLatticeGood B.localLabels.predicates.data)
+        B.turnBounds.turn) :
+    PointwiseFigure9SelectedExactAngleContainmentCertificate B :=
+  ofSelectedAndCosineTurnRows
+    selected
+    (Figure9EuclideanFactsConcrete.cosineTurnRows_of_totalTurn_and_cosineComparisons
+      B.turnBounds.turn_nonnegative
+      B.turnBounds.total_turn_lt_pi_div_three
+      H)
+
+/-- Build the W16 selected/exact certificate from total-turn bounds already
+carried by the pointwise base row and pointwise turn-chord comparisons. -/
+def ofSelectedAndTotalTurnChordComparisons
+    (selected : PointwiseFigure9SelectedWindowContainmentFields B)
+    (H :
+      Figure9UniversalLeftTurnChordComparisonRows
+        (M8BrokenLatticeGood B.localLabels.predicates.data)
+        B.turnBounds.turn) :
+    PointwiseFigure9SelectedExactAngleContainmentCertificate B :=
+  ofSelectedAndTurnChordRows
+    selected
+    (Figure9EuclideanFactsConcrete.turnChordRows_of_totalTurn_and_chordComparisons
+      B.turnBounds.turn_nonnegative
+      B.turnBounds.total_turn_lt_pi_div_three
+      H)
 
 /-- Rebuild the Figure 9 adjacent-left containment interface from the W16
 selected witnesses and the exact universal left-angle containment proof. -/

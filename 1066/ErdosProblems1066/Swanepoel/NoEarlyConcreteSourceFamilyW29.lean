@@ -111,11 +111,241 @@ def concreteNoEarlySourceRowOfCoverageAndCommonNeighbor
   R.toW25SourceRowOfObstructionPackage
     (localExclusionPackageOfCommonNeighborRow H)
 
+def localExclusionPackageOfConcreteNoEarlyTripleEquality
+    (H :
+      NoEarlyTripleConcrete.M8ConcreteNoEarlyTripleEquality
+        (RowPredicates payForCut topologyArc lemma8 C hmin)) :
+    M8ConcreteNoEarlyObstructionPackage
+      (RowPredicates payForCut topologyArc lemma8 C hmin) :=
+  M8ConcreteNoEarlyObstructionPackage.falseStart
+    (NoEarlyTripleObstructionConcrete.M8ConcreteFalseStartImplications.ofConcreteNoEarlyTripleEquality
+      H)
+
+def localExclusionPackageOfLemma9FiveStartLateFacts
+    (H :
+      NoEarlyTripleFromLemma9.M8Lemma9FiveStartLateFacts
+        (RowPredicates payForCut topologyArc lemma8 C hmin)) :
+    M8ConcreteNoEarlyObstructionPackage
+      (RowPredicates payForCut topologyArc lemma8 C hmin) :=
+  localExclusionPackageOfConcreteNoEarlyTripleEquality
+    H.toConcreteNoEarlyTripleEquality
+
+def concreteNoEarlySourceRowOfCoverageAndConcreteNoEarlyTripleEquality
+    (R : M8Lemma9NoEarlyCoverageRow
+      payForCut topologyArc lemma8 C hmin)
+    (H :
+      NoEarlyTripleConcrete.M8ConcreteNoEarlyTripleEquality
+        (RowPredicates payForCut topologyArc lemma8 C hmin)) :
+    M8ConcreteNoEarlySourceRow
+      payForCut topologyArc lemma8 C hmin :=
+  R.toW25SourceRowOfObstructionPackage
+    (localExclusionPackageOfConcreteNoEarlyTripleEquality H)
+
+def concreteNoEarlySourceRowOfCoverageAndLemma9FiveStartLateFacts
+    (R : M8Lemma9NoEarlyCoverageRow
+      payForCut topologyArc lemma8 C hmin)
+    (H :
+      NoEarlyTripleFromLemma9.M8Lemma9FiveStartLateFacts
+        (RowPredicates payForCut topologyArc lemma8 C hmin)) :
+    M8ConcreteNoEarlySourceRow
+      payForCut topologyArc lemma8 C hmin :=
+  concreteNoEarlySourceRowOfCoverageAndConcreteNoEarlyTripleEquality
+    R H.toConcreteNoEarlyTripleEquality
+
 /-! ## Family-level concrete source constructors -/
 
 def finiteLocalExclusionFamilyOfMinimalFailures :
     M8FiniteLocalExclusionFamily.{u} :=
   M8FiniteLocalExclusionFamily.ofMinimalFailures
+
+abbrev M8ConcreteNoEarlyTripleEqualityFamily
+    (payForCut : W18PayForCutConcreteProducerFamily)
+    (topologyArc : W18TopologyArcConcreteProducerFamily.{u})
+    (lemma8 : W18Lemma8ConcreteProducerFamily.{u}
+      payForCut topologyArc) : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C),
+      NoEarlyTripleConcrete.M8ConcreteNoEarlyTripleEquality
+        (RowPredicates payForCut topologyArc lemma8 C hmin)
+
+abbrev M8Lemma9FiveStartLateFactsFamily
+    (payForCut : W18PayForCutConcreteProducerFamily)
+    (topologyArc : W18TopologyArcConcreteProducerFamily.{u})
+    (lemma8 : W18Lemma8ConcreteProducerFamily.{u}
+      payForCut topologyArc) : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C),
+      NoEarlyTripleFromLemma9.M8Lemma9FiveStartLateFacts
+        (RowPredicates payForCut topologyArc lemma8 C hmin)
+
+def concreteNoEarlyTripleEqualityFamilyOfLemma9FiveStartLateFactsFamily
+    (H :
+      M8Lemma9FiveStartLateFactsFamily.{u}
+        payForCut topologyArc lemma8) :
+    M8ConcreteNoEarlyTripleEqualityFamily.{u}
+      payForCut topologyArc lemma8 :=
+  fun C hmin => (H C hmin).toConcreteNoEarlyTripleEquality
+
+def lemma9FiveStartLateFactsFamilyOfConcreteNoEarlyTripleEqualityFamily
+    (H :
+      M8ConcreteNoEarlyTripleEqualityFamily.{u}
+        payForCut topologyArc lemma8) :
+    M8Lemma9FiveStartLateFactsFamily.{u}
+      payForCut topologyArc lemma8 :=
+  fun C hmin =>
+    NoEarlyTripleFromLemma9.M8Lemma9FiveStartLateFacts.ofConcreteNoEarlyTripleEquality
+      (H C hmin)
+
+theorem concreteNoEarlyTripleEqualityFamily_iff_lemma9FiveStartLateFactsFamily :
+    M8ConcreteNoEarlyTripleEqualityFamily.{u}
+      payForCut topologyArc lemma8 <->
+      M8Lemma9FiveStartLateFactsFamily.{u}
+        payForCut topologyArc lemma8 := by
+  constructor
+  case mp =>
+    exact lemma9FiveStartLateFactsFamilyOfConcreteNoEarlyTripleEqualityFamily
+  case mpr =>
+    exact concreteNoEarlyTripleEqualityFamilyOfLemma9FiveStartLateFactsFamily
+
+def localExclusionObstructionPackageFamilyOfConcreteNoEarlyTripleEqualityFamily
+    (H :
+      M8ConcreteNoEarlyTripleEqualityFamily.{u}
+        payForCut topologyArc lemma8) :
+    M8LocalExclusionObstructionPackageFamily.{u}
+      payForCut topologyArc lemma8 where
+  row := fun C hmin =>
+    localExclusionPackageOfConcreteNoEarlyTripleEquality
+      (payForCut := payForCut) (topologyArc := topologyArc)
+      (lemma8 := lemma8) (C := C) (hmin := hmin)
+      (H C hmin)
+
+def localExclusionDataOfCoverageAndConcreteNoEarlyTripleEqualityFamily
+    (coverage :
+      M8Lemma9NoEarlyCoverageFamily.{u}
+        payForCut topologyArc lemma8)
+    (H :
+      M8ConcreteNoEarlyTripleEqualityFamily.{u}
+        payForCut topologyArc lemma8) :
+    M8LocalExclusionNoEarlySourceFamilyData.{u}
+      payForCut topologyArc lemma8 where
+  coverage := coverage
+  obstruction :=
+    localExclusionObstructionPackageFamilyOfConcreteNoEarlyTripleEqualityFamily
+      H
+
+def localExclusionDataOfCoverageAndLemma9FiveStartLateFactsFamily
+    (coverage :
+      M8Lemma9NoEarlyCoverageFamily.{u}
+        payForCut topologyArc lemma8)
+    (H :
+      M8Lemma9FiveStartLateFactsFamily.{u}
+        payForCut topologyArc lemma8) :
+    M8LocalExclusionNoEarlySourceFamilyData.{u}
+      payForCut topologyArc lemma8 :=
+  localExclusionDataOfCoverageAndConcreteNoEarlyTripleEqualityFamily
+    coverage
+    (concreteNoEarlyTripleEqualityFamilyOfLemma9FiveStartLateFactsFamily H)
+
+def concreteNoEarlySourceFamilyOfCoverageAndConcreteNoEarlyTripleEqualityFamily
+    (coverage :
+      M8Lemma9NoEarlyCoverageFamily.{u}
+        payForCut topologyArc lemma8)
+    (H :
+      M8ConcreteNoEarlyTripleEqualityFamily.{u}
+        payForCut topologyArc lemma8) :
+    M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8 :=
+  (localExclusionDataOfCoverageAndConcreteNoEarlyTripleEqualityFamily
+    coverage H).toW25SourceFamily
+
+def concreteNoEarlySourceFamilyOfCoverageAndLemma9FiveStartLateFactsFamily
+    (coverage :
+      M8Lemma9NoEarlyCoverageFamily.{u}
+        payForCut topologyArc lemma8)
+    (H :
+      M8Lemma9FiveStartLateFactsFamily.{u}
+        payForCut topologyArc lemma8) :
+    M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8 :=
+  concreteNoEarlySourceFamilyOfCoverageAndConcreteNoEarlyTripleEqualityFamily
+    coverage
+    (concreteNoEarlyTripleEqualityFamilyOfLemma9FiveStartLateFactsFamily H)
+
+theorem nonempty_concreteNoEarlySourceFamily_of_coverage_and_concreteNoEarlyTripleEqualityFamily
+    (hcoverage :
+      Nonempty
+        (M8Lemma9NoEarlyCoverageFamily.{u}
+          payForCut topologyArc lemma8))
+    (H :
+      M8ConcreteNoEarlyTripleEqualityFamily.{u}
+        payForCut topologyArc lemma8) :
+    Nonempty
+      (M8ConcreteNoEarlySourceFamily.{u}
+        payForCut topologyArc lemma8) := by
+  cases hcoverage with
+  | intro coverage =>
+      exact
+        Nonempty.intro
+          (concreteNoEarlySourceFamilyOfCoverageAndConcreteNoEarlyTripleEqualityFamily
+            coverage H)
+
+theorem nonempty_concreteNoEarlySourceFamily_of_coverage_and_lemma9FiveStartLateFactsFamily
+    (hcoverage :
+      Nonempty
+        (M8Lemma9NoEarlyCoverageFamily.{u}
+          payForCut topologyArc lemma8))
+    (H :
+      M8Lemma9FiveStartLateFactsFamily.{u}
+        payForCut topologyArc lemma8) :
+    Nonempty
+      (M8ConcreteNoEarlySourceFamily.{u}
+        payForCut topologyArc lemma8) :=
+  nonempty_concreteNoEarlySourceFamily_of_coverage_and_concreteNoEarlyTripleEqualityFamily
+    hcoverage
+    (concreteNoEarlyTripleEqualityFamilyOfLemma9FiveStartLateFactsFamily H)
+
+/-! ## Extracting route families from actual W25 source rows -/
+
+def coverageFamilyOfConcreteNoEarlySourceFamily
+    (F : M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8) :
+    M8Lemma9NoEarlyCoverageFamily.{u}
+      payForCut topologyArc lemma8 where
+  row := fun C hmin =>
+    { longArcCount := (F.row C hmin).longArcCount
+      coverage := (F.row C hmin).coverage }
+
+def localExclusionObstructionPackageFamilyOfConcreteNoEarlySourceFamily
+    (F : M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8) :
+    M8LocalExclusionObstructionPackageFamily.{u}
+      payForCut topologyArc lemma8 where
+  row := fun C hmin =>
+    (F.row C hmin).obstruction
+
+def localExclusionDataOfConcreteNoEarlySourceFamily
+    (F : M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8) :
+    M8LocalExclusionNoEarlySourceFamilyData.{u}
+      payForCut topologyArc lemma8 where
+  coverage := coverageFamilyOfConcreteNoEarlySourceFamily F
+  obstruction :=
+    localExclusionObstructionPackageFamilyOfConcreteNoEarlySourceFamily F
+
+def concreteNoEarlyTripleEqualityFamilyOfConcreteNoEarlySourceFamily
+    (F : M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8) :
+    M8ConcreteNoEarlyTripleEqualityFamily.{u}
+      payForCut topologyArc lemma8 :=
+  fun C hmin => (F.row C hmin).obstruction.toConcreteNoEarlyTripleEquality
+
+def lemma9FiveStartLateFactsFamilyOfConcreteNoEarlySourceFamily
+    (F : M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8) :
+    M8Lemma9FiveStartLateFactsFamily.{u}
+      payForCut topologyArc lemma8 :=
+  lemma9FiveStartLateFactsFamilyOfConcreteNoEarlyTripleEqualityFamily
+    (concreteNoEarlyTripleEqualityFamilyOfConcreteNoEarlySourceFamily F)
 
 def localExclusionDataOfK23Data
     (D : M8K23NoEarlySourceFamilyData.{u}
@@ -217,6 +447,18 @@ def toConcreteNoEarlySourceFamily
       payForCut topologyArc lemma8 :=
   D.toLocalExclusionData.toW25SourceFamily
 
+/-- Route data gives the concrete five-start no-early equality on each
+assembled minimal-failure row. -/
+def concreteNoEarlyTripleEquality
+    (D : M8ConcreteNoEarlySourceRouteData.{u}
+      payForCut topologyArc lemma8)
+    {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C) :
+    NoEarlyTripleConcrete.M8ConcreteNoEarlyTripleEquality
+      (RowPredicates payForCut topologyArc lemma8 C hmin) :=
+  let H := (D.toConcreteNoEarlySourceFamily.row C hmin).obstruction
+  H.toConcreteNoEarlyTripleEquality
+
 theorem nonempty_localExclusionData
     (D : M8ConcreteNoEarlySourceRouteData.{u}
       payForCut topologyArc lemma8) :
@@ -262,6 +504,33 @@ def routeDataOfLocalExclusionData
     M8ConcreteNoEarlySourceRouteData.{u}
       payForCut topologyArc lemma8 :=
   M8ConcreteNoEarlySourceRouteData.localExclusion D
+
+def routeDataOfConcreteNoEarlySourceFamily
+    (F : M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8) :
+    M8ConcreteNoEarlySourceRouteData.{u}
+      payForCut topologyArc lemma8 :=
+  routeDataOfLocalExclusionData
+    (localExclusionDataOfConcreteNoEarlySourceFamily F)
+
+def concreteNoEarlyTripleEqualityOfConcreteNoEarlySourceFamily
+    (F : M8ConcreteNoEarlySourceFamily.{u}
+      payForCut topologyArc lemma8)
+    {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C) :
+    NoEarlyTripleConcrete.M8ConcreteNoEarlyTripleEquality
+      (RowPredicates payForCut topologyArc lemma8 C hmin) :=
+  (F.row C hmin).obstruction.toConcreteNoEarlyTripleEquality
+
+def concreteNoEarlyTripleEqualityOfRouteData
+    (D :
+      M8ConcreteNoEarlySourceRouteData.{u}
+        payForCut topologyArc lemma8)
+    {n : Nat} (C : _root_.UDConfig n)
+    (hmin : IsMinimalClearedFailure C) :
+    NoEarlyTripleConcrete.M8ConcreteNoEarlyTripleEquality
+      (RowPredicates payForCut topologyArc lemma8 C hmin) :=
+  D.concreteNoEarlyTripleEquality C hmin
 
 theorem nonempty_concreteNoEarlySourceFamily_of_k23Data
     (h :
@@ -325,6 +594,80 @@ theorem nonempty_concreteNoEarlySourceFamily_of_routeData
   cases h with
   | intro D =>
       exact D.nonempty_concreteNoEarlySourceFamily
+
+theorem nonempty_coverageFamily_of_concreteNoEarlySourceFamily
+    (h :
+      Nonempty
+        (M8ConcreteNoEarlySourceFamily.{u}
+          payForCut topologyArc lemma8)) :
+    Nonempty
+      (M8Lemma9NoEarlyCoverageFamily.{u}
+        payForCut topologyArc lemma8) := by
+  cases h with
+  | intro F =>
+      exact Nonempty.intro
+        (coverageFamilyOfConcreteNoEarlySourceFamily F)
+
+theorem concreteNoEarlyTripleEqualityFamily_of_nonempty_concreteNoEarlySourceFamily
+    (h :
+      Nonempty
+        (M8ConcreteNoEarlySourceFamily.{u}
+          payForCut topologyArc lemma8)) :
+    M8ConcreteNoEarlyTripleEqualityFamily.{u}
+      payForCut topologyArc lemma8 := by
+  cases h with
+  | intro F =>
+      exact concreteNoEarlyTripleEqualityFamilyOfConcreteNoEarlySourceFamily F
+
+theorem lemma9FiveStartLateFactsFamily_of_nonempty_concreteNoEarlySourceFamily
+    (h :
+      Nonempty
+        (M8ConcreteNoEarlySourceFamily.{u}
+          payForCut topologyArc lemma8)) :
+    M8Lemma9FiveStartLateFactsFamily.{u}
+      payForCut topologyArc lemma8 :=
+  lemma9FiveStartLateFactsFamilyOfConcreteNoEarlyTripleEqualityFamily
+    (concreteNoEarlyTripleEqualityFamily_of_nonempty_concreteNoEarlySourceFamily
+      h)
+
+theorem nonempty_localExclusionObstructionPackageFamily_of_concreteNoEarlySourceFamily
+    (h :
+      Nonempty
+        (M8ConcreteNoEarlySourceFamily.{u}
+          payForCut topologyArc lemma8)) :
+    Nonempty
+      (M8LocalExclusionObstructionPackageFamily.{u}
+        payForCut topologyArc lemma8) := by
+  cases h with
+  | intro F =>
+      exact Nonempty.intro
+        (localExclusionObstructionPackageFamilyOfConcreteNoEarlySourceFamily F)
+
+theorem nonempty_localExclusionData_of_concreteNoEarlySourceFamily
+    (h :
+      Nonempty
+        (M8ConcreteNoEarlySourceFamily.{u}
+          payForCut topologyArc lemma8)) :
+    Nonempty
+      (M8LocalExclusionNoEarlySourceFamilyData.{u}
+        payForCut topologyArc lemma8) := by
+  cases h with
+  | intro F =>
+      exact Nonempty.intro
+        (localExclusionDataOfConcreteNoEarlySourceFamily F)
+
+theorem nonempty_routeData_of_concreteNoEarlySourceFamily
+    (h :
+      Nonempty
+        (M8ConcreteNoEarlySourceFamily.{u}
+          payForCut topologyArc lemma8)) :
+    Nonempty
+      (M8ConcreteNoEarlySourceRouteData.{u}
+        payForCut topologyArc lemma8) := by
+  cases h with
+  | intro F =>
+      exact Nonempty.intro
+        (routeDataOfConcreteNoEarlySourceFamily F)
 
 theorem nonempty_routeData_iff :
     Nonempty

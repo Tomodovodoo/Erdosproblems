@@ -129,6 +129,21 @@ def toExactSelectedFaceEnclosureBlocker
   (SelectedFaceEnclosureSourceW30.selectedFaceEnclosureFields_iff_exactBlocker
     C).1 S.toSelectedFaceEnclosureFields
 
+theorem outerBoundaryEnclosureRow
+    (S : FaceBoundaryEnclosureSource C) :
+    Nonempty
+      (OuterBoundaryInterface.OuterBoundaryEnclosure
+        (CanonicalGraph C) S.faceBoundary S.outerFace) :=
+  Nonempty.intro S.outerEnclosure
+
+theorem toExactActualTopologyFields
+    (S : FaceBoundaryEnclosureSource C)
+    (hlen : 3 <= S.faceBoundary.boundaryLength S.outerFace) :
+    OuterBoundaryExistenceConcrete.ExactActualTopologyFields C :=
+  OuterBoundaryExistenceConcrete.exactActualTopologyFields_of_faceBoundaryFields
+    (C := C) (H := S.faceBoundary) (F := S.outerFace)
+    S.outerFace_isOuter hlen S.outerBoundaryEnclosureRow
+
 def toOuterBoundarySourceFields
     (S : FaceBoundaryEnclosureSource C) :
     OuterBoundarySourceFields C :=
@@ -235,12 +250,59 @@ def ofSelectedOuterFaceAndEnclosure
   ofRawFaceBoundaryAndEnclosure D.faceBoundary D.outerFace
     D.outerFace_isOuter E.outerEnclosure
 
+theorem outerBoundaryEnclosureRow_ofSelectedOuterFaceAndEnclosure
+    {C : _root_.UDConfig n}
+    (D : SelectedOuterFaceData C)
+    (E : SelectedEnclosureData D) :
+    Nonempty
+      (OuterBoundaryInterface.OuterBoundaryEnclosure
+        (CanonicalGraph C) D.faceBoundary D.outerFace) :=
+  (ofSelectedOuterFaceAndEnclosure D E).outerBoundaryEnclosureRow
+
+theorem exactActualTopologyFields_ofSelectedOuterFaceAndEnclosure
+    {C : _root_.UDConfig n}
+    (D : SelectedOuterFaceData C)
+    (E : SelectedEnclosureData D)
+    (hlen : 3 <= D.faceBoundary.boundaryLength D.outerFace) :
+    OuterBoundaryExistenceConcrete.ExactActualTopologyFields C :=
+  (ofSelectedOuterFaceAndEnclosure D E).toExactActualTopologyFields hlen
+
 def ofOuterBoundaryCore
     {C : _root_.UDConfig n}
     (P : OuterBoundaryCore.{0} (CanonicalGraph C)) :
     FaceBoundaryEnclosureSource C :=
   ofRawFaceBoundaryAndEnclosure P.faceBoundary P.outerFace
     P.outerFace_isOuter P.outerEnclosure
+
+theorem outerBoundaryEnclosureRow_ofRawFaceBoundaryAndEnclosure
+    {C : _root_.UDConfig n}
+    {H : FaceBoundaryHypotheses C}
+    {F : H.Face}
+    (hF : H.IsOuterFace F)
+    (E : OuterBoundaryInterface.OuterBoundaryEnclosure
+      (CanonicalGraph C) H F) :
+    Nonempty
+      (OuterBoundaryInterface.OuterBoundaryEnclosure
+        (CanonicalGraph C) H F) :=
+  (ofRawFaceBoundaryAndEnclosure H F hF E).outerBoundaryEnclosureRow
+
+theorem exactActualTopologyFields_ofRawFaceBoundaryAndEnclosure
+    {C : _root_.UDConfig n}
+    {H : FaceBoundaryHypotheses C}
+    {F : H.Face}
+    (hF : H.IsOuterFace F)
+    (hlen : 3 <= H.boundaryLength F)
+    (E : OuterBoundaryInterface.OuterBoundaryEnclosure
+      (CanonicalGraph C) H F) :
+    OuterBoundaryExistenceConcrete.ExactActualTopologyFields C :=
+  (ofRawFaceBoundaryAndEnclosure H F hF E).toExactActualTopologyFields hlen
+
+theorem ofOuterBoundaryCore_toOuterBoundaryCore
+    {C : _root_.UDConfig n}
+    (P : OuterBoundaryCore.{0} (CanonicalGraph C)) :
+    (ofOuterBoundaryCore P).toOuterBoundaryCore = P := by
+  cases P
+  rfl
 
 def ofOuterBoundarySourceFields
     {C : _root_.UDConfig n}

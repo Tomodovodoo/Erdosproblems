@@ -80,6 +80,31 @@ theorem no_concreteNonConnectorLowerTableFamily :
     (h.elim fun C =>
       Nonempty.intro (roleHingedPeriodSearchFamilyOfConcreteLowerTables C))
 
+theorem no_periodSearch_with_nonConnectorLowerTableFamily :
+    Not
+      (Exists fun periodSearch : PeriodSearchData =>
+        Nonempty
+          (NonConnectorLowerTableFamily
+            periodSearch.toRoleHingedPeriodSearchFamily)) := by
+  intro h
+  exact no_concreteNonConnectorLowerTableFamily
+    (ConcreteCrossBlockLowerTable.ConcreteNonConnectorLowerTableFamily.nonempty_iff_exists_periodSearch_tables.2 h)
+
+theorem no_periodSearch_with_nonConnectorValueMatrixFamily :
+    Not
+      (Exists fun periodSearch : PeriodSearchData =>
+        Nonempty
+          (NonConnectorValueMatrixFamily
+            periodSearch.toRoleHingedPeriodSearchFamily)) := by
+  intro h
+  apply no_periodSearch_with_nonConnectorLowerTableFamily
+  cases h with
+  | intro periodSearch HM =>
+      cases HM with
+      | intro matrices =>
+          exact Exists.intro periodSearch
+            (Nonempty.intro matrices.toNonConnectorLowerTableFamily)
+
 /-! ## Finite table core independent of the blocked period-search surface -/
 
 structure FiniteTableCore (F : RoleHingedPeriodSearchFamily) where

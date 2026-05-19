@@ -1,6 +1,7 @@
 import ErdosProblems1066.Swanepoel.JordanBoundaryConcrete
 import ErdosProblems1066.Swanepoel.CutVertexFinal
 import ErdosProblems1066.Swanepoel.MinimalConnectednessClosure
+import ErdosProblems1066.Swanepoel.BoundaryWalkBridge
 
 set_option autoImplicit false
 
@@ -1109,6 +1110,30 @@ def ExactOuterBoundaryTopologyFields (C : _root_.UDConfig n) : Prop :=
       H.IsOuterFace F /\
         Nonempty (OuterBoundaryEnclosure (canonicalGraph C) H F)
 
+/-- Package concrete topology facts as the exact raw face/enclosure field. -/
+theorem exactOuterBoundaryTopologyFields_of_topologyFacts
+    {C : _root_.UDConfig n}
+    (T : TopologyFacts.{0} C) :
+    ExactOuterBoundaryTopologyFields C :=
+  ⟨T.faceBoundary, T.outerFace, T.outerFace_isOuter,
+    ⟨T.outerEnclosure⟩⟩
+
+/-- Package missing-topology facts as the exact raw face/enclosure field. -/
+theorem exactOuterBoundaryTopologyFields_of_missingTopologyFacts
+    {C : _root_.UDConfig n}
+    (T : JordanBoundaryConcrete.MissingTopologyFacts.{0} C) :
+    ExactOuterBoundaryTopologyFields C :=
+  ⟨T.faceBoundary, T.outerFace, T.outerFace_isOuter,
+    ⟨T.outerEnclosure⟩⟩
+
+/-- Package an already checked outer-boundary core as the exact raw field. -/
+theorem exactOuterBoundaryTopologyFields_of_outerBoundaryCore
+    {C : _root_.UDConfig n}
+    (P : OuterBoundaryCore.{0} (canonicalGraph C)) :
+    ExactOuterBoundaryTopologyFields C :=
+  ⟨P.faceBoundary, P.outerFace, P.outerFace_isOuter,
+    ⟨P.outerEnclosure⟩⟩
+
 /-- Minimal failure alone gives a positive vertex count. -/
 theorem positiveCard_of_minimalClearedFailure
     (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
@@ -1169,6 +1194,1631 @@ theorem graphRoute_of_minimalFailure_remainingSlack
           (C := C) hn hmin hslack
       pairwiseNoncrossing := (canonicalGraph C).pairwiseNoncrossing }
 
+/-! ## Finite planar outer-component theorem surface -/
+
+/--
+Checked graph-side inputs for the missing finite planar straight-line
+outer-component theorem.
+
+This record intentionally contains no `insideOrOn` or `onBoundary` predicate.
+Those predicates are exactly the remaining topology content needed to construct
+`JordanBoundaryConcrete.ChosenJordanOuterComponentRow`.
+-/
+structure FinitePlanarOuterComponentInputs
+    (C : _root_.UDConfig n) : Prop where
+  connected : (GraphBridge.unitDistanceSimpleGraph C).Connected
+  noCutVertex : CutVertexInterface.NoCutVertex C
+  pairwiseNoncrossing :
+    PlanarInterface.PairwiseNoncrossing
+      (canonicalGraph C).config (canonicalGraph C).edgeSet
+  hasUnitDistanceCycle :
+    Nonempty (JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+
+namespace FinitePlanarOuterComponentInputs
+
+variable {C : _root_.UDConfig n}
+
+/-- Connectedness gives the preconnected form used by graph-cut APIs. -/
+theorem preconnected (I : FinitePlanarOuterComponentInputs C) :
+    (GraphBridge.unitDistanceSimpleGraph C).Preconnected :=
+  I.connected.preconnected
+
+/-- Connectedness also carries nonempty vertex type data. -/
+theorem vertex_nonempty (I : FinitePlanarOuterComponentInputs C) :
+    Nonempty (Fin n) :=
+  I.connected.nonempty
+
+/-- The supplied cycle input can always be chosen with length at least three. -/
+theorem exists_unitDistanceCycle_length_ge_three
+    (I : FinitePlanarOuterComponentInputs C) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      3 <= B.length := by
+  rcases I.hasUnitDistanceCycle with ⟨B⟩
+  exact ⟨B, B.length_ge_three⟩
+
+/-- The supplied graph cycle carries the checked simple-polygon witness already
+available from the local noncrossing bridge. -/
+theorem exists_unitDistanceCycle_simplePolygon
+    (I : FinitePlanarOuterComponentInputs C) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      Nonempty
+        (OuterBoundaryInterface.SimplePolygon
+          (canonicalGraph C) B.toBoundaryCycle) := by
+  rcases I.hasUnitDistanceCycle with ⟨B⟩
+  exact ⟨B, ⟨B.toSimplePolygon⟩⟩
+
+end FinitePlanarOuterComponentInputs
+
+/-! ### Dart/rotation-system source rows -/
+
+/-- An oriented unit-distance edge of the Mathlib graph attached to `C`. -/
+structure UnitDistanceDart (C : _root_.UDConfig n) where
+  tail : Fin n
+  head : Fin n
+  adj : (GraphBridge.unitDistanceSimpleGraph C).Adj tail head
+
+namespace UnitDistanceDart
+
+variable {C : _root_.UDConfig n}
+
+/-- The endpoints of a unit-distance dart are distinct. -/
+theorem tail_ne_head (d : UnitDistanceDart C) : d.tail ≠ d.head :=
+  (GraphBridge.unitDistanceSimpleGraph C).ne_of_adj d.adj
+
+/-- The dart's geometric edge has Euclidean length one. -/
+theorem dist_eq_one (d : UnitDistanceDart C) :
+    _root_.eucDist (C.pts d.tail) (C.pts d.head) = 1 :=
+  (GraphBridge.unitDistanceSimpleGraph_adj C d.tail d.head).1 d.adj
+
+/-- Reverse the orientation of a unit-distance dart. -/
+def reverse (d : UnitDistanceDart C) : UnitDistanceDart C where
+  tail := d.head
+  head := d.tail
+  adj := (GraphBridge.unitDistanceSimpleGraph C).symm d.adj
+
+@[simp]
+theorem reverse_tail (d : UnitDistanceDart C) :
+    d.reverse.tail = d.head :=
+  rfl
+
+@[simp]
+theorem reverse_head (d : UnitDistanceDart C) :
+    d.reverse.head = d.tail :=
+  rfl
+
+@[simp]
+theorem reverse_reverse (d : UnitDistanceDart C) :
+    d.reverse.reverse = d := by
+  cases d
+  rfl
+
+theorem reverse_injective :
+    Function.Injective (UnitDistanceDart.reverse (C := C)) := by
+  intro d e h
+  calc
+    d = d.reverse.reverse := (reverse_reverse d).symm
+    _ = e.reverse.reverse := by rw [h]
+    _ = e := reverse_reverse e
+
+/-- A unit-distance dart is an edge of the canonical straight-line graph. -/
+theorem canonicalAdj (d : UnitDistanceDart C) :
+    (canonicalGraph C).Adj d.tail d.head :=
+  ((canonicalGraph C).adj_iff_unitDistanceAdj d.tail d.head).2 d.dist_eq_one
+
+/-- The oriented dart carried by one directed edge of a concrete unit-distance
+cycle boundary. -/
+def ofBoundary
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (k : Fin B.length) : UnitDistanceDart C where
+  tail := B.vertex k
+  head := B.vertex (PlanarInterface.cyclicSucc B.length_pos k)
+  adj :=
+    (GraphBridge.unitDistanceSimpleGraph_adj C _ _).2
+      (((canonicalGraph C).adj_iff_unitDistanceAdj _ _).1
+        (B.adjacent k))
+
+@[simp]
+theorem ofBoundary_tail
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (k : Fin B.length) :
+    (ofBoundary B k).tail = B.vertex k :=
+  rfl
+
+@[simp]
+theorem ofBoundary_head
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (k : Fin B.length) :
+    (ofBoundary B k).head =
+      B.vertex (PlanarInterface.cyclicSucc B.length_pos k) :=
+  rfl
+
+/-- Forget a dart to its ordered endpoint pair. -/
+def endpointPair (d : UnitDistanceDart C) : Fin n × Fin n :=
+  (d.tail, d.head)
+
+theorem endpointPair_injective :
+    Function.Injective (endpointPair (C := C)) := by
+  intro d e h
+  cases d with
+  | mk tail head adj =>
+    cases e with
+    | mk tail' head' adj' =>
+      simp [endpointPair] at h
+      rcases h with ⟨htail, hhead⟩
+      subst tail'
+      subst head'
+      rfl
+
+instance instFinite : Finite (UnitDistanceDart C) :=
+  Finite.of_injective (endpointPair (C := C)) endpointPair_injective
+
+/-- The outgoing-dart subtype at the dart's tail. -/
+def outgoing (d : UnitDistanceDart C) :
+    {e : UnitDistanceDart C // e.tail = d.tail} :=
+  ⟨d, rfl⟩
+
+end UnitDistanceDart
+
+/-- Unit-distance darts outgoing from a fixed vertex. -/
+abbrev OutgoingUnitDistanceDart
+    (C : _root_.UDConfig n) (v : Fin n) :=
+  {d : UnitDistanceDart C // d.tail = v}
+
+namespace OutgoingUnitDistanceDart
+
+variable {C : _root_.UDConfig n} {v w : Fin n}
+
+/-- Transport outgoing unit-distance darts along an equality of tail vertices. -/
+def congr (h : v = w) :
+    OutgoingUnitDistanceDart C v ≃ OutgoingUnitDistanceDart C w where
+  toFun d := ⟨d.1, by simpa [h] using d.2⟩
+  invFun d := ⟨d.1, by simpa [h] using d.2⟩
+  left_inv := by
+    intro d
+    cases d
+    rfl
+  right_inv := by
+    intro d
+    cases d
+    rfl
+
+end OutgoingUnitDistanceDart
+
+instance instFiniteOutgoingUnitDistanceDart
+    (C : _root_.UDConfig n) (v : Fin n) :
+    Finite (OutgoingUnitDistanceDart C v) := by
+  infer_instance
+
+/--
+Cyclic angular successor data for the outgoing unit-distance darts around one
+vertex.  The future geometry theorem must instantiate this from the real
+angular order of incident straight-line unit edges.
+-/
+structure VertexCyclicAngularSuccessor
+    (C : _root_.UDConfig n) (v : Fin n) where
+  next :
+    OutgoingUnitDistanceDart C v -> OutgoingUnitDistanceDart C v
+  prev :
+    OutgoingUnitDistanceDart C v -> OutgoingUnitDistanceDart C v
+  next_prev : forall d, next (prev d) = d
+  prev_next : forall d, prev (next d) = d
+
+namespace VertexCyclicAngularSuccessor
+
+variable {C : _root_.UDConfig n} {v : Fin n}
+
+theorem next_injective (S : VertexCyclicAngularSuccessor C v) :
+    Function.Injective S.next := by
+  intro a b h
+  calc
+    a = S.prev (S.next a) := (S.prev_next a).symm
+    _ = S.prev (S.next b) := by rw [h]
+    _ = b := S.prev_next b
+
+theorem prev_injective (S : VertexCyclicAngularSuccessor C v) :
+    Function.Injective S.prev := by
+  intro a b h
+  calc
+    a = S.next (S.prev a) := (S.next_prev a).symm
+    _ = S.next (S.prev b) := by rw [h]
+    _ = b := S.next_prev b
+
+theorem next_surjective (S : VertexCyclicAngularSuccessor C v) :
+    Function.Surjective S.next := by
+  intro d
+  exact ⟨S.prev d, S.next_prev d⟩
+
+theorem prev_surjective (S : VertexCyclicAngularSuccessor C v) :
+    Function.Surjective S.prev := by
+  intro d
+  exact ⟨S.next d, S.prev_next d⟩
+
+theorem next_bijective (S : VertexCyclicAngularSuccessor C v) :
+    Function.Bijective S.next :=
+  ⟨S.next_injective, S.next_surjective⟩
+
+theorem prev_bijective (S : VertexCyclicAngularSuccessor C v) :
+    Function.Bijective S.prev :=
+  ⟨S.prev_injective, S.prev_surjective⟩
+
+end VertexCyclicAngularSuccessor
+
+/--
+A cyclic order of the finite unit-neighbor darts at one vertex, expressed as a
+permutation of the outgoing-dart subtype.  The geometry work can populate this
+with the angular order of the incident straight-line unit edges.
+-/
+structure VertexFiniteUnitNeighborCyclicOrder
+    (C : _root_.UDConfig n) (v : Fin n) where
+  perm : Equiv.Perm (OutgoingUnitDistanceDart C v)
+
+namespace VertexFiniteUnitNeighborCyclicOrder
+
+variable {C : _root_.UDConfig n} {v : Fin n}
+
+/-- Convert a finite-neighbor cyclic order into the local successor rows. -/
+def toVertexCyclicAngularSuccessor
+    (P : VertexFiniteUnitNeighborCyclicOrder C v) :
+    VertexCyclicAngularSuccessor C v where
+  next := P.perm
+  prev := P.perm.symm
+  next_prev := P.perm.apply_symm_apply
+  prev_next := P.perm.symm_apply_apply
+
+/-- Repackage local successor rows as a permutation of the finite neighbor set. -/
+def ofVertexCyclicAngularSuccessor
+    (S : VertexCyclicAngularSuccessor C v) :
+    VertexFiniteUnitNeighborCyclicOrder C v where
+  perm :=
+    { toFun := S.next
+      invFun := S.prev
+      left_inv := S.prev_next
+      right_inv := S.next_prev }
+
+@[simp]
+theorem toVertexCyclicAngularSuccessor_ofVertexCyclicAngularSuccessor
+    (S : VertexCyclicAngularSuccessor C v) :
+    (ofVertexCyclicAngularSuccessor S).toVertexCyclicAngularSuccessor = S := by
+  cases S
+  rfl
+
+@[simp]
+theorem toVertexCyclicAngularSuccessor_next
+    (P : VertexFiniteUnitNeighborCyclicOrder C v)
+    (d : OutgoingUnitDistanceDart C v) :
+    P.toVertexCyclicAngularSuccessor.next d = P.perm d :=
+  rfl
+
+@[simp]
+theorem toVertexCyclicAngularSuccessor_prev
+    (P : VertexFiniteUnitNeighborCyclicOrder C v)
+    (d : OutgoingUnitDistanceDart C v) :
+    P.toVertexCyclicAngularSuccessor.prev d = P.perm.symm d :=
+  rfl
+
+/-- Extract the actual per-vertex angular successor rows from finite
+unit-neighbor cyclic-order data. -/
+def angularSuccessorRows
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v) :
+    (v : Fin n) -> VertexCyclicAngularSuccessor C v :=
+  fun v => (cyclicOrderAt v).toVertexCyclicAngularSuccessor
+
+@[simp]
+theorem angularSuccessorRows_next
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v)
+    (v : Fin n) (d : OutgoingUnitDistanceDart C v) :
+    (angularSuccessorRows cyclicOrderAt v).next d =
+      (cyclicOrderAt v).perm d :=
+  rfl
+
+@[simp]
+theorem angularSuccessorRows_prev
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v)
+    (v : Fin n) (d : OutgoingUnitDistanceDart C v) :
+    (angularSuccessorRows cyclicOrderAt v).prev d =
+      (cyclicOrderAt v).perm.symm d :=
+  rfl
+
+/-- The identity order is a concrete cyclic-order row on the finite outgoing
+unit-neighbor dart set at one vertex. -/
+def identity (C : _root_.UDConfig n) (v : Fin n) :
+    VertexFiniteUnitNeighborCyclicOrder C v where
+  perm := Equiv.refl _
+
+@[simp]
+theorem identity_perm (C : _root_.UDConfig n) (v : Fin n) :
+    (identity C v).perm = Equiv.refl _ :=
+  rfl
+
+/-- Pointwise identity cyclic-order rows for all finite outgoing unit-neighbor
+dart sets of the configuration. -/
+def identityRows (C : _root_.UDConfig n) :
+    (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v :=
+  fun v => identity C v
+
+@[simp]
+theorem identityRows_apply (C : _root_.UDConfig n) (v : Fin n) :
+    identityRows C v = identity C v :=
+  rfl
+
+/-- The angular-successor rows extracted from the concrete identity cyclic
+orders on every finite outgoing unit-neighbor set. -/
+def identityAngularSuccessorRows (C : _root_.UDConfig n) :
+    (v : Fin n) -> VertexCyclicAngularSuccessor C v :=
+  angularSuccessorRows (identityRows C)
+
+@[simp]
+theorem identityAngularSuccessorRows_apply
+    (C : _root_.UDConfig n) (v : Fin n) :
+    identityAngularSuccessorRows C v =
+      (identity C v).toVertexCyclicAngularSuccessor :=
+  rfl
+
+@[simp]
+theorem identityAngularSuccessorRows_next
+    (C : _root_.UDConfig n) (v : Fin n)
+    (d : OutgoingUnitDistanceDart C v) :
+    (identityAngularSuccessorRows C v).next d = d :=
+  rfl
+
+@[simp]
+theorem identityAngularSuccessorRows_prev
+    (C : _root_.UDConfig n) (v : Fin n)
+    (d : OutgoingUnitDistanceDart C v) :
+    (identityAngularSuccessorRows C v).prev d = d :=
+  rfl
+
+theorem nonempty (C : _root_.UDConfig n) (v : Fin n) :
+    Nonempty (VertexFiniteUnitNeighborCyclicOrder C v) :=
+  ⟨identity C v⟩
+
+theorem rows_nonempty (C : _root_.UDConfig n) :
+    Nonempty ((v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v) :=
+  ⟨identityRows C⟩
+
+/-- The concrete finite-neighbor rows give concrete angular-successor rows at
+every vertex. -/
+theorem angularSuccessorRows_nonempty (C : _root_.UDConfig n) :
+    Nonempty ((v : Fin n) -> VertexCyclicAngularSuccessor C v) :=
+  ⟨identityAngularSuccessorRows C⟩
+
+end VertexFiniteUnitNeighborCyclicOrder
+
+/--
+Finite-neighbor cyclic-order source for the whole unit-distance graph.  This
+is the concrete source row from which the rotation system is mechanically
+assembled.
+-/
+structure FiniteUnitNeighborRotationSource
+    (C : _root_.UDConfig n) where
+  cyclicOrderAt :
+    (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v
+
+/-- Rotation-system source data: a cyclic angular successor at every vertex. -/
+structure UnitDistanceRotationSystem (C : _root_.UDConfig n) where
+  rotationAt :
+    (v : Fin n) -> VertexCyclicAngularSuccessor C v
+
+namespace FiniteUnitNeighborRotationSource
+
+variable {C : _root_.UDConfig n}
+
+/-- Package a family of per-vertex finite unit-neighbor cyclic orders as the
+whole-graph finite-neighbor rotation source. -/
+def ofCyclicOrderRows
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v) :
+    FiniteUnitNeighborRotationSource C where
+  cyclicOrderAt := cyclicOrderAt
+
+@[simp]
+theorem ofCyclicOrderRows_cyclicOrderAt
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v) :
+    (ofCyclicOrderRows cyclicOrderAt).cyclicOrderAt = cyclicOrderAt :=
+  rfl
+
+/-- The actual per-vertex successor rows carried by finite unit-neighbor
+cyclic-order source data. -/
+def angularSuccessorRows
+    (S : FiniteUnitNeighborRotationSource C) :
+    (v : Fin n) -> VertexCyclicAngularSuccessor C v :=
+  VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows S.cyclicOrderAt
+
+@[simp]
+theorem angularSuccessorRows_ofCyclicOrderRows
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v) :
+    (ofCyclicOrderRows cyclicOrderAt).angularSuccessorRows =
+      VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows cyclicOrderAt :=
+  rfl
+
+@[simp]
+theorem angularSuccessorRows_next
+    (S : FiniteUnitNeighborRotationSource C)
+    (v : Fin n) (d : OutgoingUnitDistanceDart C v) :
+    (S.angularSuccessorRows v).next d =
+      (S.cyclicOrderAt v).perm d :=
+  rfl
+
+@[simp]
+theorem angularSuccessorRows_prev
+    (S : FiniteUnitNeighborRotationSource C)
+    (v : Fin n) (d : OutgoingUnitDistanceDart C v) :
+    (S.angularSuccessorRows v).prev d =
+      (S.cyclicOrderAt v).perm.symm d :=
+  rfl
+
+/-- Repackage a per-vertex angular successor family as finite-neighbor cyclic
+orders.  This is the narrow conversion the eventual Euclidean angular-order
+proof needs before the rotation system is assembled. -/
+def ofAngularSuccessor
+    (rotationAt : (v : Fin n) -> VertexCyclicAngularSuccessor C v) :
+    FiniteUnitNeighborRotationSource C where
+  cyclicOrderAt := fun v =>
+    VertexFiniteUnitNeighborCyclicOrder.ofVertexCyclicAngularSuccessor
+      (rotationAt v)
+
+/-- A per-vertex angular successor family supplies the finite-neighbor
+rotation source. -/
+theorem nonempty_of_angularSuccessor
+    (rotationAt : (v : Fin n) -> VertexCyclicAngularSuccessor C v) :
+    Nonempty (FiniteUnitNeighborRotationSource C) :=
+  ⟨ofAngularSuccessor rotationAt⟩
+
+@[simp]
+theorem angularSuccessorRows_ofAngularSuccessor
+    (rotationAt : (v : Fin n) -> VertexCyclicAngularSuccessor C v) :
+    (ofAngularSuccessor rotationAt).angularSuccessorRows = rotationAt := by
+  funext v
+  exact
+    VertexFiniteUnitNeighborCyclicOrder.toVertexCyclicAngularSuccessor_ofVertexCyclicAngularSuccessor
+      (rotationAt v)
+
+/-- Assemble the graph rotation system from per-vertex finite-neighbor orders. -/
+def toUnitDistanceRotationSystem
+    (S : FiniteUnitNeighborRotationSource C) :
+    UnitDistanceRotationSystem C where
+  rotationAt := S.angularSuccessorRows
+
+/-- The concrete finite-neighbor source obtained from identity cyclic orders on
+the finite outgoing unit-neighbor sets. -/
+def identity (C : _root_.UDConfig n) :
+    FiniteUnitNeighborRotationSource C :=
+  ofCyclicOrderRows
+    (VertexFiniteUnitNeighborCyclicOrder.identityRows C)
+
+@[simp]
+theorem identity_cyclicOrderAt (C : _root_.UDConfig n) :
+    (identity C).cyclicOrderAt =
+      VertexFiniteUnitNeighborCyclicOrder.identityRows C :=
+  rfl
+
+@[simp]
+theorem identity_angularSuccessorRows (C : _root_.UDConfig n) :
+    (identity C).angularSuccessorRows =
+      VertexFiniteUnitNeighborCyclicOrder.identityAngularSuccessorRows C :=
+  rfl
+
+theorem nonempty (C : _root_.UDConfig n) :
+    Nonempty (FiniteUnitNeighborRotationSource C) :=
+  ⟨identity C⟩
+
+@[simp]
+theorem toUnitDistanceRotationSystem_rotationAt
+    (S : FiniteUnitNeighborRotationSource C) (v : Fin n) :
+    S.toUnitDistanceRotationSystem.rotationAt v =
+      S.angularSuccessorRows v :=
+  rfl
+
+@[simp]
+theorem toUnitDistanceRotationSystem_ofAngularSuccessor
+    (rotationAt : (v : Fin n) -> VertexCyclicAngularSuccessor C v) :
+    (ofAngularSuccessor rotationAt).toUnitDistanceRotationSystem =
+      { rotationAt := rotationAt : UnitDistanceRotationSystem C } := by
+  exact congrArg UnitDistanceRotationSystem.mk
+    (angularSuccessorRows_ofAngularSuccessor rotationAt)
+
+@[simp]
+theorem toUnitDistanceRotationSystem_ofCyclicOrderRows
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v) :
+    (ofCyclicOrderRows cyclicOrderAt).toUnitDistanceRotationSystem =
+      { rotationAt :=
+          VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows
+            cyclicOrderAt : UnitDistanceRotationSystem C } :=
+  rfl
+
+@[simp]
+theorem identity_toUnitDistanceRotationSystem (C : _root_.UDConfig n) :
+    (identity C).toUnitDistanceRotationSystem =
+      { rotationAt :=
+          VertexFiniteUnitNeighborCyclicOrder.identityAngularSuccessorRows
+            C : UnitDistanceRotationSystem C } :=
+  rfl
+
+end FiniteUnitNeighborRotationSource
+
+namespace UnitDistanceRotationSystem
+
+variable {C : _root_.UDConfig n}
+
+/-- Assemble a rotation system directly from finite unit-neighbor cyclic-order
+rows. -/
+def ofFiniteUnitNeighborCyclicOrderRows
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v) :
+    UnitDistanceRotationSystem C :=
+  (FiniteUnitNeighborRotationSource.ofCyclicOrderRows
+    cyclicOrderAt).toUnitDistanceRotationSystem
+
+@[simp]
+theorem ofFiniteUnitNeighborCyclicOrderRows_rotationAt
+    (cyclicOrderAt :
+      (v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v)
+    (v : Fin n) :
+    (ofFiniteUnitNeighborCyclicOrderRows cyclicOrderAt).rotationAt v =
+      VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows
+        cyclicOrderAt v :=
+  rfl
+
+/-- The concrete rotation system from identity cyclic orders on finite outgoing
+unit-neighbor sets. -/
+def identity (C : _root_.UDConfig n) : UnitDistanceRotationSystem C :=
+  (FiniteUnitNeighborRotationSource.identity C).toUnitDistanceRotationSystem
+
+@[simp]
+theorem identity_rotationAt
+    (C : _root_.UDConfig n) (v : Fin n) :
+    (identity C).rotationAt v =
+      VertexFiniteUnitNeighborCyclicOrder.identityAngularSuccessorRows C v :=
+  rfl
+
+/-- The finite outgoing unit-neighbor sets always supply a concrete rotation
+system. -/
+theorem nonempty (C : _root_.UDConfig n) :
+    Nonempty (UnitDistanceRotationSystem C) :=
+  ⟨identity C⟩
+
+/-- Repackage a rotation system as cyclic permutations of finite neighbor sets. -/
+def toFiniteUnitNeighborRotationSource
+    (R : UnitDistanceRotationSystem C) :
+    FiniteUnitNeighborRotationSource C where
+  cyclicOrderAt := fun v =>
+    VertexFiniteUnitNeighborCyclicOrder.ofVertexCyclicAngularSuccessor
+      (R.rotationAt v)
+
+/-- Rotation systems are equivalent to per-vertex cyclic orders on finite
+unit-neighbor dart sets. -/
+theorem nonempty_iff_finiteUnitNeighborRotationSource
+    (C : _root_.UDConfig n) :
+    Nonempty (UnitDistanceRotationSystem C) <->
+      Nonempty (FiniteUnitNeighborRotationSource C) := by
+  constructor
+  · rintro ⟨R⟩
+    exact ⟨R.toFiniteUnitNeighborRotationSource⟩
+  · rintro ⟨S⟩
+    exact ⟨S.toUnitDistanceRotationSystem⟩
+
+/-- A finite-neighbor cyclic-order source supplies the rotation system needed
+by face-orbit construction. -/
+theorem nonempty_of_finiteUnitNeighborRotationSource
+    (S : FiniteUnitNeighborRotationSource C) :
+    Nonempty (UnitDistanceRotationSystem C) :=
+  ⟨S.toUnitDistanceRotationSystem⟩
+
+/-- The next outgoing dart in the cyclic order around the same tail vertex. -/
+def nextAround (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) : UnitDistanceDart C :=
+  ((R.rotationAt d.tail).next d.outgoing).1
+
+/-- The previous outgoing dart in the cyclic order around the same tail vertex. -/
+def prevAround (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) : UnitDistanceDart C :=
+  ((R.rotationAt d.tail).prev d.outgoing).1
+
+theorem nextAround_tail_eq (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (R.nextAround d).tail = d.tail :=
+  ((R.rotationAt d.tail).next d.outgoing).2
+
+theorem prevAround_tail_eq (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (R.prevAround d).tail = d.tail :=
+  ((R.rotationAt d.tail).prev d.outgoing).2
+
+theorem nextAround_adj (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (GraphBridge.unitDistanceSimpleGraph C).Adj
+      (R.nextAround d).tail (R.nextAround d).head :=
+  (R.nextAround d).adj
+
+theorem prevAround_adj (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (GraphBridge.unitDistanceSimpleGraph C).Adj
+      (R.prevAround d).tail (R.prevAround d).head :=
+  (R.prevAround d).adj
+
+/-- The face successor of a dart: reverse it, then advance around the new tail. -/
+def faceSucc (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) : UnitDistanceDart C :=
+  R.nextAround d.reverse
+
+theorem faceSucc_tail_eq_head (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (R.faceSucc d).tail = d.head := by
+  simpa [faceSucc] using R.nextAround_tail_eq d.reverse
+
+theorem faceSucc_adj (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (GraphBridge.unitDistanceSimpleGraph C).Adj
+      (R.faceSucc d).tail (R.faceSucc d).head :=
+  (R.faceSucc d).adj
+
+theorem faceSucc_dist_eq_one (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    _root_.eucDist (C.pts (R.faceSucc d).tail)
+      (C.pts (R.faceSucc d).head) = 1 :=
+  (R.faceSucc d).dist_eq_one
+
+theorem faceSucc_canonicalAdj (R : UnitDistanceRotationSystem C)
+    (d : UnitDistanceDart C) :
+    (canonicalGraph C).Adj (R.faceSucc d).tail (R.faceSucc d).head :=
+  (R.faceSucc d).canonicalAdj
+
+/-- At one boundary vertex, swap the incoming boundary dart with the outgoing
+boundary dart and leave all other outgoing darts fixed. -/
+def boundaryTurnSwap
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (j : Fin B.length) :
+    Equiv.Perm (OutgoingUnitDistanceDart C (B.vertex j)) := by
+  classical
+  exact
+    Equiv.swap
+      (α := OutgoingUnitDistanceDart C (B.vertex j))
+      ⟨(UnitDistanceDart.ofBoundary B
+          (PlanarInterface.cyclicPred B.length_pos j)).reverse, by
+        rw [UnitDistanceDart.reverse_tail]
+        rw [UnitDistanceDart.ofBoundary_head]
+        rw [PlanarInterface.cyclicSucc_cyclicPred]⟩
+      ⟨UnitDistanceDart.ofBoundary B j, rfl⟩
+
+/-- The boundary-turn swap transported to an arbitrary vertex known to be the
+given boundary vertex. -/
+def boundaryTurnSwapAt
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (v : Fin n) (j : Fin B.length) (hj : B.vertex j = v) :
+    Equiv.Perm (OutgoingUnitDistanceDart C v) :=
+  let e := OutgoingUnitDistanceDart.congr (C := C) hj
+  e.symm.trans ((boundaryTurnSwap (C := C) B j).trans e)
+
+/-- Concrete per-vertex cyclic order that follows the displayed boundary cycle
+whenever the vertex lies on that boundary. -/
+noncomputable def boundaryFollowingCyclicOrder
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (v : Fin n) :
+    VertexFiniteUnitNeighborCyclicOrder C v where
+  perm :=
+    if h : Exists fun j : Fin B.length => B.vertex j = v then
+      boundaryTurnSwapAt (C := C) B v (Classical.choose h)
+        (Classical.choose_spec h)
+    else
+      Equiv.refl _
+
+/-- Rotation system whose local successor rows advance along the supplied
+boundary cycle. -/
+noncomputable def ofBoundaryCycle
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C) :
+    UnitDistanceRotationSystem C :=
+  ofFiniteUnitNeighborCyclicOrderRows
+    (fun v => boundaryFollowingCyclicOrder (C := C) B v)
+
+end UnitDistanceRotationSystem
+
+/-- Actual face-successor rows for a concrete boundary cycle in a supplied
+rotation system.  This is the combinatorial data saying that the rotation
+system's face walk follows the displayed simple unit-distance cycle. -/
+structure UnitDistanceCycleFaceSuccRows
+    (C : _root_.UDConfig n) (R : UnitDistanceRotationSystem C)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C) where
+  faceSucc_eq_next :
+    forall k : Fin B.length,
+      R.faceSucc (UnitDistanceDart.ofBoundary B k) =
+        UnitDistanceDart.ofBoundary B
+          (PlanarInterface.cyclicSucc B.length_pos k)
+
+namespace UnitDistanceCycleFaceSuccRows
+
+variable {C : _root_.UDConfig n}
+
+/-- The boundary-following rotation system supplies concrete face-successor
+rows for the displayed unit-distance cycle. -/
+noncomputable def ofBoundaryCycle
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C) :
+    UnitDistanceCycleFaceSuccRows C
+      (UnitDistanceRotationSystem.ofBoundaryCycle (C := C) B) B where
+  faceSucc_eq_next := by
+    classical
+    intro k
+    let j := PlanarInterface.cyclicSucc B.length_pos k
+    have hmem : Exists fun t : Fin B.length => B.vertex t = B.vertex j :=
+      ⟨j, rfl⟩
+    have hchoose : Classical.choose hmem = j :=
+      B.simple (Classical.choose_spec hmem)
+    have hpred : PlanarInterface.cyclicPred B.length_pos j = k := by
+      simp [j, PlanarInterface.cyclicPred_cyclicSucc]
+    simp [UnitDistanceRotationSystem.ofBoundaryCycle,
+      UnitDistanceRotationSystem.faceSucc,
+      UnitDistanceRotationSystem.nextAround,
+      UnitDistanceRotationSystem.boundaryFollowingCyclicOrder,
+      UnitDistanceRotationSystem.boundaryTurnSwapAt,
+      UnitDistanceRotationSystem.boundaryTurnSwap,
+      UnitDistanceDart.outgoing,
+      OutgoingUnitDistanceDart.congr, j, hmem, hchoose, hpred]
+
+end UnitDistanceCycleFaceSuccRows
+
+/--
+A finite face orbit in a supplied rotation system, tied to a checked
+unit-distance cycle boundary.  The orbit records both dart succession and the
+agreement between dart endpoints and consecutive boundary-cycle vertices.
+-/
+structure FaceDartOrbit
+    (C : _root_.UDConfig n) (R : UnitDistanceRotationSystem C) where
+  boundary : JordanBoundaryConcrete.UnitDistanceCycleBoundary C
+  dart : Fin boundary.length -> UnitDistanceDart C
+  dart_tail_eq_vertex :
+    forall k, (dart k).tail = boundary.vertex k
+  dart_head_eq_succ_vertex :
+    forall k, (dart k).head =
+      boundary.vertex (PlanarInterface.cyclicSucc boundary.length_pos k)
+  faceSucc_eq_next :
+    forall k, R.faceSucc (dart k) =
+      dart (PlanarInterface.cyclicSucc boundary.length_pos k)
+
+namespace FaceDartOrbit
+
+variable {C : _root_.UDConfig n} {R : UnitDistanceRotationSystem C}
+
+/-- The orbit boundary is nondegenerate. -/
+theorem length_ge_three (O : FaceDartOrbit C R) :
+    3 <= O.boundary.length :=
+  O.boundary.length_ge_three
+
+/-- The orbit boundary as the existing boundary-cycle interface. -/
+def toBoundaryCycle (O : FaceDartOrbit C R) :
+    OuterBoundaryInterface.BoundaryCycle (canonicalGraph C) :=
+  O.boundary.toBoundaryCycle
+
+/-- The orbit boundary carries the checked simple-polygon witness. -/
+def toSimplePolygon (O : FaceDartOrbit C R) :
+    OuterBoundaryInterface.SimplePolygon (canonicalGraph C) O.toBoundaryCycle :=
+  O.boundary.toSimplePolygon
+
+/-- Build the concrete face orbit from a unit-distance cycle and the actual
+face-successor rows for that same cycle.  Simplicity/no-repeat comes from the
+cycle boundary itself. -/
+def ofBoundaryFaceSuccRows
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows : UnitDistanceCycleFaceSuccRows C R B) :
+    FaceDartOrbit C R where
+  boundary := B
+  dart := UnitDistanceDart.ofBoundary B
+  dart_tail_eq_vertex := by
+    intro k
+    rfl
+  dart_head_eq_succ_vertex := by
+    intro k
+    rfl
+  faceSucc_eq_next := rows.faceSucc_eq_next
+
+@[simp]
+theorem ofBoundaryFaceSuccRows_boundary
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows : UnitDistanceCycleFaceSuccRows C R B) :
+    (ofBoundaryFaceSuccRows B rows).boundary = B :=
+  rfl
+
+@[simp]
+theorem ofBoundaryFaceSuccRows_dart
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows : UnitDistanceCycleFaceSuccRows C R B)
+    (k : Fin B.length) :
+    (ofBoundaryFaceSuccRows B rows).dart k =
+      UnitDistanceDart.ofBoundary B k :=
+  rfl
+
+/-- Every dart in the orbit is an edge of the canonical straight-line graph. -/
+theorem dart_canonicalAdj (O : FaceDartOrbit C R)
+    (k : Fin O.boundary.length) :
+    (canonicalGraph C).Adj (O.dart k).tail (O.dart k).head :=
+  (O.dart k).canonicalAdj
+
+theorem dart_tail_injective (O : FaceDartOrbit C R) :
+    Function.Injective fun k : Fin O.boundary.length => (O.dart k).tail := by
+  intro i j h
+  apply O.boundary.simple
+  calc
+    O.boundary.vertex i = (O.dart i).tail := (O.dart_tail_eq_vertex i).symm
+    _ = (O.dart j).tail := h
+    _ = O.boundary.vertex j := O.dart_tail_eq_vertex j
+
+theorem dart_injective (O : FaceDartOrbit C R) :
+    Function.Injective O.dart := by
+  intro i j h
+  exact O.dart_tail_injective (congrArg UnitDistanceDart.tail h)
+
+/-- The constructed orbit has no repeated darts. -/
+theorem ofBoundaryFaceSuccRows_dart_injective
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows : UnitDistanceCycleFaceSuccRows C R B) :
+    Function.Injective (ofBoundaryFaceSuccRows B rows).dart :=
+  (ofBoundaryFaceSuccRows B rows).dart_injective
+
+/-- The face successor lands at the next boundary-cycle vertex. -/
+theorem faceSucc_tail_eq_next_vertex
+    (O : FaceDartOrbit C R) (k : Fin O.boundary.length) :
+    (R.faceSucc (O.dart k)).tail =
+      O.boundary.vertex
+        (PlanarInterface.cyclicSucc O.boundary.length_pos k) := by
+  rw [O.faceSucc_eq_next k]
+  exact O.dart_tail_eq_vertex _
+
+/-- The dart head is the same next boundary-cycle vertex as the face successor tail. -/
+theorem dart_head_eq_faceSucc_tail
+    (O : FaceDartOrbit C R) (k : Fin O.boundary.length) :
+    (O.dart k).head = (R.faceSucc (O.dart k)).tail := by
+  rw [O.faceSucc_tail_eq_next_vertex k]
+  exact O.dart_head_eq_succ_vertex k
+
+end FaceDartOrbit
+
+/--
+Exterior-face enclosure predicates for a concrete dart orbit.  These are the
+topological fields that remain to be proved from the exterior component; this
+record only packages them against the orbit that they describe.
+-/
+structure ExteriorDartOrbitEnclosure
+    (C : _root_.UDConfig n) (R : UnitDistanceRotationSystem C)
+    (O : FaceDartOrbit C R) where
+  exteriorDart : UnitDistanceDart C
+  exteriorDart_on_orbit :
+    Exists fun k : Fin O.boundary.length => O.dart k = exteriorDart
+  insideOrOn : PlanarInterface.Point -> Prop
+  onBoundary : Fin n -> Prop
+  boundary_vertex_onBoundary :
+    forall k : Fin O.boundary.length, onBoundary (O.boundary.vertex k)
+  boundary_point_insideOrOn :
+    forall k : Fin O.boundary.length,
+      insideOrOn ((canonicalGraph C).point (O.boundary.vertex k))
+  all_vertices_insideOrOn :
+    forall v : Fin n, insideOrOn ((canonicalGraph C).point v)
+  onBoundary_iff_orbit_vertex :
+    forall v : Fin n, onBoundary v <->
+      Exists fun k : Fin O.boundary.length => O.boundary.vertex k = v
+
+namespace ExteriorDartOrbitEnclosure
+
+variable {C : _root_.UDConfig n} {R : UnitDistanceRotationSystem C}
+variable {O : FaceDartOrbit C R}
+
+/-- Forget exterior-dart orbit enclosure rows to the existing Jordan enclosure. -/
+def toJordanOuterComponentEnclosure
+    (E : ExteriorDartOrbitEnclosure C R O) :
+    JordanBoundaryConcrete.JordanOuterComponentEnclosure C O.boundary where
+  insideOrOn := E.insideOrOn
+  onBoundary := E.onBoundary
+  boundary_vertex_onBoundary := E.boundary_vertex_onBoundary
+  boundary_point_insideOrOn := E.boundary_point_insideOrOn
+  all_vertices_insideOrOn := E.all_vertices_insideOrOn
+  onBoundary_iff_outer_cycle := E.onBoundary_iff_orbit_vertex
+
+theorem exteriorDart_mem_boundary
+    (E : ExteriorDartOrbitEnclosure C R O) :
+    Exists fun k : Fin O.boundary.length => O.dart k = E.exteriorDart :=
+  E.exteriorDart_on_orbit
+
+theorem onBoundary_of_orbit_vertex
+    (E : ExteriorDartOrbitEnclosure C R O) {v : Fin n}
+    (hv : Exists fun k : Fin O.boundary.length => O.boundary.vertex k = v) :
+    E.onBoundary v :=
+  (E.onBoundary_iff_orbit_vertex v).2 hv
+
+theorem exists_orbit_vertex_of_onBoundary
+    (E : ExteriorDartOrbitEnclosure C R O) {v : Fin n}
+    (hv : E.onBoundary v) :
+    Exists fun k : Fin O.boundary.length => O.boundary.vertex k = v :=
+  (E.onBoundary_iff_orbit_vertex v).1 hv
+
+theorem exteriorDart_tail_onBoundary
+    (E : ExteriorDartOrbitEnclosure C R O) :
+    E.onBoundary E.exteriorDart.tail := by
+  rcases E.exteriorDart_on_orbit with ⟨k, hk⟩
+  rw [← hk]
+  rw [O.dart_tail_eq_vertex k]
+  exact E.boundary_vertex_onBoundary k
+
+theorem exteriorDart_head_onBoundary
+    (E : ExteriorDartOrbitEnclosure C R O) :
+    E.onBoundary E.exteriorDart.head := by
+  rcases E.exteriorDart_on_orbit with ⟨k, hk⟩
+  rw [← hk]
+  rw [O.dart_head_eq_succ_vertex k]
+  exact
+    E.boundary_vertex_onBoundary
+      (PlanarInterface.cyclicSucc O.boundary.length_pos k)
+
+theorem exteriorDart_tail_point_insideOrOn
+    (E : ExteriorDartOrbitEnclosure C R O) :
+    E.insideOrOn ((canonicalGraph C).point E.exteriorDart.tail) :=
+  E.all_vertices_insideOrOn E.exteriorDart.tail
+
+theorem exteriorDart_head_point_insideOrOn
+    (E : ExteriorDartOrbitEnclosure C R O) :
+    E.insideOrOn ((canonicalGraph C).point E.exteriorDart.head) :=
+  E.all_vertices_insideOrOn E.exteriorDart.head
+
+/-- Promote a Jordan enclosure for the same face orbit to exterior-dart rows. -/
+def ofJordanOuterComponentEnclosure
+    (O : FaceDartOrbit C R)
+    (k0 : Fin O.boundary.length)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C O.boundary) :
+    ExteriorDartOrbitEnclosure C R O where
+  exteriorDart := O.dart k0
+  exteriorDart_on_orbit := ⟨k0, rfl⟩
+  insideOrOn := E.insideOrOn
+  onBoundary := E.onBoundary
+  boundary_vertex_onBoundary := E.boundary_vertex_onBoundary
+  boundary_point_insideOrOn := E.boundary_point_insideOrOn
+  all_vertices_insideOrOn := E.all_vertices_insideOrOn
+  onBoundary_iff_orbit_vertex := E.onBoundary_iff_outer_cycle
+
+@[simp]
+theorem toJordanOuterComponentEnclosure_ofJordanOuterComponentEnclosure
+    (O : FaceDartOrbit C R)
+    (k0 : Fin O.boundary.length)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C O.boundary) :
+    (ofJordanOuterComponentEnclosure O k0 E).toJordanOuterComponentEnclosure =
+      E :=
+  rfl
+
+end ExteriorDartOrbitEnclosure
+
+/--
+The complete local dart/rotation source for the finite planar theorem: a
+rotation system, one exterior face orbit in that system, and enclosure
+predicates proved for that same orbit.
+-/
+structure ExteriorDartOrbitSource (C : _root_.UDConfig n) where
+  rotation : UnitDistanceRotationSystem C
+  orbit : FaceDartOrbit C rotation
+  enclosure : ExteriorDartOrbitEnclosure C rotation orbit
+
+namespace ExteriorDartOrbitSource
+
+variable {C : _root_.UDConfig n}
+
+/-- Project the exterior dart orbit source to the positive chosen-cycle row. -/
+def toChosenJordanOuterComponentRow
+    (S : ExteriorDartOrbitSource C) :
+    JordanBoundaryConcrete.ChosenJordanOuterComponentRow C where
+  boundary := S.orbit.boundary
+  enclosure := S.enclosure.toJordanOuterComponentEnclosure
+
+/-- Build the exterior-dart source from a proved face orbit and matching
+Jordan enclosure for that same orbit boundary. -/
+def ofFaceDartOrbitAndJordanEnclosure
+    (R : UnitDistanceRotationSystem C)
+    (O : FaceDartOrbit C R)
+    (k0 : Fin O.boundary.length)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C O.boundary) :
+    ExteriorDartOrbitSource C where
+  rotation := R
+  orbit := O
+  enclosure :=
+    ExteriorDartOrbitEnclosure.ofJordanOuterComponentEnclosure O k0 E
+
+theorem nonempty_of_faceDartOrbit_jordanEnclosure
+    (R : UnitDistanceRotationSystem C)
+    (O : FaceDartOrbit C R)
+    (k0 : Fin O.boundary.length)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C O.boundary) :
+    Nonempty (ExteriorDartOrbitSource C) :=
+  ⟨ofFaceDartOrbitAndJordanEnclosure R O k0 E⟩
+
+/-- A supplied exterior dart orbit source gives the chosen outer component row. -/
+theorem gives_chosenJordanOuterComponentRow
+    (S : ExteriorDartOrbitSource C) :
+    Nonempty (JordanBoundaryConcrete.ChosenJordanOuterComponentRow C) :=
+  Nonempty.intro S.toChosenJordanOuterComponentRow
+
+end ExteriorDartOrbitSource
+
+/--
+The reduced S2 source package: a rotation system, one face orbit for that
+system, and Jordan outer-component enclosure predicates for exactly that orbit
+boundary.
+-/
+structure FaceOrbitJordanEnclosureSource (C : _root_.UDConfig n) where
+  rotation : UnitDistanceRotationSystem C
+  orbit : FaceDartOrbit C rotation
+  enclosure :
+    JordanBoundaryConcrete.JordanOuterComponentEnclosure C orbit.boundary
+
+namespace FaceOrbitJordanEnclosureSource
+
+variable {C : _root_.UDConfig n}
+
+/-- Promote the reduced source package to the exterior-dart-orbit source. -/
+def toExteriorDartOrbitSource
+    (S : FaceOrbitJordanEnclosureSource C) :
+    ExteriorDartOrbitSource C :=
+  let k0 : Fin S.orbit.boundary.length :=
+    ⟨0, S.orbit.boundary.length_pos⟩
+  ExteriorDartOrbitSource.ofFaceDartOrbitAndJordanEnclosure
+    S.rotation S.orbit k0 S.enclosure
+
+/-- Project the reduced source package directly to the chosen outer component. -/
+def toChosenJordanOuterComponentRow
+    (S : FaceOrbitJordanEnclosureSource C) :
+    JordanBoundaryConcrete.ChosenJordanOuterComponentRow C :=
+  S.toExteriorDartOrbitSource.toChosenJordanOuterComponentRow
+
+/-- Forget an exterior-dart source to the reduced face-orbit/Jordan-enclosure
+source package. -/
+def ofExteriorDartOrbitSource
+    (S : ExteriorDartOrbitSource C) :
+    FaceOrbitJordanEnclosureSource C where
+  rotation := S.rotation
+  orbit := S.orbit
+  enclosure := S.enclosure.toJordanOuterComponentEnclosure
+
+/-- The reduced source package is nonempty exactly when the exterior-dart
+source package is nonempty. -/
+theorem nonempty_iff_exteriorDartOrbitSource
+    (C : _root_.UDConfig n) :
+    Nonempty (FaceOrbitJordanEnclosureSource C) <->
+      Nonempty (ExteriorDartOrbitSource C) := by
+  constructor
+  · rintro ⟨S⟩
+    exact ⟨S.toExteriorDartOrbitSource⟩
+  · rintro ⟨S⟩
+    exact ⟨ofExteriorDartOrbitSource S⟩
+
+/-- A reduced source package gives the chosen outer-component row. -/
+theorem gives_chosenJordanOuterComponentRow
+    (S : FaceOrbitJordanEnclosureSource C) :
+    Nonempty (JordanBoundaryConcrete.ChosenJordanOuterComponentRow C) :=
+  Nonempty.intro S.toChosenJordanOuterComponentRow
+
+/-- Build the reduced face-orbit/Jordan-enclosure source from finite-neighbor
+rotation data and a face orbit for the assembled rotation system. -/
+def ofFiniteUnitNeighborRotationSource
+    (S : FiniteUnitNeighborRotationSource C)
+    (O : FaceDartOrbit C S.toUnitDistanceRotationSystem)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C O.boundary) :
+    FaceOrbitJordanEnclosureSource C where
+  rotation := S.toUnitDistanceRotationSystem
+  orbit := O
+  enclosure := E
+
+/-- Finite-neighbor rotation data plus a matching face orbit and Jordan
+enclosure inhabits the reduced S2 source package. -/
+theorem nonempty_of_finiteUnitNeighborRotationSource_faceDartOrbit_jordanEnclosure
+    (S : FiniteUnitNeighborRotationSource C)
+    (O : FaceDartOrbit C S.toUnitDistanceRotationSystem)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C O.boundary) :
+    Nonempty (FaceOrbitJordanEnclosureSource C) :=
+  ⟨ofFiniteUnitNeighborRotationSource S O E⟩
+
+/-- Build the reduced source directly from a concrete boundary cycle, its
+face-successor rows, and the matching Jordan enclosure. -/
+def ofBoundaryFaceSuccRows
+    (R : UnitDistanceRotationSystem C)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows : UnitDistanceCycleFaceSuccRows C R B)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C B) :
+    FaceOrbitJordanEnclosureSource C where
+  rotation := R
+  orbit := FaceDartOrbit.ofBoundaryFaceSuccRows B rows
+  enclosure := E
+
+/-- Concrete boundary successor rows plus the matching enclosure inhabit the
+reduced source package. -/
+theorem nonempty_of_boundaryFaceSuccRows_jordanEnclosure
+    (R : UnitDistanceRotationSystem C)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows : UnitDistanceCycleFaceSuccRows C R B)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C B) :
+    Nonempty (FaceOrbitJordanEnclosureSource C) :=
+  ⟨ofBoundaryFaceSuccRows R B rows E⟩
+
+end FaceOrbitJordanEnclosureSource
+
+namespace ExteriorDartOrbitSource
+
+variable {C : _root_.UDConfig n}
+
+/-- Build the exterior-dart source from concrete boundary face-successor rows
+and the matching Jordan enclosure. -/
+def ofBoundaryFaceSuccRows
+    (R : UnitDistanceRotationSystem C)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows : UnitDistanceCycleFaceSuccRows C R B)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C B) :
+    ExteriorDartOrbitSource C :=
+  (FaceOrbitJordanEnclosureSource.ofBoundaryFaceSuccRows
+    R B rows E).toExteriorDartOrbitSource
+
+/-- Concrete boundary successor rows plus the matching enclosure inhabit the
+exterior-dart source package. -/
+theorem nonempty_of_boundaryFaceSuccRows_jordanEnclosure
+    (R : UnitDistanceRotationSystem C)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows : UnitDistanceCycleFaceSuccRows C R B)
+    (E : JordanBoundaryConcrete.JordanOuterComponentEnclosure C B) :
+    Nonempty (ExteriorDartOrbitSource C) :=
+  ⟨ofBoundaryFaceSuccRows R B rows E⟩
+
+end ExteriorDartOrbitSource
+
+namespace FinitePlanarOuterComponentInputs
+
+variable {C : _root_.UDConfig n}
+
+/-- The concrete simple cycle supplied by the graph-side inputs, selected once
+for downstream orbit construction. -/
+def selectedBoundary (I : FinitePlanarOuterComponentInputs C) :
+    JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+  Classical.choice I.hasUnitDistanceCycle
+
+/-- The selected input cycle is nondegenerate. -/
+theorem selectedBoundary_length_ge_three
+    (I : FinitePlanarOuterComponentInputs C) :
+    3 <= I.selectedBoundary.length :=
+  I.selectedBoundary.length_ge_three
+
+/-- Build the selected simple face orbit once the actual face-successor rows are
+proved for the selected input cycle. -/
+def selectedFaceDartOrbit
+    (I : FinitePlanarOuterComponentInputs C)
+    (R : UnitDistanceRotationSystem C)
+    (rows : UnitDistanceCycleFaceSuccRows C R I.selectedBoundary) :
+    FaceDartOrbit C R :=
+  FaceDartOrbit.ofBoundaryFaceSuccRows I.selectedBoundary rows
+
+/-- The selected orbit has no repeated darts, by the checked cycle simplicity. -/
+theorem selectedFaceDartOrbit_dart_injective
+    (I : FinitePlanarOuterComponentInputs C)
+    (R : UnitDistanceRotationSystem C)
+    (rows : UnitDistanceCycleFaceSuccRows C R I.selectedBoundary) :
+    Function.Injective (I.selectedFaceDartOrbit R rows).dart :=
+  (I.selectedFaceDartOrbit R rows).dart_injective
+
+/-- The graph-side inputs give an exterior-dart source exactly when the selected
+cycle has real face-successor rows and a matching Jordan enclosure. -/
+def selectedExteriorDartOrbitSource
+    (I : FinitePlanarOuterComponentInputs C)
+    (R : UnitDistanceRotationSystem C)
+    (rows : UnitDistanceCycleFaceSuccRows C R I.selectedBoundary)
+    (E :
+      JordanBoundaryConcrete.JordanOuterComponentEnclosure
+        C I.selectedBoundary) :
+    ExteriorDartOrbitSource C :=
+  ExteriorDartOrbitSource.ofBoundaryFaceSuccRows
+    R I.selectedBoundary rows E
+
+/-- The graph-side inputs give the reduced face-orbit/Jordan-enclosure source
+once the selected cycle has real face-successor rows and a matching Jordan
+enclosure. -/
+def selectedFaceOrbitJordanEnclosureSource
+    (I : FinitePlanarOuterComponentInputs C)
+    (R : UnitDistanceRotationSystem C)
+    (rows : UnitDistanceCycleFaceSuccRows C R I.selectedBoundary)
+    (E :
+      JordanBoundaryConcrete.JordanOuterComponentEnclosure
+        C I.selectedBoundary) :
+    FaceOrbitJordanEnclosureSource C :=
+  FaceOrbitJordanEnclosureSource.ofBoundaryFaceSuccRows
+    R I.selectedBoundary rows E
+
+/-- Nonempty reduced source form for the selected input cycle. -/
+theorem nonempty_selectedFaceOrbitJordanEnclosureSource
+    (I : FinitePlanarOuterComponentInputs C)
+    (R : UnitDistanceRotationSystem C)
+    (rows : UnitDistanceCycleFaceSuccRows C R I.selectedBoundary)
+    (E :
+      JordanBoundaryConcrete.JordanOuterComponentEnclosure
+        C I.selectedBoundary) :
+    Nonempty (FaceOrbitJordanEnclosureSource C) :=
+  Nonempty.intro
+    (I.selectedFaceOrbitJordanEnclosureSource R rows E)
+
+end FinitePlanarOuterComponentInputs
+
+/--
+Sharper theorem surface for the dart/rotation route: instantiate the checked
+graph-side inputs with a genuine exterior dart orbit source.
+-/
+abbrev FinitePlanarStraightLineExteriorDartOrbitTheorem : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n),
+    FinitePlanarOuterComponentInputs C ->
+      Nonempty (ExteriorDartOrbitSource C)
+
+/--
+Precise missing theorem surface: from the checked connected/no-cut/noncrossing
+unit-distance graph data and the existence of a simple unit-distance cycle,
+choose the genuine outer-component cycle and prove its matching Jordan
+enclosure predicates.
+-/
+abbrev FinitePlanarStraightLineOuterComponentTheorem : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n),
+    FinitePlanarOuterComponentInputs C ->
+      Nonempty (JordanBoundaryConcrete.ChosenJordanOuterComponentRow C)
+
+/-- The exterior-dart-orbit theorem is enough for the existing S2 outer-component theorem. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_exteriorDartOrbitTheorem
+    (h : FinitePlanarStraightLineExteriorDartOrbitTheorem) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  fun C inputs =>
+    let source := h C inputs
+    Nonempty.elim source
+      (fun S => S.gives_chosenJordanOuterComponentRow)
+
+/-- The exterior-dart theorem is equivalent to producing the reduced
+face-orbit/Jordan-enclosure source for every checked graph input. -/
+theorem finitePlanarStraightLineExteriorDartOrbitTheorem_iff_faceOrbitJordanEnclosureSource :
+    FinitePlanarStraightLineExteriorDartOrbitTheorem <->
+      (forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Nonempty (FaceOrbitJordanEnclosureSource C)) := by
+  constructor
+  · intro h n C inputs
+    rcases h C inputs with ⟨S⟩
+    exact ⟨FaceOrbitJordanEnclosureSource.ofExteriorDartOrbitSource S⟩
+  · intro h n C inputs
+    rcases h C inputs with ⟨S⟩
+    exact ⟨S.toExteriorDartOrbitSource⟩
+
+/-- A family of reduced source packages proves the exterior-dart-orbit theorem. -/
+def finitePlanarStraightLineExteriorDartOrbitTheorem_of_faceOrbitJordanEnclosureSource
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Nonempty (FaceOrbitJordanEnclosureSource C)) :
+    FinitePlanarStraightLineExteriorDartOrbitTheorem :=
+  finitePlanarStraightLineExteriorDartOrbitTheorem_iff_faceOrbitJordanEnclosureSource.2
+    h
+
+/-- A family of reduced source packages proves the chosen outer-component
+theorem surface. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_faceOrbitJordanEnclosureSource
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Nonempty (FaceOrbitJordanEnclosureSource C)) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_exteriorDartOrbitTheorem
+    (finitePlanarStraightLineExteriorDartOrbitTheorem_of_faceOrbitJordanEnclosureSource
+      h)
+
+/-- It is enough to construct finite-neighbor cyclic order data, then a face
+orbit and Jordan enclosure for the rotation system assembled from it. -/
+def finitePlanarStraightLineExteriorDartOrbitTheorem_of_finiteUnitNeighborRotationSource_faceOrbitJordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun S : FiniteUnitNeighborRotationSource C =>
+            Exists fun O : FaceDartOrbit C S.toUnitDistanceRotationSystem =>
+              Nonempty
+                (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                  C O.boundary)) :
+    FinitePlanarStraightLineExteriorDartOrbitTheorem :=
+  finitePlanarStraightLineExteriorDartOrbitTheorem_of_faceOrbitJordanEnclosureSource
+    (fun C inputs => by
+      rcases h C inputs with ⟨S, O, ⟨E⟩⟩
+      exact
+        FaceOrbitJordanEnclosureSource.nonempty_of_finiteUnitNeighborRotationSource_faceDartOrbit_jordanEnclosure
+          S O E)
+
+/-- The same finite-neighbor cyclic-order rows also prove the chosen
+outer-component theorem surface once the matching face orbit and Jordan
+enclosure are supplied. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_finiteUnitNeighborRotationSource_faceOrbitJordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun S : FiniteUnitNeighborRotationSource C =>
+            Exists fun O : FaceDartOrbit C S.toUnitDistanceRotationSystem =>
+              Nonempty
+                (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                  C O.boundary)) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_exteriorDartOrbitTheorem
+    (finitePlanarStraightLineExteriorDartOrbitTheorem_of_finiteUnitNeighborRotationSource_faceOrbitJordanEnclosure
+      h)
+
+/-- It is enough to construct finite unit-neighbor cyclic angular order rows;
+their extracted per-vertex angular successors feed the angular-successor
+outer-component reduction directly. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_finiteUnitNeighborCyclicOrderRows
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun cyclicOrderAt :
+            ((v : Fin n) -> VertexFiniteUnitNeighborCyclicOrder C v) =>
+            Exists fun O :
+              FaceDartOrbit C
+                (FiniteUnitNeighborRotationSource.ofAngularSuccessor
+                  (VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows
+                    cyclicOrderAt)).toUnitDistanceRotationSystem =>
+              Nonempty
+                (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                  C O.boundary)) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_finiteUnitNeighborRotationSource_faceOrbitJordanEnclosure
+    (fun C inputs => by
+      rcases h C inputs with ⟨cyclicOrderAt, O, hE⟩
+      exact
+        ⟨FiniteUnitNeighborRotationSource.ofAngularSuccessor
+            (VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows
+              cyclicOrderAt),
+          O, hE⟩)
+
+/-- It is enough to construct the actual angular successor rows, then a face
+orbit and Jordan enclosure for the rotation system assembled from those rows. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_angularSuccessorRows
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun rotationAt :
+            ((v : Fin n) -> VertexCyclicAngularSuccessor C v) =>
+            Exists fun O :
+              FaceDartOrbit C
+                (FiniteUnitNeighborRotationSource.ofAngularSuccessor
+                  rotationAt).toUnitDistanceRotationSystem =>
+              Nonempty
+                (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                  C O.boundary)) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_finiteUnitNeighborCyclicOrderRows
+    (fun C inputs => by
+      rcases h C inputs with ⟨rotationAt, O, hE⟩
+      let cyclicOrderAt :=
+        (FiniteUnitNeighborRotationSource.ofAngularSuccessor
+          rotationAt).cyclicOrderAt
+      have hrows :
+          VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows
+              cyclicOrderAt =
+            rotationAt := by
+        change
+          (FiniteUnitNeighborRotationSource.ofAngularSuccessor
+            rotationAt).angularSuccessorRows = rotationAt
+        exact
+          FiniteUnitNeighborRotationSource.angularSuccessorRows_ofAngularSuccessor
+            rotationAt
+      have hrotation :
+          (FiniteUnitNeighborRotationSource.ofAngularSuccessor
+              (VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows
+                cyclicOrderAt)).toUnitDistanceRotationSystem =
+            (FiniteUnitNeighborRotationSource.ofAngularSuccessor
+              rotationAt).toUnitDistanceRotationSystem := by
+        rw [hrows]
+      cases hrotation
+      exact ⟨cyclicOrderAt, O, hE⟩)
+
+/-- It is enough to prove a genuine rotation-system face orbit and matching
+Jordan enclosure for that same orbit boundary. -/
+def finitePlanarStraightLineExteriorDartOrbitTheorem_of_faceOrbitJordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun R : UnitDistanceRotationSystem C =>
+            Exists fun O : FaceDartOrbit C R =>
+              Nonempty
+                (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                  C O.boundary)) :
+    FinitePlanarStraightLineExteriorDartOrbitTheorem :=
+  fun C inputs => by
+    rcases h C inputs with ⟨R, O, ⟨E⟩⟩
+    let k0 : Fin O.boundary.length := ⟨0, O.boundary.length_pos⟩
+    exact
+      ExteriorDartOrbitSource.nonempty_of_faceDartOrbit_jordanEnclosure
+        R O k0 E
+
+/-- The same concrete face-orbit/Jordan-enclosure rows also prove the
+outer-component theorem surface. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_faceOrbitJordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun R : UnitDistanceRotationSystem C =>
+            Exists fun O : FaceDartOrbit C R =>
+              Nonempty
+                (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                  C O.boundary)) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_exteriorDartOrbitTheorem
+    (finitePlanarStraightLineExteriorDartOrbitTheorem_of_faceOrbitJordanEnclosure h)
+
+/-- It is enough to supply a concrete simple unit-distance cycle, the actual
+face-successor rows showing that the rotation system follows that cycle, and a
+matching Jordan outer-component enclosure for that same cycle. -/
+def finitePlanarStraightLineExteriorDartOrbitTheorem_of_boundaryFaceSuccRows_jordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun R : UnitDistanceRotationSystem C =>
+            Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+              Exists fun _rows : UnitDistanceCycleFaceSuccRows C R B =>
+                Nonempty
+                  (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                    C B)) :
+    FinitePlanarStraightLineExteriorDartOrbitTheorem :=
+  finitePlanarStraightLineExteriorDartOrbitTheorem_of_faceOrbitJordanEnclosure
+    (fun C inputs => by
+      rcases h C inputs with ⟨R, B, rows, ⟨E⟩⟩
+      exact
+        ⟨R, FaceDartOrbit.ofBoundaryFaceSuccRows B rows,
+          ⟨E⟩⟩)
+
+/-- Concrete cycle face-successor rows plus the matching Jordan enclosure prove
+the finite planar straight-line outer-component theorem surface. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_boundaryFaceSuccRows_jordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun R : UnitDistanceRotationSystem C =>
+            Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+              Exists fun _rows : UnitDistanceCycleFaceSuccRows C R B =>
+                Nonempty
+                  (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                    C B)) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_exteriorDartOrbitTheorem
+    (finitePlanarStraightLineExteriorDartOrbitTheorem_of_boundaryFaceSuccRows_jordanEnclosure
+      h)
+
+/-- It is enough to prove face-successor rows and a matching Jordan enclosure
+for the unit-distance cycle already selected from the graph-side inputs.  This
+is the selected-boundary variant of
+`finitePlanarStraightLineExteriorDartOrbitTheorem_of_boundaryFaceSuccRows_jordanEnclosure`
+with the separate cycle-choice field eliminated. -/
+def finitePlanarStraightLineExteriorDartOrbitTheorem_of_selectedBoundaryFaceSuccRows_jordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun R : UnitDistanceRotationSystem C =>
+            Exists fun _rows :
+              UnitDistanceCycleFaceSuccRows C R inputs.selectedBoundary =>
+                Nonempty
+                  (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                    C inputs.selectedBoundary)) :
+    FinitePlanarStraightLineExteriorDartOrbitTheorem :=
+  finitePlanarStraightLineExteriorDartOrbitTheorem_of_boundaryFaceSuccRows_jordanEnclosure
+    (fun C inputs => by
+      rcases h C inputs with ⟨R, rows, hE⟩
+      exact ⟨R, inputs.selectedBoundary, rows, hE⟩)
+
+/-- Selected-boundary face-successor rows plus the matching Jordan enclosure
+prove the finite planar straight-line outer-component theorem surface. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_selectedBoundaryFaceSuccRows_jordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun R : UnitDistanceRotationSystem C =>
+            Exists fun _rows :
+              UnitDistanceCycleFaceSuccRows C R inputs.selectedBoundary =>
+                Nonempty
+                  (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                    C inputs.selectedBoundary)) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_exteriorDartOrbitTheorem
+    (finitePlanarStraightLineExteriorDartOrbitTheorem_of_selectedBoundaryFaceSuccRows_jordanEnclosure
+      h)
+
+/-- It is enough to construct finite-neighbor rotation data, a concrete cycle
+whose face-successor rows are computed in the assembled rotation system, and
+the matching Jordan enclosure. -/
+def finitePlanarStraightLineExteriorDartOrbitTheorem_of_finiteUnitNeighborRotationSource_boundaryFaceSuccRows_jordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun S : FiniteUnitNeighborRotationSource C =>
+            Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+              Exists fun _rows :
+                UnitDistanceCycleFaceSuccRows
+                  C S.toUnitDistanceRotationSystem B =>
+                Nonempty
+                  (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                    C B)) :
+    FinitePlanarStraightLineExteriorDartOrbitTheorem :=
+  finitePlanarStraightLineExteriorDartOrbitTheorem_of_faceOrbitJordanEnclosureSource
+    (fun C inputs => by
+      rcases h C inputs with ⟨S, B, rows, ⟨E⟩⟩
+      exact
+        FaceOrbitJordanEnclosureSource.nonempty_of_boundaryFaceSuccRows_jordanEnclosure
+          S.toUnitDistanceRotationSystem B rows E)
+
+/-- Finite-neighbor rotation rows together with concrete face-successor rows
+for a simple exterior unit-distance cycle and the matching Jordan enclosure
+prove the finite planar straight-line outer-component theorem surface. -/
+def finitePlanarStraightLineOuterComponentTheorem_of_finiteUnitNeighborRotationSource_boundaryFaceSuccRows_jordanEnclosure
+    (h :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        FinitePlanarOuterComponentInputs C ->
+          Exists fun S : FiniteUnitNeighborRotationSource C =>
+            Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+              Exists fun _rows :
+                UnitDistanceCycleFaceSuccRows
+                  C S.toUnitDistanceRotationSystem B =>
+                Nonempty
+                  (JordanBoundaryConcrete.JordanOuterComponentEnclosure
+                    C B)) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_exteriorDartOrbitTheorem
+    (finitePlanarStraightLineExteriorDartOrbitTheorem_of_finiteUnitNeighborRotationSource_boundaryFaceSuccRows_jordanEnclosure
+      h)
+
+/-- Minimal failure plus an already proved no-cut theorem supplies all checked
+graph-side inputs for the missing finite planar outer-component theorem. -/
+theorem finitePlanarOuterComponentInputs_of_minimalFailure_noCutVertex
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (hno : CutVertexInterface.NoCutVertex C) :
+    FinitePlanarOuterComponentInputs C where
+  connected :=
+    MinimalConnectednessClosure.unitDistanceSimpleGraph_connected_of_minimalClearedFailure
+      (C := C) hmin
+  noCutVertex := hno
+  pairwiseNoncrossing := (canonicalGraph C).pairwiseNoncrossing
+  hasUnitDistanceCycle :=
+    JordanBoundaryConcrete.nonempty_unitDistanceCycleBoundary_of_minimalClearedFailure
+      (C := C) hmin
+
+/-- The existing `MinimalFailureGraphRoute` supplies the checked graph-side
+inputs once the remaining cycle existence from minimality is added. -/
+theorem finitePlanarOuterComponentInputs_of_graphRoute
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (route : MinimalFailureGraphRoute C) :
+    FinitePlanarOuterComponentInputs C where
+  connected := route.connectedNoCutDegreeRange.connected
+  noCutVertex := route.connectedNoCutDegreeRange.noCutVertex
+  pairwiseNoncrossing := route.pairwiseNoncrossing
+  hasUnitDistanceCycle :=
+    JordanBoundaryConcrete.nonempty_unitDistanceCycleBoundary_of_minimalClearedFailure
+      (C := C) hmin
+
+/-- Minimality plus the current no-cut slack payload supplies the checked
+graph-side inputs for the missing finite planar outer-component theorem. -/
+theorem finitePlanarOuterComponentInputs_of_minimalFailure_remainingSlack
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
+    (hslack : CutVertexFinal.RemainingNoCutSlackFact C) :
+    FinitePlanarOuterComponentInputs C :=
+  finitePlanarOuterComponentInputs_of_graphRoute
+    (C := C) hmin
+    (graphRoute_of_minimalFailure_remainingSlack
+      (C := C) hmin hslack)
+
+/-- If the finite planar outer-component theorem is proved, and no-cut is
+available for minimal failures, then the live S2 chosen-cycle row family follows
+without fixing the canonical girth cycle. -/
+noncomputable def minimalFailureChosenRows_of_finitePlanarOuterComponentTheorem
+    (outerComponent :
+      FinitePlanarStraightLineOuterComponentTheorem)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    JordanBoundaryConcrete.MinimalFailureChosenJordanOuterComponentRows :=
+  fun {n} C hmin =>
+    Classical.choice
+      (outerComponent C
+        (finitePlanarOuterComponentInputs_of_minimalFailure_noCutVertex
+          (C := C) hmin (noCutRows (n := n) C hmin)))
+
 /-- The raw face/enclosure field is exactly nonempty concrete topology facts. -/
 theorem exactOuterBoundaryTopologyFields_iff_topologyFacts
     (C : _root_.UDConfig n) :
@@ -1185,9 +2835,7 @@ theorem exactOuterBoundaryTopologyFields_iff_topologyFacts
         enclosureData :=
           { outerEnclosure := E } }⟩
   · rintro ⟨T⟩
-    exact
-      ⟨T.faceBoundary, T.outerFace, T.outerFace_isOuter,
-        ⟨T.outerEnclosure⟩⟩
+    exact exactOuterBoundaryTopologyFields_of_topologyFacts T
 
 /-- The raw face/enclosure field is exactly nonempty missing-topology facts. -/
 theorem exactOuterBoundaryTopologyFields_iff_missingTopologyFacts
@@ -1203,9 +2851,7 @@ theorem exactOuterBoundaryTopologyFields_iff_missingTopologyFacts
         outerFace_isOuter := hF
         outerEnclosure := E }⟩
   · rintro ⟨T⟩
-    exact
-      ⟨T.faceBoundary, T.outerFace, T.outerFace_isOuter,
-        ⟨T.outerEnclosure⟩⟩
+    exact exactOuterBoundaryTopologyFields_of_missingTopologyFacts T
 
 /-- The raw face/enclosure field is exactly nonempty checked core data. -/
 theorem exactOuterBoundaryTopologyFields_iff_outerBoundaryCore
@@ -1221,9 +2867,7 @@ theorem exactOuterBoundaryTopologyFields_iff_outerBoundaryCore
         outerFace_isOuter := hF
         outerEnclosure := E }⟩
   · rintro ⟨P⟩
-    exact
-      ⟨P.faceBoundary, P.outerFace, P.outerFace_isOuter,
-        ⟨P.outerEnclosure⟩⟩
+    exact exactOuterBoundaryTopologyFields_of_outerBoundaryCore P
 
 /--
 Topology completion after the graph route is cleared.  The equivalence below

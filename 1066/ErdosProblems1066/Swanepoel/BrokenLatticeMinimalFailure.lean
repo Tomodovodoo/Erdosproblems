@@ -1,4 +1,5 @@
 import ErdosProblems1066.Swanepoel.BrokenLatticeInterface
+import ErdosProblems1066.Swanepoel.BrokenLatticePipeline
 
 /-!
 # Broken-lattice closure for minimal cleared failures
@@ -14,6 +15,7 @@ namespace Swanepoel
 namespace BrokenLatticeMinimalFailure
 
 open BrokenLatticeInterface
+open BrokenLatticePipeline
 open GraphBridge
 open Lemma10AnalyticBridge
 open Lemma10Bridge
@@ -55,12 +57,53 @@ def toInterfaceData {n : Nat} {C : _root_.UDConfig n}
   figure9_E23 := D.figure9_E23
   lateTriples := D.lateTriples
 
+/-- Forget the full construction data to the exact honest-local-predicate fact
+used by `BrokenLatticePipeline.exists_m8_honestLocalPredicates_of_minimalFailure`.
+-/
+def toHonestLocalPredicatesFacts {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8ConstructionData C hmin) :
+    MinimalFailureM8HonestLocalPredicatesFacts C hmin :=
+  MinimalFailureM8HonestLocalPredicatesFacts.ofHonestLocalPredicates
+    D.predicates
+
+@[simp]
+theorem toHonestLocalPredicatesFacts_toHonestLocalPredicates
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8ConstructionData C hmin) :
+    D.toHonestLocalPredicatesFacts.toHonestLocalPredicates =
+      D.predicates := by
+  rfl
+
+/-- The named minimal-failure existential, specialized to an honest
+construction-data source package. -/
+theorem exists_honestLocalPredicates {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    (D : M8ConstructionData C hmin) :
+    Exists fun P : M8HonestLocalPredicates (unitDistanceLocalGraph C) =>
+      P = D.predicates := by
+  exact
+    exists_m8_honestLocalPredicates_of_minimalFailure
+      D.toHonestLocalPredicatesFacts
+
+/-- The construction-data contradiction is exactly the honest E22/E23 route.
+-/
+theorem contradiction_via_honestE22E23 {n : Nat}
+    {C : _root_.UDConfig n} {hmin : IsMinimalClearedFailure C}
+    (D : M8ConstructionData C hmin) :
+    False := by
+  exact Lemma10AnalyticBridge.honestContradiction_of_E22_E23
+    D.predicates D.turn D.turn_nonnegative
+    D.total_turn_lt_pi_div_three D.figure8_E22 D.figure9_E23
+    D.lateTriples
+
 /-- The construction data for a minimal cleared failure is contradictory. -/
 theorem contradiction {n : Nat} {C : _root_.UDConfig n}
     {hmin : IsMinimalClearedFailure C}
     (D : M8ConstructionData C hmin) :
     False := by
-  exact D.toInterfaceData.contradiction
+  exact D.contradiction_via_honestE22E23
 
 end M8ConstructionData
 

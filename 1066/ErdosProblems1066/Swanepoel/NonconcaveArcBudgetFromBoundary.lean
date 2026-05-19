@@ -505,8 +505,11 @@ theorem toM8TurnBounds_totalTurn_eq_raw_m8ThirteenTurnSum
     (D : NonconcaveArcBoundaryBudgetData.{u} G) :
     totalTurn D.toM8TurnBounds.turn =
       m8ThirteenTurnSum D.rawTurn := by
-  simpa [D.raw_totalTurn_eq_m8ThirteenTurnSum] using
-    D.toM8TurnBounds_totalTurn_eq_rawTurn
+  calc
+    totalTurn D.toM8TurnBounds.turn = totalTurn D.rawTurn :=
+      D.toM8TurnBounds_totalTurn_eq_rawTurn
+    _ = m8ThirteenTurnSum D.rawTurn :=
+      D.raw_totalTurn_eq_m8ThirteenTurnSum
 
 /-- The normalized M8 total turn is bounded by the boundary angle budget. -/
 theorem toM8TurnBounds_totalTurn_le_boundaryBudget
@@ -1017,9 +1020,155 @@ variable {Subpolygon : Type u}
 variable {subpolygonData :
   Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G}
 
+/-- A concavity subtype of the actual boundary-walk long-arc indices has
+cardinality bounded by the computed long-arc count. -/
+theorem concaveLongArcCount_le_boundaryLongArcCount
+    (concave : walk.data.longArcIndices -> Prop)
+    [concaveLongArcFintype :
+      Fintype {a : walk.data.longArcIndices // concave a}] :
+    @Fintype.card {a : walk.data.longArcIndices // concave a}
+        concaveLongArcFintype <= walk.counts.B := by
+  have hsub :
+      @Fintype.card {a : walk.data.longArcIndices // concave a}
+          concaveLongArcFintype <=
+        @Fintype.card walk.data.longArcIndices inferInstance :=
+    Fintype.card_subtype_le concave
+  have hlong :
+      @Fintype.card walk.data.longArcIndices inferInstance =
+        walk.counts.B :=
+    (BoundaryWalkBookkeeping.toBoundaryBookkeeping_B walk.data).symm
+  simpa [hlong] using hsub
+
+/-- Boundary E12 plus Lemma 6/7-style coverage gives the strict count gap
+required by `BoundaryWalkLongArcFacts`, with the long-arc type fixed to the
+actual boundary-walk long-arc subtype. -/
+theorem concaveLongArcCount_lt_boundaryLongArcCount_of_coverage
+    {geometricAngleSum : Real}
+    {forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum}
+    {geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum}
+    {Subpolygon : Type u}
+    {subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G}
+    (concave : walk.data.longArcIndices -> Prop)
+    [concaveLongArcFintype :
+      Fintype {a : walk.data.longArcIndices // concave a}]
+    (degreeThree_le_negativeCount_add_longArcCount :
+      walk.counts.d3 <= walk.counts.negativeCount +
+        @Fintype.card walk.data.longArcIndices inferInstance) :
+    @Fintype.card {a : walk.data.longArcIndices // concave a}
+        concaveLongArcFintype < walk.counts.B := by
+  let D : PlanarBoundaryClosure.PlanarBoundaryData.{u} G :=
+    walk.toPlanarBoundaryData geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData
+  have hboundary :
+      walk.counts.negativeCount + walk.counts.B + 6 <=
+        walk.counts.d3 := by
+    simpa [D] using
+      PlanarBoundaryFinal.PlanarBoundaryData.boundaryNegativeCountInequality_viaBoundaryCounting
+        D
+  have hlong :
+      @Fintype.card walk.data.longArcIndices inferInstance =
+        walk.counts.B :=
+    (BoundaryWalkBookkeeping.toBoundaryBookkeeping_B walk.data).symm
+  have hcoverage :
+      walk.counts.d3 <= walk.counts.negativeCount + walk.counts.B := by
+    simpa [hlong] using degreeThree_le_negativeCount_add_longArcCount
+  have hconcave :
+      @Fintype.card {a : walk.data.longArcIndices // concave a}
+          concaveLongArcFintype <= walk.counts.B :=
+    concaveLongArcCount_le_boundaryLongArcCount (walk := walk) concave
+  omega
+
+/-- Build boundary-walk long-arc facts once the concrete coverage inequality
+and raw-turn/concavity interpretation have been supplied.  The finite concave
+count comparison is derived from the classified boundary data. -/
+def ofCoverageAndTurns
+    (concave : walk.data.longArcIndices -> Prop)
+    [concaveLongArcFintype :
+      Fintype {a : walk.data.longArcIndices // concave a}]
+    (degreeThree_le_negativeCount_add_longArcCount :
+      walk.counts.d3 <= walk.counts.negativeCount +
+        @Fintype.card walk.data.longArcIndices inferInstance)
+    (rawTurn : walk.data.longArcIndices -> Nat -> Real)
+    (rawTurn_nonnegative_on_arc :
+      forall a : walk.data.longArcIndices,
+        forall k : Nat, Membership.mem turnIndexSet k -> 0 <= rawTurn a k)
+    (concave_iff :
+      forall a : walk.data.longArcIndices,
+        concave a <-> Real.pi / 3 <= totalTurn (rawTurn a)) :
+    BoundaryWalkLongArcFacts walk geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData where
+  concave := concave
+  concaveLongArcFintype := concaveLongArcFintype
+  concaveLongArcCount_lt_boundaryLongArcCount :=
+    concaveLongArcCount_lt_boundaryLongArcCount_of_coverage
+      (walk := walk) (geometricAngleSum := geometricAngleSum)
+      (forced_le_geometric := forced_le_geometric)
+      (geometric_le_polygon := geometric_le_polygon)
+      (Subpolygon := Subpolygon) (subpolygonData := subpolygonData)
+      concave degreeThree_le_negativeCount_add_longArcCount
+  rawTurn := rawTurn
+  rawTurn_nonnegative_on_arc := rawTurn_nonnegative_on_arc
+  concave_iff := concave_iff
+
+/-- The canonical raw-turn interpretation of concavity for boundary-walk
+long arcs. -/
+def rawTurnConcave
+    (rawTurn : walk.data.longArcIndices -> Nat -> Real)
+    (a : walk.data.longArcIndices) : Prop :=
+  Real.pi / 3 <= totalTurn (rawTurn a)
+
+@[simp]
+theorem rawTurnConcave_iff
+    (rawTurn : walk.data.longArcIndices -> Nat -> Real)
+    (a : walk.data.longArcIndices) :
+    rawTurnConcave (walk := walk) rawTurn a <->
+      Real.pi / 3 <= totalTurn (rawTurn a) :=
+  Iff.rfl
+
+/-- Build boundary-walk long-arc facts from the concrete coverage inequality
+and raw turns, with concavity interpreted definitionally by the raw total-turn
+threshold. -/
+def ofCoverageAndRawTurns
+    (degreeThree_le_negativeCount_add_longArcCount :
+      walk.counts.d3 <= walk.counts.negativeCount +
+        @Fintype.card walk.data.longArcIndices inferInstance)
+    (rawTurn : walk.data.longArcIndices -> Nat -> Real)
+    (rawTurn_nonnegative_on_arc :
+      forall a : walk.data.longArcIndices,
+        forall k : Nat, Membership.mem turnIndexSet k -> 0 <= rawTurn a k) :
+    BoundaryWalkLongArcFacts walk geometricAngleSum forced_le_geometric
+      geometric_le_polygon Subpolygon subpolygonData := by
+  classical
+  exact
+    ofCoverageAndTurns
+      (walk := walk) (geometricAngleSum := geometricAngleSum)
+      (forced_le_geometric := forced_le_geometric)
+      (geometric_le_polygon := geometric_le_polygon)
+      (Subpolygon := Subpolygon) (subpolygonData := subpolygonData)
+      (concave := rawTurnConcave (walk := walk) rawTurn)
+      degreeThree_le_negativeCount_add_longArcCount rawTurn
+      rawTurn_nonnegative_on_arc
+      (by
+        intro a
+        rfl)
+
 /-- The planar-boundary data constructed from the same classified boundary
 walk and subpolygon data. -/
 def planarBoundary
+    {walk :
+      OuterBoundaryWalkBookkeeping P IsTriangle IsNontriangle
+        IsDegree3 IsDegree4 IsDegree5 IsDegree6}
+    {geometricAngleSum : Real}
+    {forced_le_geometric :
+      walk.counts.forcedBoundaryAngleSum <= geometricAngleSum}
+    {geometric_le_polygon :
+      geometricAngleSum <= walk.counts.polygonAngleSum}
+    {Subpolygon : Type u}
+    {subpolygonData :
+      Subpolygon -> SubpolygonAssembly.SubpolygonCycleCountAngleData G}
     (_F :
       BoundaryWalkLongArcFacts walk geometricAngleSum
         forced_le_geometric geometric_le_polygon Subpolygon subpolygonData) :

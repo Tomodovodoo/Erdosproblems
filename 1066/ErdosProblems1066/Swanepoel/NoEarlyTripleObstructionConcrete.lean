@@ -554,6 +554,27 @@ def concreteNoEarlyTripleEquality_of_K23Obstruction_minimalFailure
     H (finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
       hmin hred)
 
+/-- Minimal-failure finite local exclusions for the unit-distance local graph,
+with the `K_{2,3}` reducibility input supplied by the checked unit-distance
+common-neighbor theorem. -/
+def finiteLocalExclusions_of_minimalFailure_unitDistanceConfig
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : IsMinimalClearedFailure C) :
+    FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C) :=
+  finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
+    hmin (K23DegreeReducible_of_unitDistanceConfig C)
+
+/-- Minimal-failure local exclusions route a `K_{2,3}` obstruction into the
+concrete no-early package with no separate degree-reduction premise. -/
+def concreteNoEarlyTripleEquality_of_K23Obstruction_minimalFailure_noAssumptions
+    {n : Nat} {C : _root_.UDConfig n}
+    {P : BrokenLatticePredicates (GraphBridge.unitDistanceLocalGraph C) 8}
+    (H : M8ConcreteK23ObstructionInputs P)
+    (hmin : IsMinimalClearedFailure C) :
+    M8ConcreteNoEarlyTripleEquality P :=
+  concreteNoEarlyTripleEquality_of_K23Obstruction_and_finiteLocalExclusions
+    H (finiteLocalExclusions_of_minimalFailure_unitDistanceConfig hmin)
+
 /-- Minimal-failure finite local exclusions route a `K_{2,3}` obstruction into
 the raw late-triples predicate. -/
 theorem brokenLatticeLateTriples_of_K23Obstruction_minimalFailure
@@ -565,6 +586,17 @@ theorem brokenLatticeLateTriples_of_K23Obstruction_minimalFailure
     M8BrokenLatticeLateTriples P :=
   (concreteNoEarlyTripleEquality_of_K23Obstruction_minimalFailure
     H hmin hred).toBrokenLatticeLateTriples
+
+/-- Minimal-failure local exclusions route a `K_{2,3}` obstruction into the
+raw late-triples predicate with no separate degree-reduction premise. -/
+theorem brokenLatticeLateTriples_of_K23Obstruction_minimalFailure_noAssumptions
+    {n : Nat} {C : _root_.UDConfig n}
+    {P : BrokenLatticePredicates (GraphBridge.unitDistanceLocalGraph C) 8}
+    (H : M8ConcreteK23ObstructionInputs P)
+    (hmin : IsMinimalClearedFailure C) :
+    M8BrokenLatticeLateTriples P :=
+  (concreteNoEarlyTripleEquality_of_K23Obstruction_minimalFailure_noAssumptions
+    H hmin).toBrokenLatticeLateTriples
 
 /-! ## Packaged K23 obstruction plus arc-angle data -/
 
@@ -661,6 +693,21 @@ def k23ArcAngleObstructionData_of_minimalFailure
   finiteLocalExclusions :=
     finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
       hmin hred
+  arcAngleData := D
+
+/-- Minimal-failure local exclusions package K23 obstruction and arc/angle
+data directly, with the unit-distance common-neighbor theorem discharging the
+older `K23DegreeReducible` premise. -/
+def k23ArcAngleObstructionData_of_minimalFailure_noAssumptions
+    {n : Nat} {C : _root_.UDConfig n}
+    {P : M8HonestLocalPredicates (GraphBridge.unitDistanceLocalGraph C)}
+    (H : M8ConcreteK23ObstructionInputs P.data)
+    (hmin : IsMinimalClearedFailure C)
+    (D : M8TurnBoundsFromArc.M8ArcAngleData P) :
+    M8ConcreteK23ArcAngleObstructionData P where
+  k23Obstruction := H
+  finiteLocalExclusions :=
+    finiteLocalExclusions_of_minimalFailure_unitDistanceConfig hmin
   arcAngleData := D
 
 /-! ## Packaged K23 obstruction plus turn/window data -/
@@ -824,6 +871,25 @@ def k23TurnWindowObstructionData_of_minimalFailure
       hmin hred
   windowContainment := W
 
+/-- Minimal-failure finite local exclusions package the K23 obstruction and
+turn/window data directly, with no separate degree-reduction premise. -/
+def k23TurnWindowObstructionData_of_minimalFailure_noAssumptions
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8ConcreteK23TurnWindowObstructionData C hmin where
+  localLabels := localLabels
+  arc := A
+  k23Obstruction := H
+  finiteLocalExclusions :=
+    finiteLocalExclusions_of_minimalFailure_unitDistanceConfig hmin
+  windowContainment := W
+
 /-! ## Direct turn/window composition from K23 obstruction data -/
 
 /-- Direct composition theorem: K23 obstruction data, finite local exclusions,
@@ -878,6 +944,21 @@ def turnWindowNoEarlyPackage_of_K23Obstruction_minimalFailure
     M8TurnWindowNoEarlyFinal.M8TurnWindowNoEarlyPackage C hmin :=
   (k23TurnWindowObstructionData_of_minimalFailure
     (C := C) (hmin := hmin) (localLabels := localLabels) A H hred W).toTurnWindowNoEarlyPackage
+
+/-- Direct minimal-failure specialization of the K23 obstruction route into the
+turn/window/no-early package, with no separate degree-reduction premise. -/
+def turnWindowNoEarlyPackage_of_K23Obstruction_minimalFailure_noAssumptions
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    M8TurnWindowNoEarlyFinal.M8TurnWindowNoEarlyPackage C hmin :=
+  (k23TurnWindowObstructionData_of_minimalFailure_noAssumptions
+    (C := C) (hmin := hmin) (localLabels := localLabels) A H W).toTurnWindowNoEarlyPackage
 
 /-- The direct finite-local-exclusion K23 route supplies the strongest current
 window/no-early construction fields. -/
@@ -973,6 +1054,21 @@ theorem contradiction_of_K23Obstruction_minimalFailure_and_turnWindow
     False :=
   (turnWindowNoEarlyPackage_of_K23Obstruction_minimalFailure
     (hmin := hmin) A H hred W).contradiction
+
+/-- Unit-distance local exclusions close the direct K23 turn/window route for a
+fixed minimal cleared failure, without a separate degree-reduction premise. -/
+theorem contradiction_of_K23Obstruction_minimalFailure_noAssumptions_and_turnWindow
+    {n : Nat} {C : _root_.UDConfig n}
+    {hmin : IsMinimalClearedFailure C}
+    {localLabels : M8ConstructionInterface.M8LocalLabels C}
+    (A : M8TurnBoundsFromArc.NonconcaveArcTurnData)
+    (H : M8ConcreteK23ObstructionInputs localLabels.predicates.data)
+    (W :
+      M8WindowGeometryFromContainment.M8WindowContainment
+        localLabels A.toM8TurnBounds) :
+    False :=
+  (turnWindowNoEarlyPackage_of_K23Obstruction_minimalFailure_noAssumptions
+    (hmin := hmin) A H W).contradiction
 
 /-! ## Uniform K23 turn/window eliminator -/
 
@@ -1118,6 +1214,20 @@ theorem contradiction_of_K23Obstruction_minimalFailure_and_arcAngleData
     [DecidablePred (M8BrokenLatticeGood P.data)] :
     False :=
   (k23ArcAngleObstructionData_of_minimalFailure H hmin hred D).contradiction
+
+/-- A `K_{2,3}` obstruction, unit-distance minimal-failure local exclusions,
+and arc/angle data close the local finite `m = 8` contradiction without a
+separate degree-reduction premise. -/
+theorem contradiction_of_K23Obstruction_minimalFailure_noAssumptions_and_arcAngleData
+    {n : Nat} {C : _root_.UDConfig n}
+    (P : M8HonestLocalPredicates (GraphBridge.unitDistanceLocalGraph C))
+    (H : M8ConcreteK23ObstructionInputs P.data)
+    (hmin : IsMinimalClearedFailure C)
+    (D : M8TurnBoundsFromArc.M8ArcAngleData P)
+    [DecidablePred (M8BrokenLatticeGood P.data)] :
+    False :=
+  (k23ArcAngleObstructionData_of_minimalFailure_noAssumptions
+    H hmin D).contradiction
 
 end NoEarlyTripleObstructionConcrete
 end Swanepoel

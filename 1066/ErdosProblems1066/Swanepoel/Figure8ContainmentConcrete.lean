@@ -149,6 +149,109 @@ theorem E22_of_containmentInterface
   E22_of_windowGeometry
     (windowGeometry_of_containmentInterface H)
 
+/-! ## Atomic rows to the real containment interface -/
+
+/-- Raw separated Figure 8 distance witnesses for every separated failed
+pair. -/
+def Figure8SeparatedDistanceWitnessRows
+    (good : Nat -> Prop) : Prop :=
+  forall {i j : Nat},
+    1 <= i -> i + 1 < j -> j <= 10 ->
+    Not (good i) -> Not (good j) ->
+      Exists fun p : Point =>
+      Exists fun qi : Point =>
+      Exists fun qj : Point =>
+      Exists fun s : Point =>
+      Exists fun r : Point =>
+        Figure8DistanceData p qi qj s r
+
+/-- The actual separated Figure 8 central-angle containment row for every
+compatible distance package at a separated failed pair. -/
+def Figure8SeparatedCentralAngleContainmentRows
+    (good : Nat -> Prop) (turn : Nat -> Real) : Prop :=
+  forall {i j : Nat} {p qi qj s r : Point},
+    1 <= i -> i + 1 < j -> j <= 10 ->
+    Not (good i) -> Not (good j) ->
+    Figure8DistanceData p qi qj s r ->
+      angleAt qi p qj <= separatedTurn turn i j
+
+/-- Project raw distance-witness rows from the real Figure 8 separated
+containment interface. -/
+theorem distanceWitnessRows_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedContainmentInterface good turn) :
+    Figure8SeparatedDistanceWitnessRows good := by
+  intro i j hi hsep hj hbad_i hbad_j
+  let D := H.extractedData hi hsep hj hbad_i hbad_j
+  exact
+    Exists.intro D.p
+      (Exists.intro D.qi
+        (Exists.intro D.qj
+          (Exists.intro D.s
+            (Exists.intro D.r D.distanceData))))
+
+/-- Project the actual central-angle containment rows from the real Figure 8
+separated containment interface. -/
+theorem centralAngleContainmentRows_of_containmentInterface
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (H : Figure8SeparatedContainmentInterface good turn) :
+    Figure8SeparatedCentralAngleContainmentRows good turn := by
+  intro i j p qi qj s r hi hsep hj hbad_i hbad_j D
+  exact H.central_angle_le_separatedTurn hi hsep hj hbad_i hbad_j D
+
+/-- Raw separated Figure 8 distance witnesses plus the actual universal
+central-angle containment row build the real containment interface. -/
+def containmentInterface_of_distanceWitnessRowsAndCentralAngleContainment
+    {good : Nat -> Prop} {turn : Nat -> Real}
+    (distanceRows : Figure8SeparatedDistanceWitnessRows good)
+    (centralAngleContainment :
+      Figure8SeparatedCentralAngleContainmentRows good turn) :
+    Figure8SeparatedContainmentInterface good turn where
+  extractedData := by
+    intro i j hi hsep hj hbad_i hbad_j
+    let hp := distanceRows (i := i) (j := j) hi hsep hj hbad_i hbad_j
+    let p := Classical.choose hp
+    let hqi := Classical.choose_spec hp
+    let qi := Classical.choose hqi
+    let hqj := Classical.choose_spec hqi
+    let qj := Classical.choose hqj
+    let hs := Classical.choose_spec hqj
+    let s := Classical.choose hs
+    let hr := Classical.choose_spec hs
+    let r := Classical.choose hr
+    let D := Classical.choose_spec hr
+    exact
+      { p := p
+        qi := qi
+        qj := qj
+        s := s
+        r := r
+        distanceData := D }
+  central_angle_le_separatedTurn := by
+    intro i j p qi qj s r hi hsep hj hbad_i hbad_j D
+    exact centralAngleContainment hi hsep hj hbad_i hbad_j D
+
+/-- The real Figure 8 separated containment interface is equivalent to the
+two atomic row families: distance witnesses and central-angle containment. -/
+theorem containmentInterface_nonempty_iff_distanceWitnessRows_and_centralAngleContainmentRows
+    {good : Nat -> Prop} {turn : Nat -> Real} :
+    Nonempty (Figure8SeparatedContainmentInterface good turn) <->
+      Figure8SeparatedDistanceWitnessRows good /\
+        Figure8SeparatedCentralAngleContainmentRows good turn := by
+  constructor
+  case mp =>
+    intro H
+    cases H with
+    | intro H =>
+        exact And.intro
+          (distanceWitnessRows_of_containmentInterface H)
+          (centralAngleContainmentRows_of_containmentInterface H)
+  case mpr =>
+    intro H
+    exact Nonempty.intro
+      (containmentInterface_of_distanceWitnessRowsAndCentralAngleContainment
+        H.1 H.2)
+
 /-! ## Generic separated-window Figure 8 containment -/
 
 /-- Explicit Figure 8 distance data and central-angle containment for every

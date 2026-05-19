@@ -1,189 +1,163 @@
-# Non-vacuous completion route after the translated connector obstruction
+# Non-Vacuous Completion Route
 
-This note records the intended handoff after the translated
-connector-equation obstruction.  It is a proof-working note only.  It does not
-claim that either the Pach--Toth `5 / 16` construction or the Swanepoel
-`8 / 31` lower bound has been completed unconditionally.
+This note records the current non-vacuous completion routes.  It is a
+proof-working note only.  It does not claim that either the Pach--Toth
+`5 / 16` construction or the Swanepoel `8 / 31` lower bound has been completed
+unconditionally.
 
-The common point is that a conditional endpoint is useful only when its
-remaining hypothesis has an honest geometric source.  A route that proves the
-remaining hypothesis from contradictory translated data is vacuous and must not
-be counted as progress toward the paper theorem.
+The common rule is simple: a conditional endpoint is useful only when its
+remaining hypothesis has an honest geometric, finite-search, or paper-source
+inhabitant.  A route that merely adds another facade, or routes through a
+checked no-go payload, is not progress toward the paper theorem.
 
-## 1. The obstruction that must be respected
+## Pach--Toth Route
 
-For Pach--Toth, the translated-copy shortcut is now explicitly blocked.
+The live Pach--Toth route is W34 threshold/eventual, not the old translated
+connector-equation route and not the exact-base all-positive direct-flexible
+route.
 
-The relevant checked files are:
+Current target shape:
 
-- `ErdosProblems1066/PachToth/RealTranslationObstruction.lean`;
-- `ErdosProblems1066/PachToth/ConnectorEquationConcrete.lean`;
-- `ErdosProblems1066/PachToth/ConnectorEquationClosure.lean`;
-- `ErdosProblems1066/PachToth/EquationTransitionClosure.lean`;
-- `ErdosProblems1066/PachToth/FinalConditional.lean`.
+```text
+PachTothRemainingSourceLedgerW34.
+  exactAndArbitraryTargets_of_largeClosedPlacementFieldsSix_and_below
+```
 
-`RealTranslationObstruction.no_real_offset_connector_equations` proves that the
-four real equations
+This route needs:
 
-- `eq211`;
-- `eq212`;
-- `eq400`;
-- `eq402`;
+1. `LargeClosedPlacementFieldsSix`: closed placements for all block lengths
+   from six onward.
+2. `BelowThresholdMetricFieldsSix`: exact metric certificates below the large
+   threshold.
+3. `DeformedLengthOneExactBlocksTwoThroughFiveSource`: genuine small
+   deformed sources feeding the below-threshold package.
+4. `MinimalExactRemainderSplitSourceBlocker`: the exact-to-arbitrary remainder
+   split input.
 
-are inconsistent for one arbitrary real translation of the exact local block.
-The geometric form is
-`no_real_translation_realizes_all_connector_units`: no single translated copy
-of the next exact block realizes all four proof-used connector unit edges.
-The closed-chain specialization
-`no_translated_closed_chain_placement` rules out the corresponding translated
-closed-placement shortcut.
+The large side should be sourced through non-rigid eventual data:
 
-`ConnectorEquationConcrete` goes further: the raw structure
-`ConnectorEquationTransitionFacts`, and hence the same/opposite structure built
-from it, is contradictory when it asks for all four translated exact-block
-equations at the exact height.  In particular,
-`false_of_equationTransitionData` and
-`false_of_sameOppositeEquationTransitionData` show that the existing
-`ConnectorEquationClosure.EquationTransition` package is uninhabited in this
-translated exact-block interpretation.
+- `EventualRoleHingeClosure` and `RoleHingeCandidateSearchSurface` for
+  same/opposite transition geometry.
+- `PeriodSearchInterface` and `EventualPeriodSearchData` for orientation words
+  and closure equations.
+- `GeneratedSeparationFarApart` and `EventualCrossBlockMetricData` for reduced
+  cross-block distance lower bounds.
+- `EventualClosedPlacementSourceW34` and
+  `AlternativeNonRigidClosedPlacementW34` for large exact block targets.
 
-Therefore the following is not an acceptable completion route:
+The useful large-side closure is:
 
-1. Supply a `ConnectorEquationClosure.SameOppositeEquationTransition`.
-2. Use the connector-equation closure to obtain the final conditional
-   Pach--Toth target.
-3. Treat that as an honest construction.
+```text
+AlternativeNonRigidClosedPlacementW34.
+  largeExactBlockTargetsFromSix_of_largeClosedPlacementFieldsSix
+```
 
-That route would be vacuous unless the transition interface has first been
-replaced by a non-translated/deformed source of connector unit edges.
+The exact/arbitrary closure is:
 
-## 2. Pach--Toth: non-vacuous route
+```text
+PachTothRemainingSourceLedgerW34.
+  exactAndArbitraryTargets_of_largeClosedPlacementFieldsSix_and_below
+```
 
-The viable Pach--Toth route should target deformed or role-hinged transition
-data, not full translated connector-equation data.
+### Pach--Toth No-Go Guardrails
 
-The non-vacuous target shape is:
+Do not task workers with inhabiting the exact-base direct-flexible all-positive
+payload.  It is checked refuted by:
 
-1. Keep the checked exact one-block geometry:
-   `BaseTransitionRealization.exactBase` and its same-block isometry facts.
-2. Replace the impossible translated four-equation transition with honest
-   same/opposite transition maps whose connector unit edges are proved from
-   their own deformed construction data.
-3. Prove same-block distance preservation for those same/opposite transition
-   maps.
-4. For each positive block count `k`, supply an orientation word and an indexed
-   algebraic period certificate for the resulting generated chain.
-5. For each positive `k`, supply cross-block lower bounds and prove both:
-   all lower entries are at least `1`, and the generated Euclidean distances
-   dominate those lower entries.
-6. Route this data through the existing generated-chain closure to the exact
-   `16 * k` construction, and then through the checked arbitrary-`n` remainder
-   route.
+```text
+FiniteReducedMetricCandidateSearchW33.not_directFlexibleSourceShape
+FlexibleCandidateMetricInhabitationW33.not_nonempty_directFlexibleSourcePayload
+DeformedLengthOneSourceW34.not_nonempty_directFlexibleSourcePayload
+```
 
-The current Lean modules already contain useful non-vacuous-shaped interfaces:
+Do not use translated exact-block connector equations as an honest
+construction source.  They are useful obstruction evidence and legacy audit
+context, not the live route.
 
-- `ConcretePeriodSearchFamily.PeriodSearchData` stores finite orientation
-  words and pointwise algebraic period equations.
-- `ConcretePeriodSearchFamily.ConcreteCrossBlockFamily` adds the cross-block
-  lower-bound table and inequalities.
-- `CrossBlockLowerBoundsInterface.RoleHingedPeriodSearchFamily` and the
-  associated lower-bound interface are the better downstream shape for a
-  role-hinged construction, because they do not require the contradictory
-  translated four-equation package.
+## Swanepoel Route
 
-The intended next Pach--Toth Lean work is therefore not to instantiate
-`FinalConditional.EquationPeriodSearchCrossBlockFamily` using
-`ConnectorEquationClosure.SameOppositeEquationTransition`.  That family is now
-best understood as an audited closure around an impossible translated model.
-Instead, the route should either:
+The live Swanepoel target is the compact W34 final source surface:
 
-- move the final facade to the role-hinged/deformed transition interfaces
-  already used by `ConcretePeriodSearchFamily`, or
-- introduce a new final conditional family whose transition field is an honest
-  deformed metric obligation package, with connector unit edges and
-  same-block preservation supplied directly.
+```text
+SwanepoelW32FinalAssembly.W34ActualRoutePremises
+```
 
-Only after that replacement should period-search certificates and cross-block
-tables be attached.  At that point the completion is non-vacuous: each field
-has a concrete geometric or finite-search meaning, and no field is known to
-imply `False` before it reaches the target theorem.
+The checked closure is:
 
-## 3. Swanepoel: non-vacuous route
+```text
+SwanepoelW32FinalAssembly.
+  targetLowerBoundEightThirtyOne_of_w34ActualRoutePremises
+```
 
-Swanepoel is not blocked by the Pach--Toth translated connector equations, but
-the same anti-vacuity rule applies.  The checked Swanepoel endpoint is a
-conditional minimal-failure eliminator:
+The current compact constructor is:
 
-- `FinalConditional.MinimalFailureM8SeparatedConstructionEliminator`;
-- `M8MinimalFailureEliminatorInterface.M8MinimalFailureEliminator`;
-- `M8SeparatedConstructionConcrete.M8SeparatedConstructionComponents`.
+```text
+SwanepoelW32FinalAssembly.
+  w34ActualRoutePremises_of_exactActualTopologyClosureMissingFieldPackage_finiteWalkGeneratedOrder_realizationCarrier_badAdjacency_labelCertificateS5AngleRows
+```
 
-For one minimal cleared failure, the required non-vacuous package is the
-actual separated `m = 8` construction data:
+The route certificate layer is:
 
-- honest local labels/predicates;
-- nonnegative turn values with total turn `< pi / 3`;
-- Figure 8 separated-window geometry;
-- Figure 9 adjacent-left window geometry;
-- late-triples data.
+```text
+M8ConstructionDataInhabitationW33.
+  routeCertificate_of_exactClosureMissingField_finitePQGeneratedOrderRows_badAdjacency_s5Rows
 
-`M8SeparatedConstructionConcrete` gives the clean component-level source:
+M8ConstructionDataInhabitationW33.
+  no_minimalClearedFailure_of_routeCertificate
+```
 
-- `M8LabelsFromBoundaryData C`;
-- `NonconcaveArcTurnData`;
-- `M8ConstructionNoEarlyTriples labels.toM8LocalLabels`;
-- `M8WindowContainment labels.toM8LocalLabels arc.toM8TurnBounds`.
+The exact no-cut/minimality residue is tracked by:
 
-These assemble into
-`M8PipelineClosure.M8SeparatedConstructionFields C hmin`, and the checked
-pipeline then gives a contradiction for that fixed minimal failure.  Uniformly
-supplying such a component package for every minimal cleared failure gives
-`targetLowerBoundEightThirtyOne` through the existing minimal-failure closure.
+```text
+NoCutMinimalityClosureW34.
+  ExactRemainingPremiseForNoCutMinimalityClosure
+```
 
-The non-vacuous Swanepoel completion route is therefore:
+### Swanepoel Positive Source Obligations
 
-1. From an arbitrary minimal cleared failure, construct the boundary and
-   Lemma 8 label data used by `M8LabelsFromBoundaryData`.
-2. Construct the nonconcave arc and its turn function, including
-   nonnegativity and the strict total-turn bound.
-3. Prove the Lemma 9/no-early-triples input for those labels.
-4. Prove the Figure 8/Figure 9 angle-window containment facts for the same
-   labels and turns.
-5. Assemble those four components with
-   `M8SeparatedConstructionComponentPackage.toM8SeparatedConstructionFields`.
-6. Apply the existing `M8PipelineClosure` contradiction and then
-   `MinimalFailureClosure`.
+The current positive route has seven compact obligations.
 
-This route is non-vacuous because the component package is not obtained by
-assuming the final contradiction.  It is meant to be built from the geometry of
-an arbitrary minimal cleared failure.  The remaining burden is exactly the
-paper-facing construction work: boundary extraction, Lemma 8 labels, the
-nonconcave-arc turn budget, Lemma 9 late triples, and window containment.
+1. Build exact actual topology rows from a minimal cleared failure:
+   `SelectedTopologyRowsInhabitationW33.MinimalFailureExactActualTopologyFieldsTarget`
+   or
+   `FaceBoundaryTopologySourceW32.MinimalFailureExactActualTopologyFieldsTarget`.
+2. Prove the selected nondegenerate outer-face sector order:
+   `OuterBoundaryAngleSourceW34.SelectedNondegenerateTopologyOuterFaceSectorOrderTheorem`.
+3. Inhabit the exact topology closure/missing-field package:
+   `SelectedTopologyRowsInhabitationW33.ExactActualTopologyClosureMissingFieldPackage`.
+4. Supply finite-walk generated order rows:
+   `FrameCyclicOrderAssemblyW32.SelectedFiniteWalkFrameCoreGeneratedOrderSourceRows`.
+5. Supply selected-frame K23 route coverage/realization-carrier rows:
+   `K23RouteCoverageSourceW34.SelectedFrameActualSelectedBoundaryGapTriangleDegree34RealizationCarrierRowsSourceTheorem`.
+6. Supply bad-adjacency/common-neighbor rows:
+   `K23RouteCoverageSourceW34.SelectedFrameBadAdjacencyCommonNeighborRowsSourceTheorem`.
+7. Supply compact S5 angle rows:
+   `ExactFigureWitnessSourceW34.S5AngleRowsForFinitePQSpineGeneratedOrderSource`.
 
-## 4. Practical guardrails
+The expanded sibling route can use long-arc and W16 finite p/q source data
+directly:
 
-- Do not use the translated exact-block connector equations as a Pach--Toth
-  construction source.  They are now checked inconsistent.
-- Do not expose conditional Pach--Toth or Swanepoel endpoints through
-  `KnownBounds` until their remaining packages have honest source data.
-- For Pach--Toth, prefer deformed/role-hinged transition interfaces over
-  `ConnectorEquationClosure` for any future final facade.
-- For Swanepoel, keep the completion target at the component level.  The
-  useful object to construct is
-  `M8SeparatedConstructionComponents`, not a theorem-shaped black box.
-- Any future note or Lean wrapper should state whether its input package is
-  known inhabited, merely conditional, or known contradictory.
+```text
+SwanepoelW32FinalAssembly.
+  w34ActualRoutePremises_of_exactActualTopologyFields_outerFaceSectorOrderTheorem_longArc_w16_finiteWalkGeneratedOrder_realizationCarrier_incidenceRows_labelCertificateS5AngleRows
+```
 
-## 5. Current status
+### Swanepoel Guardrails
 
-Pach--Toth: the translated connector-equation route is obstructed.  A
-non-vacuous completion must replace that route with deformed/role-hinged
-transition data, then add period-search and cross-block lower-bound
-certificates.
+- Do not count synthetic S2 enclosure shims as an honest topology proof.
+- Do not add final wrappers unless source inputs shrink or become inhabited.
+- Do not expose `8 / 31` through `KnownBounds.lean` until the source inputs are
+  inhabited and the build/audit gates pass.
+- Prefer proving one source row in an owning module over creating a new
+  numbered facade.
 
-Swanepoel: the checked closure from explicit separated `m = 8` components to
-the target proposition is available conditionally.  A non-vacuous completion
-must construct those components uniformly from arbitrary minimal cleared
-failures.
+## Practical Completion Standard
 
-Neither status is a final proof completion.
+A task is real completion progress when it does at least one of these:
+
+- inhabits a row in `remaining_fields_matrix.md`;
+- proves a no-go result that removes a live false path from `TASK.md`;
+- replaces several old wrappers with a smaller checked source package;
+- verifies that an already-claimed row is root-imported and audit-clean.
+
+Everything else should be treated as context, not completion.

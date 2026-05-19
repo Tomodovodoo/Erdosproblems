@@ -1,37 +1,34 @@
 # Global Task Tracker
 
-This is the living completion plan for the Lean formalization of Erdos problem
-1066.  Keep it as an executable checklist: every open item names the current
-state, the exact Lean target, and the next action needed to mark it off.
+This file is the executable task queue for the Lean formalization of Erdos
+problem 1066.  It is intentionally not a wave ledger, route encyclopedia, build
+log, or project-structure document.
 
-Ground rule: mark a task `DONE` only after the relevant Lean declarations are
-imported by `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, compile
-with the pinned toolchain, and pass the forbidden-token scan.  Conditional
-bridges are progress, but they are not final theorem completion until their
-hypotheses are discharged.
+Detailed theorem dependencies live in
+`E:/Personal/Erdosproblems/1066/proof_workings/theorem_dependency_map.md`.
+Source-paper proof plans live in `proof_workings/*_lean_ready.md`.
 
-Every unchecked task below is meant to be a subagent-sized work unit.  A task
-should name:
+## Operating Rules
 
-- Paper step: the source-paper claim it implements, such as Swanepoel `E14`
-  or Pach--Toth `GEO.3`.
-- Lean route: the existing files/declarations that consume the result.
-- Deliverable: the exact theorem, structure field, or package to construct.
-- Completion gate: the imported Lean declaration builds with the pinned
-  toolchain and the forbidden-token scan is clean.
+- Completion of the proof project is the target.  File count is not the
+  scoreboard.
+- A worker should own a closing obligation: prove a needed lemma, inhabit a
+  concrete source field/package, verify a claimed closure, search mathlib,
+  sharpen a theorem statement, or remove a blocked route from the live path.
+- Add a new Lean file only when it gives a real ownership, import-boundary,
+  reusable-certificate, or compile-time advantage.  Prefer proving related
+  results near the existing owner module.
+- Do not add another numbered facade/audit layer unless it directly shortens or
+  closes a real obligation.
+- Mark a task done only after the relevant declaration is imported by
+  `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, builds with the
+  pinned toolchain, and the forbidden-token scan is clean.
+- `proof_workings/` is for proof-plan `.md` files only.  Disposable logs belong
+  under ignored `proof_logs/`.
 
-If a task cannot be completed by one focused proof agent, split it before
-starting.  Do not mark an interface or conditional facade as done for the
-paper theorem until its concrete input fields have been supplied.
+## Verification Gates
 
-Target skeletons below are proof-agent contracts, not source code to paste
-unchanged into the Lean tree.  They may use `:= by sorry` to mark the intended
-statement while the task is open.  A task is complete only when the real Lean
-declaration has replaced that placeholder, is imported by
-`E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, builds with the pinned
-toolchain, and the Lean-source forbidden-token scan is still clean.
-
-Verification command:
+Before any public-bound claim or checked-off task:
 
 ```powershell
 Set-Location 'E:/Personal/Erdosproblems/1066'
@@ -48,2936 +45,1944 @@ rg -n -i -e '\baxiom\b' -e '\bconstant\b' -e '\bsorry\b' -e '\badmit\b' `
 if ($LASTEXITCODE -eq 1) { 'clean' } elseif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 ```
 
-Last verification recorded in this file:
-
-```text
-elan run leanprover/lean4:v4.28.0 lake build
-Build completed successfully (8850 jobs).
-
-Lean source forbidden-token scan over ErdosProblems1066/ and
-ErdosProblems1066.lean: clean.
-
-Root import coverage: 823 imported modules for 823 Lean files under
-ErdosProblems1066/.  No missing, extra, or duplicate root imports.
-
-Trust-source scan for `native_decide`, `trustCompiler`, and `ofReduceBool`:
-clean.
-
-CI-style dependency audit: passed for 1127 declarations, including W13-W31
-endpoint and gate declarations.  Every checked declaration reports only
-Lean/mathlib base axioms `propext`, `Classical.choice`, and `Quot.sound`.
-W18-W31 endpoint declarations are imported, build-clean, source-scan clean,
-trust-source clean, and represented in the CI-style declaration list.
-
-Encoding hygiene is not a proof-state gate.  A broad marker scan reports older
-legacy non-ASCII/mojibake-looking text, so do not use encoding hygiene as
-evidence for or against the current certified bounds route.
-```
-
-## Active Snapshot
-
-- [x] W13 through W31 route and source-package layers are integrated and root-imported.
-  - Current coverage: 823 imported package modules for 823 Lean files.
-  - Current root target build succeeds with 8850 jobs under
-    `leanprover/lean4:v4.28.0`.
-  - Lean-source forbidden-token and trust-source scans are clean.
-  - The W15-W31 final-gate modules are conditional gates, not
-    unconditional final closures.
-
-- [x] W16 proof wave is integrated.
-  - W16 ownership map:
-    `PayForCutArithmeticW16`, `NoCutFromMinimalityW16`,
-    `BoundaryArcFiniteWalkConstructionW16`, `BoundaryTopologyArcBridgeW16`,
-    `Figure8WindowContainmentW16`, `Figure9WindowContainmentW16`,
-    `Lemma8LocalLabelsW16`, `Lemma9LateTriplesW16`,
-    `LongArcFactsSelectionW16`, `TailPolynomialRowsW16`,
-    `SmallRowsTwoThreeW16`, `SmallRowsFourFiveW16`,
-    `PeriodBaseFixingSameW16`, `PeriodBaseFixingOppositeW16`,
-    `PeriodBaseFixingCertificateW16`, `LargeKGlobalSeparationW16`,
-    `SmallComplementExactBlocksW16`, and
-    `EventualClosedPlacementCertificateW16`.
-  - W16 audit result:
-    keep W16 focused on concrete input rows and local package fields.  The
-    W15 final gates are endpoint bookkeeping until their concrete blockers are
-    supplied, and `Verified`-namespace conditional wrappers are not completion
-    evidence.
-  - W16 verification:
-    current root build passes at 8830 jobs; coverage is 803/803;
-    forbidden-token scan, trust-source scan, and 1106-declaration dependency
-    audit pass.
-  - W16 status:
-    the new modules are checked reducers/adapters, not unconditional final
-    theorem closures.  Swanepoel still needs a uniform construction of the
-    concrete pointwise remaining input rows.  Pach--Toth still needs viable
-    transition/base-fixing data and concrete inequality/certificate rows rather
-    than only conditional adapter surfaces.
-
-- [x] W17 concrete interface surface is integrated and root-imported.
-  - Swanepoel W17 modules:
-    `BoundaryBudgetLongArcConcreteW17`, `FigureWitnessConcreteAssemblyW17`,
-    `Lemma8FiniteDataConstructionW17`, `Lemma9CoverageConcreteW17`,
-    `PayForCutConcreteInequalityW17`, `PointwiseRemainingRowAssemblyW17`,
-    `SwanepoelConcreteBlockerLedgerW17`, `SwanepoelUniformFamilyGateW17`,
-    `TopologyTrianglePipelineW17`, and `TriangleRunSelectorW17`.
-  - Pach--Toth W17 modules:
-    `AllPositiveFinalCertificateW17`, `BaseFixingRowsViableW17`,
-    `LargeK0ExplicitSeparationDataW17`, `PachTothEventualFinalGateW17`,
-    `SmallComplementConcreteBlocksW17`, `SmallRowValueCertificatesW17`,
-    `TailValueCertificateConcreteW17`, and `ViableTransitionPackageW17`.
-  - W17 status:
-    these are rooted reducer/adapter surfaces over the W16/W15 gates.  They do
-    not yet make the Swanepoel 8/31 or Pach--Toth 5/16 bounds public
-    unconditional `KnownBounds` theorems.
-
-- [x] W17 concrete final-input lane is integrated.
-  - W17 completed the rooted adapter/reducer layer feeding W16 and W15.
-    Every W17 file is imported by `ErdosProblems1066.lean`, targeted-checked,
-    source-scan clean, included in the current 8830-job root build, and
-    represented in the 1106-declaration dependency audit.
-  - W17 does not close the final paper bounds unconditionally.  It sharpens the
-    remaining work to inhabiting concrete input packages rather than proving
-    more endpoint wrappers.
-
-- [x] W18 concrete input-production surface is integrated and root-imported.
-  - W18 modules now build through the root target and route into the W17/W16
-    packages.  W18 is still conditional plumbing: it does not prove the final
-    Swanepoel or Pach--Toth public bounds without the W19 concrete closure
-    inputs below.
-
-- [x] W19 closure surface is integrated and root-imported.
-  - Swanepoel W19 modules:
-    `AngleContainmentBridgeProducerW19`, `BoundaryFrameCoreProducerW19`,
-    `FigureWitnessClosureW19`, `Lemma8ConcreteGeometryProducerW19`,
-    `Lemma9NatLateTripleProducerW19`, `NoCutMinimalityClosureW19`,
-    `PointwiseAssemblyClosureW19`, `PositiveCyclicOrderProducerW19`,
-    `SwanepoelFinalClosureW19`, and `TopologyArcClosureW19`.
-  - Pach--Toth W19 modules:
-    `ArbitraryNClosedPlacementRouteW19`, `ClosedPlacementCrossConnectorEdgesW19`,
-    `ClosedPlacementObstructionBypassW19`, `ClosedPlacementSameBlockEdgesW19`,
-    `ClosedPlacementSeparationW19`, `ClosedPlacementSmallKCertificatesW19`,
-    `ClosedPlacementTargetWrappersW19`, `ExplicitClosedPlacementProducerW19`,
-    `NonRigidClosedPlacementDataW19`, and `PachTothClosedPlacementAuditW19`.
-  - W19 status:
-    these are rooted closure/adaptor surfaces.  They expose the exact remaining
-    concrete input packages, but `KnownBounds.lean` is still intentionally not
-    extended to the two requested public bounds.
-
-- [x] W20 source-package and audit surface is integrated and root-imported.
-  - Pach--Toth W20 modules:
-    `ClosedPlacementCIEndpointsW20`, `ClosedPlacementUnconditionalAttemptW20`,
-    `ExplicitClosedPlacementInputPackageW20`, `GeneratedChainClosureProducerW20`,
-    `GeneratedChainFamilyProducerW20`, `GeneratedMetricAuditW20`,
-    `LargeKClosedPlacementSourceW20`, `PachTothFinalRouteW20`,
-    `ReducedMetricHypothesesProducerW20`, and
-    `SmallKClosedPlacementSourceW20`.
-  - Swanepoel W20 modules:
-    `FigureProducerFamilyW20`, `Lemma8ProducerFamilyW20`,
-    `Lemma9ProducerFamilyW20`, `PayForCutProducerFamilyW20`,
-    `PointwiseProducerFamilyFieldsW20`, `RemainingObligationLedgerW20`,
-    `SwanepoelCIEndpointsW20`, `SwanepoelSourcePackageW20`,
-    `SwanepoelUnconditionalAttemptW20`, and `TopologyArcProducerFamilyW20`.
-  - W20 status:
-    the project now has checked source-package adapters and audit endpoints for
-    the W19 final closures.  It does not yet have unconditional inhabitants of
-    those source packages, so `KnownBounds.lean` must not expose the requested
-    `8 / 31` or `5 / 16` paper bounds.
-
-- [x] W21 source-package and KnownBounds-gate surface is integrated and root-imported.
-  - Pach--Toth W21 modules package the generated-chain source route, concrete
-    value-matrix adapters, period/base/large-small source fields, and the
-    closed-placement KnownBounds exposure gate.
-  - Swanepoel W21 modules package the no-cut, topology, Lemma 8, Lemma 9,
-    figure-angle, remaining-field, boundary-topology, broken-lattice, and
-    Swanepoel KnownBounds exposure surfaces.
-  - W21 status:
-    the files are imported by the root, build-clean, forbidden-token clean, and
-    trust-source clean.  They still reduce the final public bounds to concrete
-    source-package inhabitants; they do not close the requested public
-    `KnownBounds` wrappers.
-
-- [x] W22 source-inhabitation audit surface is integrated and root-imported.
-  - Pach--Toth W22 modules expose the value-matrix, source-field,
-    remaining-separation, small-complement, arbitrary-`n`, and dependency-audit
-    surfaces for the W21/W20 route.
-  - Swanepoel W22 modules expose the no-cut, topology, Lemma 8, Lemma 9,
-    figure-angle, geometry-closure, remaining-source, M8 blocker, and final
-    KnownBounds source-component surfaces.
-  - W22 status:
-    all 20 W22 files are root-imported, build-clean, forbidden-token clean,
-    trust-source clean, and represented in the 1106-declaration CI-style axiom
-    audit.  They remain conditional source-package surfaces.
-
-- [x] W23 concrete route/audit surface is integrated and root-imported.
-  - Pach--Toth W23 modules route concrete value-matrix rows, generated-chain
-    closure/source fields, base-fixing, separation, small-length targets, and
-    KnownBounds-from-rows/audit wrappers.
-  - Swanepoel W23 modules route concrete no-cut, topology/Jordan, Lemma 8,
-    Lemma 9, figure-angle, M8 component lanes, lane-product, KnownBounds, and
-    route-audit wrappers.
-  - W23 status:
-    all 20 W23 files are root-imported and represented in the current
-    CI-style axiom audit.  They are conditional route surfaces, not final
-    unconditional public-bound closures.
-
-- [x] W24 concrete source-package/audit surface is integrated and root-imported.
-  - Pach--Toth W24 modules expose role-free alternative value-matrix routes,
-    direct cross-block/full-metric/free-placement packages, non-role period
-    routes, concrete remainder split bridges, route obstruction facts, and
-    small-length exact target surfaces.
-  - Swanepoel W24 modules expose no-cut blocker elimination, Jordan boundary
-    witness data, Lemma 8 frame/order bridges, Lemma 9 no-early packages,
-    figure-angle E22/E23 bridges, minimal still-open components, lane-product
-    assembly, and W20 source-package concrete bridges.
-  - W24 status:
-    all W24 files are root-imported, build-clean, forbidden-token clean,
-    trust-source clean, and represented in the 1106-declaration CI-style axiom
-    audit.  They remain conditional source-package surfaces.
-
-- [x] W25 source-inhabitation/audit surface is integrated and root-imported.
-  - Pach--Toth W25 modules add generated-closure metric packages,
-    same-family closure sources, reduced-metric fields, free-placement field
-    equivalences, non-role split sources, appended-remainder separation,
-    direct full-metric source packages, closed-placement witness assembly, and
-    W25 route-audit endpoints.
-  - Swanepoel W25 modules add cut-vertex contradiction equivalences,
-    minimal boundary-topology witness inhabitation, Lemma 8 frame rows, Lemma
-    9 no-early obstruction packages, selected figure witnesses, concrete W23
-    component assembly, lane-product final gates, pointwise source-field
-    bridges, planar topology extraction bridges, and W25 route-audit
-    endpoints.
-  - W25 verification:
-    root build passes at 8830 jobs; coverage is 803/803; forbidden-token scan,
-    trust-source scan, and the 1106-declaration dependency audit pass.
-  - W25 status:
-    W25 narrows the remaining proof obligations and adds checked
-    equivalence/adapter layers.  It does not yet close Swanepoel 8/31 or
-    Pach--Toth 5/16 as unconditional public `KnownBounds` theorems.
-
-- [ ] Concrete source-inhabitation beyond W30 is live.
-  - Swanepoel target:
-    produce an actual
-    `Swanepoel.SwanepoelW30FinalAssembly.FinalSourceGate`,
-    `Swanepoel.SwanepoelW30FinalAssembly.LaneProductSourceAlternatives`, or
-    `Swanepoel.PointwiseProductDataClosureW30.SourceData`,
-    and route it through the W30 final-source gate without target-to-source
-    shortcuts.
-  - Pach--Toth target:
-    do not target the W27 role-hinged
-    `ConcreteNonConnectorLowerTableFamily` alias as a live source; W27 proves
-    that lane blocked.  Produce actual W30 generated-closure/completion-row
-    data, `PachToth.PositiveChainComponentClosureW30.ExactPositiveChainComponentData`,
-    `PachToth.LargeTailCertificateRowsW30.LargeTailCertificateRows`, or
-    `PachToth.RemainderExactDependencyClosureW30.RemainderSplitExactSourcePackage`,
-    and route it through the W30 exact/arbitrary source gates.
-  - Completion gate:
-    root-imported declarations build with the pinned toolchain; root coverage
-    is complete; forbidden-token and trust-source scans are clean; endpoint
-    declarations are added to the CI-style axiom audit and report only
-    Lean/mathlib base axioms; public `KnownBounds` wrappers are added only
-    after the matching internal `*_verified` theorem exists and builds.
-
-- [x] W26 parallel proof wave is integrated and audited.
-  - Pach--Toth workers:
-    `DirectReducedMetricInputW26`,
-    `NonRoleSplitSourceConstructionW26`,
-    `ClosedPlacementConcreteConstructionW26`,
-    `FullToReducedMetricClosureW26`,
-    `ArbitraryNFinalAssemblyW26`,
-    `PositiveExactChainPackageW26`,
-    `ConcreteReducedMetricCertificatesW26`,
-    `PachTothW26RouteAudit`, and
-    `ExactTargetClosureW26`.
-  - Swanepoel workers:
-    `NoCutConcreteEliminationW26`,
-    `ConcreteW23ComponentsInhabitationW26`,
-    `PlanarTopologyActualExtractionW26`,
-    `Lemma8FrameRowsConstructionW26`,
-    `Lemma9NoEarlyConstructionW26`,
-    `FigureWitnessConstructionW26`,
-    `BoundaryWitnessRemainingFieldsW26`,
-    `SwanepoelW26FinalAssembly`, and
-    `BrokenLatticeMinimalFailureConstructionW26`.
-  - Read-only auditors:
-    Lean proof-surface/no-axiom practice audit and Mathlib route audit.
-  - W26 agent inventory is condensed after verification; the checked artifacts
-    above are the durable handoff.
-  - W26 verification:
-    all W26 files are root-imported.  The root build succeeds at 8830 jobs;
-    root import coverage is 803/803; forbidden-token scan and trust-source
-    scan are clean; the expanded CI-style axiom audit passes for 1106
-    declarations.
-  - W26 status:
-    W26 closes several missing-field adapters and exact dependency
-    equivalences.  Pach--Toth now has checked reduced-metric/full-metric
-    handoffs and exact/arbitrary target equivalences, but still needs an
-    actual concrete lower-table/full-metric/free-placement source rather than
-    target repackaging.  Swanepoel now has no-cut, topology, Lemma 8, Lemma 9,
-    figure, boundary-witness, concrete-component, broken-lattice, and final
-    assembly adapters, but still needs actual inhabitants of the concrete
-    component/source packages before a public unconditional `8 / 31` wrapper
-    may be added.
-
-- [x] W27 concrete source/audit wave is integrated and audited.
-  - Pach--Toth W27 modules:
-    concrete closed-orbit/squared-distance adapters, blocked lower-table audit,
-    direct full-metric source construction, finite reduced-metric certificates,
-    free-placement fields, positive exact-chain assembly, large-tail blockers,
-    remainder exact sources, and W27 route/final assembly.
-  - Swanepoel W27 modules:
-    actual selected topology, boundary components, cut/pay-for-cut fields,
-    figure witnesses, lane product, Lemma 8 geometry, Lemma 9 source families,
-    no-cut local deletion, pointwise source fields, and W27 final assembly.
-  - W27 verification:
-    all W27 files are root-imported.  The root build succeeds at 8830 jobs;
-    root import coverage is 803/803; forbidden-token and trust-source scans
-    are clean; the expanded CI-style axiom audit passes for 1106 declarations.
-  - W27 status:
-    Swanepoel made real conditional source-package progress.  Pach--Toth also
-    added useful W27 assembly and obstruction data, but the role-hinged lower
-    table alias is proved blocked and must not be treated as the live source
-    construction route.
-
-- [x] W28 source-inhabitation/audit wave is integrated and audited.
-  - Pach--Toth W28 modules:
-    alternative non-role sources, generated-closure metrics, squared-orbit
-    closure, large-tail exact-source blockers, positive-chain components,
-    remainder split exact sources, finite-row no-go audit, exact/arbitrary
-    source assembly, route audit, and final assembly.
-  - Swanepoel W28 modules:
-    no-cut source construction, side-card/pay-for-cut source fields, outer
-    boundary core construction, selected-face witnesses, Lemma 8 finite
-    geometry rows, Lemma 9 no-early rows, exact figure-angle sources,
-    pointwise product blockers, lane-product final sources, and final assembly.
-  - W28 verification:
-    all W28 files are root-imported.  The current root build succeeds at 8830
-    jobs; root import coverage is 803/803; forbidden-token and trust-source
-    scans are clean; the expanded CI-style axiom audit passes for 1106
-    declarations.
-  - W28 status:
-    W28 adds checked source packages and blocker equivalences.  It still does
-    not close Swanepoel 8/31 or Pach--Toth 5/16 unconditionally, so public
-    `KnownBounds` wrappers remain absent for those two bounds.
-
-- [x] W29 source-inhabitation/audit wave is integrated and audited.
-  - Pach--Toth W29 modules:
-    completion-row sources, squared-orbit closure rows, large-tail fields,
-    positive-chain component data, exact-chain family sources, remainder-split
-    closure, closed-orbit branch assembly, no-fake audit, route audit, and
-    final assembly.
-  - Swanepoel W29 modules:
-    outer-boundary source construction, extracted boundary witnesses, uniform
-    finite geometry rows, concrete no-early source families, exact figure-angle
-    data, pointwise product blockers, lane-product alternatives, no-cut blocker
-    contradiction, route audit, and final assembly.
-  - W29 verification:
-    all W29 files are root-imported.  The root build succeeds at 8830 jobs;
-    root import coverage is 803/803; forbidden-token and trust-source scans
-    are clean; the expanded CI-style axiom audit passes for 1106 declarations.
-  - W29 status:
-    W29 fixes the previous pending blockers and gives the current live final
-    gates.  It does not add public unconditional Swanepoel 8/31 or Pach--Toth
-    5/16 `KnownBounds` wrappers, because the final gates still require actual
-    source-package inhabitants.
-
-- [x] W30 source-inhabitation/audit wave is integrated and audited.
-  - Pach--Toth W30 modules:
-    generated-closure metric rows, completion-row closure, closed-orbit branch
-    sources, exact-chain family closure, positive-chain component closure,
-    large-tail certificate rows, remainder exact-dependency closure, no-fake
-    audit, route audit, and final assembly.
-  - Swanepoel W30 modules:
-    selected-face enclosure sources, extracted-witness components, frame/cyclic
-    order rows, no-early route-data closure, exact figure inequalities,
-    pointwise-product data closure, lane-product final closure, no-cut blocker
-    elimination, route audit, and final assembly.
-  - W30 verification:
-    all W30 files are root-imported.  The root build succeeds at 8830 jobs;
-    root import coverage is 803/803; forbidden-token and trust-source scans
-    are clean; the expanded CI-style axiom audit passes for 1106 declarations.
-  - W30 status:
-    W30 fixed the pending W29/W30 compile/name blockers and is the current
-    live final-gate layer.  It still does not add public unconditional
-    Swanepoel 8/31 or Pach--Toth 5/16 `KnownBounds` wrappers, because actual
-    source-package inhabitants are still required.
-
-## Current Certified State
-
-- [x] The imported project builds through the pinned Lean toolchain.
-  - `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean` imports every
-    Lean source module under `E:/Personal/Erdosproblems/1066/ErdosProblems1066`.
-  - Current coverage: 803 imported package modules for 803 Lean files.
-  - Current root target build succeeds with 8830 jobs.  W7/W8/W9/W10/W11/W12 route and matrix modules
-    remain included, especially `PachTothRemainingMatrix`,
-    `PachTothW8ClosureMatrix`, `ExactLocalTransitionObligationMatrix`,
-    `SwanepoelRemainingMatrix`, `SwanepoelW8ClosureMatrix`,
-    `M8RefinedInputConcrete`, `MinimalFailureConcreteDataMatrix`,
-    `MinimalFailureDirectMatrixW10`, `GeometryRemainingFieldsW10`, and
-    `SwanepoelW10ClosureMatrix`, plus the imported W11-W30
-    closure, summary, gate, and certificate layers.
-
-- [x] Third parallel proof wave is integrated.
-  - Pach--Toth workers PT3-1--PT3-10 own:
-    `RoleHingeConcreteSearch.lean`, `ConcretePeriodSearchFamily.lean`,
-    `CrossBlockSqTableSearch.lean`, `FiniteCertificateObligationSummary.lean`,
-    `ExactFiveSixteenRouteMatrix.lean`, `GeneratedSeparationFarApart.lean`,
-    `SplitRealizationFinal.lean`, `NonRigidClosedPlacementInterface.lean`,
-    `ClosedPlacementComponentsAssembly.lean`, and
-    `SmallCaseCertificates.lean`.
-  - Swanepoel workers SW3-1--SW3-10 own:
-    `CutVertexSideCardFromMinimality.lean`, `JordanTopologyFactsConcrete.lean`,
-    `PlanarBoundaryFaceDataRefinement.lean`,
-    `BoundaryLabelCertificateAssembly.lean`, `Lemma8ExistenceConcrete.lean`,
-    `Lemma8NeighborExtractionConcrete.lean`, `Lemma8CombinatoricsConcrete.lean`,
-    `NoEarlyTripleObstructionConcrete.lean`,
-    `NonconcaveArcBudgetFromBoundary.lean`,
-    `M8WindowGeometryFromContainment.lean`,
-    `M8MinimalFailureEliminatorInterface.lean`, and
-    `M8PipelineClosure.lean`.
-  - Completion gate passed: all 20 workers were closed only after completion,
-    every changed file received a targeted pinned Lean check and source scan,
-    and the root build, source scan, coverage scan, encoding scan, and
-    CI-style axiom audit passed.
-
-- [x] Fourth parallel proof wave is integrated.
-  - Pach--Toth workers P11--P20 own:
-    `RoleHingeInterfaceRefinement.lean`, `GeneratedMetricClosure.lean`,
-    `FiniteSearchCertificate.lean`, `CrossBlockPolynomialNormalization.lean`,
-    `ConcretePeriodCandidateSearch.lean`, `FinalConditional.lean`,
-    `EventualRoleHingeClosure.lean`, `NonRigidConnectorSeparationFacts.lean`,
-    `GeneratedPeriodClosure.lean`, and `ExactFiveSixteenRouteMatrix.lean`.
-  - Swanepoel workers S11--S20 own:
-    `CutVertexSlackFromDeletion.lean`, `JordanBoundaryConcrete.lean`,
-    `BoundaryWalkConstruction.lean`, `SubpolygonAssembly.lean`,
-    `OuterBoundaryAngleClosure.lean`, `NonconcaveArcConcrete.lean`,
-    `Figure8EuclideanFactsConcrete.lean`,
-    `Figure9EuclideanFactsConcrete.lean`, `M8TurnWindowNoEarlyFinal.lean`,
-    and `MinimalFailurePaperFactMatrix.lean`.
-  - Fourth-wave conditional bridges now integrated:
-    `ConcretePeriodCandidateSearch` exposes the period-equation family plus
-    lower-bound route under the current target spelling;
-    `EventualRoleHingeClosure` exposes the eventual role-hinged closure route
-    with exact-target small-case complement;
-    `ExactFiveSixteenRouteMatrix` routes square-value certificates and
-    reduced non-connector polynomial tables to the current conditional
-    exact/arbitrary Pach--Toth facades; `BoundaryWalkConstruction` exposes a
-    reusable long-arc contribution and planar-boundary count-realization
-    projection; and `NonconcaveArcConcrete` exposes a finite long-arc count-gap
-    selector that produces boundary-budget data and M8 turn bounds.
-  - Refined remaining blockers: the conditional bridges above do not supply
-    unconditional Pach--Toth `5 / 16` or Swanepoel `8 / 31` bounds.  Pach--Toth
-    still needs actual same/opposite transition data, period
-    certificates/equations, cross-block lower-bound inequalities, and the
-    large/even-threshold closed-chain family.  Swanepoel still needs the
-    honest boundary classifications/count gap from an actual outer boundary,
-    Lemmas 6 and 7 as project-local geometry, and the final
-    `NonconcaveArcGeometricAngleFacts` package.
-  - Completion gate passed: completed workers were closed after completion,
-    their touched modules received targeted pinned checks and source scans, and
-    the root build, source scan, coverage scan, encoding scan, and CI-style
-    axiom audit all passed after integration.
-
-- [x] Fifth parallel proof wave is integrated.
-  - Pach--Toth workers PT5-1--PT5-10 own concrete construction files:
-    `RoleHingeTransitionSearch.lean`, `RoleHingeAngleCertificates.lean`,
-    `PeriodWordCertificates.lean`, `PeriodCertificateExamples.lean`,
-    `CrossBlockUpperTriangleConcrete.lean`,
-    `IndexedCrossBlockTableConcrete.lean`, `SmallCaseCertificates.lean`,
-    `EventualRoleHingeClosure.lean`, `NonRigidClosedPlacementInterface.lean`,
-    and `GeneratedSeparationFarApart.lean`.
-  - Swanepoel workers SW5-1--SW5-10 own concrete geometry/topology files:
-    `JordanBoundaryConcrete.lean`, `PlanarBoundaryFinal.lean`,
-    `BoundaryLabelExtractionTasks.lean`, `NonconcaveArcAngleFacts.lean`,
-    `NonconcaveArcBudgetFromBoundary.lean`,
-    `Lemma8NeighborExtractionConcrete.lean`,
-    `NoEarlyTripleObstructionConcrete.lean`, `BrokenLatticePipeline.lean`,
-    `MinimalGraphFacts.lean`, and `OuterBoundaryAssembly.lean`.
-  - Fifth-wave results integrated: Pach--Toth now has explicit obstruction
-    facts for the too-strong role-hinge transition package, equilateral
-    role-angle exact-local bridges, all-positive and threshold period-word
-    families, concrete upper-triangle/non-connector cross-block projections,
-    generated reduced closed-placement routes, and small-case threshold
-    plumbing.  Swanepoel now has stronger Jordan/topology equivalences,
-    boundary-walk-to-face-counting bridges, boundary-label projections,
-    Lemma 7 angle-to-turn projections, long-arc budget routes, Lemma 8
-    extraction projections, no-early/K23 routes, broken-lattice fact
-    constructors, minimal-failure closure wrappers, and outer-boundary count
-    projections.
-  - Completion gate passed: all completed workers were closed after
-    completion; targeted pinned checks passed; root build, source scan,
-    coverage scan, encoding scan, diff whitespace check, and CI-style axiom
-    audit passed.
-
-- [x] Sixth parallel proof wave is integrated.
-  - Pach--Toth workers W6-P1--W6-P10 owned:
-    `RoleHingeTransitionSearch.lean`, `RoleHingeAngleCertificates.lean`,
-    `PeriodWordCertificates.lean`, `PeriodCertificateExamples.lean`,
-    `CrossBlockUpperTriangleConcrete.lean`,
-    `IndexedCrossBlockTableConcrete.lean`, `SmallCaseCertificates.lean`,
-    `EventualRoleHingeClosure.lean`, `NonRigidClosedPlacementInterface.lean`,
-    `ClosedPlacementClosure.lean`, and `GeneratedSeparationFarApart.lean`.
-  - Swanepoel workers W6-S1--W6-S10 owned:
-    `JordanBoundaryConcrete.lean`, `PlanarBoundaryFinal.lean`,
-    `BoundaryLabelExtractionTasks.lean`, `NonconcaveArcAngleFacts.lean`,
-    `NonconcaveArcBudgetFromBoundary.lean`,
-    `Lemma8NeighborExtractionConcrete.lean`,
-    `NoEarlyTripleObstructionConcrete.lean`, `BrokenLatticePipeline.lean`,
-    `BrokenLatticeClosure.lean`, `MinimalGraphFacts.lean`,
-    `MinimalGraphClosure.lean`, and `OuterBoundaryAssembly.lean`.
-  - Sixth-wave results integrated: the non-rigid Pach--Toth route now has
-    weaker connector-only role-hinge transition facts separated from the
-    impossible all-pairs preservation package; period-word families project to
-    generated-chain families; two-step nontrivial period examples are
-    available; non-connector distance and squared-distance lower-bound routes
-    feed exact, eventual, and arbitrary-`n` targets; and generated
-    period/reduced-metric data routes to closed-placement families.  The
-    Swanepoel route now has planar-boundary consumer bridges from topology
-    data, direct face-counting constructors from boundary walks, stronger
-    label/projection surfaces, turn-bound output packages, K23-to-no-early
-    construction packages, broken-lattice closure adapters, and minimal graph
-    target wrappers.
-  - Remaining blockers after this wave: Pach--Toth still needs actual
-    numerical/finite certificates for the non-rigid period and non-connector
-    lower-bound inputs rather than just the consuming route.  Swanepoel still
-    needs the honest construction of the topology/core boundary data and the
-    concrete paper facts that fill the refined M8 input matrix.
-  - Completion gate passed and remains covered by the current full verification
-    snapshot above.
-
-- [x] Seventh parallel proof wave is integrated.
-  - W7 Pach--Toth and Swanepoel route modules are root-imported,
-    build-checked, scan-clean, and consumed by `PachTothRemainingMatrix` and
-    `SwanepoelRemainingMatrix`.
-  - Remaining blockers after this wave: Pach--Toth must replace the blocked
-    four-target exact-local transition with a viable non-rigid transition
-    model and then fill actual numeric lower tables for the resulting
-    candidate.  Swanepoel must still supply the concrete topology, boundary,
-    label, window-containment, and no-early fields carried by the W7 matrices.
-  - Completion gate passed and remains covered by the current full verification
-    snapshot above.
-
-- [x] Eighth parallel proof wave is integrated.
-  - Pach--Toth workers W8-P1--W8-P10 own:
-    `FlexibleExactLocalTransition.lean`,
-    `ExactLocalTransitionObligationMatrix.lean`,
-    `RoleHingeCandidateSearchSurface.lean`,
-    `ConcretePeriodWordSearch.lean`,
-    `PeriodCandidateTargetRoute.lean`,
-    `GeneratedPolynomialLowerTableRoute.lean`,
-    `ConcreteNonConnectorValueMatrix.lean`,
-    `ArbitraryNExactRemainderClosure.lean`,
-    `GeneratedPointPolynomialFacts.lean`, and
-    `PachTothW8ClosureMatrix.lean`.
-  - Swanepoel workers W8-S1--W8-S10 own:
-    `OuterBoundaryExistenceConcrete.lean`,
-    `BoundaryWalkFinitePartitions.lean`,
-    `SubpolygonFaceConstruction.lean`,
-    `BoundaryAngleAssembly.lean`,
-    `LongArcGapConcrete.lean`,
-    `K23NoEarlyClosure.lean`,
-    `M8WindowContainmentConcrete.lean`,
-    `Lemma9NoStartConcrete.lean`,
-    `MinimalFailureW8RowAssembly.lean`, and
-    `SwanepoelW8ClosureMatrix.lean`.
-  - Eighth-wave results integrated: Pach--Toth now has a flexible exact-local
-    transition interface, a checked exact-local possible-row/obstruction
-    matrix with no `trustCompiler` dependency, a role-hinge finite-search
-    surface, reusable checked period-word families, period-candidate target
-    routing, generated polynomial lower-table routing, concrete value-matrix
-    certificate wrappers, exact-remainder arbitrary-`n` closure, generated
-    point polynomial normalization facts, and a W8 closure matrix.  Swanepoel
-    now has exact outer-boundary topology fields, finite boundary-walk
-    partitions, subpolygon-face construction bridges, boundary/subpolygon
-    angle assembly, long-arc gap-to-turn-bound routing, K23/common-neighbor
-    no-early closure, M8 window containment packaging, Lemma 9 no-start
-    adapters, minimal-failure W8 row assembly, and a W8 closure matrix.
-  - Remaining blockers after this wave: Pach--Toth still needs concrete
-    same/opposite flexible branch data and actual polynomial/value lower-table
-    certificates for a viable period family.  Swanepoel still needs actual
-    topology extraction, boundary-label facts, window containment witnesses,
-    and no-start/no-early fields instantiated from the geometric graph rather
-    than carried as row data.
-  - Completion gate passed and remains covered by the current full verification
-    snapshot above.
-
-- [x] Ninth parallel proof wave is integrated.
-  - Pach--Toth workers W9-P1--W9-P10 own:
-    `FlexibleBranchCoordinateSearch.lean`,
-    `ExactLocalBranchSolverSurface.lean`,
-    `PeriodFamilyCandidateSearchW9.lean`,
-    `PolynomialCertificateExtraction.lean`,
-    `ConcreteValueCertificateExamples.lean`,
-    `PachTothFinalDataAssembly.lean`,
-    `ExactRemainderPublicBridge.lean`,
-    `UnitVectorParameterizationSearch.lean`,
-    `CrossBlockLowerBoundSearchW9.lean`, and
-    `PachTothRemainingObligationsW9.lean`.
-  - Swanepoel workers W9-S1--W9-S10 own:
-    `TopologyExtractionFromNoncrossing.lean`,
-    `OuterBoundaryLabelFacts.lean`,
-    `BoundaryPartitionInstantiation.lean`,
-    `SubpolygonInstantiation.lean`,
-    `BoundaryAngleWitnessConstruction.lean`,
-    `M8WindowContainmentConcrete.lean`,
-    `NoStartInstantiation.lean`,
-    `K23MinimalFailureInstantiation.lean`,
-    `MinimalFailureW8RowAssembly.lean`, and
-    `SwanepoelRemainingObligationsW9.lean`.
-  - Ninth-wave results integrated: Pach--Toth now has explicit coordinate
-    search surfaces for the blocked same/opposite branch, a filtered
-    exact-local row API, unit-vector parameterization routing, generated
-    period/equation family surfaces, polynomial/value certificate extraction
-    facades, concrete value examples, exact-remainder public routing, cross-block
-    lower-bound facades, final-data assembly wrappers, and an explicit
-    W9 remaining-obligation matrix.  Swanepoel now has topology-from-noncrossing
-    frontier equivalences, boundary-label projections, partition/count
-    instantiation, subpolygon instantiation fields, unit-separated angle
-    witnesses, expanded M8 containment routes, no-start/K23 minimal-failure
-    row adapters, W8 row assembly extensions, and a W9 remaining-obligation
-    matrix.
-  - Remaining blockers after this wave: Pach--Toth still needs an actually
-    viable non-rigid transition family, period equations, and non-connector
-    lower/value tables that inhabit the explicit closing fields.  The concrete
-    same/opposite four-target coordinates remain formally blocked by the
-    `T1_1,r` exact-local row.  Swanepoel still needs concrete topology,
-    enclosure, label, angle, containment, and no-early witnesses instantiated
-    uniformly for every minimal failure, rather than carried as explicit row
-    fields.
-  - Completion gate passed: all 20 W9 workers were closed only after completion;
-    all owned modules received targeted pinned Lean checks and source scans;
-    root import coverage, full build, forbidden-token scan,
-    `native_decide`/`trustCompiler` source scan, diff whitespace check, and
-    CI-style axiom audit passed.
-
-- [x] Tenth parallel proof wave is integrated.
-  - Pach--Toth workers W10-P1--W10-P10 own:
-    `FlexibleTransitionSearchW10.lean`,
-    `RoleHingePolynomialSystemW10.lean`,
-    `NonRigidPeriodCandidateW10.lean`,
-    `CrossBlockValueSearchW10.lean`,
-    `LengthTwoThreeCaseW10.lean`,
-    `ExactLocalObstructionExpansionW10.lean`,
-    `FlexibleBranchSearchSummaryW10.lean`,
-    `ArbitraryNBridgeW10.lean`,
-    `GeneratedPointNormalizationW10.lean`, and
-    `PachTothW10ClosureMatrix.lean`.
-  - Swanepoel workers W10-S1--W10-S10 own:
-    `TopologyFrontierW10.lean`,
-    `BoundaryLabelInstantiationW10.lean`,
-    `BoundaryCountingInstantiationW10.lean`,
-    `SubpolygonAngleW10.lean`,
-    `WindowContainmentW10.lean`,
-    `NoEarlyK23AssemblyW10.lean`,
-    `MinimalFailureDirectMatrixW10.lean`,
-    `SwanepoelTargetFacadeW10.lean`,
-    `GeometryRemainingFieldsW10.lean`, and
-    `SwanepoelW10ClosureMatrix.lean`.
-  - Tenth-wave results integrated: Pach--Toth now has sharper non-rigid
-    transition search surfaces, role-hinge polynomial systems, period-candidate
-    routing, cross-block value/inequality ledgers, length-two/length-three
-    missing-data ledgers, exact-local obstruction expansions, generated-point
-    normalization certificates, arbitrary-`n` routing, and a W10 closure
-    matrix.  Swanepoel now has topology-frontier equivalences, boundary-label
-    instantiation rows, boundary/subpolygon angle-count adapters, M8 window
-    containment adapters, no-early/K23 assembly rows, minimal-failure direct
-    matrices, remaining geometry-field packages, target facades, and a W10
-    closure matrix.
-  - Remaining blockers after this wave: Pach--Toth still needs concrete
-    non-rigid transition/period data and actual polynomial/value lower-table
-    certificates for a viable generated closed-chain family.  Swanepoel still
-    needs concrete inhabitants of the topology/enclosure, boundary-label,
-    angle/long-arc, window-containment, no-start/no-early, K23/common-neighbor,
-    and broken-lattice geometry fields.
-  - W10 status: these modules provide checked conditional direct/K23/component
-    and geometry projection routes, plus 20 CI axiom-audit entries.  They do
-    not yet provide uniform row-family inhabitants for either final bound.
-  - Completion gate passed: all 20 W10 workers were closed only after
-    completion; all owned modules received targeted pinned Lean checks and
-    source scans; root import coverage, full build, forbidden-token scan,
-    `native_decide`/`trustCompiler` source scan, diff whitespace check, and
-    CI-style axiom audit passed.
-
-- [x] Eleventh parallel proof wave is integrated.
-  - Pach--Toth W11 worker and terminal-route modules are root-imported,
-    build-checked, and scan-clean.
-  - Swanepoel W11 worker and terminal-route modules are root-imported,
-    build-checked, and scan-clean.
-  - Completion gate passed: the 19 W11 terminal-route files that were outside
-    the root import surface now import through
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`; targeted checks,
-    root build, source scan, `native_decide`/`trustCompiler` source scan,
-    coverage scan, diff whitespace check, and CI-style axiom audit passed.
-  - Current status: W11 closes the terminal-summary import/build plumbing; it
-    still does not supply the final unconditional
-    Swanepoel `8 / 31` or Pach--Toth `5 / 16` public theorem data.
-
-- [x] Twelfth parallel proof wave surface is integrated.
-  - Pach--Toth W12 modules are root-imported, build-checked, and scan-clean:
-    `FiniteCertificateObligationsW12`, `LargeClosedPlacementW12`,
-    `NonConnectorSeparationW12`, and `OrbitSqDistancesW12`.
-  - Swanepoel W12 modules are root-imported, build-checked, and scan-clean:
-    `BoundaryArcW12`, `BoundaryClassificationW12`, `CutVertexSlackW12`,
-    `E22E23BridgeW12`, `Figure8ContainmentW12`,
-    `Figure9ContainmentW12`, `Lemma6NegativeAfterGapW12`,
-    `Lemma7GapInductionW12`, `Lemma8WitnessW12`, `M8TurnPackageW12`,
-    `OuterBoundaryAngleW12`, `SubpolygonAngleW12`, and
-    `SubpolygonPackageW12`.
-  - Current W12 route correction: `OrbitSqDistancesW12` proves the old fully
-    quantified concrete connector-only orbit-distance target is blocked, so
-    Pach--Toth work must instantiate a replacement transition/orbit package or
-    use the restricted exact-block route that avoids the obstructed all-same
-    two-block word.
-  - Completion gate passed: all 17 W12 files import through
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`; targeted checks,
-    root build, source scan, `native_decide`/`trustCompiler` source scan,
-    coverage scan, diff whitespace check, and CI-style axiom audit passed.
-
-- [x] Thirteenth parallel proof wave surface is integrated.
-  - Swanepoel W13 bridge/assembly modules are root-imported, build-checked,
-    and scan-clean.
-  - Pach--Toth W13 bridge/assembly modules are root-imported, build-checked,
-    and scan-clean.
-  - Current status: W13 routes the W12 package surfaces into narrower
-    endpoint/assembly paths, but the final theorem data is still conditional.
-
-- [x] Fourteenth parallel proof wave surface is integrated.
-  - Pach--Toth W14 endpoint and certificate modules are root-imported,
-    build-checked, and scan-clean, including exact-to-arbitrary, large/small,
-    period/non-connector, and known-bound-spine surfaces.
-  - Swanepoel W14 endpoint and remaining-input modules are root-imported,
-    build-checked, and scan-clean, including boundary-arc, boundary-angle,
-    Lemma 6/7, Lemma 8/9, face-reduction, and final endpoint attempts.
-  - Current status: W14 gives the live conditional endpoint facades; it does
-    not by itself supply the concrete final gate inputs.
-
-- [x] Fifteenth proof-surface wave is integrated.
-  - Pach--Toth W15 modules are root-imported, build-checked, and scan-clean:
-    `AllPositiveCertificateAssemblyW15`, `FinalPachTothGateW15`,
-    `LargeThresholdSmallCasesW15`, `PeriodRowsAllPositiveProofW15`, and
-    `TailPolynomialLowerProofW15`.
-  - Swanepoel W15 modules are root-imported, build-checked, and scan-clean:
-    `BoundaryArcExtractionProofW15`, `FinalSwanepoelGateW15`,
-    `Lemma89WindowContainmentProofW15`, `NoCutMinimalityProofW15`,
-    `OuterAngleBudgetProofW15`, and `RemainingInputConcreteAssemblyW15`.
-  - Current status: W15 provides the final-gate shape.  The final bounds are
-    still conditional on constructing `FinalPachTothGateW15.FinalGate` and
-    `FinalSwanepoelGateW15.FinalGate`.
-
-- [x] Sixteenth proof-surface wave is integrated.
-  - Pach--Toth W16 modules are root-imported, build-checked, and scan-clean:
-    `EventualClosedPlacementCertificateW16`, `LargeKGlobalSeparationW16`,
-    `PeriodBaseFixingCertificateW16`, `PeriodBaseFixingOppositeW16`,
-    `PeriodBaseFixingSameW16`, `SmallComplementExactBlocksW16`,
-    `SmallRowsFourFiveW16`, `SmallRowsTwoThreeW16`, and
-    `TailPolynomialRowsW16`.
-  - Swanepoel W16 modules are root-imported, build-checked, and scan-clean:
-    `BoundaryArcFiniteWalkConstructionW16`, `BoundaryTopologyArcBridgeW16`,
-    `Figure8WindowContainmentW16`, `Figure9WindowContainmentW16`,
-    `Lemma8LocalLabelsW16`, `Lemma9LateTriplesW16`,
-    `LongArcFactsSelectionW16`, `NoCutFromMinimalityW16`, and
-    `PayForCutArithmeticW16`.
-  - Current status: W16 tightens the final-gate input contracts, but it still
-    leaves the concrete final-gate constructors as the live proof work.
-
-- [x] Import and scan the completed interface-wave modules.
-  - Completed interface-wave modules are root-imported and covered by the
-    current full-tree forbidden-token scan.  The long per-module inventory has
-    been retired; remaining active work is tracked by the open items below.
-
-- [x] Record the Pach--Toth translated-equation obstruction.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/TranslatedEquationObstruction.lean`.
-  - Current state: the four-equation translated connector route is formally
-    uninhabited.  Treat equation-carried final facades as audit/obstruction
-    material, not as the live constructive proof path.
-  - Live Pach--Toth path: non-rigid/role-hinged transition data, explicit
-    period words/equations, and indexed cross-block lower tables.
-
-- [x] `TurnBoundsInterface.lean` is imported and build-checked.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/TurnBoundsInterface.lean`.
-  - Current state: imported by the root file, included in the successful
-    pinned build, and scan-clean.
-
-- [x] `LocalDeletionConstructors.lean` is integrated and build-checked.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/LocalDeletionConstructors.lean`.
-  - Current state: imported by
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`; standalone
-    `lake env lean` check passes; pinned `lake build` builds it.
-  - New helper:
-    `localClosedNeighborhoodDeletionEliminator_of_exists_localClosedNeighborhoodDeletion`
-    turns tupled `deleted`/`reinsertion` data plus the five local facts into
-    the structure-valued eliminator.
-  - New direct local-deletion facts:
-    `MinimalFailureLocalExclusions.LocalClosedNeighborhoodDeletion.induced_card_lt_original`,
-    `hasCleared_of_minimalFailure`, and `false_of_minimalFailure`.
-    These get the strict smaller induced configuration directly from local
-    deletion data before attaching the smaller independent set.
-  - Current downstream status: S2 now has the singleton-safe deletion
-    certificate route and the deficient-neighborhood contradiction in
-    `Swanepoel/DeficientNeighborhood.lean`.  This file remains conditional
-    plumbing; the actual local inequality is certified separately.
-
-- [x] Public facade currently exposes only completed legacy bounds.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/KnownBounds.lean`.
-  - Current public theorems: `Verified.upper_bound_third`,
-    `Verified.lower_bound_quarter`, and `PollackPach.lower_bound_quarter`.
-  - Do not expose Swanepoel `8 / 31` or Pach-Toth `5 / 16` until the final
-    checklists below are complete.
-
-File hygiene note.
-  - Ignored stale generated output:
-    `E:/Personal/Erdosproblems/1066/Aristotle/ARISTOTLE_SUMMARY.md`.
-  - Ignored build cache: `E:/Personal/Erdosproblems/1066/.lake/`.
-  - These do not affect Lean builds.  Do not use them as evidence of current
-    proof state.
-  - Next action: do not create audit/output files while proving tasks.  If file
-    hygiene is cleaned later, remove stale ignored/generated files separately
-    from proof edits.
-
-## Swanepoel 8 / 31 Overview
-
-Final target:
-
-```lean
--- E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Bridge.lean
-def targetLowerBoundEightThirtyOne : Prop :=
-  forall (n : Nat) (C : UDConfig n),
-    exists s : Finset (Fin n), C.IsIndep s /\ 31 * s.card >= 8 * n
-```
-
-Current checked reduction:
-
-```lean
--- E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/TargetReduction.lean
-theorem targetLowerBoundEightThirtyOne_of_pipelineCleared :
-  (forall (n : Nat) (C : UDConfig n),
-    CounterexamplePipeline.HasClearedEightThirtyOneIndependentSet C) ->
-  targetLowerBoundEightThirtyOne
-```
-
-Current real status: the algebraic and conditional spine is good, but the
-paper bridge is still missing.  Swanepoel is not one small theorem away unless
-that theorem is treated as a large mega-construction containing E5 through E23.
-
-Paper-to-Lean route:
-
-| Paper step | Strategy in the paper | Lean route / current consumer |
-|---|---|---|
-| `E5` | Lemma 1, in the M8-needed form: every nonempty independent `S` with `S.card <= 8` has at least `3 * S.card` outside neighbours | S2, `SmallIndependentNeighborhood`, `MinimalFailureLocalExclusions`, `DeficientNeighborhood` |
-| `E6` | Lemma 2: minimum degree at least `3` | S3, `MinimumDegree.unitDistanceNeighborSet_card_ge_three_of_minimalClearedFailure` |
-| `E7` | Lemma 3: connected and no cut vertex | S3, `MinimalConnectednessClosure`, then `CutVertexFinal.RemainingNoCutSlackFact` |
-| `E8-E10` | outer boundary and boundary bookkeeping | S4, `JordanTopologyFactsConcrete.TopologyFacts`, `JordanBoundaryConcrete.MissingTopologyFacts`, `PlanarBoundaryClosure.PlanarBoundaryData` |
-| `E11` | source-faithful boundary arc bookkeeping that feeds the boundary labels | S4, boundary cycle/classification data, `BoundaryFaceCountingToM8`, `BoundaryLabelExtractionTasks` |
-| `E12-E13` | boundary and subpolygon angle/count inequalities | S5, `BoundaryAngleRealization.OuterBoundaryAngleRealization.angleLowerBound`, `SubpolygonAssembly.SubpolygonCycleCountAngleData.lowDegreeInequality`, `SubpolygonAssembly.e13LowDegreeInequality_of_explicitCycleCountAngleData` |
-| `E14-E16` | Lemmas 6, 7, 5: long nonconcave arc | S6, current Lean has reducers/adapters; the remaining proof must construct `NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData` |
-| `E17` | `m = 8` thirteen-turn specialization of the long-arc data | S6, `NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData` to `M8TurnBoundsFromArc.NonconcaveArcTurnData` |
-| `E18-E19` | Lemma 8 labels and Lemma 9 late triples | S6/S8, `M8FinitePQSpineCertificate`, `M8Lemma8MissingExistenceConditions`, `M8Lemma9FiveStartLateFacts` |
-| `E21-E23` | Euclidean Lemma 10 and Figure 8/Figure 9 inequalities | S7, `HonestFigure8ExplicitEuclideanFacts`, `HonestFigure9AdjacentLeftEuclideanFactWitnesses`, then `MinimalFailureM8RefinedPaperFacts.windowGeometry` |
-| `E24` | `m = 8` contradiction and lower-bound target | S8, `MinimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne` |
-
-Current source-refined paper package:
-
-```lean
-M8PaperFactsAssemblyRefined.MinimalFailureM8RefinedPaperFactsFamily
-```
-
-This is the cleanest paper-facing checklist.  The smallest Lean-efficient
-conditional gate below it is:
-
-```lean
-BrokenLatticeMinimalFailure.MinimalFailureM8ConstructionEliminator
-```
-
-The source-refined package closes the target through:
-
-```text
-MinimalFailureM8RefinedPaperFacts
--> MinimalFailureM8RefinedPaperFacts.toM8ConstructionData
--> MinimalFailureM8RefinedPaperFactsFamily.toM8ConstructionEliminator
--> MinimalFailureM8RefinedPaperFactsFamily.no_minimalClearedFailure
--> MinimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne
--> Swanepoel.targetLowerBoundEightThirtyOne
-```
-
-The older separated-construction gate remains checked separately through:
-
-```text
-M8PipelineClosure.MinimalFailureM8SeparatedConstructionEliminator
--> M8PipelineClosure.no_minimalClearedFailure_of_separatedConstructionEliminator
--> MinimalFailureClosure.targetLowerBoundEightThirtyOne_of_no_minimalClearedFailure
--> Swanepoel.targetLowerBoundEightThirtyOne
-```
-
-The paper-facing `MinimalFailureM8RefinedPaperFacts` package still has a
-`positiveCard` field, but the concrete matrix routes derive it from minimality.
-The remaining source obligations are no-cut slack, arc budget, spine
-certificate, Lemma 8, Lemma 9, and Figure 8/Figure 9 facts.
-
-For current parallel handoff, use the rooted W20/W21 source-package lane.
-Swanepoel agents should target
-`RemainingObligationLedgerW20.RemainingObligationFields`,
-`PointwiseProducerFamilyFieldsW20.PointwiseSourceFamilyFields`,
-`SwanepoelSourcePackageW20.ExactRemainingFields`, and
-`SwanepoelKnownBoundsGateW21.KnownBoundsExposureGate`.  Pach--Toth agents
-should target
-`ExplicitClosedPlacementInputPackageW20.GeneratedFamilyClosureReducedMetricSourceFields`,
-`GeneratedChainFamilyProducerW20.SourceFields`,
-`ExplicitClosedPlacementProducerW19.InputPackage`, and
-`ClosedPlacementKnownBoundsGateW21.KnownBoundsExposureGate`.  W12-W21 package
-surfaces remain the component contracts underneath this handoff.
-
-### Swanepoel Already Checked
-
-- [x] `UDConfig` to Mathlib `SimpleGraph` bridge.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/GraphBridge.lean`.
-  - Current declarations include `unitDistanceSimpleGraph`,
-    `unitDistanceSimpleGraph_adj`, `unitDistanceSimpleGraph_adj_iff_ne_and_dist`,
-    and `isIndep_iff_simpleGraph_isIndepSet`.
-
-- [x] Induced subconfiguration machinery.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/InducedSubconfiguration.lean`.
-  - Current declarations include `Induced`, `preservesDistancesOn`,
-    `image_indep_iff`, and `ofFinset`.
-
-- [x] Degree upper bound `<= 6`.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/DegreeBound.lean`.
-  - Checked declaration: `UDConfig.unitDistanceNeighborSet_card_le_six`.
-
-- [x] Noncrossing unit edges.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoncrossingUnitEdges.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/FaceReduction.lean`.
-  - Checked declaration: `FaceReduction.unitDistanceEdges_pairwiseNoncrossing`.
-
-- [x] Conditional deletion/reinsertion arithmetic.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalCounterexample.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CounterexamplePipeline.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/DegreePipeline.lean`.
-
-- [x] Common-neighbor and labelled `K_{2,3}` cap for unit-distance configs.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CommonNeighborGeometry.lean`.
-  - Current state: this cap no longer needs a separate `K23DegreeReducible`
-    assumption.
-
-- [x] Boundary-count and subpolygon-count algebra from explicit angle bounds.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryCounting.lean`.
-  - Current declarations:
-    `BoundaryCounts.boundary_angle_count_inequality` and
-    `SubpolygonDegreeCounts.subpolygon_low_degree_inequality`.
-
-- [x] Lemma 10 finite contradiction from supplied E22/E23.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10Bridge.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10AnalyticBridge.lean`.
-  - Use `honestContradiction_of_E22_E23` for the final honest package.
-    The lower-level `contradiction_of_E22_E23` also exists, but it needs an
-    explicit raw `htriple`.
-
-- [x] Euclidean angle and Lemma 10 window arithmetic interfaces.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/TriangleAngleFacts.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/AngleGeometry.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/AngleArithmetic.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10EuclideanBridge.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10Pipeline.lean`.
-  - Current state: imported, build-checked, and scan-clean.  These files route
-    explicit squared-distance/unit-angle facts and weighted turn-window
-    inequalities into the existing Lemma 10 E22/E23 contradiction machinery.
-  - Conditional status: the paper-specific Figure 8/Figure 9 distance data and
-    turn-window containment still have to be extracted from the boundary
-    construction.
-
-- [x] Minimal-failure closure, conditional on no minimal failure.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureClosure.lean`.
-  - Current declarations include `hasCleared_of_no_minimalClearedFailure` and
-    `targetLowerBoundEightThirtyOne_of_no_minimalClearedFailure`.
-
-### Swanepoel Completion Checklist
-
-#### S1. Integrate the local deletion constructor layer
-
-- [x] Fix and import `LocalDeletionConstructors.lean`.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/LocalDeletionConstructors.lean`.
-  - Why: it is useful conditional plumbing above
-    `MinimalFailureLocalExclusions`.
-  - Current state: root import coverage includes it and pinned build succeeds.
-  - Next task: use this layer only after S2 supplies the actual eliminator
-    hypothesis from honest local deletion data.
-
-- [x] Add direct-card-bound local deletion interfaces.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/LocalDeletionWithCardBound.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/LocalDeletionEliminatorWithCardBound.lean`.
-  - Current state: imported, build-checked, and scan-clean.  The checked layer
-    packages `LocalDeletionData`, routes it to a local deletion certificate,
-    and provides conditional eliminators such as
-    `targetLowerBoundEightThirtyOne_of_directCardBoundCertificateEliminator`.
-  - Conditional status: these are not final Swanepoel completion theorems; the
-    direct-card-bound deletion data still has to be supplied in honest cases.
-
-#### S2. Prove Lemma 1 / small independent neighborhoods
-
-- [x] Add canonical multi-center closed neighborhoods.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SmallIndependentNeighborhood.lean`.
-  - Checked declarations:
-
-```lean
-noncomputable def closedNeighborhoodOf
-    {n : Nat} (C : UDConfig n) (S : Finset (Fin n)) : Finset (Fin n)
-
-noncomputable def outsideNeighborhoodOf
-    {n : Nat} (C : UDConfig n) (S : Finset (Fin n)) : Finset (Fin n)
-
-lemma isClosedNeighborhood_closedNeighborhoodOf :
-    IsClosedNeighborhood C S (closedNeighborhoodOf C S)
-```
-
-  - Current state: definitions are by finite filters over `Finset.univ`;
-    membership lemmas, `isClosedNeighborhood_closedNeighborhoodOf`,
-    `disjoint_outsideNeighborhoodOf`, `closedNeighborhoodOf_eq_union`,
-    `closedNeighborhoodOf_card_eq_add_outsideNeighborhoodOf_card`, and the
-    deletion-cardinality bridges are imported, build-checked, and audited.
-
-- [x] Add a general local deletion certificate that works for singleton
-  reinsertion.
-  - Best home:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureLocalExclusions.lean`.
-  - Why: the older `DegreeLocalDeletionCertificate` is degree-specific and
-    assumes `2 <= reinsertion.card`; paper Lemma 1 needs singleton cases.
-  - Checked shape:
-
-```lean
-structure LocalDeletionCertificate
-    {n nSmall : Nat} (C : UDConfig n) (Csmall : UDConfig nSmall) where
-  kept : Fin nSmall -> Fin n
-  deleted : Finset (Fin n)
-  reinsertion : Finset (Fin n)
-  keptInjective : Function.Injective kept
-  keptDeletedDisjoint :
-    Disjoint ((Finset.univ.image kept) : Finset (Fin n)) deleted
-  cover : ((Finset.univ.image kept) : Finset (Fin n)) ∪ deleted = Finset.univ
-  closedNeighborhood : IsClosedNeighborhood C reinsertion deleted
-  deletedCard : (deleted.card : Int) <= 4 * (reinsertion.card : Int) - 1
-  reinsertionNonempty : reinsertion.Nonempty
-  reinsertionCardUpper : reinsertion.card <= 8
-  reinsertionIndep : C.IsIndep reinsertion
-  preservesDistances :
-    forall small : Finset (Fin nSmall),
-      PreservesDistancesOn Csmall C kept small
-```
-
-  - Current checked declarations include
-    `LocalDeletionCertificate.data`,
-    `LocalDeletionCertificate.hypotheses`,
-    `LocalDeletionCertificate.hasCleared_of_minimalFailure`,
-    `LocalDeletionCertificate.false_of_minimalFailure`, and
-    `LocalDeletionCertificate.not_nonempty_localDeletionCertificate_of_minimalFailure`.
-  - Current downstream status: canonical data is now packaged by
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/DeficientNeighborhood.lean`.
-    The general certificate layer is no longer an S2 blocker.
-
-- [x] Prove the deficient-neighborhood contradiction.
-  - Checked declarations:
-
-```lean
-theorem canonicalDeletion_satisfies_directLocalDeletionInputs
-
-theorem exists_localDeletionCertificate_of_deficientNeighborhood
-
-theorem outsideNeighborhood_card_ge_three_mul_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
-    {S : Finset (Fin n)}
-    (hSnonempty : S.Nonempty)
-    (hSindep : C.IsIndep S)
-    (hScard : S.card <= 8) :
-    3 * S.card <= (outsideNeighborhoodOf C S).card
-```
-
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/DeficientNeighborhood.lean`.
-  - Current state: imported, build-checked, and audited.  The proof deletes
-    `closedNeighborhoodOf C S`, packages the kept side via
-    `InducedSubconfiguration.ofFinset`, converts a deficient outside
-    neighborhood into a `LocalDeletionCertificate`, and contradicts minimality.
-
-#### S3. Derive graph structure from minimal failure
-
-- [x] Prove minimum degree `>= 3`.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SingletonNeighborhood.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimumDegree.lean`.
-  - Checked declarations:
-
-```lean
-theorem closedNeighborhoodOf_singleton_eq_closedUnitNeighborhood
-
-theorem outsideNeighborhoodOf_singleton_eq_unitDistanceNeighborSet
-
-theorem unitDistanceNeighborSet_card_ge_three_of_minimalClearedFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
-    (v : Fin n) :
-    3 <= (DegreePipeline.unitDistanceNeighborSet C v).card
-```
-
-  - Current state: imported, build-checked, and audited.  The proof
-    specializes the deficient-neighborhood theorem to `S = {v}` and identifies
-    the outside neighborhood with `DegreePipeline.unitDistanceNeighborSet`.
-
-- [x] Package the minimal-failure degree range.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureDegreeRange.lean`.
-  - Current state: imported, build-checked, and audited.  The theorem
-    `unitDistanceNeighborSet_card_between_three_and_six_of_minimalClearedFailure`
-    combines the minimum-degree lower bound with
-    `DegreeBound.UDConfig.unitDistanceNeighborSet_card_le_six`.
-
-- [x] Add structural anticomplete-partition glue.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/ConnectednessSeparator.lean`.
-  - Current state: imported, build-checked, and audited.  The structure
-    `FinAnticompletePartition` packages a two-side anticomplete partition, and
-    `FinAnticompletePartition.hasCleared_of_induced_hasCleared` glues cleared
-    independent sets from the induced sides.  The theorem
-    `FinAnticompletePartition.contradiction_of_minimalClearedFailure` closes
-    the contradiction for any supplied anticomplete partition of a minimal
-    cleared failure.  This is honest connectedness plumbing, not yet a theorem
-    extracting such a partition from graph disconnectedness.
-
-- [x] Extract disconnectedness separators and close connectedness.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/ConnectednessExtraction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalConnectedness.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/ConnectednessExtractionClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalConnectednessClosure.lean`.
-  - Current state: imported, build-checked, and scan-clean.  The extraction
-    route converts failure of preconnectedness into a finite anticomplete
-    partition, then uses the checked separator contradiction to prove
-    `MinimalConnectednessClosure.unitDistanceSimpleGraph_connected_of_minimalClearedFailure`.
-
-- [x] Add cut-vertex interfaces and conditional closure plumbing.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexClosure.lean`.
-  - Current state: imported, build-checked, and scan-clean.  The checked layer
-    defines `CutVertexPartition`, `NoCutVertex`, `CutVertexSlackGluingData`,
-    and the conditional closure theorem
-    `CutVertexClosure.noCutVertexCertificate_of_minimalFailure_allCutVertexSlack`.
-  - This is not an unconditional no-cut-vertex theorem: it still requires the
-    uniform cut-vertex slack package.
-
-- [ ] Prove the W16 no-cut payload from minimality.
-  - Paper step: Swanepoel `E7`, Lemma 3 two-connectedness/no-cut-vertex
-    reduction.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexFromConnectedness.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexFinal.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoCutMinimalityProofW15.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/PayForCutArithmeticW16.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoCutFromMinimalityW16.lean`,
-    consumed downstream by
-    `NoCutFromMinimalityW16.PointwiseNoCutMinimalityInputs.noCutVertex`
-    and eventually `FinalSwanepoelGateW15.FinalGate`.
-  - Current checked W16 localization:
-
-```lean
-def NoCutMinimalityProofW15.MinimalitySelectedPayForCut
-
-theorem PayForCutArithmeticW16
-  .minimalitySelectedPayForCut_iff_sideCardExactFact
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    MinimalitySelectedPayForCut hmin <->
-      CutVertexDeletionSideCardExactFact hmin
-
-theorem PayForCutArithmeticW16
-  .minimalitySelectedPayForCut_iff_noCutVertex_of_minimalFailure
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    MinimalitySelectedPayForCut hmin <-> CutVertexInterface.NoCutVertex C
-```
-
-  - Correct next target: prove the partition-independent W15 pay-for-cut
-    statement from minimality, or prove `NoCutVertex C` directly and recover
-    the pay-for-cut statement by the checked equivalence.
-
-```lean
-theorem minimalitySelectedPayForCut_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    NoCutMinimalityProofW15.MinimalitySelectedPayForCut hmin := by
-  sorry
-
-theorem noCutVertex_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    CutVertexInterface.NoCutVertex C := by
-  exact
-    NoCutMinimalityProofW15
-      .noCutVertex_of_minimalFailure_minimalitySelectedPayForCut
-        hmin
-        (minimalitySelectedPayForCut_of_minimalFailure hmin)
-```
-
-  - How: argue by contradiction from a supplied `CutVertexPartition C`.
-    `NoCutMinimalityProofW15` proves that a concrete partition obstructs the
-    uniform pay-for-cut input, so the proof must extract an actual contradiction
-    from the partition using deletion/gluing and `CutVertexPayForCutArithmetic`,
-    not merely assert that the minimality-selected side surplus pays the cut
-    vertex while the partition remains live.
-  - Completion gate: root-import a theorem providing `NoCutVertex C` for every
-    minimal cleared failure, then consume it through
-    `NoCutFromMinimalityW16.NoCutMinimalityRemainingInputFamily` or directly in
-    `FinalSwanepoelGateW15.FinalGate`.
-
-- [x] Add connectedness-plus-conditional cut-vertex closure adapter.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexFromConnectedness.lean`.
-  - Current state: imported, build-checked, scan-clean, and covered by the
-    axiom audit.  It combines checked connectedness extraction, the
-    conditional all-cut-vertex slack package, and the minimal-failure degree
-    range into `ConnectedNoCutVertexCertificate`.
-  - Conditional status: this still does not prove the all-cut-vertex slack
-    package from minimality; that is the remaining no-cut payload.
-
-- [x] Add cut-vertex pay-for-cut arithmetic reducer.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexPayForCutArithmetic.lean`.
-  - Current state: imported, build-checked, scan-clean, and covered by the
-    current root build surface.
-  - Conditional status: it is arithmetic/reduction plumbing for the remaining
-    cut-vertex slack route; the geometric slack facts still need proof.
-
-#### S4. Build honest outer-boundary and subpolygon data
-
-- [x] Add a lightweight boundary-walk bridge to Mathlib polygons.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryWalkBridge.lean`.
-  - Current state: imported, build-checked, and audited.  It exposes
-    `BoundaryCycle.toPolygon`, cyclic edge helpers, unit edge-length
-    projections, and simple-polygon noncrossing projections.  It deliberately
-    does not claim faces, interiors, or Jordan-curve construction.
-
-- [x] Add boundary-walk construction bookkeeping.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryWalkConstruction.lean`.
-  - Current state: imported, build-checked, and scan-clean.  It turns supplied
-    finite boundary-cycle edge and degree classifications into
-    `BoundaryClassification` bookkeeping and projections back to
-    `OuterBoundaryCore`.
-  - Conditional status: the geometric/Jordan-style boundary cycle and the
-    classification evidence are still supplied inputs.
-
-- [x] Add an honest outer-boundary core interface.
-  - Existing weak interface:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/FaceReduction.lean`.
-  - Existing package interfaces:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/OuterBoundaryInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/OuterBoundaryReduction.lean`.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/OuterBoundaryCore.lean`.
-  - Checked structure:
-
-```lean
-structure OuterBoundaryCore
-    (G : FaceReduction.CanonicalStraightLineUnitDistanceGraph n) where
-  faceBoundary : FaceReduction.UnitDistanceFaceBoundaryHypotheses G
-  outerFace : faceBoundary.Face
-  outerFace_isOuter : faceBoundary.IsOuterFace outerFace
-  outerEnclosure :
-    OuterBoundaryInterface.OuterBoundaryEnclosure G faceBoundary outerFace
-```
-
-  - Current state: imported, build-checked, and scan-clean.  The file exposes
-    projections to `OuterBoundaryPackage`,
-    `OuterBoundaryReduction.OuterBoundaryConstruction`, and the canonical
-    boundary-count hypotheses once explicit count and angle data are supplied.
-  - Conditional status: this is an interface/forgetful packaging layer, not a
-    construction of an outer face from a minimal cleared failure.
-
-- [ ] Construct the honest topology/outer-boundary package from a minimal
-  cleared failure.
-  - Paper step: Swanepoel `E8`, boundary polygon exists.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanBoundaryExtraction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanBoundaryConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanTopologyFactsConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/OuterBoundaryCore.lean`.
-  - Deliverable: for each minimal cleared failure, construct
-    `JordanTopologyFactsConcrete.TopologyFacts C` or, if a smaller first step
-    is needed, `JordanBoundaryConcrete.MissingTopologyFacts C`.  Project to
-    `OuterBoundaryCore` only through `.toCore`; the final consumer wants
-    `PlanarBoundaryClosure.PlanarBoundaryData (CanonicalGraph C)`.
-  - Target skeleton:
-
-```lean
-noncomputable def topologyFacts_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    JordanTopologyFactsConcrete.TopologyFacts C := by
-  sorry
-
-noncomputable def outerBoundaryCore_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    OuterBoundaryCore (JordanTopologyFactsConcrete.canonicalGraph C) :=
-  (topologyFacts_of_minimalFailure hmin).toCore
-```
-
-  - How: start from S3 connected/no-cut data plus
-    `FaceReduction.unitDistanceEdges_pairwiseNoncrossing`; use Mathlib
-    `SimpleGraph.Walk`, `Walk.IsCycle`, `Polygon`, `Wbtw`, and `Sbtw` only for
-    graph/cycle/polygon primitives.  The actual outer-face/Jordan extraction is
-    project-local.
-  - Dependency: the full `OuterBoundaryCore`/`PlanarBoundaryData` route needs
-    `remainingNoCutSlackFact_of_minimalFailure` from S3.  Until then,
-    `MissingTopologyFacts`-style topology extraction is the parallel-safe
-    subtask.
-  - Completion gate: the constructed core is usable by
-    `PlanarBoundaryClosure.PlanarBoundaryData.core`.
-
-- [x] Add boundary classification and bookkeeping interfaces.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryClassification.lean`.
-  - Current state: imported, build-checked, and scan-clean.  It defines
-    `BoundaryEdgeClass`, `BoundaryDegreeClass`, `BoundaryBookkeeping`,
-    `BoundaryCountsRealization`, and projection lemmas into
-    `BoundaryCounting.BoundaryCounts`.
-  - Conditional status: it computes counts from supplied classification data;
-    it does not yet extract those classifications from an actual boundary.
-
-- [ ] Extract actual boundary classifications and counts.
-  - Needed data:
-    boundary cycle vertices, ambient degrees `3..6`, triangle/nontriangle
-    edge classification, unique common-neighbor witnesses on triangle edges,
-    long arcs, concave long arcs, and computed `BoundaryCounts`.
-  - Paper step: Swanepoel `E9-E10`, boundary edge classification and turn/count
-    bookkeeping.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryClassification.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryWalkConstruction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryFaceCountingToM8.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/PlanarBoundaryFaceDataRefinement.lean`.
-  - Deliverable: concrete boundary `BoundaryCountsRealization` and the
-    boundary-face data needed by `PlanarBoundaryClosure.PlanarBoundaryData`.
-  - Conditional bridge now present: `BoundaryWalkConstruction` has
-    `longArcContribution`, `longArcIndicator_sum_eq_B` in terms of that
-    contribution, and `toPlanarBoundaryData_countsRealization` for projecting
-    the count realization carried by the constructed planar-boundary package.
-    This is bookkeeping glue only; the actual boundary classifications and
-    count data still have to be extracted from the outer boundary.
-  - How: define all counts from the actual boundary cycle, prove the
-    classification is exhaustive and nonoverlapping, and project the computed
-    counts to the fields consumed by `BoundaryCounting`.
-  - Completion gate: `PlanarBoundaryClosure.PlanarBoundaryData.faceCountingTheorems`
-    can be obtained from the constructed boundary data.
-
-- [ ] Extract the source-faithful boundary arc bookkeeping used by the M8
-  labels.
-  - Paper step: Swanepoel `E11`, boundary arcs and label bookkeeping between
-    the outer-boundary construction and the later `p_i/q_i` spine.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryFaceCountingToM8.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryLabelExtractionTasks.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundarySpineConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundarySpineFiniteCertificate.lean`.
-  - Deliverable: checked boundary-cycle arc data with the exact finite labels
-    needed to produce `BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate
-    planarBoundary`.
-  - How: after the S4 topology/count data exists, define the cyclic boundary
-    index order, identify the paper's arc endpoints and long-arc markers, and
-    prove the projections used by the M8 label extraction modules.
-  - Completion gate: the S6 Lemma 8 task can construct its finite spine from
-    the honest `PlanarBoundaryClosure.PlanarBoundaryData`, not from abstract
-    supplied labels.
-
-- [x] Add outer-boundary assembly adapter.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/OuterBoundaryAssembly.lean`.
-  - Current state: imported, build-checked, and scan-clean.  It combines an
-    `OuterBoundaryCore`, bookkeeping-realized boundary counts, and a matching
-    boundary-angle package into `FaceCountingBridge` count hypotheses.
-  - Conditional status: it assembles supplied core/bookkeeping/angle data; it
-    does not construct the outer boundary, classifications, or angle package.
-
-- [x] Add concrete subpolygon count and angle-realization interfaces.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonCore.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonAngleRealization.lean`.
-  - Current state: imported, build-checked, and scan-clean.  `SubpolygonCore`
-    computes boundary degree counts from a supplied induced vertex set and
-    routes `DegreeCountData` to the checked low-degree inequalities.
-    `SubpolygonAngleRealization` turns supplied geometric angle comparisons
-    into `SubpolygonDegreeCounts.AngleLowerBound`.
-  - Conditional status: these files do not construct the geometric subpolygon
-    or the angle-sum comparisons.
-
-- [x] Add subpolygon assembly interface.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonAssembly.lean`.
-  - Current state: imported by
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, build-checked,
-    and scan-clean.
-  - Current purpose: assemble a supplied subpolygon boundary, induced count
-    realization, and explicit angle comparisons into the checked E13
-    subpolygon counting interfaces.
-  - Conditional status: it still requires the supplied subpolygon boundary,
-    count realization, and angle comparisons.
-
-- [ ] Construct honest geometric subpolygon packages.
-  - Needed data:
-    subpolygon boundary cycle, inside/on vertex set, induced subconfiguration,
-    induced boundary degrees, computed `SubpolygonDegreeCounts`.
-  - Paper step: Swanepoel `E13`, Lemma 4 subpolygon low-degree inequality.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonCore.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonAngleRealization.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonAssembly.lean`.
-  - Deliverable: a reusable honest subpolygon package whose computed
-    `SubpolygonDegreeCounts` feeds
-    `SubpolygonAssembly.SubpolygonCycleCountAngleData.lowDegreeInequality` and
-    `SubpolygonAssembly.e13LowDegreeInequality_of_explicitCycleCountAngleData`.
-  - How: define the inside/on vertex set, build the induced configuration,
-    compute boundary degrees from the induced graph, and prove the degree range
-    hypotheses needed by the existing low-degree inequality.
-  - Completion gate: the subpolygon package can be supplied to
-    `PlanarBoundaryClosure.PlanarBoundaryData` and to the Lemma 6/8
-    contradiction subagents.
-
-- [x] Add conditional planar-boundary closure adapter.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/PlanarBoundaryClosure.lean`.
-  - Current state: imported, build-checked, scan-clean, and covered by the
-    axiom audit.  It combines supplied `OuterBoundaryCore`, boundary
-    bookkeeping/angle data, and subpolygon cycle/count/angle data into the
-    `FaceCountingBridge` inputs.
-  - Conditional status: it still requires the explicit planar/Jordan-style
-    outer-boundary core and honest subpolygon data.
-
-#### S5. Discharge boundary and subpolygon angle lower bounds
-
-- [x] Add angle-lower-bound interface packages.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryAngleInterface.lean`.
-  - Current state: imported, build-checked, and scan-clean.  It defines
-    `BoundaryAngleLowerBoundPackage` and
-    `SubpolygonAngleLowerBoundPackage`, routing supplied geometric angle-sum
-    comparisons into the checked boundary and subpolygon counting inequalities.
-  - Conditional status: the geometric angle sums and their comparison
-    inequalities are still hypotheses.
-
-- [x] Add concrete boundary-angle realization interface.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryAngleRealization.lean`.
-  - Current state: imported by
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, build-checked,
-    and scan-clean.
-  - Current purpose: records explicit per-class outer-boundary angle masses
-    and routes them to `BoundaryAngleLowerBoundPackage`.
-  - Conditional status: it still consumes supplied geometric angle-mass data;
-    it does not derive those masses from an actual outer boundary.
-
-- [ ] Prove outer boundary angle lower bound.
-  - Paper step: Swanepoel `E12`, boundary angle-count inequality.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryAngleRealization.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/OuterBoundaryAngleClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryCounting.lean`.
-  - Current consumer declarations:
-
-```lean
-BoundaryAngleRealization.OuterBoundaryAngleRealization.angleLowerBound
-OuterBoundaryAngleClosure.BoundaryBookkeepingAngleBounds.angleLowerBound
-OuterBoundaryAngleClosure.boundaryAngleCountInequality_of_outerBoundaryCore_angleRealization
-```
-
-  - Deliverable: construct the explicit `BoundaryAngleRealization` or
-    `BoundaryBookkeepingAngleBounds` for the honest outer boundary.
-  - Target skeleton:
-
-```lean
-noncomputable def outerBoundaryAngleRealization_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    BoundaryAngleRealization.OuterBoundaryAngleRealization := by
-  sorry
-
-theorem outerBoundaryAngleLowerBound_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    BoundaryCounting.BoundaryCounts.AngleLowerBound
-      (outerBoundaryAngleRealization_of_minimalFailure hmin).counts :=
-  (outerBoundaryAngleRealization_of_minimalFailure hmin).angleLowerBound
-```
-
-  - How: use the polygon interior-angle sum plus local triangle/quadrilateral
-    angle facts to prove the geometric angle-mass inequalities consumed by
-    `BoundaryCounts.boundary_angle_count_inequality`.
-  - Completion gate: the resulting angle package combines with S4 boundary
-    counts inside `PlanarBoundaryClosure.PlanarBoundaryData`.
-
-- [ ] Prove subpolygon angle lower bound.
-  - Paper step: Swanepoel `E13`, subpolygon angle-count inequality.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonAngleRealization.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonAssembly.lean`.
-  - Current consumer declarations:
-
-```lean
-SubpolygonAssembly.SubpolygonCycleCountAngleData.angleLowerBound
-SubpolygonAssembly.SubpolygonCycleCountAngleData.lowDegreeInequality
-SubpolygonAssembly.e13LowDegreeInequality_of_explicitCycleCountAngleData
-```
-
-  - Deliverable: construct the explicit subpolygon angle realization for each
-    subpolygon produced by S4 and needed by Lemma 6/Lemma 8.
-  - Target skeleton:
-
-```lean
-noncomputable def subpolygonCycleCountAngleData_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
-    (P : SubpolygonCore.SubpolygonPackage
-      (JordanTopologyFactsConcrete.canonicalGraph C)) :
-    SubpolygonAssembly.SubpolygonCycleCountAngleData
-      (JordanTopologyFactsConcrete.canonicalGraph C) := by
-  sorry
-
-theorem subpolygonLowDegreeInequality_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
-    (P : SubpolygonCore.SubpolygonPackage
-      (JordanTopologyFactsConcrete.canonicalGraph C)) :
-    6 <=
-      2 * (subpolygonCycleCountAngleData_of_minimalFailure hmin P).counts.D2 +
-        (subpolygonCycleCountAngleData_of_minimalFailure hmin P).counts.D3 :=
-  (subpolygonCycleCountAngleData_of_minimalFailure hmin P).lowDegreeInequality
-```
-
-  - How: mirror the outer-boundary angle proof for induced subpolygons and
-    feed `SubpolygonDegreeCounts.subpolygon_low_degree_inequality`.
-  - Completion gate: the subpolygon angle package can be used directly by the
-    S6 long-arc and Lemma 8 subpolygon-contradiction tasks.
-
-#### S6. Formalize Swanepoel Lemmas 6, 7, 5, 8, and 9
-
-- [ ] Prove Lemma 6 / forced negative after a gap.
-  - Paper step: Swanepoel `E14`.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma6NegativeAfterGapW12.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcBudgetFromBoundary.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcAngleFacts.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/SubpolygonAssembly.lean`.
-  - Deliverable: instantiate the checked W12
-    `BoundaryWalkLemma6Obstruction` or `BoundaryArcIndexMap` for the actual
-    boundary walk, then use `negativeAfter_of_gap` / `negativeAfterAt_of_gapAt`
-    to feed the nonconcave-arc package.
-  - How: express the gap condition in terms of the current boundary-spine and
-    turn data, construct the subpolygon contradiction, and feed the checked
-    S5 subpolygon low-degree inequality.
-  - Completion gate: the theorem is callable while constructing
-    `NonconcaveArcGeometricAngleFacts`.
-
-- [ ] Prove Lemma 7 / degree-three gap induction.
-  - Paper step: Swanepoel `E15`.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcAngleFacts.lean`.
-  - Deliverable: an induction theorem over the degree-three/gap pattern that
-    supplies the arc monotonicity/forced-turn facts required by
-    `NonconcaveArcGeometricAngleFacts`.  This should consume the Lemma 6
-    theorem above, not bypass it with a new abstract field.
-  - How: iterate the Lemma 6 theorem over the boundary index interval, keeping
-    all finite-index arithmetic in `Nat`/`Fin` rather than informal cyclic
-    notation.
-  - Completion gate: the induction theorem is used in the construction of
-    `NonconcaveArcBoundaryBudgetData` and its
-    `toNonconcaveArcGeometricAngleFacts` projection.
-
-- [ ] Prove Lemma 5 / existence of a nonconcave long arc.
-  - Paper step: Swanepoel `E16`.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcAngleFacts.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnBoundsFromArc.lean`.
-  - Deliverable: construct the existing geometric-angle package from the S4/S5
-    boundary and subpolygon facts plus Lemmas 6 and 7.
-  - Conditional bridge now present: `NonconcaveArcConcrete.BoundaryLongArcFacts`
-    packages a finite family of long arcs, a concavity predicate, the strict
-    count gap, raw turn functions, nonnegativity, and the `concave_iff`
-    comparison.  It already selects a nonconcave long arc and routes it to
-    `NonconcaveArcBoundaryBudgetData` and `M8ConstructionInterface.M8TurnBounds`.
-    This does not prove Lemma 5 by itself; the remaining work is to build the
-    `BoundaryLongArcFacts` instance from the real boundary data and connect
-    Lemmas 6 and 7 to `NonconcaveArcGeometricAngleFacts`.
-
-```lean
-noncomputable def nonconcaveArcBoundaryBudgetData_of_minimalFailure
-    {n : Nat} {C : UDConfig n}
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C)
-    (planarBoundary :
-      PlanarBoundaryClosure.PlanarBoundaryData
-        (BoundaryFaceCountingToM8.CanonicalUDGraph C)) :
-    NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData
-      (BoundaryFaceCountingToM8.CanonicalUDGraph C) := by
-  sorry
-```
-
-  - How: package the selected long arc, the turn function, turn
-    nonnegativity, and the `totalTurn < Real.pi / 3` budget from Lemmas 6 and
-    7.
-  - Completion gate: the refined M8 package field `arcBoundaryBudget` is filled.
-
-- [ ] Specialize the long-arc data to the `m = 8` thirteen-turn package.
-  - Paper step: Swanepoel `E17`.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnPackageW12.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcAngleFacts.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnBoundsFromArc.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnBoundsConcrete.lean`.
-  - Target skeleton:
-
-```lean
-noncomputable def m8ThirteenTurnData_of_nonconcaveArc
-    {G : Type u} [Fintype G] [DecidableEq G]
-    (D : NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData G) :
-    M8TurnBoundsFromArc.NonconcaveArcTurnData :=
-  D.toNonconcaveArcTurnData
-```
-
-  - How: prove that the paper's selected `m = 8` arc is exactly the current
-    `turnIndexSet = {1, ..., 13}` and that all off-arc turns are normalized to
-    zero by the checked adapter.
-  - Completion gate: S7 can use the resulting
-    `M8TurnPackageW12.BoundaryLongArcM8TurnPackage` turn function in the
-    Figure 8/Figure 9 Euclidean fact fields.
-
-- [ ] Prove Lemma 8 / construction of the `r_i, s_i` witnesses.
-  - Paper step: Swanepoel `E18`.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundarySpineFiniteCertificate.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryLabelCertificateAssembly.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8NeighborExtractionConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8ExistenceConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8CyclicOrderConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8DegreeSixConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8ForbiddenDistinctConcrete.lean`.
-  - Deliverables:
-
-```lean
-noncomputable def m8FinitePQSpineCertificate_of_planarBoundary
-    {n : Nat} {C : UDConfig n}
-    (planarBoundary :
-      PlanarBoundaryClosure.PlanarBoundaryData
-        (BoundaryFaceCountingToM8.CanonicalUDGraph C)) :
-    BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate
-      planarBoundary := by
-  sorry
-
-noncomputable def m8Lemma8MissingExistenceConditions_of_spine
-    {n : Nat} {C : UDConfig n}
-    {H : M8LabelsFromBoundaryInterface.M8BoundaryCutDegreeContext C}
-    (S : M8LabelsFromBoundaryInterface.M8BoundarySpine H) :
-    Lemma8ExistenceConcrete.M8Lemma8MissingExistenceConditions S := by
-  sorry
-```
-
-  - How: first extract the finite `p/q` spine from the boundary labels, then
-    prove the missing existence/cyclic-order/degree-six/forbidden-distinct
-    fields using local boundary classification and S4/S5 subpolygon
-    contradictions.
-  - Completion gate: the refined M8 package fields `spineCertificate` and
-    `lemma8Existence` are filled.
-
-- [ ] Prove Lemma 9 / late triples.
-  - Paper step: Swanepoel `E19`.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoEarlyTripleFromLemma9.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoEarlyTripleObstructionConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8LateTriplesFromNoEarly.lean`.
-  - Deliverable:
-
-```lean
-noncomputable def m8Lemma9FiveStartLateFacts_of_paperLemma9
-    {V : Type u} {G : LocalConfigurations.LocalGraph V}
-    (P : LocalConfigurations.BrokenLatticePredicates G 8) :
-    NoEarlyTripleFromLemma9.M8Lemma9FiveStartLateFacts P := by
-  sorry
-```
-
-  - How: show any equality triple in the honest `m = 8` label package starts
-    at index at least `6`, then route it through the checked no-early-triples
-    adapter.
-  - Completion gate: the refined M8 package field `lemma9FiveStartLateFacts`
-    is filled.
-
-#### S7. Close E22/E23 through angle-to-turn containment
-
-- [x] Add containment-to-angle-to-turn bridge interfaces.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/AngleContainmentInterface.lean`.
-  - Checked declarations:
-
-```lean
-structure Figure8SeparatedContainmentInterface
-structure Figure9AdjacentLeftContainmentInterface
-structure AngleContainmentBridges
-
-theorem Figure8SeparatedContainmentInterface.separatedWindowLowerE22
-theorem Figure9AdjacentLeftContainmentInterface.adjacentWindowLowerE23
-theorem AngleContainmentBridges.E22_E23
-```
-
-  - Current state: once extracted Figure 8/Figure 9 data and the respective
-    angle-containment inequalities are supplied, the file packages them into the
-    existing `Lemma10AngleToTurn` E22/E23 bridge.
-
-- [x] Add window-level geometry wrappers for E22/E23.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10WindowGeometry.lean`.
-  - Current state: imported, build-checked, and scan-clean.  The file routes
-    explicit unit-distance data plus containment in the separated/adjacent
-    turn windows to the existing E22/E23 lower-bound interfaces, including
-    honest `m = 8` wrappers.
-  - Conditional status: it still requires the actual Figure 8/Figure 9
-    distance data and window-containment proofs.
-
-- [ ] Extract Figure 8 distance data from failed separated labels.
-  - Paper step: Swanepoel `E22`, Lemma 10 inequality (5), Figure 8.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8ContainmentConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8EuclideanFactsConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8ContainmentAngleBudget.lean`,
-    with older analytic data in
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/AngleBridgeFacts.lean`.
-  - Local deliverable:
-
-```lean
-Figure8ContainmentConcrete.Figure8SeparatedWindowContainment
-```
-
-  - How: map the broken-lattice witnesses into the current Figure 8 contained
-    witness structure, prove the unit-distance/squared-distance facts, and
-    route them through the existing Euclidean facts module.
-  - Completion gate: the refined M8 package field `figure8EuclideanFacts` can
-    be constructed for the honest M8 labels.
-
-- [ ] Prove Figure 8 central-angle containment.
-  - Paper step: Swanepoel `E22`, angle-to-turn containment.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10AngleToTurn.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8ContainmentAngleBudget.lean`.
-  - Deliverable field:
-    `Figure8SeparatedAngleToTurnBridge.central_angle_le_separatedTurn`.
-  - How: prove the oriented angle lies inside the separated turn window.  The
-    local `pi / 3` angle lower bound is already checked.
-  - Completion gate: this field is combined with the Figure 8 witness package
-    into `HonestFigure8ExplicitEuclideanFacts`.
-
-- [ ] Extract Figure 9 distance data from failed adjacent labels.
-  - Paper step: Swanepoel `E23`, Lemma 10 inequality (6), Figure 9.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9ContainmentConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9EuclideanFactsConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9ContainmentAngleBudget.lean`.
-  - Local deliverable:
-
-```lean
-Figure9ContainmentConcrete.Figure9AdjacentLeftContainedWitnesses
-```
-
-  - How: map adjacent failed labels into the current Figure 9 contained
-    witness structure and prove the required unit-distance/squared-distance
-    facts.
-  - Completion gate: the refined M8 package field `figure9EuclideanFacts` can
-    be constructed for the honest M8 labels.
-
-- [ ] Prove Figure 9 left-angle containment.
-  - Paper step: Swanepoel `E23`, angle-to-turn containment.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10AngleToTurn.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9ContainmentAngleBudget.lean`.
-  - Deliverable field:
-    `Figure9AdjacentLeftAngleToTurnBridge.left_angle_le_adjacentTurn`.
-  - How: prove the oriented Figure 9 angle lies inside the adjacent three-turn
-    window, then package the field with the distance data from the previous
-    item.
-  - Completion gate: this field is combined with the Figure 9 witness package
-    into `HonestFigure9AdjacentLeftEuclideanFactWitnesses`.
-
-- [ ] Build the honest E22/E23 hypotheses.
-  - Existing final bridge:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10AngleToTurn.lean`.
-  - Window-geometry bridge:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma10WindowGeometry.lean`.
-  - W12 route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/E22E23BridgeW12.lean`.
-  - Target route:
-
-```lean
-figure8SeparatedWindowLowerE22_of_angleToTurnBridge
-figure9AdjacentWindowLowerE23_of_leftAngleToTurnBridge
-E22_E23_of_angleToTurnBridges
-
-Lemma10WindowGeometry.honestE22_E23_of_leftWindowGeometry
-M8PaperFactsAssemblyRefined.MinimalFailureM8RefinedPaperFacts.windowGeometry
-E22E23BridgeW12.contradiction_of_constructionDataFromContainment
-```
-
-  - Deliverable:
-
-```lean
-noncomputable def figure8EuclideanFacts_of_m8LabelsAndArc
-    {n : Nat} {C : UDConfig n}
-    (localLabels : M8ConstructionInterface.M8LocalLabels C)
-    (D :
-      NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData
-        (BoundaryFaceCountingToM8.CanonicalUDGraph C)) :
-    Figure8EuclideanFactsConcrete.HonestFigure8ExplicitEuclideanFacts
-      localLabels.predicates D.toM8TurnBounds.turn := by
-  sorry
-
-noncomputable def figure9EuclideanFacts_of_m8LabelsAndArc
-    {n : Nat} {C : UDConfig n}
-    (localLabels : M8ConstructionInterface.M8LocalLabels C)
-    (D :
-      NonconcaveArcBudgetFromBoundary.NonconcaveArcBoundaryBudgetData
-        (BoundaryFaceCountingToM8.CanonicalUDGraph C)) :
-    Figure9EuclideanFactsConcrete.HonestFigure9AdjacentLeftEuclideanFactWitnesses
-      localLabels.predicates D.toM8TurnBounds.turn := by
-  sorry
-```
-
-  - How: construct `Figure8SeparatedAngleToTurnBridge` and
-    `Figure9AdjacentLeftAngleToTurnBridge`, or use the newer containment
-    wrappers directly from extracted distance data and window-containment
-    lemmas.
-  - Completion gate: the refined M8 package fields `figure8EuclideanFacts` and
-    `figure9EuclideanFacts` are filled.
-
-- [x] Add containment-to-M8 window geometry adapter.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8WindowGeometryFromContainment.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8ContainmentConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8EuclideanFactsConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure8ContainmentAngleBudget.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9EuclideanFactsConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9ContainmentAngleBudget.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Figure9ContainmentConcrete.lean`.
-  - Current state: imported, build-checked, scan-clean, and compatible with
-    the current CI-style axiom audit.  It repackages supplied Figure 8/Figure 9 containment
-    interfaces, concrete contained-witness data, and angle-budget wrappers
-    into the window-geometry fields consumed by `M8ConstructionInterface`;
-    the Figure 9 module now builds after the witness-alias type mismatch was
-    corrected.
-  - Conditional status: the concrete containment interfaces and extracted
-    distance data still need to be proved from the boundary/broken-lattice
-    geometry.
-
-#### S8. Build the final minimal-failure contradiction
-
-- [x] Add broken-lattice contradiction and minimal-failure closure interfaces.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BrokenLatticeInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BrokenLatticeMinimalFailure.lean`.
-  - Current state: imported, build-checked, and scan-clean.
-    `BrokenLatticeInterface` routes a supplied honest `m = 8` local-predicate,
-    turn, E22/E23, and late-triples package to contradiction.
-    `BrokenLatticeMinimalFailure` names the remaining construction data and
-    proves `no_minimalClearedFailure_of_m8ConstructionEliminator` from an
-    eliminator supplying that data for every minimal cleared failure.
-  - Conditional status: the eliminator is not constructed yet.
-
-- [x] Add turn-bound, late-triples, and M8 pipeline closure
-  interfaces.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/TurnBoundsInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/LateTriplesInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8PipelineClosure.lean`.
-  - Current state: imported by
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, build-checked,
-    and scan-clean.
-  - Current purpose: package honest turn bounds, finite late-triples inputs,
-    and separated M8 construction fields into the existing broken-lattice
-    contradiction route.
-  - Conditional status: the honest inputs still need to be constructed from
-    the minimal-failure geometry.
-
-- [x] Add boundary-to-M8, nonconcave-arc, no-early-triple, and final
-  conditional M8 adapters.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8LabelsFromBoundaryInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnBoundsFromArc.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcAngleFacts.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NonconcaveArcBudgetFromBoundary.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8LateTriplesFromNoEarly.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoEarlyTripleFromLemma9.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/NoEarlyTripleObstructionConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8MinimalFailureEliminatorInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/FinalConditional.lean`.
-  - Current state: imported, build-checked, scan-clean, and compatible with
-    the current CI-style axiom audit.  These files package the structural boundary/no-cut/degree
-    context, explicit Lemma 8 labels, concrete nonconcave-arc angle
-    inequalities, boundary-attached turn-budget reducers, Lemma 9-shaped
-    no-early triple exclusions, obstruction bookkeeping, and final separated
-    M8 eliminator into the current conditional Swanepoel target route.
-  - Conditional status: the paper Lemma 8 combinatorics, nonconcave arc,
-    no-early-triple proof, containment data, and separated M8 construction
-    fields still must be constructed from an actual minimal cleared failure.
-
-- [x] Add concrete M8 assembly and reducer modules.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8ConstructionDataBridge.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureComponentPackage.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureFactsFamilyConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8TurnWindowNoEarlyFinal.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryFaceCountingToM8.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryLabelExtractionTasks.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundarySpineConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundarySpineFiniteCertificate.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BoundaryLabelCertificateAssembly.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexSlackFromDeletion.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/CutVertexSideCardFromMinimality.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanBoundaryExtraction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanBoundaryConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/JordanTopologyFactsConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/PlanarBoundaryFaceDataRefinement.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8CombinatoricsConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8NeighborExtractionConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8ExistenceConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8CyclicOrderConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8DegreeSixConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/Lemma8ForbiddenDistinctConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8PaperFactsAssemblyRefined.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailurePaperFactMatrix.lean`.
-  - Current state: imported, build-checked, scan-clean, and compatible with
-    the current CI-style axiom audit.
-  - Current purpose: the remaining Swanepoel construction has been narrowed to
-    the explicit `MinimalFailureM8RefinedPaperFacts` fields: positive
-    cardinality, cut-vertex slack, boundary-attached nonconcave arc budget,
-    the M8 boundary spine certificate, Lemma 8 extra-neighbor combinatorics,
-    Lemma 9 five-start late facts, and Figure 8/Figure 9 Euclidean facts.
-  - Conditional status: these fields are still paper facts to prove, not
-    completed Lean constructions.
-
-- [ ] Prove the minimal-failure `m = 8` construction eliminator.
-  - Paper step: Swanepoel `E24`, final `m = 8` contradiction.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/M8PaperFactsAssemblyRefined.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/BrokenLatticeMinimalFailure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailureClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/Swanepoel/MinimalFailurePaperFactMatrix.lean`.
-  - Source-refined paper deliverables:
-
-```lean
-noncomputable def minimalFailureM8RefinedPaperFacts
-    {n : Nat} (C : UDConfig n)
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C) :
-    M8PaperFactsAssemblyRefined.MinimalFailureM8RefinedPaperFacts C hmin := by
-  sorry
-
-noncomputable def minimalFailureM8RefinedPaperFactsFamily :
-    M8PaperFactsAssemblyRefined.MinimalFailureM8RefinedPaperFactsFamily where
-  facts := fun C hmin => minimalFailureM8RefinedPaperFacts C hmin
-
-theorem targetLowerBoundEightThirtyOne_verified :
-    _root_.ErdosProblems1066.Swanepoel.targetLowerBoundEightThirtyOne :=
-  minimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne
-```
-
-  - Lean-efficient construction-data gate:
-
-```lean
-noncomputable def minimalFailureM8ConstructionEliminator :
-    BrokenLatticeMinimalFailure.MinimalFailureM8ConstructionEliminator := by
-  intro C hmin
-  sorry
-```
-
-  - Exact gate definition already checked in Lean:
-
-```lean
-def BrokenLatticeMinimalFailure.MinimalFailureM8ConstructionEliminator : Prop :=
-  forall {n : Nat} (C : _root_.UDConfig n)
-    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
-      Nonempty (BrokenLatticeMinimalFailure.M8ConstructionData C hmin)
-```
-
-  - How: assemble the S3 cut-slack field, S4/S5 planar-boundary field, S6
-    boundary-attached arc budget plus spine/Lemma 8/Lemma 9 fields, and S7
-    Figure 8/Figure 9 Euclidean fields into
-    `MinimalFailureM8RefinedPaperFacts`.  Then use
-    `MinimalFailureM8RefinedPaperFactsFamily.targetLowerBoundEightThirtyOne`.
-  - Completion gate: the refined family proves
-    `Swanepoel.targetLowerBoundEightThirtyOne` without extra hypotheses.
-
-- [ ] Prove no minimal cleared failure.
-  - Best home: new `MinimalFailureContradiction.lean` or
-    `NoMinimalFailure.lean`.
-  - Target theorem:
-
-```lean
-theorem no_minimalClearedFailure
-    {n : Nat} (C : UDConfig n) :
-    Not (MinimalGraphFacts.IsMinimalClearedFailure C)
-```
-
-  - Next action: construct the S8 eliminator and call
-    `BrokenLatticeMinimalFailure.no_minimalClearedFailure_of_m8ConstructionEliminator`.
-
-- [ ] Prove the verified target wrapper.
-  - Target theorem:
-
-```lean
-theorem targetLowerBoundEightThirtyOne_verified :
-    targetLowerBoundEightThirtyOne
-```
-
-  - Next action: apply
-    `MinimalFailureClosure.targetLowerBoundEightThirtyOne_of_no_minimalClearedFailure`.
-
-- [ ] Add the public theorem.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/KnownBounds.lean`.
-  - Target theorem:
-
-```lean
-theorem lower_bound_eight_thirty_one
-    (n : Nat) (C : UDConfig n) :
-    exists s : Finset (Fin n), C.IsIndep s /\ 31 * s.card >= 8 * n
-```
-
-## Pach-Toth 5 / 16 Overview
-
-Current exact-block target:
-
-```lean
--- E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/Bridge.lean
-def targetUpperConstructionFiveSixteen : Prop :=
-  forall (k : Nat), 0 < k ->
-    exists C : UDConfig (16 * k),
-      forall s, C.IsIndep s -> s.card <= 5 * k
-```
-
-Current arbitrary-`n` target:
-
-```lean
--- E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ArbitraryN.lean
-def targetUpperConstructionFiveSixteenArbitrary : Prop := ...
-```
-
-Important source-faithfulness correction: the Pach-Toth paper route is
-eventual, for sufficiently large `n` / sufficiently large block count `k`.
-The current all-positive-`k` Lean target is a stronger optional theorem unless
-finite small-case certificates are supplied.
-
-Paper-to-Lean route:
-
-| Paper step | Strategy in the paper | Lean route / current consumer |
-|---|---|---|
-| `FG.1-FG.4` | proof-used finite block graph, independence count, and edge roles | P2, `FiniteGraph`, `CrossBlock`, `Figure2EdgeTable` |
-| `FG.5-FG.6` | source-faithful complete Figure 2 table from the PostScript primitives | P2 optional attribution layer, full `S0-S8` / `U0-U29` table and projection lemmas |
-| `GEO.1` | exact one-block geometry | already routed by `ExactLocalGeometry`, `AffineLocalGeometry`, `BaseTransitionRealization.exactBase` |
-| `GEO.2` | same/opposite non-rigid transition maps, including connector unit edges | P3, `RoleHingeInterfaceRefinement.SameOppositeRoleHingeOrbitTransitionFacts`; concrete connector edges are P3, global `next_sep` is P4 |
-| `GEO.3` | source-faithful closed chains/period closure for sufficiently large block count | P4/P5, orientation words, `AlgebraicVertexPeriodEquation` fields, and eventual/threshold route |
-| `GEO.3` stronger Lean route | compact all-positive-`k` closed chains and square-distance tables | P4, `FiniteCertificateObligationSummary.Obligations` |
-| `GEO.3` separation | global distance `>= 1` for cross-block pairs | P4, all-pairs `CrossBlockSqTableSearch` route or reduced non-connector `NonRigidConnectorSeparationFacts` route |
-| `GEO.4` | remainder placement | P5, `RemainderPlacement`, `SplitArbitraryNNonRigidBridge`, `SmallCaseCertificates` |
-| `PT96.Main` | sufficiently large construction, optionally all `n` with finite cases | P5-P6, `targetUpperConstructionFiveSixteenEventually` and `targetUpperConstructionFiveSixteenArbitrary` |
-
-Compact stronger all-positive-`k` non-rigid package:
-
-```lean
-FiniteCertificateObligationSummary.Obligations
-```
-
-It is the compact non-rigid route.  Its fields are `transitions`, `word`,
-`equation`, `sqValue`, `sqValue_eq_polynomial_lt`, and `sqValue_ge_one_lt`.
-Once supplied, it closes the exact and arbitrary target facades through
-`FiniteCertificateObligationSummary.Obligations.targetUpperConstructionFiveSixteen`
-and
-`FiniteCertificateObligationSummary.Obligations.targetUpperConstructionFiveSixteenArbitrary`.
-The only top-level theorem currently exposed in that module is the arbitrary
-wrapper
-`FiniteCertificateObligationSummary.targetUpperConstructionFiveSixteenArbitrary`.
-The source-faithful thresholded/eventual analogue of this obligation package is
-already present as
-`EventualRoleHingeClosure.EventualFiniteCertificateObligations`; the remaining
-work is supplying concrete eventual transition, orientation, period, and
-separation data, plus matching small cases for the chosen threshold.
-Do not use the translated four-equation facade as the live route; that route is
-kept only as an audited obstruction surface.
-
-### Pach-Toth Already Checked
-
-- [x] Finite one-block graph and counting.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FiniteGraph.lean`.
-  - Current declarations include `alpha_le_six`,
-    `unique_size_six_independent`, and `next_block_after_forbidden_le_four`.
-
-- [x] Chain counting.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlock.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/Chain.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/IndexedChain.lean`.
-
-- [x] Exact local one-block geometry.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ExactLocalGeometry.lean`.
-  - Note: do not use rounded PostScript drawing coordinates as metric
-    coordinates.
-
-- [x] Affine/local-coordinate and connector-equation support.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/AffineLocalGeometry.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ConnectorEquationFacts.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedChainConstruction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/DeformedOrientationBridge.lean`.
-  - Current state: imported, build-checked, and scan-clean.  These files
-    provide coordinate/connector algebra and adapters from supplied oriented
-    closed-chain placements to explicit closed-placement and indexed-chain
-    certificates.
-  - Conditional status: they do not supply the non-rigid transition geometry,
-    period closure, or global separation by themselves.
-
-- [x] Rigid translation routes are formally dead.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockGeometry.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/OrientedCrossBlockGeometry.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RealTranslationObstruction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/TranslatedEquationObstruction.lean`.
-  - Current state: the stronger four-equation translated connector route is
-    also formally uninhabited.  Do not use
-    `FinalConditional.EquationPeriodSearchCrossBlockFamily` as the live proof
-    route; keep it only as an audited conditional surface over inconsistent
-    equation-transition data.
-
-- [x] Remainder construction and far-apart translated placement.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RemainderConstruction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RemainderPlacement.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SplitSoundness.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SplitCertificateBridge.lean`.
-
-- [x] Conditional closed-placement interfaces and reductions.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/Arithmetic.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/DeformedPlacement.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedPlacementInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedChainExistence.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedChainReduction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CyclicIndex.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedClosedChain.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedClosedChainReduction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedClosedChainEventualReduction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/EventualReduction.lean`.
-  - New checked arithmetic:
-    `Arithmetic.cyclicSucc_iterate_val` and
-    `Arithmetic.cyclicSucc_iterate_card`.
-  - New checked orbit bridge:
-    `ClosedChainExistence.SuccessorCompatibleCyclicPointOrbit.exists_closedPlacement_of_successorCompatibleCyclicPointOrbit`
+Active certification tasks:
+
+- [ ] Run the pinned full root build on the current checkout.
+- [x] Run the forbidden-token scan on the current checkout.
+- [x] Run the trust-source scan on the current checkout.
+- [x] Run retained root import coverage and resolve missing, extra, or
+  duplicate imports on that surface.
+- [ ] Replay the CI-style axiom audit for the current endpoint list.
+- [ ] Keep `KnownBounds.lean` closed to Swanepoel `8 / 31` and Pach--Toth
+  `5 / 16` until unconditional internal verified theorems exist.
+
+Root-state ledger: current retained source surface has root import coverage
+`872/872` and clean forbidden/trust scans.  Earlier successful logs
+`proof_logs/root_build_20260519_082033.out.log` and
+`proof_logs/ci_axiom_audit_stdout_20260519_082158.txt` predate later Lean-file
+edits, so they are no longer certification for the current checkout.  Re-run
+the pinned full root build and CI-style axiom audit before crediting new
+checked-off work.  The exact-base all-positive flexible source is refuted by
+the root-imported W33/W34 blocker stack.  W33/W34 files are completion evidence
+only for the conditional endpoints they prove; they do not close Swanepoel
+`8 / 31` or Pach--Toth `5 / 16` without an unconditional internal theorem.
+Lean/Lake CLI resolution has been repaired at the User PATH level: the WinGet
+elan shim directory now precedes `C:/Users/Tom/bin`, so new shells resolve
+`lean`/`lake` through the `leanprover/lean4:v4.28.0` toolchain.  Existing
+shells should refresh PATH before verification.  Concurrent Lake jobs still
+cause silent `-1` exits in this workspace; serialize final certification
+builds.
+
+## Swanepoel First
+
+Finish Swanepoel `8 / 31` before broadening Pach--Toth work.  The live work is
+source inhabitation for the compact `W34ActualRoutePremises` route, not more
+facades or route ledgers.
+
+### S1. No-Cut Minimal Failure
+
+- [x] Treat no-cut as checked infrastructure and integration-only.
+  - Checked route: `CutVertexSideCardFromMinimality` refutes
+    `CutPartitionBothPlusSidesCutForcedData`; W32/W34 expose
+    `NoCutPointwiseBridgeW32.noCutDependency_of_refuting_bothPlusSidesCutForced`
+    and `NoCutMinimalityClosureW34.noCutVertexFamily_of_refuting_bothPlusSidesCutForced`.
+  - Current action: use the checked no-cut family in final assembly.  Do not
+    reopen cut-partition deletion, side-card, or actual-route-premise no-cut
+    branches unless a theorem name has become stale.
+
+### S2. Minimal-Failure Topology And Boundary Rows
+
+- [ ] Construct the honest nondegenerate outer-boundary topology source.
+  - Paper steps: `E8-E11`.
+  - Owners:
+    `Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+    `Swanepoel/OuterBoundaryCoreConstructionW28.lean`,
+    `Swanepoel/JordanBoundaryConcrete.lean`,
+    `Swanepoel/SelectedTopologyRowsInhabitationW33.lean`,
+    `Swanepoel/BoundarySpineFiniteCertificate.lean`.
+  - Live target:
+    `FaceBoundaryTopologySourceW32.MinimalFailureRemainingActualOuterBoundaryCycleTheoremTarget`,
+    equivalently `MinimalFailureNondegenerateMissingTopologyFactsTarget`.
+  - Current exact S2 blocker:
+    construct the actual unbounded-frontier boundary-edge carrier from
+    `JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs C`.
+    The checked reducer
+    `ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_connected_two_regular_frontier_graph`
+    closes S2 once this carrier is supplied as a finite connected two-regular
+    graph whose injective hom into `GraphBridge.unitDistanceSimpleGraph C`
+    has vertex image exactly the graph vertices on
+    `frontier (ExteriorComponentTopology.unboundedExteriorComponentRows C inputs).exterior`.
+    Do not use the induced graph on all frontier vertices as the target:
+    boundary chords can make that graph degree greater than two.
+  - Newest reduction: `OuterBoundaryCoreConstructionW28.outerBoundaryCoreSource_with_length_iff_remainingActualOuterBoundaryCycleTheorem`
+    identifies the remaining actual-cycle theorem with a concrete W28
+    `OuterBoundaryCoreSource` plus `3 <= outerCycle.length`; the weak
+    adjacent-pair selected-face witness is not enough for this route.
+  - Latest source-with-length bridge:
+    `FaceBoundaryTopologySourceW32.remainingActualOuterBoundaryCycleTheorem_of_exactFiniteNoncrossingActualOuterBoundaryCycleTheorem`
+    now factors the exact finite-noncrossing face-boundary package through W28
+    `OuterBoundaryCoreSourceWithLength`, with
+    `EnclosureAndFaceBoundaryW31.ofOuterBoundaryCore_toOuterBoundaryCore` as
+    the W31 projection helper.  Stale graph-cycle adapters are out of the live
+    route.
+  - Boundary-witness split:
+    `SelectedTopologyRowsInhabitationW33.minimalBoundaryTopologyWitnessFamily_nonempty_iff_exists_skeleton_missingLongArcTriangleRunField`
+    reduces the old witness-family target to a skeleton plus the exact missing
+    field
+    `JordanBoundaryConcreteInhabitationW24.MinimalBoundaryTopologySkeleton.MissingLongArcTriangleRunField`.
+    The skeleton carries topology, classification/counts, angle comparison, and
+    subpolygon rows; the missing field carries only the concrete long-arc data
+    and triangle run over that assembled planar boundary.
+  - Next action: prove the finite noncrossing canonical unit-distance graph has
+    that nondegenerate actual outer-boundary core, then build the
+    `MinimalBoundaryTopologySkeletonFamily` rows that S3 and the exact missing
+    field can complete into `ActualTopologyComponentClosurePackage` and the
+    finite `p_i/q_i` spine.
+  - Latest exact field bridge:
+    `FaceBoundaryTopologySourceW32.minimalFailureFiniteNoncrossingSourceTarget_iff_minimalFaceBoundaryFieldPackage`
+    identifies the finite-noncrossing source with dependent face-boundary rows:
+    `UnitDistanceFaceBoundaryHypotheses`, selected outer face `F`,
+    `H.IsOuterFace F`, `3 <= H.boundaryLength F`, and a matching
+    `OuterBoundaryEnclosure`.  The remaining S2 work is to prove those rows
+    for the canonical unit-distance graph of each minimal failure.
+  - Mencius bridge now available:
+    `FaceReduction.UnitDistanceFaceBoundaryHypotheses.ofOuterBoundaryCycle`
     and
-    `ClosedChainExistence.IsometricSuccessorCompatibleCyclicPointOrbit.exists_closedPlacement_of_isometricSuccessorCompatibleCyclicPointOrbit`.
-  - Current meaning: a successor-compatible cyclic orbit now packages into the
-    downstream closed-placement interface.  Generated closed-chain data now
-    routes through exact-block, exact-target, and eventual arbitrary-`n`
-    Pach-Toth reductions once its period, global separation, and same-block
-    isometry obligations are supplied.  The theorem
-    `GeneratedClosedChain.generatedPoint_same_block_isometry` reduces the
-    same-block isometry obligation to base-block isometry plus local
-    transition distance preservation.  Period and global separation remain open
-    geometry.
-  - Current eventual route:
-    `GeneratedClosedChainEventualReduction.targetUpperConstructionFiveSixteenArbitrary_of_eventual_generated_chains_base_transitions`
-    carries the same reduced same-block hypothesis style through the
-    eventual-plus-small-cases arbitrary-`n` target.
+    `FaceReduction.UnitDistanceFaceBoundaryHypotheses.exists_outerFace_length_ge_three_ofOuterBoundaryCycle`
+    turn an extracted simple cyclic outer-boundary row into the required
+    `H/F/outer/length >= 3` rows.  Current S2 work should connect the existing
+    extracted-boundary row and matching enclosure predicates to
+    `OuterBoundaryExistenceConcrete.ExactActualTopologyFields`; do not search
+    for a Mathlib face API or duplicate this bridge.
+  - Latest concrete field package:
+    `OuterBoundaryExistenceConcrete.ExactActualTopologyFields` is the current
+    nondegenerate S2 package.  It is equivalent to the remaining actual
+    outer-boundary-cycle theorem and to an `OuterBoundaryCore` with
+    `3 <= outerCycle.length`.  The task is now positive inhabitation of this
+    package, not another bridge.
+  - Newest target name:
+    `FaceBoundaryTopologySourceW32.MinimalFailureExactActualTopologyFieldsTarget`
+    is the source-level S2 target.  It is equivalent to the exact finite
+    noncrossing actual-cycle target and the remaining actual-cycle theorem via
+    `minimalFailureExactActualTopologyFieldsTarget_iff_exactFiniteNoncrossingActualOuterBoundaryCycleTheoremTarget`
+    and
+    `minimalFailureExactActualTopologyFieldsTarget_iff_remainingActualOuterBoundaryCycleTheoremTarget`.
+    The exact positive obligation is to supply, for every minimal failure,
+    either face-boundary field rows through
+    `minimalFailureExactActualTopologyFieldsTarget_of_faceBoundaryFieldRows`
+    or an `OuterBoundaryExistenceConcrete.ExtractedSimpleCyclicOuterBoundaryRow`
+    plus matching enclosure rows through
+    `minimalFailureExactActualTopologyFieldsTarget_of_extractedOuterBoundaryCycle_enclosureRows`.
+  - Latest exact row entrances:
+    `minimalFailureExactActualTopologyFieldsTarget_of_w31JordanSourceRows_with_length`
+    and
+    `minimalFailureExactActualTopologyFieldsTarget_of_outerBoundaryCoreSourceWithLengthRows`
+    are the current shortest S2 constructors.  The remaining positive work is
+    not another bridge; it is an honest
+    `MinimalFailureOuterBoundaryCoreSourceWithLengthRows` family or the
+    extracted simple cyclic boundary row plus matching `insideOrOn`,
+    `onBoundary`, and enclosure predicates.
+  - Latest bundled S2 source:
+    `OuterBoundaryExistenceConcrete.ExtractedSimpleCyclicOuterBoundaryEnclosureRows`
+    packages the extracted cyclic boundary with the matching enclosure
+    predicates, and
+    `FaceBoundaryTopologySourceW32.MinimalFailureExtractedSimpleCyclicOuterBoundaryEnclosureRows`
+    is the minimal-failure row family that feeds
+    `minimalFailureExactActualTopologyFieldsTarget_of_extractedSimpleCyclicOuterBoundaryEnclosureRows`.
+    Inhabit that bundle or `MinimalFailureOuterBoundaryCoreSourceWithLengthRows`;
+    do not add another S2 target synonym.
+  - Latest positive S2 projection:
+    `ExtractedSimpleCyclicOuterBoundaryEnclosureRows.ofOuterBoundaryCoreWithLength`
+    and `.ofActualOuterBoundaryCycleData` show that the bundled S2 rows are
+    inhabited exactly by the strong W28/source-with-length or actual-cycle
+    sources.  The weak adjacent-pair selected-face lane has boundary length `2`
+    and is not the live route.
+  - Newest checked S2 bridge:
+    `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_actualOuterBoundaryCycleDataRows`
+    maps a minimal-failure family of actual outer-boundary-cycle data directly
+    to `MinimalFailureExactActualTopologyFieldsTarget`.  In
+    `OuterBoundaryExistenceConcrete`,
+    `ExtractedSimpleCyclicOuterBoundaryEnclosureRows.nonempty_iff_exactActualTopologyFields`
+    and
+    `.nonempty_iff_outerBoundaryCore_with_length_ge_three` identify the row
+    bundle with exact actual topology fields or a real `OuterBoundaryCore`
+    with `3 <= outerCycle.length`.
+  - Current checked S2 adapter status:
+    `minimalFailureExtractedSimpleCyclicOuterBoundaryEnclosureRows` still passes
+    through an extracted-cycle compatibility shim whose enclosure predicates are
+    trivial (`insideOrOn := fun _ => True`).  Treat this as
+    compile/bookkeeping progress only, not as an honest planar
+    outer-boundary/enclosure source.  The no-argument theorem previously named
+    `minimalFailureExactActualTopologyFieldsTarget` has been quarantined as
+    `bookkeeping_minimalFailureExactActualTopologyFieldsTarget_of_syntheticCycleEnclosure`
+    so it cannot masquerade as a live S2 proof.  The live S2 proof remains the
+    strong W28/source-with-length route or actual outer-boundary-cycle data with
+    nontrivial `OuterBoundaryEnclosure` fields.  The shortest positive source
+    is now a minimal-failure family of nondegenerate actual outer-boundary
+    cores, equivalently `MinimalFailureOuterBoundaryCoreSourceWithLengthRows`.
+    Newest honest S2 adapters:
+    `OuterBoundaryExistenceConcrete.exactActualTopologyFields_of_outerBoundaryCoreWithLength`
+    and `.exactActualTopologyFields_of_actualOuterBoundaryCycleData` route
+    exact topology fields through the real `outerEnclosure` carried by
+    outer-boundary core/cycle data, not through the synthetic extracted-cycle
+    shim.  `FaceBoundaryTopologySourceW32` now also has nonempty forms
+    `minimalFailureExactActualTopologyFieldsTarget_of_nonempty_outerBoundaryCoreSourceWithLengthRows`
+    and
+    `minimalFailureExactActualTopologyFieldsTarget_of_nonempty_actualOuterBoundaryCycleDataRows`.
+    Separately, `JordanBoundaryConcrete.SimpleCyclicOuterBoundaryEnclosureRows`
+    is the concrete nondegenerate simple-cycle-plus-matching-enclosure row
+    surface and feeds actual outer-boundary-cycle data via
+    `MissingTopologyFacts.remainingActualOuterBoundaryCycleTheorem_of_simpleCyclicOuterBoundaryEnclosureRows`.
+    `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_simpleCyclicOuterBoundaryEnclosureRows`
+    is the direct minimal-failure adapter from that concrete row family to the
+    live exact S2 target.
+  - S2-J flexible Jordan source:
+    `JordanBoundaryConcrete.MinimalFailureJordanOuterComponentSourceRows` is
+    the live S2 bridge: choose a genuine outer-component unit-distance cycle
+    together with matching `insideOrOn`, `onBoundary`, all-vertices-inside, and
+    boundary-iff-cycle predicates.  It feeds W33 through
+    `FaceBoundaryTopologySourceW32.minimalFailureActualOuterBoundaryCycleDataRowsOfJordanOuterComponentSourceRows`,
+    `minimalFailureRemainingActualOuterBoundaryCycleTheoremTarget_of_jordanOuterComponentSourceRows`,
+    and
+    `minimalFailureExactActualTopologyFieldsTarget_of_nonempty_jordanOuterComponentSourceRows`.
+    The canonical girth-cycle source remains a sufficient special case, but it
+    is not the required live route unless that selected cycle is proved to be
+    outer.
+  - S2-K chosen-cycle usability surface:
+    `JordanBoundaryConcrete.ChosenJordanOuterComponentRow` is the positive
+    one-configuration package for an explicitly chosen outer-component
+    `UnitDistanceCycleBoundary` plus its matching
+    `JordanOuterComponentEnclosure`.
+    `minimalFailureJordanOuterComponentSourceRowsOfChosen`,
+    `simpleCyclicOuterBoundaryEnclosureRowsOfChosenJordanOuterComponentRows`,
+    and
+    `actualOuterBoundaryCycleDataRowsOfChosenJordanOuterComponentRows`
+    project that chosen-cycle source to the existing S2 rows without using the
+    canonical girth cycle or the synthetic extracted-cycle enclosure shim.
+    Newest checked W32 consumer adapters:
+    `FaceBoundaryTopologySourceW32.minimalFailureJordanOuterComponentSourceRowsOfChosenJordanOuterComponentRows`,
+    `minimalFailureActualOuterBoundaryCycleDataRowsOfChosenJordanOuterComponentRows`,
+    `minimalFailureRemainingActualOuterBoundaryCycleTheoremTarget_of_chosenJordanOuterComponentRows`,
+    and
+    `minimalFailureExactActualTopologyFieldsTarget_of_chosenJordanOuterComponentRows`
+    route the chosen outer-component family directly into the live S2 exact
+    topology target.  Do not retask workers with this consumer bridge; the
+    remaining S2 obligation is the positive chosen-row theorem itself.
+    `minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem`
+    now composes the finite planar outer-component theorem directly into the
+    live exact topology target.  Remaining S2 work is the actual finite planar
+    outer-component theorem source, not another W32 consumer bridge.
+    Verified consumer chain:
+    `FinitePlanarStraightLineOuterComponentTheorem` ->
+    `minimalFailureChosenRows_of_finitePlanarOuterComponentTheorem` ->
+    `minimalFailureExactActualTopologyFieldsTarget_of_chosenJordanOuterComponentRows`
+    -> `minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem`.
+    `SelectedTopologyRowsInhabitationW33.MinimalFailureExactActualTopologyFieldsTarget`
+    is an abbrev of the same W32 target, so S6 can consume this path directly.
+    Newest chosen-row constructors:
+    `JordanBoundaryConcrete.chosenJordanOuterComponentRowOfBoundaryEnclosure`,
+    `chosenJordanOuterComponentRowOfJordanOuterComponentSource`,
+    `chosenJordanOuterComponentRow_of_minimalClearedFailure`,
+    `minimalFailureChosenJordanOuterComponentRowsOfSourceRows`, and
+    `minimalFailureChosenJordanOuterComponentRowsOfCanonical` reduce
+    `MinimalFailureChosenJordanOuterComponentRows` to either a real
+    `MinimalFailureJordanOuterComponentSourceRows` family or a matching
+    `JordanOuterComponentEnclosure` for the canonical minimal-failure cycle.
+    Exact remaining positive theorem:
+    produce that source/enclosure family.  The missing mathematical lemma is
+    the finite planar straight-line graph theorem:
+    connected noncrossing unit-edge graph, no cut vertex, and at least one
+    cycle imply an outer face bounded by a simple graph cycle, with
+    `insideOrOn`, `onBoundary`, all-vertices-inside, and
+    boundary-iff-cycle predicates.  Convex-hull vertices do not solve this
+    because `UDConfig.sep` gives distance `>= 1`, not unit graph edges.
+    `JordanTopologyFactsConcrete.FinitePlanarOuterComponentInputs` is the
+    checked graph-side source package for that theorem, and
+    `FinitePlanarStraightLineOuterComponentTheorem` is the exact missing
+    theorem surface:
+    for each `UDConfig`, those inputs produce a nonempty
+    `ChosenJordanOuterComponentRow`.  `minimalFailureChosenRows_of_finitePlanarOuterComponentTheorem`
+    then closes the chosen-row S2 family.
+    `OuterBoundaryInterface.OuterBoundaryEnclosure` now has projection helpers
+    (`boundaryCycle_vertex_onBoundary`, `boundaryCycle_point_insideOrOn`,
+    `onBoundary_iff_boundaryCycle`, `insideOrOn_of_onBoundary`, and package
+    projections) for consuming that future outer-face theorem.
+    `OuterBoundaryExistenceConcrete` now has the real-enclosure equivalences
+    `exactActualTopologyFields_iff_nonempty_actualOuterBoundaryCycleData`,
+    `nonempty_actualOuterBoundaryCycleData_iff_exactActualTopologyFields`,
+    `exactActualTopologyFields_iff_nonempty_simpleCyclicOuterBoundaryEnclosureRows`,
+    `nonempty_simpleCyclicOuterBoundaryEnclosureRows_iff_exactActualTopologyFields`,
+    and `remainingActualOuterBoundaryCycleTheorem_iff_exactActualTopologyFields`.
+    These routes preserve `outerEnclosure`; avoid any synthetic
+    `insideOrOn := True` closure when consuming exact topology fields.
+    Minimal implementation plan for
+    `FinitePlanarStraightLineOuterComponentTheorem`: build a local
+    dart/rotation-system theorem for the canonical straight-line graph; define
+    the face successor on oriented unit edges by cyclic angular order; choose
+    the orbit of an extremal exterior dart; prove that orbit is a simple
+    unit-edge cycle using connectedness/no-cut to rule out bridge-like repeats;
+    define the exterior component with `connectedComponentIn` on the complement
+    of the finite embedded edge set; and package the resulting enclosure
+    predicates into `ChosenJordanOuterComponentRow`.
+    The first checked dart surface is in place:
+    `UnitDistanceDart`, `VertexCyclicAngularSuccessor`,
+    `UnitDistanceRotationSystem`, `FaceDartOrbit`,
+    `ExteriorDartOrbitEnclosure`, `ExteriorDartOrbitSource`,
+    `FinitePlanarStraightLineExteriorDartOrbitTheorem`, and
+    `finitePlanarStraightLineOuterComponentTheorem_of_exteriorDartOrbitTheorem`.
+    `JordanTopologyFactsConcrete` now constructs the face orbit from concrete
+    cycle successor data: `UnitDistanceDart.ofBoundary`,
+    `UnitDistanceCycleFaceSuccRows`, and `FaceDartOrbit.ofBoundaryFaceSuccRows`
+    turn a unit-distance cycle plus rotation-system successor rows into a
+    simple face orbit.  With a matching `JordanOuterComponentEnclosure`,
+    `selectedExteriorDartOrbitSource` produces the exterior orbit source.
+    Remaining S2 input is choosing/proving the genuine exterior cycle, its
+    `UnitDistanceCycleFaceSuccRows`, and the matching enclosure.
+    Newest dart reduction:
+    `UnitDistanceRotationSystem.faceSucc_dist_eq_one`,
+    `FaceDartOrbit.dart_injective`,
+    `ExteriorDartOrbitEnclosure` boundary/inside projections, and
+    `finitePlanarStraightLineOuterComponentTheorem_of_faceOrbitJordanEnclosure`
+    reduce S2 to the concrete source: construct a real
+    `UnitDistanceRotationSystem`, a simple exterior `FaceDartOrbit`, and a
+    matching `JordanOuterComponentEnclosure` for each
+    `FinitePlanarOuterComponentInputs C`.
+    `JordanTopologyExteriorEnclosure` is now root-imported and reduces the
+    enclosure side further: exterior frontier/closure rows construct a
+    `JordanOuterComponentEnclosure`, then `FaceOrbitJordanEnclosureSource`,
+    then `FinitePlanarStraightLineExteriorDartOrbitTheorem` and
+    `FinitePlanarStraightLineOuterComponentTheorem`.  The remaining S2 topology
+    source is the actual exterior frontier/closure rows and simple face orbit,
+    not another enclosure adapter.
+    Latest exterior-frontier reduction: boundary vertices are on the frontier
+    from the single `frontier_iff_cycle_vertex` row, and boundary closure rows
+    follow from `frontier_compl` / `frontier_subset_closure`.  The exact
+    remaining topological fact is: graph vertices on `frontier exterior` are
+    exactly the chosen orbit vertices, and non-orbit graph vertices lie in
+    `closure exteriorᶜ` (stronger: are not in `exterior`).
+    Latest reduced S2 source layer:
+    `VertexFiniteUnitNeighborCyclicOrder`,
+    `FiniteUnitNeighborRotationSource`,
+    `UnitDistanceRotationSystem.nonempty_iff_finiteUnitNeighborRotationSource`,
+    `FaceOrbitJordanEnclosureSource`,
+    `finitePlanarStraightLineExteriorDartOrbitTheorem_iff_faceOrbitJordanEnclosureSource`,
+    and
+    `finitePlanarStraightLineOuterComponentTheorem_of_faceOrbitJordanEnclosureSource`.
+    Remaining: prove finite unit-neighbor cyclic angular order and a genuine
+    face-orbit Jordan enclosure source; do not add another equivalent wrapper.
+    `finitePlanarStraightLineOuterComponentTheorem_of_angularSuccessorRows`
+    now consumes actual per-vertex `VertexCyclicAngularSuccessor` rows together
+    with a matching `FaceDartOrbit` and `JordanOuterComponentEnclosure`.
+    Remaining S2 work is the real angular-successor construction and the
+    exterior face-orbit/Jordan enclosure proof.
+    `finitePlanarStraightLineOuterComponentTheorem_of_finiteUnitNeighborCyclicOrderRows`
+    now reduces the angular-successor input to finite-neighbor cyclic-order
+    rows, using `VertexFiniteUnitNeighborCyclicOrder.angularSuccessorRows` and
+    `FiniteUnitNeighborRotationSource.angularSuccessorRows`.  Remaining S2
+    work is actual cyclic angular order for each finite neighbor set and the
+    face-orbit/Jordan enclosure proof.
+    `VertexFiniteUnitNeighborCyclicOrder.identity`, `.identityRows`,
+    `.rows_nonempty`, and the refactored
+    `finitePlanarStraightLineOuterComponentTheorem_of_angularSuccessorRows`
+    are checked convenience paths.  They do not replace the need for a genuine
+    exterior face-orbit/Jordan enclosure source.
+    Newest S2 source rows:
+    `VertexFiniteUnitNeighborCyclicOrder.identityAngularSuccessorRows`,
+    `FiniteUnitNeighborRotationSource.ofCyclicOrderRows`,
+    `FiniteUnitNeighborRotationSource.identity`, and
+    `UnitDistanceRotationSystem.ofFiniteUnitNeighborCyclicOrderRows` now supply
+    the finite unit-neighbor rotation-system side.  The remaining honest S2
+    topology payload is exactly the exterior `FaceDartOrbit` plus matching
+    `JordanOuterComponentEnclosure`.
+    `OuterBoundaryExistenceConcrete` now has real-enclosure consumers
+    `exactActualTopologyFields_of_chosenJordanOuterComponentRow`,
+    `exactActualTopologyFields_of_nonempty_chosenJordanOuterComponentRow`, and
+    `exactActualTopologyFields_of_finitePlanarOuterComponentTheorem`.  These
+    preserve the chosen row's `JordanOuterComponentSource`; the remaining S2
+    theorem is still the positive
+    `FinitePlanarStraightLineOuterComponentTheorem`.
+    Latest S2 positive adapters:
+    `JordanBoundaryConcrete.JordanOuterComponentSource.ofBoundaryEnclosureRow`,
+    `minimalFailureJordanOuterComponentSourceRowsOfBoundaryEnclosureRows`, and
+    `minimalFailureChosenJordanOuterComponentRowsOfBoundaryEnclosureRows`
+    consume an actual unit-distance cycle plus matching
+    `JordanOuterComponentEnclosure` without importing the downstream face-orbit
+    module.  In `JordanTopologyFactsConcrete`, concrete
+    `UnitDistanceCycleFaceSuccRows` plus such an enclosure now build
+    `FinitePlanarStraightLineExteriorDartOrbitTheorem` and
+    `FinitePlanarStraightLineOuterComponentTheorem`.  In
+    `FaceBoundaryTopologySourceW32`,
+    `minimalFailureExactActualTopologyFieldsTarget_of_exterior_frontier_not_mem`
+    consumes the sharper exterior-frontier route from
+    `JordanTopologyExteriorEnclosure.finitePlanarStraightLineOuterComponentTheorem_of_exterior_frontier_not_mem`.
+    Remaining S2 work is the actual exterior unit-distance cycle and its
+    nontrivial exterior frontier row.
+    Shortest current checked reducer:
+    `JordanTopologyExteriorEnclosure.finitePlanarStraightLineOuterComponentTheorem_of_exterior_cycle_frontier_not_mem`
+    now packages the boundary-following rotation system and face orbit from a
+    selected cycle.  The exact remaining blocker is therefore the finite
+    planar straight-line outer-component theorem in the following row shape:
+    for every `C` and `FinitePlanarOuterComponentInputs C`, choose
+    `B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C` and
+    `exterior : Set PlanarInterface.Point` such that graph vertices on
+    `frontier exterior` are exactly the vertices of `B`; once `exterior` is a
+    subset of the drawing complement, non-cycle graph vertices not in
+    `exterior` are automatic.
+    Drawing groundwork now lives in `Swanepoel/FinitePlaneDrawing.lean`:
+    `closedSegment_eq_image_Icc`, `isCompact_closedSegment`,
+    `isClosed_closedSegment`, `embeddedEdgePairs`,
+    `mem_embeddedEdgeSet_iff_exists_embeddedEdgePairs`,
+    `embeddedEdgeSet_closed`, `embeddedEdgeSet_compact`,
+    `drawingComplement_open`, `drawingComplement_nonempty`,
+    `frontier_drawingComplement_subset_embeddedEdgeSet`, and
+    `vertex_mem_embeddedEdgeSet_of_inputs` are checked.  Do not reprove
+    finite-union closedness, compactness, complement nonemptiness, or endpoint
+    membership.
+    `Swanepoel/ExteriorComponentTopology.lean` is the current next reducer:
+    `ExteriorComponentRows` records an open exterior subset of
+    `drawingComplement C`, `drawingComplementRows` gives the whole open
+    complement as a candidate, and `ExteriorConnectedComponentRows` packages
+    open connected components of the drawing complement.  The unbounded
+    component is now constructed by `unboundedExteriorComponentRows`, using a
+    rightward x-axis ray outside the compact embedded drawing; graph vertices
+    are proved outside it and its frontier lies in the embedded drawing.  The
+    helper `unboundedExteriorFrontierCycleRowsOfBoundary` shows the exact
+    remaining S2 source: choose the simple unit-distance outer cycle for that
+    unbounded component and prove `frontier_iff_cycle_vertex`.
+    `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows`
+    consumes that row family and the no-cut rows directly.
 
-### Pach-Toth Completion Checklist
+### S3. Angle And Subpolygon Packages
 
-#### P1. Add source-faithful eventual target
+- [ ] Prove selected nondegenerate outer-face sector/order rows.
+  - Paper steps: `E12-E13`.
+  - Owners:
+    `Swanepoel/OuterBoundaryAngleSourceW34.lean`,
+    `Swanepoel/BoundaryCountingInstantiationW10.lean`,
+    `Swanepoel/PlanarBoundaryFaceDataRefinement.lean`,
+    `Swanepoel/SubpolygonSelectedGeometrySourceW34.lean`.
+  - Live target:
+    `OuterBoundaryAngleSourceW34.SelectedNondegenerateTopologyOuterFaceSectorOrderTheorem`
+    for the S2 nondegenerate topology target.
+  - Newest reduction: that single theorem projects to
+    `SelectedTopologyLocalAngleGeometryRows`,
+    `ActualSelectedBoundaryEuclideanAngleRows`, and
+    `MinimalFailureActualOuterBoundaryAngleDataRows` through the checked
+    W34/W10 accounting path.  The concrete accounting support theorem is
+    `OuterBoundaryAngleSourceW34.selectedTopologyLocalAngleFamiliesOfMinimalFailure_accountedAngleSum_le_polygon_of_angleMassBudgets`,
+    backed by
+    `BoundaryCountingInstantiationW10.ClassifiedBoundary.UnitSeparatedLocalAngleFamilies.accountedAngleSum_le_polygon_of_angleMassBudgets`.
+  - Next action: choose the selected `longArc` predicate and prove the local
+    angle rows are ordered, disjoint outer-face sectors whose accounted mass is
+    bounded by the simple-polygon interior-angle sum.  Subpolygon realization
+    is already on the selected outer-face lane; do not add another adapter.
+  - Latest exact projection:
+    `selectedTopologyLocalAngleFamiliesOfMinimalFailure_accountedAngleSum_le_simpleOuterPolygonInteriorAngleSum_of_outerFaceSectorOrder`
+    extracts the scalar inequality from
+    `SelectedTopologyLocalAngleOuterFaceSectorOrderRows`.  The remaining fields
+    are the honest sector angles, nonnegativity, local accounted-mass
+    containment in the ordered sector sum, and the simple-polygon sector-sum
+    bound.
+  - Scalar-accounting bookkeeping:
+    `OuterBoundaryAngleSourceW34.selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_generatedAccountedAngleSum`
+    and
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_iff_exists_generatedAccountedAngleSum_le_simpleOuterPolygonInteriorAngleSum`
+    are checked bookkeeping equivalences only.  Do not present the generated
+    scalar inequality as the live S3 proof route.  The remaining S3 source is
+    honest sector-containment, genuine triangulation, or genuine
+    ear-decomposition angle-mass data.
+  - Latest S2 adapter:
+    `OuterBoundaryAngleSourceW34.remainingActualCycleSkeletonRemainderRowsOfOuterFaceSectorOrderTheorem`
+    converts a proved honest
+    `SelectedNondegenerateTopologyOuterFaceSectorOrderTheorem` into the exact
+    `RemainingActualCycleSkeletonRemainderRows` field required by W34 final
+    assembly.
+  - Newest positive sources:
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_angleMassBudgetedSectorRows`,
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_triangulationAngleMassBudgetRows`,
+    and
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_earDecompositionAngleMassBudgetRows`
+    are the current concrete S3 entrances.  Prove one honest sector/triangulation
+    or ear-decomposition angle-mass package; do not add another scalar wrapper.
+    The triangulation/ear packages now require
+    `budgetSum_le_orderedOuterFaceSectorSum`, so the budget rows must fit
+    directly inside the ordered outer-face sector sum before using
+    `orderedOuterFaceSectorSum_eq_simpleOuterPolygonInteriorAngleSum`.
+    The triangulation rows are currently inhabited from the generated scalar budget by
+    `selectedNondegenerateTopologyLocalAngleOuterFaceTriangulationAngleMassBudgetRowsOfGeneratedAccountedAngleSum`
+    and
+    `nonempty_selectedNondegenerateTopologyLocalAngleOuterFaceTriangulationAngleMassBudgetRows_of_generatedAccountedAngleSum_le_simpleOuterPolygonInteriorAngleSum`.
+    Treat these as scalar bookkeeping helpers only: they concentrate the whole
+    polygon angle sum into one sector and use formal constant-angle triangles,
+    so they must not be credited as an honest E12/E13 proof.
+    Preferred current entrance:
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_sectorContainmentRows`.
+    It uses `SelectedTopologyLocalAngleOuterFaceSectorContainmentRows`, where
+    generated local angle slots are assigned to selected outer-face sectors and
+    per-sector loads are bounded directly.  Populate those sector-containment
+    rows rather than reviving the arbitrary generated-witness scalar route.
+    The honest missing row is actual outer-face sector angles at each selected
+    boundary vertex, Swanepoel cyclic unit-neighbor gaps for the generated
+    local slots, correct per-slot sector assignment, per-sector load
+    containment, and the real polygon angle-sum theorem.
+    Subpolygon bookkeeping is not the current blocker:
+    `SubpolygonSelectedGeometrySourceW34.planarBoundaryFaceDataOfMinimalFailureSelectedClassification_subpolygonData_eq_realizationFamily`
+    identifies the skeleton subpolygon-data projection with the selected
+    outer-face W33 realization family, and
+    `selectedOuterFaceRealizationFamilyDataOfMinimalFailureSelectedClassificationFields_lowDegreeWithHighDegreeSlack`
+    exposes the E13 high-degree slack row from that family.
+    The clean honest sector route should pass through
+    `SelectedTopologyActualBoundaryNeighborSectorContainmentRows`; its existing
+    converter fills the generic budget rows by the actual local angle values.
+    The sector angle source is the predecessor/current/successor boundary
+    angle, available via
+    `BoundaryAngleWitnessConstruction.UnitSeparatedAngle.ofOuterBoundaryCoreIndex`
+    or the `BoundaryWalkBridge` predecessor/successor angle rows.  The missing
+    S3 content is therefore the six slot-to-sector maps, per-sector load
+    containment into those actual PCS angles, and the real polygon sector-sum
+    bound.
+    Newest checked S3 reduction:
+    `selectedBoundaryDegree3SlotSectorOfIndex`,
+    `selectedBoundaryDegree4SlotSectorOfIndex`,
+    `selectedBoundaryDegree5SlotSectorOfIndex`,
+    `selectedBoundaryDegree6SlotSectorOfIndex`,
+    `selectedBoundaryNontriangleSlotSectorOfIndex`, and
+    `selectedBoundaryLongArcSlotSectorOfIndex` assign all generated slots to
+    the same actual boundary-index sector.  The compact entrance is now
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_boundaryIndexSectorRows`.
+    The remaining honest S3 inputs are exactly the pointwise
+    `selectedBoundaryIndexSectorLoad <= actualBoundaryNeighborSector` row and
+    the actual PCS boundary-sector angle-sum bound by the simple-polygon
+    interior-angle sum.
+    W10 now exposes that second input as an honest row package:
+    `BoundaryCountingInstantiationW10.ClassifiedBoundary.BoundaryNeighborSectorAngleSumRows`,
+    with `boundaryCyclePolygonAngleSum` matching the selected-topology
+    cycle-length polygon sum.  `BoundaryNeighborSectorAngleSumRows.ofOuterBoundaryCoreIndex`
+    builds the package from canonical predecessor/current/successor boundary
+    sectors once the genuine polygon sector-sum inequality is proved.  The
+    remaining S3 geometric inequality is therefore the local pointwise
+    sector-load bound, plus the still-genuine proof of the PCS sector-sum
+    inequality for the simple outer polygon.
+    W34 adapter now available:
+    `boundaryNeighborSectorAngleSumRows_le_simpleOuterPolygonInteriorAngleSum`
+    and
+    `selectedTopologyActualBoundaryNeighborSectorContainmentRowsOfBoundaryIndexSectorsAndAngleSumRows`
+    consume W10's `BoundaryNeighborSectorAngleSumRows` directly on the selected
+    topology route.  The remaining local S3 source is the pointwise
+    `selectedBoundaryIndexSectorLoad <= actualBoundaryNeighborSector` proof.
+    Newest W10 polygon-angle bridge:
+    `ClassifiedBoundary.simplePolygonInteriorAngleAt` and
+    `simplePolygonInteriorAngleSum` spell the actual PCS interior-angle sum.
+    `BoundaryNeighborSectorAngleSumRows.ofOuterBoundaryCoreIndexOfSimplePolygonInteriorAngleSum`
+    constructs W10 sector-sum rows from the genuine theorem
+    `simplePolygonInteriorAngleSum P <= boundaryCyclePolygonAngleSum P`.
+    This is the exact polygon-angle theorem still needed on the selected outer
+    cycle; no generated scalar budget closes it.
+    Newest W10 sector/polygon accounting:
+    `triangulationAngleSum_eq_boundaryCyclePolygonAngleSum`,
+    `simplePolygonInteriorAngleSum_le_boundaryCyclePolygonAngleSum_of_triangulationAngleSum`,
+    `BoundaryNeighborSectorAngleSumRows.boundarySector_value_eq_simplePolygonInteriorAngleAt`,
+    `.sectorAngleSum_eq_simplePolygonInteriorAngleSum`, and
+    `.ofOuterBoundaryCoreIndexOfTriangulationAngleSum`.  Remaining W10-facing
+    S3 input is genuine triangulation angle-sum data and the matching
+    boundary-sector equality for the selected topology rows.
+    Newest S3 gap-decomposition source:
+    `SelectedTopologyBoundaryCyclicNeighborGapRows` is the explicit row package
+    for the missing pointwise load proof.  It carries, per boundary vertex, the
+    neighbor interval from boundary predecessor to successor, consecutive gap
+    angles, generated-slot-to-gap maps, slot value equalities,
+    slot-load-to-gap-sum, and gap-sum-to-PCS-sector inequalities.  It feeds the
+    current S3 route through
+    `selectedTopologyActualBoundaryNeighborSectorContainmentRowsOfCyclicNeighborGapRowsAndAngleSumRows`
+    and
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_cyclicNeighborGapRowsAndAngleSumRows`.
+    The remaining positive S3 work is honest construction of these cyclic
+    neighbor gap rows from planar unit-neighbor order geometry.
+    Newest S3 interval source:
+    `SelectedTopologyBoundaryCyclicNeighborIntervalRows` reduces the gap-row
+    package to an ordered unit-neighbor interval.  The consecutive
+    `UnitSeparatedAngle` gap witnesses are now constructed from
+    `neighbor_unit` plus `neighbor_injective` by
+    `SelectedTopologyBoundaryCyclicNeighborIntervalRows.toCyclicNeighborGapRows`.
+    The final S3 constructor
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_cyclicNeighborIntervalRowsAndAngleSumRows`
+    consumes these interval rows plus W10 sector-sum rows.  The remaining
+    honest S3 theorem is construction of the interval rows from real planar
+    cyclic unit-neighbor order data, including slot-to-gap value equalities,
+    load-to-gap-sum, and gap-sum-to-PCS-sector inequalities.
+    Newest per-index source:
+    `SelectedBoundaryIndexCyclicNeighborIntervalRows` and
+    `SelectedTopologyBoundaryIndexCyclicNeighborIntervalRows` localize that
+    obligation at each selected boundary index; their `.toIntervalRows`
+    projection builds the global interval rows.  The exact remaining S3 source
+    is now the real ordered unit-neighbor interval from boundary predecessor
+    to successor at each boundary vertex.
+    Latest interval-to-sector bridge:
+    `SelectedTopologyBoundaryIndexCyclicNeighborIntervalRows.toCyclicNeighborGapRows`,
+    `.sectorLoad_le_boundarySectorAngle`,
+    `.toActualBoundaryNeighborSectorContainmentRowsAndAngleSumRows`,
+    `.toLocalAngleOuterFaceSectorOrderRowsAndAngleSumRows`, and
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_boundaryIndexCyclicNeighborIntervalRowsAndAngleSumRows`
+    connect per-boundary-index interval rows plus W10 sector-sum rows to the
+    live sector-order theorem.  Remaining S3 work is actual interval rows,
+    matching `BoundaryNeighborSectorAngleSumRows`, and `boundarySector_eq`.
+    The generic interval constructor is now
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_boundaryIndexCyclicNeighborIntervalRowsAndBoundaryNeighborSectorAngleSumRows`,
+    and `actualBoundaryNeighborSectorOfOuterBoundaryCoreIndex_sectorAngleSum_eq_simplePolygonInteriorAngleSum`
+    removes the remaining explicit `boundarySector_eq` input.  The
+    triangulation variant builds W10 rows via
+    `BoundaryNeighborSectorAngleSumRows.ofOuterBoundaryCoreIndexOfTriangulationAngleSum`.
+    Newest canonical S3 constructor:
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_boundaryIndexCyclicNeighborIntervalRowsAndSimplePolygonInteriorAngleSumRows`
+    builds the W10 sector rows canonically from the genuine simple-polygon
+    interior-angle inequality and discharges `boundarySector_eq` by `rfl`.
+    Remaining S3 inputs are now actual boundary-index cyclic-neighbor interval
+    rows and the genuine simple-polygon interior-angle inequality.
+    Latest triangle-point S3 constructor:
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_boundaryIndexCyclicNeighborIntervalRowsAndSelectedOuterBoundaryNondegenerateTrianglePointRows`
+    and the source-row variant consume selected outer-boundary nondegenerate
+    triangle-point rows directly.  Remaining S3 inputs are actual interval
+    rows and selected triangle-point rows.
+    S3 source rows are now split as
+    `SelectedNondegenerateTopologyBoundaryIndexCyclicNeighborIntervalRows` and
+    `SelectedNondegenerateTopologySimplePolygonInteriorAngleSumRows`, with
+    `selectedNondegenerateTopologyOuterFaceSectorOrderTheorem_of_boundaryIndexCyclicNeighborIntervalSourceRowsAndSimplePolygonInteriorAngleSumRows`
+    as the canonical constructor.  The simple-polygon row is supplied by
+    triangulation rows through
+    `selectedNondegenerateTopologySimplePolygonInteriorAngleSumRowsOfTriangulationRows`.
+    `PlanarBoundaryFaceDataRefinement.SelectedOuterBoundaryNondegenerateTrianglePointRows.ofCorePolygonTriangleVertices`
+    now constructs the selected nondegenerate triangle-point rows from distinct
+    triangle corners in the actual core outer cycle, proving the side vector is
+    nonzero internally.  Do not rebuild this point-distinctness argument in S3;
+    focus workers on the interval rows and the polygon angle-sum/triangulation
+    source.
+    `AngleGeometry.gapAngleSum_eq_sectorAngle_of_realAngle_eq_no_wrap` and
+    `gapAngleSum_le_sectorAngle_of_realAngle_eq_no_wrap` are checked helpers
+    for the last inequality: once cyclic order/no-crossing supplies the
+    oriented `Real.Angle` telescope and the no-wrap bounds, they turn the
+    telescope into the real-valued sector inequality required by the interval
+    rows.  The remaining geometry is the oriented telescope and no-wrap proof,
+    not another scalar accounting bridge.
+    `AngleGeometry.oangle_sum_range_succ_eq_oangle` and
+    `gapAngleSum_eq_sectorAngle_of_oangle_chain_no_wrap` now discharge the
+    algebraic telescope once each consecutive gap is identified with the
+    oriented angle between successive nonzero rays and the sector is identified
+    with the first-to-last oriented angle.  S3 still must prove the actual
+    cyclic-order/no-wrap hypotheses from planar neighbor order.
+    Newest AngleGeometry support also includes Nat and `Fin (m + 1)` chain
+    no-wrap equality/inequality forms plus concrete `angleAt` neighbor-chain
+    lemmas shaped for downstream `UnitSeparatedAngle.value` goals.  The
+    remaining S3 geometry is now the real planar neighbor-order/no-wrap input,
+    not algebraic telescope manipulation.
+    `BoundaryWalkBridge.EndpointNeighborInterval` supplies the honest
+    endpoint-only interval data: predecessor first, successor last, adjacency
+    to the center, and injectivity for length at least three.  The missing
+    interval data is the full ordered unit-neighbor enumeration between those
+    endpoints and the slot-to-gap/angle-sum fields.
+    `OuterBoundaryAngleSourceW34` now has boundary-data row carriers based on
+    `OuterBoundaryInterface.BoundaryCycle.EndpointNeighborInterval`, with
+    `selectedNondegenerateTopologyBoundaryIndexCyclicNeighborIntervalRows_of_boundaryDataRows`
+    projecting them into the selected-nondegenerate interval target.  The live
+    S3 interval source is construction of those boundary-data endpoint/ordered
+    neighbor rows from the actual outer boundary, not another interval adapter.
+    `SelectedBoundaryIndexOrderedUnitNeighborData` and
+    `SelectedBoundaryIndexCyclicNeighborSlotToGapRows` are the newest explicit
+    boundary-index row surfaces: the first records the ordered cyclic
+    unit-neighbor list, endpoints, unit proofs, and injectivity, and the second
+    records the class-slot to consecutive-gap identifications and load/gap
+    inequalities.  These feed the existing interval route; the remaining work
+    is proving the real ordered unit-neighbor list and slot-to-gap geometry,
+    not adding another carrier type.
+    `OuterBoundaryAngleSourceW34` now consumes those two boundary-index rows
+    directly, projecting them through actual/local sector-containment rows into
+    `SelectedNondegenerateTopologyOuterFaceSectorOrderTheorem`.  Do not add
+    more S3 sector-containment wrappers; prove the ordered-neighbor and
+    slot-to-gap rows or a real planar-cyclic-order source for them.
+    `OuterBoundaryCoreConstructionW28` now constructs
+    `EndpointNeighborInterval` with `gapCount = 1` from any nondegenerate
+    boundary cycle, `OuterBoundaryCore`, source-with-length rows,
+    actual-cycle data, or chosen Jordan outer-component rows.  The remaining S3
+    boundary-order fact is the full ordered unit-neighbor/slot-to-gap data:
+    cyclic neighbor list, class-slot maps, angle-value equalities,
+    `slotLoad_le_gapAngleSum`, and `gapAngleSum_le_boundarySectorAngle`.
+    `OuterBoundaryCoreConstructionW28.BoundaryIndexOrderedUnitNeighborData`
+    is now the import-acyclic W28 endpoint-backed carrier and has constructors
+    from boundary cycles, outer cores, source-with-length rows, actual-cycle
+    data, and chosen Jordan rows.  It is positive endpoint data only; W34 still
+    needs the full ordered unit-neighbor enumeration and slot-to-gap geometry.
+    `PlanarBoundaryFaceDataRefinement.SimplePolygonInteriorAngleTriangulationRows`
+    reduces the genuine simple-polygon angle bound to real triangulation rows:
+    `length - 2` triangles, each with `angleAt` sum `pi`, and equality between
+    polygon PCS angles and triangle-corner angles.  Construct these rows from
+    a real triangulation or ear decomposition of the selected outer polygon.
+    `PlanarBoundaryFaceData.SimplePolygonInteriorAngleTriangulationRows.ofNondegenerateTrianglePoints`
+    now discharges each triangle's `pi` angle-sum from actual triangle corner
+    points plus one nonzero side vector.  The remaining triangulation source is
+    therefore the actual triangle-point/ear-decomposition data and polygon
+    angle compatibility.
+    `PlanarBoundaryFaceDataRefinement.SelectedOuterBoundaryNondegenerateTrianglePointRows`
+    is the selected outer-boundary version of that source; its projections
+    `toSimplePolygonInteriorAngleTriangulationRows`,
+    `simplePolygonInteriorAngleSum_le_boundaryCyclePolygonAngleSum`, and
+    `toBoundaryNeighborSectorAngleSumRows` feed the W10/S3 angle route from
+    actual triangle points plus nonzero side data.
+    `SelectedOuterBoundaryCorePolygonTriangulationRows` is now the strongest S3
+    triangulation source: actual indexed outer-cycle triangle vertices,
+    nondegenerate side data, and PCS polygon-angle compatibility.  It projects
+    to selected nondegenerate triangle-point rows, honest triangulation rows,
+    the pointwise `simplePolygonInteriorAngleSum <= boundaryCyclePolygonAngleSum`
+    row, and W10 boundary-neighbor sector rows.  Remaining S3 work is positive
+    construction of these triangulation rows and the endpoint/ordered-neighbor
+    interval rows from the actual outer boundary.
+    `SelectedOuterBoundaryCorePolygonEarDecompositionRows` is the newest
+    ear-decomposition source in `PlanarBoundaryFaceDataRefinement`: it records
+    actual ear triangles on the selected outer cycle, the `length - 2` count,
+    nondegenerate side data, and PCS polygon-angle compatibility, and projects
+    to the selected triangulation rows.  Remaining S3 triangulation work is
+    honest construction of these ear rows from the simple outer polygon.
+    `PlanarBoundaryFaceDataRefinement` now also carries actual indexed
+    triangulation/ear angle fields (`triangleAngle`, `earAngle`), nonnegativity,
+    and per-triangle/per-ear angle-sum-to-`pi` rows, and its W10 sector-sum
+    constructors route directly through those real angle rows.  The import
+    cycle still makes W34 the downstream consumer; the remaining source is an
+    honest ear decomposition/triangulation of the selected outer polygon.
+    `SubpolygonAngleRealization.ConcreteSubpolygonInteriorAngleTriangulationRows`
+    is the native subpolygon version of the same triangulation obligation,
+    avoiding an import cycle with `PlanarBoundaryFaceDataRefinement`.  It
+    exposes actual triangle points, `AngleGeometry.angleAt` corner sums,
+    boundary predecessor data, equality between boundary interior-angle sum and
+    triangle-angle sum, and compatibility with the E13 degree-count total.
+    `SubpolygonDataConcrete.CoreOuterBoundaryInteriorAngleTriangulationRows`
+    is the upstream outer-core package equivalent to the downstream W10
+    polygon-angle rows.  Its
+    `.ofConcreteSubpolygonInteriorAngleTriangulationRows` bridge connects the
+    native subpolygon triangulation surface to the selected outer-core sector
+    sum route without reversing imports.
+    `SubpolygonDataConcrete` now also supplies
+    `CoreSubpolygonAngleData.ofConcreteSubpolygonInteriorAngleTriangulationRows`,
+    `CoreSubpolygonAngleData.lowDegreeWithHighDegreeSlack_ofConcreteSubpolygonInteriorAngleTriangulationRows`,
+    and matching `CoreFaceSubpolygonAngleData` constructors.  Remaining
+    subpolygon work is genuine triangulation and boundary-angle-sum input, not
+    another E13 consumer.
+  - Compile status:
+    `OuterBoundaryAngleSourceW34` builds with the pinned toolchain after the
+    recursive finite-sum simplification loops were replaced by explicit
+    `change`/`rw`/`Finset.sum_le_sum` proofs.  This is compile progress only;
+    the honest S3 obligation remains a genuine sector-containment,
+    triangulation, or ear-decomposition angle-mass source.
 
-- [x] Add an internal eventual target.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ArbitraryN.lean`.
-  - Checked declarations:
+### S4. Missing Long-Arc/Triangle-Run Field, Lemma 6/7, And Lemma 9 Rows
 
-```lean
-def targetUpperConstructionFiveSixteenEventually : Prop :=
-  exists N0 : Nat, forall n : Nat,
-    N0 <= n -> targetUpperConstructionFiveSixteenAt n
-
-def targetUpperConstructionFiveSixteenSmallUpTo (N0 : Nat) : Prop :=
-  forall n : Nat, n < N0 -> targetUpperConstructionFiveSixteenAt n
-
-theorem targetUpperConstructionFiveSixteenArbitrary_of_eventually_and_small
-    (N0 : Nat)
-    (Hlarge : forall n : Nat, N0 <= n -> targetUpperConstructionFiveSixteenAt n)
-    (Hsmall : targetUpperConstructionFiveSixteenSmallUpTo N0) :
-    targetUpperConstructionFiveSixteenArbitrary
-```
-
-  - Current state: pure routing theorem is imported, build-checked, and in the
-    axiom audit.  `PachToth/EventualReduction.lean` also routes eventual
-    explicit closed-placement certificates plus finite small-case checks to the
-    arbitrary-`n` target.  These theorems do not construct the large or small
-    cases.
-
-#### P2. Decide proof-sufficient versus source-faithful Figure 2 transcription
-
-- [x] For the proof-sufficient Lean construction, the finite counting and
-  proof-used edge roles are stated in terms of the current relations.
-  - Paper step: Pach--Toth `FG.1-FG.4`, proof-used Figure 2 relation
+- [ ] Inhabit the exact boundary missing field for the S2/S3 skeleton.
+  - Paper steps: long-arc and thirteen-edge triangle-run material in
+    `E14-E21`.
+  - Owners:
+    `Swanepoel/JordanBoundaryConcreteInhabitationW24.lean`,
+    `Swanepoel/LongArcExistenceConcrete.lean`,
+    `Swanepoel/BoundaryArcFiniteWalkConstructionW16.lean`,
+    `Swanepoel/TriangleRunSelectorW17.lean`.
+  - Live target:
+    `SelectedTopologyRowsInhabitationW33.MinimalBoundaryTopologyMissingLongArcTriangleRunField`
+    for the `MinimalBoundaryTopologySkeletonFamily` produced by S2/S3; rowwise
+    this is
+    `MinimalBoundaryTopologySkeleton.MissingLongArcTriangleRunField`.
+  - Next action: prove the concrete
+    `LongArcExistenceConcrete.BoundaryLongArcExistenceFields` and
+    `BoundaryArcTriangleRun` over the skeleton's `planarBoundary`.  Do not
+    resurrect older separate "missing long arc" or "triangle run" route names
+    except as compatibility aliases in Lean comments/docs.
+  - Latest non-circular finite-`p/q` integration:
+    `BoundaryArcFiniteWalkConstructionW16.FinitePQSpineCyclicSuccessorRowsTheorem`
+    is now the explicit theorem surface that supplies cyclic-successor rows
+    for arbitrary topology/angle/subpolygon/long-arc rows.  W17, W24, and W33
+    route this theorem to
+    `MinimalBoundaryTopologyMissingLongArcTriangleRunField`; in particular use
+    `SelectedTopologyRowsInhabitationW33.minimalBoundaryTopologyMissingLongArcTriangleRunFieldOfRemainingActualCycleSkeletonRowsFinitePQSpineCyclicSuccessorRowsTheorem`
+    once the W34 skeleton long-arc family is available.  Do not use
+    `FrameCyclicOrderAssemblyW32.selectedFinitePQSpineCyclicSuccessorRowsSourceFamilyOfActualTopologyClosureGeneratedOrderRows`
+    to build this missing field, because that theorem is keyed to the
+    `componentClosure` produced only after the missing field is supplied.
+    The next real source field is the skeleton-level
+    `MinimalBoundaryTopologyLongArcFieldFamily`.
+  - Latest skeleton closure bridge:
+    `SelectedTopologyRowsInhabitationW33.actualTopologyClosurePackageOfRemainingActualCycleSkeletonRowsLongArcFinitePQSpineCyclicSuccessorRowsTheorem`
+    constructs the actual topology closure package from S2/S3 skeleton rows,
+    `MinimalBoundaryTopologyLongArcFieldFamily`, and the W16 finite-`p/q`
+    cyclic successor theorem.  The remaining honest S4 missing-field work is
+    therefore the long-arc family plus the W16 finite-`p/q` theorem.
+    The W16 theorem is now produced from a uniform finite boundary-walk source
+    by
+    `BoundaryArcFiniteWalkConstructionW16.finitePQSpineCyclicSuccessorRowsTheorem_of_finiteWalkTheorem`.
+    Newest W16 pointwise extraction:
+    `BoundaryArcFiniteWalkConstructionW16.finitePQSpineCyclicSuccessorRowsTarget_of_frameCoreTarget`
+    turns a `BoundaryArcFiniteWalkFrameCoreTarget` directly into the W16
+    finite-`p/q` successor-row target, using its concrete finite walk and
+    frame-core fields only.  The remaining finite-walk payload is now a real
+    `Nonempty BoundaryArcFiniteWalkFrameCoreData` for the selected skeleton.
+    Latest W16 certificate adapters:
+    `finitePQSpineCyclicSuccessorRowsOfBoundaryArcCertificate`,
+    `finitePQSpineCyclicSuccessorRowsOfBoundaryArcFrameCoreFields`,
+    `finitePQSpineCyclicSuccessorRows_nonempty_of_frameCoreData`,
+    `finitePQSpineCyclicSuccessorRowsTarget_of_boundaryArcCertificate`, and
+    `finitePQSpineCyclicSuccessorRowsTarget_of_boundaryArcFrameCoreFields`
+    route boundary-arc certificate/frame-core fields into the finite-`p/q`
+    target.  Remaining work is to construct those actual boundary-arc
+    certificate/frame-core fields from the selected boundary spine.
+    Latest finite-spine raw-fact constructors:
+    `BoundarySpineFiniteCertificate.M8BoundaryCorePQSpineRows.ofCyclicOrder_pIndex`,
+    `.ofCyclicOrder_q`, `.ofCyclicOrder_edgeIndex`,
+    `.finitePQSpineCertificateOfCyclicOrder_pIndex`, and the analogous
+    `M8BoundaryWalkPQSpineRows.ofCyclicOrder*` plus
+    `frameCoreFieldsOfRawFacts` / `rawFactsOfFrameCoreFields` conversions
+    expose the selected finite spine as raw cyclic-order/frame-core data.
+    Use these in generated-order and W16 source construction; do not rebuild
+    finite-spine raw facts elsewhere.
+    Boundary-spine also now exposes explicit finite-spine source packages:
+    `M8FinitePQSpineCertificate.ExplicitCyclicOrderRows`,
+    `M8FinitePQSpineRawFrameCoreFacts`, and
+    `M8FinitePQSpineExplicitFrameCoreSource`, with conversions to/from
+    `M8FinitePQSpineFrameCoreFields` and projection to
+    `M8FinitePQSpineBoundaryArcFrameCoreFields`.  Use this source when feeding
+    W16 or generated-order rows.
+    Boundary-spine now also exposes upstream boundary-arc fields:
+    `M8FinitePQSpineBoundaryArcCertificateFields`,
+    `M8FinitePQSpineCertificate.toBoundaryArcCertificateFields`,
+    `M8FinitePQSpineBoundaryArcFrameCoreFields`,
+    `M8FinitePQSpineCertificate.toBoundaryArcFrameCoreFields`, and the core /
+    walk `boundaryArcCertificateFieldsOfCyclicOrder` /
+    `boundaryArcFrameCoreFieldsOfRawFacts` constructors.  Downstream W16 work
+    should consume these fields rather than rebuilding them.
+    W16 now has an import-safe raw finite-spine bridge:
+    `finitePQSpineCyclicSuccessorRowsOfRawFinitePQFacts`,
+    `finitePQSpineCyclicSuccessorRowsOfRawFinitePQFacts_val`, and
+    `finitePQSpineCyclicSuccessorRowsTarget_of_rawFinitePQFacts`.
+    W16 also consumes the upstream boundary-spine fields directly via
+    `boundaryArcCertificateOfFinitePQSpineBoundaryArcCertificateFields`,
+    `boundaryArcCertificateOfFinitePQSpineBoundaryArcFrameCoreFields`,
+    `finitePQSpineCyclicSuccessorRowsOfFinitePQSpineBoundaryArcCertificateFields`,
+    `finitePQSpineCyclicSuccessorRowsOfFinitePQSpineBoundaryArcFrameCoreFields`,
+    and the matching `finitePQSpineCyclicSuccessorRowsTarget_of_*` theorems.
+    W16 theorem-level source surfaces are now available:
+    `FinitePQSpineBoundaryArcCertificateFieldsTheorem` and
+    `FinitePQSpineRawFinitePQFactsTheorem`; both reduce to
+    `FinitePQSpineCyclicSuccessorRowsTheorem`.  The raw route preserves the
+    frame-core raw facts needed later for generated-order rows.  Remaining W16
+    work is positive inhabitation of one of these source theorems, not another
+    W16 bridge.
+    W16 now has direct positive constructors from finite-walk or triangle-run
+    data:
+    `finitePQSpineBoundaryArcCertificateFieldsOfFiniteWalkData`,
+    `finitePQSpineBoundaryArcCertificateFieldsOfTriangleRun`,
+    `finitePQSpineBoundaryArcCertificateFieldsTheorem_of_finiteWalkDataTheorem`,
+    and `finitePQSpineBoundaryArcCertificateFieldsTheorem_of_triangleRunTheorem`.
+    Remaining W16 input is therefore an actual finite-walk theorem or triangle
+    run theorem for the selected skeleton.
+  - Latest long-arc source:
+    `MinimalBoundaryTopologyLongArcRawTurnRows` feeds
+    `MinimalBoundaryTopologyLongArcFieldFamily`.  The remaining honest long-arc
+    blocker is the raw row package: `d3 <= negativeCount + card longArcIndices`
+    for the skeleton boundary, plus raw-turn nonnegativity and threshold
+    interpretation.
+    Lemma6/Lemma7 coverage already supplies the count inequality through
+    `longArcRawTurnRowsOfGapNegativeCoverageDataAndRawTurns` or
+    `longArcRawTurnRowsOfBoundaryWalkGapNegativeCoverageOutputsAndRawTurns`.
+    Checked W24 bridge:
+    `longArcFieldFamilyOfBoundaryLongArcGapNegativePackages` composes W13
+    `BoundaryLongArcGapNegativePackage` families and a carrier equivalence into
+    the live long-arc family; with the W16 theorem,
+    `missingFieldOfBoundaryLongArcGapNegativePackagesFinitePQSpineCyclicSuccessorRowsTheorem`
+    produces the skeleton missing field.  Remaining inputs are the actual
+    package family on the selected skeleton, the equivalence to concrete
+    `longArcIndices`, and the W16 finite-`p/q` theorem.
+    The remaining positive long-arc content is an honest
+    `rawTurn : longArcIndices -> Nat -> Real` and its nonnegativity on the
+    selected arc; Lemma9 is downstream and does not construct raw turns.
+    `JordanBoundaryConcreteInhabitationW24.longArcRawTurnRowsOfBoundaryLongArcGapNegativePackages`
+    now builds the skeleton raw-turn rows from W13
+    `BoundaryLongArcGapNegativePackage` families using the package's real
+    `rawTurn` and Lemma6/Lemma7 coverage.  This is a non-circular bridge only:
+    the live missing source is still construction of genuine raw turns from
+    boundary geometry.
+    Checked W13 source closure:
+    `boundaryLongArcGapNegativePackageOfBoundaryWalkGapNegativeCoverageOutputAndRawTurns`
+    and
+    `boundaryLongArcGapNegativePackageOfGapNegativeCoverageDataAndRawTurns`
+    build the package family from Lemma6/Lemma7 coverage plus the actual
+    classified `longArcIndices` raw-turn rows.  The remaining positive input is
+    still the honest raw-turn family and its nonnegativity; the boundary-walk
+    output route also needs the count equality identifying the output's
+    `longArcCount` with `card longArcIndices`.
+    The existing honest raw-turn source type is
+    `BoundaryAngleTurnW11.UDConfigRoute.BoundaryAngleTurnTopologyPackage.MinimalBoundaryTopologyBoundaryTurnAngleRows`;
+    its `rawTurn` is the value of real `UnitSeparatedAngle` witnesses on the
+    thirteen turn slots, and `toLongArcRawTurnRows` /
+    `toLongArcFieldFamily` already route those rows into the W24 long-arc
+    family.  The missing geometry is to inhabit that W11 row package: actual
+    `turnVertex`, `turnAngle`, and predecessor/center/successor equalities for
+    each selected long arc and turn slot.
+    Newest W11 constructor:
+    `MinimalBoundaryTopologyBoundaryTurnAngleRows.ofOuterBoundaryTurnVertex`
+    constructs the actual `UnitSeparatedAngle` turn rows once a per-long-arc,
+    per-slot outer-cycle vertex map is supplied.  The remaining positive map is
+    a family
+    `classification.longArcIndices -> Nat -> Fin outerCycle.length` naming the
+    boundary vertex where each raw turn slot is measured; the existing single
+    triangle-run `pIndex` does not yet supply this uniformly for all long arcs.
+    Newest W11 triangle-run source:
+    `MinimalBoundaryTopologyBoundaryTurnVertexRows.ofTriangleRun` and
+    `MinimalBoundaryTopologyBoundaryTurnAngleRows.ofTriangleRun` provide that
+    per-long-arc/per-slot map from the established M8 triangle-run indexing,
+    using `BoundaryArcIndexMap.m8BoundaryIndexOfNat` for slots `1..13`.  The
+    live W11/W13 integration task is now to feed the available triangle-run
+    theorem plus Lemma6/Lemma7 count coverage into the W24 long-arc family for
+    the selected skeleton.
+    `TriangleRunSelectorW17.ExplicitM8TriangleRunIndices` is the explicit
+    triangle-run source surface: construct the actual boundary indices
+    `p_0, ..., p_13`, prove the 13 cyclic-successor rows, and prove the 13
+    `IsTriangleEdge` rows.  `triangleRunTheorem_of_explicitM8TriangleRunIndicesTheorem`
+    then feeds the existing triangle-run theorem.
+    `ExplicitM8TriangleRunIndices` now exposes concrete projections `p0`
+    through `p13`, `cyclicOrder0` through `cyclicOrder12`, and `triangleEdge0`
+    through `triangleEdge12`.  Use those named row projections when proving
+    W11 turn-angle rows or W16/raw finite-spine facts; do not add another
+    triangle-run unpacking layer.
+    W17 now reduces `ExplicitM8TriangleRunIndicesTheorem` from the existing
+    triangle-run theorem, extraction targets, finite-walk data, finite-`p/q`
+    successor rows, boundary-arc certificate fields, or raw finite-`p/q` facts,
+    with `explicitM8TriangleRunIndicesTheorem_iff_triangleRunTheorem` as the
+    main equivalence.  W11/W16 workers should consume these reductions rather
+    than re-proving the named `p0..p13` surface.
+    The classified Lemma 6 obstruction specialization
+    `boundaryLongArcGapNegativePackageOfLemma6ObstructionAndRawTurns`
+    discharges that count equality internally via `counts_B`.
+    Newest W13/W24 integration:
+    `Lemma6Lemma7AssemblyW13.ClassifiedBoundary.BoundaryLongArcRawTurnRows`
+    and `BoundaryLongArcGapNegativeRows` are the cycle-safe row interface
+    between W11-style turn rows and W13 gap packages.
+    `boundaryLongArcGapNegativePackageOfLemma6ObstructionAndRawTurnRows`
+    packages Lemma6/Lemma7 coverage with raw-turn rows into the exact W13
+    package, and
+    `JordanBoundaryConcreteInhabitationW24.longArcFieldFamilyOfTurnRowsAndBoundaryLongArcGapNegativePackages`
+    routes W11 turn rows plus W13 packages into the W24
+    `MinimalBoundaryTopologyLongArcFieldFamily`.
+    Latest W13 bridge:
+    `BoundaryLongArcRawTurnRows.ofRawTurns`,
+    `BoundaryLongArcGapNegativeRows.ofCoverageOutputAndRawTurns`, and
+    `BoundaryLongArcGapNegativeRows.ofLemma6ObstructionAndRawTurns` preserve
+    the selected `longArcIndices`, route
+    `longArcCount = card longArcIndices = counts.B`, keep the supplied raw
+    turns, and preserve nonnegativity.  There is no remaining W13 count/card
+    blocker; the external source is W11 turn-angle/raw-turn geometry.
+    `LongArcExistenceConcrete.BoundaryLongArcTurnAngleRows` now provides that
+    raw-turn interpretation layer: `rawTurn a k` is the actual
+    `UnitSeparatedAngle.value` on `turnIndexSet` and `0` off it, with
+    nonnegativity from `UnitSeparatedAngle.value_nonnegative` and projection to
+    `BoundaryLongArcCarrierRawTurnRows` preserving the carrier, `card = B`, and
+    Lemma6/Lemma7 count row.  Remaining long-arc source is construction of
+    these turn-angle rows from the actual selected boundary turns.
+    `BoundaryAngleTurnW11` now connects the W11 turn-angle package to W13 raw
+    turns via `BoundaryLongArcRawTurnRows.ofRawTurns`, routes the W24 raw rows
+    through that adapter, and supplies the explicit-triangle-run theorem bridge
+    into the `ofTriangleRun` constructor.  No boundary-vertex/turn-angle
+    equality rows remain for this W11 route.
+    `BoundaryAngleWitnessConstruction` now exposes cycle-safe constructors for
+    canonical boundary predecessor/current/successor witnesses, explicit triple
+    witnesses requiring exactly the two cyclic-successor equalities, and
+    pointwise long-arc/turn-slot witness families matching
+    `BoundaryLongArcTurnAngleRows.turnAngle` and S5 actual-turn consumers.
+    Use these constructors rather than reproving boundary-index equalities.
+    `LongArcExistenceConcrete.BoundaryLongArcTurnAngleRows.ofOuterBoundaryCoreTurnVertex`
+    now imports those witness constructors and builds actual W11 turn-angle
+    rows from selected boundary turn vertices; `carrierRawTurnRowsOfOuterBoundaryCoreTurnVertex`
+    projects the corresponding carrier/raw-turn rows with the actual angle
+    value on turn slots.  W13 also has
+    `boundaryLongArcGapNegativePackageOfGapNegativeCoverageDataAndRawTurnRows`
+    and `longArcExistenceFieldsOfGapNegativeCoverageAndRawTurnRows`, so actual
+    raw-turn rows plus `GapNegativeCoverageData` now build the W13
+    package/fields directly.
+    W24's gap-negative and no-boundary-gap missing-field sources already consume
+    W13 packages plus the W16 theorem; the latest cleanup reuses
+    `toBoundaryLongArcCarrierRawTurnRows` directly.  The live long-arc blocker
+    remains the genuine W11/W13 raw-turn package and W16 source, not W24
+    plumbing.
+    `LongArcExistenceConcrete.BoundaryLongArcCarrierRawTurnRows` is the
+    concrete positive source surface for the same content: a finite long-arc
+    carrier, cardinality `B`, Lemma6/Lemma7 coverage, and nonnegative real
+    raw turns.
+    `BoundaryLongArcCarrierRawTurnRows.ofFiniteCarrierRawTurns`,
+    `.nonempty_of_finiteCarrierRawTurns`, and
+    `.exists_nonconcave_longArc_with_turn_bounds` sharpen that upstream
+    carrier route.  The exact remaining long-arc inputs are now the finite
+    carrier, `card = B`, Lemma6/Lemma7 coverage `d3 <= N + card`, the real
+    `rawTurn`, and raw-turn nonnegativity on the turn slots.
+    Newest W11/W24 composition:
+    `BoundaryAngleTurnW11.ofTriangleRunAndBoundaryLongArcGapNegativeRows`
+    consumes a triangle-run family and W13 gap-negative rows to build the W11
+    real turn-angle row package, and
+    `missingFieldOfTriangleRunBoundaryLongArcGapNegativeRowsFinitePQSpineCyclicSuccessorRowsTheorem`
+    routes those rows plus the W16 finite-`p/q` theorem directly to the W24
+    missing long-arc/triangle-run field.
+    Newest compact W24 route:
+    `JordanBoundaryConcreteInhabitationW24.longArcFieldFamilyOfBoundaryLongArcGapNegativeRows`
+    and
+    `missingFieldOfBoundaryLongArcGapNegativeRowsFinitePQSpineCyclicSuccessorRowsTheorem`
+    consume W13 `BoundaryLongArcGapNegativeRows` (using their real raw-turn
+    rows) plus the W16 finite-`p/q` theorem.  The exact remaining source
+    inputs are genuine W13 gap-negative rows and either explicit triangle-run
+    rows or the W16 finite-`p/q` theorem over the selected skeleton.
+    No-boundary-gap W24 route:
+    `BoundaryLongArcNoBoundaryGapTriangleDegree34Rows`,
+    `.toBoundaryLongArcGapNegativeRows`,
+    `.toLongArcFieldFamily`,
+    `missingFieldOfNoBoundaryGapTriangleDegree34RowsFinitePQSpineCyclicSuccessorRowsTheorem`,
+    and
+    `ofSkeletonNoBoundaryGapTriangleDegree34RowsAndFinitePQSpineCyclicSuccessorRowsTheorem`
+    route no-boundary-gap rows plus W16 finite-`p/q` rows to the missing field.
+    Remaining work is the actual no-boundary-gap/no-gap rows, not another W24
+    bridge.
+    W24 now has `missingField_nonempty_of_noBoundaryGapTriangleDegree34Rows_explicitM8TriangleRunIndicesTheorem`,
+    consuming no-boundary-gap rows plus explicit M8 triangle-run indices through
+    the W17 finite-`p/q` theorem.  `BoundaryAngleTurnW11` also exposes
+    `missingFieldOfTriangleRunAndBoundaryLongArcGapNegativeRows` and a
+    nonempty theorem from triangle-run rows plus W13 gap-negative rows.
+    `SelectedTopologyRowsInhabitationW33` packages these into
+    `exactActualTopologyClosureMissingFieldPackageOfSkeletonRowsBoundaryLongArcGapNegativeRowsExplicitM8TriangleRunIndicesTheorem`.
+    Remaining long-arc/W24 work is positive row inhabitation, not another
+    missing-field bridge.
+    `Lemma6Lemma7AssemblyW13` now consumes `BoundaryLongArcGapNegativeRows`
+    into classified long-arc existence fields, concrete count-gap input, and
+    `M8ConstructionInterface.M8TurnBounds`, including
+    `m8TurnBoundsOfBoundaryLongArcGapNegativeRows_totalTurn_lt_pi_div_three`.
+    Remaining W13 work is positive gap-negative row inhabitation, not turn-bound
     extraction.
-  - Same-block relation:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FiniteGraph.lean`.
-  - Cross-block relation:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlock.lean`.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/Figure2EdgeTable.lean`,
-    consumed by `RoleHingeTransitionSearch` and the finite counting modules.
-  - Deliverable: theorem/docstring wording for any internal or public wrapper
-    says "proof-used Figure 2 edge roles" unless the full transcription task
-    below is completed.
-  - Checked gate:
+    K23 now supplies a W24-facing no-boundary-gap reduction from skeleton
+    realization-carrier rows via
+    `SkeletonBoundaryGapTriangleDegree34RealizationCarrierRows`,
+    `noBoundaryGapTriangleDegree34RowsOfSkeletonRealizationCarrierRows`,
+    `boundaryLongArcNoBoundaryGapTriangleDegree34RowsOfSkeletonRealizationCarrierRows`,
+    `longArcFieldFamilyOfSkeletonRealizationCarrierRows`, and
+    `missingFieldOfSkeletonRealizationCarrierRowsFinitePQSpineCyclicSuccessorRowsTheorem`.
+    Remaining work is the actual skeleton realization-carrier rows and raw-turn
+    rows.
+    Shortest W13 source route:
+    supply `ClassifiedBoundary.BoundaryLongArcRawTurnRows` for each selected
+    skeleton row, then combine with Lemma6/Lemma7 coverage using
+    `ClassifiedBoundary.BoundaryLongArcGapNegativeRows` or
+    `BoundaryLongArcGapNegativeRows.ofLemma6Obstruction`.  W11 is optional on
+    this shortest route; the real missing data is still the raw-turn family and
+    nonnegativity on `turnIndexSet`.
 
-```lean
-theorem proofUsedFigure2EdgeRoles_project_to_current_relations :
-    (forall u v role,
-      Figure2EdgeTable.localEdgeRole u v = some role ->
-        FiniteGraph.adj u v = true) /\
-    (forall u v role,
-      Figure2EdgeTable.nextConnectorRole u v = some role ->
-        CrossBlock.NextConnector u v) :=
-  And.intro
-    Figure2EdgeTable.localEdgeRole_adj
-    Figure2EdgeTable.nextConnectorRole_nextConnector
-```
-
-  - Completion gate: this proof-sufficient gate is already imported; any
-    wrapper wording must continue to say "proof-used Figure 2 edge roles"
-    unless the full transcription task below is completed.
-
-- [ ] Audit wording so no internal or public theorem claims a complete Figure
-  2 transcription before `FG.5-FG.6` is closed.
-  - Paper step: Pach--Toth attribution hygiene.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/Figure2EdgeTable.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/KnownBounds.lean`,
-    any eventual Pach--Toth wrapper module.
-  - Completion gate: all names/docstrings/public wrappers distinguish the
-    proof-used finite model from a complete source transcription.
-
-- [x] Add the proof-used Figure 2 edge-role table.
-  - File:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/Figure2EdgeTable.lean`.
-  - Current state: imported, build-checked, and scan-clean.  It records the
-    local edge roles, connector-source names, farthest representatives, and
-    directed successor-connector roles used by the finite and chain counting
-    proofs, with projection lemmas to `FiniteGraph.adj` and
-    `CrossBlock.NextConnector`.
-  - Conditional status: this is the proof-used finite subset; do not describe
-    it as a complete Figure 2 transcription.
-
-- [ ] Complete the source-faithful Figure 2 transcription if needed for the
-  public attribution.
-  - Paper step: Pach--Toth `FG.5-FG.6`, full Figure 2 edge table from the
-    PostScript primitives.
-  - Needed data:
-    primitive side table, same-block edge projection to `FiniteGraph.adj`,
-    orientation-indexed next-block relation or projection to
-    `CrossBlock.NextConnector`, `p/q` roles, farthest-vertex roles, and
-    no-duplicate/no-gap theorems.
-  - Lean route:
-    extend `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/Figure2EdgeTable.lean`
-    or add a dedicated imported module if the table becomes too large.
-  - Deliverable: complete finite table plus projection lemmas to
-    `FiniteGraph.adj` and `CrossBlock.NextConnector`.
-  - Target skeleton after introducing the primitive source types:
-
-```lean
-structure SourceFaithfulFigure2TableCertificate where
-  sourceLocalEdge :
-    FiniteGraph.LocalVertex -> FiniteGraph.LocalVertex -> Bool
-  sourceNextConnector :
-    FiniteGraph.LocalVertex -> FiniteGraph.LocalVertex -> Bool
-  localProjects :
-    forall u v, sourceLocalEdge u v = true ->
-      FiniteGraph.adj u v = true
-  localComplete :
-    forall u v, FiniteGraph.adj u v = true ->
-      sourceLocalEdge u v = true
-  nextProjects :
-    forall u v, sourceNextConnector u v = true ->
-      CrossBlock.NextConnector u v
-  nextComplete :
-    forall u v, CrossBlock.NextConnector u v ->
-      sourceNextConnector u v = true
-```
-
-  - Completion gate: every side of the listed `S0-S8` and `U0-U29`
-    primitives is classified exactly once and proof-used rows project to the
-    existing finite relations.
-
-#### P3. Construct the non-rigid transition geometry
-
-- [x] Add unit-vector and hinge algebra interfaces.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/UnitVectorGeometry.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/HingeAlgebra.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/HingedTransitionInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/BaseTransitionRealization.lean`.
-  - Current state: imported, build-checked, and scan-clean.  The checked layer
-    defines `unitVec`, `hingePoint`, squared-distance hinge lemmas,
-    same/opposite transition metric interfaces, `RoleHingeTransition`, and
-    the exact base-block isometry for `ExactLocalGeometry.localPoint`.
-  - Conditional status: concrete connector-only same/opposite role-hinge
-    transition obligations are now checked; exact-local same-block
-    square-distance preservation, period/closure data, and generated global
-    separation remain supplied data.
-
-- [x] Build concrete connector-only same/opposite role-hinge transition data.
-  - Live target shape:
-
-```lean
-def RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations :
-    Figure2Certificate.SameOppositeTransitionObligations
-```
-
-  - Current state: `RoleHingeConcreteSearch` defines the concrete role angles,
-    same/opposite maps, connector unit-edge proofs, and the bundled
-    `concreteSameOppositeTransitionObligations`; `RoleHingeInterfaceRefinement`
-    routes this object into exact-block conditional bridges.
-  - Remaining blocker: prove exact-local same-block square-distance
-    preservation for these concrete maps, plus period/closure data and global
-    separation.  Do not target the old
-    `BaseTransitionRealization.BaseSameOppositeTransitionRealization` as the
-    live path; the current fixed-angle strong interface is obstructed by
-    `RoleHingeInterfaceRefinement.no_concreteSameOppositeRemainingEquations_for_strong_interface`.
-
-- [x] Add non-rigid/role-hinged transition and closed-placement wrappers.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeTransitionSearch.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeConnectorAlgebra.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeAngleCertificates.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeSameBlockAlgebra.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeFiniteFamilyBridge.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeConcreteSearch.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeInterfaceRefinement.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/NonRigidClosedPlacementInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedPlacementNonRigidComponents.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedPlacementComponentsAssembly.lean`.
-  - Current state: imported, build-checked, scan-clean, and compatible with
-    the current CI-style axiom audit.
-  - Current purpose: these modules route explicit non-rigid point/orbit
-    fields and role-hinged transition facts to closed placements, exact-block
-    targets, and exact-family targets; the newest algebra layers expose
-    connector-port unit facts, exact-local same-block square-distance
-    obligations, role-hinge interface refinements, component assembly, and a
-    concrete role-angle search facade without using the contradictory
-    translated four-equation data.
-  - Conditional status: the old full exact-local preservation field for the
-    concrete connector-only obligations is blocked by W12.  The live fields are
-    replacement transition/orbit data, period/closure data, and generated
-    global separation/non-connector lower tables.
-
-- [ ] Replace the blocked concrete connector-only orbit-distance route.
-  - Checked W12 facts:
-
-```lean
-OrbitSqDistancesW12.sameBlockIsometry_of_concreteTransitionObligations_orbitSqDistances
-OrbitSqDistancesW12.exactBlockTarget_of_concreteTransitionObligations_orbitSqDistances
-OrbitSqDistancesW12.concreteTransitionObligations_transitionExactLocalSqDistances_blocked
-OrbitSqDistancesW12.concreteTransitionObligations_orbitSqDistances_twoSame_blocked
-OrbitSqDistancesW12.concreteTransitionObligations_orbitSqDistances_blocked
-```
-
-  - Next action: do not target the old fully quantified theorem for
-    `RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations`.
-    It is false for the current concrete map.  A proof agent should either
-    choose replacement transition data whose orbit rows avoid the checked
-    obstruction, or keep the current connector-only map and instantiate only
-    the restricted closure/separation/orbit data consumed by
-    `OrbitSqDistancesW12.exactBlockTarget_of_concreteTransitionObligations_orbitSqDistances`.
-  - Completion gate: a root-imported route supplies the exact-block target
-    through either the replacement transition package or the checked restricted
-    W12 exact-block theorem, without contradicting
-    `OrbitSqDistancesW12.concreteTransitionObligations_orbitSqDistances_blocked`.
-
-- [x] Prove the generic connector-port unit-edge reducer.
-  - Checked route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeConnectorAlgebra.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/RoleHingeInterfaceRefinement.lean`.
-  - Current state: the generic role-hinge connector algebra is imported,
-    build-checked, and scan-clean.
-
-- [x] Instantiate concrete connector-port unit edges.
-  - Checked declarations:
-
-```lean
-RoleHingeConcreteSearch.concreteRoleHingePlace_connector_unit_edges
-RoleHingeConcreteSearch.same_connector_unit_edges
-RoleHingeConcreteSearch.opposite_connector_unit_edges
-RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations
-```
-
-  - Remaining blocker: connector-pair unit edges are done; non-connector
-    separation and same-block metric preservation remain open.
-
-- [x] Build connector-only same/opposite transition maps.
-  - Checked declaration:
-
-```lean
-def RoleHingeConcreteSearch.concreteSameOppositeTransitionObligations :
-  Figure2Certificate.SameOppositeTransitionObligations
-```
-
-  - Remaining dependencies: residual/orbit exact-local metric data, period
-    equations, and reduced non-connector separation.  The old all-source
-    preservation route remains only an obstruction audit surface.
-
-#### P4. Construct closed placements
-
-- [x] Add generated closed-chain packaging and reduction plumbing.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedClosedChain.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedClosedChainReduction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedSeparationInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedPeriodClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedPlacementClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ConcretePeriodSearchFamily.lean`.
-  - Checked declarations:
-
-```lean
-theorem GeneratedClosedChain.exists_closedPlacement_of_generated_closed_chain
-theorem GeneratedClosedChain.generatedBlock_eq_closedPlacementAlgebra_iterated_from_zero
-
-theorem GeneratedClosedChainReduction.targetUpperConstructionFiveSixteenAt_exactBlock_of_generated_closed_chain
-theorem GeneratedClosedChainReduction.targetUpperConstructionFiveSixteen_of_generated_closed_chains
-```
-
-  - Current state: imported, build-checked, and scan-clean.  Generated
-    same/opposite orbit data routes into the existing closed-placement and
-    exact-block target interfaces.  `PeriodInterface` names the generated
-    period/closure equations; `GeneratedPeriodClosure` and
-    `ClosedPlacementClosure` route supplied period/closure equations plus
-    generated metric hypotheses to exact-block and family target statements.
-  - Conditional status: the period/closure equations, global separation, and
-    concrete same/opposite metric realization remain open geometry/data.
-
-- [x] Add generated metric and period-search interfaces.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedMetricClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodSearchInterface.lean`.
-  - Current state: imported by
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, build-checked,
-    and scan-clean.
-  - Current purpose: `GeneratedMetricClosure` packages exact-base
-    role-hinged generated chains from supplied global separation and closure
-    data; `PeriodSearchInterface` names finite orientation-word period
-    certificates for later verified algebraic/search outputs.
-  - Conditional status: the actual period certificates, global separation, and
-    concrete metric data remain open.
-
-- [x] Add finite period-word and indexed cross-block table reducers.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodWordCertificates.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/IndexedCrossBlockTableConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockDistanceSqReduction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/NonRigidConnectorSeparationFacts.lean`.
-  - Current state: imported, build-checked, scan-clean, and compatible with
-    the current CI-style axiom audit.
-  - Current purpose: period words/equations and finite indexed cross-block
-    inequalities now have direct table-style Lean surfaces, including a
-    squared-distance reducer for generated cross-block lower bounds, plus
-    connector-pair separation so finite tables only have to cover remaining
-    non-connector cross-block pairs.
-  - Conditional status: the actual finite period equations and the lower-bound
-    inequalities for every distinct block pair remain to be proved.
-
-- [x] Add orientation-word, connector-equation, far-apart, and
-  exact-family closure modules.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/OrientationWord.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ConnectorEquationClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeneratedSeparationFarApart.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ExactFamilyClosure.lean`.
-  - Current state: imported by
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, build-checked,
-    and scan-clean.
-  - Current purpose: finite orientation-word algebra, connector-equation
-    transition packaging, generated far-apart separation wrappers, and final
-    exact-family target routing.
-  - Conditional status: these are routing/packaging layers; they do not supply
-    the actual large closed-chain family by themselves.
-
-- [x] Add equation-transition, cross-block lower-bound, period-example, and
-  final conditional Pach-Toth facade modules.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/EquationTransitionClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockLowerBoundsInterface.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockSqTableSearch.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockUpperTriangleConcrete.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/CrossBlockPolynomialNormalization.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodCertificateExamples.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PeriodEquationConcreteSearch.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ConcretePeriodCandidateSearch.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/EventualRoleHingeClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ExactFiveSixteenRouteMatrix.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FiniteCertificateObligationSummary.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FinalConditional.lean`.
-  - Current state: imported, build-checked, scan-clean, and compatible with
-    the current CI-style axiom audit.  The files route explicit connector equations, same-block
-    distance preservation, finite period-search certificates/candidates,
-    normalized cross-block square-distance tables, obligation summaries, and
-    quantitative lower-bound tables into the strongest current conditional
-    Pach-Toth exact/arbitrary target facades.
-    `FinalConditional.EquationPeriodSearchCrossBlockFamily` is legacy
-    obstruction/conditional plumbing over the translated-equation route; it is
-    not the live proof deliverable.
-  - Conditional status: they still require actual same/opposite transition
-    data, period certificates/equations, and cross-block lower-bound
-    inequalities.
-  - Fourth-wave bridge status: the live conditional names include
-    `ConcretePeriodCandidateSearch.targetUpperConstructionFiveSixteenAt_ofPeriodEquationFamilyAndLowerBounds`,
-    `EventualRoleHingeClosure.targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_exactTarget`,
-    the square-value certificate projections
-    `PeriodSearchSqValueFactsInput.targetUpperConstructionFiveSixteen` and
-    `PeriodSearchSqValueFactsInput.targetUpperConstructionFiveSixteenArbitrary`,
+- [ ] Instantiate boundary-walk gap-negative coverage on the selected frame.
+  - Paper steps: `E14-E21`.
+  - Owners:
+    `Swanepoel/Lemma6NegativeAfterGapW12.lean`,
+    `Swanepoel/Lemma7GapInductionW12.lean`,
+    `Swanepoel/Lemma6Lemma7AssemblyW13.lean`,
+    `Swanepoel/K23RouteCoverageSourceW34.lean`,
+    `Swanepoel/Lemma9NatLateTripleInhabitationW22.lean`.
+  - Coverage target:
+    `K23RouteCoverageSourceW34.SelectedFrameBoundaryWalkGapNegativeCoverageSourceTheorem`.
+  - Lemma 9 target:
+    `K23RouteCoverageSourceW34.SelectedFrameLemma9NatLateTripleInputsSourceTheorem`
+    or the family theorem
+    `SelectedFrameLemma9NatLateTripleSourceFamilyTheorem`.
+  - Newest reduction: concrete five-start no-early equality now projects to
+    nat-late rows via
+    `lemma9NatLateTripleInputsFamilyOfConcreteNoEarlyTripleEquality`,
+    `selectedFrameLemma9NatLateTripleInputsSourceTheorem_of_concreteNoEarlyTripleEquality`,
+    and then to five-start late facts / route coverage via the checked
+    `*_of_natLateTripleInputs` constructors.
+  - Next action: prove the actual positive nat-late rows for the selected
+    frame/cyclic package and pair them with boundary-walk gap-negative
+    coverage.  Do not add another no-early equality wrapper.
+  - Latest route-coverage-to-Lemma9 projections:
+    `NoEarlyRouteCoverageClosureW32.lemma9SourceFieldsOfRouteData`,
+    `natLateTripleInputsOfRouteData`,
+    `lemma9SourceFieldsOfRouteCoverageAvailable`,
+    `natLateTripleInputsOfRouteCoverageAvailable`, and
+    `nonempty_lemma9SourceFields_of_routeCoverage` feed Lemma 9 source fields
+    directly from route-coverage data.  Remaining work is the concrete route
+    coverage source plus five-start exclusions, not another Lemma 9 projection
+    bridge.
+    The W32 route-coverage handoff has been re-verified and is already
+    sufficient; W34 already contains the selected-frame consumers from route
+    coverage plus five-start exclusions.  Do not add another W32 wrapper unless
+    a real theorem-shape mismatch reappears.
+    W22 now has import-safe projections
+    `Lemma9NatLateTripleInhabitationW22.natLateTripleInputsOfSourceFields`,
+    `concreteNoEarlyTripleEqualityOfSourceFields`,
+    `fiveStartExclusionsOfSourceFields`, and
+    `assembledNatLateTripleInputsFamilyOfSourceFamily`, so W34 can compose
+    route coverage with Lemma 9 without importing W32 back into W22.
+    Newest W22 reductions:
+    `concreteNoEarlyTripleEquality_iff_fiveStartExclusions`,
+    `nonempty_natLateTripleInputs_iff_fiveStartExclusions`,
+    `natCoverageInputs_of_coverage_and_fiveStartExclusions`,
+    `nonempty_coverageConcreteRow_iff_exists_coverage_and_fiveStartExclusions`,
+    and `nonempty_sourceFields_of_coverage_and_fiveStartExclusions` reduce the
+    nat-late/Lemma 9 side to actual coverage plus the five-start exclusions.
+    `NoEarlyTripleFromLemma9` now gives row-level conversions
+    `M8Lemma9FiveStartLateFacts.iff_fiveStartExclusions`,
+    `fiveStartExclusions_of_lateTriples`,
+    `fiveStartExclusions_of_natLateTripleInputs`, and
+    `fiveStartExclusions_of_earlyTripleObstructionInputs`, so selected-frame
+    five-start exclusions can be sourced from any of those concrete inputs.
+    K23/W34 now has
+    `selectedFrameLemma9NatLateTripleSourceFamilyTheorem_of_routeCoverageAvailable`
     and
-    `ExactFiveSixteenRouteMatrix.targetUpperConstructionFiveSixteenArbitrary_of_nonConnectorPolynomialTableFamily`.
-    These are conditional bridge names only; they do not close an
-    unconditional Pach--Toth bound.
+    `selectedFrameLemma9NatLateTripleInputsSourceTheorem_of_routeCoverageAvailable`,
+    so route coverage directly supplies the selected-frame Lemma 9 source.
+    Remaining K23 work is concrete route coverage/no-gap/incidence inputs.
+    K23/W34 also has direct selected-frame five-start exclusion constructors
+    `selectedFrameConcreteFiveStartExclusionSourceTheorem_of_lemma9FiveStartLateFacts`,
+    `_of_lateTriples`, `_of_natLateTripleInputs`, and
+    `_of_earlyTripleObstructionInputs`, plus
+    `selectedFrameConcreteFiveStartExclusionSourceTheorem_iff_natLateTripleInputs`.
+    Do not route through W22 nat-late unless that is the actual available
+    source.
+    `NoEarlyTripleFromLemma9.M8FiveStartExclusions` is now the named
+    five-start payload, with selected-row conversions from restricted Lemma 9
+    late facts, raw late triples, nat-late inputs, or early-obstruction inputs
+    into both five-start exclusions and concrete no-early equality rows.
+  - Latest exact carrier reduction:
+    `K23RouteCoverageSourceW34.selectedFrameBoundaryWalkGapNegativeCoverageSourceTheorem_of_actualSelectedNoGapRows`
+    now consumes actual selected no-gap rows directly through
+    `boundaryWalkGapNegativeCoverageRowsOfActualSelectedNoGapRows`, instead of
+    routing through the older no-gap-to-carrier equivalence.
+    Actual selected no-gap rows can be produced from pointwise component-row
+    refutations by
+    `selectedFrameActualSelectedBoundaryNoGapTriangleDegree34RowsSourceTheorem_of_componentRows`.
+    The remaining no-gap blocker is the pointwise no-component row, not another
+    coverage adapter.
+    `SubpolygonConcreteRealizationW33.FaceSubpolygonRealizationFamilyData` now
+    exposes flattened source reductions from component-pattern carrier rows to
+    actual pointwise no-bad component rows and then into the selected
+    `BoundaryGapTriangleDegree34Row` no-gap field.  Use this flattened family
+    when connecting selected subpolygon realizations to route coverage.
+  - Latest common-neighbor reduction:
+    `K23RouteCoverageSourceW34.SelectedFrameCommonNeighborGeometrySourceTheorem`
+    and the three-common-neighbor analogue now bridge to concrete no-early
+    equality and nat-late/source-family/route coverage.  The remaining honest
+    geometry fields are the five start-indexed common-neighbor witnesses:
+    `witness_start1` through `witness_start5`, each proving the appropriate
+    common-neighbor cardinality or explicit three-neighbor incidences.
+  - Newest positive sources:
+    `SelectedFrameThreeCommonNeighborWitnessRowsSourceTheorem` or
+    `SelectedFrameCommonNeighborWitnessRowsSourceTheorem`, together with the
+    actual no-gap carrier rows consumed by
+    `routeCoverageAvailable_of_selectedFrameBoundaryGapTriangleDegree34CarrierRows_and_threeCommonNeighborGeometrySource`,
+    are enough for the current S4 route-coverage side.  The exact remaining
+    obligations are the actual selected no-gap rows and one of those five-start
+    witness-row source theorems.
+  - Latest positive K23 source reductions:
+    `selectedFrameThreeCommonNeighborGeometrySourceTheorem_iff_witnessRows`,
+    `selectedFrameCommonNeighborGeometrySourceTheorem_iff_witnessRows`, and
+    `selectedFrameK23GeometrySourceTheorem_iff_witnessRows` identify the
+    geometry source theorems with positive witness-row families.  Use these to
+    avoid no-start/no-early geometry manufacture; the proof obligation remains
+    the five-start witness rows plus actual no-gap carrier rows.
+    The common-neighbor and three-neighbor witness-row formulations are now
+    interconvertible through
+    `selectedFrameThreeCommonNeighborWitnessRowsSourceTheorem_iff_commonNeighborWitnessRows`.
+    Do not add another K23 adapter; prove the actual five-start
+    incidence/cardinality rows.
+    Newest checked K23 conversion:
+    `CommonNeighborRouteCoverageSourceW34.ThreeCommonNeighborIncidenceDatum`
+    and `threeCommonNeighborObstructionInputsOfIncidenceRows` convert explicit
+    third-neighbor incidence data into the three-common-neighbor witness rows.
+    Current known blocker: triple-equality rows give only the standard two
+    common neighbors for adjacent `q` pairs.  The exact missing positive
+    incidences are `Adj q_1 s_2`, `Adj q_2 s_3`, `Adj q_3 s_4`,
+    `Adj q_4 s_5`, and `Adj q_5 s_6`, equivalently
+    `Adj s_{i+1} q_i` for starts `i = 1..5`.
+    `K23ObstructionConcrete` now names the Euclidean version of this blocker:
+    `M8BadAdjacencyCrossAdjacencyRows` is equivalent to
+    `M8BadAdjacencyCrossDistanceRows`, and the local-label aliases are
+    `M8LocalLabelBadAdjacencyCrossAdjacencyRows` /
+    `M8LocalLabelBadAdjacencyCrossDistanceRows`.  The precise remaining K23
+    geometric source is proving those five unit-distance rows for the actual
+    selected labels.
+    `M8BadAdjacencyCrossFigure9DistanceRows` packages the five selected-label
+    Figure 9 distance rows with `qi = q_i` and `s = s_{i+1}`;
+    `m8LocalLabelBadAdjacencyCrossDistanceRows_of_figure9DistanceRows` turns
+    them into the local-label cross-distance package.  The remaining K23 source
+    is exactly those five Figure 9 distance rows for the cross pairs.
+    `K23RouteCoverageSourceW34.BadAdjacencyCommonNeighborDatum` is the
+    route-facing source package for exactly these five incidences:
+    `threeCommonNeighborObstructionInputsOfBadAdjacencyData` consumes five
+    such rows and feeds the common-neighbor/K23 route.
+  - Latest no-gap reduction:
+    `SelectedFrameActualSelectedBoundaryNoGapTriangleDegree34RowsSourceTheorem`
+    reduces through
+    `selectedFrameActualSelectedBoundaryNoGapTriangleDegree34RowsSourceTheorem_of_componentRows`
+    to the pointwise component-row source.  The concrete missing fields are a
+    uniform `coreSubpolygonData`, the exact `RowBoundary` equality, and the
+    pointwise absence of the four-field bad pattern: degree-3 at `k`, not
+    long-arc, triangular successor edge, and successor degree 3 or 4.  The
+    carrier route may close this by producing `CoreSubpolygonCarrierCountData`
+    from every bad pattern and applying the existing E13 contradiction.
+    Checked row-level shortcut:
+    `K23RouteCoverageSourceW34.actualSelectedBoundaryNoGapTriangleDegree34RowsForFrameCyclicRows_of_componentCarrierRows`
+    now composes those component-carrier rows directly into actual selected
+    no-gap rows, preserving the same `coreSubpolygonData` and `RowBoundary`
+    equality fields.  This is still conditional on producing the actual
+    component-carrier rows for every bad pattern.
+    Newest no-gap and K23 row bridges:
+    `ActualSelectedBoundaryGapTriangleDegree34RealizationCarrierRowsForFrameCyclicRows`
+    feeds
+    `actualSelectedBoundaryNoGapTriangleDegree34RowsForFrameCyclicRows_of_realizationCarrierRows`.
+    `SubpolygonSelectedGeometrySourceW34.false_of_selectedOuterFaceCoreSubpolygonCarrierCountDataOfMinimalFailureSelectedClassificationFields`
+    exposes the E13 high-degree-slack contradiction for selected outer-face
+    carrier data.  The remaining no-gap source is therefore an actual
+    realization-carrier row for each bad pattern, not another no-gap adapter.
+    Subpolygon triangulation consumers now include
+    `ConcreteSubpolygonInteriorAngleTriangulationRows.toConcreteAngleBoundsOfBoundaryInteriorAngleSum`,
+    `.angleLowerBound_of_forced_le_boundaryInteriorAngleSum`,
+    `.lowDegreeWithHighDegreeSlack_of_forced_le_boundaryInteriorAngleSum`, and
+    `.lowDegreeInequality_of_forced_le_boundaryInteriorAngleSum`; use these to
+    turn genuine triangulation rows plus the boundary interior-angle inequality
+    into the E13 low-degree conclusions.
+    No-gap carrier realization now reduces to pointwise no-bad rows through
+    `SubpolygonConcreteRealizationW33.coreSubpolygonAngleRealizationFamily_carrier_false`,
+    `noBadRows_of_coreSubpolygonAngleRealizationFamily_carrierRows`,
+    `coreSubpolygonAngleRealizationFamily_carrierRows_iff_noBadRows`, and the
+    matching face-subpolygon variants.  Remaining no-gap work is the actual
+    pointwise no-bad row source.
+    `SubpolygonSelectedGeometrySourceW34` now specializes the W33
+    `FaceSubpolygonRealizationFamilyData` bridge to minimal-failure selected
+    classification/realization fields.  The exact remaining no-gap blocker is
+    pointwise absence of `BoundaryGapTriangleDegree34ComponentPattern`, or
+    equivalently producing `CoreSubpolygonCarrierCountData` for any such bad
+    pattern and applying the existing E13 high-degree-slack contradiction.
+    `SubpolygonConcreteRealizationW33` now has pointwise contradiction lemmas
+    for core, face-subpolygon, and flattened selected face-subpolygon
+    realization families: a bad
+    `BoundaryGapTriangleDegree34ComponentPattern` plus matching
+    `CoreSubpolygonCarrierCountData` is contradictory over the same W33
+    realization family.  The remaining no-gap source is construction of that
+    actual carrier-count data for any selected bad component pattern.
+    `SubpolygonSelectedGeometrySourceW34` now packages selected realization
+    rows as W33 `FaceSubpolygonRealizationFamilyData` and proves the
+    K23-consumable no-gap theorem
+    `selectedFrameActualSelectedBoundaryNoGapTriangleDegree34RowsSourceTheorem_of_selectedFaceRealizationRows`.
+    `K23RouteCoverageSourceW34` also has exact realization carrier row data
+    and
+    `selectedFrameActualSelectedBoundaryNoGapTriangleDegree34RowsSourceTheorem_of_exactRealizationCarrierRows`,
+    consuming W33's exact component-carrier contradiction directly.  Remaining
+    no-gap work is positive selected realization/exact-carrier data, not a
+    no-gap adapter.
+    Latest component-pattern reduction:
+    `SubpolygonConcreteRealizationW33.BoundaryGapTriangleDegree34ComponentPattern`,
+    `boundaryGapTriangleDegree34Row_iff_componentPattern`,
+    `coreSubpolygonAngleRealizationFamily_componentPatternCarrierRows_iff_noBadRows`,
+    and
+    `no_boundaryGapTriangleDegree34Rows_of_coreSubpolygonAngleRealizationFamily_componentCarrierRows`
+    reduce selected no-gap to the actual four-field bad pattern
+    (degree/long-arc/triangular-successor/successor degree).
+    K23 now aliases `ActualSelectedBoundaryGapTriangleDegree34ComponentRow` to
+    that W33 component pattern and uses the same no-boundary-gap theorem in
+    `actualSelectedBoundaryNoGapTriangleDegree34RowsForFrameCyclicRows_of_realizationCarrierRows`.
+    For K23 common-neighbor geometry,
+    `SelectedFrameBadAdjacencyCommonNeighborRowsSourceTheorem` is the compact
+    five-incidence source; it feeds the three/common-neighbor witness rows and
+    route coverage through
+    `selectedFrameThreeCommonNeighborWitnessRowsSourceTheorem_of_badAdjacencyCommonNeighborRows`
+    and
+    `routeCoverageAvailable_of_selectedFrameCoverage_and_badAdjacencyCommonNeighborRows`.
+    Newest positive incidence surface:
+    `SelectedFrameBadAdjacencyCommonNeighborIncidenceRows` and
+    `selectedFrameBadAdjacencyCommonNeighborRowsSourceTheorem_of_incidenceRows`
+    package the five start-indexed E19 incidence rows directly into the compact
+    bad-adjacency source.  The remaining exact fields are the five explicit
+    third-neighbor incidences `Adj q_1 s_2`, `Adj q_2 s_3`, `Adj q_3 s_4`,
+    `Adj q_4 s_5`, and `Adj q_5 s_6`, plus the standard bundled distinctness
+    and common-neighbor data required by each
+    `BadAdjacencyCommonNeighborDatum`.
+    `CommonNeighborRouteCoverageSourceW34.M8ConcreteThreeCommonNeighborIncidenceInputs`
+    is the lower-level no-cycle package for the same five local incidences,
+    with projections `start1_left0_adj_third` through
+    `start5_left0_adj_third` and conversions to the three/common-neighbor
+    obstruction inputs.
+    Newest incidence/no-gap bridge:
+    `M8ConcreteThreeCommonNeighborIncidenceInputs.ofWitnessStarts`,
+    `start1_left1_adj_third` through `start5_left1_adj_third`,
+    `k23ObstructionInputsOfIncidenceRows`,
+    `selectedFrameThreeCommonNeighborWitnessRowsSourceTheorem_of_badAdjacencyCommonNeighborIncidenceRows`,
+    `selectedFrameK23WitnessRowsSourceTheorem_of_badAdjacencyCommonNeighborIncidenceRows`,
+    `selectedFrameConcreteNoEarlySourceFamilyTheorem_of_actualSelectedNoGapRows_and_badAdjacencyCommonNeighborIncidenceRows`,
+    and
+    `routeCoverageAvailable_of_selectedFrameActualSelectedNoGapRows_and_badAdjacencyCommonNeighborIncidenceRows`
+    route the five bad-adjacency incidences into K23/no-early coverage.  The
+    remaining content is the actual five incidences from the selected finite
+    labels, not another K23 adapter.
+    Root-imported downstream bridge `BoundaryLabelBadAdjacencyRoute` now turns
+    finite-label `BadAdjacencyIncidenceRows` into
+    `M8ConcreteBadAdjacencyCommonNeighborObstructionInputs` through
+    `badAdjacencyCommonNeighborDatumOfStart` and
+    `badAdjacencyCommonNeighborObstructionInputsOfRows`, avoiding a K23 import
+    cycle.  Remaining incidence work is the actual five adjacency rows
+    `adj_q1_s2` through `adj_q5_s6` inside the finite label certificate.
+    Do not import `BoundaryLabelBadAdjacencyRoute` back into K23: it already
+    imports K23, so finite-label-to-selected-frame consumption must remain in a
+    downstream module importing both.
+    `BoundaryLabelCertificateAssembly.BadAdjacencyFiniteLabelIncidenceRows`
+    is now the finite-label-facing positive target for those five rows, with
+    `badAdjacencyIncidenceRows_iff_finiteLabelIncidenceRows` and
+    `badAdjacencyIncidenceRows_nonempty_of_finiteLabelIncidenceRows` converting
+    it to the route-facing incidence package.  Remaining incidence work is to
+    prove these finite-label rows from the actual generated label certificate.
+    Important blocker: the generated finite label certificate currently gives
+    `q_i ~ q_{i-1}`, `q_i ~ q_{i+1}`, `q_i ~ r_i`, and `q_i ~ s_i`, but not
+    the cross adjacencies `q_i ~ s_{i+1}` needed for
+    `BadAdjacencyFiniteLabelIncidenceRows`.  Those five rows need a geometric
+    proof or stronger selected-label construction; they are not obtainable by
+    unpacking the present certificate fields alone.
+    `BoundaryLabelBadAdjacencyRoute` now also consumes finite-label incidence
+    rows directly through
+    `selectedFrameBadAdjacencyCommonNeighborRowsSourceTheorem_of_finiteLabelBadAdjacencyIncidenceRows`
+    and `selectedFrameK23WitnessRowsSourceTheorem_of_finiteLabelBadAdjacencyIncidenceRows`.
+    The remaining K23 incidence source is therefore exactly the finite-label
+    row package, not a route-facing bridge.
+    `CommonNeighborRouteCoverageSourceW34.BadAdjacencyCommonNeighborStandardDatumAt`
+    and `M8BadAdjacencyCommonNeighborStandardRows` now package the same five
+    selected bad-adjacency incidences together with the standard two adjacent
+    common neighbors, and project to concrete three-common-neighbor incidence,
+    three-common-neighbor obstruction, and common-neighbor card-obstruction
+    inputs.  The remaining K23 source is still the five cross adjacencies or
+    Figure 9 cross-distance rows; the standard-row bridge is complete.
+    `M8BadAdjacencyCommonNeighborStandardRowFamily` now lifts those standard
+    rows to common-neighbor route data and route-coverage availability.  The
+    selected-frame consumer belongs in `K23RouteCoverageSourceW34` because that
+    file imports the common-neighbor layer.
+    `K23ObstructionConcrete.M8BadAdjacencyCrossSelectedFiniteLabelFigure9Rows`
+    now reduces actual selected Figure 9 cross rows to cross-distance rows and
+    to finite/local label incidence rows:
+    `badAdjacencyFiniteLabelIncidenceRows_of_selectedFiniteLabelFigure9Rows`
+    and `badAdjacencyLocalLabelIncidenceRowAt_of_selectedFiniteLabelFigure9Rows`.
+    `ExactFigureWitnessSourceW34` now supplies finite-PQ wrappers from bad
+    adjacency local-label or finite-label rows to exact K23 cross-distance rows.
+    `BoundaryLabelCertificateAssembly` now has an import-cycle-free local
+    surface for the same source:
+    `BadAdjacencySelectedFiniteLabelFigure9RowAt` and
+    `BadAdjacencySelectedFiniteLabelFigure9Rows`, projecting to
+    `BadAdjacencyLocalLabelIncidenceRowAt`,
+    `BadAdjacencyFiniteLabelIncidenceRows`, and route-facing
+    `BadAdjacencyIncidenceRows`.  Remaining K23 incidence work is positive
+    construction of those selected finite-label Figure 9 rows.
+    For Lemma 9, `SelectedFrameConcreteFiveStartExclusionSourceTheorem` feeds
+    `selectedFrameLemma9NatLateTripleInputsSourceTheorem_of_fiveStartExclusions`
+    and the five-start route-coverage bridges.
+    Latest compact S4 route-coverage constructors:
+    `routeCoverageAvailable_of_selectedFrameRealizationCarrierRows_and_badAdjacencyCommonNeighborRows`,
+    `routeCoverageAvailable_of_selectedFrameRealizationCarrierRows_and_fiveStartExclusions`,
+    and
+    `routeCoverageAvailable_of_selectedFrameRealizationCarrierRows_badAdjacencyCommonNeighborRows_and_fiveStartExclusions`
+    combine realization-carrier no-gap rows with the bad-adjacency K23 source
+    and/or five-start Lemma9 source for final assembly.
 
-- [x] Build the compact all-positive finite-certificate obligation package.
-  - Paper step: stronger Lean route for `GEO.2-GEO.3`.
-  - Lean route:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/FiniteCertificateObligationsW12.lean`.
-  - Checked facade:
+### S5. Figure 8 / Figure 9 Containment
 
-```lean
-structure FiniteCertificateObligationsW12.PeriodEquationFields
-structure FiniteCertificateObligationsW12.AllPositiveNonConnectorFields
-structure FiniteCertificateObligationsW12.TableFamilyPackage
-structure FiniteCertificateObligationsW12.VectorPackage
-structure FiniteCertificateObligationsW12.ListPackage
-theorem FiniteCertificateObligationsW12.targetUpperConstructionFiveSixteenArbitrary_of_rawFields
-```
+- [ ] Prove the selected-frame local-window containment source.
+  - Paper step: Lemma 10 / `E22-E23`.
+  - Owners:
+    `Swanepoel/Figure8ContainmentW12.lean`,
+    `Swanepoel/Figure9ContainmentW12.lean`,
+    `Swanepoel/ExactFigureRowsAssemblyW32.lean`,
+    `Swanepoel/ExactFigureWitnessSourceW34.lean`.
+  - Live target:
+    `ExactFigureWitnessSourceW34.LocalWindowContainmentFieldsForFrameCyclicSource`
+    for the selected frame/cyclic rows.
+  - Newest reduction: local-window containment projects to both Figure 8 and
+    Figure 9 distance/angle rows and directly to final-assembly figure
+    components via
+    `honestEuclideanSourceComponentsForFrameCyclicSource_of_localWindowContainmentFields`.
+    The interface constructors from Figure 8 separated containment and Figure 9
+    adjacent-left containment are checked.
+  - Next action: construct the actual selected figure witnesses, Figure 8
+    central-angle containment rows, and Figure 9 middle-turn realization rows
+    for the selected frame; then feed them through
+    `localWindowContainmentFieldsForFrameCyclicSource_of_actualS5_sourceRows`.
+  - Latest compact constructor:
+    `ExactFigureWitnessSourceW34.localWindowContainmentFieldsForFrameCyclicSource_of_actualS5_sourceRows`
+    reduces local-window containment to selected figure witnesses, Figure 8
+    central-angle containment rows, and Figure 9 middle-turn realization rows.
+  - Latest Figure 8 projection:
+    `ExactFigureWitnessSourceW34.figure8CentralAngleContainmentRowsForFrameCyclicSource_of_localHonestEuclideanRows`
+    and
+    `figure8SeparatedContainmentInterfacesForFrameCyclicSource_of_localHonestEuclideanRows`
+    project Figure 8 containment directly from the honest Euclidean row package.
+  - Latest selected-figure bridge:
+    `ExactFigureRowsAssemblyW32` now projects existing exact row assembly to
+    `LocalSelectedFigureWitnessFieldsFamily`, and
+    `ExactFigureWitnessSourceW34` projects local honest Euclidean rows to
+    `SelectedFigureWitnessSourceFieldsForFrameCyclicSource`, including the
+    actual finite-`p_i/q_i` generated frame packages.  The remaining S5 blocker
+    is honest Figure 9 middle-turn realization for the selected frame.
+  - Newest compact S5 entrances:
+    `localWindowContainmentFieldsForFrameCyclicSource_of_localHonestEuclideanRows`
+    reduces local-window containment to
+    `LocalHonestEuclideanRowsForFrameCyclicSource`; the Figure 9 side uses the
+    left-angle containment row, which is the typed Lemma 10 interface.  The
+    older middle-turn realization row is a stronger producer, not a final-route
+    blocker.
+    Equivalently, prove the Figure 8/Figure 9 distance-and-angle rows through
+    `localHonestEuclideanRowsForFrameCyclicSource_iff_distance_and_angle_rows`.
+    No new Figure 8 adapter is needed.
+  - Latest bundled S5 source:
+    `LocalHonestS5FigureRowsForFrameCyclicSource` is the compact obligation
+    bundling local honest Euclidean rows with the genuine Figure 9 middle-turn
+    realization.  It feeds
+    `localWindowContainmentFieldsForFrameCyclicSource_nonempty_of_localHonestS5FigureRows`.
+  - Latest atomic S5 entrance:
+    `localHonestEuclideanRowsForFrameCyclicSource_of_distance_and_angle_rows`
+    builds local honest Euclidean rows from the four atomic distance/angle row
+    families.  The final constructor
+    `w34ActualRoutePremises_of_exactRemainingInputPackage_distance_and_angle_rows`
+    now consumes those four row families plus Figure 9 middle-turn rows.
+    The current shortest final S5 route is the atomic four-row variant:
+    Figure 8 distance rows, Figure 8 central-angle containment rows, Figure 9
+    distance rows, and Figure 9 left-angle containment rows.  The Figure 9
+    middle-turn row is a stronger producer, not required by that shortest
+    route.
+    Newest Figure 9 simplification:
+    `Figure9ContainmentConcrete.leftAngleContainmentRows_of_angleLeMiddleTurnRows`
+    proves the left-angle containment row from turn nonnegativity plus the
+    pointwise upper bound `angleAt p qi s <= turn (i + 1)`.  The remaining S5
+    angle source can therefore use this weaker pointwise middle-turn upper
+    bound instead of the older equality-style middle-turn realization row.
+    W19 exposes the same weaker source through
+    `AngleContainmentBridgeProducerW19.Figure9UniversalLeftAngleLeMiddleTurnRows`
+    and
+    `figure9UniversalLeftAngleContainment_of_angleLeMiddleTurnRows`, with
+    certificate constructors ending in
+    `ofDistanceWitnessRowsAndAngleLeMiddleTurnRows`.
+    Newest checked S5 integration:
+    `Figure9LeftAngleLeMiddleTurnRowsForFrameCyclicSource` and
+    `Figure9LeftAngleLeMiddleTurnRowsForFinitePQSpineGeneratedOrderSource`
+    expose that weaker pointwise bound on the frame/finite-`p_i/q_i` route.
+    `localHonestEuclideanRowsForFrameCyclicSource_of_distance_rows_and_angleLeMiddleTurnRows`,
+    `localWindowContainmentFieldsForFrameCyclicSource_of_distance_rows_and_angleLeMiddleTurnRows`,
+    and
+    `honestEuclideanSourceComponentsForFrameCyclicSource_of_distance_rows_and_angleLeMiddleTurnRows`
+    now turn Figure 8 distance rows, Figure 8 central-angle containment, Figure
+    9 distance rows, and the weaker Figure 9 middle-turn upper-bound rows into
+    the S5 local-window/Euclidean components.  The remaining S5 geometry is
+    Figure 8 central-angle containment plus the actual pointwise Figure 9
+    middle-turn upper-bound rows for the generated frame.
+    Newest Figure 8 bridge:
+    `Figure8ContainmentW12.dataWitnesses_of_distanceWitnessRowsAndCentralAngleContainmentRows`
+    and `E22_of_distanceWitnessRowsAndCentralAngleContainmentRows` turn
+    Figure 8 distance rows plus central-angle containment rows into the E22
+    interface.  In `ExactFigureWitnessSourceW34`,
+    `Figure8CentralAngleLeSeparatedTurnRowsForFrameCyclicSource` and
+    `Figure8CentralAngleLeSeparatedTurnRowsForFinitePQSpineGeneratedOrderSource`
+    are now the compact positive row surfaces for the remaining Figure 8 angle
+    source, with finite-label and Figure9 upper-bound constructors ending in
+    `localHonestEuclideanRowsForFinitePQSpineGeneratedOrderSource_of_finiteLabelRows_centralAngleLeSeparatedTurnRows_and_figure9AngleLeMiddleTurnRows`.
+    `BoundaryLabelCertificateAssembly.M8FiniteBoundaryFrameCoreLabelCertificate.S5AngleRows`
+    is the compact label-certificate angle row package for the quantitative
+    S5 angle facts that the finite label data itself does not contain; it
+    assembles to `AngleContainmentBridges` via
+    `angleContainmentBridgesOfS5AngleRows`.
+    `M8FiniteBoundaryFrameCoreLabelCertificate.S5FiniteLabelAngleRows` now
+    bundles the same explicit finite-label angle inequalities with direct
+    projections to the Figure 8/Figure 9 containment interfaces.  The remaining
+    S5 angle inputs are exactly: for Figure 8, prove
+    `angleAt qi p qj <= separatedTurn turn i j` for each failed separated
+    pair; for Figure 9, prove `angleAt p qi s <= turn (i + 1)` for each
+    adjacent failed pair.
+    Figure 8 has now been reduced to turn-window geometry:
+    `Figure8ExplicitEuclideanFactsCompletionW33.Figure8CentralAngleTurnSubwindowRows`
+    or `Figure8CentralAngleTurnSubwindowEqRows` feed
+    `centralAngleContainmentRows_of_turnSubwindowRows` /
+    `centralAngleContainmentRows_of_turnSubwindowEqRows`.  The exact remaining
+    Figure 8 source is a real central-angle telescope/subwindow inside
+    `Finset.Icc (i + 1) j` for each separated failed pair, plus turn
+    nonnegativity.
+    Latest Figure 8 source refinements:
+    `Figure8CentralAngleTurnIccSubwindowRows`,
+    `Figure8CentralAngleTurnIccSubwindowEqRows`,
+    `Figure8CentralAngleTurnIndexedSubwindowRows`, and
+    `Figure8CentralAngleTurnIndexedSubwindowEqRows` feed containment through
+    the checked `centralAngleContainmentRows_of_*` constructors, including
+    M8-turn-bound variants.  The remaining proof content is now the actual
+    indexed/Icc window selection for every separated failed pair.
+    Figure 9 has now been reduced to concrete turn geometry:
+    `Figure9EuclideanFactsConcrete.Figure9AdjacentLeftCosineTurnRows` or
+    `Figure9AdjacentLeftTurnChordRows` feed
+    `angleLeMiddleTurnRows_of_cosineTurnRows` /
+    `angleLeMiddleTurnRows_of_turnChordRows`.  The exact remaining rows are
+    `turn (i + 1) ∈ [0, pi]` and either
+    `Real.cos (turn (i + 1)) <= dotAt p qi s` or
+    `sqDist p s <= 2 - 2 * Real.cos (turn (i + 1))`.
+    Latest Figure 9 row calculus:
+    `cosineTurnRows_iff_turnChordRows`,
+    `middleTurn_mem_Icc_zero_pi_of_totalTurn_lt_pi_div_three`,
+    `cosineTurnRows_of_totalTurn_and_cosineComparisons`,
+    `turnChordRows_of_totalTurn_and_chordComparisons`,
+    `angleLeMiddleTurnRows_of_totalTurn_and_cosineComparisons`, and
+    `angleLeMiddleTurnRows_of_totalTurn_and_chordComparisons` reduce the
+    remaining Figure 9 source to total-turn control plus pointwise cosine or
+    chord comparisons.
+    `Figure9EuclideanFactsConcrete` now also has pointwise comparison lemmas
+    turning `angleAt p qi s <= theta` into cosine/chord comparison rows, with
+    `UnitSeparatedAngle.value` and equality variants for the common case where
+    the certified turn angle is exactly the Figure 9 left comparison angle.
+    Remaining S5 work is to prove those pointwise angle upper bounds from the
+    actual selected turn-angle geometry.
+    W19 containment now consumes those concrete Figure 9 rows through
+    `figure9UniversalLeftAngleLeMiddleTurnRows_of_cosineTurnRows`,
+    `figure9UniversalLeftAngleLeMiddleTurnRows_of_turnChordRows`,
+    `Figure9ExactAngleContainmentCertificate.ofDistanceWitnessRowsAndCosineTurnRows`,
+    and `.ofDistanceWitnessRowsAndTurnChordRows`.
+    Newest W19 total-turn constructors:
+    `Figure9UniversalLeftCosineComparisonRows`,
+    `Figure9UniversalLeftTurnChordComparisonRows`,
+    `figure9UniversalLeftAngleLeMiddleTurnRows_of_totalTurn_and_cosineComparisons`,
+    `figure9UniversalLeftAngleLeMiddleTurnRows_of_totalTurn_and_chordComparisons`,
+    and the corresponding `Figure9ExactAngleContainmentCertificate` /
+    `PointwiseFigure9SelectedExactAngleContainmentCertificate` constructors
+    let S5 use total-turn control plus pointwise cosine/chord comparisons
+    directly.
+    Exact finite-`p_i/q_i` S5 route:
+    `ExactFigureWitnessSourceW34.S5AngleRowsForFinitePQSpineGeneratedOrderSource`
+    is the row-wise S5 angle package for the generated finite label
+    certificate.  The label certificate supplies distance rows via
+    `figure8FiniteLabelAdjacencyDistinctnessRowsForFinitePQSpineGeneratedOrderSource_of_labelCertificate`
+    and
+    `figure9FiniteLabelAdjacencyDistinctnessRowsForFinitePQSpineGeneratedOrderSource_of_labelCertificate`,
+    while `S5AngleRows` supplies the quantitative angle rows via
+    `figure8CentralAngleLeSeparatedTurnRowsForFinitePQSpineGeneratedOrderSource_of_labelCertificateS5AngleRows`
+    and
+    `figure9LeftAngleLeMiddleTurnRowsForFinitePQSpineGeneratedOrderSource_of_labelCertificateS5AngleRows`.
+    The compact S5 bundle is
+    `distance_and_angle_rowsForFinitePQSpineGeneratedOrderSource_of_labelCertificateS5AngleRows`,
+    and the direct local-window/honest-Euclidean constructors are
+    `localHonestEuclideanRowsForFinitePQSpineGeneratedOrderSource_of_labelCertificateS5AngleRows`
+    and
+    `localWindowContainmentFieldsForFinitePQSpineGeneratedOrderSource_of_labelCertificateS5AngleRows`.
+    Newest finite-PQ concrete row wrappers:
+    `Figure8CentralAngleTurnSubwindowRowsForFinitePQSpineGeneratedOrderSource`,
+    `Figure8CentralAngleTurnSubwindowEqRowsForFinitePQSpineGeneratedOrderSource`,
+    `Figure9AdjacentLeftCosineTurnRowsForFinitePQSpineGeneratedOrderSource`,
+    `Figure9AdjacentLeftTurnChordRowsForFinitePQSpineGeneratedOrderSource`,
+    their Figure 8/Figure 9 projections, and the four compact
+    `s5AngleRowsForFinitePQSpineGeneratedOrderSource_of_*` constructors reduce
+    finite-PQ S5 angle rows to actual Figure 8 subwindow rows plus Figure 9
+    cosine/chord rows.
+    Additional finite-PQ wrappers now cover Figure 8 Icc/indexed
+    subwindow/equality rows and total-turn Figure 9 cosine/chord comparison
+    rows, including `figure9LeftAngleLeMiddleTurnRowsForFinitePQSpineGeneratedOrderSource_of_totalTurn_and_cosineComparisonRows`,
+    the chord analogue, and the `S5AngleRowsForFinitePQSpineGeneratedOrderSource`
+    constructors from Icc/indexed Figure 8 rows plus middle-turn/comparison
+    rows.  Direct `localHonestEuclideanRowsForFinitePQSpineGeneratedOrderSource`
+    constructors also consume those combinations.  Remaining S5 content is the
+    actual subwindow selection and comparison rows from finite-label geometry.
+    Boundary-label S5 now exposes local finite-label row surfaces
+    `M8FiniteBoundaryFrameCoreLabelCertificate.Figure8CentralAngleTurnSubwindowRows`,
+    `Figure8CentralAngleTurnIccSubwindowRows`,
+    `Figure8CentralAngleTurnIndexedSubwindowRows`,
+    `Figure9AdjacentLeftCosineTurnRows`, `Figure9AdjacentLeftTurnChordRows`,
+    and cosine/chord comparison row aliases, with `S5AngleRows` constructors
+    such as `.ofTurnSubwindowRowsAndCosineTurnRows` and
+    `.ofTurnSubwindowRowsAndCosineComparisonRows`.  Remaining S5 work is to
+    inhabit these rows from the actual finite label/turn geometry.
+    W34 also has local-honest finite-PQ wrappers
+    `localHonestEuclideanRowsForFinitePQSpineGeneratedOrderSource_of_distance_rows_and_cosineComparisonRows`,
+    `.of_distance_rows_and_chordComparisonRows`, and the finite-label-row
+    variants with central-angle rows plus Figure 9 comparison rows.  Remaining
+    S5 content is still the actual comparison/subwindow row source.
+    W11 now exposes actual-turn S5 carriers
+    `Figure8CentralAngleActualTurnIccSubwindowRows`,
+    `Figure8CentralAngleActualTurnIndexedSubwindowRows`,
+    `Figure9AdjacentLeftActualTurnCosineComparisonRows`, and
+    `Figure9AdjacentLeftActualTurnChordComparisonRows`, plus adapters
+    `s5AngleRows_of_actualTurnIccRowsAndCosineComparisonRows` and indexed /
+    chord variants.  Remaining S5 work is to inhabit those actual-turn rows
+    from triangle-run/turn-angle geometry.
+    Newest W11 turn-angle reductions:
+    `Figure8CentralAngleTurnAngleIccSubwindowRows`,
+    `Figure8CentralAngleTurnAngleIndexedSubwindowRows`,
+    `Figure9AdjacentLeftTurnAngleCosineComparisonRows`, and
+    `Figure9AdjacentLeftTurnAngleChordComparisonRows` feed the actual-turn
+    carriers via the `*_of_turnAngleRows` constructors.  The exact S5 source
+    now is the real turn-angle row package for the selected triangle run:
+    subwindow membership for Figure 8 and pointwise cosine/chord comparisons
+    for Figure 9.
+    Latest Figure 8 turn-angle bridge:
+    `Figure8CentralAngleTriangleRunIccSubwindowRows` plus
+    `figure8CentralAngleTurnAngleIccSubwindowRows_of_triangleRunIccSubwindowRows`
+    turns explicit triangle-run Icc subwindow rows into the W11 Figure 8
+    turn-angle row package.  The remaining Figure 8 source is the actual
+    triangle-run Icc subwindow selection for each separated failed pair.
+    `ExactFigureWitnessSourceW34` now has finite-PQ wrappers that connect W11
+    actual-turn Figure 8/Figure 9 rows to
+    `S5AngleRowsForFinitePQSpineGeneratedOrderSource` using the existing
+    finite-label distance machinery.  The remaining S5 source is the actual W11
+    turn rows themselves, not a finite-PQ adapter.
+    `ExactFigureRowsAssemblyW32` now also has local adapters from finite-label
+    `S5AngleRows` to `LocalHonestEuclideanInequalitySourceFields`, plus direct
+    W11 turn-angle adapters for Figure 8 Icc/indexed rows with Figure 9
+    cosine/chord comparison rows.  Do not add more S5 adapter layers unless the
+    source row shape changes.
 
-  - Current state: the W12 facade is root-imported, build-checked, scan-clean,
-    and covered by the CI-style axiom audit.
-  - Remaining open work: instantiate `PeriodEquationFields` and one of
-    `AllPositiveNonConnectorFields`, `TableFamilyPackage`, `VectorPackage`, or
-    `ListPackage` with actual period equations and non-connector lower tables.
-    That instantiation, not another facade, is the live proof task.
+### S6. Swanepoel Final Assembly
 
-- [x] Choose the reduced non-connector separation route.
-  - Verified route choice: use reduced non-connector tables through
-    `ConcreteCrossBlockLowerTable`, `NonConnectorPolynomialCertificates`, and
-    `PachTothRemainingMatrix`; keep all-pairs tables only as fallback.
-  - Remaining numeric-certificate target skeleton:
+- [ ] Inhabit `SwanepoelW32FinalAssembly.W34ActualRoutePremises`.
+  - Short route inputs:
+    checked no-cut family; actual topology/component closure; compatible
+    finite-spine generated-order rows; S4 route coverage; S5 exact figure rows
+    or local-window containment.
+  - Preferred final constructors:
+    `w34ActualRoutePremises_of_exactRemainingInputPackage`,
+    `w34ActualRoutePremises_of_refuting_bothPlusSidesCutForced_finitePQSpineRows_boundaryWalkGapCoverage_lemma9Late_localWindowContainment`,
+    `w34ActualRoutePremises_of_boundaryWalkGapCoverage_lemma9Late_localWindowContainment`,
+    and `w34ActualRoutePremises_of_boundaryWalkGapCoverage_lemma9Late_figure8_figure9_rows`.
+    The nat-late plus containment-interface constructor
+    `w34K23LocalExactAngleRoutePremises_of_refuting_bothPlusSidesCutForced_finitePQSpineRows_boundaryWalkGapCoverage_natLate_containmentInterfaces`
+    is a checked compatibility alias for the same `W34ActualRoutePremises`
+    route; name it that way if it appears in handoff text.
+  - Use `W34ActualRoutePremises` as the live route name in task text.  Older
+    route names are compatibility aliases only; do not create new tasks around
+    them.
+  - Latest compact package:
+    `w34ActualRoutePremises_of_exactRemainingInputPackage` consumes exactly the
+    S2 boundary target, S3 skeleton/angle rows, S4 missing long-arc/triangle-run
+    field, finite `p_i/q_i` generated-order rows, S4 carrier plus K23 geometry,
+    and S5 selected-figure/Figure 8/Figure 9 rows.  Use this as the final
+    assembly surface while proving the remaining positive source fields.
+    The newer
+    `w34ActualRoutePremises_of_exactRemainingInputPackage_honestSourceRows`
+    consumes the honest source rows directly: K23 witness rows plus local
+    honest S5 rows and Figure 9 middle-turn rows.  Prefer this constructor
+    when integrating the latest S4/S5 obligations.
+    The distance/angle-row variant
+    `w34ActualRoutePremises_of_exactRemainingInputPackage_distance_and_angle_rows`
+    is the current shortest S5-facing constructor when the four atomic figure
+    row families are available.
+    The newer
+    `w34ActualRoutePremises_of_exactRemainingInputPackage_atomicFigureRows`
+    removes the stronger Figure 9 middle-turn input from that shortest route.
+    The compact S4/S5 route
+    `w34ActualRoutePremises_of_exactRemainingInputPackage_actualNoGap_compactS4S5`
+    consumes long-arc rows, the W16 finite-`p/q` theorem, actual no-gap rows,
+    K23 witness rows, and bundled S5 rows directly.
+    Finite generated-order rows after closure can also be sourced from W16 /
+    finite-walk data via
+    `selectedFinitePQSpineGeneratedOrderRowsOfFiniteWalkFrameCoreData` and
+    `selectedFinitePQSpineGeneratedOrderRows_nonempty_of_finiteWalkFrameCoreData`.
+    W16 finite `p/q` cyclic-successor rows alone are not enough for generated
+    order.  The exact upgrade surface is
+    `selectedFinitePQSpineGeneratedOrderRows_nonempty_of_finiteWalkFrameCoreCenterDegreeSix`
+    or the direct-extra-cardinality variant.  The missing payload is
+    `BoundaryArcFiniteWalkFrameCoreData`, `boundaryArc_eq`,
+    `centerDegreeSix` or `extraNeighborCardTwo`, and generated cyclic-order
+    rows for the finite-walk frame core.
+    Newest generated-order source:
+    `FrameCyclicOrderAssemblyW32.SelectedFiniteWalkFrameCoreGeneratedOrderSourceRows`
+    and the center-degree-six variant package the missing finite-walk frame
+    core, boundary-arc equality, extra-neighbor-cardinality/degree-six, and
+    generated cyclic-order rows.  They feed
+    `selectedFinitePQSpineGeneratedOrderRowsOfFiniteWalkFrameCoreGeneratedOrderSourceRows`
+    and
+    `selectedFinitePQSpineGeneratedOrderRowsOfFiniteWalkFrameCoreCenterDegreeSixGeneratedOrderSourceRows`.
+    The selected finite-walk generated-order source rows now store the current
+    frame-core fields directly and expose raw-fact plus bundled
+    boundary-arc-frame-core constructors.  Remaining generated-order work is
+    positive inhabitation of those raw/frame-core and generated cyclic-order
+    inputs, not another row-shape adapter.
+    Newest generated-order bridge:
+    `selectedFiniteWalkFrameCoreGeneratedOrderSourceRowsOfFinitePQSpineFrameCoreLemma8Rows`
+    and its nonempty form produce final-consumable generated-order source rows
+    from finite-spine frame-core/Lemma 8 rows plus
+    `SelectedFinitePQSpineGeneratedCyclicRows`; the extra-neighbor cardinality
+    row is derived from `finiteRows.lemma8`.  The remaining generated-order
+    blocker on this route is exactly the selected finite-`p/q` generated cyclic
+    rows.
+    `FrameCyclicOrderAssemblyW32` now constructs those selected generated
+    cyclic rows from
+    `BoundarySpineFiniteCertificate.M8FinitePQSpineCertificate.ExplicitCyclicOrderRows`
+    through `selectedFinitePQSpineGeneratedCyclicRowsOfExplicitCyclicOrderRows`
+    and its nonempty form.  Remaining generated-order source is therefore the
+    explicit finite-spine cyclic-order rows, already available from the
+    boundary-spine source package.
+    Newest raw-fact route:
+    `PointwiseFinitePQSpineRawFrameCoreFacts`,
+    `finitePQSpineFrameCoreFields_iff_rawFacts`,
+    `finitePQSpineGeneratedOrderRowsOfRawFacts`,
+    `selectedFinitePQSpineGeneratedOrderRowsOfRawFacts`,
+    `SelectedFiniteWalkFrameCoreGeneratedOrderSourceRows.rawFacts`, and
+    `selectedFiniteWalkFrameCoreGeneratedOrderSourceRowsOfRawFacts` connect
+    finite-spine raw cyclic-order/frame-core facts to generated-order rows.
+    M8 construction now has the local-honest shortest route
+    `m8ConstructionData_nonempty_of_exactTopology_longArc_finitePQTheorem_generatedFiniteWalk_realizationCarrier_badAdjacencyIncidence_localHonestRows`.
+    Final assembly now has the matching constructor
+    `w34ActualRoutePremises_of_exactActualTopologyFields_outerFaceSectorOrderTheorem_longArc_w16_finiteWalkGeneratedOrder_realizationCarrier_incidenceRows_labelCertificateS5AngleRows`.
+    The remaining final-route inputs are the actual source rows named in that
+    theorem: S2 exact topology, S3 sector theorem, long-arc rows, W16 finite
+    p/q theorem, finite-walk generated-order rows, realization-carrier no-gap
+    rows, K23 incidence rows, and S5 label-angle rows.
+    `BrokenLatticeMinimalFailure` already closes
+    `no_minimalClearedFailure` from a `MinimalFailureM8ConstructionEliminator`
+    via `M8ConstructionData.contradiction` and
+    `no_minimalClearedFailure_of_m8ConstructionEliminator`.  Do not import
+    `M8ConstructionDataInhabitationW33` back into that file; it would form a
+    cycle.  The remaining bridge is upstream construction of M8 data for every
+    minimal failure from the current source rows.
+    Current M8 endpoint:
+    `m8ConstructionData_nonempty_of_exactActualTopologyFields_outerFaceSectorOrderTheorem_longArc_w16_finiteWalkGeneratedOrder_realizationCarrier_incidenceRows_labelCertificateS5AngleRows`
+    and
+    `contradiction_of_exactActualTopologyFields_outerFaceSectorOrderTheorem_longArc_w16_finiteWalkGeneratedOrder_realizationCarrier_incidenceRows_labelCertificateS5AngleRows`
+    match the final source surface exactly.  Remaining blockers are only the
+    positive source inputs themselves.
+    `SwanepoelW32FinalAssembly` now also exposes the exact-source contradiction
+    composition theorem with that same source-row surface, so the contradiction
+    route and M8 data route are aligned.  Do not add another final-assembly
+    shape wrapper unless the source inputs change.
+    Current closure-package M8 endpoint:
+    `m8ConstructionData_nonempty_of_exactActualTopologyClosureMissingFieldPackage_finiteWalkGeneratedOrder_realizationCarrier_badAdjacency_labelCertificateS5AngleRows`
+    consumes the exact closure/missing-field package, finite-walk generated
+    order, realization-carrier rows, bad-adjacency rows, and S5 rows directly.
+    No M8 constructor mismatch remains; remaining work is positive inhabitation
+    of those source inputs.
+    `SwanepoelW32FinalAssembly` now has the same closure-package-shaped
+    conditional M8 source and contradiction wrapper, and older long-arc/W16
+    adapters route through it.  Do not add more M8 source-shape wrappers unless
+    the final source inputs themselves change.
+    `MinimalGraphFacts` cannot import the M8 route without a cycle
+    (`MinimalGraphFacts -> BrokenLatticeMinimalFailure -> ... -> MinimalGraphFacts`).
+    Downstream closure already exists via
+    `BrokenLatticeMinimalFailure.no_minimalClearedFailure_of_m8ConstructionEliminator`
+    and `M8ConstructionDataInhabitationW33.no_minimalClearedFailure_of_routeCertificate`.
+    The exact remaining route source is
+    `Nonempty M8ConstructionDataInhabitationW33.StrongestRouteSource`,
+    equivalently `NoCutMinimalityClosureW34.ExactRemainingPremiseForNoCutMinimalityClosure`.
+    W16 also exposes
+    `finitePQSpineCyclicSuccessorRowsTarget_of_frameCoreData` for frame-core
+    finite-`p/q` successor rows.
+    W16 now has the assembly-facing
+    `FinitePQSpineExplicitCyclicOrderRowsAndRawFactsTheorem` and
+    `finitePQSpineCyclicSuccessorRowsTheorem_of_explicitCyclicOrderRowsAndRawFactsTheorem`,
+    reducing the final W16 theorem to finite label certificate,
+    explicit cyclic-order rows, and raw frame-core facts.
+    The old exact-input constructor that listed ten independent inputs is now
+    stale.  The current compact final route has seven positive source
+    obligations:
+    S2 `MinimalFailureExactActualTopologyFieldsTarget`;
+    S3 `SelectedNondegenerateTopologyOuterFaceSectorOrderTheorem`; an
+    `ExactActualTopologyClosureMissingFieldPackage` for the resulting skeleton
+    rows, or its expanded long-arc plus W16 source; finite-walk
+    `SelectedFiniteWalkFrameCoreGeneratedOrderSourceRows`; K23
+    `SelectedFrameActualSelectedBoundaryGapTriangleDegree34RealizationCarrierRowsSourceTheorem`;
+    K23 `SelectedFrameBadAdjacencyCommonNeighborRowsSourceTheorem`; and compact
+    S5 `S5AngleRowsForFinitePQSpineGeneratedOrderSource`.  `MinimalBoundaryTopologySkeletonFamily`,
+    old actual-cycle targets, atomic distance rows, and separate K23 witness
+    rows are not independent blockers on this compact surface.
+    W33 now has the exact-S2 package route
+    `ExactActualTopologyClosureMissingFieldPackage` and
+    `exactActualTopologyClosureMissingFieldPackageOfSkeletonRowsLongArcFinitePQSpineCyclicSuccessorRowsTheorem`,
+    consuming exact actual topology fields, W33 skeleton rows, W24 long-arc
+    family, and the W16 finite-`p/q` theorem to produce the matching
+    missing-field/closure pair for final assembly.
+    `SelectedTopologyRowsInhabitationW33` also exposes direct constructors for
+    `ExactActualTopologyClosureMissingFieldPackage` from W24 missing-field
+    rows, W13 gap-negative rows plus W16, no-boundary-gap rows plus W16, and
+    the explicit triangle-run/long-arc row surfaces.  Use these constructors
+    before adding any new W33 closure layer; the remaining work is positive
+    source inhabitation.
+    Newest exact-S2/source-row constructor:
+    `w34ActualRoutePremises_of_exactActualTopologyClosureMissingFieldPackage_finiteWalkGeneratedOrder_realizationCarrier_badAdjacency_labelAngleRows`
+    composes exact topology fields, the S3 sector theorem, W33's
+    `ExactActualTopologyClosureMissingFieldPackage`, finite-walk generated
+    order rows, realization-carrier no-gap rows, bad-adjacency K23 rows, and
+    finite label/S5 angle rows into `W34ActualRoutePremises`.  This is now the
+    preferred S6 integration surface after S2/S3/S4/S5 positive sources are
+    inhabited.
+    `w34ActualRoutePremises_of_exactActualTopologyClosureMissingFieldPackage_finiteWalkGeneratedOrder_realizationCarrier_badAdjacency_labelCertificateS5AngleRows`
+    is the still-shorter S5-facing form: it consumes the generated finite label
+    certificate plus `S5AngleRowsForFinitePQSpineGeneratedOrderSource`; the
+    label certificate supplies the two distinctness rows and the S5 angle rows
+    supply Figure 8 central-angle plus Figure 9 middle-turn upper bounds.
+    On the S5 distance side,
+    `BoundaryLabelCertificateAssembly.M8FiniteBoundaryFrameCoreLabelCertificate.figure8DistanceWitnessRows`
+    and `.figure9DistanceWitnessRows` already construct the local Figure 8/9
+    distance witness rows from a finite boundary frame-core label certificate.
+    The remaining S5 proof work is the actual Figure 8 central-angle
+    containment and Figure 9 left-angle or middle-turn-upper-bound rows for the
+    generated frame.
+    Latest final/S5 integration:
+    `ExactFigureRowsAssemblyW32` now has finite-label S5 constructors for
+    Figure 8 containment and Figure 9 middle-turn-to-left-angle containment,
+    and `ExactFigureWitnessSourceW34.honestEuclideanSourceComponentsForFinitePQSpineGeneratedOrderSource_of_labelCertificateS5AngleRows`
+    hands compact S5 rows to exact figure components.  `SwanepoelW32FinalAssembly`
+    checks again after removing an unused proof-irrelevance cast theorem and
+    routing the exact topology/S3/long-arc/W16/generated-order/no-gap/K23/S5
+    surface through the closure-package helper.  M8 also exposes
+    `routeCertificate_of_exactActualTopologyFields_outerFaceSectorOrderTheorem_longArc_w24NoCut_w16FinitePQ_generatedFiniteWalk_realizationCarrier_incidenceRows_labelCertificateS5AngleRows`
+    as the strongest route-certificate endpoint for that source surface.
+  - Compile status:
+    `SwanepoelW32FinalAssembly` now builds with the pinned toolchain after
+    removing duplicate `Verified` aliases already exported by
+    `SwanepoelW32RouteAudit` and fixing the generated-order row universe.
+    This does not inhabit `W34ActualRoutePremises`; it only verifies the
+    conditional assembly surface.
 
-```lean
-noncomputable def indexedNonConnectorCrossBlockSqDistanceTableFamily
-    (F : CrossBlockLowerBoundsInterface.RoleHingedPeriodSearchFamily) :
-    NonRigidConnectorSeparationFacts.IndexedNonConnectorCrossBlockSqDistanceTableFamily
-      F := by
-  constructor
-  intro k hk
-  constructor
-  intro i u j v hij hnotConnector
-  sorry
-```
+- [ ] Derive the internal lower-bound target from the inhabited route.
+  - Target: `Swanepoel.targetLowerBoundEightThirtyOne`.
+  - Current conditional wrappers are not enough; `W34ActualRoutePremises` must
+    be inhabited unconditionally and imported.
 
-  - How: connector-pair distances are handled by
-    `NonRigidConnectorSeparationFacts`; remaining table rows need only cover
-    `Ne i j` and
-    `Not (NonRigidConnectorSeparationFacts.IndexedCyclicConnectorPair hk i u j v)`.
-  - Completion gate: the chosen table route supplies
-    `GeneratedSeparationInterface.GeneratedGlobalSeparation` for every
-    generated chain used by the period route.
+- [ ] Add public Swanepoel wrappers only after the internal theorem builds and
+  the audit is clean.
+  - File: `ErdosProblems1066/KnownBounds.lean`.
+  - Public theorem shape: `Verified.lower_bound_eight_thirty_one` and a
+    source-specific alias.
 
-- [x] Add a source-faithful thresholded/eventual finite-certificate package if
-  the all-positive route is too strong.
-  - Paper step: Pach--Toth `GEO.3` / `PT96.Main`, sufficiently large `k`.
-  - Current bridge status: `EventualRoleHingeClosure` already carries the
-    thresholded role-hinged closure route down to exact-target small-case
-    complement data.  The remaining blocker is not another facade theorem but
-    the actual eventual transition, orientation, period, and separation data,
-    plus enough small cases to match the chosen threshold.
-  - Existing imported structure:
+## Pach--Toth After Swanepoel
 
-```lean
-structure EventualFiniteCertificateObligations (K0 : Nat) where
-  transitions : EventualRoleHingeClosure.RoleHingeTransitions
-  word :
-    forall (k : Nat), K0 <= k -> 0 < k -> OrientationWord.Word k
-  equation :
-    forall (k : Nat) (hK : K0 <= k) (hk : 0 < k) (i : Fin 16),
-      PeriodSearchInterface.AlgebraicVertexPeriodEquation
-        transitions.toFigure2TransitionObligations
-        BaseTransitionRealization.exactBase
-        (PeriodCertificateExamples.finiteOrientationWordOfWord hk
-          (word k hK hk))
-        (BlockPartition.localVertexEquivFin16.symm i)
-  separated :
-    forall (k : Nat) (hK : K0 <= k) (hk : 0 < k),
-      GeneratedSeparationInterface.GeneratedGlobalSeparation
-        transitions.toFigure2TransitionObligations
-        hk
-        BaseTransitionRealization.exactBase
-        ((word k hK hk).toFin)
+Do not spend effort on blocked rigid or translated-equation routes.  The
+Pach--Toth public wrapper remains absent until the exact/arbitrary internal
+targets are unconditional and audited.
 
-theorem EventualFiniteCertificateObligations.targetUpperConstructionFiveSixteenEventually
-    {K0 : Nat} (O : EventualFiniteCertificateObligations K0) :
-    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenEventually
-```
+### P1. Quarantine Blocked Routes
 
-  - Current state: the package and eventual/arbitrary wrappers are imported
-    and build-checked.
-  - Remaining blocker: instantiate the structure by supplying concrete
-    transitions, orientation words, period equations, and generated global
-    separation for all `K0 <= k`, then combine with matching small cases.
+- [x] The proof-used Figure 2 edge-role table is checked infrastructure.
+  Keep names/docstrings honest: it is not a complete PostScript transcription.
 
-- [ ] Prove sufficiently-large closed placement certificates.
-  - Best home:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/LargeClosedPlacementW12.lean`
-    or a new imported module directly instantiating its W12 structures.
-  - Source-faithful target:
+- [x] Treat the exact-base all-positive direct-flexible W33 source as refuted.
+  - Checked blockers:
+    `FiniteReducedMetricCandidateSearchW33.not_directFlexibleSourceShape`,
+    `FlexibleCandidateMetricInhabitationW33.not_nonempty_directFlexibleSourcePayload`,
+    and related length-one exact-base obstruction theorems.
+  - Consequence: do not task workers with inhabiting the all-positive
+    `DirectFlexibleSourcePayload` / `CandidatePeriodMetricData` lane unless
+    they first explain why the checked obstruction no longer applies.
+  - Current status:
+    `CrossBlockMetricInequalitiesW33` pins the obstruction to the forced
+    `T2_2 -> T1_1` unit row versus exact squared distance `12`.  This is a
+    real no-go result for the exact-base all-positive flexible surface.
+    W34 non-rigid material may supply conditional eventual/threshold
+    endpoints, but not an unconditional Pach--Toth theorem by itself.
 
-```lean
-def closedChainThreshold : Nat
+- [ ] Keep concrete four-target / translated-equation lanes out of the live
+  proof route.
+  - Blocked or audit-only modules include:
+    `RoleHingeConcreteSearch`,
+    `OrbitSqDistancesW12`,
+    `TransitionAlternativeW13`,
+    `ConcreteLowerTableValueDataBlockerW32`,
+    `PeriodCandidateConcreteTableBlockerW32`.
 
-noncomputable def largeExplicitClosedPlacementCertificates_verified :
-    LargeClosedPlacementW12.LargeExplicitClosedPlacementCertificates
-      closedChainThreshold := by
-  sorry
+### P2. Choose The Live Closed-Placement Route
 
-theorem targetUpperConstructionFiveSixteenEventually_verified :
-    _root_.ErdosProblems1066.PachToth.targetUpperConstructionFiveSixteenEventually := by
-  exact
-    largeExplicitClosedPlacementCertificates_verified
-      |>.targetUpperConstructionFiveSixteenEventually
-```
+- [ ] Target an eventual/threshold non-rigid route unless a verified
+  alternative supersedes the W33 obstruction.
+  - Deliverable:
+    `EventualRoleHingeClosure.EventualFiniteCertificateObligations K0` or
+    `LargeClosedPlacementW12.LargeExplicitClosedPlacementCertificates K0`.
+  - Fields: same/opposite transition data, thresholded orientation words,
+    indexed algebraic period equations, and global separation.
+  - Gate: yields explicit closed-placement certificates for all large block
+    counts.
+  - Latest checked bridge:
+    `RoleHingeCandidateSearchSurface` now has a positive thresholded route via
+    `EventualPeriodSearchData T K0` and `EventualCrossBlockMetricData P`,
+    proving eventual, large-block, and arbitrary-`n` targets once those
+    thresholded sources and the matching small-case package are inhabited.
+    `AlternativeNonRigidClosedPlacementW34` and
+    `PachTothRemainingSourceLedgerW34` now also expose the threshold-six metric
+    route: large closed-placement fields for `k >= 6` plus
+    `BelowThresholdMetricFieldsSix` yield the full deformed metric-field
+    family and the exact/arbitrary targets.  `BelowThresholdMetricFieldsSix`
+    is now obtained from
+    `ClosedPlacementSmallKCertificatesW19.SmallExplicitTransitionCertificateSource`,
+    so the exact small source has the same honest geometry surface as the
+    existing small-certificate route.
+    Large exact blocks from six onward now route through threshold-six
+    closed-placement fields via
+    `largeExactBlockTargetsFromSix_of_largeClosedPlacementFieldsSix` and
+    related adapters in `EventualClosedPlacementSourceW34`,
+    `RemainderSplitSourceClosureW32`, and
+    `AlternativeNonRigidClosedPlacementW34`.  This remains secondary until the
+    Swanepoel route is closed.
 
-  - Next action: build macro-step certificates, express every large `k` by the
-    macro lengths, close cyclic displacement, prove global separation, and
-    package the resulting certificates through
-    `LargeClosedPlacementW12.LargeExplicitClosedPlacementCertificates`.
+- [ ] Provide the finite small-complement package for the chosen threshold.
+  - Deliverable: exact certificates below the threshold induced by `K0`.
+  - Owners:
+    `PachToth/ClosedPlacementSmallKCertificatesW19.lean`,
+    `PachToth/SmallLengthExactTargetsConcreteW24.lean`.
+  - Warning: `SmallUpTo_sixteen` only suffices for arbitrary `n` when the
+    block threshold is compatible with `K0 <= 1`.
+  - Current blocker:
+    the checked small-source lane still needs a genuine
+    `DeformedLengthOneTransitionGeometry` / `DeformedLengthOneSource`; the
+    helper route through exact-base flexible generated closure depends on the
+    now-refuted W33 direct-flexible gate.
+  - Checked W34 status:
+    `PachToth/DeformedLengthOneSourceW34.lean` records the honest
+    geometry-to-source constructors and the blocker theorem
+    `not_nonempty_directFlexibleSourcePayload`, citing the W33
+    `T2_2 -> T1_1` exact-base length-one obstruction.
+    The current reduced small side is
+    `DeformedLengthOneExactBlocksTwoThroughFiveSource`, equivalently a genuine
+    deformed length-one source plus exact blocks two through five; it feeds the
+    threshold-six arbitrary/exact adapters in
+    `SmallLengthExactTargetsConcreteW24`, `RemainderSplitSourceClosureW32`, and
+    `FarApartRemainderSourceW34`.
 
-- [ ] Optionally prove all-small exact-chain certificates.
-  - Needed only for the stronger all-`k` / all-`n` theorem.
-  - Target:
+### P3. Prove Closed Placements And Separation
 
-```lean
-theorem exactChainUpper_small
-    (k : Nat) (hk : 0 < k) (hsmall : k < closedChainThreshold) :
-    SplitSoundness.ExactChainUpper k
+- [ ] Construct same/opposite non-rigid transition data.
+  - Owners:
+    `PachToth/RoleHingeCandidateSearchSurface.lean`,
+    `PachToth/FlexibleTransitionSearchW11.lean`,
+    `PachToth/EventualRoleHingeClosure.lean`.
 
-noncomputable def exactChainSmallCaseCertificates_all :
-    SmallCaseReduction.ExactChainSmallCaseCertificates
-      (16 * closedChainThreshold) := by
-  sorry
-```
+- [ ] Construct period/closure certificates for the selected route.
+  - Owners:
+    `PachToth/PeriodSearchInterface.lean`,
+    `PachToth/PeriodWordCertificates.lean`,
+    `PachToth/EventualRoleHingeClosure.lean`.
 
-  - Next action: either explicitly construct finite small placements or do not
-    claim the all-`n` Pach-Toth theorem.
+- [ ] Prove global separation through reduced cross-block metric tables.
+  - Owners:
+    `PachToth/GeneratedSeparationFarApart.lean`,
+    `PachToth/CrossBlockLowerBoundsInterface.lean`,
+    `PachToth/RoleHingeCandidateSearchSurface.lean`.
 
-- [ ] If choosing the stronger route, prove all-positive closed placement
-  certificates.
-  - Stronger target:
+### P4. Pach--Toth Final Assembly
 
-```lean
-theorem exists_explicitClosedPlacementCertificate
-    (k : Nat) (hk : 0 < k) :
-    ClosedPlacementInterface.ExplicitClosedPlacementCertificate k hk
-```
+- [ ] Derive the eventual target after large closed placements are inhabited.
+  - Target: `PachToth.targetUpperConstructionFiveSixteenEventually`.
 
-  - Next action: combine the large construction with the small certificates.
+- [ ] Derive the exact all-block target only from an all-positive certificate
+  family.
+  - Target: `PachToth.targetUpperConstructionFiveSixteen`.
 
-#### P5. Route placements to exact and arbitrary targets
+- [ ] Derive the arbitrary target only after the exact target or a threshold
+  route plus matching finite small cases.
+  - Target: `PachToth.targetUpperConstructionFiveSixteenArbitrary`.
+  - Latest far-apart split bridge:
+    `FarApartRemainderSourceW34` and `RemainderSplitSourceClosureW32` now build
+    `CanonicalSplitRealization k r` internally from an exact chain/closed
+    placement family and checked finite remainders using translated far-apart
+    placement.  The remaining split blocker is no longer far-apart placement;
+    it is `MinimalExactRemainderSplitSourceBlocker`, equivalently
+    `ExactBlocksOneThroughFive /\ LargeExactBlockTargetsFromSix`.
 
-- [x] Add small-case and split-realization routing modules.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SmallCaseReduction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SmallCaseCertificates.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SplitArbitraryNNonRigidBridge.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SplitRealizationClosure.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/SplitRealizationFinal.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/GeometricSoundness.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/PlacementBridge.lean`.
-  - Current state: imported, build-checked, and scan-clean.
-    `SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_sixteen`
-    discharges the target for `n < 16` via the translated-remainder route.
-    `SplitRealizationClosure` packages supplied generated closed-chain data
-    with explicit far-apart split realization data.
-  - Conditional status: this does not supply the eventual large generated
-    closed chains / large closed-placement data.  The remainder far-apart
-    routing is checked; the missing input is the generated-chain global
-    separation and closed-placement family, not a new remainder construction.
+- [ ] Add public `KnownBounds` wrappers only after the matching internal
+  theorem builds and passes the audit.
 
-- [x] Prove the eventual target from large certificates.
-  - Files:
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/ClosedChainReduction.lean`,
-    `E:/Personal/Erdosproblems/1066/ErdosProblems1066/PachToth/EventualReduction.lean`.
-  - Checked theorems:
+## Project Structure Tasks
 
-```lean
-theorem targetUpperConstructionFiveSixteenEventually_of_eventualExplicitClosedPlacementCertificates
-    (K0 : Nat)
-    (Hclosed :
-      forall (k : Nat), K0 <= k -> forall hk : 0 < k,
-        ClosedPlacementInterface.ExplicitClosedPlacementCertificate k hk) :
-    targetUpperConstructionFiveSixteenEventually
-
-theorem targetUpperConstructionFiveSixteenArbitrary_of_eventualExplicitClosedPlacement_and_small
-```
-
-  - Current state: exact chains from eventual explicit certificates plus the
-    existing translated remainder route give an eventual target; finite
-    small-case coverage then routes to the arbitrary-`n` target.  The large
-    certificates and any finite cases beyond the proved `n < 16` window remain
-    open geometry/data.
-
-- [ ] Prove the exact `16 * k` target if all-positive certificates are supplied.
-  - Target theorem:
-
-```lean
-theorem targetUpperConstructionFiveSixteen_verified :
-    targetUpperConstructionFiveSixteen
-```
-
-  - Next action: apply
-    `ClosedChainReduction.targetUpperConstructionFiveSixteen_of_explicitClosedPlacementCertificates`.
-
-- [ ] Prove the arbitrary all-`n` target only after the large route and
-  threshold-matching small cases are supplied.
-  - Target theorem:
-
-```lean
-theorem targetUpperConstructionFiveSixteenArbitrary_verified :
-    targetUpperConstructionFiveSixteenArbitrary
-```
-
-  - Next action: combine the eventual large route with the checked
-    `SmallCaseCertificates.targetUpperConstructionFiveSixteenSmallUpTo_sixteen`
-    if the threshold is `16`, or extend the small-case certificate up to the
-    eventual threshold.
-
-#### P6. Add public Pach-Toth wrappers
-
-- [ ] Add the source-faithful eventual wrapper first.
-  - File: `E:/Personal/Erdosproblems/1066/ErdosProblems1066/KnownBounds.lean`.
-  - Target theorem:
-
-```lean
-theorem upper_construction_five_sixteen_eventual :
-    exists N0 : Nat, forall n : Nat, N0 <= n ->
-      exists C : UDConfig n,
-        forall s : Finset (Fin n), C.IsIndep s ->
-          s.card <= PachToth.Arithmetic.ceilDiv (5 * n) 16
-```
-
-- [ ] Add exact and arbitrary all-`n` wrappers only if the matching internal
-  verified targets are closed.
-  - Target theorem names:
-
-```lean
-theorem upper_construction_five_sixteen_exact
-theorem upper_construction_five_sixteen
-```
-
-  - Next action: keep these wrappers absent until
-    `targetUpperConstructionFiveSixteen_verified` and
-    `targetUpperConstructionFiveSixteenArbitrary_verified` are closed.
-
-## Mathlib Landing Points
-
-Use Mathlib for:
-
-- finite graph bridge, induced graphs, independence, walks/cycles:
-  `Mathlib.Combinatorics.SimpleGraph.Basic`,
-  `Mathlib.Combinatorics.SimpleGraph.Maps`,
-  `Mathlib.Combinatorics.SimpleGraph.Subgraph`,
-  `Mathlib.Combinatorics.SimpleGraph.Finite`,
-  `Mathlib.Combinatorics.SimpleGraph.Clique`,
-  `Mathlib.Combinatorics.SimpleGraph.Walks.Basic`,
-  `Mathlib.Combinatorics.SimpleGraph.Paths`,
-  `Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected`;
-- polygon and betweenness primitives:
-  `Mathlib.Geometry.Polygon.Basic`,
-  `Mathlib.Analysis.Convex.Between`;
-- Euclidean angle/trig facts:
-  `Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine`,
-  `Mathlib.Geometry.Euclidean.Angle.Oriented.Affine`,
-  `Mathlib.Geometry.Euclidean.Triangle`,
-  `Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic`;
-- finite cardinal and cyclic-index plumbing:
-  `Mathlib.Data.Finset.Card`,
-  `Mathlib.Data.Fintype.Card`,
-  `Mathlib.Algebra.BigOperators.Fin`,
-  `Mathlib.Logic.Equiv.Fin.Rotate`.
-
-Do not expect Mathlib to provide the Swanepoel planar outer-face/Jordan
-construction or the Pach-Toth non-rigid closed-chain construction.  Those are
-project-local proof obligations.
-
-## Final Completion Gates
-
-- [x] Every `.lean` source file under
-  `E:/Personal/Erdosproblems/1066/ErdosProblems1066` is imported by
-  `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`.
-  - Current coverage: 823 imported modules for 823 Lean files, with no missing,
-    extra, or duplicate root imports.
-- [x] Pinned build succeeds.
-  - Current command succeeded for the root target with 8850 jobs.
-- [x] Forbidden-token scan is clean over `ErdosProblems1066` and
-  `ErdosProblems1066.lean`.
-- [x] Trust-source scan is clean for `native_decide`, `trustCompiler`, and
-  `ofReduceBool`.
-- [x] CI-style axiom audit declaration list covers the current W13-W31
-  endpoint layer.
-  - Current configured audit checks 1127 declarations and reports only
-    `propext`, `Classical.choice`, and `Quot.sound`.
-  - Current source-level no-additional-declared-axiom evidence: the full
-    Lean-source forbidden-token scan is clean over the 823-module root surface.
-- [x] Add W18/W19/W20 endpoint declarations to the CI-style axiom audit.
-  - The configured audit now includes the W18 final/ledger endpoints, the W19
-    Pach-Toth closed-placement audit aliases, the W19 Swanepoel
-    pointwise/final closure endpoints, and the W20 Pach-Toth/Swanepoel
-    endpoint surfaces.
-- [x] Add W21/W22 endpoint declarations to the CI-style axiom audit.
-  - The W21/W22 subset is folded into the current 1127-declaration replayed
-    audit, which passed with only Lean/mathlib base axioms.
-- [x] Add W23/W24/W25/W26/W27/W28 endpoint declarations to the CI-style axiom audit.
-  - The configured audit now includes W23 route/audit wrappers, W24 source and
-    obstruction surfaces, W25 source-inhabitation/audit endpoints, and W26
-    concrete-adapter/final-gate endpoints, plus W27/W28 source/audit endpoints.
-  - The replayed audit passed for 1127 declarations with only Lean/mathlib base
-    axioms.
-- [x] Add W29 endpoint declarations to the CI-style axiom audit.
-  - The configured audit now includes W29 Pach--Toth source/assembly/audit
-    endpoints and W29 Swanepoel source/final-gate endpoints.
-  - The replayed audit passed for 1127 declarations with only Lean/mathlib base
-    axioms.
-- [x] Add W30 endpoint declarations to the CI-style axiom audit.
-  - The configured audit now includes W30 Pach--Toth generated-closure,
-    completion-row, branch/source, large-tail, route-audit, no-fake, and final
-    conditional endpoints, plus W30 Swanepoel selected-face, extracted-witness,
-    frame/cyclic-order, no-cut, no-early, figure, pointwise, route-audit, and
-    final-source endpoints.
-  - The replayed audit passed for 1127 declarations with only Lean/mathlib base
-    axioms.
-- [x] Add W31 endpoint declarations to the CI-style axiom audit.
-  - The configured audit now includes W31 Pach--Toth explicit generated metric
-    rows, completion-row inhabitants, closed-orbit branch, exact-chain family,
-    positive-chain small blocks, large-tail row realization, remainder
-    dependency, route/no-fake audit, and final conditional assembly endpoints.
-  - The configured audit also includes W31 Swanepoel selected-face/enclosure,
-    extracted components, frame/cyclic rows, no-early rows, figure inequalities,
-    pointwise/lane product, route audit, and final conditional endpoints.
-  - The replayed audit passed for 1127 declarations with only Lean/mathlib base
-    axioms.
-- [x] `KnownBounds.lean` exposes only the theorems actually closed in Lean.
-  - Next action: add no new public wrappers until the matching internal
-    `*_verified` theorem exists and builds.
-
-## Latest W31 Status
-
-- [x] W20-W31 waves integrated and verified.
-  - Root surface: 823 Lean files imported by 823 root imports.
-  - Pinned build: `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
-    succeeded with 8850 jobs.
-  - Forbidden-token scan, trust-source scan, root import coverage, and the
-    1127-declaration CI-style axiom audit all pass.
-  - W31 fixes the W31 face-boundary/enclosure audit namespace by using
-    `ErdosProblems1066.Swanepoel.Verified.swanepoelW31_source_exactly_exactTopologyFields`.
-
-- [x] W23-W31 waves integrated, root-build verified, and CI-audited.
-  - All W23, W24, W25, W26, W27, W28, W29, W30, and W31 files are root-imported
-    and covered by the current 823/823 import surface.
-  - W23-W31 add concrete route/audit wrappers, source-package equivalences,
-    route obstruction records, and sharper lane/row package names; they do not
-    prove the final public bounds unconditionally.
-
-- [ ] Next action: inhabit the concrete source packages beyond W31.
-  - Pach--Toth: produce actual completion-row/generated-orbit, positive-chain,
-    large-tail, and remainder-split source data for the W31 final gate; do not
-    target the blocked role-hinged lower-table alias.
-  - Swanepoel: produce actual W31 final-source gate data from minimal failure
-    topology/geometry, no-cut, no-early, finite-row, figure-angle, pointwise,
-    and lane-product data.
-  - Public `KnownBounds` wrappers remain closed until the internal
-    `*_verified` theorem builds through the W31 gate and the expanded axiom
-    audit is clean.
-
-- [x] W30 parallel source-inhabitation wave is integrated and verified.
-  - Pool policy: keep active agents running long enough to do real proof work;
-    prune only agents that are finished or genuinely stale.
-  - Agent pool completed:
-    Laplace/Meitner/Mencius/McClintock/Archimedes/Sagan/Kepler/Raman/
-    Confucius/Rawls own the Pach--Toth W30 tasks; Locke/Boyle/Epicurus/
-    Newton/Kierkegaard/Galileo/Einstein/Ohm/Descartes/Turing own the
-    Swanepoel W30 tasks.
-  - Pach--Toth completed tasks:
-    `GeneratedClosureMetricRowsW30`, `CompletionRowsClosureW30`,
-    `ClosedOrbitBranchSourceW30`, `ExactChainFamilyClosureW30`,
-    `PositiveChainComponentClosureW30`, `LargeTailCertificateRowsW30`,
-    `RemainderExactDependencyClosureW30`, `PachTothW30NoFakeAudit`,
-    `PachTothW30RouteAudit`, and `PachTothW30FinalAssembly`.
-  - Swanepoel completed tasks:
-    `SelectedFaceEnclosureSourceW30`, `ExtractedWitnessComponentsW30`,
-    `FrameCyclicOrderRowsW30`, `NoEarlyRouteDataClosureW30`,
-    `ExactFigureInequalitiesW30`, `PointwiseProductDataClosureW30`,
-    `LaneProductFinalClosureW30`, `NoCutBlockerEliminationW30`,
-    `SwanepoelW30RouteAudit`, and `SwanepoelW30FinalAssembly`.
-  - W30 completion gate:
-    all 20 produced `.lean` files compile with pinned Lean 4.28.0, are
-    root-imported, scan-clean, trust-source clean, included in the 8830-job root
-    build, and covered by the 1106-declaration CI-style axiom audit.
-
-- [x] W31 parallel source-inhabitation wave is integrated and verified.
-  - Pool policy: W30 agents were closed only after their work was integrated,
-    root-built, and audited.  W31 agents were likewise kept active until all
-    outputs were locally checked, root-imported, root-built, and CI-audited.
-  - Agent pool completed:
-    Popper/Mendel/Leibniz/Plato/Russell/Bacon/Godel/Avicenna/Hegel/Pauli own
-    the Pach--Toth W31 tasks; Pasteur/Curie/Ampere/Faraday/Bohr/Herschel/Gibbs/
-    Volta/Erdos/Parfit own the Swanepoel W31 tasks.
-  - Pach--Toth W31 completed tasks:
-    `GeneratedMetricSourceFieldsW31`, `CompletionRowsInhabitationW31`,
-    `ClosedOrbitConcreteBranchW31`, `ExactChainFamilyInhabitationW31`,
-    `PositiveChainSmallBlocksW31`, `LargeTailRowsRealizationW31`,
-    `RemainderDependencyFinalW31`, `PachTothW31NoFakeAudit`,
-    `PachTothW31RouteAudit`, and `PachTothW31FinalAssembly`.
-  - Swanepoel W31 completed tasks:
-    `SelectedOuterFaceConstructionW31`, `EnclosureAndFaceBoundaryW31`,
-    `ExtractedComponentsInhabitationW31`, `FrameRowsInhabitationW31`,
-    `CyclicOrderRowsInhabitationW31`, `NoEarlyConcreteRowsW31`,
-    `FigureInequalityRowsW31`, `PointwiseLaneProductInhabitationW31`,
-    `SwanepoelW31RouteAudit`, and `SwanepoelW31FinalAssembly`.
-  - W31 completion gate:
-    all 20 produced `.lean` files compile with pinned Lean 4.28.0, are
-    root-imported, scan-clean, trust-source clean, included in the 8850-job root
-    build, and covered by the 1127-declaration CI-style axiom audit.
-
-- [ ] W32 parallel source-inhabitation wave is queued.
-  - Pool policy: close the integrated W31 agents, then keep W32 agents active
-    long enough to do real Lean work; prune only finished or genuinely stale
-    agents.
-  - Pach--Toth W32 targets:
-    `ExplicitMetricRowsInhabitationW32`, `CompletionRowsConcretePayloadsW32`,
-    `ClosedOrbitPayloadInhabitationW32`, `ExactChainSourceCertificateW32`,
-    `PositiveChainLargeTailAssemblyW32`, `LargeTailClosedPlacementRowsW32`,
-    `RemainderSplitSourceClosureW32`, `PachTothW32NoFakeAudit`,
-    `PachTothW32RouteAudit`, and `PachTothW32FinalAssembly`.
-  - Swanepoel W32 targets:
-    `SelectedFaceEnclosureBridgeW32`, `FaceBoundaryTopologySourceW32`,
-    `ExtractedComponentsConcreteClosureW32`, `FrameCyclicOrderAssemblyW32`,
-    `NoEarlyRouteCoverageClosureW32`, `ExactFigureRowsAssemblyW32`,
-    `NoCutPointwiseBridgeW32`, `PointwiseLaneFinalBridgeW32`,
-    `SwanepoelW32RouteAudit`, and `SwanepoelW32FinalAssembly`.
-  - W32 completion gate:
-    each produced `.lean` file must compile with pinned Lean 4.28.0 before root
-    import, then the root import surface, source scans, trust scans, root build,
-    and CI-style axiom audit must be expanded and replayed.
+- [ ] Keep `TASK.md` as this active execution queue.  Put theorem dependency
+  explanations in `proof_workings/theorem_dependency_map.md`.
+- [ ] Do not create new W-numbered files for bookkeeping.  If a W-numbered file
+  remains, it must be a checked proof/certificate/blocker or a documented
+  compatibility surface.
+- [ ] For every unrooted Lean file, either root-import it after a targeted
+  pinned check, merge it into the owning module, or remove/quarantine it with
+  the owner decision recorded outside TASK.md.
+- [ ] Defer physical folder moves until imports are stabilized.  When moving
+  later, move one semantic cluster at a time and leave old-path import shims
+  until all downstream imports are migrated.

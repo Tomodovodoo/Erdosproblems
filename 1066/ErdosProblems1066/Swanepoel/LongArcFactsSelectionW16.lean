@@ -74,6 +74,26 @@ def selectedM8TurnFields
   BoundaryBudgetM8TurnFields.ofBoundaryBudgetData
     (selectedBoundaryBudgetData F)
 
+/-- The W12 M8 turn package obtained from the selected long-arc facts. -/
+def selectedM8TurnPackage
+    (F : BoundaryLongArcFacts.{u} D) :
+    M8TurnPackageW12.BoundaryLongArcM8TurnPackage
+      (selectedBoundaryBudgetData F) :=
+  M8TurnPackageW12.BoundaryLongArcM8TurnPackage.ofBoundaryLongArcFacts F
+
+@[simp]
+theorem selectedM8TurnPackage_turnBounds
+    (F : BoundaryLongArcFacts.{u} D) :
+    (selectedM8TurnPackage F).turnBounds = F.toM8TurnBounds :=
+  rfl
+
+/-- The W12 thirteen-turn/window facts obtained from the selected long arc. -/
+def selectedM8ThirteenWindowData
+    (F : BoundaryLongArcFacts.{u} D) :
+    M8TurnPackageW12.M8ThirteenTurnWindowData
+      (selectedM8TurnPackage F).turnBounds :=
+  (selectedM8TurnPackage F).thirteenWindowData
+
 /-- Pointwise nonnegativity for the normalized M8 turn function. -/
 theorem selectedM8Turn_nonnegative
     (F : BoundaryLongArcFacts.{u} D) (k : Nat) :
@@ -150,6 +170,25 @@ def selectedM8TurnFields :
     BoundaryBudgetM8TurnFields (selectedBoundaryBudgetData W) :=
   BoundaryBudgetM8TurnFields.ofBoundaryBudgetData
     (selectedBoundaryBudgetData W)
+
+/-- The W12 M8 turn package obtained from the selected W15 long arc. -/
+def selectedM8TurnPackage :
+    M8TurnPackageW12.BoundaryLongArcM8TurnPackage
+      (selectedBoundaryBudgetData W) :=
+  M8TurnPackageW12.BoundaryLongArcM8TurnPackage.ofBoundaryLongArcFacts
+    W.longArcFacts
+
+@[simp]
+theorem selectedM8TurnPackage_turnBounds :
+    (selectedM8TurnPackage W).turnBounds = W.longArcFacts.toM8TurnBounds :=
+  rfl
+
+/-- The W12 thirteen-turn/window facts obtained from the selected W15 long
+arc. -/
+def selectedM8ThirteenWindowData :
+    M8TurnPackageW12.M8ThirteenTurnWindowData
+      (selectedM8TurnPackage W).turnBounds :=
+  (selectedM8TurnPackage W).thirteenWindowData
 
 /-- Pointwise nonnegativity for the normalized M8 turn function selected by W15. -/
 theorem selectedM8Turn_nonnegative (k : Nat) :

@@ -2,6 +2,7 @@ import ErdosProblems1066.PachToth.GeneratedClosedChainEventualReduction
 import ErdosProblems1066.PachToth.GeneratedMetricClosure
 import ErdosProblems1066.PachToth.ConcretePeriodSearchFamily
 import ErdosProblems1066.PachToth.PeriodCertificateExamples
+import ErdosProblems1066.PachToth.RoleHingeCandidateSearchSurface
 import ErdosProblems1066.PachToth.SmallCaseCertificates
 import ErdosProblems1066.PachToth.SmallCaseReduction
 
@@ -915,6 +916,28 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHinged_exist
       K0 T Hlarge
       (SmallCaseReduction.smallCaseCallback_of_exactChainCertificates
         smallCases)
+
+/-- The thresholded positive candidate-search route closes the source-faithful
+eventual target.  This is the non-rigid/generated metric lane, not the
+refuted exact-base direct-flexible source. -/
+theorem targetUpperConstructionFiveSixteenEventually_of_positiveRouteData
+    {K0 : Nat}
+    (R :
+      RoleHingeCandidateSearchSurface.ChosenEventualPositiveRouteData K0) :
+    PachToth.targetUpperConstructionFiveSixteenEventually :=
+  R.targetUpperConstructionFiveSixteenEventually
+
+/-- Nonempty thresholded positive candidate-search route data closes the
+source-faithful eventual target. -/
+theorem targetUpperConstructionFiveSixteenEventually_of_nonempty_positiveRouteData
+    {K0 : Nat}
+    (H :
+      Nonempty
+        (RoleHingeCandidateSearchSurface.ChosenEventualPositiveRouteData K0)) :
+    PachToth.targetUpperConstructionFiveSixteenEventually := by
+  cases H with
+  | intro R =>
+      exact targetUpperConstructionFiveSixteenEventually_of_positiveRouteData R
 
 end
 

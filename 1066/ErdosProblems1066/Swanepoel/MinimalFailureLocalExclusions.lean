@@ -367,18 +367,11 @@ independent set to the deletion certificate. -/
 theorem hasCleared_of_minimalFailure
     (hmin : IsMinimalClearedFailure C)
     (L : LocalClosedNeighborhoodDeletion C) :
-    HasClearedEightThirtyOneIndependentSet C := by
-  classical
-  match induced_hasCleared_of_minimalFailure hmin L with
-  | Exists.intro small hrest =>
-      let K := L.toDegreeLocalDeletionCertificate
-      let D := K.data small
-      have hDdegree : DegreeHypotheses D := K.degreeHypotheses small
-      have hsmall : D.SmallerBound := by
-        exact
-          { smallIndep := hrest.1
-            smallBound := hrest.2 }
-      exact hasCleared_of_degreeDeletionReinsertion D hDdegree hsmall
+    HasClearedEightThirtyOneIndependentSet C :=
+  hasCleared_of_minimalFailure_induced_degree_deletion
+    (deleted := L.deleted) (reinsertion := L.reinsertion)
+    hmin L.closedNeighborhood L.deletedSubsetClosedUnitNeighborhood
+    L.reinsertionCardLower L.reinsertionCardUpper L.reinsertionIndep
 
 /-- Equivalently, a minimal cleared failure cannot carry local
 closed-neighborhood deletion data. -/
@@ -402,15 +395,14 @@ def PatternDegreeReducible {n : Nat} (C : _root_.UDConfig n)
       Exists fun Csmall : _root_.UDConfig nSmall =>
         Nonempty (DegreeLocalDeletionCertificate C Csmall)
 
-/-- Generic reducer constructor: a local pattern reducer only has to supply
-the deletion/reinsertion sets.  The smaller induced configuration is rebuilt
-by `LocalClosedNeighborhoodDeletion`. -/
-theorem patternDegreeReducible_of_localClosedNeighborhoodDeletion
+/-- If a local pattern is already impossible, its degree-reducibility obligation
+is vacuous. -/
+theorem patternDegreeReducible_of_not_pattern
     {n : Nat} {C : _root_.UDConfig n} {pattern : Prop}
-    (hdel : pattern -> LocalClosedNeighborhoodDeletion C) :
+    (hno : ¬ pattern) :
     PatternDegreeReducible C pattern := by
   intro hpattern
-  exact (hdel hpattern).exists_degreeLocalDeletionCertificate
+  exact False.elim (hno hpattern)
 
 /-- Any degree-reducible local pattern is absent from a minimal cleared
 failure. -/
@@ -431,46 +423,33 @@ def K23DegreeReducible {n : Nat} (C : _root_.UDConfig n) : Prop :=
       Exists fun Csmall : _root_.UDConfig nSmall =>
         Nonempty (DegreeLocalDeletionCertificate C Csmall)
 
-/-- A local `K_{2,3}` deletion rule only has to provide the deleted and
-reinserted sets.  The induced smaller configuration and all distance
-preservation data are constructed automatically. -/
-theorem K23DegreeReducible_of_localClosedNeighborhoodDeletion
+/-- If the unit-distance local graph has no `K_{2,3}`, the older
+degree-reducibility obligation is vacuous. -/
+theorem K23DegreeReducible_of_not_hasK23
     {n : Nat} {C : _root_.UDConfig n}
-    (hdel :
-      forall _P : K23Pattern (GraphBridge.unitDistanceLocalGraph C),
-        LocalClosedNeighborhoodDeletion C) :
+    (hno : ¬ HasK23 (GraphBridge.unitDistanceLocalGraph C)) :
     K23DegreeReducible C := by
   intro P
-  exact (hdel P).exists_degreeLocalDeletionCertificate
+  exact False.elim (hno (Nonempty.intro P))
 
-/-- Tupled-input variant of
-`K23DegreeReducible_of_localClosedNeighborhoodDeletion`, convenient for
-workers proving a concrete local rule. -/
-theorem K23DegreeReducible_of_localClosedNeighborhoodK23Deletion
+/-- The checked two-circle common-neighbor theorem supplies the
+degree-reducibility input for any separated unit-distance configuration. -/
+theorem K23DegreeReducible_of_unitDistanceConfig
+    {n : Nat} (C : _root_.UDConfig n) :
+    K23DegreeReducible C :=
+  K23DegreeReducible_of_not_hasK23
+    (CommonNeighborGeometry.not_hasK23_unitDistanceLocalGraph C)
+
+/-- A labelled local `K_{2,3}` pattern contradicts the checked unit-distance
+common-neighbor geometry.  The minimal-failure hypothesis is kept for
+compatibility with older route consumers. -/
+theorem false_of_minimalFailure_and_K23Pattern
     {n : Nat} {C : _root_.UDConfig n}
-    (hdel :
-      forall _P : K23Pattern (GraphBridge.unitDistanceLocalGraph C),
-        Exists fun deleted : Finset (Fin n) =>
-        Exists fun reinsertion : Finset (Fin n) =>
-          IsClosedNeighborhood C reinsertion deleted /\
-          (Exists fun center : Fin n =>
-            deleted <= closedUnitNeighborhood C center) /\
-          2 <= reinsertion.card /\
-          reinsertion.card <= 8 /\
-          C.IsIndep reinsertion) :
-    K23DegreeReducible C := by
-  intro P
-  rcases hdel P with
-    ⟨deleted, reinsertion, hclosed, hsubset, hlower, hupper, hindep⟩
-  let L : LocalClosedNeighborhoodDeletion C :=
-    { deleted := deleted
-      reinsertion := reinsertion
-      closedNeighborhood := hclosed
-      deletedSubsetClosedUnitNeighborhood := hsubset
-      reinsertionCardLower := hlower
-      reinsertionCardUpper := hupper
-      reinsertionIndep := hindep }
-  exact L.exists_degreeLocalDeletionCertificate
+    (_hmin : IsMinimalClearedFailure C)
+    (P : K23Pattern (GraphBridge.unitDistanceLocalGraph C)) :
+    False :=
+  CommonNeighborGeometry.not_hasK23_unitDistanceLocalGraph C
+    (Nonempty.intro P)
 
 /-- If every local `K_{2,3}` pattern is degree-reducible, then a minimal
 cleared failure has no local `K_{2,3}`. -/
@@ -521,6 +500,79 @@ theorem finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
   classical
   exact FiniteLocalExclusionPackage.of_not_hasK23
     (not_hasK23_of_minimalFailure_and_K23DegreeReducible hmin hred)
+
+/-! ## Direct unit-distance route for minimal failures -/
+
+/-- The finite local-exclusion package in a minimal cleared failure, with the
+unit-distance `K_{2,3}` exclusion supplied by the checked two-circle
+common-neighbor theorem. -/
+theorem finiteLocalExclusionPackage_of_minimalFailure_and_localClosedNeighborhoodK23Deletion
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : IsMinimalClearedFailure C) :
+    FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C) :=
+  finiteLocalExclusionPackage_of_minimalFailure_and_K23DegreeReducible
+    hmin (K23DegreeReducible_of_unitDistanceConfig C)
+
+/-- Strong no-premise finite local-exclusion package for a minimal cleared
+failure. -/
+theorem finiteLocalExclusionPackage_of_minimalFailure
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : IsMinimalClearedFailure C) :
+    FiniteLocalExclusionPackage (GraphBridge.unitDistanceLocalGraph C) :=
+  finiteLocalExclusionPackage_of_minimalFailure_and_localClosedNeighborhoodK23Deletion
+    hmin
+
+/-- Backwards-compatible projection of the direct unit-distance route to the
+no-`K_{2,3}` statement. -/
+theorem not_hasK23_of_minimalFailure_and_localClosedNeighborhoodK23Deletion
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : IsMinimalClearedFailure C) :
+    ¬ HasK23 (GraphBridge.unitDistanceLocalGraph C) :=
+  (finiteLocalExclusionPackage_of_minimalFailure_and_localClosedNeighborhoodK23Deletion
+    hmin).noK23
+
+/-- Strong no-premise local `K_{2,3}` exclusion for a minimal cleared
+failure. -/
+theorem not_hasK23_of_minimalFailure
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : IsMinimalClearedFailure C) :
+    ¬ HasK23 (GraphBridge.unitDistanceLocalGraph C) := by
+  rintro ⟨P⟩
+  exact false_of_minimalFailure_and_K23Pattern hmin P
+
+/-- Backwards-compatible projection of the direct unit-distance route to the
+two-common-neighbor cap. -/
+theorem commonNeighborFinset_card_le_two_of_minimalFailure_and_localClosedNeighborhoodK23Deletion
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : IsMinimalClearedFailure C)
+    {a b : Fin n} (hab : a ≠ b) :
+    (LocalExclusions.LocalGraph.commonNeighborFinset
+      (GraphBridge.unitDistanceLocalGraph C) a b).card <= 2 :=
+  (finiteLocalExclusionPackage_of_minimalFailure_and_localClosedNeighborhoodK23Deletion
+    hmin).commonNeighborCard_le_two hab
+
+/-- Strong no-premise common-neighbor cap for a minimal cleared failure. -/
+theorem commonNeighborFinset_card_le_two_of_minimalFailure
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : IsMinimalClearedFailure C) {a b : Fin n} (hab : a ≠ b) :
+    (LocalExclusions.LocalGraph.commonNeighborFinset
+      (GraphBridge.unitDistanceLocalGraph C) a b).card <= 2 :=
+  (finiteLocalExclusionPackage_of_minimalFailure hmin).commonNeighborCard_le_two
+    hab
+
+/-- Strong no-premise three-common-neighbor exclusion for a minimal cleared
+failure. -/
+theorem no_three_commonNeighbors_of_minimalFailure
+    {n : Nat} {C : _root_.UDConfig n}
+    (hmin : IsMinimalClearedFailure C) {a b : Fin n} (hab : a ≠ b) :
+    ¬ (∃ x y z : Fin n,
+      x ≠ y ∧ x ≠ z ∧ y ≠ z ∧
+        (GraphBridge.unitDistanceLocalGraph C).CommonNeighbor a b x ∧
+        (GraphBridge.unitDistanceLocalGraph C).CommonNeighbor a b y ∧
+        (GraphBridge.unitDistanceLocalGraph C).CommonNeighbor a b z) := by
+  exact LocalExclusions.LocalGraph.no_three_commonNeighbors_of_not_hasK23
+    (GraphBridge.unitDistanceLocalGraph C)
+    (not_hasK23_of_minimalFailure hmin) hab
 
 /-- The geometric two-circle argument gives the finite local-exclusion package
 for every separated unit-distance configuration, with no minimal-failure or

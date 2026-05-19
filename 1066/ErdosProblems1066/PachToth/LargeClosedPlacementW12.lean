@@ -67,7 +67,8 @@ theorem targetUpperConstructionFiveSixteenEventually
     {K0 : Nat} (C : LargeExplicitClosedPlacementCertificates K0) :
     PachToth.targetUpperConstructionFiveSixteenEventually := by
   exact
-    ClosedChainReduction.targetUpperConstructionFiveSixteenEventually_of_eventualExplicitClosedPlacementCertificates
+    open ClosedChainReduction in
+    targetUpperConstructionFiveSixteenEventually_of_eventualExplicitClosedPlacementCertificates
       K0 C.certificate
 
 /-- Sufficiently-large explicit closed-placement certificates, plus the
@@ -80,7 +81,8 @@ theorem targetUpperConstructionFiveSixteenArbitrary_of_small
           targetUpperConstructionFiveSixteenSmallUpTo N0) :
     PachToth.targetUpperConstructionFiveSixteenArbitrary := by
   exact
-    ClosedChainReduction.targetUpperConstructionFiveSixteenArbitrary_of_eventualExplicitClosedPlacement_and_small
+    open ClosedChainReduction in
+    targetUpperConstructionFiveSixteenArbitrary_of_eventualExplicitClosedPlacement_and_small
       K0 C.certificate Hsmall
 
 /-- Sufficiently-large explicit closed placements, with exact-chain small-case
@@ -237,7 +239,8 @@ theorem targetUpperConstructionFiveSixteenEventually_of_eventual_roleHingedClosu
 
 /-- Closure-equation data and a finite-complement callback give the arbitrary
 target through the explicit closed-placement route. -/
-theorem targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_explicitClosed_and_small
+theorem
+targetUpperConstructionFiveSixteenArbitrary_of_eventual_roleHingedClosure_explicitClosed_and_small
     (K0 : Nat)
     (T : RoleHingeTransitions)
     (orientation :

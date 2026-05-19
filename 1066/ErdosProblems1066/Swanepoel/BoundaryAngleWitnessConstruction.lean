@@ -52,6 +52,369 @@ theorem pi_div_three_le_value (A : UnitSeparatedAngle G) :
     Real.pi / 3 <= A.value :=
   BoundaryAngleCertificatesConcrete.UnitSeparatedAngle.pi_div_three_le_value A
 
+/-- The honest local boundary angle at an outer-boundary index, using the
+predecessor/current/successor triple from the selected outer cycle.  The side
+adjacencies are the two actual boundary edges incident to `k`, and endpoint
+distinctness is supplied by simplicity of the outer cycle together with
+`3 <= P.outerCycle.length`. -/
+def ofOuterBoundaryCoreIndex
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    (k : Fin P.outerCycle.length) :
+    UnitSeparatedAngle G where
+  left := P.outerCycle.prevVertex k
+  center := P.outerCycle.vertex k
+  right := P.outerCycle.nextVertex k
+  left_adj := P.outerCycle.prev_adjacent k
+  right_adj := P.outerCycle.next_adjacent_symm k
+  endpoints_ne := P.outerCycle.prevVertex_ne_nextVertex_of_three_le h3 k
+
+@[simp]
+theorem ofOuterBoundaryCoreIndex_left
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    (k : Fin P.outerCycle.length) :
+    (ofOuterBoundaryCoreIndex P h3 k).left = P.outerCycle.prevVertex k :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryCoreIndex_center
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    (k : Fin P.outerCycle.length) :
+    (ofOuterBoundaryCoreIndex P h3 k).center = P.outerCycle.vertex k :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryCoreIndex_right
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    (k : Fin P.outerCycle.length) :
+    (ofOuterBoundaryCoreIndex P h3 k).right = P.outerCycle.nextVertex k :=
+  rfl
+
+/-- The left endpoint of the canonical boundary angle is witnessed by the
+cyclic predecessor index of the center.  This is the row shape used by the
+turn-angle packages downstream. -/
+theorem ofOuterBoundaryCoreIndex_left_is_boundary_predecessor
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    (k : Fin P.outerCycle.length) :
+    Exists fun pred : Fin P.outerCycle.length =>
+      (ofOuterBoundaryCoreIndex P h3 k).left =
+          P.outerCycle.vertex pred /\
+        PlanarInterface.cyclicSucc P.outerCycle.length_pos pred = k := by
+  refine Exists.intro (P.outerCycle.prev k) ?_
+  exact And.intro rfl (by
+    simp [OuterBoundaryInterface.BoundaryCycle.prev])
+
+/-- The right endpoint of the canonical boundary angle is the cyclic successor
+of the center index. -/
+theorem ofOuterBoundaryCoreIndex_right_eq_boundary_successor
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    (k : Fin P.outerCycle.length) :
+    (ofOuterBoundaryCoreIndex P h3 k).right =
+      P.outerCycle.vertex
+        (PlanarInterface.cyclicSucc P.outerCycle.length_pos k) :=
+  rfl
+
+/-- The canonical boundary angle centered at `current` has the prescribed
+center vertex.  This projection is deliberately pointwise so W11 turn rows can
+reuse it without unpacking the whole angle witness. -/
+theorem ofOuterBoundaryCoreIndex_center_eq_boundary_current
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {current : Fin P.outerCycle.length} :
+    (ofOuterBoundaryCoreIndex P h3 current).center =
+      P.outerCycle.vertex current :=
+  rfl
+
+/-- A predecessor index is forced by the equality saying its cyclic successor
+is the current boundary index. -/
+theorem boundary_predecessor_eq_prev_of_cyclicSucc_eq
+    (P : OuterBoundaryCore G)
+    {pred current : Fin P.outerCycle.length}
+    (hpred :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos pred = current) :
+    pred = P.outerCycle.prev current := by
+  apply PlanarInterface.cyclicSucc_injective P.outerCycle.length_pos
+  rw [hpred]
+  simp [OuterBoundaryInterface.BoundaryCycle.prev]
+
+/-- Pointwise left-endpoint row for a named predecessor/current pair. -/
+theorem ofOuterBoundaryCoreIndex_left_eq_boundary_predecessor
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {pred current : Fin P.outerCycle.length}
+    (hpred :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos pred = current) :
+    (ofOuterBoundaryCoreIndex P h3 current).left =
+      P.outerCycle.vertex pred := by
+  rw [ofOuterBoundaryCoreIndex_left]
+  change P.outerCycle.vertex (P.outerCycle.prev current) =
+    P.outerCycle.vertex pred
+  rw [boundary_predecessor_eq_prev_of_cyclicSucc_eq
+    (P := P) hpred]
+
+/-- Pointwise right-endpoint row for a named current/successor pair. -/
+theorem ofOuterBoundaryCoreIndex_right_eq_boundary_successor_index
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {current succ : Fin P.outerCycle.length}
+    (hsucc :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos current = succ) :
+    (ofOuterBoundaryCoreIndex P h3 current).right =
+      P.outerCycle.vertex succ := by
+  rw [ofOuterBoundaryCoreIndex_right_eq_boundary_successor]
+  rw [hsucc]
+
+/-- The canonical turn witness for a selected boundary
+predecessor/current/successor triple.  The equalities are kept as arguments so
+callers can see exactly which boundary-index facts identify the selected
+triple with the canonical predecessor/current/successor triple. -/
+def ofOuterBoundaryCoreIndexTriple
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {pred current succ : Fin P.outerCycle.length}
+    (_hpred :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos pred = current)
+    (_hsucc :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos current = succ) :
+    UnitSeparatedAngle G :=
+  ofOuterBoundaryCoreIndex P h3 current
+
+@[simp]
+theorem ofOuterBoundaryCoreIndexTriple_center
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {pred current succ : Fin P.outerCycle.length}
+    (hpred :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos pred = current)
+    (hsucc :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos current = succ) :
+    (ofOuterBoundaryCoreIndexTriple P h3 hpred hsucc).center =
+      P.outerCycle.vertex current :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryCoreIndexTriple_left
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {pred current succ : Fin P.outerCycle.length}
+    (hpred :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos pred = current)
+    (hsucc :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos current = succ) :
+    (ofOuterBoundaryCoreIndexTriple P h3 hpred hsucc).left =
+      P.outerCycle.vertex pred := by
+  rw [ofOuterBoundaryCoreIndexTriple, ofOuterBoundaryCoreIndex_left]
+  change P.outerCycle.vertex (P.outerCycle.prev current) =
+    P.outerCycle.vertex pred
+  rw [boundary_predecessor_eq_prev_of_cyclicSucc_eq
+    (P := P) hpred]
+
+@[simp]
+theorem ofOuterBoundaryCoreIndexTriple_right
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {pred current succ : Fin P.outerCycle.length}
+    (hpred :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos pred = current)
+    (hsucc :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos current = succ) :
+    (ofOuterBoundaryCoreIndexTriple P h3 hpred hsucc).right =
+      P.outerCycle.vertex succ := by
+  rw [ofOuterBoundaryCoreIndexTriple,
+    ofOuterBoundaryCoreIndex_right_eq_boundary_successor]
+  rw [hsucc]
+
+/-- Pointwise turn-angle witness at a boundary vertex selected by a long-arc
+and turn-slot map.  This has the computational shape needed for
+`BoundaryLongArcTurnAngleRows.turnAngle` and for the S5 actual-turn rows. -/
+def ofOuterBoundaryCoreTurnVertex
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat) :
+    UnitSeparatedAngle G :=
+  ofOuterBoundaryCoreIndex P h3 (turnVertex a k)
+
+/-- A whole family of pointwise turn-angle witnesses from a boundary vertex
+map.  The slot predicate is ignored by the construction, matching row types
+that only request witnesses on the selected turn slots. -/
+def turnWitnessesOfBoundaryVertices
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u} {SlotOk : Nat -> Prop}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length) :
+    forall _a : LongArc, forall k : Nat, SlotOk k -> UnitSeparatedAngle G :=
+  fun a k _ => ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k
+
+@[simp]
+theorem turnWitnessesOfBoundaryVertices_apply
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u} {SlotOk : Nat -> Prop}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat) (hk : SlotOk k) :
+    turnWitnessesOfBoundaryVertices P h3 turnVertex a k hk =
+      ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k :=
+  rfl
+
+@[simp]
+theorem ofOuterBoundaryCoreTurnVertex_center
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat) :
+    (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).center =
+      P.outerCycle.vertex (turnVertex a k) :=
+  rfl
+
+/-- The pointwise turn-angle witness, rewritten against a named current
+boundary index. -/
+theorem ofOuterBoundaryCoreTurnVertex_center_eq_boundary_current
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat)
+    {current : Fin P.outerCycle.length}
+    (hcurrent : turnVertex a k = current) :
+    (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).center =
+      P.outerCycle.vertex current := by
+  rw [ofOuterBoundaryCoreTurnVertex_center, hcurrent]
+
+@[simp]
+theorem ofOuterBoundaryCoreTurnVertex_right_eq_successor
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat) :
+    (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).right =
+      P.outerCycle.vertex
+        (PlanarInterface.cyclicSucc P.outerCycle.length_pos
+          (turnVertex a k)) :=
+  rfl
+
+/-- Pointwise turn-angle right endpoint for a named successor. -/
+theorem ofOuterBoundaryCoreTurnVertex_right_eq_boundary_successor_index
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat)
+    {succ : Fin P.outerCycle.length}
+    (hsucc :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos
+        (turnVertex a k) = succ) :
+    (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).right =
+      P.outerCycle.vertex succ := by
+  rw [ofOuterBoundaryCoreTurnVertex_right_eq_successor]
+  rw [hsucc]
+
+/-- The selected turn vertex has a canonical cyclic predecessor supplying the
+left endpoint of the pointwise turn-angle witness. -/
+theorem ofOuterBoundaryCoreTurnVertex_left_is_boundary_predecessor
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat) :
+    Exists fun pred : Fin P.outerCycle.length =>
+      (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).left =
+          P.outerCycle.vertex pred /\
+        PlanarInterface.cyclicSucc P.outerCycle.length_pos pred =
+          turnVertex a k :=
+  ofOuterBoundaryCoreIndex_left_is_boundary_predecessor
+    P h3 (turnVertex a k)
+
+/-- Pointwise turn-angle left endpoint for a named predecessor. -/
+theorem ofOuterBoundaryCoreTurnVertex_left_eq_boundary_predecessor
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat)
+    {pred : Fin P.outerCycle.length}
+    (hpred :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos pred =
+        turnVertex a k) :
+    (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).left =
+      P.outerCycle.vertex pred :=
+  ofOuterBoundaryCoreIndex_left_eq_boundary_predecessor
+    P h3 hpred
+
+/-- Canonical predecessor/current/successor equality rows for a pointwise
+turn-angle witness.  The returned angle is still the same canonical
+outer-boundary angle; the equalities expose the named triple directly. -/
+theorem ofOuterBoundaryCoreTurnVertex_boundary_triple_rows
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat)
+    {pred current succ : Fin P.outerCycle.length}
+    (hcurrent : turnVertex a k = current)
+    (hpred :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos pred = current)
+    (hsucc :
+      PlanarInterface.cyclicSucc P.outerCycle.length_pos current = succ) :
+    (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).left =
+        P.outerCycle.vertex pred /\
+      (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).center =
+        P.outerCycle.vertex current /\
+      (ofOuterBoundaryCoreTurnVertex P h3 turnVertex a k).right =
+        P.outerCycle.vertex succ := by
+  subst current
+  exact And.intro
+    (ofOuterBoundaryCoreTurnVertex_left_eq_boundary_predecessor
+      P h3 turnVertex a k hpred)
+    (And.intro
+      (ofOuterBoundaryCoreTurnVertex_center P h3 turnVertex a k)
+      (ofOuterBoundaryCoreTurnVertex_right_eq_boundary_successor_index
+        P h3 turnVertex a k hsucc))
+
+theorem turnWitnessesOfBoundaryVertices_center
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u} {SlotOk : Nat -> Prop}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat) (hk : SlotOk k) :
+    (turnWitnessesOfBoundaryVertices P h3 turnVertex a k hk).center =
+      P.outerCycle.vertex (turnVertex a k) :=
+  rfl
+
+theorem turnWitnessesOfBoundaryVertices_left_is_boundary_predecessor
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u} {SlotOk : Nat -> Prop}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat) (hk : SlotOk k) :
+    Exists fun pred : Fin P.outerCycle.length =>
+      (turnWitnessesOfBoundaryVertices P h3 turnVertex a k hk).left =
+          P.outerCycle.vertex pred /\
+        PlanarInterface.cyclicSucc P.outerCycle.length_pos pred =
+          turnVertex a k :=
+  ofOuterBoundaryCoreTurnVertex_left_is_boundary_predecessor
+    P h3 turnVertex a k
+
+theorem turnWitnessesOfBoundaryVertices_right_eq_successor
+    (P : OuterBoundaryCore G)
+    (h3 : 3 <= P.outerCycle.length)
+    {LongArc : Type u} {SlotOk : Nat -> Prop}
+    (turnVertex : LongArc -> Nat -> Fin P.outerCycle.length)
+    (a : LongArc) (k : Nat) (hk : SlotOk k) :
+    (turnWitnessesOfBoundaryVertices P h3 turnVertex a k hk).right =
+      P.outerCycle.vertex
+        (PlanarInterface.cyclicSucc P.outerCycle.length_pos
+          (turnVertex a k)) :=
+  rfl
+
 end UnitSeparatedAngle
 
 /-- Build an angle-mass certificate from exactly `m` explicit local

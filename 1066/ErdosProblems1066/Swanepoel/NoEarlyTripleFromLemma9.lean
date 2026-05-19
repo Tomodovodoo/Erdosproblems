@@ -36,6 +36,16 @@ variable {V : Type u} {G : LocalGraph V}
 
 /-! ## Five concrete starts from late-triple facts -/
 
+/-- The five explicit early-start exclusions for a concrete `m = 8` predicate
+package. -/
+abbrev M8FiveStartExclusions
+    (P : BrokenLatticePredicates G 8) : Prop :=
+  Not (P.tripleEquality start1) /\
+  Not (P.tripleEquality start2) /\
+  Not (P.tripleEquality start3) /\
+  Not (P.tripleEquality start4) /\
+  Not (P.tripleEquality start5)
+
 /-- Lemma 9's late-triple conclusion restricted to the five concrete early
 starts.  Each field is intentionally phrased as a late-start implication so
 the impossible inequalities are checked in this file. -/
@@ -71,6 +81,41 @@ def ofNatLateTripleInputs
   late_start3 := H.late_of_tripleEquality
   late_start4 := H.late_of_tripleEquality
   late_start5 := H.late_of_tripleEquality
+
+/-- Five explicit early-start exclusions give the restricted Lemma 9
+late-start facts. -/
+def ofFiveStartExclusions
+    (no_start1 : Not (P.tripleEquality start1))
+    (no_start2 : Not (P.tripleEquality start2))
+    (no_start3 : Not (P.tripleEquality start3))
+    (no_start4 : Not (P.tripleEquality start4))
+    (no_start5 : Not (P.tripleEquality start5)) :
+    M8Lemma9FiveStartLateFacts P where
+  late_start1 h := False.elim (no_start1 h)
+  late_start2 h := False.elim (no_start2 h)
+  late_start3 h := False.elim (no_start3 h)
+  late_start4 h := False.elim (no_start4 h)
+  late_start5 h := False.elim (no_start5 h)
+
+/-- Concrete five-start no-early exclusions give the Lemma 9-shaped
+late-start facts by contradiction at each early start. -/
+def ofConcreteNoEarlyTripleEquality
+    (H : M8ConcreteNoEarlyTripleEquality P) :
+    M8Lemma9FiveStartLateFacts P :=
+  ofFiveStartExclusions
+    H.no_start1 H.no_start2 H.no_start3 H.no_start4 H.no_start5
+
+/-- Abstract no-early triple equality also gives the Lemma 9-shaped
+five-start late facts. -/
+def ofNoEarlyTripleEquality
+    (hno : M8NoEarlyTripleEquality P) :
+    M8Lemma9FiveStartLateFacts P :=
+  ofConcreteNoEarlyTripleEquality
+    { no_start1 := hno start1 (by simp [M8TripleStartEarly])
+      no_start2 := hno start2 (by simp [M8TripleStartEarly])
+      no_start3 := hno start3 (by simp [M8TripleStartEarly])
+      no_start4 := hno start4 (by simp [M8TripleStartEarly])
+      no_start5 := hno start5 (by simp [M8TripleStartEarly]) }
 
 /-- The restricted Lemma 9 facts rule out triple equality at start `1`. -/
 theorem not_start1
@@ -116,6 +161,31 @@ theorem not_start5
   have hlate : 6 <= (5 : Nat) := by
     simpa using H.late_start5 htriple
   omega
+
+/-- Restricted Lemma 9 late-start facts are exactly the five explicit
+early-start exclusions needed by the selected-frame source. -/
+theorem toFiveStartExclusions
+    (H : M8Lemma9FiveStartLateFacts P) :
+    M8FiveStartExclusions P :=
+  And.intro H.not_start1
+    (And.intro H.not_start2
+      (And.intro H.not_start3
+        (And.intro H.not_start4 H.not_start5)))
+
+/-- Row-level equivalence between the restricted Lemma 9 facts and the actual
+five-start exclusion payload. -/
+theorem iff_fiveStartExclusions :
+    M8Lemma9FiveStartLateFacts P <->
+      M8FiveStartExclusions P := by
+  constructor
+  case mp =>
+    intro H
+    exact H.toFiveStartExclusions
+  case mpr =>
+    intro H
+    exact
+      ofFiveStartExclusions
+        H.1 H.2.1 H.2.2.1 H.2.2.2.1 H.2.2.2.2
 
 /-- Package the five impossible early starts as the concrete no-early-triple
 input. -/
@@ -172,6 +242,190 @@ def concreteNoEarlyTripleEquality_of_earlyTripleObstructionInputs
   no_start4 := H.noEarlyTripleEquality start4 (by simp [M8TripleStartEarly])
   no_start5 := H.noEarlyTripleEquality start5 (by simp [M8TripleStartEarly])
 
+/-! ## Direct five-start exclusion projections -/
+
+/-- Lemma 9 late triples imply the five explicit early-start exclusions. -/
+theorem fiveStartExclusions_of_lateTriples
+    {P : BrokenLatticePredicates G 8}
+    (hlate : M8BrokenLatticeLateTriples P) :
+    M8FiveStartExclusions P :=
+  (M8Lemma9FiveStartLateFacts.ofLateTriples hlate).toFiveStartExclusions
+
+/-- Finite natural-index Lemma 9 inputs imply the five explicit early-start
+exclusions. -/
+theorem fiveStartExclusions_of_natLateTripleInputs
+    {P : BrokenLatticePredicates G 8}
+    (H : M8NatLateTripleInputs P) :
+    M8FiveStartExclusions P :=
+  (M8Lemma9FiveStartLateFacts.ofNatLateTripleInputs H).toFiveStartExclusions
+
+/-- Early-obstruction Lemma 9 inputs imply the five explicit early-start
+exclusions. -/
+theorem fiveStartExclusions_of_earlyTripleObstructionInputs
+    {P : BrokenLatticePredicates G 8}
+    (H : M8EarlyTripleObstructionInputs P) :
+    M8FiveStartExclusions P :=
+  (M8Lemma9FiveStartLateFacts.ofConcreteNoEarlyTripleEquality
+      (concreteNoEarlyTripleEquality_of_earlyTripleObstructionInputs H)).toFiveStartExclusions
+
+/-! ## Actual selected five-start row families -/
+
+/-- A minimal-failure selected predicate family for unit-distance
+configurations.  This abstracts the selected frame/cyclic row predicates so
+their no-early reduction can live here rather than in a route-specific file. -/
+abbrev ActualSelectedPredicateFamily : Type :=
+  forall {n : Nat} (C : _root_.UDConfig n),
+    MinimalGraphFacts.IsMinimalClearedFailure C ->
+      BrokenLatticePredicates (GraphBridge.unitDistanceLocalGraph C) 8
+
+/-- Actual selected five-start exclusions, row by row. -/
+abbrev ActualSelectedFiveStartExclusionRows
+    (Pred : ActualSelectedPredicateFamily) : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+      M8FiveStartExclusions (Pred C hmin)
+
+/-- Actual selected restricted Lemma 9 five-start late facts, row by row. -/
+abbrev ActualSelectedFiveStartLateFactRows
+    (Pred : ActualSelectedPredicateFamily) : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+      M8Lemma9FiveStartLateFacts (Pred C hmin)
+
+/-- Actual selected Lemma 9 late triples, row by row. -/
+abbrev ActualSelectedLateTripleRows
+    (Pred : ActualSelectedPredicateFamily) : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+      M8BrokenLatticeLateTriples (Pred C hmin)
+
+/-- Actual selected finite natural-index Lemma 9 inputs, row by row. -/
+abbrev ActualSelectedNatLateTripleInputRows
+    (Pred : ActualSelectedPredicateFamily) : Type :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+      M8NatLateTripleInputs (Pred C hmin)
+
+/-- Actual selected early-obstruction Lemma 9 inputs, row by row. -/
+abbrev ActualSelectedEarlyTripleObstructionRows
+    (Pred : ActualSelectedPredicateFamily) : Type :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+    (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+      M8EarlyTripleObstructionInputs (Pred C hmin)
+
+/-- Existing actual selected late-triple rows reduce to restricted five-start
+late facts. -/
+def actualSelectedFiveStartLateFactRows_of_lateTriples
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedLateTripleRows Pred) :
+    ActualSelectedFiveStartLateFactRows Pred :=
+  fun {n} C hmin =>
+    M8Lemma9FiveStartLateFacts.ofLateTriples
+      (P := Pred (n := n) C hmin) (H C hmin)
+
+/-- Existing actual selected natural-index late inputs reduce to restricted
+five-start late facts. -/
+def actualSelectedFiveStartLateFactRows_of_natLateTripleInputs
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedNatLateTripleInputRows Pred) :
+    ActualSelectedFiveStartLateFactRows Pred :=
+  fun {n} C hmin =>
+    M8Lemma9FiveStartLateFacts.ofNatLateTripleInputs
+      (P := Pred (n := n) C hmin) (H C hmin)
+
+/-- Existing actual selected early-obstruction rows reduce to restricted
+five-start late facts. -/
+def actualSelectedFiveStartLateFactRows_of_earlyTripleObstructionInputs
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedEarlyTripleObstructionRows Pred) :
+    ActualSelectedFiveStartLateFactRows Pred :=
+  fun {n} C hmin =>
+    M8Lemma9FiveStartLateFacts.ofConcreteNoEarlyTripleEquality
+      (P := Pred (n := n) C hmin)
+      (concreteNoEarlyTripleEquality_of_earlyTripleObstructionInputs
+        (P := Pred (n := n) C hmin) (H C hmin))
+
+/-- Restricted actual selected five-start late facts project to explicit
+five-start exclusions. -/
+theorem actualSelectedFiveStartExclusionRows_of_fiveStartLateFacts
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedFiveStartLateFactRows Pred) :
+    ActualSelectedFiveStartExclusionRows Pred :=
+  fun C hmin => (H C hmin).toFiveStartExclusions
+
+/-- Existing actual selected late-triple rows reduce to the explicit
+five-start exclusions. -/
+theorem actualSelectedFiveStartExclusionRows_of_lateTriples
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedLateTripleRows Pred) :
+    ActualSelectedFiveStartExclusionRows Pred :=
+  actualSelectedFiveStartExclusionRows_of_fiveStartLateFacts
+    (actualSelectedFiveStartLateFactRows_of_lateTriples H)
+
+/-- Existing actual selected natural-index late inputs reduce to the explicit
+five-start exclusions. -/
+theorem actualSelectedFiveStartExclusionRows_of_natLateTripleInputs
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedNatLateTripleInputRows Pred) :
+    ActualSelectedFiveStartExclusionRows Pred :=
+  actualSelectedFiveStartExclusionRows_of_fiveStartLateFacts
+    (actualSelectedFiveStartLateFactRows_of_natLateTripleInputs H)
+
+/-- Existing actual selected early-obstruction rows reduce to the explicit
+five-start exclusions. -/
+theorem actualSelectedFiveStartExclusionRows_of_earlyTripleObstructionInputs
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedEarlyTripleObstructionRows Pred) :
+    ActualSelectedFiveStartExclusionRows Pred :=
+  actualSelectedFiveStartExclusionRows_of_fiveStartLateFacts
+    (actualSelectedFiveStartLateFactRows_of_earlyTripleObstructionInputs H)
+
+/-- Restricted actual selected five-start late facts give the packaged
+concrete no-early equality rows. -/
+def actualSelectedConcreteNoEarlyTripleEqualityRows_of_fiveStartLateFacts
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedFiveStartLateFactRows Pred) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+        M8ConcreteNoEarlyTripleEquality (Pred C hmin) :=
+  fun C hmin => (H C hmin).toConcreteNoEarlyTripleEquality
+
+/-- Actual selected late-triple rows give the packaged concrete no-early
+equality rows. -/
+def actualSelectedConcreteNoEarlyTripleEqualityRows_of_lateTriples
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedLateTripleRows Pred) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+        M8ConcreteNoEarlyTripleEquality (Pred C hmin) :=
+  fun {n} C hmin =>
+    concreteNoEarlyTripleEquality_of_lateTriples
+      (P := Pred (n := n) C hmin) (H C hmin)
+
+/-- Actual selected natural-index late inputs give the packaged concrete
+no-early equality rows. -/
+def actualSelectedConcreteNoEarlyTripleEqualityRows_of_natLateTripleInputs
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedNatLateTripleInputRows Pred) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+        M8ConcreteNoEarlyTripleEquality (Pred C hmin) :=
+  fun {n} C hmin =>
+    concreteNoEarlyTripleEquality_of_natLateTripleInputs
+      (P := Pred (n := n) C hmin) (H C hmin)
+
+/-- Actual selected early-obstruction rows give the packaged concrete
+no-early equality rows. -/
+def actualSelectedConcreteNoEarlyTripleEqualityRows_of_earlyTripleObstructionInputs
+    {Pred : ActualSelectedPredicateFamily}
+    (H : ActualSelectedEarlyTripleObstructionRows Pred) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (hmin : MinimalGraphFacts.IsMinimalClearedFailure C),
+        M8ConcreteNoEarlyTripleEquality (Pred C hmin) :=
+  fun {n} C hmin =>
+    concreteNoEarlyTripleEquality_of_earlyTripleObstructionInputs
+      (P := Pred (n := n) C hmin) (H C hmin)
+
 /-! ## Construction-interface no-early packages -/
 
 /-- Concrete five-start exclusions give the construction-interface no-early
@@ -221,6 +475,82 @@ def constructionNoEarlyTriples_of_earlyTripleObstructionInputs
     M8ConstructionNoEarlyTriples localLabels :=
   constructionNoEarlyTriples_of_concreteNoEarlyTripleEquality
     (concreteNoEarlyTripleEquality_of_earlyTripleObstructionInputs H)
+
+/-! ## Honest local-label source -/
+
+/-- Concrete no-early/late-triples source attached to honest M8 local labels.
+
+The source is exactly the Lemma 9 five-start late-triple fact for the
+local-label predicates.  The no-early equality and construction late-triples
+package below are checked projections from that source. -/
+abbrev LocalLabelNoEarlyLateTriplesSource
+    {n : Nat} {C : _root_.UDConfig n}
+    (localLabels : M8LocalLabels C) : Prop :=
+    M8Lemma9FiveStartLateFacts localLabels.predicates.data
+
+namespace LocalLabelNoEarlyLateTriplesSource
+
+variable {n : Nat} {C : _root_.UDConfig n}
+variable {localLabels : M8LocalLabels C}
+
+/-- Concrete no-early data for the same local labels inhabits the exposed
+local Lemma 9 source. -/
+def ofConcreteNoEarlyTripleEquality
+    (H : M8ConcreteNoEarlyTripleEquality localLabels.predicates.data) :
+    LocalLabelNoEarlyLateTriplesSource localLabels :=
+  M8Lemma9FiveStartLateFacts.ofConcreteNoEarlyTripleEquality H
+
+/-- Abstract no-early data for the same local labels inhabits the exposed
+local Lemma 9 source. -/
+def ofNoEarlyTripleEquality
+    (hno : M8NoEarlyTripleEquality localLabels.predicates.data) :
+    LocalLabelNoEarlyLateTriplesSource localLabels :=
+  M8Lemma9FiveStartLateFacts.ofNoEarlyTripleEquality hno
+
+/-- The stored Lemma 9 facts give the concrete five-start no-early package. -/
+def toConcreteNoEarlyTripleEquality
+    (S : LocalLabelNoEarlyLateTriplesSource localLabels) :
+    M8ConcreteNoEarlyTripleEquality localLabels.predicates.data :=
+  M8Lemma9FiveStartLateFacts.toConcreteNoEarlyTripleEquality S
+
+/-- The stored Lemma 9 facts give the abstract no-early predicate. -/
+theorem toNoEarlyTripleEquality
+    (S : LocalLabelNoEarlyLateTriplesSource localLabels) :
+    M8NoEarlyTripleEquality localLabels.predicates.data :=
+  M8Lemma9FiveStartLateFacts.toNoEarlyTripleEquality S
+
+/-- Local-label no-early source in the construction-interface package. -/
+def toConstructionNoEarlyTriples
+    (S : LocalLabelNoEarlyLateTriplesSource localLabels) :
+    M8ConstructionNoEarlyTriples localLabels where
+  noEarlyTripleEquality := S.toNoEarlyTripleEquality
+
+/-- Local-label no-early source projected to construction late triples. -/
+def toM8LateTriples
+    (S : LocalLabelNoEarlyLateTriplesSource localLabels) :
+    M8LateTriples localLabels :=
+  S.toConstructionNoEarlyTriples.toM8LateTriples
+
+/-- The corresponding honest local late-triples predicate. -/
+theorem toHonestLateTriples
+    (S : LocalLabelNoEarlyLateTriplesSource localLabels) :
+    localLabels.predicates.LateTriples :=
+  S.toConstructionNoEarlyTriples.toHonestLateTriples
+
+/-- Local-label source plus turn/window data assembles the clean
+construction-interface package without asking separately for late triples. -/
+def toM8ConstructionData
+    {hmin : MinimalGraphFacts.IsMinimalClearedFailure C}
+    (S : LocalLabelNoEarlyLateTriplesSource localLabels)
+    (turnBounds : M8TurnBounds)
+    (windowGeometry : M8WindowGeometry localLabels turnBounds) :
+    M8ConstructionData C hmin where
+  localLabels := localLabels
+  turnBounds := turnBounds
+  lateTriples := S.toM8LateTriples
+  windowGeometry := windowGeometry
+
+end LocalLabelNoEarlyLateTriplesSource
 
 /-! ## Available contradictions -/
 

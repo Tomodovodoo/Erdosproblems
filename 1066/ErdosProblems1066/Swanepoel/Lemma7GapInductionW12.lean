@@ -130,8 +130,8 @@ structure TerminalGapExclusion
     C.count C.length = C.length -> terminalGap
   terminal_lemma6_gap_forces_forced :
     Lemma6GapToNegativeCertificate D terminalGap terminalForced
-  terminal_forced_absent :
-    Not terminalForced
+  terminal_count_ne_length :
+    C.count C.length ≠ C.length
 
 namespace TerminalGapExclusion
 
@@ -154,15 +154,10 @@ theorem terminal_count_strict_lower_bound
     C.length < C.count C.length := by
   have hle : C.length <= C.count C.length :=
     C.terminal_count_lower_bound
-  if hcount : C.count C.length = C.length then
-    exact False.elim
-      (T.terminal_forced_absent
-        (T.terminalForced_of_count_eq hcount))
-  else
-    have hne : Not (C.length = C.count C.length) := by
-      intro hlength
-      exact hcount hlength.symm
-    exact Nat.lt_of_le_of_ne hle hne
+  have hne : Not (C.length = C.count C.length) := by
+    intro hlength
+    exact T.terminal_count_ne_length hlength.symm
+  exact Nat.lt_of_le_of_ne hle hne
 
 /-- Nat form of the strict terminal conclusion, ready to use as the
 `d_3 <= N + A` coverage inequality when `length + 1` is the number of

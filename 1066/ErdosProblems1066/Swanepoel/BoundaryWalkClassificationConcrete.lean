@@ -343,6 +343,44 @@ namespace OuterBoundaryClassificationInputs
 variable {G : CanonicalStraightLineUnitDistanceGraph n}
 variable {P : OuterBoundaryCore G}
 
+/-- Build the concrete boundary classification from the selected boundary
+cycle, a lower degree bound, and the selected long-arc predicate.  Decidability
+of the long-arc predicate is finite/classical data, so callers do not need to
+carry it as a separate geometric premise. -/
+def ofLongArcPredicate
+    (degree_ge_three :
+      forall k : Fin P.outerCycle.length,
+        3 <= ambientDegree G (P.outerCycle.vertex k))
+    (longArc : Fin P.outerCycle.length -> Prop) :
+    OuterBoundaryClassificationInputs P where
+  degree_ge_three := degree_ge_three
+  longArc := longArc
+  longArcDecidable := by
+    classical
+    intro k
+    infer_instance
+
+@[simp]
+theorem ofLongArcPredicate_longArc
+    (degree_ge_three :
+      forall k : Fin P.outerCycle.length,
+        3 <= ambientDegree G (P.outerCycle.vertex k))
+    (longArc : Fin P.outerCycle.length -> Prop) :
+    (ofLongArcPredicate (P := P) degree_ge_three longArc).longArc =
+      longArc :=
+  rfl
+
+@[simp]
+theorem ofLongArcPredicate_degree_ge_three
+    (degree_ge_three :
+      forall k : Fin P.outerCycle.length,
+        3 <= ambientDegree G (P.outerCycle.vertex k))
+    (longArc : Fin P.outerCycle.length -> Prop)
+    (k : Fin P.outerCycle.length) :
+    (ofLongArcPredicate (P := P) degree_ge_three longArc).degree_ge_three k =
+      degree_ge_three k :=
+  rfl
+
 /-- The concrete classified outer-boundary walk. -/
 def toOuterBoundaryWalkBookkeeping
     (D : OuterBoundaryClassificationInputs P) :
@@ -399,6 +437,13 @@ theorem countsRealization_toBoundaryCounts
 theorem countsRealizationLift_toBoundaryCounts
     (D : OuterBoundaryClassificationInputs P) :
     D.countsRealizationLift.toBoundaryCounts = D.counts :=
+  rfl
+
+@[simp]
+theorem countsRealizationLift_bookkeeping
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealizationLift.bookkeeping =
+      D.toOuterBoundaryWalkBookkeeping.toBoundaryBookkeepingLift :=
   rfl
 
 /-! ### Concrete index subtypes -/
@@ -586,6 +631,216 @@ def walkLongArcIndicesEquiv
     intro x
     rfl
 
+/-! ### Full pointwise boundary rows -/
+
+/-- The concrete edge/vertex/long-arc row at one selected boundary-walk index.
+
+Unlike the finite `M8` spine rows, this is indexed by every
+`Fin P.outerCycle.length` position of the selected outer boundary. -/
+structure BoundaryIndexClassificationRow
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) where
+  edgeKind : BoundaryEdgeClass
+  vertexKind : BoundaryDegreeClass
+  longArc : Prop
+  edgeKind_eq :
+    edgeKind = D.toOuterBoundaryWalkBookkeeping.data.edgeKind k
+  vertexKind_eq :
+    vertexKind = D.toOuterBoundaryWalkBookkeeping.data.vertexKind k
+  longArc_eq : longArc = D.longArc k
+  triangleEvidence :
+    edgeKind = BoundaryEdgeClass.triangle ->
+      IsTriangleEdge G (P.outerCycle.edge k)
+  nontriangleEvidence :
+    edgeKind = BoundaryEdgeClass.nontriangle ->
+      IsNontriangleEdge G (P.outerCycle.edge k)
+  degree3Evidence :
+    vertexKind = BoundaryDegreeClass.degree3 ->
+      IsDegree3 G (P.outerCycle.vertex k)
+  degree4Evidence :
+    vertexKind = BoundaryDegreeClass.degree4 ->
+      IsDegree4 G (P.outerCycle.vertex k)
+  degree5Evidence :
+    vertexKind = BoundaryDegreeClass.degree5 ->
+      IsDegree5 G (P.outerCycle.vertex k)
+  degree6Evidence :
+    vertexKind = BoundaryDegreeClass.degree6 ->
+      IsDegree6 G (P.outerCycle.vertex k)
+
+/-- The concrete classification row at an arbitrary boundary-walk index. -/
+def boundaryIndexClassificationRow
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) :
+    BoundaryIndexClassificationRow D k where
+  edgeKind := edgeKind P k
+  vertexKind := vertexKind P k
+  longArc := D.longArc k
+  edgeKind_eq := rfl
+  vertexKind_eq := rfl
+  longArc_eq := rfl
+  triangleEvidence := edgeKind_triangleEvidence P k
+  nontriangleEvidence := edgeKind_nontriangleEvidence P k
+  degree3Evidence := fun hclass =>
+    (vertexKind_eq_degree3_iff P k).1 hclass
+  degree4Evidence := fun hclass =>
+    (vertexKind_eq_degree4_iff P k).1 hclass
+  degree5Evidence := fun hclass =>
+    (vertexKind_eq_degree5_iff P k).1 hclass
+  degree6Evidence := fun hclass =>
+    (vertexKind_eq_degree6_iff P D.degree_ge_three k).1 hclass
+
+@[simp]
+theorem boundaryIndexClassificationRow_edgeKind
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) :
+    (D.boundaryIndexClassificationRow k).edgeKind =
+      D.toOuterBoundaryWalkBookkeeping.data.edgeKind k :=
+  rfl
+
+@[simp]
+theorem boundaryIndexClassificationRow_vertexKind
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) :
+    (D.boundaryIndexClassificationRow k).vertexKind =
+      D.toOuterBoundaryWalkBookkeeping.data.vertexKind k :=
+  rfl
+
+@[simp]
+theorem boundaryIndexClassificationRow_longArc
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) :
+    (D.boundaryIndexClassificationRow k).longArc = D.longArc k :=
+  rfl
+
+/-- Classification rows for every selected boundary-walk index. -/
+def boundaryIndexClassificationRows
+    (D : OuterBoundaryClassificationInputs P) :
+    forall k : Fin P.outerCycle.length,
+      BoundaryIndexClassificationRow D k :=
+  fun k => D.boundaryIndexClassificationRow k
+
+/-- The concrete classification row at the cyclic successor of a boundary
+index. -/
+def nextBoundaryIndexClassificationRow
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) :
+    BoundaryIndexClassificationRow D (P.outerCycle.next k) :=
+  D.boundaryIndexClassificationRow (P.outerCycle.next k)
+
+@[simp]
+theorem nextBoundaryIndexClassificationRow_edgeKind
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) :
+    (D.nextBoundaryIndexClassificationRow k).edgeKind =
+      D.toOuterBoundaryWalkBookkeeping.data.edgeKind (P.outerCycle.next k) :=
+  rfl
+
+@[simp]
+theorem nextBoundaryIndexClassificationRow_vertexKind
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) :
+    (D.nextBoundaryIndexClassificationRow k).vertexKind =
+      D.toOuterBoundaryWalkBookkeeping.data.vertexKind (P.outerCycle.next k) :=
+  rfl
+
+/-- The concrete local row used by the strict Lemma 6 carrier source: a
+degree-three non-long-arc gap whose successor edge is triangular and whose
+successor vertex has degree three or four. -/
+structure BoundaryGapTriangleDegree34Row
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) : Prop where
+  gapDegree : IsDegree3 G (P.outerCycle.vertex k)
+  notLongArc : Not (D.longArc k)
+  triangleNext : IsTriangleEdge G (P.outerCycle.edge (P.outerCycle.next k))
+  nextDegree :
+    IsDegree3 G (P.outerCycle.vertex (P.outerCycle.next k)) \/
+      IsDegree4 G (P.outerCycle.vertex (P.outerCycle.next k))
+
+/-- The strict local row is exactly the four concrete classification facts
+used by Lemma 6: degree-three gap, non-long-arc gap, triangular successor
+edge, and successor degree three or four. -/
+theorem boundaryGapTriangleDegree34Row_iff_components
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length) :
+    BoundaryGapTriangleDegree34Row D k <->
+      IsDegree3 G (P.outerCycle.vertex k) /\
+        Not (D.longArc k) /\
+        IsTriangleEdge G (P.outerCycle.edge (P.outerCycle.next k)) /\
+        (IsDegree3 G (P.outerCycle.vertex (P.outerCycle.next k)) \/
+          IsDegree4 G (P.outerCycle.vertex (P.outerCycle.next k))) := by
+  constructor
+  · intro row
+    exact
+      ⟨row.gapDegree, row.notLongArc, row.triangleNext, row.nextDegree⟩
+  · intro h
+    exact
+      { gapDegree := h.1
+        notLongArc := h.2.1
+        triangleNext := h.2.2.1
+        nextDegree := h.2.2.2 }
+
+/-- A contradiction for the four concrete local facts rules out the strict
+gap/triangle/degree-3-or-4 boundary row. -/
+theorem not_boundaryGapTriangleDegree34Row_of_not_components
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length)
+    (hnot :
+      Not
+        (IsDegree3 G (P.outerCycle.vertex k) /\
+          Not (D.longArc k) /\
+          IsTriangleEdge G (P.outerCycle.edge (P.outerCycle.next k)) /\
+          (IsDegree3 G (P.outerCycle.vertex (P.outerCycle.next k)) \/
+            IsDegree4 G (P.outerCycle.vertex (P.outerCycle.next k))))) :
+    Not (BoundaryGapTriangleDegree34Row D k) := by
+  intro row
+  exact hnot ((boundaryGapTriangleDegree34Row_iff_components D k).1 row)
+
+/-- A row-wise contradiction for the four concrete local facts gives the
+sharper no-gap field over the whole selected boundary walk. -/
+theorem no_boundaryGapTriangleDegree34Rows_of_no_components
+    (D : OuterBoundaryClassificationInputs P)
+    (hno :
+      forall k : Fin P.outerCycle.length,
+        Not
+          (IsDegree3 G (P.outerCycle.vertex k) /\
+            Not (D.longArc k) /\
+            IsTriangleEdge G (P.outerCycle.edge (P.outerCycle.next k)) /\
+            (IsDegree3 G (P.outerCycle.vertex (P.outerCycle.next k)) \/
+              IsDegree4 G (P.outerCycle.vertex (P.outerCycle.next k))))) :
+    forall k : Fin P.outerCycle.length,
+      Not (BoundaryGapTriangleDegree34Row D k) := by
+  intro k
+  exact not_boundaryGapTriangleDegree34Row_of_not_components D k (hno k)
+
+/-- Build the strict-carrier local row from concrete boundary-walk class
+equalities at `k` and its cyclic successor. -/
+def boundaryGapTriangleDegree34RowOfClassifications
+    (D : OuterBoundaryClassificationInputs P)
+    (k : Fin P.outerCycle.length)
+    (gapDegree :
+      D.toOuterBoundaryWalkBookkeeping.data.vertexKind k =
+        BoundaryDegreeClass.degree3)
+    (notLongArc : Not (D.longArc k))
+    (triangleNext :
+      D.toOuterBoundaryWalkBookkeeping.data.edgeKind (P.outerCycle.next k) =
+        BoundaryEdgeClass.triangle)
+    (nextDegree :
+      D.toOuterBoundaryWalkBookkeeping.data.vertexKind (P.outerCycle.next k) =
+          BoundaryDegreeClass.degree3 \/
+        D.toOuterBoundaryWalkBookkeeping.data.vertexKind (P.outerCycle.next k) =
+          BoundaryDegreeClass.degree4) :
+    BoundaryGapTriangleDegree34Row D k where
+  gapDegree := (D.boundaryIndexClassificationRow k).degree3Evidence gapDegree
+  notLongArc := notLongArc
+  triangleNext :=
+    (D.nextBoundaryIndexClassificationRow k).triangleEvidence triangleNext
+  nextDegree := by
+    rcases nextDegree with h3 | h4
+    · exact Or.inl
+        ((D.nextBoundaryIndexClassificationRow k).degree3Evidence h3)
+    · exact Or.inr
+        ((D.nextBoundaryIndexClassificationRow k).degree4Evidence h4)
+
 /-! ### Count projections -/
 
 @[simp]
@@ -667,6 +922,73 @@ theorem boundaryBookkeeping_toBoundaryCounts
     (D : OuterBoundaryClassificationInputs P) :
     D.boundaryBookkeeping.toBoundaryCounts = D.counts :=
   rfl
+
+@[simp]
+theorem countsRealization_bookkeeping
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealization.bookkeeping = D.boundaryBookkeeping :=
+  rfl
+
+@[simp]
+theorem countsRealization_bookkeeping_d3
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealization.bookkeeping.d3 =
+      Fintype.card D.degree3Indices := by
+  change D.counts.d3 = Fintype.card D.degree3Indices
+  exact D.counts_d3
+
+@[simp]
+theorem countsRealization_bookkeeping_d4
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealization.bookkeeping.d4 =
+      Fintype.card D.degree4Indices := by
+  change D.counts.d4 = Fintype.card D.degree4Indices
+  exact D.counts_d4
+
+@[simp]
+theorem countsRealization_bookkeeping_d5
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealization.bookkeeping.d5 =
+      Fintype.card D.degree5Indices := by
+  change D.counts.d5 = Fintype.card D.degree5Indices
+  exact D.counts_d5
+
+@[simp]
+theorem countsRealization_bookkeeping_d6
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealization.bookkeeping.d6 =
+      Fintype.card D.degree6Indices := by
+  change D.counts.d6 = Fintype.card D.degree6Indices
+  exact D.counts_d6
+
+@[simp]
+theorem countsRealization_bookkeeping_b
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealization.bookkeeping.b =
+      Fintype.card D.nontriangleEdgeIndices := by
+  change D.counts.b = Fintype.card D.nontriangleEdgeIndices
+  exact D.counts_b
+
+@[simp]
+theorem countsRealization_bookkeeping_B
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealization.bookkeeping.longArcCount =
+      Fintype.card D.longArcIndices := by
+  change D.counts.B = Fintype.card D.longArcIndices
+  exact D.counts_B
+
+@[simp]
+theorem countsRealization_bookkeeping_negativeElementCount
+    (D : OuterBoundaryClassificationInputs P) :
+    D.countsRealization.bookkeeping.negativeElementCount =
+      Fintype.card D.nontriangleEdgeIndices +
+        Fintype.card D.degree5Indices +
+        Fintype.card D.degree6Indices := by
+  change D.counts.negativeCount =
+    Fintype.card D.nontriangleEdgeIndices +
+      Fintype.card D.degree5Indices +
+      Fintype.card D.degree6Indices
+  exact D.counts_negativeCount
 
 /-! ## Planar-boundary final facade projections -/
 

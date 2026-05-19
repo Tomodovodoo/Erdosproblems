@@ -66,6 +66,25 @@ def ofFaceBoundary
   adjacent := H.boundaryAdjacent F
   simple := H.boundarySimple F
 
+/-- Equality of vertices on an injectively indexed boundary cycle is exactly
+equality of the cyclic indices. -/
+theorem vertex_eq_iff_index_eq
+    (C : BoundaryCycle G) {i j : Fin C.length} :
+    C.vertex i = C.vertex j <-> i = j := by
+  constructor
+  · intro h
+    exact C.simple h
+  · intro h
+    subst h
+    rfl
+
+/-- Distinct cyclic indices give distinct boundary vertices. -/
+theorem vertex_ne_of_index_ne
+    (C : BoundaryCycle G) {i j : Fin C.length} (hij : i ≠ j) :
+    C.vertex i ≠ C.vertex j := by
+  intro h
+  exact hij (C.simple h)
+
 end BoundaryCycle
 
 /-- Two boundary edges are adjacent in the cyclic index set. -/
@@ -113,6 +132,62 @@ structure OuterBoundaryEnclosure
       onBoundary v <->
         Exists fun k : Fin (H.boundaryLength F) => H.boundaryVertex F k = v
 
+namespace OuterBoundaryEnclosure
+
+variable {G : CanonicalStraightLineUnitDistanceGraph n}
+variable {H : UnitDistanceFaceBoundaryHypotheses G} {F : H.Face}
+
+/-- The boundary cycle whose predicates are recorded by an enclosure. -/
+def boundaryCycle (_ : OuterBoundaryEnclosure G H F) : BoundaryCycle G :=
+  BoundaryCycle.ofFaceBoundary H F
+
+/-- Recorded boundary vertices satisfy the enclosure's boundary predicate. -/
+theorem boundaryCycle_vertex_onBoundary
+    (E : OuterBoundaryEnclosure G H F) (k : Fin E.boundaryCycle.length) :
+    E.onBoundary (E.boundaryCycle.vertex k) := by
+  simpa [boundaryCycle, BoundaryCycle.ofFaceBoundary] using
+    E.boundary_vertex_onBoundary k
+
+/-- Recorded boundary vertices lie in the enclosed region. -/
+theorem boundaryCycle_point_insideOrOn
+    (E : OuterBoundaryEnclosure G H F) (k : Fin E.boundaryCycle.length) :
+    E.insideOrOn (E.boundaryCycle.point k) := by
+  simpa [boundaryCycle, BoundaryCycle.point, BoundaryCycle.ofFaceBoundary] using
+    E.boundary_point_insideOrOn k
+
+/-- The enclosure boundary predicate is exactly membership in the recorded
+boundary cycle. -/
+theorem onBoundary_iff_boundaryCycle
+    (E : OuterBoundaryEnclosure G H F) (v : Fin n) :
+    E.onBoundary v <->
+      Exists fun k : Fin E.boundaryCycle.length => E.boundaryCycle.vertex k = v := by
+  simpa [boundaryCycle, BoundaryCycle.ofFaceBoundary] using
+    E.onBoundary_iff_outer_cycle v
+
+/-- Extract the boundary-cycle index of a vertex known to lie on the boundary. -/
+theorem exists_boundaryCycle_vertex_eq_of_onBoundary
+    (E : OuterBoundaryEnclosure G H F) {v : Fin n} (hv : E.onBoundary v) :
+    Exists fun k : Fin E.boundaryCycle.length => E.boundaryCycle.vertex k = v :=
+  (E.onBoundary_iff_boundaryCycle v).1 hv
+
+/-- A vertex equal to a recorded cycle vertex lies on the enclosure boundary. -/
+theorem onBoundary_of_boundaryCycle_vertex_eq
+    (E : OuterBoundaryEnclosure G H F) {k : Fin E.boundaryCycle.length}
+    {v : Fin n} (hv : E.boundaryCycle.vertex k = v) :
+    E.onBoundary v :=
+  (E.onBoundary_iff_boundaryCycle v).2 (Exists.intro k hv)
+
+/-- Boundary vertices lie inside-or-on the enclosed region, transported through
+the boundary predicate. -/
+theorem insideOrOn_of_onBoundary
+    (E : OuterBoundaryEnclosure G H F) {v : Fin n} (hv : E.onBoundary v) :
+    E.insideOrOn (G.point v) := by
+  rcases E.exists_boundaryCycle_vertex_eq_of_onBoundary hv with ⟨k, hk⟩
+  rw [← hk]
+  simpa [BoundaryCycle.point] using E.boundaryCycle_point_insideOrOn k
+
+end OuterBoundaryEnclosure
+
 /-! ## Subpolygon data -/
 
 /-- Explicit data for one subpolygon boundary and its degree count. -/
@@ -137,6 +212,36 @@ structure SubpolygonData (G : CanonicalStraightLineUnitDistanceGraph n) where
 namespace SubpolygonData
 
 variable {G : CanonicalStraightLineUnitDistanceGraph n}
+
+/-- Boundary vertices of a subpolygon lie in its enclosed region. -/
+theorem boundary_point_insideOrOn
+    (S : SubpolygonData G) (k : Fin S.boundary.length) :
+    S.insideOrOn (G.point (S.boundary.vertex k)) :=
+  S.vertices_insideOrOn (S.boundary.vertex k) (S.boundary_vertices_mem k)
+
+/-- Extract the boundary-cycle index of a vertex known to lie on a subpolygon
+boundary. -/
+theorem exists_boundaryIndex_of_onBoundary
+    (S : SubpolygonData G) {v : Fin n} (hv : S.onBoundary v) :
+    Exists fun k : Fin S.boundary.length => S.boundary.vertex k = v :=
+  (S.onBoundary_iff_cycle v).1 hv
+
+/-- A vertex equal to a recorded subpolygon cycle vertex lies on that
+subpolygon boundary. -/
+theorem onBoundary_of_boundary_vertex_eq
+    (S : SubpolygonData G) {k : Fin S.boundary.length} {v : Fin n}
+    (hv : S.boundary.vertex k = v) :
+    S.onBoundary v :=
+  (S.onBoundary_iff_cycle v).2 (Exists.intro k hv)
+
+/-- Subpolygon boundary vertices lie inside-or-on the subpolygon region,
+transported through the boundary predicate. -/
+theorem insideOrOn_of_onBoundary
+    (S : SubpolygonData G) {v : Fin n} (hv : S.onBoundary v) :
+    S.insideOrOn (G.point v) := by
+  rcases S.exists_boundaryIndex_of_onBoundary hv with ⟨k, hk⟩
+  rw [← hk]
+  exact S.boundary_point_insideOrOn k
 
 /-- A subpolygon supplies the canonical subpolygon-count package. -/
 def toCanonicalSubpolygonCountHypotheses
@@ -244,6 +349,61 @@ theorem outerCycle_edge_geometry_dist_eq_one
     Geometry.Distance.eucDist (P.outerCycle.point k)
       (P.outerCycle.point (cyclicSucc P.outerCycle.length_pos k)) = 1 :=
   P.outerCycle.edge_geometry_dist_eq_one k
+
+/-- Recorded vertices of the selected outer cycle satisfy the package's
+boundary predicate. -/
+theorem outerCycle_vertex_onBoundary
+    (P : OuterBoundaryPackage G) (k : Fin P.outerCycle.length) :
+    P.outerEnclosure.onBoundary (P.outerCycle.vertex k) := by
+  simpa [outerCycle, OuterBoundaryEnclosure.boundaryCycle] using
+    P.outerEnclosure.boundaryCycle_vertex_onBoundary k
+
+/-- Recorded vertices of the selected outer cycle lie inside-or-on the
+package's enclosed region. -/
+theorem outerCycle_point_insideOrOn
+    (P : OuterBoundaryPackage G) (k : Fin P.outerCycle.length) :
+    P.outerEnclosure.insideOrOn (P.outerCycle.point k) := by
+  simpa [outerCycle, OuterBoundaryEnclosure.boundaryCycle] using
+    P.outerEnclosure.boundaryCycle_point_insideOrOn k
+
+/-- Every graph vertex lies inside-or-on the selected outer enclosure. -/
+theorem all_vertices_insideOrOn
+    (P : OuterBoundaryPackage G) (v : Fin n) :
+    P.outerEnclosure.insideOrOn (G.point v) :=
+  P.outerEnclosure.all_vertices_insideOrOn v
+
+/-- The package boundary predicate is exactly membership in the selected outer
+cycle. -/
+theorem onBoundary_iff_outerCycle
+    (P : OuterBoundaryPackage G) (v : Fin n) :
+    P.outerEnclosure.onBoundary v <->
+      Exists fun k : Fin P.outerCycle.length => P.outerCycle.vertex k = v := by
+  simpa [outerCycle, OuterBoundaryEnclosure.boundaryCycle] using
+    P.outerEnclosure.onBoundary_iff_boundaryCycle v
+
+/-- Extract the selected outer-cycle index of a vertex known to lie on the
+package boundary. -/
+theorem exists_outerCycle_vertex_eq_of_onBoundary
+    (P : OuterBoundaryPackage G) {v : Fin n}
+    (hv : P.outerEnclosure.onBoundary v) :
+    Exists fun k : Fin P.outerCycle.length => P.outerCycle.vertex k = v :=
+  (P.onBoundary_iff_outerCycle v).1 hv
+
+/-- A vertex equal to a recorded selected outer-cycle vertex lies on the
+package boundary. -/
+theorem onBoundary_of_outerCycle_vertex_eq
+    (P : OuterBoundaryPackage G) {k : Fin P.outerCycle.length} {v : Fin n}
+    (hv : P.outerCycle.vertex k = v) :
+    P.outerEnclosure.onBoundary v :=
+  (P.onBoundary_iff_outerCycle v).2 (Exists.intro k hv)
+
+/-- Boundary vertices of the selected outer cycle lie inside-or-on the selected
+outer enclosure, transported through the boundary predicate. -/
+theorem insideOrOn_of_onBoundary
+    (P : OuterBoundaryPackage G) {v : Fin n}
+    (hv : P.outerEnclosure.onBoundary v) :
+    P.outerEnclosure.insideOrOn (G.point v) :=
+  P.outerEnclosure.insideOrOn_of_onBoundary hv
 
 /-- Route the outer-boundary E12 inequality through the face-counting bridge. -/
 theorem boundaryAngleCountInequality_viaFaceCountingBridge

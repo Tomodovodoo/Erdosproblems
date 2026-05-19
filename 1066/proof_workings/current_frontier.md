@@ -1,4 +1,10 @@
-# Current Lean frontier
+# Historical Lean Frontier Snapshot
+
+Historical snapshot note, 2026-05-19: this file records an older
+documentation pass.  It is useful for source-roadmap context, but it is not
+the live Lean handoff.  Use `theorem_dependency_map.md`, `current_spines.md`,
+`remaining_fields_matrix.md`, and `nonvacuous_completion_route.md` for current
+W32/W34 route status.
 
 This note records the documentation/Lean frontier after a read-only pass over
 `proof_workings/*_lean_ready.md`, `Proof_Files/`, and the current Lean modules.

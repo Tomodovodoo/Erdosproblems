@@ -257,6 +257,71 @@ structure ConcreteValueMatrixFamily where
 
 namespace ConcreteValueMatrixFamily
 
+def ofVectorCertificateFamily
+    (periodSearch : PeriodSearchData)
+    (C :
+      UpperTriangleNonConnectorSqValueVectorCertificateFamily
+        periodSearch.toRoleHingedPeriodSearchFamily) :
+    ConcreteValueMatrixFamily where
+  periodSearch := periodSearch
+  matrices := NonConnectorValueMatrixFamily.ofVectorCertificateFamily C
+
+def ofListCertificateFamily
+    (periodSearch : PeriodSearchData)
+    (C :
+      UpperTriangleNonConnectorSqValueListCertificateFamily
+        periodSearch.toRoleHingedPeriodSearchFamily) :
+    ConcreteValueMatrixFamily where
+  periodSearch := periodSearch
+  matrices := NonConnectorValueMatrixFamily.ofListCertificateFamily C
+
+@[simp]
+theorem ofVectorCertificateFamily_periodSearch
+    (periodSearch : PeriodSearchData)
+    (C :
+      UpperTriangleNonConnectorSqValueVectorCertificateFamily
+        periodSearch.toRoleHingedPeriodSearchFamily) :
+    (ofVectorCertificateFamily periodSearch C).periodSearch =
+      periodSearch := by
+  rfl
+
+@[simp]
+theorem ofListCertificateFamily_periodSearch
+    (periodSearch : PeriodSearchData)
+    (C :
+      UpperTriangleNonConnectorSqValueListCertificateFamily
+        periodSearch.toRoleHingedPeriodSearchFamily) :
+    (ofListCertificateFamily periodSearch C).periodSearch =
+      periodSearch := by
+  rfl
+
+theorem nonempty_iff_exists_periodSearch_matrices :
+    Nonempty ConcreteValueMatrixFamily <->
+      Exists fun periodSearch : PeriodSearchData =>
+        Nonempty
+          (NonConnectorValueMatrixFamily
+            periodSearch.toRoleHingedPeriodSearchFamily) := by
+  constructor
+  · intro H
+    cases H with
+    | intro C =>
+        exact Exists.intro C.periodSearch (Nonempty.intro C.matrices)
+  · intro H
+    cases H with
+    | intro periodSearch HM =>
+        cases HM with
+        | intro matrices =>
+            exact Nonempty.intro
+              { periodSearch := periodSearch
+                matrices := matrices }
+
+theorem nonempty_periodSearch_of_nonempty
+    (H : Nonempty ConcreteValueMatrixFamily) :
+    Nonempty PeriodSearchData := by
+  cases H with
+  | intro C =>
+      exact Nonempty.intro C.periodSearch
+
 def toRoleHingedPeriodSearchFamily
     (C : ConcreteValueMatrixFamily) :
     RoleHingedPeriodSearchFamily :=

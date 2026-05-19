@@ -1,3 +1,4 @@
+import ErdosProblems1066.Swanepoel.PlanarInterface
 import ErdosProblems1066.Swanepoel.TriangleAngleFacts
 
 /-!
@@ -56,6 +57,19 @@ lemma eucSeparated_comm {p q : Point} (h : EucSeparated p q) :
     EucSeparated q p := by
   unfold EucSeparated eucDist at *
   rwa [Geometry.Distance.eucDist_comm]
+
+lemma eucUnit_of_unitDistanceAdj {n : Nat} (C : _root_.UDConfig n)
+    {i j : Fin n} (h : GraphBridge.UnitDistanceAdj C i j) :
+    EucUnit (C.pts i) (C.pts j) := by
+  simpa [EucUnit, eucDist] using
+    (PlanarInterface.unitDistanceAdj_iff_geometry_eucDist C i j).1 h
+
+lemma eucSeparated_of_ne {n : Nat} (C : _root_.UDConfig n)
+    {i j : Fin n} (h : Ne i j) :
+    EucSeparated (C.pts i) (C.pts j) := by
+  unfold EucSeparated eucDist
+  simpa [PlanarInterface.geometry_eucDist_eq_root] using
+    C.sep i j h
 
 lemma sqDist_unit_sides_of_eucUnit_sides
     {a b c : Point} (hab : EucUnit a b) (hcb : EucUnit c b) :
@@ -143,6 +157,23 @@ namespace Figure8DistanceData
 
 variable {p qi qj s r : Point}
 
+def ofUDConfigAdj {n : Nat} (C : _root_.UDConfig n)
+    {p qi qj s r : Fin n}
+    (hp_qi : GraphBridge.UnitDistanceAdj C p qi)
+    (hp_qj : GraphBridge.UnitDistanceAdj C p qj)
+    (hqi_s : GraphBridge.UnitDistanceAdj C qi s)
+    (hqj_r : GraphBridge.UnitDistanceAdj C qj r)
+    (hqi_qj : Ne qi qj)
+    (hs_r : Ne s r) :
+    Figure8DistanceData
+      (C.pts p) (C.pts qi) (C.pts qj) (C.pts s) (C.pts r) where
+  p_qi := eucUnit_of_unitDistanceAdj C hp_qi
+  p_qj := eucUnit_of_unitDistanceAdj C hp_qj
+  qi_s := eucUnit_of_unitDistanceAdj C hqi_s
+  qj_r := eucUnit_of_unitDistanceAdj C hqj_r
+  qi_qj_sep := eucSeparated_of_ne C hqi_qj
+  s_r_sep := eucSeparated_of_ne C hs_r
+
 lemma qi_qj_sqDist_ge_one (D : Figure8DistanceData p qi qj s r) :
     1 <= sqDist qi qj :=
   one_le_sqDist_of_eucSeparated
@@ -192,6 +223,27 @@ structure Figure9DistanceData (p qi qj s r : Point) where
 namespace Figure9DistanceData
 
 variable {p qi qj s r : Point}
+
+def ofUDConfigAdj {n : Nat} (C : _root_.UDConfig n)
+    {p qi qj s r : Fin n}
+    (hp_qi : GraphBridge.UnitDistanceAdj C p qi)
+    (hp_qj : GraphBridge.UnitDistanceAdj C p qj)
+    (hqi_s : GraphBridge.UnitDistanceAdj C qi s)
+    (hqj_r : GraphBridge.UnitDistanceAdj C qj r)
+    (hqi_qj : Ne qi qj)
+    (hp_s : Ne p s)
+    (hp_r : Ne p r)
+    (hs_r : Ne s r) :
+    Figure9DistanceData
+      (C.pts p) (C.pts qi) (C.pts qj) (C.pts s) (C.pts r) where
+  p_qi := eucUnit_of_unitDistanceAdj C hp_qi
+  p_qj := eucUnit_of_unitDistanceAdj C hp_qj
+  qi_s := eucUnit_of_unitDistanceAdj C hqi_s
+  qj_r := eucUnit_of_unitDistanceAdj C hqj_r
+  qi_qj_sep := eucSeparated_of_ne C hqi_qj
+  p_s_sep := eucSeparated_of_ne C hp_s
+  p_r_sep := eucSeparated_of_ne C hp_r
+  s_r_sep := eucSeparated_of_ne C hs_r
 
 lemma central_dotAt_le_half (D : Figure9DistanceData p qi qj s r) :
     dotAt qi p qj <= 1 / 2 :=

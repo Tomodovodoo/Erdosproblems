@@ -5,6 +5,10 @@ Source: `../Proof_Files/Sw02.pdf`
 Paper: K. J. Swanepoel, "Independence Numbers of Planar Contact Graphs",
 Discrete & Computational Geometry 28 (2002), 649-670.
 
+Current-status note, 2026-05-19: this is a source-paper roadmap, not the live
+Lean handoff.  It should be read for paper structure and obligations; check
+`theorem_dependency_map.md` for current Lean route status before starting work.
+
 Purpose of this file: give a numbered Markdown proof plan whose numbered
 claims can be transcribed later into Lean lemmas.  This is not Lean code.
 Unproved Lean theorem targets are written as comments only.
