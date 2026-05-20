@@ -67,6 +67,14 @@ files are `proof_workings/theorem_dependency_map.md`,
 `proof_workings/current_spines.md`, `proof_workings/remaining_fields_matrix.md`,
 and `proof_workings/nonvacuous_completion_route.md`.
 
+Status note, 2026-05-20: Swanepoel remains first.  The current S2 work is
+source inhabitation for an actual unbounded exterior boundary cycle and its
+pointwise boundary-sector rows, using the root-imported
+`Swanepoel.S2LocalTwoGermAssembly` and
+`Swanepoel.S2ExteriorBoundarySource` owner files.  These files are checked
+infrastructure for the S2 handoff; they do not by themselves expose the
+unconditional `8 / 31` theorem.
+
 The strongest current Swanepoel handoff is the W34 actual-route-premises
 surface in `ErdosProblems1066.Swanepoel.SwanepoelW32FinalAssembly`.  It is fed
 by W33/W34 exact-topology, sector-order, closure, finite-walk generated-order,

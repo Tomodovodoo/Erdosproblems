@@ -6,3 +6,4 @@ __pycache__/
 /proof_workings/*
 !/proof_workings/
 !/proof_workings/*.md
+/In_works/temp_all_lean_work_aggregate.md

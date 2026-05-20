@@ -7,6 +7,8 @@ route encyclopedia, build log, or project-structure document.
 Detailed theorem dependencies live in
 `E:/Personal/Erdosproblems/1066/proof_workings/theorem_dependency_map.md`.
 Source-paper proof plans live in `proof_workings/*_lean_ready.md`.
+Swanepoel S2 route notes, tried routes, immediate source tasks, and research
+tactics live in `proof_workings/s2_route_workbook.md`.
 
 ## Operating Rules
 
@@ -30,6 +32,3478 @@ Source-paper proof plans live in `proof_workings/*_lean_ready.md`.
 - `proof_workings/` is for proof-plan `.md` files only.  Disposable logs belong
   under ignored `proof_logs/`.
 
+## Current S2 Active Workboard
+
+This block supersedes older S2 `Claim:` entries below.  Only the entries in
+the `Live Claims Refresh` subsection are live.  Older pool-era claims and
+older claim entries in this block remain historical unless repeated in the
+refresh list.
+
+Live subagent count is pool-managed across concurrent agents.  Codex-owned
+active claims are listed in this refresh block and are cleared when their
+workers finish; spawn new S2 agents only after claiming a concrete source
+obligation here.
+
+Live S2 route after the latest reducer map:
+
+```text
+FiniteDrawingUnboundedComplementFrontierNoClosedSeparation
++ forall C inputs, UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows inputs
++ S1 noCutRows
+-> minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520
+-> MinimalFailureExactActualTopologyFieldsTarget
+```
+
+The current local/geometric source expands to:
+
+```text
+forall C inputs, LocalSelectedIncidentEdgePairSourceRows inputs
++ selected-head GraphVertexGeometricOutgoingListNoBetweenRows
+-> UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows inputs
+```
+
+The current topology source expands to:
+
+```text
+PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded
+-> FiniteDrawingUnboundedComplementFrontierNoClosedSeparation
+```
+
+The compact connected raw-orbit package, Janiszewski/package, and
+repeated-tail/orientation routes remain checked fallbacks.  The live short
+route now uses the finite-drawing no-closed-separation source plus the compact
+geometric-neighbour source package directly; the arbitrary-trace Janiszewski
+target is compatibility-only because it is overstrong for arbitrary compact
+connected traces.
+Do not revive all-adjacent endpoint
+closure, induced frontier graphs, arbitrary carrier cycles, convex-hull
+shortcuts, identity angular-order rows, synthetic enclosure rows, or another
+facade layer.  The next work should source the displayed leaves above, with
+final integration only after those source families are actually closed.
+
+### Live Claims Refresh
+
+#### Codex-current Dynamic Claims 2026-05-20
+
+Generic Codex-owned S2 lanes above are being treated as stale unless they have
+a currently named worker in this subsection.  Codex-current pruned the locally
+known completed/not-found agents from the previous round and is now using a
+max-10 dynamic allocation against the remaining S2 source leaves.
+
+- Claim: `S2-codex-cont-20260520-aligned-k-source`.
+  Owner: Codex-continuation.  Role: topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `S2_codex_cont_20260520_aligned_k_source` and
+  `S2_codex_cont_20260520_finite_no_closed_separation_source`, routing
+  component avoidance through the aligned K-split adapter to the finite
+  no-closed-separation source.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` check and focused scan.
+
+- Claim: `S2-codex-cont-20260520-local-selected-source`.
+  Owner: Codex-continuation.  Role: local selected-carrier source prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added `S2_codex_cont_20260520_local_selected_source`,
+  `S2_codex_cont_20260520_local_sector_rows_of_selected_input_source`, and
+  `S2_codex_cont_20260520_local_selected_source_family`, projecting checked
+  selected-neighbour input rows into selected local carrier/local-sector rows
+  while preserving actual `unboundedFrontierEdgeSet` incidences.  Gate passed:
+  targeted owner-file checks and focused scans.
+
+- Claim: `S2-codex-cont-20260520-raw-orbit-angular-source`.
+  Owner: Codex-continuation.  Role: raw face-successor / angular-order source
+  prover.  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `geometricUnitDistanceRotationSystem_faceSucc_eq_of_geometricAngularNeighborSelectionRow`,
+  `selectedRawOrbitGeometricAngularNeighborSelectionRows_of_orientationRows`,
+  and `S2_codex_cont_20260520_raw_orbit_angular_source`, reducing the selected
+  raw-orbit angular branch to genuine `geometricOutgoingDartList` successor
+  rows and the raw orientation branch.  Gate passed: targeted owner-file checks
+  and focused scans.
+
+- Claim: `S2-codex-cont-20260520-endgame-composer`.
+  Owner: Codex-continuation.  Role: endgame composer and route verifier.
+  Scope: `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066.lean`, `TASK.md`, and the S2 workbook.  Status:
+  completed/pruned 2026-05-20.  Result: verified that the shortest current W32
+  chain consumes `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`,
+  the selected-carrier/geometric-neighbour source family, and S1 no-cut rows;
+  no new facade or public bound wrapper was added.
+
+- Claim: `S2-codex-cont-20260520-component-avoidance-source`.
+  Owner: Codex-continuation.  Role: planar topology source closer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiComponentAvoidance`
+  and `S2_codex_cont_20260520_component_avoidance_source`, and rewired
+  `S2_codex_cont_20260520_finite_no_closed_separation_source` through this
+  direct finite no-closed-separation handoff.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` check and focused scan.
+
+- Claim: `S2-codex-cont-20260520-selected-neighbor-input-source`.
+  Owner: Codex-continuation.  Role: selected exterior carrier/local geometry
+  source closer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_cont_20260520_selected_neighbor_input_source_family` and
+  `boundaryFreeConnectedRawOrbitSourceRows_family_of_componentTopology_selectedIncidentEdges_geometricOutgoingListNoBetween_sortedBetween_20260520cont`,
+  reducing the local source to actual selected incident-edge rows plus genuine
+  outgoing-list no-between/sorted-between rows.  Gate passed: targeted
+  owner-file checks and focused scans.
+
+- Claim: `S2-codex-cont-20260520-s1-nocut-row-handoff`.
+  Owner: Codex-continuation.  Role: S1 no-cut handoff verifier.  Scope:
+  `ErdosProblems1066/Swanepoel/NoCut*.lean`,
+  `ErdosProblems1066/Swanepoel/*W34*.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: strongest checked no-cut handoff is
+  `NoCutMinimalityClosureW34.noCutVertexFamily_of_refuting_bothPlusSidesCutForced`,
+  matching the W32 `noCutRows` argument shape.  Gate passed: targeted
+  `NoCutMinimalityClosureW34.lean` and W32 checks.
+
+- Claim: `S2-codex-cont-20260520-frontier-preconnected-source`.
+  Owner: Codex-continuation.  Role: planar continuum frontier theorem prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  optional Mathlib-search notes in `proof_workings/s2_route_workbook.md`.
+  Status: completed/pruned 2026-05-20.  Result: read-only route/API audit
+  confirmed that the shortest non-circular topology leaf is still
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance`,
+  feeding `S2_codex_cont_20260520_finite_no_closed_separation_source`; no
+  direct Mathlib theorem was found.  Gate: no Lean edits.
+
+- Claim: `S2-codex-cont-20260520-local-frontier-star-source`.
+  Owner: Codex-continuation.  Role: local exterior-star source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/verified 2026-05-20.  Result: added
+  `localSelectedIncidentEdgePairSourceRows_of_boundaryVertexExteriorSectorRows`,
+  `localFrontierStarSourceRows_of_boundaryVertexExteriorSectorRows`, and
+  `S2_codex_cont_20260520_local_frontier_star_source`, selecting the two
+  actual predecessor/successor `unboundedFrontierEdgeSet` germs from primitive
+  boundary-sector rows and feeding the local selected-edge/local-radius
+  frontier-star source.  Gate passed: targeted owner-file checks and focused
+  scans.
+
+- Claim: `S2-codex-cont-20260520-carrier-degree-cutpartition-source`.
+  Owner: Codex-continuation.  Role: carrier degree-two/no-cut source prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `S2_codex_cont_20260520_carrier_degree_cutpartition_source`,
+  `S2_codex_cont_20260520_carrier_degree_unreachableAfterDelete_source`, and
+  `S2_codex_cont_20260520_carrier_degree_two_of_local_radius_source`, closing
+  the cut-partition and deleted-neighbour source surfaces from honest
+  local-radius selected exterior-star rows and using `inputs.noCutVertex`
+  through the existing degree-two eraser.  Gate passed: targeted owner-file
+  checks and focused scans.
+
+- Claim: `S2-codex-cont-20260520-face-orbit-source`.
+  Owner: Codex-continuation.  Role: raw exterior face orbit source prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/verified 2026-05-20.  Result: added
+  `rawFaceSuccOrbit_geometricOutgoingDartListConsecutive_of_faceSucc`,
+  `rawFaceSuccOrbit_edge_mem_unboundedFrontierEdgeSet_of_selectedNeighborGeometricOrder_successorTailRows_20260520`,
+  `rawFaceSuccOrbitRemainingSourceRows_of_selectedNeighborGeometricOrder_successorTailRows_20260520`,
+  and
+  `unboundedExteriorFrontierCycleRows_of_selectedNeighborGeometricOrder_rawFaceSuccOrbit_sourceRows_20260520`,
+  reducing the selected raw exterior face-orbit source to genuine
+  `faceSucc`/`geometricOutgoingDartList` successor rows plus explicit period
+  and repeated-tail rows.  Gate passed: targeted owner-file checks and focused
+  scans.
+
+- Claim: `S2-codex-cont-20260520-janiszewski-component-avoidance-proof`.
+  Owner: Codex-continuation + subagent.  Role: planar topology source prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `S2_codex_cont_20260520_janiszewski_component_avoidance_proof`, reducing
+  component avoidance to the existing relative-clopen Janiszewski surface with
+  no arbitrary traces, final-cycle rows, induced frontier graphs, or synthetic
+  enclosures.  Gate passed: targeted `ExteriorComponentTopology.lean` check
+  and focused scan.
+
+- Claim: `S2-codex-cont-20260520-selected-geometric-order-source`.
+  Owner: Codex-continuation + subagent.  Role: geometric local order prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `S2_codex_cont_20260520_selected_geometric_order_source` and its family
+  form, deriving selected geometric-order rows from actual selected
+  `unboundedFrontierEdgeSet` incidence rows plus genuine
+  `GraphVertexGeometricOutgoingListNoBetweenRows`.  Gate passed: targeted
+  owner-file checks and focused scan.
+
+- Claim: `S2-codex-cont-20260520-current-route-composer`.
+  Owner: Codex-continuation + subagent.  Role: route composer/verifier.
+  Scope: `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: confirmed the shortest checked chain consumes
+  `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`, the pointwise
+  `UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows` family, and
+  S1 no-cut rows; no facade, duplicate source package, or public wrapper was
+  added.  Gate: read-only route verification.
+
+- Claim: `S2-codex-cont-20260520-boundary-bumping-api-scout`.
+  Owner: Codex-continuation + subagent.  Role: read-only theorem/API scout.
+  Scope: local S2 owner files and imported Mathlib topology files.  Status:
+  completed/pruned 2026-05-20.  Result: no direct Mathlib replacement for the
+  local Janiszewski/boundary-bumping component-avoidance theorem was found;
+  the current local component-avoidance/relative-clopen source remains the
+  precise primitive.  Gate: no Lean edits.
+
+- Claim: `S2-codex-cont-20260520-relative-clopen-hard-source`.
+  Owner: Codex-continuation + subagent.  Role: planar boundary-bumping source
+  prover.  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_crossingSubcontinuumForcesBounded`,
+  strictly reducing the Janiszewski relative-clopen K-side source to
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` check, module build,
+  and focused scan.
+
+- Claim: `S2-codex-cont-20260520-geometric-neighbor-family-source`.
+  Owner: Codex-continuation + subagent.  Role: geometric selected-neighbour
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `S2_codex_cont_20260520_geometric_neighbor_family_source_of_selectedIncidentEdgeRows_geometricOutgoingListNoBetween`
+  and
+  `S2_codex_cont_20260520_geometric_neighbor_family_source_of_selectedIncidentEdgeRows_graphVertexGeometricOutgoingListNoBetweenRows`,
+  reducing the compact geometric-neighbour family to actual
+  `LocalSelectedIncidentEdgePairSourceRows` plus genuine selected-head
+  `geometricOutgoingDartList` no-between rows.  Gate passed: targeted
+  owner-file checks and focused scan.
+
+- Claim: `S2-codex-cont-20260520-final-s2-composition`.
+  Owner: Codex-continuation + subagent.  Role: final S2 composition and import
+  hygiene.  Scope: `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  any existing S2 owner module needed for the final theorem,
+  `ErdosProblems1066.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: blocked/checked 2026-05-21.
+  Result: the S1 no-cut row is closed and has the W32 consumer shape:
+  `NoCutMinimalityClosureW34.noCutVertexFamily_of_refuting_bothPlusSidesCutForced`.
+  The final unconditional S2 theorem was not added because the topology and
+  geometric source leaves are still parameterized.  The checked shortest W32
+  consumer is
+  `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520`,
+  requiring
+  `ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`
+  and
+  `forall C inputs, S2LocalTwoGermAssembly.UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows inputs`.
+  Gate passed for this audit: Lean `#check` of the W32 consumer, topology
+  reducers, geometric erasers, and W34 no-cut handoff.
+
+- Claim: `S2-codex-cont-20260520-finite-drawing-direct-route`.
+  Owner: Codex-continuation + subagent.  Role: finite-drawing alternate route
+  prover.  Scope: `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiBoundaryBumping`,
+  strictly reducing the finite-drawing no-closed-separation source to the
+  Janiszewski boundary-bumping relative-clopen K-side source.  Gate passed:
+  targeted `ExteriorComponentTopology.lean` and `FinitePlaneDrawing.lean`
+  checks and focused scan.
+
+- Claim: `S2-codex-cont-20260520-crossing-frontier-subcontinuum-source`.
+  Owner: Codex-continuation + subagent.  Role: compact-plane crossing source
+  prover.  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  and `proof_workings/s2_route_workbook.md`.  Status: active/claimed
+  2026-05-20.  Deliverable: prove or strictly reduce
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum`
+  or the direct boundedness theorem
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`
+  from compact plane/frontier facts.  Gate: targeted
+  `ExteriorComponentTopology.lean` check and focused scan.
+
+- Claim: `S2-codex-cont-20260520-selected-incident-edge-family`.
+  Owner: Codex-continuation + subagent.  Role: selected exterior incident-edge
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active/claimed
+  2026-05-20.  Deliverable: prove or strictly reduce the family
+  `forall C inputs, LocalSelectedIncidentEdgePairSourceRows inputs` from actual
+  exterior-boundary/local-sector rows, preserving `unboundedFrontierEdgeSet`
+  incidence and avoiding all-adjacent endpoint or induced-frontier shortcuts.
+  Gate: targeted owner-file checks and focused scan.
+
+- Claim: `S2-codex-cont-20260520-selected-head-no-between-family`.
+  Owner: Codex-continuation + subagent.  Role: geometric no-between source
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active/claimed
+  2026-05-20.  Deliverable: prove or strictly reduce the pointwise
+  `GraphVertexGeometricOutgoingListNoBetweenRows` source needed by the
+  selected incident-edge route, using the real
+  `GeometricRotationSystem.geometricOutgoingDartList` order.  Gate: targeted
+  owner-file checks and focused scan.
+
+- Claim: `S2-codex-cont-20260520-raw-exterior-orbit-source`.
+  Owner: Codex-continuation + subagent.  Role: exterior raw face-orbit source
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active/claimed
+  2026-05-20.  Deliverable: construct or strictly reduce the raw exterior
+  `faceSucc` orbit package that supplies actual unbounded-frontier edge
+  membership, raw-tail frontier coverage, and repeated-tail no-cut rows for the
+  final `UnboundedExteriorFrontierCycleRows` erasers.  Gate: targeted
+  owner-file checks and focused scan.
+
+#### Codex-current Dynamic Dispatch 2026-05-20
+
+These claims are the current active subagent dispatch.  They are bounded
+source obligations, not a standing pool.  Clear each claim when the worker
+finishes, blocks, or is superseded.
+
+- Claim: `S2-current-component-avoidance-source-20260520a`.
+  Owner: Singer the 3rd (`019e475a-3573-7693-b50c-e93c3d160e0e`, worker).
+  Role: topology source closer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiNoSubcontinuumObstruction`,
+  reducing the no-subcontinuum Janiszewski source directly to finite
+  no-closed-separation without arbitrary trace, relative-clopen loop, facade
+  layer, or synthetic enclosure row.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` check and focused scan.
+
+- Claim: `S2-current-selected-neighbor-input-source-20260520a`.
+  Owner: Euler the 3rd (`019e475a-35bf-76e1-a0e0-d6e2cf6eb745`, worker).
+  Role: selected carrier/local source closer.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_current_selected_neighbor_input_source_20260520a_family_of_selectedIncidentEdgeRows_geometricOrderRows`
+  and
+  `S2_current_selected_neighbor_input_source_20260520a_family_of_actualCarrierDegreeTwo_geometricOutgoingListNoBetweenRows`,
+  reducing the selected-input family to actual selected
+  `unboundedFrontierEdgeSet` incidences plus genuine geometric outgoing-list
+  order.  Gate passed: targeted `S2LocalTwoGermAssembly.lean` check and
+  focused scan.
+
+- Claim: `S2-current-w32-selected-incident-geometric-consumer-20260520a`.
+  Owner: Codex-current.  Role: W32 route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedIncidentEdgeRows_geometricOrderRows_20260520`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_actualCarrierDegreeTwo_geometricOutgoingListNoBetweenRows_20260520`.
+  Gate passed: targeted `FaceBoundaryTopologySourceW32.lean` check.
+
+- Claim: `S2-current-raw-orbit-selected-order-source-20260520a`.
+  Owner: Hume the 3rd (`019e475a-361c-7921-b969-014af7bedeb9`, worker).
+  Role: raw-orbit/geometric-order bridge closer.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  read-only `GeometricRotationSystem.lean`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `unboundedFrontierCarrierSelectedNeighborGeometricOrderRows_of_selectedRawOrbitHeadMatch_rawOrientation`,
+  `selectedNeighborCutPartitionGeometricOrderInputSource_of_selectedCutRows_rawOrbitHeadMatch_rawOrientation`,
+  `S2_current_raw_orbit_selected_order_source_20260520a`, and
+  `S2_current_raw_orbit_selected_order_source_family_20260520a`, reducing the
+  selected-neighbour geometric-order source through the checked raw-orbit
+  `faceSucc`/`geometricOutgoingDartList` lane without identity angular order.
+  Gate passed: targeted owner-file check, module build, and focused scan.
+
+- Claim: `S2-current-w32-raw-orbit-selected-order-consumer-20260520a`.
+  Owner: Codex-current.  Role: W32 route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedIncidentEdgeRows_rawOrbitHeadMatch_rawOrientation_20260520`,
+  consuming Hume's raw-orbit selected-order family in W32 while keeping
+  component avoidance, selected incident edges, raw-tail coverage, head-match,
+  raw orientation, and no-cut as explicit source inputs.  Gate passed:
+  targeted `FaceBoundaryTopologySourceW32.lean` check.
+
+- Claim: `S2-current-w32-nosubcontinuum-selected-input-consumer-20260520b`.
+  Owner: Codex-current.  Role: W32 route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_selectedNeighborInput_20260520`,
+  consuming the no-subcontinuum Janiszewski topology source directly with the
+  selected-neighbour input source and no-cut rows.  Gate passed: targeted
+  `FaceBoundaryTopologySourceW32.lean` check.
+
+- Claim: `S2-current-w32-crossing-subcontinuum-selected-input-consumer-20260520b`.
+  Owner: Codex-current.  Role: W32 route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_crossingSubcontinuum_selectedNeighborInput_20260520`,
+  consuming the crossing-subcontinuum topology witness route with the
+  selected-neighbour input source and no-cut rows.  Gate passed: focused S2
+  owner build and forbidden-token scan.
+
+- Claim: `S2-current-nocut-handoff-20260520a`.
+  Owner: Erdos the 3rd (`019e475a-367b-75d3-8e0a-b277e2386198`, explorer).
+  Role: no-cut theorem mapper.  Scope:
+  read-only `ErdosProblems1066/Swanepoel/NoCut*.lean`,
+  `ErdosProblems1066/Swanepoel/*W34*.lean`,
+  `ErdosProblems1066/Swanepoel/MinimalGraphFacts.lean`, and
+  `FaceBoundaryTopologySourceW32.lean`; optional workbook update only if a
+  precise checked route is found.  Status: completed/pruned 2026-05-20.
+  Result: identified
+  `NoCutMinimalityClosureW34.minimalFailureNoCutVertexFamily_of_refuting_bothPlusSidesCutForced`
+  and `NoCutMinimalityClosureW34.noCutVertex_of_refuting_bothPlusSidesCutForced`
+  as checked no-cut rows.  W32 keeps `noCutRows` explicit to avoid importing
+  downstream W34 closure back into the S2 source layer.
+
+- Claim: `S2-current-endgame-composition-map-20260520a`.
+  Owner: Epicurus the 3rd (`019e475a-36d8-7901-b0ef-4462a4e1953b`, explorer).
+  Role: route composer.  Scope: read-only
+  `FaceBoundaryTopologySourceW32.lean`, `ExteriorComponentTopology.lean`,
+  `S2LocalTwoGermAssembly.lean`, and `proof_workings/s2_route_workbook.md`.
+  Status: completed/pruned 2026-05-20.  Result: confirmed the shortest checked
+  S2 spine is component avoidance -> finite no-closed-separation, plus
+  selected-neighbour input and no-cut rows -> W32 target; remaining W32
+  boundary leaves are exactly those three source families.
+
+- Claim: `S2-current-w32-component-avoidance-selected-input-consumer-20260520a`.
+  Owner: Codex-current.  Role: W32 route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedNeighborInput_20260520`,
+  the direct checked consumer from
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance`
+  plus the selected-neighbour input source family to
+  `MinimalFailureExactActualTopologyFieldsTarget`, preserving `noCutRows` as an
+  explicit non-circular input.  Gate passed: targeted
+  `FaceBoundaryTopologySourceW32.lean` check.
+
+- Claim: `S2-current-no-subcontinuum-source-20260520b`.
+  Owner: Ramanujan the 3rd (`019e476a-0a79-7232-854a-8d3e866932f4`, worker).
+  Role: topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_crossingSubcontinuumForcesBounded`
+  and `S2_current_no_subcontinuum_source_20260520b`, reducing
+  no-subcontinuum to the crossing-subcontinuum frontier witness route without
+  arbitrary traces, relative-clopen loops, synthetic enclosure rows, or facade
+  layers.  Gate passed: targeted `ExteriorComponentTopology.lean` check and
+  focused scan.
+
+- Claim: `S2-current-carrier-degree-two-source-20260520b`.
+  Owner: Heisenberg the 3rd (`019e476a-0ad1-7222-9911-825b5b99ac08`, worker).
+  Role: actual carrier local-degree prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and read-only
+  `ExteriorComponentTopology.lean`.  Status: completed/pruned 2026-05-20.
+  Result: added `BoundaryFreeLocalNoThirdGermSourceRows.toNeighborFinsetCardTwo`,
+  `S2_current_carrier_degree_two_source_20260520b`, and
+  `S2_current_carrier_degree_two_source_family_20260520b`, reducing actual
+  `unboundedFrontierCarrierGraph` degree two to honest local exterior-star /
+  no-third-germ rows, not an induced frontier graph.  Gate passed: targeted
+  owner-file checks and focused scan.
+
+- Claim: `S2-current-selected-raw-tail-coverage-source-20260520b`.
+  Owner: Locke the 3rd (`019e476a-0b1e-7d42-95b5-55c202d56108`, worker).
+  Role: raw orbit coverage prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_current_selectedRawTailCoverageSourceRows_of_rawOrbitCoverage_boundaryFreeSource_20260520b`,
+  `S2_current_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520b`,
+  and family/nonempty-family wrappers, sourcing
+  `SelectedRawTailCoverageSourceRows` from honest raw coverage of the actual
+  `unboundedFrontierEdgeSet` carrier plus boundary-free local rows.  Gate
+  passed: focused S2 owner build and forbidden-token scan.
+
+- Claim: `S2-current-selected-raw-head-match-source-20260520b`.
+  Owner: Fermat the 3rd (`019e476a-0b6a-7201-a8e2-988fddf24c5c`, worker).
+  Role: selected carrier/raw-orbit alignment prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added `SelectedRawOrbitLeftPredHeadMatchSource`,
+  `selectedRawOrbitHeadMatchSource_of_leftPredHeadMatchSource_20260520b`,
+  `S2_current_selected_raw_head_match_source_20260520b`, and the refreshed
+  raw-orbit selected-order route `S2_current_raw_orbit_selected_order_source_20260520b`.
+  The residual is now one-sided raw predecessor alignment for the selected
+  left head.  Gate passed: focused S2 owner build and forbidden-token scan.
+
+- Claim: `S2-current-raw-orbit-orientation-source-20260520b`.
+  Owner: Copernicus the 3rd (`019e476a-0bb9-7833-a4e3-557f0a85fab9`, worker).
+  Role: raw orbit orientation prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Result: added
+  `geometricUnitDistanceRotationSystem_faceSucc_eq_and_graphDartArg_lt_of_reverse_getElem_succ_at`,
+  `selectedRawOrbitOrientationRows_of_geometricSuccessorNonwrapRows_faceSuccListOrder`,
+  and `S2_current_raw_orbit_orientation_source_20260520b`, reducing
+  `SelectedRawOrbitOrientationRows` to genuine nonwrap geometric
+  face-successor/list-order rows with the strict `graphDartArg` inequality
+  read from `geometricOutgoingDartList`.  No identity angular-order shortcut,
+  synthetic row, or axiom is used.  Gate passed: targeted owner-file checks,
+  module build, and focused forbidden-token scan.
+
+- Claim: `S2-current-topology-source-scout-20260520b`.
+  Owner: not spawned.  Role: read-only topology theorem scout.  Scope:
+  read-only `ExteriorComponentTopology.lean`, Mathlib topology imports, and
+  `proof_workings/s2_route_workbook.md`.  Status: superseded/not spawned
+  2026-05-20.  Reason: Ramanujan reduced the no-subcontinuum leaf to the exact
+  crossing-subcontinuum frontier witness theorem before this scout was needed.
+
+- Claim: `S2-current-local-degree-source-scout-20260520b`.
+  Owner: not spawned.  Role: read-only local carrier-degree scout.  Scope:
+  read-only `S2LocalTwoGermAssembly.lean`, `S2BoundaryFreeRawSource.lean`,
+  `ExteriorComponentTopology.lean`, and `proof_workings/s2_route_workbook.md`.
+  Status: superseded/not spawned 2026-05-20.  Reason: Heisenberg closed the
+  carrier degree-two reduction to boundary-free local no-third-germ rows.
+
+- Claim: `S2-codex-main-20260520-janiszewski-closed-split-source`.
+  Owner: Codex-main.  Role: Janiszewski closed-split source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_main_20260520_janiszewski_closed_split_source` and
+  `S2_codex_main_20260520_planar_connected_frontier_of_janiszewski_closed_split_source`.
+  The assigned closed-split source now strictly reduces to the stronger
+  non-circular aligned hard-case source, then feeds the connected-frontier
+  route.  Gate passed: targeted `ExteriorComponentTopology.lean` build,
+  focused forbidden-token scan, and diff whitespace check.
+
+- Claim: `S2-codex-current-20260520-boundaryfree-connected-raw-orbit-source`.
+  Owner: Meitner the 3rd (`019e474d-a98b-74d0-bdaa-a5d6020360a7`).  Role:
+  boundary-free raw-orbit source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and
+  `proof_workings/s2_route_workbook.md`; read-only use of S2 seeded/exterior
+  files.  Status: completed/pruned 2026-05-20.  Result: added
+  `BoundaryFreeLocalInputSourceReduction.ofLocalNoThirdGermSource`,
+  `BoundaryFreeLocalInputSourceReduction.toConnectedInputSourceRows`,
+  `BoundaryFreeLocalInputSourceReduction.connected_of_planarContinuum`,
+  `BoundaryFreeLocalInputSourceReduction.toComponentTopologyRowsFromFrontierPreconnected`,
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_localNoThirdGermSource`,
+  `componentTopologyRows_of_frontierPreconnected_localNoThirdGermSource`,
+  `BoundaryFreeInputSourceReduction.ofBoundaryFreeNoThirdGermSource`, and
+  `S2_codex_current_20260520_boundaryfree_input_reduction_of_no_third_germ_source`.
+  This removes redundant `localTwoGermRows` residuals from boundary-free local
+  and global input packages when no-third-germ data is present, and supplies
+  connected-carrier/component-topology rows from local no-third-germ plus
+  frontier preconnectedness.  Gate passed: targeted
+  `S2BoundaryFreeRawSource.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-component-avoidance-aligned-k-split-adapter`.
+  Owner: Codex-current.  Role: topology adapter implementer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/verified 2026-05-20.  Result: added
+  `exists_closed_k_split_of_component_avoidance`,
+  `planarContinuumUnboundedComplementFrontierNontrivialAlignedKSplit_of_janiszewskiComponentAvoidance`,
+  and
+  `S2_codex_current_20260520_aligned_k_split_source_of_componentAvoidance`.
+  The live aligned K-split topology residual is now sourced directly from
+  Janiszewski component avoidance without using the relative-clopen/crossing
+  reducer loop.  Gate passed: targeted `ExteriorComponentTopology.lean` check
+  and focused scan.
+
+- Claim: `S2-codex-current-20260520-finite-drawing-local-isolation-source`.
+  Owner: Hypatia the 3rd (`019e474d-a9da-70d0-9ffe-7ef8290e5f4f`).  Role:
+  finite straight-line drawing local isolation prover.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` and
+  `proof_workings/s2_route_workbook.md`; read-only use of topology owner files.
+  Status: completed/pruned 2026-05-20.  Result: added
+  `exists_ball_disjoint_embeddedEdgeSetExceptEdge_of_inOpenSegment`,
+  `edgePositiveSideBall_local_patch_of_local_closedSegment`,
+  `edgePositiveSideBall_swap_local_patch_of_local_closedSegment`, and
+  `exists_edgePositiveSideBall_local_patches_of_edge_inOpenSegment`.  No proof
+  residual remains in this local-isolation file.  Gate passed: targeted
+  `FinitePlaneDrawing.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-aligned-k-split-mathlib-scout`.
+  Owner: Hegel the 3rd (`019e474d-aa38-74f3-a2f0-ab70b4c1088f`).  Role:
+  read-only topology scout.  Scope:
+  read-only `ExteriorComponentTopology.lean`, Mathlib topology files, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: identified the direct component-avoidance route and
+  local adapter `exists_closed_k_split_of_component_avoidance`, now implemented
+  by `S2-codex-current-20260520-component-avoidance-aligned-k-split-adapter`.
+
+- Claim: `S2-codex-current-20260520-closed-separation-forces-continuum-source`.
+  Owner: Carson the 3rd (`019e4741-93ae-7ef0-9256-a9f9a60844e5`).  Role:
+  planar connected-frontier source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit`,
+  `planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_nontrivialAlignedKSplit`,
+  and `S2_codex_current_20260520_closed_separation_forces_continuum_source`.
+  The connected-frontier hard theorem now reduces to the aligned hard case:
+  for nonempty closed frontier pieces `A` and `B`, produce closed disjoint
+  `K`-side sets covering `K` and containing `A`/`B`.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-boundaryfree-local-no-third-germ-source`.
+  Owner: Euclid the 3rd (`019e4741-940d-7863-9cf8-dbea0370b8a2`).  Role:
+  boundary-free local source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_boundaryfree_local_no_third_germ_source` and
+  `S2_codex_current_20260520_boundaryfree_local_no_third_germ_source_family`,
+  strictly reducing the boundary-free local/no-third-germ source to
+  `LocalSelectedIncidentEdgePairSourceRows inputs`.  The two selected heads
+  remain actual `unboundedFrontierEdgeSet` incidences; the local radius and
+  incident-germ frontier membership are supplied by the existing checked
+  local incident-germ path.  Gate passed: targeted owner-file builds and
+  focused scan.
+
+- Claim: `S2-codex-current-20260520-raw-face-succ-orbit-existence-source`.
+  Owner: Faraday the 3rd (`019e4741-9469-7b92-852b-e8e8dc24fecd`).  Role:
+  raw exterior face-successor orbit source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource`,
+  `S2_codex_current_20260520_raw_face_succ_orbit_existence_source`,
+  `boundaryFreeConnectedRawOrbitSourceRows_family_of_geometricSelection_incidentGermFrontierEdge_successorTailNeighborRows_20260520`,
+  and
+  `S2_codex_current_20260520_raw_orbit_source_closure_of_selectedNeighborGeometricOrder_successorTailNeighborRows`.
+  The explicit index-chain equality `leftHeadRow.index + 1 =
+  headRightRow.index` is no longer a residual; it is derived from the two
+  genuine successor-tail neighbour rows in `geometricOutgoingDartList`.
+  Gate passed: targeted `S2SeededRawOrbitSource.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-selected-head-angular-order-final-source`.
+  Owner: Parfit the 3rd (`019e4741-94d6-7a01-b552-0dd8caf24a28`).  Role:
+  selected-head angular-order source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `graphVertexGeometricOutgoingListNoBetweenRows_of_graphVertexAngularNoBetweenRows`,
+  `graphVertexAngularNoBetweenRows_iff_geometricOutgoingListNoBetweenRows`,
+  `graphVertexAngularNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow`,
+  `graphVertexGeometricOutgoingListNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow`,
+  and `S2_codex_current_20260520_selected_head_angular_order_final_source`.
+  The pointwise selected-head angular/list no-between source now reduces to a
+  genuine nonwrap `GraphVertexGeometricAngularNeighborSelectionRow` source
+  over `geometricOutgoingDartList` and real `graphDartArg` order.  Gate passed:
+  targeted `GeometricRotationSystem.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-boundary-edge-coverage-local-sector-source`.
+  Owner: Bacon the 3rd (`019e4741-9535-7f30-a900-4904b8bde6cb`).  Role:
+  exterior edge coverage / local-sector source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_rawOrbit_edgeCoverage_of_localSectorRows_carrierConnected`,
+  `S2_codex_current_20260520_selected_edge_chain_connectivity_leaf_of_localSectorRows_carrierConnected`,
+  and
+  `S2_componentTopologySourceRows_of_rawFaceSuccOrbit_dartFrontier_localSectorRows_carrierConnected`.
+  Standalone selected edge coverage is removed as an input; it now follows
+  from the genuine raw face-successor orbit, raw dart open-segment frontier,
+  honest pointwise local-sector rows, and connectedness of the actual
+  `unboundedFrontierCarrierGraph`.  Gate passed: targeted
+  `S2ExteriorBoundarySource.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-planar-no-closed-separation-leaf`.
+  Owner: Dewey the 2nd (`019e4708-494f-7af2-9e9a-b5a87d34d605`).  Role: finite planar
+  topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_connected`
+  and `S2_codex_current_20260520_finite_no_closed_separation_source`, reducing
+  the current W32 finite topology premise directly to
+  `PlanarContinuumUnboundedComplementFrontierConnected`.  Gate passed:
+  targeted `ExteriorComponentTopology.lean` build and focused scan.
+
+- Claim: `S2-codex-current-20260520-face-dart-carrier-input-leaf`.
+  Owner: Huygens the 3rd (`019e470a-cd7a-74f0-9e8f-17fc68b1e500`).  Role: exterior carrier
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: shutdown/superseded
+  2026-05-20.  Result: superseded by Franklin's completed
+  `S2_codex_current_20260520_face_dart_carrier_input_leaf_of_deletedTailWitnesses`,
+  which reduces `FaceDartOrbitExteriorCarrierRows C inputs` to seed-visible
+  raw orbit rows plus deleted-tail witnesses and incident-edge completeness
+  for the same extracted boundary.
+
+- Claim: `S2-codex-current-20260520-selected-head-nonwrap-leaf`.
+  Owner: Sagan the 3rd (`019e470a-e8da-7380-9d4f-650312faa1fc`).  Role: geometric
+  selected-head order prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `S2_codex_current_20260520_selected_head_nonwrap_leaf`, reducing the
+  selected-head no-between route to `SelectedRawOrbitHeadMatchSource
+  selectedRows rawRows` plus `SelectedRawOrbitOrientationRows rawRows`.
+  The nonwrap rows are derived internally through
+  `selectedRawOrbitGeometricSuccessorNonwrapRows_of_orientationRows` using the
+  actual geometric `faceSucc` row and sorted `geometricOutgoingDartList`.
+  Gate passed: targeted `S2SeededRawOrbitSource.lean` build and focused scan.
+
+- Claim: `S2-codex-current-20260520-w32-s1-integration-leaf`.
+  Owner: Maxwell the 2nd (`019e4708-4a6c-7cb1-829b-2487258437da`).  Role: final S2
+  integration verifier.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066.lean`, and `TASK.md`.  Status: completed/pruned
+  2026-05-20.  Result: confirmed the current strongest compact W32 surface is
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520`,
+  with face-dart specializations at the adjacent W32 route declarations.  S1
+  no-cut rows are supplied by
+  `NoCutMinimalityClosureW34.noCutVertexFamily_of_refuting_bothPlusSidesCutForced`.
+  Root imports already include the S2 owner files and
+  `FaceBoundaryTopologySourceW32`.  No Lean edits.
+
+- Claim: `S2-codex-current-20260520-raw-repeated-tail-cut-leaf`.
+  Owner: Franklin the 2nd (`019e4708-4a02-7f51-8efe-7c5469b47bd1`).  Role:
+  repeated-tail cut-row source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `proof_workings/s2_route_workbook.md` only if a route is proved or demoted.
+  Status: completed/pruned 2026-05-20.  Result: added seed-visible
+  repeated-tail witness reducers including
+  `SelectedSeededRawFaceSuccOrbitSourceRows.toFaceDartOrbitExteriorCarrierRows_of_deletedTailWitnesses_complete`
+  and `S2_codex_current_20260520_face_dart_carrier_input_leaf_of_deletedTailWitnesses`.
+  The face-dart carrier input leaf now reduces to deleted-tail witnesses for
+  the same selected seeded raw orbit.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` and `S2SeededRawOrbitSource.lean` builds.
+
+- Claim: `S2-codex-main-20260520-connected-frontier-source-leaf`.
+  Owner: Herschel the 2nd (`019e470d-e894-7262-bc90-8501fb8d815a`).  Role: planar continuum connected-frontier source
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_main_20260520_connected_frontier_source_leaf`, reducing
+  `PlanarContinuumUnboundedComplementFrontierConnected` and the finite
+  no-closed-separation source to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` build.
+
+- Claim: `S2-codex-current-20260520-janiszewski-component-avoidance-leaf`.
+  Owner: Halley the 2nd (`019e4711-8cea-7551-86e5-be891866bd1e`).  Role: planar component
+  avoidance source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `planarJaniszewskiBoundaryBumpingComponentAvoidance_of_crossingSubcontinuumForcesBounded`
+  and `S2_codex_current_20260520_janiszewski_component_avoidance_leaf`,
+  reducing component avoidance to
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` build.
+
+- Claim: `S2-codex-current-20260520-crossing-subcontinuum-bounded-leaf`.
+  Owner: Kierkegaard the 3rd (`019e4716-91d4-74e0-8a59-35ee75ce0038`).  Role: planar boundedness
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: verified
+  `S2_codex_current_20260520_crossing_subcontinuum_bounded_leaf`, reducing
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`
+  to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` build and focused
+  forbidden-token scan.
+
+- Claim: `S2-codex-current-20260520-janiszewski-no-subcontinuum-leaf`.
+  Owner: Poincare the 3rd (`019e471b-cf76-7902-81cf-f04b1b2dfeea`).  Role: planar
+  no-subcontinuum source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_janiszewski_no_subcontinuum_leaf`, reducing
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`
+  to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` build and focused
+  forbidden-token scan.
+
+- Claim: `S2-codex-current-20260520-relative-clopen-k-side-leaf`.
+  Owner: Dirac the 3rd (`019e4721-cc8f-7851-a650-4661669ad20f`).  Role: planar
+  relative-clopen K-side source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_relative_clopen_k_side_leaf`, reducing
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`
+  to
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`
+  by opening the component witness `U = connectedComponentIn Kᶜ x`.  Gate
+  passed: targeted `ExteriorComponentTopology.lean` build and focused scan.
+
+- Claim: `S2-codex-current-20260520-nontrivial-relative-clopen-side-leaf`.
+  Owner: Ohm the 3rd (`019e4726-fab2-7f61-8c0a-d342ab8c24a9`).  Role: planar
+  continuum nontrivial relative-clopen side source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `planarContinuumUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_crossingBounded`
+  and `S2_codex_current_20260520_nontrivial_relative_clopen_side_leaf`,
+  reducing
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`,
+  to `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` check, module build,
+  and focused scan.
+
+- Claim: `S2-codex-current-20260520-boundaryfree-source-leaf`.
+  Owner: Hooke the 2nd (`019e4711-a5e5-79e0-a212-d468b7b71ff0`).  Role: local boundary-free
+  no-third-germ source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `boundaryFreeNoThirdGermSource_of_localSectorRows_incidentGermFrontierEdge`,
+  `S2_codex_current_20260520_boundaryfree_source_leaf`, and its family form,
+  reducing `BoundaryFreeNoThirdGermSource inputs` to selected carrier
+  local-sector rows plus honest incident-germ `unboundedFrontierEdgeSet`
+  membership.  Gate passed: targeted `S2BoundaryFreeRawSource.lean` and
+  `S2LocalTwoGermAssembly.lean` builds.
+
+- Claim: `S2-codex-current-20260520-raw-orbit-source-leaf`.
+  Owner: Linnaeus the 2nd (`019e4711-bee0-7282-96a5-7e405b60a5c0`).  Role: connected raw-orbit
+  source closer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `boundaryFreeConnectedRawOrbitSourceRows_of_componentTopology_boundaryFreeInput_selectedSuccessorEdge_20260520`,
+  `boundaryFreeConnectedRawOrbitSourceRows_of_componentTopology_boundaryFreeInput_selectedNeighborGeometricOrder_successorTailRows_20260520`,
+  and its family form.  The compact raw-orbit source now reduces to component
+  topology, `BoundaryFreeInputSourceReduction`, and selected-neighbour
+  successor-tail `faceSucc` rows.  Gate passed: targeted
+  `S2SeededRawOrbitSource.lean` build and module build.
+
+- Claim: `S2-codex-current-20260520-boundaryfree-input-reduction-leaf`.
+  Owner: Arendt the 3rd (`019e471b-e89a-70e1-855a-7fe98e4b670c`).  Role: boundary-free input
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `S2_codex_current_20260520_boundaryfree_input_reduction_leaf` and its family
+  form, reducing `BoundaryFreeInputSourceReduction inputs` to selected carrier
+  local-sector rows plus honest incident-germ `unboundedFrontierEdgeSet`
+  membership.  Gate passed: targeted owner-file builds and focused scans.
+
+- Claim: `S2-codex-current-20260520-selected-successor-tail-source-leaf`.
+  Owner: Aquinas the 3rd (`019e471c-0429-7e52-a62d-e9de7c9bb0d9`).  Role: selected successor
+  tail source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `S2_codex_current_20260520_selected_successor_tail_source_leaf` plus
+  selected-neighbor angular and outgoing-list wrappers, reducing the selected
+  successor-tail geometric rows to the genuine selected-head outgoing-list
+  no-between source
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricOutgoingListNoBetweenRowsNoOrbitSource`.
+  Gate passed: targeted owner-file builds and focused scans.
+
+- Claim: `S2-codex-current-20260520-selected-successor-tail-outgoing-list-leaf`.
+  Owner: Turing the 3rd (`019e4721-cce0-7fa3-a537-02e34e64afe4`).  Role:
+  selected-head outgoing-list no-between source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricOutgoingListNoBetweenRowsNoOrbitSource_of_noBetweenRows`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricOutgoingListNoBetweenRowsNoOrbitSource_of_carrierNoBetweenRows_strictOrder`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricOutgoingListNoBetweenRowsNoOrbitSource_of_geometricSelectionInputSource_strictOrder`,
+  and `S2_codex_current_20260520_selected_successor_tail_outgoing_list_leaf`,
+  reducing the selected outgoing-list no-between source to
+  `RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource` for the
+  same selected geometric carrier heads.  Gate passed: targeted owner-file
+  builds and focused scan.
+
+- Claim: `S2-codex-current-20260520-selected-strict-order-source-leaf`.
+  Owner: Dewey the 3rd (`019e472a-5054-7753-9c28-be45806f7481`).  Role:
+  selected `faceSucc` strict-order source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_successorTailOutgoingListNoBetweenRows`,
+  the selected geometric-selection wrappers, and
+  `S2_codex_current_20260520_selected_strict_order_source_leaf`, reducing the
+  selected strict-order source to the same genuine selected successor-tail
+  outgoing-list no-between source.  This is a useful eraser, but together with
+  the earlier outgoing-list-to-strict-order eraser it should be treated as a
+  checked equivalence, not as a source closure.  Gate passed: targeted
+  `S2SeededRawOrbitSource.lean` and `GeometricRotationSystem.lean` checks,
+  module builds, and focused scan.
+
+- Claim: `S2-codex-current-20260520-local-sector-incident-germ-leaf`.
+  Owner: Kepler the 3rd (`019e4721-cd2e-73d1-9791-755f225e46bd`).  Role:
+  boundary-free local sector and incident-germ source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_local_sector_residual_of_geometricSelection`,
+  `S2_codex_current_20260520_incident_germ_residual_reduced_to_local_radius`,
+  `S2_codex_current_20260520_local_sector_incident_germ_leaf`, and its family
+  form.  The selected carrier local-sector residual is reduced to selected
+  carrier/geometric-selection data; the honest incident-germ edge membership is
+  reduced to the true local-radius row.  Gate passed: targeted owner-file
+  builds and focused scans.
+
+- Claim: `S2-codex-current-20260520-compact-geometric-neighbor-source-leaf`.
+  Owner: Banach the 3rd (`019e4721-cd8c-7501-b352-e7d700bff7e4`).  Role:
+  compact geometric neighbor source composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `proof_workings/s2_route_workbook.md`; read-only use of
+  `S2ExteriorBoundarySource.lean` and `S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `S2_codex_current_20260520_compact_geometric_neighbor_source_leaf`, reducing
+  `UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows inputs` to
+  `UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs` plus
+  pointwise genuine selected-head
+  `GraphVertexAngularNoBetweenRows C a.1 left right`.  Gate passed: targeted
+  `S2LocalTwoGermAssembly.lean` build and focused scan.
+
+- Claim: `S2-codex-current-20260520-selected-edge-chain-connectivity-leaf`.
+  Owner: Dalton the 3rd (`019e4723-703d-7c40-b8cb-f0961bcc2daa`).  Role:
+  selected exterior edge-chain connectivity source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and
+  `proof_workings/s2_route_workbook.md`; read-only use of topology and raw
+  orbit owner files.  Status: completed/pruned 2026-05-20.  Result: added
+  `unboundedFrontierSelectedEdgeEndpointChainConnected_of_rawFaceSuccOrbit_edges`,
+  `S2_codex_current_20260520_selected_edge_endpoint_chain_connectivity_leaf`,
+  and `S2_codex_current_20260520_selected_edge_chain_connectivity_leaf`,
+  reducing both selected endpoint-chain and edge-carrier chain connectivity to
+  a raw `faceSucc` orbit with per-dart open-segment frontier propagation plus
+  exact coverage of every selected `unboundedFrontierEdgeSet` edge.  Gate
+  passed: targeted `S2ExteriorBoundarySource.lean` checks/build and focused
+  scan.
+
+- Claim: `S2-codex-current-20260520-selected-cut-partition-source-leaf`.
+  Owner: Darwin the 3rd (`019e4729-1007-7361-bdc4-93bfb2838509`).  Role: selected carrier
+  cut-partition source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `proof_workings/s2_route_workbook.md`; read-only use of
+  `S2ExteriorBoundarySource.lean` and topology owner files.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `S2_codex_current_20260520_selected_cut_partition_source_leaf` and
+  `S2_codex_current_20260520_selected_cut_partition_source_leaf_family`,
+  reducing
+  `UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs` for
+  the actual selected carrier neighbours to
+  `LocalSelectedIncidentEdgePairSourceRows inputs` through the existing
+  selected-incident-edge and cut-partition erasers.  Gate passed: targeted
+  `S2LocalTwoGermAssembly` module build and focused scan.
+
+- Claim: `S2-codex-current-20260520-w32-selected-cut-angular-integration`.
+  Owner: Gibbs the 3rd (`019e4727-6890-7822-a1ef-09ed8b3ae72c`).  Role: W32
+  short-route integration prover.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`; read-only
+  use of `S2LocalTwoGermAssembly.lean`, `S2ExteriorBoundarySource.lean`, and
+  topology owner files.  Status: completed/pruned 2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedCutPartition_angularNoBetween_20260520`,
+  which uses `S2_codex_current_20260520_compact_geometric_neighbor_source_leaf`
+  and reduces the finite S2 route to finite no-closed-separation, selected
+  cut-partition source rows, pointwise genuine selected-head
+  `GraphVertexAngularNoBetweenRows`, and S1 no-cut rows.  Gate passed:
+  targeted `FaceBoundaryTopologySourceW32` module build and focused scan.
+
+- Claim: `S2-codex-current-20260520-selected-head-angular-source-leaf`.
+  Owner: Euclid the 4th.  Role: selected-head angular-order
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`; read-only use of
+  `S2ExteriorBoundarySource.lean` and topology owner files.  Status:
+  completed/pruned 2026-05-20.  Result: verified
+  `unboundedFrontierCarrierSelectedNeighborGraphVertexAngularNoBetweenRows_of_geometricOrderRows`
+  and `S2_worker_20260520_selected_head_angular_no_between_of_indexRows`.
+  The preferred row is checked: for any selected cut-partition source,
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows selectedRows`
+  supplies
+  `forall a, GeometricRotationSystem.GraphVertexAngularNoBetweenRows C a.1
+    (selectedRows.selectedNeighborRows a).left
+    (selectedRows.selectedNeighborRows a).right`.
+  The source is the genuine sorted `geometricOutgoingDartList` index row for
+  the same selected heads; no identity angular-order rows, induced frontier
+  graphs, arbitrary cycles, all-adjacent endpoint shortcuts, or synthetic
+  enclosure rows are used.  Gate passed: targeted
+  `GeometricRotationSystem.lean` and `S2LocalTwoGermAssembly.lean` checks,
+  module builds, and focused forbidden-token scan.
+
+- Claim: `S2-codex-current-20260520-crossing-selected-input-w32-handoff`.
+  Owner: Codex-current.  Role: W32 route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_crossingBounded_selectedNeighborInput_20260520`,
+  composing `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`,
+  `SelectedNeighborCutPartitionGeometricOrderInputSource`, and S1 no-cut rows
+  into `MinimalFailureExactActualTopologyFieldsTarget`.  Gate passed: targeted
+  `FaceBoundaryTopologySourceW32.lean` build and focused scan.
+
+- Claim: `S2-codex-current-20260520-short-route-residual-audit`.
+  Owner: Huygens the 3rd (`019e472b-46e4-74c0-b7dc-99246a54848a`).  Role: read-only S2 residual mapper.
+  Scope: `TASK.md`, `proof_workings/s2_route_workbook.md`, and read-only
+  theorem/API search across S2 owner files.  Status: stale/pruned
+  2026-05-20; the handle is no longer present in the visible worker pool.
+  Replacement residual mapping is now owned by the current dynamic S2 source
+  claims below rather than a standing read-only audit lane.
+
+- Claim: `S2-codex-current-20260520-crossing-subcontinuum-bounded-source`.
+  Owner: Noether the 4th.  Role: planar continuum boundedness source prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed 2026-05-20.
+  Result: added
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum`,
+  `planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_frontierSubcontinuum`,
+  and `S2_codex_current_20260520_crossing_subcontinuum_bounded_source`,
+  strictly reducing
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`
+  to the displayed frontier-subcontinuum witness source.  The checked reducer
+  uses only the compact connected frontier witness and the given closed cover
+  of that same frontier; it does not pass through the Janiszewski
+  relative-clopen K-side, no-subcontinuum obstruction, no-closed-separation, or
+  connected-frontier source loop.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` build and focused scan.
+
+- Claim: `S2-codex-current-20260520-local-selected-incident-source`.
+  Owner: Euler the 4th.  Role: actual carrier selected-neighbour
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`; read-only use of topology files.
+  Status: completed/pruned 2026-05-20.  Result: added checked family reducers
+  `S2_codex_current_20260520_local_selected_incident_source_of_carrierGraph_degree_two`,
+  `S2_codex_current_20260520_local_selected_incident_source_of_neighborPairRows`,
+  `S2_codex_current_20260520_local_selected_incident_source_of_localSectorRows`,
+  and
+  `ExteriorComponentTopology.S2_codex_current_20260520_local_selected_incident_source`.
+  The family `forall C inputs, LocalSelectedIncidentEdgePairSourceRows inputs`
+  now strictly reduces to actual carrier degree two, actual carrier
+  neighbour-pair rows, actual local-sector rows, or the honest
+  `FaceDartOrbitExteriorCarrierRows C inputs` package.  Gate passed:
+  targeted `S2LocalTwoGermAssembly` and `S2ExteriorBoundarySource` builds and
+  focused forbidden-token scan.
+
+- Claim: `S2-codex-current-20260520-selected-angular-index-source`.
+  Owner: Gauss the 4th.  Role: selected-head sorted-list index
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/strictly reduced
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_selected_angular_index_source`, reducing the
+  selected-edge-route
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows selectedRows`
+  family to route-selected
+  `GeometricRotationSystem.GraphVertexGeometricOutgoingListNoBetweenRows`
+  over the genuine sorted `geometricOutgoingDartList`.  No identity angular
+  order, final boundary-cycle shortcut, induced frontier graph, arbitrary
+  cycle, all-adjacent endpoint shortcut, or synthetic enclosure is used.
+  Gate passed: targeted owner-file direct checks and module builds for
+  `S2LocalTwoGermAssembly` and `GeometricRotationSystem`; focused forbidden
+  scan clean.
+
+- Claim: `S2-codex-current-20260520-selected-orientation-source-leaf`.
+  Owner: Leibniz the 2nd (`019e4711-db08-7ba3-a2fc-a0496c18ca49`).  Role: selected raw-orbit
+  geometric orientation source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `S2_codex_current_20260520_selected_orientation_source_leaf`, reducing both
+  `SelectedRawOrbitOrientationRows` and
+  `SelectedRawOrbitGeometricAngularNeighborSelectionRows` to the genuine
+  nonwrap `SelectedRawOrbitGeometricSuccessorNonwrapRows` source over
+  `geometricOutgoingDartList`.  Gate passed: targeted
+  `GeometricRotationSystem.lean` and `S2SeededRawOrbitSource.lean` builds.
+
+- Claim: `S2-codex-current-20260520-shortest-chain-after-leaf-reductions`.
+  Owner: Pascal the 3rd (`019e4716-b2cd-7640-9747-3acb9b69ed6d`).  Role: route compression
+  verifier.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: confirmed the shortest checked S2 path is still
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520`,
+  consuming finite no-closed-separation, the compact
+  `UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows` family, and
+  S1 no-cut rows.  Inlined topology residual is now
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`.
+  Recommended next local source is the compact geometric-neighbour source
+  family, preferably by closing pointwise
+  `GraphVertexGeometricAngularNeighborSelectionRow` for actual selected carrier
+  heads.  No files edited.
+
+- Claim: `S2-codex-current-20260520-prune-route-sync`.
+  Owner: Codex-current.  Role: workboard/route coordinator.  Scope:
+  `TASK.md`, `proof_workings/s2_route_workbook.md`, and verification commands.
+  Status: in progress.  Deliverable: keep claims tied to actual running
+  workers, prune completed/stale workers, and keep the live S2 route focused
+  on finite topology plus genuine selected exterior-boundary carrier data.
+  Current result: added checked W32 consumer
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedEdgePair_geometricOutgoingListNoBetween_20260520`,
+  reducing the finite S2 route to `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`,
+  `LocalSelectedIncidentEdgePairSourceRows`, matching selected-head
+  outgoing-list no-between rows, and S1 no-cut rows.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean
+  ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`.  Added next
+  checked specialization
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_faceDartOrbitCarrier_geometricOutgoingListNoBetween_20260520`,
+  reducing the local carrier source to `FaceDartOrbitExteriorCarrierRows C
+  inputs` plus matching selected-head outgoing-list rows.  Added the parallel
+  checked angular-row specialization
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_faceDartOrbitCarrier_angularNoBetween_20260520`,
+  which consumes selected-head angular no-between rows for the same face-dart
+  carrier heads.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource
+  ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32` and targeted
+  `FaceBoundaryTopologySourceW32` build after the angular specialization.
+  Added current bundled-input W32 consumer
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedNeighborInput_20260520`,
+  reducing the local side to one
+  `SelectedNeighborCutPartitionGeometricOrderInputSource` family carrying the
+  selected frontier incidences, third-neighbour cut residual, and genuine
+  sorted-list index rows together.  Gate passed: targeted
+  `lake env lean FaceBoundaryTopologySourceW32.lean` and focused scan.
+  Added current true-residual W32 consumer
+  `minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumBetween_selectedNeighborInput_20260520`,
+  reducing S2 to `PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween`,
+  `SelectedNeighborCutPartitionGeometricOrderInputSource`, and S1 no-cut rows.
+  Gate passed: targeted `lake env lean FaceBoundaryTopologySourceW32.lean` and
+  focused scan.
+  Added current sharp topology W32 consumer
+  `minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_selectedNeighborInput_20260520`,
+  reducing S2 to `PlanarContinuumUnboundedComplementFrontierConnected`,
+  `SelectedNeighborCutPartitionGeometricOrderInputSource`, and S1 no-cut rows.
+  Gate passed: targeted `lake env lean FaceBoundaryTopologySourceW32.lean` and
+  focused scan.  Added checked geometric-angular W32 handoffs
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedCutPartition_geometricAngularSelection_20260520`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_alignedKSplit_selectedCutPartition_geometricAngularSelection_20260520`,
+  reducing the live route to the aligned K-split topology residual, actual
+  selected cut-partition rows, pointwise nonempty genuine
+  `GraphVertexGeometricAngularNeighborSelectionRow`s, and S1 no-cut rows.  Gate
+  passed: targeted `FaceBoundaryTopologySourceW32.lean` check and focused
+  scan.
+
+- Claim: `S2-codex-current-20260520-finite-frontier-preconnected-acyclic-source`.
+  Owner: Sartre the 3rd (`019e4730-ac3d-7261-ba04-a41c96728ba5`).  Role: finite topology source
+  prover / circular-route eliminator.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_finite_frontier_preconnected_acyclic_source`,
+  reducing `FiniteDrawingUnboundedComplementFrontierPreconnected` to
+  `PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween`.  Workbook
+  now explicitly demotes the circular crossing/no-subcontinuum/relative-clopen
+  loop as compatibility plumbing, not source progress.  Gate passed: targeted
+  `ExteriorComponentTopology` build and proof-token scan.
+
+- Claim: `S2-codex-current-20260520-face-dart-orbit-carrier-source`.
+  Owner: Franklin the 3rd (`019e4730-ac9f-7140-a865-b071d465e0b1`).  Role: actual exterior orbit
+  carrier source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_face_dart_orbit_carrier_source_of_actualExteriorSectorInputSourceRows`,
+  `S2_codex_current_20260520_face_dart_orbit_carrier_source_of_actualBoundary_geometricOrderRows`,
+  and `S2_codex_current_20260520_face_dart_orbit_carrier_source`, reducing
+  `FaceDartOrbitExteriorCarrierRows C inputs` to an actual boundary/frontier
+  equivalence row, genuine `BoundaryVertexGeometricRotationOrderRow` for that
+  boundary, and same-boundary `BoundaryCycleIncidentFrontierEdgeCompleteness`.
+  Gate passed: targeted `S2ExteriorBoundarySource.lean` check/build and
+  focused scans.
+
+- Claim: `S2-codex-current-20260520-subcontinuum-between-source`.
+  Owner: Plato the 3rd (`019e4736-3e21-7ce2-bdd1-ec4309a2a190`).  Role: planar continuum
+  topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_subcontinuum_between_source`, reducing
+  `PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween` to the
+  standard connected-frontier residual
+  `PlanarContinuumUnboundedComplementFrontierConnected`.  Gate passed:
+  targeted `ExteriorComponentTopology.lean` build and focused scan.
+
+- Claim: `S2-codex-current-20260520-actual-boundary-source`.
+  Owner: Zeno the 3rd (`019e4736-3e70-7e21-81b0-2b1bce18f413`).  Role: actual exterior
+  boundary/frontier equivalence source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_actualBoundary_geometricOrder_incident_source_of_rawOrbit_localSectorRows`
+  and
+  `S2_codex_current_20260520_face_dart_orbit_carrier_source_of_rawOrbit_localSectorRows`,
+  reducing the actual boundary/frontier equivalence and carrier package to a
+  genuine raw exterior face-successor orbit, local-sector rows, carrier
+  connectedness, raw dart frontier rows, repeated-tail separation, and raw
+  orientation.  Gate passed: targeted `S2ExteriorBoundarySource.lean` build and
+  focused scan.
+
+- Claim: `S2-codex-current-20260520-boundary-geometric-order-source`.
+  Owner: Raman the 3rd (`019e4736-3ebe-72a3-b9ce-824d1844bee4`).  Role: boundary rotation
+  order source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `boundaryVertexGeometricRotationOrderRows_of_pred_succ_no_between` and
+  `S2_codex_current_20260520_boundary_geometric_order_source`, reducing
+  boundary geometric rotation order to actual boundary
+  `BoundaryVertexAngularNoBetweenRows`.  Gate passed: targeted
+  `GeometricRotationSystem.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-boundary-incident-completeness-source`.
+  Owner: Hilbert the 3rd (`019e4736-3f0b-7ac2-b5e8-5fd21e8b16d8`).  Role: selected frontier
+  incident-edge completeness prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_boundary_incident_completeness_source`, reducing
+  `BoundaryCycleIncidentFrontierEdgeCompleteness inputs B` to the same-boundary
+  `BoundaryVertexExteriorSectorRowsAt` family.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` build and focused scan.
+
+- Claim: `S2-codex-current-20260520-successor-tail-triple-index-source`.
+  Owner: Schrodinger the 3rd (`019e4736-3f6b-7f42-82ec-7080b4c1d11c`).  Role: selected raw-orbit
+  triple-index source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_successor_tail_triple_index_source`, reducing the
+  selected-head triple-index source to the same selected successor-tail
+  geometric row.  Gate passed: targeted `S2SeededRawOrbitSource.lean` build
+  and focused scan.
+
+- Claim: `S2-codex-current-20260520-selected-input-from-degree-order`.
+  Owner: Maxwell the 3rd (`019e4736-3fd6-7b81-a912-4d417b69dd33`).  Role: selected-neighbour
+  bundled input composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_selected_input_from_selectedIncidentEdgeRows_geometricOutgoingListNoBetween`,
+  `S2_codex_current_20260520_selected_input_from_selectedIncidentEdgeRows_graphVertexGeometricOutgoingListNoBetweenRows`,
+  `S2_codex_current_20260520_selected_input_from_degree_order_of_geometricOutgoingListNoBetween`,
+  and `S2_codex_current_20260520_selected_input_from_degree_order`.  The compact
+  selected-neighbour input now reduces to actual carrier degree two plus
+  genuine selected-head outgoing-list no-between rows.  Gate passed: targeted
+  `S2LocalTwoGermAssembly.lean` build and focused scan.
+
+- Claim: `S2-codex-main-20260520-planar-subcontinuum-connected-source`.
+  Owner: Dirac the 3rd (`019e473b-0fbc-7d51-af5e-d2dc29890e24`).  Role: planar continuum
+  topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_main_20260520_planar_subcontinuum_connected_source`, strictly
+  reducing `PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween` to
+  the standard `PlanarContinuumUnboundedComplementFrontierConnected` theorem.
+  Gate passed: targeted `ExteriorComponentTopology.lean` build and focused
+  scan.
+
+- Claim: `S2-codex-main-20260520-planar-connected-frontier-theorem`.
+  Owner: Rawls the 3rd (`019e473d-d285-7b02-b466-99e1374c9d2a`).  Role: planar continuum
+  connected-frontier prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `planarContinuumUnboundedComplementFrontierConnected_of_closedSeparationForcesContinuumSeparation`
+  and `S2_codex_main_20260520_planar_connected_frontier_theorem`, strictly
+  reducing the connected-frontier theorem to
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation`.
+  The worker handle is now absent from the pool, and the declarations are
+  present in `ExteriorComponentTopology.lean`.
+
+- Claim: `S2-codex-main-20260520-raw-face-orbit-source`.
+  Owner: Parfit the 3rd (`019e473b-1007-7b91-9dd5-380f096a839b`).  Role: exterior raw
+  face-successor orbit source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_main_20260520_face_dart_orbit_carrier_source_of_connectedRawOrbitSourceRows_selectedRepeatedTailRows_rawOrientation`,
+  `S2_codex_main_20260520_face_dart_orbit_carrier_source_of_connectedRawOrbitSourceRows_selectedCutPartitions_geometricSuccessorNonwrap`,
+  and
+  `S2_codex_main_20260520_face_dart_orbit_carrier_source_family_of_connectedRawOrbitSourceRows_selectedCutPartitions_geometricSuccessorNonwrap`.
+  Raw carrier inputs now reduce through `BoundaryFreeConnectedRawOrbitSourceRows`;
+  residuals are repeated-tail cut partitions plus genuine nonwrap successor
+  rows for the same selected raw orbit.  Gate passed: targeted
+  `S2SeededRawOrbitSource.lean` checks/build and focused scan.
+
+- Claim: `S2-codex-main-20260520-selected-head-outgoing-list-source`.
+  Owner: Feynman the 3rd (`019e473b-1058-7140-a8d7-6fa589142696`).  Role: genuine selected-head
+  sorted-list no-between prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `unboundedFrontierCarrierSelectedNeighborGraphVertexGeometricOutgoingListNoBetweenRows_of_geometricOrderRows`,
+  `S2_codex_main_20260520_selected_head_outgoing_list_source`, and
+  `S2_codex_main_20260520_selected_head_outgoing_list_source_of_selectedNeighborGeometricOrderSourceRows`.
+  Pointwise selected-head outgoing-list/no-between rows now reduce to genuine
+  selected geometric-order rows for the same selected carrier heads.  Gate
+  passed: targeted owner-file builds and focused scan.
+
+- Claim: `S2-codex-main-20260520-current-route-composer`.
+  Owner: Codex-main.  Role: local route composer and verifier.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status: in progress
+  2026-05-20.  Deliverable: compose newly closed source leaves into the
+  strongest checked route toward `UnboundedExteriorFrontierCycleRows`,
+  `FinitePlanarStraightLineOuterComponentTheorem`, and the W32 target, while
+  removing stale live claims.  Gate: targeted W32 build and focused scan.
+
+- Claim: `S2-codex-main-20260520-janiszewski-closed-split-source`.
+  Owner: Hilbert the 3rd (`019e4746-a961-7442-b065-954f8c4737ff`).  Role: planar topology
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: superseded by the Codex-main
+  live refresh completion 2026-05-20.  Result: the task is recorded above with
+  `S2_codex_main_20260520_janiszewski_closed_split_source` and
+  `S2_codex_main_20260520_planar_connected_frontier_of_janiszewski_closed_split_source`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` build and focused
+  scan.
+
+- Claim: `S2-codex-main-20260520-boundaryfree-no-third-source`.
+  Owner: Banach the 3rd (`019e4746-db73-7b61-aad2-35642ef8d254`).  Role: local
+  exterior-sector source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: stale/pruned
+  2026-05-20; worker handle no longer found in the pool.  Deliverable was:
+  prove the source family yielding
+  `BoundaryFreeNoThirdGermSource inputs` for every
+  `FinitePlanarOuterComponentInputs C`, using actual `unboundedFrontierEdgeSet`
+  local-sector geometry and no all-adjacent-frontier-edge shortcut.  Gate:
+  targeted owner-file builds and focused scan.  Replacement work is now under
+  `S2-codex-current-20260520-boundaryfree-connected-raw-orbit-source`.
+
+- Claim: `S2-codex-main-20260520-edge-chain-source`.
+  Owner: Hubble the 3rd (`019e4747-1303-7560-a8c0-5234c7f33695`) and
+  Codex main (this thread).  Role: exterior frontier carrier connectedness prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.  Deliverable: prove `UnboundedFrontierEdgeCarrierSegmentChainConnected`
+  or the checked component-topology row that produces it from the planar
+  connected-frontier source and local sector rows, preserving actual
+  frontier-edge honesty.  Checked theorem:
+  `ExteriorComponentTopology.S2_dyn_20260520_frontier_edge_chain_from_fixed_side`,
+  with projections through
+  `edgeChain_of_planarContinuumConnected_localSectorRows_fixedSide` and
+  `componentTopologySourceRows_of_planarContinuumConnected_localSectorRows`.
+  Gate: targeted owner-file builds and focused scan passed 2026-05-20.
+
+- Claim: `S2-codex-main-20260520-successor-tail-geometric-source`.
+  Owner: Codex main thread.  Role: raw face-successor successor-tail
+  sorted-list prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed 2026-05-20.
+  Result: added
+  `S2_codex_main_20260520_successor_tail_geometric_source_of_tripleIndex`,
+  which proves the selected-neighbour successor-tail geometric rows from the
+  stronger triple-index sorted-list source over genuine
+  `geometricOutgoingDartList` entries.  Gate passed: targeted owner-file
+  checks, module build, focused scan, and diff check.
+  Deliverable: prove
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource`
+  or the stronger sorted-list successor-tail source for the selected
+  raw-orbit/selected-neighbour route, using genuine `geometricOutgoingDartList`
+  nonwrap rows.  Gate: targeted owner-file builds and focused scan.
+
+- Claim: `S2-codex-main-20260520-finite-no-closed-separation-source`.
+  Owner: Noether the 1st (`codex-main-finite-no-closed-separation-source`).
+  Role: planar topology source prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/verified
+  2026-05-20.
+  Deliverable: prove `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`
+  or its current non-circular source
+  `PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit`,
+  then route through the checked finite no-closed-separation reducers.  Gate:
+  targeted `ExteriorComponentTopology.lean` build and focused scan.  Result:
+  `S2_codex_main_20260520_finite_no_closed_separation_source` strictly reduces
+  the finite drawing no-closed-separation leaf to the non-circular Janiszewski
+  hard case via the checked connected-frontier reducer.
+
+- Claim: `S2-codex-main-20260520-selected-cutpartition-source`.
+  Owner: Codex selected-cutpartition worker (`current-thread`).  Role: local selected carrier source
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed 2026-05-20.
+  Deliverable: prove the family
+  `forall C inputs, UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs`
+  or the strict pointwise source below it, using actual
+  `unboundedFrontierEdgeSet` incidences and `inputs.noCutVertex`, not induced
+  frontier graphs or all-adjacent endpoint shortcuts.  Gate: targeted
+  `S2LocalTwoGermAssembly.lean` build and focused scan.  Result:
+  `S2_codex_main_20260520_selected_cutpartition_source_of_boundaryFree_twoSelectedEdges_noThirdGerm`
+  and family wrapper
+  `S2_codex_main_20260520_selected_cutpartition_source_family_of_boundaryFree_twoSelectedEdges_noThirdGerm`
+  compose the boundary-free two-selected-edge/no-third-germ source into the
+  selected cut-partition source.  Gate passed: targeted owner-file build and
+  focused scan.
+
+- Claim: `S2-codex-main-20260520-selected-geometric-angular-source`.
+  Owner: Codex GPT-5 (this thread).  Role: selected-head geometric order
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed 2026-05-20.
+  Deliverable: prove the pointwise source
+  `Nonempty (GraphVertexGeometricAngularNeighborSelectionRow C a.1 left right)`
+  for the selected cut-partition heads, or equivalently
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderRows`, using the real
+  sorted `geometricOutgoingDartList` order.  Gate: targeted owner-file builds
+  and focused scan.  Result: added
+  `unboundedFrontierCarrierSelectedNeighborGeometricOrderRows_of_graphVertexGeometricOutgoingListNoBetweenRows`,
+  `S2_codex_main_20260520_selected_geometric_angular_source`, and
+  `S2_codex_main_20260520_selected_geometric_order_rows_of_outgoing_list_no_between`.
+  The selected-head geometric source now rebuilds the nonwrap sorted-list
+  neighbour row from genuine outgoing-list no-between rows and actual selected
+  `unboundedFrontierEdgeSet` incidences.
+
+- Claim: `S2-codex-current-20260520-actual-carrier-degree-two-final-source`.
+  Owner: Helmholtz the 3rd (`019e473c-b3e3-7ec1-a37f-fb87ec493706`).  Role: actual carrier
+  two-regularity source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_actual_carrier_degree_two_final_source` and
+  `S2_codex_current_20260520_actual_carrier_degree_two_source_of_final_source`,
+  reducing actual carrier two-regularity to the genuine boundary-free
+  two-selected-edge/no-third-germ family.  No induced frontier graph,
+  arbitrary cycle, all-adjacent endpoint shortcut, identity angular order,
+  convex hull, or synthetic enclosure row was added.  Gate passed: targeted
+  `S2LocalTwoGermAssembly.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-boundary-sector-angular-source`.
+  Owner: Avicenna the 3rd (`019e473c-b436-75b1-b622-a895ad97652c`).  Role: boundary sector /
+  angular source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `boundaryVertexAngularNoBetweenRows_iff_boundaryVertexGeometricRotationOrderRow`,
+  `S2_codex_current_20260520_same_boundary_angular_geometric_order_source_iff`,
+  and `S2_codex_current_20260520_same_boundary_angular_no_between_source`,
+  tying same-boundary angular no-between rows to genuine
+  `BoundaryVertexGeometricRotationOrderRow`s over `geometricOutgoingDartList`.
+  Residual remains topology-owned: source `BoundaryVertexExteriorSectorRowsAt`
+  from actual incident frontier-edge completeness / local sector rows.  Gate
+  passed: targeted `GeometricRotationSystem.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-actual-carrier-degree-two-source`.
+  Owner: Hooke the 3rd (`019e4730-acfe-7640-b696-8b4e46457f1c`).  Role: concrete selected
+  carrier degree-two source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_actual_carrier_degree_two_source`, feeding actual
+  carrier two-regularity
+  `forall a, ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card
+  = 2` directly through
+  `localSelectedIncidentEdgePairSourceRows_of_unboundedFrontierCarrierGraph_degree_two`.
+  Residual source is still the actual two-regularity theorem for
+  `unboundedFrontierCarrierGraph C inputs`; no induced or synthetic source was
+  added.  Gate passed: targeted `S2LocalTwoGermAssembly.lean` check and
+  comment-stripped focused scan.
+
+- Claim: `S2-codex-current-20260520-selected-geometric-order-input-source`.
+  Owner: Popper the 3rd (`019e4730-ad5a-70d3-9407-cf720fc9f7c0`).  Role: selected geometric
+  order source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `exists_graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows`,
+  `graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows`,
+  and namespace projections from
+  `GraphVertexGeometricOutgoingListNoBetweenRows` to the nonwrap selected
+  geometric index row.  Residual source is the pointwise selected-head
+  outgoing-list/no-between row for the exact selected heads.  Gate passed:
+  targeted `GeometricRotationSystem.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-selected-outgoing-list-source`.
+  Owner: Noether the 3rd (`019e4730-adb9-74e2-9296-f0f2e4f3d235`).  Role: selected successor-tail
+  outgoing-list source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricOutgoingListNoBetweenRowsNoOrbitSource_of_successorTailGeometricRows`,
+  selected-geometric wrappers, and
+  `S2_codex_current_20260520_selected_outgoing_list_source`, reducing the
+  successor-tail outgoing-list source to the genuine selected sorted-list
+  triple-index row
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricTripleIndexNoOrbitSource`.
+  Gate passed: targeted `S2SeededRawOrbitSource.lean` check and focused scan.
+
+- Claim: `S2-codex-current-20260520-finite-no-closed-final-leaf`.
+  Owner: Pasteur the 2nd (`019e4720-81d7-7c43-90ec-96f581e70013`).
+  Role: finite-drawing topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: added
+  `S2_codex_current_20260520_finite_no_closed_final_leaf`, reducing
+  `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation` to
+  `FiniteDrawingUnboundedComplementFrontierPreconnected`.  Gate passed:
+  targeted `ExteriorComponentTopology.lean` build.
+
+- Claim: `S2-codex-current-20260520-selected-geometric-order-index-leaf`.
+  Owner: Planck the 2nd (`019e4720-8220-7d61-aa54-d1fc9128ef38`).
+  Role: selected carrier geometric-order source prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `S2_dyn_20260520_graph_vertex_geometric_order_row_source_for_selectedEdgePairRoute_of_geometric_outgoing_list_no_between_source`
+  and
+  `S2_dyn_20260520_graph_vertex_geometric_order_row_source_for_selectedEdgePairRoute_of_geometric_outgoing_list_no_between_rows`,
+  reducing the selected carrier geometric-order source to genuine
+  `geometricOutgoingDartList` no-between rows.  Gate passed: targeted
+  `GeometricRotationSystem.lean` and `S2LocalTwoGermAssembly.lean` builds.
+
+- Claim: `S2-codex-current-20260520-selected-carrier-to-geometric-family`.
+  Owner: Ptolemy the 2nd (`019e4720-827c-7653-a5cd-19ef210f8d00`).
+  Role: S2 route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: read-only route check confirmed the shortest checked
+  W32 path is
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520`;
+  the smallest local composer is the existing
+  `S2_dyn_20260520_geometric_order_source_rows` followed by
+  `S2_codex_20260520_selected_carrier_local_source_geometricNeighborSelectionRows`.
+  No Lean edits.
+
+- Claim: `S2-codex-current-20260520-finite-no-closed-source`.
+  Owner: Socrates the 3rd (`019e46f1-040d-7051-8053-dea2dc6602a5`).  Role: finite topology
+  source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and route notes
+  only if the route is strictly demoted.  Status: completed/pruned 2026-05-20.
+  Result: added
+  `finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_finiteDrawing_nontrivialRelativeClopenKSide`,
+  `actualFrontierNoClosedSeparation_of_alignedKSplitSource`,
+  `actualFrontierNoClosedSeparation_of_finiteDrawing_alignedKSplit`, and
+  `actualFrontierNoClosedSeparation_of_finiteDrawing_nontrivialRelativeClopenKSide`.
+  Also changed existing
+  `unboundedFrontierCarrierGraph_neighborFinset_card_two_of_deletedNeighborLocalSeparationInputSource`
+  from `theorem` to `noncomputable def` to satisfy Lean 4.28.  Remaining
+  topology leaf:
+  `FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`,
+  the actual relative-clopen side for a nonempty closed split of the finite
+  drawing unbounded-component frontier.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` check and focused scan.  Original
+  deliverable was to prove
+  or strictly reduce `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`
+  for the actual finite embedded unit-edge drawing, without reviving the
+  arbitrary Janiszewski trace source.  Gate: targeted
+  `ExteriorComponentTopology` build.
+
+- Claim: `S2-codex-current-20260520-selected-carrier-source`.
+  Owner: Boyle the 3rd (`019e46f1-0460-7dc3-84ba-bfa293e4a736`).  Role: selected
+  exterior-boundary carrier source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`; read-only use
+  of `S2LocalTwoGermAssembly.lean` and `ExteriorComponentTopology.lean`.
+  Status: completed/pruned 2026-05-20.  Result: added
+  `localSelectedIncidentEdgePairSourceRows_of_boundaryVertexFrontierIncidentSectorRows`,
+  `localSelectedIncidentEdgePairSourceRows_of_actualBoundaryRows_incidentComplete`,
+  `localSelectedIncidentEdgePairSourceRows_of_faceDartOrbitExteriorCarrierRows`,
+  and `S2_codex_current_20260520_selected_carrier_source`.  The selected local
+  carrier source is now strictly reduced to the honest
+  `FaceDartOrbitExteriorCarrierRows C inputs` package; the sharper
+  same-boundary actual-cycle helper reduces to
+  `BoundaryCycleIncidentFrontierEdgeCompleteness inputs actualRows.boundary`.
+  Gate passed: targeted `S2ExteriorBoundarySource.lean` check, focused scan,
+  and `git diff --check` for the file.  Original deliverable was to construct
+  or strictly reduce the honest source
+  of `LocalSelectedIncidentEdgePairSourceRows inputs` from actual selected
+  `unboundedFrontierEdgeSet` carrier/orbit data, not all adjacent frontier
+  endpoints.  Gate: targeted `S2ExteriorBoundarySource` build.
+
+- Claim: `S2-codex-current-20260520-angular-order-source`.
+  Owner: Pasteur the 3rd (`019e46f1-04bd-7451-8a86-8491ae69d297`).  Role: genuine angular
+  order source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`; read-only use of
+  `S2LocalTwoGermAssembly.lean` and `S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: no edits; confirmed the genuine
+  angular no-between machinery is already present in
+  `GeometricRotationSystem.lean`, including
+  `graphVertexAngularNoBetweenRows_of_geometricAngularNeighborSelectionRow`,
+  `GraphVertexGeometricOutgoingListNoBetweenRows`, and the outgoing-list
+  no-between erasers.  Remaining leaf moved out of this owner file: source
+  actual pointwise sorted-list/index rows for the selected carrier heads.
+  Gate passed: targeted `GeometricRotationSystem.lean` check and focused scan.
+  Original deliverable was to source or strictly reduce the selected-head
+  `GraphVertexAngularNoBetweenRows` / outgoing-list rows from genuine sorted
+  outgoing-dart geometry, avoiding identity cyclic-order rows.  Gate: targeted
+  `GeometricRotationSystem` build.
+
+- Claim: `S2-codex-current-20260520-local-geometric-assembly`.
+  Owner: Laplace the 3rd (`019e46f1-050a-7ce3-9f5a-6b2bb8ffceb1`).  Role: local
+  source composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`; read-only use of
+  the boundary and angular owner files.  Status: completed/pruned 2026-05-20.
+  Result: added
+  `S2_codex_current_20260520_local_geometric_assembly_of_selectedEdgePairRoute_angularNoBetween`
+  and
+  `S2_codex_current_20260520_local_geometric_assembly_of_selectedEdgePairRoute_geometricOutgoingListNoBetween`.
+  The local assembly now consumes `LocalSelectedIncidentEdgePairSourceRows`
+  plus either selected-head angular no-between rows or selected-head
+  outgoing-list no-between rows.  Remaining lower leaf is exactly
+  `S2_dyn_20260520_graph_vertex_geometric_order_row_source_for_selectedEdgePairRoute
+  selectedEdgeRows`, i.e. pointwise `Nonempty
+  (GraphVertexGeometricAngularNeighborSelectionRow ...)` for selected heads.
+  Gate passed: targeted `S2LocalTwoGermAssembly.lean` check and focused scan.
+  Original deliverable was to compose
+  actual selected carrier neighbour rows with genuine angular no-between rows
+  into `UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows inputs`,
+  or identify the exact still-missing source theorem.  Current focus after
+  Pasteur's angular audit: the remaining angular-side leaf is not in
+  `GeometricRotationSystem.lean`; it is the actual pointwise consecutive
+  sorted-list/index row for the selected carrier heads
+  (`GraphVertexGeometricAngularNeighborSelectionRow` /
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows`) tied to
+  `LocalSelectedIncidentEdgePairSourceRows` or equivalent actual carrier
+  selected rows.  Gate: targeted
+  `S2LocalTwoGermAssembly` build.
+
+- Claim: `S2-codex-current-20260520-route-audit`.
+  Owner: Chandrasekhar the 3rd (`019e46f1-0566-7f22-83b3-e23871372a4a`).  Role: read-only
+  exact-leaf auditor.  Scope: S2 owner files, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned 2026-05-20.
+  Result: read-only audit identified the finite selected-edge W32 route and
+  exact remaining leaves.  Its transient direct-lean caveat about W32 was
+  superseded by rebuilding `S2ExteriorBoundarySource` together with
+  `FaceBoundaryTopologySourceW32`, which passed.  Confirmed `noCutRows` is not
+  an S2 leaf and `boundaryVertexExteriorSectorRows_of_inputs` is only a
+  comment-level target, not a declaration.  Original deliverable was to report
+  the shortest non-circular checked route from the current files to S2 and the
+  exact unproved leaves after the worker claims above, with no Lean edits.
+  Gate: read-only report.
+
+- Claim: `S2-codex-current-20260520-selected-index-orbit-source`.
+  Owner: Goodall the 3rd (`019e46f4-e65f-7240-ae53-844eaab0232e`).  Role: selected
+  face-successor/geometric-index source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`; read-only use of
+  `S2LocalTwoGermAssembly.lean`, `GeometricRotationSystem.lean`, and
+  `ExteriorComponentTopology.lean`.  Status: cleared/stale 2026-05-20; agent
+  no longer available to this thread.  Deliverable reallocated to the current
+  face-dart and geometric source claims.
+
+- Claim: `S2-codex-current-20260520-finite-relative-clopen-side`.
+  Owner: Einstein the 3rd (`019e46fa-45d4-71a3-9281-e0e66c7309c3`).  Role: finite topology
+  leaf prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and route notes
+  only if the route is strictly demoted.  Status: cleared/stale 2026-05-20;
+  agent no longer available to this thread.  Deliverable reallocated to
+  `S2-codex-current-20260520-boundary-bumping-relative-clopen`.
+
+- Claim: `S2-codex-current-20260520-face-dart-carrier-scout`.
+  Owner: Jason the 3rd (`019e46fa-461d-70e2-ab15-1524a46404e1`).  Role: read-only carrier-route
+  scout.  Scope: S2 owner files and route notes.  Status: completed/pruned
+  2026-05-20.  Result: identified the direct checked constructor
+  `faceDartOrbitExteriorCarrierRows_of_boundaryCarrierRows_complete`; its
+  remaining leaves are `ActualBoundaryCycleFrontierEquivalenceRows C inputs`,
+  a matching `UnitDistanceCycleFaceSuccRows`, and
+  `BoundaryCycleIncidentFrontierEdgeCompleteness inputs actualRows.boundary`.
+  The direct constructor is shorter than the sector-row facade.  No Lean edits.
+
+- Claim: `S2-codex-current-20260520-boundary-bumping-relative-clopen`.
+  Owner: Kant the 2nd (`019e46fb-ffb8-7990-b55a-8cae77816034`).  Role:
+  boundary-bumping relative-clopen source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md` only if the route changes.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `finiteDrawingUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_frontierPreconnected`,
+  `finiteDrawingUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_finiteDrawing_noClosedSeparation`,
+  and `S2_codex_current_20260520_boundary_bumping_relative_clopen`, reducing
+  the finite nontrivial relative-clopen side leaf to
+  `FiniteDrawingUnboundedComplementFrontierPreconnected`.  Gate passed:
+  targeted `ExteriorComponentTopology` build.
+
+- Claim: `S2-codex-current-20260520-face-dart-carrier-source`.
+  Owner: Kierkegaard the 2nd (`019e46fc-0007-7810-84dd-2fc37d9b27a8`).
+  Role: honest face-dart carrier source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and read-only use
+  of adjacent S2 owner files.  Status: completed/pruned 2026-05-20.  Result:
+  added `localSelectedIncidentEdgePairSourceRows_of_faceDartOrbitExteriorCarrierRows_direct`
+  and `faceDartOrbitExteriorCarrierRows_to_selectedIncidentAndNeighborPairRows_20260520`;
+  rewired the selected-carrier eraser through
+  `FaceDartOrbitExteriorCarrierRows.toLocalSectorRowsAt` so selected heads and
+  `unboundedFrontierEdgeSet` incidences remain tied to the actual face-orbit
+  predecessor/successor rows.  Gate passed: targeted `S2ExteriorBoundarySource`
+  and `S2SeededRawOrbitSource` builds plus focused scan.
+
+- Claim: `S2-codex-current-20260520-final-route-leaf-audit`.
+  Owner: Sagan the 2nd (`019e46fc-0066-7df0-8154-f01b2be043d1`).  Role:
+  read-only final route/leaf auditor.  Scope: S2 owner files, root import, and
+  route notes.  Status: completed/pruned 2026-05-20.  Result: identified the
+  shortest current checked route through finite drawing no-closed separation,
+  face-dart/local selected carrier rows, and selected-head outgoing-list
+  no-between rows; confirmed root import already includes the current owner
+  files.  Remaining leaves at that surface are finite frontier topology,
+  `FaceDartOrbitExteriorCarrierRows C inputs`, selected-head geometric order
+  rows, and S1 no-cut for the W32 target only.  No Lean edits.
+
+- Claim: `S2-codex-current-20260520-finite-frontier-preconnected-source`.
+  Owner: Darwin the 2nd (`019e4700-aee2-75e1-82d4-3ff96b8beb06`).  Role:
+  finite frontier preconnectedness source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and route notes
+  only if the route changes.  Status: completed/pruned 2026-05-20.  Result:
+  added `S2_codex_current_20260520_finite_frontier_preconnected_source`,
+  reducing `FiniteDrawingUnboundedComplementFrontierPreconnected` to
+  `PlanarContinuumUnboundedComplementFrontierConnected` through the checked
+  finite drawing compactness/connectedness adapter.  Gate passed: targeted
+  `ExteriorComponentTopology` build.
+
+- Claim: `S2-codex-current-20260520-actual-boundary-cycle-source`.
+  Owner: Erdos the 2nd (`019e4700-af2c-7160-80e5-0db5f073a215`).  Role:
+  actual exterior boundary-cycle/source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `faceDartOrbitExteriorCarrierRows_of_actualBoundaryCycleFrontierEquivalenceRows_faceSuccRows_complete`,
+  `S2_codex_current_20260520_actual_boundary_cycle_source`, and
+  `faceDartOrbitExteriorCarrierRows_of_rawFaceSuccOrbitBoundaryRows_complete`.
+  The face-dart carrier source now reduces to actual boundary/frontier rows,
+  matching face-successor rows, and same-boundary incident-edge completeness;
+  the raw-orbit specialization supplies the face-successor row from the raw
+  orbit.  Gate passed: targeted `ExteriorComponentTopology`,
+  `S2SeededRawOrbitSource`, and `S2ExteriorBoundarySource` builds.
+
+- Claim: `S2-codex-current-20260520-planar-connected-frontier-source`.
+  Owner: Hypatia the 2nd (`019e4703-e395-7d41-a094-0ca86deec8cf`).  Role:
+  planar connected-frontier topology prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and route notes
+  only if the route changes.  Status: completed/pruned 2026-05-20.  Result:
+  added `S2_codex_current_20260520_planar_connected_frontier_source`, reducing
+  `PlanarContinuumUnboundedComplementFrontierConnected` to
+  `PlanarContinuumUnboundedComplementFrontierNoClosedSeparation`.  Gate passed:
+  targeted `ExteriorComponentTopology` build.
+
+- Claim: `S2-codex-current-20260520-planar-topology-mathlib-scout`.
+  Owner: Nash the 2nd (`019e4703-e3e8-7cb1-b58f-b02c37ae31f7`).  Role:
+  read-only planar topology API scout.  Scope: local project and mathlib.
+  Status: completed/pruned 2026-05-20.  Result: found no direct mathlib theorem
+  for connected/preconnected/no-closed-separation of
+  `frontier (connectedComponentIn Kᶜ x)` for compact connected planar `K`.
+  Confirmed the clean local hard leaf remains
+  `PlanarContinuumUnboundedComplementFrontierConnected`; Janiszewski
+  relative-clopen/component-avoidance routes are conditional alternatives, not
+  unconditional closes.  No Lean edits.
+
+- Claim: `S2-codex-current-20260520-selected-head-geometric-order-source`.
+  Owner: Aquinas the 2nd (`019e4700-af8f-7353-b999-2163daeb0d51`).  Role:
+  selected-head geometric order source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `S2_codex_current_20260520_selected_head_geometric_order_source` and
+  `S2_codex_current_20260520_selected_head_geometric_outgoing_list_no_between_source`,
+  reducing the selected-head geometric order/no-between leaf to exact
+  raw-orbit head matching plus `SelectedRawOrbitGeometricSuccessorNonwrapRows`.
+  Gate passed: targeted `GeometricRotationSystem`, `S2LocalTwoGermAssembly`,
+  and `S2SeededRawOrbitSource` builds.
+
+- Claim: `S2-codex-current-20260520-raw-face-orbit-source-assembly`.
+  Owner: Laplace the 2nd (`019e4705-9fcc-7171-b397-62e28bc0e1d0`).  Role:
+  raw exterior face-orbit source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and adjacent S2
+  owner files.  Status: completed/pruned 2026-05-20.  Result: added
+  `SelectedSeededRawFaceSuccOrbitSourceRows.toActualBoundaryCycleFrontierEquivalenceRows_of_cutRows`,
+  a checked seed-visible handoff from the selected raw exterior face orbit to
+  `S2_agent_actualBoundaryCycleRows_of_rawExteriorFaceWalk_cutRows`.  The
+  only residual for this handoff is the same-orbit repeated-tail cut row:
+  `forall {i j : Fin rows.O.period}, i ≠ j ->
+  (rows.O.dart i).tail = (rows.O.dart j).tail ->
+  RawFaceSuccOrbitRepeatedTailExteriorCutRows (inputs := inputs) rows.O i j`.
+  Gate passed: targeted `S2SeededRawOrbitSource.lean` and
+  `ExteriorComponentTopology.lean` builds.
+
+- Claim: `S2-codex-current-20260520-finite-preconnected-angular-w32`.
+  Owner: Cicero the 3rd (`019e4705-6112-7e70-badb-d24da106c5d1`).  Role:
+  W32 integration reducer.
+  Scope: `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingPreconnected_faceDartOrbitCarrier_angularNoBetween_20260520`,
+  the finite-frontier-preconnected W32 consumer for the face-dart carrier plus
+  selected-head angular no-between route.  Gate passed: targeted
+  `FaceBoundaryTopologySourceW32` build and focused forbidden-token scan.
+
+- Claim: `S2-codex-main-20260520-finite-no-closed-separation-route`.
+  Owner: Codex-current / delegated worker.  Role: finite topology route
+  simplifier.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status: completed
+  2026-05-20.  Result: added a checked finite-topology S2 route from
+  `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation` plus compact
+  geometric-neighbour rows to the existing W32 S2 target.  The topology branch
+  passes through
+  `finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation`
+  and `actualFrontierPreconnected_of_finiteDrawing_frontierPreconnected`,
+  avoiding the over-broad global Janiszewski no-subcontinuum `Prop` when the
+  actual finite drawing source is enough.  Gate passed: targeted owner-file
+  builds and focused forbidden-token scan.
+
+- Claim: `S2-codex-main-20260520-selected-edge-pair-neighbor-eraser`.
+  Owner: Codex-current.  Role: local source simplifier.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `unboundedFrontierCarrierNeighborPairRows_of_selectedIncidentEdgePairRows`
+  and
+  `S2_codex_main_20260520_selected_edge_pair_neighbor_eraser`, giving the
+  direct eraser from `LocalSelectedIncidentEdgePairSourceRows inputs` to
+  `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a` using only
+  actual `unboundedFrontierEdgeSet` incidences and definitional carrier
+  adjacency.  Gate passed: targeted `S2LocalTwoGermAssembly.lean` Lean check.
+
+- Claim: `S2-codex-20260520-no-subcontinuum-source-live`.
+  Owner: Codex / new topology worker.  Role: topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md` only for route demotion.  Status:
+  completed/pruned 2026-05-20.  Result: demoted the arbitrary-trace
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceNoClosedSeparation`
+  route as overstrong and recorded the finite-drawing-only replacement route.
+  The exact remaining topology leaf is now
+  `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`.  Gate passed:
+  targeted `ExteriorComponentTopology` build and focused scan.
+
+- Claim: `S2-codex-20260520-finite-no-closed-source-live`.
+  Owner: Codex / topology worker.  Role: finite drawing topology prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: strictly reduced
+  `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation` to
+  `FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesBounded`, and
+  reduced that boundedness leaf to the actual finite-drawing aligned K-split
+  source.  Gate passed: targeted `ExteriorComponentTopology` Lean check and
+  focused scan.
+
+- Claim: `S2-codex-20260520-local-selected-source-live`.
+  Owner: Codex / new local-carrier worker.  Role: selected local germ prover.
+  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: proved that
+  `LocalSelectedIncidentEdgePairSourceRows inputs` is equivalent to concrete
+  carrier degree two:
+  `forall a, ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+  2`.  This demotes the old local-selected/no-third branch for the current
+  short route; the remaining local carrier leaf is the degree-two theorem for
+  actual unbounded-frontier carrier vertices.  Gate passed: targeted
+  `S2LocalTwoGermAssembly` build and focused scans.
+
+- Claim: `S2-codex-20260520-carrier-degree-two-live`.
+  Owner: Codex / carrier-degree worker.  Role: actual exterior carrier degree
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added neighbour-finset degree-two
+  erasers from `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource`
+  and from the stricter
+  `UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource`.  The
+  remaining carrier leaf is to produce one of those actual deleted-neighbour
+  separation sources from finite drawing topology and selected
+  `unboundedFrontierEdgeSet` incidences.  Gate passed: targeted
+  `ExteriorComponentTopology` and `S2LocalTwoGermAssembly` Lean checks and
+  focused scans.
+
+- Claim: `S2-codex-this-thread-20260520-deleted-neighbor-separation-source`.
+  Owner: Codex-this-thread.  Role: deleted-neighbor separation source prover.
+  Scope: prefer
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`; use
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only if a local
+  two-germ assembly theorem belongs there.  Status: completed 2026-05-20.
+  Result: added direct erasers from exact pointwise concrete carrier
+  neighbour-pair rows to both deleted-neighbour source surfaces:
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteRowsAt_of_neighborPairAt`,
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_neighborPairRows`,
+  `UnboundedFrontierCarrierDeletedNeighborLocalSeparationRowsAt.ofNeighborPairAt`,
+  `unboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource_of_neighborPairRows`,
+  `S2_codex_this_thread_20260520_deleted_neighbor_local_separation_source_of_neighborPairRows`,
+  and
+  `S2_codex_this_thread_20260520_unreachable_after_delete_source_of_neighborPairRows`.
+  This strictly reduces
+  `UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource C inputs`
+  or
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource C inputs`
+  to `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a`; the
+  third-neighbour branch is contradictory against the exact carrier
+  `neighbor_iff` field.  Gate passed: targeted `ExteriorComponentTopology`
+  Lean check.
+
+- Claim: `S2-codex-20260520-angular-list-source-live`.
+  Owner: Codex / new angular-order worker.  Role: geometric sorted-list prover.
+  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: reduced the geometric-neighbour source
+  to actual carrier neighbour rows plus
+  `UnboundedFrontierCarrierGeometricNeighborOutgoingListNoBetweenSourceRows`
+  for the same selected heads, through genuine sorted outgoing-dart list
+  rows.  Gate passed: targeted `GeometricRotationSystem` and
+  `S2SeededRawOrbitSource` builds and focused scan.
+
+- Claim: `S2-codex-20260520-carrier-neighbor-outgoing-source-live`.
+  Owner: Codex / geometric carrier worker.  Role: selected carrier neighbour
+  and outgoing-list source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: reduced
+  `UnboundedFrontierCarrierGeometricNeighborOutgoingListNoBetweenSourceRows`
+  to pointwise genuine
+  `GraphVertexGeometricAngularNeighborSelectionRow` data for the two selected
+  carrier heads, and added erasers from existing geometric-selection packages
+  back to the outgoing-list source.  Gate passed: targeted
+  `S2SeededRawOrbitSource` and `GeometricRotationSystem` Lean checks.
+
+- Claim: `S2-codex-this-thread-20260520-aligned-ksplit-source`.
+  Owner: Codex-this-thread / delegated topology worker.  Role: finite drawing
+  K-split source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: reduced the aligned K-split/boundedness branch to
+  `FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`
+  through `finiteDrawingUnboundedComplementFrontierClosedSeparationForcesBounded_of_finiteDrawing_nontrivialRelativeClopenKSide`
+  and `S2_codex_this_thread_20260520_aligned_ksplit_source`.  Gate passed:
+  targeted `ExteriorComponentTopology` Lean check.
+
+- Claim: `S2-codex-this-thread-20260520-geometric-angular-selection-source`.
+  Owner: Codex-this-thread / delegated angular worker.  Role: pointwise
+  geometric angular selection prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: confirmed the genuine angular
+  no-between and outgoing-list erasers already build; the live remaining
+  geometric leaf is still the selected-head pointwise
+  `GraphVertexGeometricAngularNeighborSelectionRow` / sorted-list index row
+  tied to actual carrier selected heads.  Gate passed: targeted owner-file
+  Lean checks.
+
+- Claim: `S2-codex-20260520-s2-integration-live`.
+  Owner: Codex / new integration worker.  Role: route composer and verifier.
+  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066.lean`, and `TASK.md` only if all source leaves close.
+  Status: completed/pruned 2026-05-20.  Result: confirmed the shortest
+  checked route and exact source leaves, including S1 no-cut rows and the
+  current finite-drawing/geometric-neighbour W32 reducers; no Lean edits.
+  Gate: read-only route map.
+
+- Claim: `S2-codex-20260520-final-s2-composition-live`.
+  Owner: Codex / integration worker.  Role: route composer and verifier.
+  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066.lean`, and `TASK.md` only if all source leaves close.
+  Status: claimed 2026-05-20.  Deliverable: compose the finite topology source,
+  actual carrier neighbour/outgoing-list source, and S1 no-cut row into the
+  unconditional S2 target, root-import it, run the gates, and mark S2 done only
+  after the definition of done is met.  Gate: targeted builds first, final root
+  build only at completion.
+
+- Claim: `S2-codex-20260520-janiszewski-frontier-source-now`.
+  Owner: Codex.  Role: topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and durable
+  route notes only if a theorem surface changes.  Status: completed
+  2026-05-20.  Result: added
+  `ExteriorComponentTopology.S2_codex_20260520_janiszewski_frontier_source_now`,
+  reducing `PlanarContinuumUnboundedComplementFrontierPreconnected` to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance`
+  through the existing Janiszewski relative-clopen/no-closed-separation chain.
+  Verification: targeted `ExteriorComponentTopology` build.
+
+- Claim: `S2-codex-20260520-geometric-selection-source-now`.
+  Owner: Faraday the 2nd (`019e46d5-8e09-7e90-bd29-aaffc79d9cc1`).  Role: selected carrier
+  neighbour/geometric-order source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and tiny helpers in
+  `GeometricRotationSystem.lean` only if required.  Status: completed/pruned
+  2026-05-20.  Result: reduced
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource` from the
+  current actual carrier-neighbour rows plus genuine
+  `GraphVertexAngularNoBetweenRows` data, using the sorted outgoing-dart order.
+  Gate passed: targeted owner-file checks and local forbidden scan by worker.
+
+- Claim: `S2-codex-20260520-cycle-family-assembly-now`.
+  Owner: Epicurus the 2nd (`019e46d5-8e68-7e01-acd7-1da8989911bd`).  Role: final S2 family
+  composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and root
+  import only if a checked unconditional family is produced.  Status:
+  completed/pruned 2026-05-20.  Result: added no-closed-separation +
+  geometric-selection family reducers into `UnboundedExteriorFrontierCycleRows`
+  and W32, without a root import or unconditional family.  Gate passed:
+  targeted `S2BoundaryFreeRawSource` and `FaceBoundaryTopologySourceW32`
+  builds.
+
+- Claim: `S2-codex-20260520-api-discovery-now`.
+  Owner: Russell the 2nd (`019e46d5-8ec3-7e00-9f1c-0ebe42ee09f1`).  Role: read-only theorem/API
+  discovery.  Scope: S2 owner files and mathlib search.  Status:
+  completed/pruned 2026-05-20.  Result: confirmed the shortest non-circular
+  checked family route still needs the Janiszewski/no-closed-separation
+  topology source and genuine selected carrier/geometric rows; no Lean edits.
+
+- Claim: `S2-codex-20260520-component-avoidance-proof-now`.
+  Owner: Fermat the 2nd (`019e46dc-a385-7301-9b11-7bf8a231f37b`).  Role: topology theorem prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md` only if a route is demoted.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `planarJaniszewskiBoundaryBumpingComponentAvoidance_of_noSubcontinuumObstruction`,
+  `S2_codex_20260520_component_avoidance_proof_now`, and the iff wrapper,
+  reducing the component-avoidance leaf to the exact no-subcontinuum
+  obstruction source.  Gate passed: targeted `ExteriorComponentTopology`
+  build and forbidden-token scan.
+
+- Claim: `S2-codex-20260520-neighbor-pair-source-now`.
+  Owner: Jason the 2nd (`019e46dc-bcbd-7960-82be-deb5d6c25dda`).  Role: actual carrier local-source
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added checked reducers from
+  `UnboundedFrontierCarrierLocalSelectedNoThirdGermSource` to pointwise
+  `UnboundedFrontierCarrierNeighborPairAt` rows and the family-level current
+  source.  Gate passed: targeted owner-file builds and forbidden-token scan.
+
+- Claim: `S2-codex-20260520-angular-no-between-source-now`.
+  Owner: Confucius the 2nd (`019e46dc-d722-73c1-8918-6aee5ed73403`).  Role: geometric order theorem
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` for tiny consumers.
+  Status: completed/pruned 2026-05-20.  Result: added a genuine sorted
+  outgoing-dart list reducer to `GraphVertexAngularNoBetweenRows` and
+  successor-tail consumers in `S2SeededRawOrbitSource`.  Gate passed: targeted
+  owner-file builds and forbidden-token scan.
+
+- Claim: `S2-codex-20260520-unconditional-s2-integration-now`.
+  Owner: Dalton the 2nd (`019e46dc-f25f-7ea3-ba83-0fa6fd62029c`).  Role: integration prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, root import,
+  and `TASK.md` only if all source leaves close.  Status: completed/pruned
+  2026-05-20.  Result: verified the current checked integration reducers and
+  confirmed no S2 definition-of-done closure until the topology, geometric
+  source, and S1 no-cut leaves are closed.  Gate passed: targeted
+  `S2BoundaryFreeRawSource`/`FaceBoundaryTopologySourceW32` builds.
+
+- Claim: `S2-dyn-20260520-incident-germ-global-source`.
+  Owner: Aristotle the 3rd (`019e46d3-eb7d-78c0-8043-ed1eff024fbb`).
+  Role: local selected-edge theorem
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and, only for
+  small consumers, `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.
+  Status: completed/pruned 2026-05-20.  Result: added
+  `S2_dyn_20260520_incident_germ_global_source_reduced_to_local_radius`,
+  explicit local-radius selected-neighbour consumers
+  `localSelectedNeighborRows_of_selectedNeighborGeometricOrder_localIncidentGermMembership`
+  and family form, and local-safe
+  `BoundaryFreeLocalInputSourceReduction` consumers for selected
+  geometric-order, geometric-selection, and compact geometric-neighbour rows.
+  The stronger global
+  `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` surface remains
+  compatibility-only; live local consumers can now use the proved local-radius
+  selected incident-germ row.  Gate passed: targeted owner-file checks and
+  forbidden-token scan by worker; Codex-current then closed the worker handle.
+
+- Claim: `S2-dyn-20260520-frontier-preconnected-current-source`.
+  Owner: Boole the 3rd (`019e46d3-ebd2-7de3-8101-13f963b5be69`).
+  Role: topology source theorem prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only.
+  Status: completed/pruned 2026-05-20.  Result: added
+  `S2_dyn_20260520_frontier_preconnected_current_source_of_janiszewskiBoundaryBumping`,
+  reducing the actual-component preconnected source to the smaller
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`
+  leaf through `actualFrontierPreconnected_of_janiszewskiBoundaryBumping`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` check and local
+  forbidden scan by worker; Codex-current then closed the worker handle.
+
+- Claim: `S2-dyn-20260520-janiszewski-relative-clopen-current-source`.
+  Owner: Pauli the 3rd (`019e46d8-cba1-7ab2-8648-56af3a5331aa`).
+  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only.  Status:
+  completed/strictly reduced 2026-05-20.  Result: added
+  `S2_dyn_20260520_janiszewski_relative_clopen_current_source`, reducing
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`
+  to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`
+  through the existing checked
+  `planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_noSubcontinuumObstruction`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` Lean check and
+  focused forbidden-token scan around the new declaration.
+
+- Claim: `S2-dyn-20260520-raw-successor-strict-order-source`.
+  Owner: Lovelace the 3rd (`019e46d3-ec1d-7742-aeba-1469070e4559`).
+  Role: geometric raw-orbit source
+  theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only for
+  tiny geometric helpers,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added the checked family reducers
+  `boundaryFreeConnectedRawOrbitSourceRows_family_of_boundaryFreeInput_preconnected_selectedNeighborGeometricOrder_successorTailRows_20260520`
+  and
+  `boundaryFreeConnectedRawOrbitSourceRows_family_of_geometricSelection_incidentGermFrontierEdge_successorTailRows_20260520`,
+  replacing the live strict-order premise with the smaller genuine
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource`
+  row for the same selected geometric heads.  Gate passed: targeted
+  `S2SeededRawOrbitSource.lean` check by worker; Codex-current then closed the
+  worker handle.
+
+- Claim: `S2-dyn-20260520-successor-tail-geometric-current-source`.
+  Owner: Mendel the 3rd (`019e46d7-f766-76a3-bb23-34aa64a05c64`).
+  Role: geometric successor-tail theorem
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only for
+  small sorted-list helpers,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  stale/pruned 2026-05-20.  Result: worker was shut down before producing a
+  Lean change after the route audit showed the successor-tail raw-orbit lane is
+  a checked fallback, not the shortest current S2 route.  Do not respawn this
+  task unless the direct Janiszewski no-subcontinuum + geometric-neighbour
+  source route becomes blocked.
+
+- Claim: `S2-dyn-20260520-compact-route-audit-current`.
+  Owner: Wegener the 3rd (`019e46d3-ec6e-7d90-824c-3d20f825e74f`).
+  Role: read-only route auditor.
+  Scope: S2 owner files, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Result: identified the current shortest checked S2 route as
+  Janiszewski no-subcontinuum + compact geometric-neighbour selection rows +
+  S1 no-cut rows, with the live source leaves now reduced to the topology
+  no-subcontinuum obstruction, actual carrier neighbour-pair rows, and genuine
+  `GraphVertexAngularNoBetweenRows` for those selected heads.  No Lean edits.
+
+- Claim: `S2-dyn-20260520-geometric-selection-input-source`.
+  Owner: Lagrange the 3rd (`019e46d5-a350-7e11-8275-be776b947732`).
+  Role: selected carrier/geometric
+  source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and only tiny
+  consumers in `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`
+  if needed.  Status: completed/strictly reduced 2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_geometricNeighborSelectionRows_20260520`,
+  reducing the shortest safe W32 local/geometric leaf from the bundled
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  family to compact
+  `UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows inputs`; the
+  existing eraser keeps the two selected `unboundedFrontierEdgeSet` heads and
+  genuine sorted outgoing-dart order aligned.  Gate passed: targeted owner-file
+  Lean checks and new-theorem forbidden-token scan.
+
+- Claim: `S2-dyn-20260520-geometric-neighbor-rows-current-source`.
+  Owner: Herschel the 3rd (`019e46d9-84ba-7502-bd45-81e37ab87f99`).
+  Role: local carrier/geometric theorem
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/strictly reduced 2026-05-20.  Result: added
+  `S2_dyn_20260520_geometric_neighbor_rows_current_source_family`, a
+  family-level reducer for
+  `UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows inputs` from
+  actual carrier neighbour-pair rows plus genuine
+  `GraphVertexAngularNoBetweenRows` for the same two selected heads.  No
+  endpoint-only/no-chord, all-adjacent endpoint, induced-frontier, arbitrary
+  cycle, convex-hull, synthetic-row, or identity angular-order route is used.
+  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly ErdosProblems1066.Swanepoel.GeometricRotationSystem`
+  and the owner-file forbidden-token scan.
+
+Verification snapshot for this live set: Codex-current pruned the stale
+Planck handle attempt (`019e46c4-e5f0-7640-bd1d-375a85baa440`; already not
+found), then checked the current S2 owner surface with
+`elan run leanprover/lean4:v4.28.0 lake build
+ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly
+ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource
+ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource
+ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+The build passed with pre-existing style warnings.  Forbidden-token scan over
+the active S2 owner files returned clean.
+
+- Claim: `S2-codex-main-20260520-crossing-topology-source`.
+  Owner: Codex-main.  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, with
+  `proof_workings/s2_route_workbook.md` only for durable route notes.  Status:
+  completed/pruned.  Result: added
+  `planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiComponentAvoidance`
+  and `S2_codex_main_20260520_crossing_topology_source`, strictly reducing the
+  current topology leaf to the actual Janiszewski component-avoidance surface.
+  Gate passed: `lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-codex-main-20260520-local-sector-input-source`.
+  Owner: Codex-main.  Role: local carrier theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/pruned.  Result: the local-sector/neighbour source is reduced
+  through selected actual carrier rows: `S2_agent_cw_local_sector_from_unreachableAfterDelete_20260520`
+  and `S2_agent_cw_local_sector_input_source_family_of_unreachableAfterDelete_20260520`
+  give `UnboundedFrontierCarrierLocalSectorRowsAt` from the ambient deleted-neighbour
+  input source, while `S2_codex_main_20260520_selected_neighbor_source_inputs`
+  and `S2_codex_main_20260520_selected_neighbor_source_inputs_family`
+  package the same selected `unboundedFrontierEdgeSet` edge premises with
+  genuine angular no-between rows into
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource`.
+
+- Claim: `S2-codex-main-20260520-selected-no-intervening-source`.
+  Owner: Codex-main.  Role: geometric angular theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned.  Result: the selected-head no-intervening outgoing-dart
+  row is reduced to genuine `GraphVertexAngularNoBetweenRows` /
+  `geometricOutgoingDartList` no-between rows for the same carrier-selected
+  heads; no identity rotation, endpoint shortcut, induced frontier graph, or
+  arbitrary-cycle input is used.
+
+- Claim: `S2-codex-main-20260520-current-leaf-composer`.
+  Owner: Codex-main.  Role: route composer/build verifier.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066.lean`, and `TASK.md`.  Status: completed.  Result:
+  added
+  `minimalFailureExactActualTopologyFieldsTarget_of_boundaryFreeInput_preconnected_selectedNeighborInput_strictOrder_20260520`,
+  the compact W32 composer from `BoundaryFreeInputSourceReduction`,
+  `PlanarContinuumUnboundedComplementFrontierPreconnected`, selected-neighbour
+  geometric-order input rows, and strict selected raw `faceSucc` order through
+  `BoundaryFreeConnectedRawOrbitSourceRows`.  Gate passed: targeted
+  `lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+
+- Claim: `S2-codex-main-20260520-geometric-angular-w32-consumer`.
+  Owner: Codex-main.  Role: route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`.  Status:
+  completed.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_geometricAngularNeighborSelection_20260520`,
+  composing the sharper connected raw-orbit theorem through the existing W32
+  finite-planar handoff.  Gate passed: targeted
+  `FaceBoundaryTopologySourceW32.lean` check.
+
+- Claim: `S2-dyn-20260520-endpoint-only-audit-repair`.
+  Owner: Gauss the 3rd (`019e46c0-0bd0-7501-9a6a-d73a4c322cab`).
+  Role: boundary-free source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, with
+  `S2LocalTwoGermAssembly.lean` only for a tiny helper if unavoidable.
+  Status: completed/pruned.  Result: confirmed endpoint-only is too strong as
+  a finite-input residual with boundary chords, added selected-edge-only local
+  source rows, and rewired the compatibility endpoint-only bridge through the
+  honest selected-edge row.  Gate passed: targeted owner-file check.
+
+- Claim: `S2-dyn-20260520-local-selected-source`.
+  Owner: Russell the 3rd (`019e46c0-0c21-73a1-829e-65148aa44ae7`).
+  Role: local selected no-third theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, with a tiny
+  `S2BoundaryFreeRawSource.lean` wrapper only if needed.  Status:
+  completed/pruned.  Result: added `S2_dyn_20260520_local_selected_source`
+  and family/geometric-selection wrappers, reducing
+  `UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs` to
+  local-sector rows or compact geometric-neighbour selection rows without
+  endpoint-only incidence.  Gate passed: targeted owner-file checks.
+
+- Claim: `S2-dyn-20260520-geometric-angular-selection-source`.
+  Owner: Lorentz the 3rd (`019e46c0-0c7c-78b3-a90e-8bf6e5d0a41f`).
+  Role: geometric angular source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, with a tiny
+  `S2SeededRawOrbitSource.lean` wrapper only if unavoidable.  Status:
+  completed/pruned.  Result: added a genuine sorted-list constructor from
+  adjacent nonwrap `dartFromGeometricList` entries to
+  `GraphVertexGeometricAngularNeighborSelectionRow`, plus selected raw-orbit
+  wrappers/equivalence reducing
+  `SelectedRawOrbitGeometricAngularNeighborSelectionRows` to
+  `SelectedRawOrbitGeometricSuccessorNonwrapRows`.  Gate passed:
+  `GeometricRotationSystem` check/build and forbidden-token scan; shared
+  `S2SeededRawOrbitSource` errors remain for local repair.
+
+- Claim: `S2-dyn-20260520-repeated-tail-primitive-source`.
+  Owner: Mencius the 3rd (`019e46c0-0cdb-7253-9740-38bac6164506`).
+  Role: repeated-tail primitive theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: reduced
+  `SelectedRawOrbitRepeatedTailPrimitiveSourceRows rows` to
+  `SelectedRawOrbitRepeatedTailActualExteriorArcRows`, with cut-partition and
+  family composers for the fallback repeated-tail route.  Gate passed:
+  targeted owner-file build/check and forbidden-token scan.
+
+- Claim: `S2-dyn-20260520-selected-edge-boundary-succ-source`.
+  Owner: McClintock the 3rd (`019e46c0-0d39-78a3-8595-2db9885293f9`).
+  Role: selected-edge successor theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, with a tiny
+  `S2SeededRawOrbitSource.lean` wrapper only if needed.  Status:
+  completed/pruned.  Result: added `SelectedEdgeBoundarySuccessorSource` and
+  a wrapper closing `RawOrbitSelectedEdgeBoundarySuccSource` from actual
+  selected-edge/sector rows, then rewired actual-boundary raw dart-frontier
+  paths away from old adjacent-endpoint incident completeness.  Gate passed:
+  targeted owner-file builds and forbidden-token scan.
+
+- Claim: `S2-dyn-20260520-component-topology-family-source`.
+  Owner: Bernoulli the 3rd (`019e46c0-0d94-79e3-a761-9aa73d2a7074`).
+  Role: component-topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/pruned.  Result: added
+  `S2_dyn_20260520_component_topology_family_source`, exporting family-level
+  `UnboundedExteriorFrontierComponentTopologySourceRows` and connectedness of
+  `unboundedFrontierCarrierGraph` from Janiszewski/local-sector rows, using
+  the actual unbounded exterior component and selected frontier edges.  Gate
+  passed: targeted owner-file check.
+
+- Claim: `S2-dyn-20260520-w32-build-integration`.
+  Owner: Godel the 3rd (`019e46c0-0df0-7ca0-b924-fde6b7399ad5`).
+  Role: build/integration theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` unless a
+  compile error points to a tiny imported-owner fix.  Status:
+  completed/pruned.  Result: no edits needed; direct W32/S2Seeded checks,
+  S2ExteriorBoundarySource/S2Seeded/W32 targeted builds, and forbidden-token
+  scan passed after refreshing imported-owner artifacts.
+
+- Claim: `S2-dyn-20260520-current-route-audit`.
+  Owner: Linnaeus the 3rd (`019e46c0-0e4d-7632-b3d4-aaa80bdf6adb`).
+  Role: read-only route auditor.  Scope: S2 owner files, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned.  Result:
+  confirmed the shortest honest route is the compact
+  `Nonempty (BoundaryFreeConnectedRawOrbitSourceRows inputs)` handoff plus S1
+  no-cut rows; expanded S2 leaves are `BoundaryFreeNoThirdGermSource`,
+  connectedness of `unboundedFrontierCarrierGraph`, and
+  `RawOrbitDartEdgeFrontierSource`.  Also flagged endpoint-only/no-chord and
+  all-adjacent frontier endpoint routes as non-live.
+
+- Claim: `S2-dyn-20260520-compact-composer-scout`.
+  Owner: Planck the 3rd (`019e46c4-e5f0-7640-bd1d-375a85baa440`).
+  Role: read-only compact-route scout.  Scope: S2 source owner files and W32.
+  Status: completed/pruned.  Result: identified the shortest checked compact
+  route through
+  `boundaryFreeConnectedRawOrbitSourceRows_family_of_boundaryFreeInput_preconnected_selectedNeighborGeometricOrder_strictOrder_20260520`;
+  residuals are `BoundaryFreeInputSourceReduction`,
+  `PlanarContinuumUnboundedComplementFrontierPreconnected`,
+  geometric-selection input rows, and strict raw successor order.  Missing
+  safe composer: geometric-selection plus incident-germ frontier-edge rows to
+  `BoundaryFreeInputSourceReduction`.
+
+- Claim: `S2-codex-main-20260520-boundaryfree-input-from-geometric-incident`.
+  Owner: Codex-main.  Role: source composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed.  Result: added
+  `boundaryFreeInputSourceReduction_of_geometricSelection_incidentGermFrontierEdge_20260520`
+  and family/compact geometric-neighbour wrappers, composing selected
+  geometric-neighbour rows with genuine incident-germ frontier-edge rows into
+  `BoundaryFreeInputSourceReduction` without endpoint-only or all-adjacent
+  endpoint premises.  Gate passed: targeted `S2BoundaryFreeRawSource.lean`
+  check.
+
+- Claim: `S2-codex-main-20260520-compact-connected-raw-family-composer`.
+  Owner: Codex-main.  Role: source composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed.  Result: added
+  `boundaryFreeConnectedRawOrbitSourceRows_family_of_geometricSelection_incidentGermFrontierEdge_strictOrder_20260520`,
+  composing the repaired `BoundaryFreeInputSourceReduction` family, frontier
+  preconnectedness, geometric-selection input rows, incident-germ
+  frontier-edge rows, and strict raw successor order into the compact
+  `Nonempty (BoundaryFreeConnectedRawOrbitSourceRows inputs)` family without
+  endpoint-only or all-adjacent endpoint premises.  Gate passed: targeted
+  `S2SeededRawOrbitSource.lean` check.
+
+- Claim: `S2-codex-main-20260520-topology-source-close`.
+  Owner: Lovelace the 2nd (`019e46ae-3d2c-7430-975f-6f28b5d3d7c6`).
+  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/pruned.  Result: added
+  `planarContinuumUnboundedComplementFrontierConnected_of_janiszewskiRelativeClopenKSide`
+  and
+  `planarContinuumUnboundedComplementFrontierConnected_of_janiszewskiComponentAvoidance`,
+  strictly reducing the connected-frontier topology leaf to existing
+  Janiszewski rows without induced-frontier or adjacent-endpoint shortcuts.
+  Gate passed: targeted `ExteriorComponentTopology.lean` check.
+
+- Claim: `S2-codex-main-20260520-geometric-order-close`.
+  Owner: Banach the 2nd (`019e46ae-5582-73b1-8db9-88756195cc28`).
+  Role: geometric-order theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned.  Result: added
+  `boundaryVertexGeometricRotationOrderRow_of_boundaryVertexAngularNoBetweenRows`
+  and
+  `boundaryVertexGeometricRotationOrderRows_of_boundaryVertexAngularNoBetweenRows`,
+  deriving boundary geometric rotation-order rows from honest
+  `BoundaryVertexAngularNoBetweenRows` and actual `geometricOutgoingDartList`
+  adjacency without identity angular-order rows.  Gate passed: targeted
+  `GeometricRotationSystem.lean`, `S2SeededRawOrbitSource.lean`, and
+  `S2ExteriorBoundarySource.lean` checks.
+
+- Claim: `S2-codex-main-20260520-local-sector-close`.
+  Owner: Feynman the 2nd (`019e46ae-70f3-7881-b66e-330cd695fae5`).
+  Role: local carrier theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned.  Result: added `localSectorRows_of_geometricSelection_localIncident`,
+  `S2_codex_main_20260520_local_sector_close`,
+  `localSectorRowsFamily_of_geometricSelection_localIncident_20260520`, and
+  `S2_codex_main_20260520_local_sector_close_of_faceSucc_sectorRows`,
+  reducing pointwise local-sector rows to actual selected carrier-neighbor and
+  geometric-selection rows without all-adjacent endpoint or induced-frontier
+  shortcuts.  Gate passed: targeted `S2LocalTwoGermAssembly.lean` check.
+
+- Claim: `S2-codex-main-20260520-route-leaf-audit`.
+  Owner: Meitner the 2nd (`019e46ae-86d5-7f50-811e-3ec52fad94a9`).
+  Role: read-only route auditor.  Scope: S2 workboard, workbook, and owner
+  files.  Status: completed/pruned.  Result: shortest current chain is
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`
+  plus selected raw-tail coverage, repeated-tail witness, geometric
+  successor-nonwrap, and S1 no-cut rows into
+  `minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520`.
+  The chain avoids false all-adjacent endpoint/chord leaves.
+
+- Claim: `S2-codex-main-20260520-shortest-source-chain`.
+  Owner: Hubble the 2nd (`019e46b4-75e7-7250-82ff-7e219d058202`).
+  Role: route integrator.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`.  Status:
+  completed/pruned.  Result: confirmed the shortest checked W32 route is
+  `minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows`,
+  reducing S2 to the connected raw-orbit package plus S1 no-cut rows.  Expanded
+  S2 source leaves are `BoundaryFreeNoThirdGermSource`, connectedness of
+  `unboundedFrontierCarrierGraph`, and `RawOrbitDartEdgeFrontierSource`.
+
+- Claim: `S2-codex-main-20260520-repeated-tail-source`.
+  Owner: Mill the 2nd (`019e46b4-7645-77d2-a836-36ca7162f0dc`).
+  Role: repeated-tail separation prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added
+  `selectedRawOrbitRepeatedTailCutPartitions_of_connectedRawOrbitSourceRows_repeatedTailWitnessSource_20260520`,
+  `selectedRawOrbitRepeatedTailWitnessSource_of_connectedRawOrbitSourceRows_boundaryArcSource_20260520`,
+  and
+  `selectedRawOrbitRepeatedTailCutPartitions_of_connectedRawOrbitSourceRows_boundaryArcSource_20260520`,
+  reducing selected repeated-tail cut partitions through existing exterior-cut
+  witness and boundary-arc interfaces without induced frontier graph.
+
+- Claim: `S2-codex-main-20260520-connected-raw-source`.
+  Owner: Wegener the 2nd (`019e46b4-76a3-7552-8054-dc546eb22a04`).
+  Role: raw-orbit source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added `localSelectedNeighborRows_of_geometricSelection_localIncident`,
+  `boundaryFreeInputSourceReduction_of_localSelectedNeighborRows_endpointOnly_20260520`,
+  `boundaryFreeInputSourceReduction_of_geometricSelection_endpointOnly_localIncident_20260520`,
+  and selected-neighbor geometric-order family variants, reducing the
+  boundary-free input source to actual selected-neighbor/geometric rows plus
+  endpoint-only rows without all-adjacent endpoint or arbitrary edge-chain
+  shortcuts.
+
+- Claim: `S2-codex-main-20260520-selected-orientation-source`.
+  Owner: Hilbert the 2nd (`019e46b4-7703-7090-93b8-2635757ad28d`).
+  Role: selected orientation prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added
+  `geometricOutgoingDartList_nonwrap_of_graphVertexAngularNoBetweenRows`,
+  `geometricUnitDistanceRotationSystem_faceSucc_nonwrap_of_graphVertexAngularNoBetweenRows`,
+  `rawFaceSuccOrbit_orientationRows_of_graphVertexAngularNoBetweenRows`, and
+  `rawFaceSuccOrbit_geometricSuccessorNonwrapRows_of_graphVertexAngularNoBetweenRows`,
+  reducing selected orientation/nonwrap rows to genuine angular no-between
+  data without identity angular order.
+
+- Claim: `S2-codex-main-20260520-boundaryfree-no-third-honest`.
+  Owner: Beauvoir the 2nd (`019e46c1-27af-72b1-97bb-70ad034327e7`).
+  Role: local topology prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/pruned.  Result: added
+  `boundaryFreeNoThirdGermSource_of_selectedIncidentEdgePairRows_incidentGermFrontierEdge`,
+  reducing `BoundaryFreeNoThirdGermSource inputs` to selected actual carrier
+  edge-pair rows plus the honest incident-germ frontier-edge row.
+
+- Claim: `S2-codex-main-20260520-carrier-connected-honest`.
+  Owner: Descartes the 2nd (`019e46c1-27f9-7732-bc9a-4e1e34c2e667`).
+  Role: frontier connectedness prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed/pruned.  Result: added
+  `unboundedFrontierCarrierGraph_connected_of_janiszewskiComponentAvoidance_localSectorRows`,
+  `BoundaryFreeNoThirdGermSource.connected_of_janiszewskiComponentAvoidance`,
+  and `boundaryFreeCarrierConnected_source_of_janiszewskiComponentAvoidance`,
+  reducing carrier connectedness to Janiszewski component avoidance plus the
+  boundary-free local carrier realization.
+
+- Claim: `S2-codex-main-20260520-raw-dart-frontier-honest`.
+  Owner: Euclid the 2nd (`019e46c1-2857-7f72-8cf3-cdb8224ee3da`).
+  Role: face-successor propagation prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned.  Result: added selected-neighbour geometric-order reducers
+  to `RawOrbitDartEdgeFrontierSource inputs`, with the strict successor row
+  kept on the genuine selected `faceSucc` heads.
+
+- Claim: `S2-codex-main-20260520-planar-preconnected-source`.
+  Owner: Mendel the 2nd (`019e46c1-28b6-7670-a2e1-faf19cd83f0b`).
+  Role: planar topology prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/pruned.  Result: added
+  `planarContinuumUnboundedComplementFrontierPreconnected_of_janiszewskiRelativeClopenKSide`
+  and
+  `planarContinuumUnboundedComplementFrontierPreconnected_of_janiszewskiComponentAvoidance`,
+  reducing the preconnected frontier source to current Janiszewski rows.
+
+- Claim: `S2-codex-main-20260520-frontier-carrier-degree-two`.
+  Owner: Schrodinger the 2nd (`019e46c4-bc44-7b71-ad2b-572a4d9f4180`).
+  Role: concrete carrier degree prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned.  Result: no edits needed; existing checked route is
+  `UnboundedFrontierCarrierLocalSectorRowsAt` family to
+  `unboundedFrontierCarrierDartPairRows_of_localSectorRows` and
+  `unboundedFrontierCarrierGraph_degree_two_of_localSectorRows`.
+
+- Claim: `S2-codex-main-20260520-selected-neighbor-source-inputs`.
+  Owner: Poincare the 2nd (`019e46c4-bc96-7e31-bb1b-39e2a4a645f6`).
+  Role: selected carrier-neighbour source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`
+  and `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed/pruned.  Result: added
+  `S2_codex_main_20260520_selected_neighbor_source_inputs` and family wrappers,
+  reducing the selected neighbour/geometric-selection input to actual selected
+  carrier cut rows plus genuine graph-vertex angular no-between rows.
+
+- Claim: `S2-codex-main-20260520-raw-successor-strict-order`.
+  Owner: Averroes the 2nd (`019e46c4-bcf1-7d50-a4eb-0f958785e4cf`).
+  Role: raw successor angular-order prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned.  Result: no edits needed; checked reducers already reduce
+  the strict selected successor source to genuine successor-tail geometric
+  rows for the selected `geometricOutgoingDartList` neighbours.
+
+- Claim: `S2-codex-main-20260520-w32-final-assembly`.
+  Owner: Pascal the 2nd (`019e46c4-bd44-78e0-89fa-b4626a9e3c32`).
+  Role: final assembly / build verifier.
+  Scope: `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066.lean`, and `TASK.md`.  Status: active/claimed.
+  Deliverable: when the source leaves close, assemble the unconditional S2
+  theorem through W32, verify targeted builds, root import, forbidden scan,
+  and update the S2 task status.
+
+- Claim: `S2-dyn-20260520-topology-janiszewski-leaf`.
+  Owner: Hypatia the 2nd (`019e468a-cfc0-7e61-817e-d6421c6a65f3`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/pruned.  Result: added
+  `S2_dyn_20260520_topology_janiszewski_leaf`, reducing the no-subcontinuum
+  topology source to component avoidance.  Gate passed: targeted
+  `ExteriorComponentTopology.lean` check.
+
+- Claim: `S2-dyn-20260520-neighbor-pair-selection-source`.
+  Owner: Jason the 2nd (`019e468a-d010-7fb3-b993-bb5456c56ae4`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, with
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` only if needed.
+  Status: completed/pruned.  Result: added
+  `S2_dyn_20260520_neighbor_pair_selection_source`, reducing compact
+  geometric selection to actual local-sector rows plus genuine same-head
+  geometric selection rows.  Gate passed: targeted owner-file checks.
+
+- Claim: `S2-dyn-20260520-orbit-to-selection-route-scout`.
+  Owner: Einstein the 2nd (`019e468a-d069-7533-9aed-d0c9a9b123ba`).
+  Role: read-only route scout.  Scope: S2 orbit/frontier owner files.  Status:
+  completed/pruned.  Result: identified the safe actual-boundary plus
+  faceSucc plus local-sector bridge through
+  `S2_agent_local_sector_incident_bridge` and
+  `S2_geometricSelectionInputSource_of_actualBoundaryRows_faceSuccIncidentComplete_20260520cc`.
+
+- Claim: `S2-dyn-20260520-boundaryfree-local-sector-hardening`.
+  Owner: Erdos the 2nd (`019e468a-d0c8-7ff3-b38b-00b3fe3cbd6e`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed/pruned.  Result: strengthened the local-sector route to consume
+  primitive selected-neighbour local incident-germ membership rows and added
+  preconnected/no-closed-separation geometric-selection cycle-row composers.
+  Gate passed: targeted `S2BoundaryFreeRawSource.lean` check and dependency
+  module build.
+
+- Claim: `S2-dyn-20260520-s2-audit-after-prune`.
+  Owner: Mendel the 2nd (`019e468a-d127-7143-85a8-0912f146d697`).
+  Role: read-only route auditor.  Scope: S2 owner files.  Status:
+  pruned/shutdown before handoff.
+
+- Claim: `S2-dyn-20260520-raw-orbit-source-closure`.
+  Owner: Godel the 2nd (`019e468d-3403-74d2-a72f-7d7d508bd2e3`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added
+  `S2_dyn_20260520_raw_orbit_source_closure`,
+  `S2_dyn_20260520_raw_orbit_source_closure_family`,
+  `S2_dyn_20260520_raw_orbit_source_closure_of_selectedNeighborGeometricOrder_successorTailRows`,
+  and
+  `unboundedExteriorFrontierCycleRows_of_selectedNeighborGeometricOrder_edgeChain_incident_successorTailRows_20260520`.
+  Gate passed: targeted `S2SeededRawOrbitSource.lean` check.
+
+- Claim: `S2-dyn-20260520-planar-continuum-theorem-scout`.
+  Owner: Anscombe the 2nd (`019e468d-3453-7282-b96c-5c143f5684c3`).
+  Role: read-only topology scout.  Scope: local S2 topology files and Mathlib.
+  Status: completed/pruned.  Result: found no existing Mathlib/local theorem
+  proving the unconditional planar-continuum source; recommended
+  `PlanarContinuumUnboundedComplementFrontierConnected` as the honest hard
+  theorem.
+
+- Claim: `S2-dyn-20260520-finite-topology-specialization`.
+  Owner: Cicero the 2nd (`019e4695-cd14-7080-a5ac-5defc50c045b`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, with
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` only for a
+  tiny consumer if needed.  Status: completed/pruned.  Result: added
+  `S2_dyn_20260520_finite_topology_specialization` and
+  `S2_dyn_20260520_finite_topology_specialization_componentRows`, specializing
+  the planar-continuum frontier-connected source to the actual finite drawing
+  and component rows.  Gate passed: targeted owner-file check.
+
+- Claim: `S2-dyn-20260520-actual-boundary-raw-orbit-composer`.
+  Owner: Ohm the 2nd (`019e4695-cd66-7ce2-9545-60d69a4b0cec`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added `ActualBoundaryFaceSuccLocalSectorRows`
+  and raw-orbit transports for actual boundary rows, geometric `faceSucc`
+  rows, boundary orientation, and pointwise local-sector rows.  Gate passed:
+  targeted `S2SeededRawOrbitSource.lean` check and downstream module build.
+
+- Claim: `S2-dyn-20260520-faceSucc-orientation-source`.
+  Owner: Hooke the 2nd (`019e4695-cdb5-7790-b7e7-aed7691ef0fe`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` or
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed/pruned.  Result: added genuine geometric-order reducers from
+  `BoundaryVertexGeometricRotationOrderRow` to `UnitDistanceCycleFaceSuccRows`
+  and boundary orientation, plus the actual-boundary wrapper
+  `S2_dyn_20260520_faceSucc_orientation_source_of_actualBoundary_geometricOrderRows`.
+  Gate passed: targeted owner-file checks and dependency build.
+
+- Claim: `S2-dyn-20260520-local-sector-source-from-actual-boundary`.
+  Owner: Singer the 2nd (`019e4695-ce0c-7932-af45-38b10346610a`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` or
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed/pruned.  Result: added
+  `S2_dyn_20260520_local_sector_source_from_actual_boundary` and
+  `S2_dyn_20260520_local_sector_source_from_rawOrbit_boundarySectorRows`,
+  sourcing pointwise local-sector rows from actual boundary-sector rows and
+  real `unboundedFrontierEdgeSet` predecessor/successor data.  Gate passed:
+  targeted owner-file checks and dependency build.
+
+- Claim: `S2-dyn-20260520-post-route-leaf-audit`.
+  Owner: Arendt the 2nd (`019e4695-ce6d-7682-97c2-ca9ab3c57888`).
+  Role: read-only route auditor.  Scope: S2 owner files.  Status:
+  completed/pruned.
+  Handoff: completed/pruned.  Result: mapped the exact remaining leaves of the
+  current actual-boundary/local-sector route and flagged the raw-orbit closure
+  as a fallback lane because it still exposes adjacent-endpoint incidence.
+
+- Claim: `S2-dyn-20260520-connected-frontier-source`.
+  Owner: James the 2nd (`019e46a0-067b-78f2-abbc-66202bc3c2f6`).
+  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only, with
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` read-only unless the
+  source theorem genuinely belongs there.  Status: completed/pruned.  Result:
+  added
+  `planarContinuumUnboundedComplementFrontierConnected_of_janiszewskiNoSubcontinuumObstruction`,
+  reducing connected-frontier to the existing Janiszewski no-subcontinuum
+  topology source.  Gate passed: targeted `ExteriorComponentTopology.lean`
+  check.
+
+- Claim: `S2-dyn-20260520-boundary-sector-source`.
+  Owner: Averroes the 2nd (`019e46a0-06c4-73f1-9be9-037bc4da046b`).
+  Role: actual exterior-sector theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed/pruned.  Result: added
+  `BoundaryVertexFrontierIncidentSectorRowsAt` and
+  `S2_dyn_20260520_local_sector_source_from_actual_boundary_incident_complete`,
+  reducing pointwise local-sector rows to actual-boundary frontier incidence
+  completeness.  Gate passed: targeted `S2ExteriorBoundarySource.lean` check.
+
+- Claim: `S2-dyn-20260520-boundary-geometric-order-source`.
+  Owner: Tesla the 2nd (`019e46a0-070e-7fd2-a3a7-77357d04399f`).
+  Role: geometric-order theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, with a tiny
+  `S2ExteriorBoundarySource.lean` wrapper only if necessary.  Status:
+  completed/pruned.  Result: added
+  `boundaryVertexGeometricRotationOrderRow_of_graphVertexGeometricAngularNeighborSelectionRow`
+  and family form, reducing genuine selected-neighbour geometric rows to
+  `BoundaryVertexGeometricRotationOrderRow`.  Gate passed: targeted
+  owner-file checks.
+
+- Claim: `S2-dyn-20260520-actual-boundary-package-consumer`.
+  Owner: Pascal the 2nd (`019e46a0-076b-7771-ad56-a06422493ddc`).
+  Role: selected/raw-orbit route reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, with a tiny
+  W32 consumer only if it directly consumes the package.  Status:
+  completed/pruned.  Result: added selected/raw-orbit package reducers
+  including
+  `actualBoundaryFaceSuccLocalSectorRows_family_of_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520`
+  and the connected-frontier W32 selected/raw-tail consumer.  Gate passed:
+  direct owner-file checks.
+
+- Claim: `S2-codex-20260520-actual-boundary-cycle-source`.
+  Owner: Codex thread `019e46a1-4c2c-75f3-becb-60b1ab3ae2ad`.
+  Role: actual exterior-boundary cycle/source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed/pruned.  Result: added connected-frontier/local-sector reducers
+  from the concrete carrier route to
+  `ActualBoundaryCycleFrontierEquivalenceRows`,
+  and direct `UnboundedExteriorFrontierCycleRows`, using only actual
+  `unboundedFrontierEdgeSet`/exterior-boundary carrier data.  Gate passed:
+  targeted `S2ExteriorBoundarySource.lean` check.
+
+- Claim: `S2-dyn-20260520-short-route-scout`.
+  Owner: Pasteur the 2nd (`019e46a0-07c6-7f22-99f3-b89e4491e7c0`).
+  Role: read-only route scout.  Scope: S2 owner files.  Status:
+  completed/pruned.  Result: confirmed the shortest package route is through
+  `minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520`,
+  and confirmed it does not rely on false all-adjacent endpoint incidence.
+
+- Claim: `S2-dyn-20260520-w32-actual-boundary-package-consumer`.
+  Owner: Codex-main.  Role: W32 source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`.  Status:
+  completed.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_actualBoundaryPackage_20260520`,
+  replacing four dependent actual-boundary arguments with the checked
+  `ActualBoundaryFaceSuccLocalSectorRows` package.  Gate passed: targeted
+  `FaceBoundaryTopologySourceW32.lean` check and forbidden-token scan.
+
+- Claim: `S2-dyn-20260520-w32-janiszewski-package-consumer`.
+  Owner: Codex-main.  Role: W32 source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`.  Status:
+  completed.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_actualBoundaryPackage_20260520`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520`.
+  Gate passed: targeted `FaceBoundaryTopologySourceW32.lean` check.
+
+- Claim: `S2-dyn-20260520-janiszewski-no-subcontinuum-source`.
+  Owner: Schrodinger the 2nd (`019e46a7-d865-7c91-89c0-e436f29ee583`).
+  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/pruned.  Result: confirmed the topology leaf is already reduced by
+  existing Janiszewski/component-avoidance/relative-clopen declarations.  Gate:
+  no new edits.
+
+- Claim: `S2-dyn-20260520-selected-raw-tail-coverage-source`.
+  Owner: Chandrasekhar the 2nd (`019e46a7-d8ad-7300-85b6-20ff4ba71fbe`).
+  Role: raw-orbit source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: confirmed
+  `S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw`
+  as the honest selected raw-tail source from
+  `BoundaryFreeConnectedRawOrbitSourceRows inputs`, and tightened the
+  connected-raw repeated-tail adapters.  Gate passed: targeted file check and
+  module build.
+
+- Claim: `S2-dyn-20260520-repeated-tail-witness-source`.
+  Owner: Sartre the 2nd (`019e46a7-d8fc-7a82-9721-ae3f953165ef`).
+  Role: no-cut/repeated-tail theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` or
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added
+  `SelectedRawOrbitRepeatedTailWitnessSource`,
+  `selectedRawOrbitRepeatedTailWitnessSource_of_cutPartitions_20260520`, and
+  `selectedRawTailCoverage_repeatedTailExteriorCutWitnessSource_of_cutPartitions_20260520`,
+  reducing deleted-tail witnesses to selected raw-orbit cut partitions.  Gate
+  passed: targeted file check and module build.
+
+- Claim: `S2-dyn-20260520-selected-successor-nonwrap-source`.
+  Owner: Plato the 2nd (`019e46a7-d946-7c23-99d8-7f8c2995a951`).
+  Role: geometric successor theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` or
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added
+  `geometricOutgoingDartListConsecutive_nonwrap_of_graphDartArg_lt`,
+  `selectedRawOrbitGeometricSuccessorNonwrapRows_of_orientationRows`, and
+  `selectedRawOrbitGeometricSuccessorNonwrapRows_iff_orientationRows`,
+  reducing successor-nonwrap to genuine selected raw-orbit orientation rows.
+  Gate passed: targeted owner-file checks and module build.
+
+- Claim: `S2-dyn-20260520-residual-route-scout`.
+  Owner: Bohr the 3rd (`019e46a7-d9a8-7eb1-bb7f-70319c276129`).
+  Role: read-only route scout.  Scope: S2 owner files.  Status:
+  completed/pruned.  Result: confirmed the current residual leaves and S1
+  no-cut supplier; no false all-adjacent endpoint route is on the live path.
+
+- Claim: `S2-dyn-20260520-boundaryfree-connected-raw-source`.
+  Owner: Tesla the 3rd (`019e46b1-68d2-7a91-9233-1dddd6621b99`).
+  Role: connected raw-orbit package theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added connected raw-orbit reducers from
+  boundary-free local rows, component-topology rows, selected-neighbour
+  geometric-order input, and the sorted-between face-successor source.  Gate:
+  owner-file check passed; module build rerun pending after later edits.
+
+- Claim: `S2-dyn-20260520-boundaryfree-no-third-source`.
+  Owner: Halley the 3rd (`019e46b1-692a-7da2-9c22-d19f34721a63`).
+  Role: local no-third-germ theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` or
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned.  Result: reduced `BoundaryFreeNoThirdGermSource inputs`
+  to actual selected local-sector/no-third-germ data plus an endpoint-only
+  no-chord row for the selected heads.  Follow-up: this endpoint-only residual
+  must be audited against the known boundary-chord obstruction before it is
+  used as a live source.  Gate passed: owner-file check and module build.
+
+- Claim: `S2-codex-main-20260520-boundaryfree-no-third-source`.
+  Owner: Codex-main.  Role: boundary-free no-third source theorem prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed.
+  Target: strictly reduce the `BoundaryFreeNoThirdGermSource inputs` family to
+  actual selected `unboundedFrontierEdgeSet` local-sector/geometric-neighbour
+  rows plus the matching selected incident-germ frontier-edge membership row;
+  do not use all-adjacent frontier endpoint classifiers, chord shortcuts,
+  induced frontier graphs, arbitrary cycles, synthetic enclosures, identity
+  angular order, or new W-numbered facades.  Result: added the checked
+  projection theorems
+  `S2_codex_main_20260520_boundaryfree_no_third_source_of_geometricSelection_incidentGermFrontierEdge`,
+  `S2_codex_main_20260520_boundaryfree_no_third_source_of_selectedNeighborGeometricOrder_incidentGermFrontierEdge`,
+  and
+  `S2_codex_main_20260520_boundaryfree_no_third_source_family_of_selectedNeighborGeometricOrder_incidentGermFrontierEdge`
+  in `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`; targeted
+  owner-file checks/module builds passed.
+
+- Claim: `S2-dyn-20260520-component-topology-source`.
+  Owner: Hubble the 3rd (`019e46b1-6975-7632-ac8e-5c89c1643732`).
+  Role: carrier connectedness theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` or
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed/pruned.  Result: added Janiszewski/local-sector reducers to
+  actual frontier preconnectedness, component-topology rows, carrier
+  connectedness, and selected edge-chain connectedness.  Gate passed:
+  targeted owner-file checks.
+
+- Claim: `S2-dyn-20260520-raw-faceSucc-frontier-edge-source`.
+  Owner: Curie the 3rd (`019e46b1-69d1-72d1-a268-e53315e87067`).
+  Role: raw frontier-edge theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` or
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed/pruned.  Result: added raw dart/frontier-edge reducers from
+  actual boundary or bundled exterior-sector rows plus
+  `RawOrbitSelectedEdgeBoundarySuccSource`, and rewired the actual-boundary
+  connected raw-orbit route.  Gate passed: targeted owner-file checks.
+
+- Claim: `S2-dyn-20260520-selected-cut-partitions-source`.
+  Owner: Mill the 3rd (`019e46b1-6a31-7283-925c-2703c33c61f2`).
+  Role: repeated-tail cut-partition theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` or
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: reduced selected repeated-tail cut partitions
+  through boundary-arc and primitive source rows.  The smallest exposed
+  honest residual is now `SelectedRawOrbitRepeatedTailPrimitiveSourceRows rows`.
+  Gate passed: owner-file check and module build.
+
+- Claim: `S2-dyn-20260520-selected-raw-orientation-source`.
+  Owner: Volta the 3rd (`019e46b1-6a8c-72e3-97a7-621145d922a2`).
+  Role: selected raw-orbit orientation theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` or
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: reduced selected raw-orbit orientation and
+  successor-nonwrap rows to
+  `SelectedRawOrbitGeometricAngularNeighborSelectionRows`, and added the
+  geometric-angular finite-planar theorem consumed by W32.  Gate passed:
+  targeted owner-file checks.
+
+- Claim: `S2-dyn-20260520-connected-raw-residual-scout`.
+  Owner: Carver the 3rd (`019e46b1-6aea-7e40-b4ae-45db8b919bba`).
+  Role: read-only route scout.  Scope: S2 owner files.  Status:
+  completed/pruned.  Result: mapped the shortest current connected raw-orbit
+  reducers and warned against routes exposing unconditional all-adjacent
+  frontier endpoint incidence.
+
+- Claim: `S2-codex-20260520-frontier-preconnected-source`.
+  Owner: new Codex worker.  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/pruned.  Result: added checked finite-drawing aligned-K-split
+  cycle-row reducers and `S2_codex_20260520_frontier_preconnected_source`.
+  Gate passed: targeted owner-file checks.
+
+- Claim: `S2-codex-20260520-selected-carrier-local-source`.
+  Owner: new Codex worker.  Role: local carrier theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned.  Result: added checked projections from selected
+  cut-partition/geometric rows to the selected local and compact geometric
+  carrier source surfaces.  Gate passed: targeted owner-file check.
+
+- Claim: `S2-codex-20260520-boundaryfree-cycle-composer`.
+  Owner: new Codex worker.  Role: cycle-row composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/pruned.  Result: added checked preconnected/geometric-selection
+  and selected-edge/outgoing-list cycle-row composers.  Gate passed: targeted
+  owner-file checks.
+
+- Claim: `S2-codex-20260520-route-scout-after-preconnected`.
+  Owner: new Codex explorer.  Role: read-only theorem/API scout.  Scope:
+  S2 owner files and mathlib search.  Status: completed/pruned.  Result:
+  confirmed the shortest post-preconnected route is through the compact
+  actual-carrier geometric-neighbour selection source, not another endpoint or
+  induced-frontier branch.
+
+- Claim: `S2-codex-20260520-aligned-ksplit-source`.
+  Owner: Codex worker.  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/pruned.  Result: added checked reducers from the
+  no-subcontinuum obstruction source to the planar and finite-drawing
+  aligned-K-split sources.  Gate passed: targeted owner-file check.
+
+- Claim: `S2-codex-20260520-geometric-selection-source`.
+  Owner: Codex worker.  Role: local carrier theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned.  Result: added checked reducers from selected
+  cut-partition rows and selected geometric-order index rows to the compact
+  geometric-selection input source.  Gate passed: targeted owner-file check.
+
+- Claim: `S2-codex-20260520-final-s2-composer`.
+  Owner: Codex worker.  Role: route composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/pruned.  Result: added the checked Janiszewski/no-subcontinuum
+  geometric-selection family route and W32 consumer.  Gate passed: targeted
+  owner-file checks.
+
+- Claim: `S2-codex-20260520-no-closed-separation-source`.
+  Owner: Codex worker.  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned.  Result:
+  reduced `PlanarContinuumUnboundedComplementFrontierNoClosedSeparation` to
+  the Janiszewski/boundary-bumping relative-clopen separator source.  Gate
+  passed: targeted `ExteriorComponentTopology.lean` check.
+
+- Claim: `S2-codex-20260520-selected-edge-source`.
+  Owner: Codex worker.  Role: local carrier theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned.  Result: reduced `LocalSelectedIncidentEdgePairSourceRows`
+  to actual unbounded-frontier carrier neighbour/local-sector/cut-partition
+  rows, avoiding all-adjacent endpoint closure.  Gate passed: targeted
+  `S2LocalTwoGermAssembly.lean` check.
+
+- Claim: `S2-codex-20260520-outgoing-list-order-source`.
+  Owner: Codex worker.  Role: geometric-order theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned.  Result: read-only route check found the shortest checked
+  reduction from pointwise genuine geometric neighbour selection rows to the
+  selected-head outgoing-list no-between source.  No file edits.
+
+- Claim: `S2-codex-20260520-janiszewski-relative-clopen-source`.
+  Owner: Codex worker.  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned.  Result:
+  `S2_codex_20260520_janiszewski_relative_clopen_source` strictly reduces the
+  Janiszewski relative-clopen K-side source to the component-avoidance source;
+  targeted `ExteriorComponentTopology.lean` check passed.
+
+- Claim: `S2-codex-20260520-local-sector-source`.
+  Owner: Codex worker.  Role: local carrier theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned.  Result:
+  checked strict reductions from actual local two-germ, neighbour-pair, and
+  cut-partition rows to the pointwise
+  `UnboundedFrontierCarrierLocalSectorRowsAt` family.  Gate passed: targeted
+  owner-file checks.
+
+- Claim: `S2-codex-20260520-component-avoidance-source`.
+  Owner: Codex worker.  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned.  Result:
+  checked existing theorem
+  `S2_dyn_20260520_component_avoidance_source`, which strictly reduces
+  component avoidance to the Janiszewski relative-clopen K-side source via
+  `planarJaniszewskiBoundaryBumpingComponentAvoidance_of_relativeClopenKSide`.
+
+- Claim: `S2-codex-20260520-geometric-selection-input-source`.
+  Owner: Codex.  Role: local/geometric theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned.  Result:
+  `S2_codex_20260520_geometric_selection_input_source_*` strictly reduces the
+  bundled geometric-selection input source from actual carrier-neighbour or
+  local-sector rows plus genuine sorted geometric order; targeted owner-file
+  checks passed.
+
+- Claim: `S2-codex-20260520-actual-boundary-cycle-source`.
+  Owner: Codex worker.  Role: exterior-boundary theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned.  Result:
+  added connected-frontier/local-sector reducers to
+  `ActualBoundaryCycleFrontierEquivalenceRows` and direct
+  `UnboundedExteriorFrontierCycleRows`, using only the actual carrier and
+  `unboundedFrontierEdgeSet` data.  Gate passed: targeted
+  `S2ExteriorBoundarySource.lean` check.
+
+- Claim: `S2-codex-20260520-janiszewski-nosubcontinuum-source`.
+  Owner: Codex worker.  Role: topology theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and mathlib API
+  search.  Status: completed/pruned.  Result: added the checked exact
+  equivalence
+  `planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_iff_relativeClopenKSide`
+  and finite-drawing no-subcontinuum reducers from the no-closed-separation
+  source:
+  `finiteDrawingUnboundedComplementFrontierNoSubcontinuumObstruction_of_finiteDrawing_noClosedSeparation`
+  and
+  `finiteDrawingUnboundedComplementFrontierNoSubcontinuumObstruction_of_noClosedSeparation`.
+  Gate passed: targeted owner-file checks and mathlib API search.
+
+- Claim: `S2-codex-20260520-connected-raw-orbit-source`.
+  Owner: Codex worker.  Role: raw exterior-orbit theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned.  Result: added checked preconnected/local-source
+  connected raw-orbit reducers
+  `boundaryFreeConnectedRawOrbitSourceRows_of_preconnected_selectedSuccessorEdge_20260520`,
+  `boundaryFreeConnectedRawOrbitSourceRows_of_boundaryFreeInput_preconnected_selectedSuccessorEdge_20260520`,
+  and
+  `boundaryFreeConnectedRawOrbitSourceRows_of_boundaryFreeInput_preconnected_selectedNeighborGeometricOrder_successorTailRows_20260520`,
+  preserving actual selected `unboundedFrontierEdgeSet` carrier heads and
+  avoiding edge-chain/adjacent-endpoint shortcut inputs.  Gate passed:
+  targeted `S2SeededRawOrbitSource.lean` check.
+
+- Claim: `S2-codex-20260520-selected-raw-tail-cut-source`.
+  Owner: Codex worker.  Role: no-cut/raw-orbit theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/pruned.  Result: added selected repeated-tail cut-partition
+  reducers through existing repeated-tail exterior cut rows / deleted-tail
+  witnesses, including
+  `selectedRawOrbitRepeatedTailCutPartitions_of_repeatedTailExteriorCutRows_20260520`,
+  `selectedRawOrbitRepeatedTailCutPartitions_of_deletedTailWitnesses_20260520`,
+  and connected raw-orbit source variants.  Gate passed: targeted
+  `S2SeededRawOrbitSource` build and focused token scan.
+
+- Claim: `S2-agent-20260520-unconditional-cycle-composer`.
+  Owner: Carson the 2nd (`019e4673-0108-7ee2-843e-62b423a85eea`).
+  Role: route composer / source reducer.  Scope: S2 owner files.  Status:
+  pruned as stale 2026-05-20.  Result: closed without a fresh handoff after
+  repeated waits.
+
+- Claim: `S2-agent-20260520-selected-edge-pair-pauli`.
+  Owner: Pauli the 2nd (`019e4682-38b9-78f0-b1f2-c973d1513f5d`).  Status:
+  completed/pruned.  Result: selected-edge-pair source was mapped to the
+  compact geometric-neighbour selection leaf.
+
+- Claim: `S2-agent-20260520-topology-boundedness-avicenna`.
+  Owner: Avicenna the 2nd (`019e4682-6212-7572-bab9-5e9104ab3dc6`).  Status:
+  completed/pruned.  Result: added the checked Janiszewski no-subcontinuum
+  reducer in `ExteriorComponentTopology.lean`.
+
+- Claim: `S2-agent-20260520-selected-edge-pair-route-gibbs`.
+  Owner: Gibbs the 2nd (`019e4682-7242-7f32-bcc9-97d5024ca305`).  Status:
+  completed/pruned.  Result: confirmed the non-circular selected-edge-pair
+  route through the geometric-neighbour selection leaf.
+
+- Claim: `S2-agent-20260520-sharp-route-audit-mill`.
+  Owner: Mill the 2nd (`019e4682-8809-7d40-9fd5-a57185fbe8d3`).  Status:
+  completed/pruned.  Result: audited the sharp no-subcontinuum selected-edge
+  route; no hidden forbidden assumption was reported.
+
+- Claim: `S2-codex-20260520-selected-head-angular-local-reducer`.
+  Owner: Codex.  Role: reducer prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.
+  Status: completed/strictly reduced.  Result: added
+  `S2_dyn_20260520_selected_head_no_intervening_outgoing_dart_source_for_localSelectedNoThirdGermRoute`,
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_localSelectedNoThirdGermRoute_of_no_intervening_outgoing_dart`,
+  and
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_localSelectedNoThirdGermRoute_of_geometric_outgoing_list_no_between`.
+  Gate passed: targeted `S2LocalTwoGermAssembly.lean` check and dependency
+  module build.
+
+- Claim: `S2-dyn-20260520-janiszewski-relative-clopen-source`.
+  Owner: Volta the 2nd (`019e4671-9989-7740-8496-6ca6554f75bb`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+  Status: completed/strictly reduced and pruned; worker handle is not found.
+  Result: added the checked reducer
+  `S2_dyn_20260520_janiszewski_relative_clopen_source`, lowering the
+  Janiszewski relative-clopen leaf to
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction`.
+  Gate passed: targeted `ExteriorComponentTopology.lean` checks.
+
+- Claim: `S2-dyn-20260520-local-selected-no-third-source`.
+  Owner: Ampere the 2nd (`019e4671-b61d-7e93-8f9d-ffcd486fd71a`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.
+  Status: completed/strictly reduced and pruned; worker handle is not found.
+  Result: added `S2_dyn_20260520_local_selected_no_third_source`, lowering the
+  local selected/no-third source to pointwise carrier local-sector rows without
+  all-adjacent endpoint closure or induced frontier graph shortcuts.
+  Gate passed: targeted owner-file checks.
+
+- Claim: `S2-dyn-20260520-selected-head-geometric-order-source`.
+  Owner: Galileo the 2nd (`019e4671-d4c3-7740-a1f7-808c5ae8c6dc`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.
+  Status: completed/strictly reduced and pruned; worker handle is not found.
+  Result: added `S2_dyn_20260520_selected_head_geometric_order_source`,
+  lowering selected-head geometric-order rows to honest selected-head
+  angular/no-between rows for the selected-edge route.  Gate passed: targeted
+  `S2LocalTwoGermAssembly.lean` checks.
+
+- Claim: `S2-agent-20260520-geometric-order-source-family`.
+  Owner: Codex worker.  Role: reducer prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed 2026-05-20.  Result: added the generic genuine-list no-between
+  reducer
+  `geometricOutgoingDartList_no_between_of_graphVertexGeometricAngularNeighborSelectionRow`
+  and route/family reducers from pointwise
+  `GraphVertexGeometricAngularNeighborSelectionRow` rows to the live
+  selected-head outgoing-list no-between source.  Gate passed: direct pinned
+  Lean checks of both owner files.
+
+- Claim: `S2-dyn-20260520-three-leaf-route-audit`.
+  Owner: Kuhn the 2nd (`019e4671-e5c6-7921-b960-48a1c767bcd8`).
+  Role: route mapper.  Scope: read-only S2 owner files, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned; worker
+  handle is not found.  Result: verified the three-leaf route and confirmed
+  the remaining live leaves are topology no-subcontinuum, actual carrier
+  local-sector rows, and selected-head angular/no-between rows.
+
+- Claim: `S2-agent-20260520-finite-drawing-frontier-source`.
+  Owner: Volta the 2nd (`019e466d-a98b-7fc0-a89e-2761eb929cf5`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned; worker
+  handle is not found.  Result: finite-drawing frontier topology support is
+  checked and recorded in the workbook.
+
+- Claim: `S2-agent-20260520-selected-strict-order-source`.
+  Owner: Galileo the 2nd (`019e466d-aa3c-72a2-94f8-7cc7a583b223`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/strictly reduced and pruned; stale running handle was closed.
+  Result: reduced the selected
+  `faceSucc` strict angular-order source to successor-tail geometric row,
+  triple-index, and direct angular no-between sources for the exact
+  geometric-neighbour heads.  Gate: direct owner-file Lean check passed before
+  a later unrelated same-file raw-orbit/orientation edit; latest final sweep is
+  blocked outside this selected strict/angular-order lane at
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean:9090`.
+
+- Claim: `S2-agent-20260520-final-route-composer`.
+  Owner: Pauli the 2nd (`019e466d-aa97-75f0-8445-0062e011a581`).
+  Role: route composer / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, this
+  workboard, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned; worker handle is not found.  Result: strongest checked W32
+  route is recorded; the current live work is sourcing its remaining leaves.
+
+- Claim: `S2-agent-20260520-janiszewski-relative-clopen-source`.
+  Owner: Sartre the 2nd (`019e4672-adef-7920-9d64-061a4f9f8256`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  this workboard, and `proof_workings/s2_route_workbook.md`.
+  Status: completed/strictly reduced and pruned.  Result: added
+  `actualFrontierPreconnected_of_janiszewskiBoundaryBumping`,
+  `unboundedExterior_frontier_noOpenSeparation_of_janiszewskiBoundaryBumping`,
+  `actualFrontierAlignedKSplit_of_janiszewskiBoundaryBumping`, and
+  `S2_agent_20260520_janiszewski_relative_clopen_source`, specializing the
+  Janiszewski relative-clopen leaf to the selected finite-drawing unbounded
+  exterior component's actual preconnectedness and aligned K-split rows.  Gate
+  passed: targeted `ExteriorComponentTopology.lean` check.
+
+- Claim: `S2-agent-20260520-geometric-order-source-family`.
+  Owner: Anscombe the 2nd (`019e4672-e44a-7150-a06b-c0d14bdf9c4a`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/strictly reduced and pruned.  Result: added
+  `geometricOutgoingDartList_no_between_of_graphVertexGeometricAngularNeighborSelectionRow`
+  and route/family reducers from pointwise genuine geometric-neighbor rows to
+  the selected-head outgoing-list no-between source.  Gate passed: targeted
+  checks of `GeometricRotationSystem.lean` and `S2LocalTwoGermAssembly.lean`.
+
+- Claim: `S2-agent-20260520-unconditional-cycle-composer`.
+  Owner: Carson the 2nd (`019e4673-0108-7ee2-843e-62b423a85eea`).
+  Role: route composer / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  this workboard, and `proof_workings/s2_route_workbook.md`.
+  Status: completed/strictly reduced.  Result: connected raw-orbit rows now
+  compose directly to `UnboundedExteriorFrontierCycleRows`; repeated-tail
+  separation is reduced to `S2RepeatedTailExteriorCutWitnessSource`; raw
+  orientation is reduced to `SelectedRawOrbitGeometricSuccessorNonwrapRows`;
+  and the matching finite-planar/W32 consumers are checked.  Gate passed:
+  targeted builds of `S2SeededRawOrbitSource` and `FaceBoundaryTopologySourceW32`,
+  targeted forbidden-token scan, and `git diff --check`.
+
+- Claim: `S2-main-20260520-active-leaf-integration`.
+  Owner: Codex-main.  Role: reducer integrator / build verifier.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Handoff: integrate
+  only checked source-leaf reductions from workers; do not add a new facade or
+  public `KnownBounds` exposure.  Next gate: targeted Lean checks,
+  forbidden-token scan, and `git diff --check` on touched files.
+
+- Claim: `S2-agent-20260520-local-sector-leaf-curie`.
+  Owner: Curie the 2nd (`019e467a-dbf0-7480-9779-398429308e83`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md`.  Status: active.  Handoff: prove
+  or strictly reduce the pointwise actual-carrier local-sector family using
+  the selected geometric/local-incident route.  Next gate:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+
+- Claim: `S2-main-20260520-local-sector-selected-edge-route`.
+  Owner: Codex-main.  Role: reducer prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and `TASK.md`.
+  Status: completed/strictly reduced, coordinating with Curie's local-sector
+  leaf claim.  Result: added
+  `localSectorRows_of_selectedEdgePairRoute_geometricOutgoingListNoBetween_localIncident_20260520`
+  and
+  `localSectorRowsFamily_of_selectedEdgePairRoute_geometricOutgoingListNoBetween_localIncident_20260520`,
+  reducing the local-sector family for the selected-edge route to selected
+  edge-pair rows plus the genuine selected-head outgoing-list no-between
+  source.  Gate passed: pinned targeted Lean check; targeted new-block
+  forbidden-token scan clean.
+
+- Claim: `S2-agent-20260520-selected-head-angular-archimedes`.
+  Owner: Archimedes the 2nd (`019e467a-efd2-7701-9882-e04d292eb9c1`).
+  Role: read-only reducer scout.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`; this
+  workboard and `proof_workings/s2_route_workbook.md` for claim status.
+  Status: active, redirected to read-only to avoid the live
+  `S2-codex-20260520-selected-head-angular-local-reducer` scope conflict.
+  Handoff: find the shortest existing route or proof skeleton for
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_localSelectedNoThirdGermRoute`.
+  Next gate: targeted owner-file checks.
+
+- Claim: `S2-agent-20260520-topology-nosubcontinuum-mencius`.
+  Owner: Mencius the 2nd (`019e467b-003e-7363-b0d4-a7afa1fa04b5`).
+  Role: read-only topology scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, Mathlib
+  topology imports, this workboard, and `proof_workings/s2_route_workbook.md`.
+  Status: active.  Handoff: find the shortest non-circular route to
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction`
+  or identify a checked theorem that supersedes it.  Next gate: scout handoff.
+
+- Claim: `S2-agent-20260520-w32-lowered-route-darwin`.
+  Owner: Darwin the 2nd (`019e467b-1491-7f90-841a-b771241baf7f`).
+  Role: reducer composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, this
+  workboard, and `proof_workings/s2_route_workbook.md`; avoid conflicts with
+  the active Carson composer.  Status: active.  Handoff: compose the lowered
+  no-subcontinuum/local-sector/angular-row leaves into the W32 target, or
+  report the exact existing checked route if already present.  Next gate:
+  targeted `FaceBoundaryTopologySourceW32.lean` check.
+
+- Claim: `S2-agent-20260520-route-forbidden-audit-poincare`.
+  Owner: Poincare the 2nd (`019e467b-2c0a-7f81-ae67-83a1097852f7`).
+  Role: read-only route auditor.  Scope: S2 owner files, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Handoff: audit the
+  live route for forbidden endpoint/chord, induced-graph, arbitrary-cycle,
+  identity-order, synthetic-row, axiom/sorry/admit, and `KnownBounds`
+  assumptions.  Next gate: scout handoff.
+
+Closed/pruned this pass:
+
+- Claim: `S2-codex-20260520-whole-frontier-no-subcontinuum-janiszewski-reducer`.
+  Owner: Codex.  Role: topology reducer prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and `TASK.md`.
+  Status: completed 2026-05-20.  Result: added
+  `planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiNoSubcontinuumObstruction`,
+  `planarContinuumUnboundedComplementFrontierNoSubcontinuumObstruction_of_janiszewskiNoSubcontinuumObstruction`,
+  and
+  `S2_codex_20260520_whole_frontier_no_subcontinuum_janiszewski_reducer`,
+  strictly reducing the whole-frontier no-subcontinuum leaf to the
+  component-witness Janiszewski no-subcontinuum obstruction and lowering the
+  crossing-boundedness source to the same obstruction.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+
+- `S2-agent-20260520-local-sector-source-family`: Tesla the 2nd
+  (`019e4672-c960-7bf1-be2f-042ba5e33c9e`) completed and was pruned.
+  Result: added
+  `localSectorRows_of_geometricSelection_localIncident` and
+  `localSectorRowsFamily_of_geometricSelection_localIncident_20260520`,
+  sourcing the pointwise `UnboundedFrontierCarrierLocalSectorRowsAt` family
+  from selected `unboundedFrontierEdgeSet` neighbour/geometric-selection rows
+  plus the checked local-radius incident-germ theorem.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+- `S2-dyn-20260520-relative-clopen-topology-source`: Wegener the 2nd
+  (`019e466a-7f51-7ee1-ae16-f6295b6b4717`) completed and was closed.  Result:
+  added `S2_dyn_20260520_relative_clopen_topology_source`, reducing the
+  planar-continuum relative-clopen topology source to the Janiszewski
+  relative-clopen theorem.
+- `S2-dyn-20260520-selected-edge-pair-source`: Aquinas the 2nd
+  (`019e466a-9c12-72a1-85ad-2c5fcf4f31ad`) completed and was closed.  Result:
+  added `S2_dyn_20260520_selected_edge_pair_source` and family wrappers,
+  reducing selected edge-pair rows to
+  `UnboundedFrontierCarrierLocalSelectedNoThirdGermSource`.
+- `S2-dyn-20260520-selected-index-geometric-source`: Rawls the 2nd
+  (`019e466a-b613-7c20-87d6-a5529c44c085`) completed and was closed.  Result:
+  added `S2_dyn_20260520_selected_index_geometric_source`, reducing index rows
+  to pointwise genuine selected-head geometric order rows.
+- `S2-dyn-20260520-w32-selected-edge-neighborpair-integration`: Nietzsche the
+  2nd (`019e466a-ceda-7b52-9b1a-48005e31979a`) completed and was closed.
+  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_neighborPairRows_indexRows_20260520`.
+- `S2-main-20260520-active-leaf-integration`: Codex-main added
+  `minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_localSelectedNoThird_graphVertexGeometricOrder_20260520`
+  and verified
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FaceBoundaryTopologySourceW32.lean`.
+- `S2-dyn-20260520-w32-actual-sector-selected-order-integration`: Feynman the
+  2nd (`019e4666-ac9e-7502-9887-b0c79db1e22d`) completed and was closed.
+  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_preconnected_actualBoundarySector_selectedOrder_safeLocalThirdGerm_20260520`,
+  an endpoint-free W32 reducer for actual boundary-sector rows.
+- `S2-dyn-20260520-raw-orbit-to-actual-boundary-source`: Heisenberg the 2nd
+  (`019e4666-d0d2-7de3-877c-25a7dc40fe80`) completed and was closed.  Result:
+  added
+  `actualBoundaryCycleFrontierEquivalenceRows_of_connectedRawOrbitSourceRows_selectedRepeatedTailRows_20260520`,
+  reducing actual boundary rows to connected raw-orbit rows plus repeated-tail
+  separation.
+- `S2-dyn-20260520-carrier-connected-real-source`: Planck the 2nd
+  (`019e4666-e71e-75f3-8917-89d9eb2d3b0e`) completed and was closed.  Result:
+  added `S2_dyn_20260520_carrier_connected_real_source` and
+  `S2_dyn_20260520_carrier_connected_real_source_of_localSectorRows`,
+  reducing carrier connectedness to frontier preconnectedness plus a real
+  selected edge cover.
+- `S2-dyn-20260520-sector-selected-order-source-family`: Lagrange the 2nd
+  (`019e4666-fe2a-7c70-9d1d-83e852e60043`) completed and was closed.  Result:
+  confirmed the adapter already exists as
+  `S2_dyn_20260520_boundary_geometric_to_selected_geometric_source_rows`; no
+  duplicate was added.
+- `S2-dyn-20260520-post-reducer-blocker-map`: Noether the 2nd
+  (`019e4667-0e48-72d2-a085-281c86a24ecf`) completed and was closed.  Result:
+  identified the selected-edge/index split as the sharpest endpoint-free live
+  route and demoted endpoint-branch boundary-sector sourcing from the live
+  path.
+- `S2-dyn-20260520-component-avoidance-source`: Boole the 2nd
+  (`019e4660-2383-7851-aff0-979900210da6`) completed and was closed.  Result:
+  added `planarJaniszewskiBoundaryBumpingComponentAvoidance_of_relativeClopenKSide`
+  and `S2_dyn_20260520_component_avoidance_source`, reducing component
+  avoidance to the standard Janiszewski relative-clopen K-side source.
+- `S2-dyn-20260520-actual-boundary-rows-source`: Huygens the 2nd
+  (`019e4660-23ca-7ce0-a287-7fd2449b71c9`) completed and was closed.  Result:
+  added `S2_dyn_20260520_actual_boundary_rows_source`, routing actual boundary
+  rows through raw face-successor orbit data rather than through an induced
+  frontier graph or arbitrary cycle.
+- `S2-dyn-20260520-local-exterior-sector-source`: Dalton the 2nd
+  (`019e4660-2428-7512-be65-634f94de33f9`) completed and was closed.  Result:
+  added `S2_dyn_20260520_local_exterior_sector_source` and the incident
+  completeness variant, keeping endpoint handling explicit and avoiding the
+  false all-adjacent frontier-endpoint closure theorem.
+- `S2-dyn-20260520-boundary-geometric-to-selected-geometric`: Carson the 2nd
+  (`019e4660-247f-72a1-8dde-88e91117bd34`) completed and was closed.  Result:
+  added same-boundary adapters from actual sector rows and genuine geometric
+  rotation order to selected-neighbour geometric-order rows.
+- `S2-dyn-20260520-current-source-map-after-reducers`: Lorentz the 2nd
+  (`019e4660-24d3-7a33-89f1-2d48ab1bd7f0`) completed and was closed.  Result:
+  confirmed that endpoint-free actual boundary-sector rows are now the live
+  S2 route and that endpoint-only/all-adjacent chord routes remain off-path.
+- `S2-dyn-20260520-current-leaf-sanity-scout`: Bohr the 2nd
+  (`019e4651-3f2d-7842-bf04-e3fb1ca901b6`) completed and was closed.  Result:
+  confirmed the three-leaf non-circular route and warned against older
+  unreachable/final-cycle/induced-frontier branches as source proofs.
+- `S2-dyn-20260520-janiszewski-no-subcontinuum-source`: Raman the 2nd
+  (`019e4651-0337-7d10-9986-af7b59168081`) completed and was closed.  Result:
+  added `S2_dyn_20260520_janiszewski_no_subcontinuum_source`, reducing the
+  no-subcontinuum leaf to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`.
+- `S2-dyn-20260520-carrier-neighbor-pair-source`: Locke the 2nd
+  (`019e4651-18b7-75a0-b75f-0d23a726907d`) completed and was closed.  Result:
+  added the local-selected-no-third-germ source and
+  `S2_dyn_20260520_carrier_neighbor_pair_source`, reducing neighbor pairs and
+  degree two to actual selected carrier edges plus local no-third-germ data.
+- `S2-dyn-20260520-selected-head-no-between-source`: Halley the 2nd
+  (`019e4651-2d72-7eb0-812b-3b28e2e92929`) completed and was closed.  Result:
+  added `unboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows_of_geometricOrderRows`
+  and `S2_dyn_20260520_selected_index_rows_of_selectedEdgePairRoute_geometricOrderRows`,
+  reducing the selected index source to genuine geometric-order rows.
+- Kepler the 2nd, Lovelace the 2nd, Goodall the 2nd, and Herschel the 2nd
+  completed read-only scouting and were closed/pruned.
+- Kant the 2nd completed the W32 composer scout: no existing W32 consumer takes
+  only relative-clopen plus local-two-germ rows; the current checked W32 route
+  is relative-clopen plus selected incident-edge pairs plus selected index or
+  angular/geometric-order rows.
+- Euclid the 2nd completed the local-two-germ API scout: the direct constructor
+  is `unboundedFrontierCarrierLocalTwoGermRowsAt_of_no_third_germ`; finite
+  drawing supplies lower-level local drawing isolation only.
+- Zeno the 2nd completed the local-two-germ reducer:
+  `S2_dyn_20260520_local_two_germ_rows_of_selected_no_third_germ_source`
+  reduces local two-germ rows to
+  `UnboundedFrontierCarrierLocalSelectedNoThirdGermSource`.
+- Peirce the 2nd completed the selected no-third-germ reducer:
+  `S2_dyn_20260520_selected_no_third_germ_source` reduces the local source to
+  same-boundary frontier equivalence, boundary edge membership, angular rows,
+  and local exterior point-sector rows.
+- Gauss the 2nd completed the selected geometric-order reducer:
+  `S2_dyn_20260520_geometric_order_source_rows` reduces selected geometric
+  rows to genuine pointwise geometric angular-neighbour selection rows.
+- Hume the 2nd completed the component-avoidance relative-clopen reducer:
+  `S2_dyn_20260520_component_avoidance_relative_clopen` proves the
+  Janiszewski relative-clopen side from component avoidance.
+
 ## Verification Gates
 
 Before any public-bound claim or checked-off task:
@@ -51,22 +3525,731 @@ if ($LASTEXITCODE -eq 1) { 'clean' } elseif ($LASTEXITCODE -ne 0) { exit $LASTEX
 
 Active certification tasks:
 
-- [ ] Run the pinned full root build on the current checkout.
+- [ ] `S2-main-20260520-exterior-frontier-cycle-source` -- owner:
+  Codex-main; role: source-closure integrator; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  this workboard, and `proof_workings/s2_route_workbook.md`; status:
+  active.  Task: close the actual exterior-frontier cycle source by reducing
+  the topology, selected-carrier local-sector, and selected-head angular
+  leaves to honest existing rows, then compose them into
+  `UnboundedExteriorFrontierCycleRows` and the W32 S2 target.  Gate: targeted
+  owner-file Lean checks before any final root build.
+
+- [x] `S2-agent-20260520-planar-no-closed-separation` -- owner: Codex-GPT5
+  planar topology worker (`codex-gpt5-20260520-planar-no-closed-separation`),
+  continuing Newton the 2nd (`019e4684-8991-7db0-9d8c-89733b829296`);
+  role: topology theorem prover; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`; status:
+  completed/strictly reduced and pruned.  Result: added
+  `unboundedExteriorFrontierCycleRows_of_planarContinuumPreconnected_localSectorRows`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_preconnected_selectedEdgePair_geometricOutgoingListNoBetween_20260520`;
+  the old no-closed selected-edge W32 consumer now factors through
+  `planarContinuumUnboundedComplementFrontierPreconnected_of_noClosedSeparation`.
+  Gate passed: targeted checks for `ExteriorComponentTopology.lean`,
+  `FaceBoundaryTopologySourceW32.lean`, and `FinitePlaneDrawing.lean`,
+  plus forbidden-token scan and `git diff --check`.
+
+- [x] `S2-agent-20260520-selected-edge-pair-source` -- owner: Codex-GPT5
+  selected edge-pair worker (`codex-gpt5-20260520-selected-edge-pair-source`),
+  continuing Gauss the 2nd (`019e4684-89df-7a90-ac61-c7a9f8b7057c`); role: carrier-local theorem prover; scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`; status:
+  completed/pruned by verification.  Result: the checked source/reducer is
+  already present as
+  `localSelectedIncidentEdgePairSourceRows_of_unboundedFrontierCarrierGraph_degree_two`,
+  `S2_agent_20260520_selected_edge_pair_source_of_neighborPairRows`,
+  `S2_dyn_20260520_local_selected_edge_pair_source_family_of_neighborPairRows`,
+  `localSelectedIncidentEdgePairSourceRows_of_geometricSelectionInputSource`,
+  and
+  `S2_dyn_20260520_local_selected_edge_pair_source_family_of_geometricSelectionInputSource`.
+  These preserve actual selected `unboundedFrontierEdgeSet` membership and exact
+  selected heads from the actual unbounded-frontier carrier rows, without
+  all-adjacent endpoint closure or induced carrier shortcuts.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`;
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`;
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FaceBoundaryTopologySourceW32.lean`
+  after refreshing the source module.
+
+- [x] `S2-agent-20260520-outgoing-list-no-between-source` -- owner: Noether
+  the 2nd (`019e4684-8a29-7fb1-985e-d9037479b85a`); active worker:
+  Codex-GPT5-20260520-outgoing-list-no-between-source; role: geometric-order theorem prover; scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`; status:
+  completed/strictly reduced and pruned.  Result: added
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_family_for_selectedEdgePairRoute_of_graph_vertex_geometric_order_rows`,
+  reducing the selected-edge-route genuine outgoing-list no-between source
+  family to pointwise
+  `S2_dyn_20260520_graph_vertex_geometric_order_row_source_for_selectedEdgePairRoute`
+  rows for the same selected heads.  Gate passed: targeted
+  `S2LocalTwoGermAssembly.lean` and `GeometricRotationSystem.lean` checks.
+
+- [x] `S2-agent-20260520-topology-leaf-source` -- owner: Codex topology leaf
+  worker (`codex-gpt5-20260520-s2-topology-leaf-source`), continuing Avicenna
+  the 2nd (`019e467c-e26c-7a72-985d-17764a57fbc3`);
+  role: topology theorem prover; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `proof_workings/s2_route_workbook.md`; status: completed/strictly reduced
+  and pruned.  Result: added
+  `finiteDrawingUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_noClosedSeparation`,
+  `S2_agent_20260520_topology_leaf_source_of_noClosedSeparation`, and
+  `unboundedExteriorFrontierCycleRows_of_planarContinuumNoClosedSeparation_localSectorRows`,
+  reducing the finite-drawing topology leaf to
+  `PlanarContinuumUnboundedComplementFrontierNoClosedSeparation` and routing it
+  toward `UnboundedExteriorFrontierCycleRows` with the existing local-sector
+  family.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+
+- [x] `S2-agent-20260520-local-sector-source` -- owner: Bohr the 2nd
+  (`019e467c-e2c7-7543-b0d7-ea7aaa1cebef`); active worker:
+  Codex-GPT5-20260520-local-sector-source;
+  role: local-carrier theorem prover; scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`; status: completed/strictly reduced
+  and pruned.  Result: added
+  `S2_agent_20260520_geometricSelectionInputSource_of_selectedEdgePairRoute_geometricOutgoingListNoBetween`,
+  `S2_agent_20260520_localSelectedNeighborRows_of_selectedEdgePairRoute_geometricOutgoingListNoBetween`,
+  and its family form; `localSectorRows_of_selectedEdgePairRoute_geometricOutgoingListNoBetween_localIncident_20260520`
+  now projects from that selected-neighbour row.  Gate passed: targeted
+  `S2LocalTwoGermAssembly.lean` and `S2BoundaryFreeRawSource.lean` checks.
+
+- [x] `S2-agent-20260520-selected-head-angular-source` -- owner: Locke the
+  2nd (`019e467c-e330-7e01-80bc-df869ac41ced`); active worker:
+  Codex-GPT5-20260520; role: angular-order theorem prover; scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md`; status: complete.  Task: reduce the
+  selected-head angular/no-between source to real
+  `GraphVertexGeometricAngularNeighborSelectionRow` or
+  `GraphVertexAngularNoBetweenRows` data for the exact selected heads.
+  Result: added checked selected-edge and local-route reducers from genuine
+  outgoing-list no-between rows and pointwise
+  `GraphVertexGeometricAngularNeighborSelectionRow` rows for the exact selected
+  heads:
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute_of_geometric_outgoing_list_no_between_source`,
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute_of_graph_vertex_geometric_order_rows`,
+  `S2_dyn_20260520_selected_head_geometric_order_row_source_for_localSelectedNoThirdGermRoute`,
+  and
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_localSelectedNoThirdGermRoute_of_graph_vertex_geometric_order_rows`.
+  Gate passed: `lake env lean ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`
+  and
+  `lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+- [ ] `S2-main-20260520-selected-source-composition` -- owner: Codex-main;
+  role: S2 route composer / targeted build verifier; scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  this workboard, and `proof_workings/s2_route_workbook.md`; status: active.
+  Task: compose the completed selected-source reducers into the shortest
+  checked S2 route while the leaf workers below close the remaining source
+  rows.  Progress: checked
+  `unboundedExteriorFrontierCycleRows_of_selectedRawTailCoverage_cutPartitions_20260520`,
+  `unboundedExteriorFrontierCycleRows_of_connectedRawOrbitSourceRows_selectedCutPartitions_20260520`,
+  and
+  `finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedCutPartitions_20260520`
+  in `S2SeededRawOrbitSource.lean`, shortening the selected raw-orbit support
+  route by erasing through actual-boundary rows directly instead of carrying
+  the raw-orientation/actual-sector residual.  Gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+
+- [x] `S2-agent-20260520-selected-point-sector-source` -- owner: Codex-agent;
+  role: selected local point-sector source; scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only if
+  needed, this workboard, and `proof_workings/s2_route_workbook.md`; status:
+  completed.  Result: strictly reduced the selected local point-sector leaf to
+  checked selected carrier rows and genuine geometric order.  Added
+  `S2_agent_20260520_selectedNeighborCutPartitionGeometricOrderInputSource_of_localSectorRows_geometricOrderRows`,
+  `S2_agent_20260520_selectedNeighborCutPartitionGeometricOrderInputSource_family_of_localSectorRows_geometricOrderRows`,
+  `S2_agent_20260520_selectedNeighborCutPartitionGeometricOrderInputSource_of_selectedNeighborGeometricOrderRows`,
+  `S2_agent_20260520_selectedNeighborCutPartitionGeometricOrderInputSource_family_of_selectedNeighborGeometricOrderRows`,
+  `S2_agent_20260520_selectedNeighborCutPartitionGeometricOrderInputSource_of_selectedNeighborGeometricOrder_safeLocalThirdGerm`,
+  and
+  `S2_agent_20260520_selectedNeighborCutPartitionGeometricOrderInputSource_family_of_selectedNeighborGeometricOrder_safeLocalThirdGerm`.
+  These reducers avoid the false arbitrary-radius
+  `SelectedNeighborLocalExteriorPointSectorRows` source and keep the safe
+  `SelectedNeighborThirdGermLocalExteriorPointSectorRows` local-radius route.
+  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- [x] `S2-agent-20260520-sorted-between-source` -- owner: Codex-agent; role:
+  selected raw `faceSucc` sorted-between source; scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only if needed,
+  this workboard, and `proof_workings/s2_route_workbook.md`; status:
+  completed as a strict reducer.  Result: added
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource_of_selectedNeighborCutPartition_indexRows_strictOrder_20260520`
+  and
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource_of_selectedNeighborGeometricOrder_strictOrder_20260520`
+  in `S2SeededRawOrbitSource.lean`.  The selected sorted-between source now
+  follows from selected cut/geometric-order rows plus the strict selected
+  `faceSucc` head angular-position primitive for the same selected heads; no
+  identity angular order, final cycle, convex hull, or synthetic enclosure is
+  used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  passed,
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed, and the touched Lean-file forbidden-token scan returned clean.
+
+- [x] `S2-agent-20260520-planar-no-closed-separation-source` -- owner:
+  Codex-agent; role: finite-plane topology source; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` only if needed, this
+  workboard, and `proof_workings/s2_route_workbook.md`; status:
+  completed/strictly reduced.  Added
+  `planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_connected`,
+  `S2_agent_20260520_planar_no_closed_separation_source`,
+  `finiteDrawingUnboundedComplementFrontierAlignedKSplit_of_connected`, and
+  `S2_agent_20260520_finite_aligned_K_split_source_of_connected`.  The finite
+  aligned-K split source for `embeddedEdgeSet C` now reduces directly to the
+  standard planar-continuum theorem
+  `PlanarContinuumUnboundedComplementFrontierConnected`; the finite drawing
+  contributes the existing compactness, connectedness, and frontier-subset
+  facts, and no trace-connected compatibility source is live.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- [x] `S2-agent-20260520-planar-continuum-api-discovery` -- owner:
+  Codex-agent; role: topology/API discovery; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `proof_workings/s2_route_workbook.md`, and read-only mathlib/source search;
+  status: completed/API mapped.  Mathlib has generic connectedness,
+  frontier, connected-component, compact-Hausdorff clopen, and one-point
+  compactification APIs, but no exposed Janiszewski/unicoherence/plane
+  continuum theorem closing
+  `PlanarContinuumUnboundedComplementFrontierConnected` directly.  The exact
+  Lean-feasible route is the existing owner-file surface:
+  either prove
+  `PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween` and compose
+  through
+  `planarContinuumUnboundedComplementFrontierPreconnected_of_subcontinuumBetween`,
+  or prove
+  `PlanarContinuumUnboundedComplementFrontierNoClosedSeparation` and compose
+  through
+  `planarContinuumUnboundedComplementFrontierConnected_of_noClosedSeparation`.
+  Useful checked APIs found:
+  `frontier_connectedComponentIn_subset_frontier`,
+  `planarContinuumUnboundedComplement_frontier_compact`,
+  `planarContinuumUnboundedComplement_frontier_nonempty`,
+  `noClosedSeparation_of_isPreconnected`,
+  `isPreconnected_of_noClosedSeparation`,
+  `isConnected_of_noClosedSeparation`,
+  `connectedComponent_eq_iInter_isClopen`,
+  `OnePoint.isOpenEmbedding_coe`, `OnePoint.isClosed_image_coe`, and
+  `OnePoint.instConnectedSpace`.  No Lean source patch was made.  Gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- [x] `S2-agent-20260520-selected-edge-pair-source` -- owner: Codex-agent;
+  role: selected local carrier source; scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only if
+  needed, this workboard, and `proof_workings/s2_route_workbook.md`; status:
+  completed/strictly reduced.  Added
+  `localSelectedIncidentEdgePairSourceRows_of_geometricSelectionInputSource`,
+  `S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource`,
+  `S2_agent_20260520_selected_edge_pair_source_of_geometricNeighborSelectionRows`,
+  and
+  `S2_agent_selected_cutpartition_source_of_geometricSelectionInputSource_20260520`.
+  Result: both `LocalSelectedIncidentEdgePairSourceRows` and the selected
+  neighbour-pair cut source now project from the actual
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource`, whose
+  pointwise rows carry genuine `unboundedFrontierEdgeSet` incidences; no
+  all-adjacent endpoint shortcut is used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- [x] `S2-agent-20260520-no-intervening-outgoing-source` -- owner:
+  Codex-agent; role: selected angular local source; scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `proof_workings/s2_route_workbook.md`; status: completed as a strict
+  reducer.  Result: added selected-head no-intervening outgoing-dart reducers
+  from angular no-between rows and selected index rows for the exact heads
+  selected by the local edge-pair route, using genuine geometric outgoing-list
+  order.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- [x] `S2-agent-20260520-current-route-residual-harvest` -- owner:
+  Aristotle (`019e464c-4a1c-7163-bfb0-700233407f62`); role: read-only current
+  route residual harvester; scope: S2 owner files, this workboard, and
+  `proof_workings/s2_route_workbook.md`; status: completed/read-only.  Result:
+  identified the CO raw-orbit chain through
+  `minimalFailureExactActualTopologyFieldsTarget_of_rawFaceSuccOrbitSourceRows_localTwoGerm_incident_selectedSuccessorEdge_20260520co`
+  and its four leaves.  Codex-main keeps the CO chain as a compatibility
+  surface only because its all-adjacent endpoint incidence leaf is off the
+  live path when boundary chords are present.  Task was to identify the
+  shortest current non-circular theorem chain from
+  `FinitePlanarOuterComponentInputs C` to
+  `ExteriorComponentTopology.UnboundedExteriorFrontierCycleRows C inputs`,
+  naming the exact remaining source leaves and stale active claims.  Gate:
+  handoff consumed by Codex-main; no Lean edits.
+
+- [x] `S2-agent-20260520-planar-frontier-source` -- owner:
+  Fermat (`019e464c-5dae-7c82-aaa7-ce06ed2c6503`); role: finite-plane
+  frontier topology prover; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard /
+  workbook only after checked Lean progress; status: completed/strictly
+  reduced.  Result: reduced the connected-frontier/aligned-K topology residual
+  to `PlanarContinuumUnboundedComplementFrontierPreconnected` using
+  `planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_preconnected`,
+  `planarContinuumUnboundedComplementFrontierConnected_of_preconnected`,
+  `finiteDrawingUnboundedComplementFrontierAlignedKSplit_of_preconnected`, and
+  `S2_agent_20260520_finite_aligned_K_split_source_of_preconnected`.
+  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- [x] `S2-agent-20260520-selected-geometric-source` -- owner:
+  Archimedes (`019e464c-7069-79e0-b6f7-6c8d2ed457d8`); role: selected
+  neighbour/geometric carrier source prover; scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` only if needed,
+  and this workboard / workbook only after checked Lean progress; status:
+  completed/strictly reduced.  Result: actual carrier neighbour/geometric
+  selection rows now project to `SelectedNeighborCutPartitionGeometricOrderSource`
+  and `UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows`,
+  preserving the same selected `unboundedFrontierEdgeSet` heads and genuine
+  `geometricOutgoingDartList` indices.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`.
+
+- [x] `S2-agent-20260520-raw-orbit-composer` -- owner:
+  James (`019e464c-81f9-7851-9595-e2632837e6d8`); role: raw-orbit/source
+  route composer; scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` only if needed,
+  and this workboard / workbook only after checked Lean progress; status:
+  completed/strictly reduced.  Result: selected raw-tail coverage plus
+  repeated-tail cut partitions now erases directly through
+  `ActualBoundaryCycleFrontierEquivalenceRows` to
+  `UnboundedExteriorFrontierCycleRows C inputs`, dropping the older
+  raw-orientation/actual-sector residual for that support route.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- [x] `S2-agent-20260520-planar-preconnected-source` -- owner:
+  Ampere (`019e4653-f6de-7f30-9bbf-50c58772cffe`); role:
+  planar-continuum frontier preconnectedness prover; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard only after checked
+  Lean progress; status: completed/strictly reduced.  Result: added
+  `S2_agent_20260520_planar_preconnected_source_of_connected` and
+  `S2_agent_20260520_finite_frontier_preconnected_source_of_connected`,
+  reducing the planar and finite-drawing preconnected source surfaces to the
+  standard connected-frontier theorem
+  `PlanarContinuumUnboundedComplementFrontierConnected`.  No completed
+  boundary cycle, induced frontier graph, all-adjacent endpoint/no-chord row,
+  or synthetic enclosure is used.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- [x] `S2-agent-20260520-actual-carrier-neighbor-selection` -- owner:
+  Galileo (`019e4653-f726-7501-baa6-26c23cc7337b`); role:
+  actual carrier neighbour-pair/geometric selection
+  prover; scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, workbook, and
+  this workboard only after checked Lean progress; status: completed as a
+  strict reducer.  Result: added
+  `S2_agent_20260520_actual_carrier_neighbor_selection_of_cutPartition_indexRows`
+  and
+  `S2_agent_20260520_actual_carrier_neighbor_selection_family_of_cutPartition_indexRows`.
+  The combined
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  now reduces directly to selected incident-edge/cut-partition rows carrying
+  actual `unboundedFrontierEdgeSet` incidences plus primitive index rows in the
+  genuine sorted `geometricOutgoingDartList` for the same selected heads.  No
+  identity angular order, arbitrary two-neighbour selection, all-adjacent
+  endpoint/no-chord shortcut, final boundary cycle, or synthetic enclosure is
+  used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- [x] `S2-agent-20260520-raw-face-orbit-source` -- owner:
+  Pauli (`019e4653-f794-7711-bdfe-b9a842d6f8e5`); role:
+  exterior raw face-orbit source prover; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, workbook, and
+  this workboard only after checked Lean progress; status:
+  completed/strictly reduced.  Result: added the seed-visible selected raw
+  orbit package
+  `SelectedSeededRawFaceSuccOrbitSourceRows`, its repeated-tail cut residual
+  `SelectedSeededRawOrbitRepeatedTailCutPartitions`, the constructor
+  `S2_agent_20260520_selectedSeededRawFaceSuccOrbitSourceRows_of_connectedRawOrbitSourceRows`,
+  and the existential reducer
+  `exists_rawFaceSuccOrbit_sourceRows_of_connectedRawOrbitSourceRows_seededCutPartitions_20260520`.
+  The reducer chooses a genuine `UnboundedExteriorFrontierSeed`, orients it
+  to a geometric raw `faceSucc` orbit, proves the raw consecutive edges lie in
+  `unboundedFrontierEdgeSet` up to symmetry, proves frontier-tail coverage,
+  period, and cyclic carrier coverage, and leaves only repeated-tail cut
+  partitions on that same selected orbit.  It does not use a final boundary
+  cycle, induced frontier graph, convex hull, identity angular order,
+  all-adjacent endpoint/no-chord row, or synthetic enclosure.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  passed with the existing seeded-file `simpa` style warning.
+
+- [x] `S2-agent-20260520-valid-route-integrator` -- owner:
+  Halley (`019e4653-f7f0-76d1-8601-2bbf6428ff29`); role:
+  read-only valid-route integrator; scope: S2 owner files, workbook, and
+  workboard; status: completed/read-only.  Result: identified the endpoint-free
+  live route as the relative-clopen topology branch plus actual carrier
+  neighbour-pair/cut rows plus selected-head geometric no-between rows.  The
+  exact remaining honest leaves are the planar no-subcontinuum/topology source,
+  actual selected carrier-neighbour rows, and genuine selected outgoing-list
+  no-between rows for the same selected heads.  No Lean edits.
+
+- [x] `S2-agent-20260520-planar-frontier-source` -- owner:
+  Huygens the 2nd (`019e4662-3c3d-7d12-9df6-d20f143c8794`); role:
+  planar continuum / Janiszewski source prover; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard only after checked
+  Lean progress; status: claimed.  Task: prove or strictly reduce the genuine
+  planar no-subcontinuum/frontier-connected source from compact connected
+  planar drawing data, without final boundary-cycle, carrier, induced frontier
+  graph, convex-hull, or synthetic enclosure inputs.  Status:
+  completed/strictly reduced and pruned.  Result: added
+  `planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_connected_noClosedSeparation`,
+  reducing the local connected-`K` Janiszewski no-subcontinuum row to
+  `PlanarContinuumUnboundedComplementFrontierNoClosedSeparation`; finite
+  drawings supply the connected-`K` hypothesis through
+  `embeddedEdgeSet_connected_of_inputs`.  Verification:
+  targeted `ExteriorComponentTopology` build passed and the scoped
+  forbidden-token scan was clean.
+
+- [x] `S2-agent-20260520-local-selected-source` -- owner:
+  Aristotle the 2nd (`019e4662-3c84-7f32-9647-524cdc65dca2`); role:
+  local selected exterior-neighbour source prover; scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard only after checked
+  Lean progress; status: claimed.  Task: construct actual selected
+  `unboundedFrontierEdgeSet` neighbour/geometric rows at each exterior-frontier
+  vertex from local vertex-star/exterior-sector data, avoiding arbitrary
+  adjacent frontier endpoint and identity-angular-order shortcuts.  Status:
+  completed/strictly reduced and pruned.  Result: added
+  `S2_agent_20260520_local_selected_geometricSelectionInputSource`,
+  `S2_agent_20260520_local_selected_geometricOrderSourceRows`, and
+  `S2_agent_20260520_local_selected_cutPartitionGeometricInputSource`, reducing
+  selected exterior-neighbour/geometric rows to same-boundary
+  vertex-star/exterior-sector data plus genuine
+  `BoundaryVertexGeometricRotationOrderRow`.  Verification:
+  targeted `S2LocalTwoGermAssembly`, `S2BoundaryFreeRawSource`,
+  `GeometricRotationSystem`, and `ExteriorComponentTopology` checks passed.
+
+- [x] `S2-agent-20260520-selected-facesucc-source` -- owner:
+  Gibbs the 2nd / Codex-agent (`019e4662-3cd2-7283-8492-98313a381893`); role:
+  selected geometric face-successor propagation prover;
+  scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard only after checked
+  Lean progress; status: completed/strictly reduced.  Result: added the
+  selected geometric-neighbour input reducers
+  `rawOrbitIteratedFaceSuccHeadLocalAngularCarrierNoBetweenRowsNoOrbitSource_of_geometricSelectionInputSource`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_of_geometricSelectionInputSource_strictOrder`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource_of_geometricSelectionInputSource_strictOrder`,
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_geometricSelectionInputSource_strictOrder_20260520`,
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_selectedNeighborGeometricOrder_strictOrder_20260520`,
+  and
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_selectedNeighborInput_strictOrder_20260520`.
+  These reduce selected raw `faceSucc` frontier propagation and the
+  sorted outgoing-list no-between source to selected geometric-neighbour rows,
+  safe selected local third-germ rows, and the strict selected `faceSucc` head
+  angular-order primitive for the exact bundled selected heads.  No
+  final-cycle, endpoint-only/no-chord, identity-order, induced-frontier,
+  arbitrary carrier/cycle, or synthetic enclosure shortcut is used.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  passed,
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed, and the touched Lean-file forbidden-token scan returned clean.
+
+- [x] `S2-agent-20260520-repeated-tail-separation` -- owner:
+  Ohm the 2nd (`019e4662-3d2d-72e2-a0e3-8f922b569fdb`); role:
+  repeated exterior raw-tail separation prover; scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard only after checked
+  Lean progress; status: claimed.  Task: close the no-cut repeated-tail callback
+  by proving the primitive two-open-arc separation/cut-partition rows for a
+  repeated selected raw exterior orbit tail, without assuming a final simple
+  boundary cycle.  Status: completed/strictly reduced and pruned.  Result:
+  added
+  `S2_agent_repeatedTail_cutPartition_nonempty_source_of_primitiveTwoOpenArcRows_20260520`
+  and
+  `S2_agent_repeatedTail_cutPartition_nonempty_source_of_primitiveSourceRows_20260520`,
+  reducing the repeated-tail cut-partition callback to primitive two-open-arc /
+  raw-index witness rows.  Verification: targeted
+  `S2ExteriorBoundarySource` check and build passed.
+
+- [x] `S2-agent-20260520-finite-drawing-frontier-source` -- owner:
+  Volta the 2nd (`019e466d-a98b-7fc0-a89e-2761eb929cf5`); role:
+  finite drawing frontier topology source prover; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, this workboard, and
+  `proof_workings/s2_route_workbook.md` only after checked Lean progress;
+  status: completed/strictly reduced and pruned.  Task: prove or strictly
+  reduce the input-level finite-drawing frontier no-closed/preconnected/aligned
+  K source from `FinitePlanarOuterComponentInputs C`, using the actual
+  `embeddedEdgeSet C` and `unboundedExteriorComponentRows C inputs`, not a
+  final boundary cycle or synthetic enclosure.  Gate: targeted
+  `ExteriorComponentTopology` build.
+  Active claim 2026-05-20: Codex (`S2-agent-20260520-finite-drawing-frontier-source`)
+  finished a checked reducer package; existing owner stamp preserved.  Result:
+  added `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`,
+  `UnboundedExteriorActualFrontierNoClosedSeparationSource`,
+  `UnboundedExteriorActualFrontierClosedSeparationForcesAlignedKSplit`,
+  `finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_frontierPreconnected`,
+  `finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation`,
+  `finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_planarContinuum`,
+  `finiteDrawingUnboundedComplementFrontierAlignedKSplit_of_finiteDrawing_noClosedSeparation`,
+  `actualFrontierNoClosedSeparation_of_finiteDrawing_noClosedSeparation`,
+  `actualFrontierAlignedKSplit_of_finiteDrawing_alignedKSplit`,
+  `actualFrontierAlignedKSplit_of_finiteDrawing_noClosedSeparation`, and
+  `S2_agent_20260520_finite_drawing_frontier_source`.  Verification:
+  targeted `ExteriorComponentTopology` check and build passed.
+
+- [x] `S2-agent-20260520-boundary-sector-input-source` -- owner:
+  Euler the 2nd (`019e466d-a9de-7dc1-871e-7adec4ea2628`); role:
+  actual boundary-sector source prover; scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md` only after checked Lean progress;
+  status: completed/strictly reduced and pruned.  Task: prove or strictly reduce
+  the input-facing `boundaryVertexExteriorSectorRows_of_inputs` / actual
+  boundary-cycle frontier-equivalence source from the existing raw-orbit and
+  local-sector rows, without induced frontier graph, arbitrary cycle, or
+  endpoint-only shortcuts.  Gate: targeted `S2ExteriorBoundarySource` build.
+  Active claim 2026-05-20: Codex (`S2-agent-20260520-boundary-sector-input-source`)
+  finished this row; existing owner stamp preserved.
+  Progress 2026-05-20: added checked reducers
+  `S2_agent_20260520_boundarySectorRows_of_actualBoundaryRows_localSectorRows_angular`,
+  `S2_agent_20260520_boundarySectorRows_of_actualBoundaryRows_localSectorRows_faceSuccOrientation`,
+  and `S2_agent_20260520_boundarySectorRows_of_rawOrbit_localSectorRows` in
+  `S2ExteriorBoundarySource.lean`, reducing the boundary-sector source to the
+  existing actual-boundary/raw-orbit and local-sector rows plus genuine
+  geometric orientation.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`
+  passed.  Pruned after completed handoff.
+
+- [x] `S2-agent-20260520-selected-strict-order-source` -- owner:
+  Galileo the 2nd (`019e466d-aa3c-72a2-94f8-7cc7a583b223`); role:
+  selected `faceSucc` strict angular-order source prover;
+  scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md` only after checked Lean progress;
+  status: completed/strictly reduced.  Task: discharge or strictly
+  reduce `RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource` for
+  the exact selected heads produced by the geometric-neighbour source.  Gate:
+  targeted `S2SeededRawOrbitSource` build.
+  Active claim 2026-05-20: Codex is working this row; existing Galileo owner
+  stamp preserved.
+  Progress 2026-05-20: Codex strictly reduced the selected strict-order source
+  to the successor-tail geometric-row/triple-index sources for the same
+  geometric-neighbour heads.  Added the generic reducers
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_successorTailGeometricRows`
+  and
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_successorTailTripleIndex`,
+  plus selected-head wrappers
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_geometricSelectionInputSource_successorTailRows_20260520`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_geometricSelectionInputSource_tripleIndex_20260520`,
+  and
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_selectedNeighborGeometricOrder_successorTailRows_20260520`.
+  Follow-up: added the direct angular no-between reducers
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_successorTailNoBetweenRows`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_geometricSelectionInputSource_successorTailNoBetweenRows_20260520`,
+  and
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_selectedNeighborGeometricOrder_successorTailNoBetweenRows_20260520`.
+  Verification: direct
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  passed.  The later raw-orbit/orientation composer was repaired and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- [x] `S2-agent-20260520-final-route-composer` -- owner:
+  Pauli the 2nd (`019e466d-aa97-75f0-8445-0062e011a581`); role:
+  final S2 route composer; scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md` only after checked Lean progress;
+  status: completed.  Result: added the source-owner cycle-row composer
+  `unboundedExteriorFrontierCycleRows_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520`
+  and rewired
+  `minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520`
+  to consume it directly.  The remaining leaves are exactly the
+  relative-clopen topology theorem, the family
+  `forall C inputs, LocalSelectedIncidentEdgePairSourceRows inputs`, and the
+  matching selected-edge-pair index-row family in the theorem signature.  Gate
+  passed: direct targeted Lean checks for `S2SeededRawOrbitSource.lean`,
+  `FaceBoundaryTopologySourceW32.lean`, and `S2ExteriorBoundarySource.lean`;
+  latest targeted module builds for `S2SeededRawOrbitSource` and
+  `FaceBoundaryTopologySourceW32` also passed.
+
+- [x] `S2-agent-20260520-unconditional-cycle-composer` -- owner:
+  Codex; role: current checked-route composer; scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, this
+  workboard, and `proof_workings/s2_route_workbook.md` only after checked Lean
+  progress; status: completed/strictly reduced.  Result: added the direct
+  boundary-sector composer
+  `unboundedExteriorFrontierCycleRows_of_connectedRawOrbitSourceRows_selectedRepeatedTailRows_rawOrientation_20260520`
+  and family theorem
+  `finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedRepeatedTailRows_rawOrientation_20260520`,
+  then reduced repeated-tail rows to primitive deleted-tail witnesses via
+  `unboundedExteriorFrontierCycleRows_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_rawOrientation_20260520`
+  and reduced the raw-orientation residual to geometric nonwrap successor rows
+  via
+  `unboundedExteriorFrontierCycleRows_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_geometricSuccessorNonwrap_20260520`.
+  Added the matching finite-planar family theorems and W32 consumers, ending at
+  `minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_geometricSuccessorNonwrap_20260520`.
+  This removes the intermediate `ActualExteriorSectorInputSourceRows` package
+  from the displayed raw-orbit route.  The exact remaining input theorem
+  signature is: for every `C inputs`, supply
+  `BoundaryFreeConnectedRawOrbitSourceRows inputs`; for the internally selected
+  raw orbit, supply `S2RepeatedTailExteriorCutWitnessSource` for each repeated
+  tail pair; and supply `SelectedRawOrbitGeometricSuccessorNonwrapRows`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  passed,
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed,
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FaceBoundaryTopologySourceW32.lean`
+  passed, and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.
+
+- [x] `S2-codex-20260520-selected-successor-raw-face-succ-leaf` -- owner:
+  Codex; role: selected successor / raw face-successor leaf reducer; scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, plus
+  `TASK.md` and `proof_workings/s2_route_workbook.md` only after checked Lean
+  progress; status: completed with
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_selectedNeighborGeometricOrder_sortedBetween_20260520`
+  and
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_selectedNeighborInput_sortedBetween_20260520`;
+  this connects `UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows`
+  and `SelectedNeighborCutPartitionGeometricOrderInputSource` to the selected
+  raw face-successor edge source, leaving only the selected
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource`
+  residual.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`
+  passed,
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`
+  passed,
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`
+  passed,
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed, and the touched Lean-file forbidden-token scan returned no matches.
+
+- [x] `S2-codex-20260520-boundaryfree-selected-source-closure` -- owner:
+  Codex; role: boundary-free selected-source closure/reducer; scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md` only after checked Lean progress;
+  status: completed/strictly reduced.  Added
+  `S2_codex_20260520_selectedNeighborCutPartitionGeometricOrderInputSource_of_selectedNeighborGeometricOrder_localPointSector`
+  and its family form in `S2LocalTwoGermAssembly.lean`, plus
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_geometricSelection_localIncident`
+  in `S2BoundaryFreeRawSource.lean`.  Result: the selected-source route now
+  reaches `SelectedNeighborCutPartitionGeometricOrderInputSource inputs` from
+  actual selected `unboundedFrontierEdgeSet` geometric-order rows plus the
+  honest local point-sector row, and carrier connectedness no longer carries a
+  separate local-third-germ premise when geometric selection is available.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`
+  passed;
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`
+  passed; touched-file forbidden-token scan returned no matches.  The module
+  build
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  is presently blocked upstream by
+  `ExteriorComponentTopology.lean:1269` unknown identifier
+  `finiteDrawingUnboundedComplement_frontier_subset_embeddedEdgeSet`, which is
+  outside this claim's write scope.
+
+- [x] `S2-codex-20260520-topology-aligned-k-leaf` -- owner: Codex;
+  role: live topology aligned-K leaf reducer; scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `TASK.md` / `proof_workings/s2_route_workbook.md` only after checked
+  progress; status: completed with
+  `finiteDrawingUnboundedComplementFrontierAlignedKSplit_of_noClosedSeparation`;
+  verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- [x] `S2-worker-20260520-selected-head-angular-no-between` -- owner: Codex;
+  role: selected cut-partition head angular source reducer; scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md` only after checked progress; status:
+  completed with
+  `unboundedFrontierCarrierSelectedNeighborGraphVertexAngularNoBetweenRows_of_geometricOrderRows`
+  and `S2_worker_20260520_selected_head_angular_no_between_of_indexRows`;
+  verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`
+  passed, and the touched Lean-file forbidden-token scan returned no matches.
+
+- [x] `S2-dyn-20260520-endpoint-only-honesty-replacement` â€” owner: Codex;
+  scope: S2 endpoint-only selected-neighbour route in
+  `S2BoundaryFreeRawSource.lean`, `S2LocalTwoGermAssembly.lean`, and only if
+  needed `S2SeededRawOrbitSource.lean`; status: completed with the honest
+  replacement reducer
+  `S2_dyn_20260520_local_angular_source_of_selectedNeighbor_pointThirdGerm`.
+  The live `endpoint_only` premise is not proved from
+  `FinitePlanarOuterComponentInputs C`: carrier-neighbour rows classify
+  selected `unboundedFrontierEdgeSet` incidences, not arbitrary graph-adjacent
+  frontier endpoints/chords.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`
+  passed; touched-file forbidden-token scan passed.
+- [x] Run the pinned full root build on the current checkout.
 - [x] Run the forbidden-token scan on the current checkout.
 - [x] Run the trust-source scan on the current checkout.
 - [x] Run retained root import coverage and resolve missing, extra, or
   duplicate imports on that surface.
-- [ ] Replay the CI-style axiom audit for the current endpoint list.
+- [x] Replay the CI-style axiom audit for the current endpoint list.
 - [ ] Keep `KnownBounds.lean` closed to Swanepoel `8 / 31` and Pach--Toth
   `5 / 16` until unconditional internal verified theorems exist.
+- [ ] Before final certification, ensure root-imported S2 source files are
+  tracked in the repository state, not just present in the working tree:
+  `Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `Swanepoel/S2ExteriorBoundarySource.lean`,
+  `Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `Swanepoel/S2SeededRawOrbitSource.lean`.
 
 Root-state ledger: current retained source surface has root import coverage
-`872/872` and clean forbidden/trust scans.  Earlier successful logs
+`877/877` and clean forbidden/trust scans.  Earlier successful logs
 `proof_logs/root_build_20260519_082033.out.log` and
 `proof_logs/ci_axiom_audit_stdout_20260519_082158.txt` predate later Lean-file
-edits, so they are no longer certification for the current checkout.  Re-run
-the pinned full root build and CI-style axiom audit before crediting new
-checked-off work.  The exact-base all-positive flexible source is refuted by
+edits, so only the root build has been refreshed for the current checkout:
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed on
+2026-05-20 after the S2 source-file imports.  The CI-style axiom audit was
+replayed on 2026-05-20 from the workflow endpoint heredoc using
+`proof_logs/ci_axiom_input_20260520_033914.lean`; it passed for 1187
+declarations with output recorded in
+`proof_logs/ci_axiom_audit_stdout_20260520_033914.txt`.  The pinned root build
+and forbidden-token scan were replayed again on 2026-05-20 after the workboard
+cleanup and S2 source imports, and both passed.  The exact-base all-positive
+flexible source is refuted by
 the root-imported W33/W34 blocker stack.  W33/W34 files are completion evidence
 only for the conditional endpoints they prove; they do not close Swanepoel
 `8 / 31` or Pach--Toth `5 / 16` without an unconditional internal theorem.
@@ -76,6 +4259,134 @@ elan shim directory now precedes `C:/Users/Tom/bin`, so new shells resolve
 shells should refresh PATH before verification.  Concurrent Lake jobs still
 cause silent `-1` exits in this workspace; serialize final certification
 builds.
+
+2026-05-20 S2 source split update: after adding the root-imported
+`Swanepoel/S2SeededRawOrbitSource.lean`, the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed again,
+and the full Lean forbidden-token scan over `./ErdosProblems1066` plus
+`./ErdosProblems1066.lean` returned `clean`.
+
+2026-05-20 S2 certification refresh: after the neighbour-pair incident-edge
+route and workboard updates, the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed again,
+and the full Lean forbidden-token scan over `./ErdosProblems1066` plus
+`./ErdosProblems1066.lean` returned `clean`.  Fresh dynamic S2 delegation was
+again attempted after stale worker pruning, but the global agent-thread cap
+rejected the spawn, so no live subagent claim was opened.
+
+2026-05-20 S2 component-topology source refresh: added
+`unboundedExteriorFrontierComponentTopologySourceRows_of_edgeChain_neighborPairRows`
+and `unboundedFrontierCarrierGraph_connected_of_edgeChain_neighborPairRows`
+in `Swanepoel/ExteriorComponentTopology.lean`, plus
+`BoundaryFreeNoThirdGermSource.toFrontierVertexIncidentSource`,
+`BoundaryFreeNoThirdGermSource.toComponentTopologyRowsFromEdgeChain`, and
+`RawOrbitCoverageSourceRows.toComponentTopologyRows` in
+`Swanepoel/S2BoundaryFreeRawSource.lean`.  This records the split source route
+from selected-edge chain plus true neighbour-pair rows to component-topology
+rows, without a cycle, induced frontier graph, or new facade.  The targeted
+owner builds, the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`, and the full
+Lean forbidden-token scan all passed.
+
+2026-05-20 S2 build refresh: after the endpoint-incident W32 consumer was
+kept as two separate source arguments instead of a `Prop` conjunction with a
+structure-valued row, both
+`elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FaceBoundaryTopologySourceW32.lean`
+and the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed.
+Fresh dynamic delegation for S2-A was attempted but rejected by the global
+agent-thread cap, so no new subagent claim was opened.
+
+2026-05-20 S2 endpoint/source-surface refresh: after adding
+`BoundaryFreeNoThirdGermSource.toEndpointIncidentSourceRows`, the seeded
+raw-orbit endpoint erasers, and the split endpoint iterated-face-successor
+family surface, the module build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+passed.  The serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` also passed,
+and the full Lean forbidden-token scan returned `clean`.
+
+2026-05-20 S2 structured-source refresh: after adding
+`BoundaryFreeNoThirdGermSource.ofBoundaryCycleAngularRows`, the direct
+boundary-free iterated-`faceSucc` edge family theorem, and the successor /
+boundary-sector source reducers to the narrow selected-orbit source, both
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+and
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+passed.  The serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed again,
+and the full Lean forbidden-token scan returned `clean`.
+
+2026-05-20 S2 selected-seed refresh: the reverse-tail exterior-sector route
+was removed from the live source path because
+`BoundaryReverseTailOpenSegmentExteriorSector` is incompatible with actual
+boundary open-segment frontier.  Added
+`rawOrbitCoverageSourceRows_of_actualBoundaryRows_sectorRows_seed` and
+`finitePlanarStraightLineOuterComponentTheorem_of_actualBoundaryRows_sectorRows_localSource`
+in `Swanepoel/S2SeededRawOrbitSource.lean`, proving raw-orbit coverage from
+the selected exterior seed, actual boundary rows, sector rows, and the local
+no-third-germ source without the dead reverse-tail premise.  The owner module,
+the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`, and the full
+Lean forbidden-token scan all passed.
+
+2026-05-20 S2 actual-boundary handoff refresh: added
+`BoundaryFreeNoThirdGermSource.boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows`
+and
+`BoundaryFreeNoThirdGermSource.boundaryVertexExteriorSectorRows_source_of_rawFaceSuccOrbit`
+in `Swanepoel/S2BoundaryFreeRawSource.lean`, plus
+`GeometricRotationSystem.boundaryVertexAngularNoBetweenRows_of_faceSuccRows_pred_arg_lt_succ_arg`
+in `Swanepoel/GeometricRotationSystem.lean`.  The targeted owner builds,
+the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`, and the full
+Lean forbidden-token scan all passed.
+
+2026-05-20 S2 final-cycle route refresh: added
+`BoundaryFreeNoThirdGermSource.unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbit_noOrientation`
+in `Swanepoel/S2BoundaryFreeRawSource.lean` and
+`S2_repeatedTailExteriorCutRows_of_repeatedBoundarySeparationRows` in
+`Swanepoel/S2ExteriorBoundarySource.lean`.  This keeps the final S2 cycle-row
+route off the ordinary principal-argument nonwrap residual and lets S2-E use
+standard repeated-boundary separation rows to feed the minimal cut-row surface.
+The targeted owner checks, the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`, and the full
+Lean forbidden-token scan all passed.
+
+2026-05-20 S2 BW reducer refresh: after the local-angular, frontier-topology,
+selected-edge, and successor-point source reducers landed, the serialized
+pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed with
+output in `proof_logs/root_build_20260520_s2_bw_retry.log`, and the full Lean
+forbidden-token scan over `./ErdosProblems1066` plus
+`./ErdosProblems1066.lean` returned `clean`.
+
+2026-05-20 S2 component/frontier aligned K-split refresh: added direct
+reducers in `Swanepoel/ExteriorComponentTopology.lean` from
+`PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit`
+to boundedness, no-closed-separation, connectedness, preconnectedness,
+finite-drawing no-open-separation, actual unbounded frontier preconnectedness,
+carrier connectedness, selected edge-chain connectedness, and
+`UnboundedExteriorFrontierComponentTopologySourceRows` with fixed-side
+local-sector rows.  This strictly sharpens the S2-B source to the aligned
+Janiszewski/boundary-bumping residual plus the existing selected-edge local
+ sector source, without final cycle rows, induced frontier graph shortcuts,
+ arbitrary cycles, convex hulls, or synthetic enclosures.
+
+2026-05-20 S2 aligned K input refresh: the aligned K-split residual in
+`Swanepoel/ExteriorComponentTopology.lean` is now tightened to the genuinely
+nontrivial relative-clopen side source
+`PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`;
+the empty `A`/`B` frontier-side cases are discharged internally from compactness
+and `planarContinuumUnboundedComplement_frontier_subset`.  Added the
+finite-drawing source
+`FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit`
+and direct reducers from it to finite frontier preconnectedness, actual
+unbounded frontier preconnectedness, carrier connectedness, selected edge-chain
+connectedness, and `UnboundedExteriorFrontierComponentTopologySourceRows` with
+fixed-side local-sector rows.  This keeps S2-B on the actual
+`embeddedEdgeSet C`/`drawingComplement C` topology surface and uses no final
+cycle/carrier rows, induced frontier graph, arbitrary carrier/cycle, convex
+hull, or synthetic enclosure.
 
 ## Swanepoel First
 
@@ -96,59 +4407,7680 @@ facades or route ledgers.
 
 ### S2. Minimal-Failure Topology And Boundary Rows
 
-- [ ] Prove the input-only actual exterior boundary-cycle source theorem.
+Current S2 route, 2026-05-20:
+
+- S2 completion target: prove the input-facing boundary-sector theorem
+  `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs` for
+  every `FinitePlanarOuterComponentInputs C`.  This theorem should construct
+  the actual exterior `UnitDistanceCycleBoundary B`, prove exterior-frontier
+  graph vertices are exactly `B.vertices`, and provide
+  `forall k, BoundaryVertexExteriorSectorRowsAt inputs B k`.  The
+  `UnboundedExteriorFrontierCycleRows C inputs` family remains checked
+  downstream support, not the source-facing workboard target.  The currently
+  checked S2 consumers include:
+  `ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedCutPartitions_20260520`,
+  `ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedCutPartitions_rawOrientation_20260520`,
+  `ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_rawFaceSuccOrbitSourceRows_localTwoGerm_incident_selectedSuccessorEdge_20260520co`,
+  and the corresponding W32 consumers in `FaceBoundaryTopologySourceW32`.
+- Shortest live proof decomposition: close the input-level source rows feeding
+  those checked consumers.  The shortened CT support route needs
+  `BoundaryFreeConnectedRawOrbitSourceRows inputs`, selected repeated-tail cut
+  partitions for the selected raw orbit, then erases through actual-boundary
+  rows directly.  The older CT actual-sector route still additionally exposes
+  selected raw geometric orientation rows.  The CO route needs raw face-successor source rows,
+  pointwise local two-germ rows, selected-edge incidence for the relevant
+  adjacent endpoints, and selected successor-edge propagation.  Either route
+  must construct the actual unbounded exterior frontier carrier/orbit before
+  erasing to `UnboundedExteriorFrontierCycleRows`.
+- Csizmadia boundary-walk source model: use Cs98's rotating lowest-vertex
+  boundary-walk construction as the source idea for the selected exterior
+  face orbit.  The relevant S2 bridge is lowest/exterior seed dart ->
+  geometric angular `faceSucc` walk -> actual unbounded-frontier tracing ->
+  no-cut tail injectivity -> boundary-sector package.  Do not import the full
+  Csizmadia `9 / 35` local-deletion, block-decomposition, Case A/B, or
+  figure-geometry machinery into Swanepoel S2.
+- Do not add new bookkeeping layers or W facades for this route.  The live
+  residuals are the actual carrier/cycle, frontier iff, edge-membership,
+  angular/no-between, and incident exterior-angular sector rows on the same
+  `B`.
+- Hard S2 work rule: no deferred-premise claims.  A task may not hand off
+  `ActualBoundaryCycleFrontierEquivalenceRows`,
+  `BoundaryVertexExteriorSectorRowsAt`, `ExteriorFrontierCarrierRows`,
+  `sectorRows`, `carrierRows`, `actualRows`, `selectedSuccessorEdge`, or any
+  equivalent exterior-boundary premise to a future worker while only adding an
+  eraser to `UnboundedExteriorFrontierCycleRows`.  If a proof needs one of
+  those premises, the claimed task must first prove that premise directly from
+  `FinitePlanarOuterComponentInputs C`, or the claim must be rewritten as the
+  missing premise itself.  Waiting on another claim is not S2 progress.
+
+Active S2 source tasks:
+
+Current live handles after the 2026-05-20 pruning pass:
+
+- Claim: `S2-worker-20260520-compact-clopen-separator`.
+  Owner: Russell (`019e45e8-82d0-74f1-9226-b2476b7362ce`).  Scope:
+  `ExteriorComponentTopology.lean` only.  Status: completed/pruned
+  by Codex-main on 2026-05-20.  Result: added the checked generic
+  compact-Hausdorff relative-clopen separator
+  `exists_relative_clopen_separator_of_no_subcontinuum`; targeted
+  `ExteriorComponentTopology.lean` build passed.
+- Claim: `S2-explorer-20260520-planar-no-subcontinuum-leaf`.
+  Owner: Mill (`019e45e8-9d7c-7892-8738-331d8e43a862`).  Scope:
+  `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`, and mathlib
+  planar/topology APIs.  Status: completed/pruned by Codex-main on
+  2026-05-20.  Result: confirmed no suitable mathlib Janiszewski theorem is
+  available locally and isolated the honest leaf as the planar
+  boundary-bumping/no-subcontinuum obstruction feeding the checked compact
+  relative-clopen separator.
+- Claim: `S2-codex-20260520-janiszewski-obstruction-worker`.
+  Owner: Helmholtz (`019e45f2-274b-7000-bba3-2e721f56b251`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` only, plus this
+  workboard/workbook for status.  Status: completed/strictly reduced
+  2026-05-20.  Source task: S2-B.  Result: added the checked adapter
+  `planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_noSubcontinuumObstruction`
+  and claim wrapper `S2_codex_20260520_janiszewski_obstruction_worker`, reducing
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`
+  to the genuine planar no-subcontinuum obstruction and the existing compact
+  relative-clopen separator.  Verification:
+  `lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  passed with pre-existing warnings only.
+- Claim: `S2-codex-20260520-boundaryfree-angular-source-worker`.
+  Owner: Planck (`019e45f2-2795-7813-8549-d520decc1947`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` only, plus this
+  workboard/workbook for status.  Status: completed/pruned 2026-05-20.
+  Source task: S2-A/S2-C.  Result: added checked reducers from selected
+  neighbour geometric-order rows plus
+  `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` to
+  `BoundaryFreeLocalSectorGeometricAngularSource` and local selected-neighbour
+  rows.  Verification: targeted `S2LocalTwoGermAssembly.lean` and
+  `S2BoundaryFreeRawSource.lean` builds passed.
+- Claim: `S2-codex-20260520-current-route-chain-explorer`.
+  Owner: McClintock (`019e45f2-27f3-7b72-83dd-ef82081d0d6c`).  Scope:
+  read-only S2 owner files and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2 route minimization.  Result:
+  identified the existing BM/BN object-level route
+  `unboundedExteriorFrontierCycleRows_of_localSector_edgeChain_incident_selectedSuccessorLocalTwoGerm_20260520bn`.
+  Because it depends on the all-adjacent endpoint incident row, it is a
+  support route only and not the primary honest source target.
+- Claim: `S2-codex-20260520-planar-obstruction-source`.
+  Owner: Cicero (`019e45f8-eba2-7e70-bfe0-bf418c7f0660`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` only.  Status:
+  completed/strictly reduced 2026-05-20.  Source task: S2-B.  Result: added
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`
+  and checked adapter
+  `planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_subcontinuumForcesBounded`,
+  with claim wrapper `S2_codex_20260520_planar_obstruction_source`.  The exact
+  remaining smaller theorem is the boundedness form: any compact connected
+  subset of `K` meeting both closed frontier sides forces the selected
+  complement component `U` to be bounded.  Verification:
+  `lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  passed with pre-existing warnings only.
+- Claim: `S2-codex-20260520-selected-neighbor-source`.
+  Owner: Hooke (`019e45f8-ebf4-7dd3-9644-b12a84a73b81`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only.  Status:
+  completed/strictly reduced 2026-05-20.  Source task: S2-A/S2-C.  Result:
+  added
+  `S2_codex_20260520_localSelectedNeighborRows_of_selectedNeighborGeometricOrder_localIncident`
+  and the fully split
+  `S2_codex_20260520_localSelectedNeighborRows_of_cutPartition_indexRows_localIncident`,
+  reducing the selected-neighbour local output to actual selected
+  cut-partition rows plus genuine sorted outgoing-dart index rows; the
+  incident-germ membership is discharged by the local-radius theorem
+  `S2_codex_20260520_selected_incident_germ_membership_local_radius`.  Added
+  seeded cycle-row family reducers
+  `unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_selectedNeighborCutPartitionIndex_localIncident_20260520`
+  and
+  `unboundedExteriorFrontierCycleRows_of_finiteDrawingNontrivialRelativeClopen_selectedNeighborCutPartitionIndex_localIncident_20260520`.
+  This strictly reduces, but does not globally prove, the arbitrary-radius
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows inputs`
+  and `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` pair; the exact
+  smaller source is selected cut-partition rows plus
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows` for the
+  same selected heads.  Verification: targeted `lake env lean` checks passed
+  for `S2LocalTwoGermAssembly.lean` and `S2SeededRawOrbitSource.lean` with the
+  existing seeded-file `unnecessarySimpa` warning.
+- Claim: `S2-codex-20260520-incident-germ-source`.
+  Owner: Hume (`019e45f8-ec53-7110-8c67-741f2c338ef7`).  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only.  Status:
+  completed/strictly reduced 2026-05-20.  Source task: S2 local drawing
+  isolation.  Result: the global
+  `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` is reduced to the
+  exact local-radius theorem
+  `localIncidentGermFrontierEdgeMembershipRows_of_inputs`, exposed as
+  `SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows` and
+  `selectedNeighborIncidentGermLocalFrontierEdgeMembershipRows_of_geometricSelectionInputSource`.
+  The reduction uses vertex isolation plus
+  `interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point`, not
+  all-adjacent endpoint incidence/chord shortcuts.  Verification:
+  `lake env lean` passed for `FinitePlaneDrawing.lean`,
+  `ExteriorComponentTopology.lean`, and `S2LocalTwoGermAssembly.lean`.
+- Claim: `S2-dyn-20260520-boundaryfree-localTwoGerm-bridge`.
+  Owner: Leibniz (`019e45ef-ae7f-7c93-be48-5725eaac7248`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` only, with
+  `TASK.md`/`proof_workings/s2_route_workbook.md` only for status if needed.
+  Status: completed/pruned 2026-05-20.  Source task: S2-A.  Result: added
+  `S2_dyn_20260520_boundaryfree_localTwoGerm_bridge`, a checked reducer from
+  the pointwise `UnboundedFrontierCarrierLocalTwoGermRowsAt` family to
+  `BoundaryFreeLocalNoThirdGermSourceRows inputs`, by composing the existing
+  neighbour-pair cut-partition reducer.  Immediate premise policy: no new
+  source package or endpoint/no-chord/final-cycle shortcut.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`
+  passed in the worker; Codex-main rechecks this owner file before the next
+  S2 gate.
+- Claim: `S2-dyn-20260520-local-two-germ-leaf-audit`.
+  Owner: Aquinas (`019e45ef-aeca-7ea0-9b2b-ff69682893e8`).  Scope:
+  read-only `S2LocalTwoGermAssembly.lean`, `ExteriorComponentTopology.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-A.  Result: identified the
+  smallest honest local leaf as the pointwise source consumed by
+  `localTwoGermRows_of_boundaryFree_twoSelectedEdges_noThirdGerm_source`:
+  two actual selected `unboundedFrontierEdgeSet` incidences at each
+  unbounded-frontier vertex plus a no-third nearby frontier-germ row.  This is
+  not endpoint closure, a boundary-cycle premise, or a neighbour-pair shortcut.
+- Claim: `S2-dyn-20260520-raw-facesucc-residual-audit`.
+  Owner: Kant (`019e45ef-af19-7fc0-96af-42cef721b1bd`).  Scope:
+  read-only `S2SeededRawOrbitSource.lean`, `GeometricRotationSystem.lean`,
+  `S2ExteriorBoundarySource.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Source task: S2-C.  Result: identified the current raw
+  `faceSucc` residual as
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricTripleIndexNoOrbitSource`:
+  the selected left head, selected `faceSucc` head, and selected right head
+  must occupy consecutive `i`, `i+1`, `i+2` slots in the genuine
+  `geometricOutgoingDartList` at each selected successor tail.
+- Claim: `S2-dyn-20260520-local-two-germ-input-source`.
+  Owner: Kuhn (`019e45f4-b59a-7470-bd53-c80f3a02b295`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, with
+  `TASK.md`/`proof_workings/s2_route_workbook.md` only for checked status.
+  Status: completed/pruned 2026-05-20.  Source task: S2-A.  Result: added
+  `unboundedFrontierEdgeSet_or_symm_of_local_incident_frontier_germ` and
+  `localIncidentGermFrontierEdgeMembershipRows_of_inputs`, proving the
+  bare-input local-radius incident-germ frontier-edge membership part of the
+  local two-germ source.  Rewired
+  `localRadiusSelectedEdgeSourceRows_of_neighborPairRows` and
+  `selectedNeighborIncidentGermLocalFrontierEdgeMembershipRows_of_geometricSelectionInputSource`
+  to consume this bare-input row.  Remaining S2-A source: choose the two actual
+  selected incident heads from bare inputs and prove they exhaust the concrete
+  carrier neighbours.  Verification: worker reported
+  `lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean` and
+  `lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly` passed with
+  a clean forbidden-token scan; Codex-main rechecks locally.
+- Claim: `S2-dyn-20260520-successor-tail-triple-index-source`.
+  Owner: Ramanujan (`019e45f4-b5e2-7741-b6b3-b4556340423f`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, optionally
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` for reusable
+  sorted-list helpers, plus workboard notes after checked progress.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-C.  Result: added
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricTripleIndexNoOrbitSource_of_successorTailGeometricRows`
+  and `S2_dyn_20260520_successor_tail_triple_index_source`, showing the
+  triple-index wrapper follows from the genuine successor-tail geometric row
+  source.  Remaining S2-C source: produce the two
+  `GraphVertexGeometricAngularNeighborSelectionRow`s around the selected
+  `faceSucc` head at each successor tail.
+- Claim: `S2-dyn-20260520-local-star-lemma-scout`.
+  Owner: Boole (`019e45f4-b63f-72d0-9efa-8dd12bbe0b71`).  Scope:
+  read-only `S2LocalTwoGermAssembly.lean`, `ExteriorComponentTopology.lean`,
+  `FinitePlaneDrawing.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Source task: S2-A.  Result: identified the checked local-star
+  support lemmas
+  `exists_ball_forall_unboundedExterior_frontier_mem_incident_inOpenSegment_of_vertex_ne`,
+  `interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point`,
+  `exists_ball_forall_graph_vertex_eq_of_mem_ball`, and the existing
+  neighbour-pair erasers
+  `S2_agent_local_two_germ_neighbor_only_20260520ax` and
+  `S2_dyn_20260520_inhabit_local_radius_selected_edge_rows`.  The sharpest
+  non-circular local source is still the actual pointwise carrier-neighbour
+  family, not endpoint closure or a final boundary cycle.
+- Claim: `S2-dyn-20260520-successor-tail-geometric-row-source`.
+  Owner: Noether (`019e45fb-53ae-7882-b141-88d89f7392e6`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, optionally
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` for reusable
+  sorted-list helpers.  Status: completed/pruned 2026-05-20.  Source task:
+  S2-C.  Result: added
+  `graphVertexGeometricAngularNeighborSelectionRow_index_succ_eq_of_shared_middle`,
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNoBetweenRowsNoOrbitSource`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_of_noBetweenRows`,
+  and `S2_dyn_20260520_successor_tail_geometric_row_source`, reducing
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource`,
+  to the two genuine no-between rows around the selected `faceSucc` head at
+  each successor tail.  Remaining S2-C source: prove those two no-between rows;
+  strict propagation inequalities alone do not exclude intermediate outgoing
+  darts.
+- Claim: `S2-dyn-20260520-successor-tail-noBetween-source`.
+  Owner: Feynman (`019e45ff-d67f-77c2-b4ae-22b9036a30d1`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, optionally
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` for reusable
+  sorted-list helpers.  Status: completed/pruned 2026-05-20.  Source task:
+  S2-C.  Result: added
+  `graphVertexAngularNoBetweenRows_left_subinterval`,
+  `graphVertexAngularNoBetweenRows_right_subinterval`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNoBetweenRowsNoOrbitSource_of_localAngularStrictOrder`,
+  and `S2_dyn_20260520_successor_tail_noBetween_source`, strictly reducing
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNoBetweenRowsNoOrbitSource`
+  to `BoundaryFreeLocalSectorGeometricAngularSource inputs` plus the genuine
+  `RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource`.  The
+  remaining S2-C source is the strict successor-tail order row for the selected
+  `faceSucc` head, not endpoint/no-chord, final-cycle, arbitrary carrier,
+  synthetic, or identity-angular data.
+- Claim: `S2-dyn-20260520-noBetween-route-scout`.
+  Owner: Avicenna (`019e45ff-d6cd-7b90-a34c-656a510ad085`).  Scope:
+  read-only `S2SeededRawOrbitSource.lean`, `GeometricRotationSystem.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-C.  Result: confirmed there
+  was no direct non-circular existing theorem for the selected successor-tail
+  no-between source, identified the consecutive-row constructors in
+  `GeometricRotationSystem`, and supported the now-checked Feynman reduction to
+  the strict successor-tail order source.
+- Claim: `S2-dyn-20260520-strict-to-successorTail-geometric-composer`.
+  Owner: Huygens (`019e460a-e47a-7043-8eec-dceb3464be93`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-C.  Result: added
+  `S2_dyn_20260520_strict_to_successorTail_geometric_composer`, the narrow
+  reducer from
+  `BoundaryFreeLocalSectorGeometricAngularSource inputs` plus
+  `RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource inputs left right`
+  to
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource inputs left right`,
+  by composing the checked no-between and successor-tail geometric reducers.
+  Verification: Codex-main rechecked
+  `lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`;
+  it passed with the pre-existing seeded-file style warning.
+- Claim: `S2-dyn-20260520-strict-successor-tail-route-scout`.
+  Owner: Kierkegaard (`019e460b-0cfd-7f23-8726-71a0feb65522`).  Scope:
+  read-only `S2SeededRawOrbitSource.lean`, `GeometricRotationSystem.lean`,
+  `S2LocalTwoGermAssembly.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned by
+  Codex-main on 2026-05-20.  Source task: S2-C.  Result: confirmed the shortest
+  existing non-circular route is
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource`
+  to sorted-between to
+  `RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource`; the
+  genuine remaining leaf is the successor-tail geometric row or triple-index
+  source.
+- Claim: `S2-dyn-20260520-local-angular-source-route-scout`.
+  Owner: Curie (`019e460b-0d50-7190-9aba-a3954f0c9eb5`).  Scope:
+  read-only `S2LocalTwoGermAssembly.lean`, `S2BoundaryFreeRawSource.lean`,
+  `ExteriorComponentTopology.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Source task: S2-A.  Result: confirmed the honest local route
+  does not currently close
+  `BoundaryFreeLocalSectorGeometricAngularSource inputs` from bare inputs; the
+  best next source theorem is
+  `selectedNeighborCutPartitionGeometricOrderInputSource_of_inputs`, i.e. the
+  pointwise choice of actual selected `unboundedFrontierEdgeSet` carrier
+  neighbours plus their genuine sorted outgoing-dart adjacent index rows.
+- Claim: `S2-dyn-20260520-s2-current-consumer-chain-scout`.
+  Owner: Boyle (`019e460b-0d9b-7d91-b3bf-c4ec8cb95e3d`).  Scope:
+  read-only `FaceBoundaryTopologySourceW32.lean`, `S2BoundaryFreeRawSource.lean`,
+  `S2SeededRawOrbitSource.lean`, `ExteriorComponentTopology.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Source task: S2 integration.  Result: identified the current
+  shortest W32-facing chain as the relative-clopen K-side topology leaf plus
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs` and
+  matching selected-head `GraphVertexAngularNoBetweenRows`, feeding
+  `minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_neighborPairCutPartition_angularNoBetween_20260520`.
+- Claim: `S2-codex-20260520-relative-clopen-side-source-final`.
+  Owner: Dirac (`019e460e-eeec-7c12-8644-2b4cc23c3f15`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and
+  `proof_workings/s2_route_workbook.md` only for checked status.  Status:
+  completed/strictly reduced 2026-05-20.  Source task: S2-B.  Result: added
+  the checked claim wrapper
+  `S2_codex_20260520_relative_clopen_side_source_final`, reducing
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide`
+  to the sharper Janiszewski subcontinuum-boundedness source
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`.
+  Verification: targeted `ExteriorComponentTopology.lean` build passed with
+  pre-existing linter warnings only.
+- Claim: `S2-codex-20260520-neighbor-pair-cutpartition-final`.
+  Owner: Confucius (`019e460e-ef34-71a0-923c-1214a30d75d4`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `proof_workings/s2_route_workbook.md` only for checked status.  Status:
+  completed/strictly reduced 2026-05-20.  Source task: S2-A.  Result: added
+  `LocalRadiusSelectedEdgeSourceRows.toNeighborPairCutPartitionInputSource`,
+  `S2_codex_20260520_neighbor_pair_cutpartition_final_of_localRadiusSelectedEdgeSourceRows`,
+  and `S2_codex_20260520_neighbor_pair_cutpartition_final`, reducing
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs` to
+  the actual carrier-neighbour rows and the local-radius selected-edge source,
+  preserving the boundary-chord guardrail.  Verification: targeted
+  `ExteriorComponentTopology.lean` and `S2LocalTwoGermAssembly.lean` builds
+  passed.
+- Claim: `S2-codex-20260520-selected-head-angular-final`.
+  Owner: Hegel (`019e460e-ef83-7850-9538-0fca50592f29`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `proof_workings/s2_route_workbook.md` only for checked status.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-C.  Result: added the checked
+  selected-head/successor-tail angular reducers in
+  `S2SeededRawOrbitSource.lean`, including
+  `S2_codex_20260520_selected_head_successorTail_geometric_rows_of_selectedNeighborAngularNoBetween_strictOrder`
+  and
+  `S2_dyn_20260520_selected_head_angular_rows_of_neighborPairCutPartitionInputSource_indexRows`.
+  The remaining honest angular leaf is the selected-neighbour geometric-order
+  index row for the same selected heads, not an identity-order shortcut.
+- Claim: `S2-main-20260520-subcontinuum-local-radius-chain`.
+  Owner: Codex-main-current.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/strictly reduced 2026-05-20.  Source task: S2 integration.
+  Result: added W32 consumers
+  `minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedNeighborCutPartitionIndex_localIncident_20260520`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedNeighborInput_localIncident_20260520`,
+  composing Boyle's frontier-trace topology reduction with the checked
+  selected-neighbour cut/index route.  Then added
+  `minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedEdgePair_indexRows_20260520`,
+  exposing the local branch as selected incident-edge pairs plus genuine
+  selected-head index rows.  After the frontier-topology valid-source audit,
+  these trace-connected W32 consumers are compatibility wrappers only; they do
+  not define the live S2-B topology source leaves.
+- Claim: `S2-main-20260520-live-three-leaf-W32-route`.
+  Owner: Codex-main-current.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/checked
+  2026-05-20.  Source task: S2 integration.  Result: added the live W32
+  consumers
+  `minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520`,
+  `minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_angularNoBetween_20260520`,
+  `minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_noInterveningOutgoing_20260520`,
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_crossingBounded_unreachable_noIntervening_20260520`.
+  The current executable S2 surface is exactly:
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`,
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource`,
+  route-specific selected-head no-intervening outgoing-dart rows, and S1
+  no-cut rows.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FaceBoundaryTopologySourceW32.lean`
+  passed.
+- Claim: `S2-agent-20260520-indexrows-from-selected-neighbor`.
+  Owner: Codex-agent Hilbert (`019e4618-ad7f-7fa3-8baa-70112edcfa66`).  Role: selected-neighbour angular/index prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and read-only
+  `S2SeededRawOrbitSource.lean`.  Status: completed/pruned 2026-05-20.
+  Result: added
+  `selectedNeighborCutPartitionSourceRows_of_geometricOrderInputSource`,
+  `S2_agent_20260520_indexrows_from_selected_neighbor_inputSource`, and
+  `S2_agent_20260520_indexrows_family_from_selected_neighbor_inputSource`,
+  projecting primitive genuine `geometricOutgoingDartList` index rows from the
+  pointwise selected-neighbour/cut/geometric input source.  The residual is now
+  the pointwise combined selected-neighbour geometric-order input source, not
+  an identity-order shortcut.
+- Claim: `S2-agent-20260520-local-radius-source`.
+  Owner: Codex-agent Heisenberg (`019e4618-c29d-7f43-af57-671795c96478`).  Role: local selected-edge source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and tiny helper
+  lemmas in `ExteriorComponentTopology.lean` if required.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `LocalSelectedIncidentEdgePairSourceRows`,
+  `localRadiusSelectedEdgeSourceRows_of_selectedIncidentEdgePairRows`,
+  `S2_agent_20260520_local_radius_source`, and
+  `S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows`.
+  The residual is now the pointwise selected-edge incidence source: choose two
+  incident `unboundedFrontierEdgeSet` heads at each frontier vertex and prove
+  every selected incident head is one of them.
+- Claim: `S2-agent-20260520-planar-continuum-boundary`.
+  Owner: Codex-agent Boyle (`019e4618-e1e1-7ca1-9ae5-eec2bc5f9577`).  Role: planar topology source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/strictly reduced by Codex-main on 2026-05-20.  Result: added
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceConnected`,
+  `planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_frontierTraceConnected`,
+  `S2_agent_20260520_planar_continuum_boundary_boundedness`, and
+  `S2_agent_20260520_planar_continuum_boundary_relativeClopenKSide`.
+  Superseded by the frontier-topology valid-source audit: these trace
+  statements are compatibility-only and are not live source obligations,
+  because arbitrary compact connected `T âŠ† K` need not have connected
+  `T âˆ© frontier U`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  passed; no boundary-cycle, induced-graph, arbitrary-cycle, convex-hull,
+  synthetic-enclosure, or identity-angular-order input was used.
+- Claim: `S2-agent-20260520-selected-edge-pair-source`.
+  Owner: Codex-agent Erdos (`019e461c-5028-7612-9c28-583ee7a83efe`).  Role: selected frontier-edge source prover.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added
+  `localSelectedIncidentEdgePairSourceRows_of_unboundedFrontierCarrierGraph_degree_two`,
+  `S2_agent_20260520_selected_edge_pair_source_of_carrierGraph_degree_two`,
+  and `S2_agent_20260520_selected_edge_pair_source_of_neighborPairRows`.
+  Follow-up checked adapter pass added
+  `localSelectedIncidentEdgePairSourceRows_of_geometricSelectionInputSource`,
+  `S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource`,
+  `S2_agent_20260520_selected_edge_pair_source_of_geometricNeighborSelectionRows`,
+  and
+  `S2_agent_selected_cutpartition_source_of_geometricSelectionInputSource_20260520`.
+  The selected-edge pair and selected cut-row sources are now reduced to
+  honest actual-carrier neighbour/geometric-selection rows for
+  `unboundedFrontierCarrierGraph`/`unboundedFrontierEdgeSet`.
+- Claim: `S2-agent-20260520-shortest-route-harvest`.
+  Owner: Codex-agent Ptolemy (`019e4618-f4a8-7040-adce-a00b8d68aea9`).  Role: read-only route/API harvester.  Scope:
+  S2 owner files, `TASK.md`, and `proof_workings/s2_route_workbook.md`.
+  Status: completed/pruned 2026-05-20.  Result: shortest checked W32-facing
+  chain remains
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide`
+  plus `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource` plus
+  matching `GraphVertexAngularNoBetweenRows`, routed through
+  `unboundedExteriorFrontierCycleRows_of_relativeClopenKSide_neighborPairCutPartition_angularNoBetween_20260520`
+  and the direct W32 wrapper.  Safe stale raw-orbit/component route claims are
+  superseded for the shortest W32 route.
+- Claim: `S2-dyn-20260520-frontier-trace-connected-worker`.
+  Owner: Descartes the 2nd (`019e4625-c342-7952-bcdf-f508b712272a`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-B.  Result: added
+  `S2_dyn_20260520_frontier_trace_connected_worker`, reducing
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceConnected`
+  to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceSubcontinuumBetween`
+  through the existing checked adapter.
+- Claim: `S2-dyn-20260520-selected-edge-pair-degree-worker`.
+  Owner: Laplace the 2nd (`019e4625-c38d-7c72-b958-af097b5f214e`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only, with
+  `ExteriorComponentTopology.lean` read-only.  Status: completed/pruned
+  2026-05-20.  Source task: S2-A.  Result: added
+  `S2_dyn_20260520_selected_edge_pair_degree_worker`, reducing
+  `LocalSelectedIncidentEdgePairSourceRows inputs` to simple degree two of the
+  actual `unboundedFrontierCarrierGraph`.
+- Claim: `S2-dyn-20260520-selected-index-source-scout`.
+  Owner: Helmholtz the 2nd (`019e4625-c3db-79c3-8f06-0e37c443ec05`).  Scope:
+  read-only `S2LocalTwoGermAssembly.lean`, `S2SeededRawOrbitSource.lean`,
+  `GeometricRotationSystem.lean`, `ExteriorComponentTopology.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Source task: S2-C.  Result: the smallest next theorem is the
+  family-level selected-index source for the exact selected rows produced by
+  the current local selected-edge pair route:
+  `S2_dyn_20260520_selected_index_rows_of_selectedEdgePairRoute`.  The theorem
+  should prove
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+  selectedRows` for the selected rows obtained from
+  `S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows`,
+  not a local-angular source with recomputed heads.
+- Claim: `S2-dyn-20260520-selected-index-route-worker`.
+  Owner: Carver the 2nd (`019e462c-d189-7a52-b0ad-8b5066145ffb`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only; read-only
+  `S2SeededRawOrbitSource.lean` and `GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-C.  Result: added
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute`
+  and `S2_dyn_20260520_selected_index_rows_of_selectedEdgePairRoute`,
+  reducing selected-index rows for the exact selected-edge-pair route to the
+  smaller honest source: `GraphVertexAngularNoBetweenRows` for those exact
+  selected heads.  Carver correctly did not prove the no-extra-premise version,
+  since selected exterior edges alone do not exclude intervening non-frontier
+  unit darts in the full geometric outgoing list.
+- Claim: `S2-dyn-20260520-geometric-index-helper-worker`.
+  Owner: Hilbert the 2nd (`019e462c-d1df-7720-9b63-89dcc5fde07c`).  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` only; read-only
+  `S2LocalTwoGermAssembly.lean`.  Status: completed/pruned 2026-05-20.
+  Source task: S2-C support.  Result: no edit was needed.  The generic helper
+  already exists and was verified:
+  `GeometricRotationSystem.exists_graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows`,
+  with the choice wrapper
+  `GeometricRotationSystem.graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows`.
+  These are already consumed by
+  `unboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows_of_graphVertexAngularNoBetweenRows`.
+- Claim: `S2-dyn-20260520-frontier-trace-subcontinuum-worker`.
+  Owner: Popper the 2nd (`019e462c-d272-7691-a93f-45dd8b27c892`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only; read-only
+  `FinitePlaneDrawing.lean`.  Status: completed/pruned 2026-05-20 after the
+  owner file marked the arbitrary-trace statement compatibility-only and
+  overstrong.  Source task: S2-B.  Result: added
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction`,
+  `planarContinuumUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_noSubcontinuumObstruction`,
+  `planarContinuumUnboundedComplementFrontierRelativeClopenKSide_of_noSubcontinuumObstruction`,
+  and `S2_dyn_20260520_whole_frontier_relative_clopen_source`.  The live
+  whole-frontier relative-clopen source is now strictly reduced to the
+  no-subcontinuum obstruction for compact connected subsets crossing the two
+  nonempty closed sides of the actual unbounded complement-component frontier.
+  Verification: targeted `ExteriorComponentTopology.lean` check passed and
+  the touched-file forbidden-token scan returned clean.
+- Claim: `S2-dyn-20260520-topology-route-scout`.
+  Owner: Euler the 2nd (`019e462c-d2e7-7140-b09e-d92841c0ebee`).  Scope:
+  read-only `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`, and
+  relevant Mathlib topology imports.  Status: completed/pruned 2026-05-20.
+  Source task: S2-B support.  Result: confirmed the live source is the
+  nontrivial whole-frontier relative-clopen statement, feeding the relative
+  source by
+  `planarContinuumUnboundedComplementFrontierRelativeClopenKSide_of_nontrivialRelativeClopenKSide`
+  and the aligned K-split branch by
+  `planarContinuumUnboundedComplementFrontierAlignedKSplit_of_nontrivialRelativeClopenKSide`.
+  Warned that the arbitrary trace-subcontinuum theorem is compatibility-only
+  and should stay off the live path.
+- Claim: `S2-dyn-20260520-shortest-chain-audit`.
+  Owner: Maxwell the 2nd (`019e462c-d38e-72c3-a53f-82da5e31aeb1`).  Scope:
+  read-only `TASK.md`, `proof_workings/s2_route_workbook.md`,
+  `S2LocalTwoGermAssembly.lean`, `S2SeededRawOrbitSource.lean`, and
+  `FaceBoundaryTopologySourceW32.lean`.  Status: completed/pruned 2026-05-20.
+  Source task: S2 integration audit.  Result: confirmed the checked W32 chain
+  through selected-edge rows and dependent selected-index rows, and identified
+  trace-subcontinuum/local-radius routes as stale live source leaves.  The
+  note that Carver's selected-index theorem was not yet in Lean is superseded
+  by Carver's later checked edit.
+- Claim: `S2-dyn-20260520-selected-angular-edge-route-worker`.
+  Owner: Bernoulli the 2nd (`019e4630-84cf-7213-ab39-79f864bd0b37`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only; read-only
+  `GeometricRotationSystem.lean`, `ExteriorComponentTopology.lean`, and
+  `S2SeededRawOrbitSource.lean`.  Status: active/delegated 2026-05-20.
+  Source task: S2-C.  Deliverable: prove or strictly reduce
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute`
+  for the exact selected heads derived from `LocalSelectedIncidentEdgePairSourceRows`.
+- Claim: `S2-dyn-20260520-whole-frontier-no-subcontinuum-worker`.
+  Owner: Epicurus the 2nd (`019e4632-dea8-7b20-8e77-52f701d79cd1`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only.  Status:
+  active/delegated 2026-05-20.  Source task: S2-B.  Deliverable:
+  prove or strictly reduce
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction`,
+  the current live whole-frontier topology residual feeding
+  `S2_dyn_20260520_whole_frontier_relative_clopen_source`.
+- Claim: `S2-dyn-20260520-carrier-degree-route-scout`.
+  Owner: Ptolemy the 2nd (`019e4632-defd-7b30-a4f4-6c3854add6bd`).  Scope: read-only
+  `ExteriorComponentTopology.lean`, `S2LocalTwoGermAssembly.lean`,
+  `FinitePlaneDrawing.lean`, `TASK.md`, and `proof_workings/s2_route_workbook.md`.
+  Status: completed/pruned 2026-05-20.  Source task: S2-A support.  Result:
+  identified the smallest non-circular local residual as
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource C inputs`.
+  It feeds
+  `unboundedFrontierCarrierNeighborPairRows_of_unreachableAfterDeleteInputSource`
+  and then `S2_agent_20260520_selected_edge_pair_source_of_neighborPairRows`
+  to produce `LocalSelectedIncidentEdgePairSourceRows inputs`.  The degree-two
+  variant routes through
+  `unboundedFrontierCarrierGraph_degree_two_of_unreachableAfterDeleteInputSource`
+  and `S2_dyn_20260520_selected_edge_pair_degree_worker`.  Avoid final cycle,
+  induced frontier graph, all-adjacent endpoint, identity-order, and cut/local
+  two-germ round trips.
+- Claim: `S2-dyn-20260520-crossing-bounded-source-worker`.
+  Owner: Nash the 2nd (`019e463a-5639-7cf1-94f1-365603724d15`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-B.  Result: added/updated
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumRelativeClopenKSide`,
+  `planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_crossingRelativeClopenKSide`,
+  `planarContinuumUnboundedComplementFrontierCrossingRelativeClopenKSide_of_relativeClopenKSide`,
+  and `S2_dyn_20260520_crossing_bounded_source_worker`.  The target
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`
+  is now strictly reduced to the narrower whole-frontier relative-clopen source
+  in the specific crossing-subcontinuum case.  Verification: direct pinned
+  Lean check of `ExteriorComponentTopology.lean` and touched-file
+  forbidden-token scan passed.
+- Claim: `S2-dyn-20260520-unreachable-neighbor-source-worker`.
+  Owner: Dirac the 2nd (`019e463a-567f-73a3-976a-e17768429b53`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only, but must
+  coordinate with the crossing-bounded worker because they share a file.
+  Status: completed/pruned 2026-05-20.  Source task: S2-A.
+  Result: added
+  `S2_dyn_20260520_unreachable_neighbor_source_worker_at` and
+  `S2_dyn_20260520_unreachable_neighbor_source_worker`, strictly reducing
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource C inputs`
+  to the pointwise source
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`.  The reducer
+  keeps the two selected `unboundedFrontierEdgeSet` heads from the local-sector
+  row and discharges every third-carrier-neighbour case by `rows.only`; no
+  final boundary cycle, induced frontier graph, all-adjacent endpoint shortcut,
+  identity angular order, or local-two-germ round trip is used.  Verification:
+  direct pinned Lean check of `ExteriorComponentTopology.lean` and touched-file
+  forbidden-token scan passed.
+- Claim: `S2-dyn-20260520-no-intervening-outgoing-worker`.
+  Owner: Kierkegaard the 2nd (`019e463b-08c8-7481-9ead-744adde27f11`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only; read-only
+  `GeometricRotationSystem.lean`, `ExteriorComponentTopology.lean`, and
+  `FaceBoundaryTopologySourceW32.lean`.  Status: completed/pruned 2026-05-20.
+  Source task: S2-C.  Result: added
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute`,
+  `S2_dyn_20260520_selected_head_no_intervening_outgoing_dart_source_of_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute`,
+  `S2_dyn_20260520_selected_edge_pair_rows_of_unreachableAfterDeleteInputSource`,
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_unreachableAfterDeleteRoute`,
+  and
+  `S2_dyn_20260520_selected_head_no_intervening_outgoing_dart_source_for_unreachableAfterDeleteRoute_of_geometric_outgoing_list_no_between_source`.
+  This strictly reduces
+  `S2_dyn_20260520_selected_head_no_intervening_outgoing_dart_source_for_selectedEdgePairRoute`
+  for selected rows coming from the live unreachable-after-delete neighbour
+  source to a genuine geometric outgoing-list no-between source.  Verification:
+  direct pinned Lean check of `S2LocalTwoGermAssembly.lean` and touched-file
+  forbidden-token scan passed.
+- Claim: `S2-dyn-20260520-crossing-bounded-support-scout`.
+  Owner: Faraday the 2nd (`019e463b-b50f-7a81-ac7e-057ba7da363b`).  Scope: read-only
+  `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`, and relevant
+  Mathlib topology imports.  Status: stale/pruned 2026-05-20 after Nash closed
+  the S2-B reduction.  Source task: S2-B support.  No edits.
+- Claim: `S2-dyn-20260520-unreachable-support-scout`.
+  Owner: Copernicus the 2nd (`019e463b-b55d-7c42-ba3c-7b4133b5cf97`).  Scope: read-only
+  `ExteriorComponentTopology.lean`, `S2LocalTwoGermAssembly.lean`,
+  `MinimalGraphFacts.lean`, and graph/connectivity imports.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-A support.  Result: confirmed
+  the clean non-circular pointwise surface is
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteRowsAt inputs a`;
+  if side labels are available, use
+  `UnboundedFrontierCarrierDeletedNeighborLocalSeparationRowsAt inputs a` and
+  erase through
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_localSeparation`.
+  It also confirmed Dirac's local-sector reduction is non-circular when the
+  local-sector rows are supplied independently from boundary-free local
+  topology.
+- Claim: `S2-dyn-20260520-local-sector-input-source-worker`.
+  Owner: Socrates the 2nd (`019e4641-f754-7c81-bf6c-85eb1b0b41f2`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-A.  Result: added
+  `S2_dyn_20260520_local_sector_input_source_worker`,
+  `boundaryFreeLocalNoThirdGermSourceRows_of_selectedIncidentEdgePairRows`,
+  and `S2_dyn_20260520_boundaryFreeLocalNoThirdGermSource_of_selectedIncidentEdgePairRows`.
+  The live checked chain is now `LocalSelectedIncidentEdgePairSourceRows inputs`
+  -> `BoundaryFreeLocalNoThirdGermSourceRows inputs` ->
+  `BoundaryFreeLocalNoThirdGermSourceRows.toLocalTwoGermRows` ->
+  `localSectorRows_of_localTwoGermRows` ->
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`.  No
+  deleted-neighbour/unreachable source, final boundary cycle, induced frontier
+  graph, all-adjacent endpoint claim, identity angular order, or local-two-germ
+  round trip is used.  Gate passed: pinned direct Lean checks of
+  `ExteriorComponentTopology.lean` and `S2BoundaryFreeRawSource.lean`, plus
+  touched-file forbidden-token scan.
+- Claim: `S2-dyn-20260520-crossing-relative-clopen-worker`.
+  Owner: Ramanujan the 2nd (`019e4642-1052-7b21-b4bc-6596cf88bf2b`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and, only if
+  necessary, `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-B.  Result: added
+  `planarContinuumUnboundedComplementFrontierCrossingRelativeClopenKSide_of_crossingSubcontinuumForcesBounded`,
+  `planarContinuumUnboundedComplementFrontierCrossingRelativeClopenKSide_of_janiszewskiBoundaryBumping`,
+  and `S2_dyn_20260520_crossing_relative_clopen_worker`, strictly reducing
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumRelativeClopenKSide`
+  to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`.
+  `FinitePlaneDrawing.lean` was not edited.  Gate passed: pinned direct Lean
+  check of `ExteriorComponentTopology.lean` and touched-file forbidden-token
+  scan.
+- Claim: `S2-dyn-20260520-selected-outgoing-list-no-between-worker`.
+  Owner: Fermat the 2nd (`019e4642-24b0-7591-9e0d-1032e0f6509f`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-C.  Result: added
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_of_selected_index_rows_for_selectedEdgePairRoute`
+  and
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_unreachableAfterDeleteRoute_of_selected_index_rows`.
+  The direct eraser uses `geometricOutgoingDartList_pairwise_graphDartArg_lt`,
+  `List.no_between_of_getElem_succ_pairwise_real_lt`, and selected-head
+  equalities from `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows`;
+  no identity angular order, endpoint shortcut, final cycle row, or induced
+  frontier graph is used.  Gate passed: pinned direct Lean checks of
+  `S2LocalTwoGermAssembly.lean` and `GeometricRotationSystem.lean`, plus
+  touched-file forbidden-token scan.
+- Claim: `S2-dyn-20260520-w32-current-leaf-composer`.
+  Owner: Codex.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed 2026-05-20.  Source task: S2-D.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_crossingRelativeClopen_localSector_geometricOutgoingListNoBetween_20260520`,
+  the shortest checked non-circular W32 composer for the current three live
+  source leaves after the Nash/Dirac/Kierkegaard reductions.  It consumes
+  `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumRelativeClopenKSide`,
+  pointwise `UnboundedFrontierCarrierLocalSectorRowsAt`, and the matching
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_unreachableAfterDeleteRoute`
+  for the unreachable source built from those local-sector rows.  No facade,
+  `KnownBounds` exposure, final-cycle row, induced-frontier graph, or
+  endpoint-only shortcut was added.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FaceBoundaryTopologySourceW32.lean`.
+- Claim: `S2-dyn-20260520-local-sector-api-scout`.
+  Owner: pending dynamic explorer.  Scope: read-only
+  `ExteriorComponentTopology.lean`, `S2BoundaryFreeRawSource.lean`,
+  `S2ExteriorBoundarySource.lean`, and `proof_workings/s2_route_workbook.md`.
+  Status: completed/pruned 2026-05-20.  Source task: S2-A support.  Result:
+  shortest non-circular chain is `BoundaryFreeLocalNoThirdGermSourceRows inputs`
+  -> `BoundaryFreeLocalNoThirdGermSourceRows.toLocalTwoGermRows` ->
+  `localSectorRows_of_localTwoGermRows` ->
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`.  The
+  smallest honest missing local source is
+  `BoundaryFreeLocalNoThirdGermSourceRows inputs`; do not source it through
+  unreachable-after-delete, final cycle rows, or actual boundary equivalence.
+- Claim: `S2-dyn-20260520-relative-clopen-api-scout`.
+  Owner: pending dynamic explorer.  Scope: read-only
+  `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`, and local
+  Mathlib topology imports.  Status: completed/pruned 2026-05-20.  Source
+  task: S2-B support.  Result: shortest chain is
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`
+  -> `S2_codex_20260520_relative_clopen_side_source_final` ->
+  `planarContinuumUnboundedComplementFrontierCrossingRelativeClopenKSide_of_relativeClopenKSide`
+  -> `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumRelativeClopenKSide`.
+  The smallest missing topological theorem is
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`.
+- Claim: `S2-dyn-20260520-outgoing-list-api-scout`.
+  Owner: pending dynamic explorer.  Scope: read-only
+  `S2LocalTwoGermAssembly.lean`, `S2SeededRawOrbitSource.lean`, and
+  `GeometricRotationSystem.lean`.  Status: completed/pruned 2026-05-20.
+  Source task: S2-C support.  Result: smallest missing eraser is
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows selectedRows`
+  ->
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute selectedEdgeRows`,
+  then specialize to the unreachable route.  Expected primitives:
+  `geometricOutgoingDartList_pairwise_graphDartArg_lt`,
+  `List.no_between_of_getElem_succ_pairwise_real_lt`, and selected-head
+  equalities in the index-row structure.
+- Claim: `S2-dyn-20260520-sharp-current-leaf-composer`.
+  Owner: Codex-current.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status: completed
+  2026-05-20.  Source task: S2-D.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumForcesBounded_selectedEdgePair_indexRows_20260520`,
+  which composes the latest sharp live leaves directly:
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`,
+  `LocalSelectedIncidentEdgePairSourceRows`, and selected-edge-pair
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows`.  It
+  routes through the checked crossing-relative, boundary-free local-sector, and
+  outgoing-list no-between reducers, without adding a facade or touching
+  `KnownBounds`.  Gate passed: pinned direct Lean check of
+  `FaceBoundaryTopologySourceW32.lean`.
+- Claim: `S2-dyn-20260520-janiszewski-boundedness-source`.
+  Owner: Leibniz the 2nd (`019e464b-7464-7663-a28e-dc4e83bc72f4`).  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and, only if
+  unavoidable, `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-B.  Result: added
+  `planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_noSubcontinuumObstruction`
+  and `S2_dyn_20260520_janiszewski_boundedness_source`, strictly reducing
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`
+  to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`.
+  No trace/final-cycle/induced-frontier/arbitrary-carrier/synthetic enclosure
+  shortcut is used.  Gate passed: pinned direct Lean check of
+  `ExteriorComponentTopology.lean` and forbidden-token scan.
+- Claim: `S2-dyn-20260520-local-selected-edge-pair-source`.
+  Owner: Hubble the 2nd (`019e464b-935b-7e63-b800-09b6e65f3e0d`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only if a tiny
+  helper is unavoidable.  Status: completed/pruned 2026-05-20.  Source task:
+  S2-A.  Result: added
+  `S2_dyn_20260520_local_selected_edge_pair_source_family_of_neighborPairRows`,
+  `S2_dyn_20260520_local_selected_edge_pair_source_family_of_geometricSelectionInputSource`,
+  and
+  `S2_dyn_20260520_local_selected_edge_pair_source_family_of_geometricNeighborSelectionRows`.
+  The selected-edge-pair leaf now reduces to actual carrier neighbour-pair rows
+  or geometric-selection rows, without unreachable-after-delete, final cycles,
+  induced frontier graphs, endpoint-only all-adjacent claims, or identity
+  angular order.  Gate passed: pinned direct Lean check of
+  `S2LocalTwoGermAssembly.lean` and forbidden-token scan.
+- Claim: `S2-dyn-20260520-selected-edge-index-source`.
+  Owner: Beauvoir the 2nd (`019e464b-a7cf-78c2-8df3-49b47ad802cd`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2-C.  Result: added
+  `S2_dyn_20260520_selected_index_rows_of_selectedEdgePairRoute_geometric_outgoing_list_no_between`
+  and
+  `S2_dyn_20260520_selected_edge_index_source_family_of_geometric_outgoing_list_no_between`.
+  The selected-edge index leaf now reduces to the route-specific genuine
+  `geometricOutgoingDartList` no-between source for the exact selected heads,
+  without identity order, endpoint-only shortcut, final cycle row, or induced
+  frontier graph.  Gate passed: pinned direct Lean checks of
+  `S2LocalTwoGermAssembly.lean` and `GeometricRotationSystem.lean`, plus
+  forbidden-token scan.
+- Claim: `S2-dyn-20260520-sharp-leaf-route-scout`.
+  Owner: Aristotle the 2nd (`019e464b-ba92-79c1-81d6-291c5ce0eb51`).  Scope: read-only S2 owner files,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned 2026-05-20.  Source task: S2 support.  Result: audited
+  `minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumForcesBounded_selectedEdgePair_indexRows_20260520`;
+  the three leaves are non-circular.  Smaller honest sources are:
+  S2-B no-subcontinuum/relative-clopen, S2-A actual carrier neighbour-pair rows
+  or carrier degree two, and S2-C route-specific
+  `GraphVertexAngularNoBetweenRows` or no-intervening outgoing-dart rows.
+- Claim: `S2-dyn-20260520-janiszewski-boundedness-api-scout`.
+  Owner: Meitner the 2nd (`019e464d-2898-7db0-87d2-e6baef3babca`).  Scope: read-only
+  `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`, and topology
+  imports.  Status: completed/pruned 2026-05-20.  Source task: S2-B support.
+  Result: with Leibniz's reducer, the live topology target stops at
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`.
+  Relative-clopen is downstream via
+  `exists_relative_clopen_separator_of_no_subcontinuum`; the reverse
+  no-subcontinuum-from-boundedness adapter is circular after this reduction.
+- Claim: `S2-dyn-20260520-selected-edge-pair-api-scout`.
+  Owner: Turing the 2nd (`019e464d-399d-7622-a8c0-548a9fc92ceb`).  Scope: read-only
+  `S2LocalTwoGermAssembly.lean`, `ExteriorComponentTopology.lean`, and
+  `S2BoundaryFreeRawSource.lean`.  Status: completed/pruned 2026-05-20.
+  Source task: S2-A support.  Result: the least direct non-circular input for
+  only `LocalSelectedIncidentEdgePairSourceRows` is carrier degree two of
+  `unboundedFrontierCarrierGraph`; the smallest explicit row source is
+  `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a`.  Cut-partition,
+  geometric-selection, and unreachable-after-delete packages are stronger.
+- Claim: `S2-dyn-20260520-index-row-api-scout`.
+  Owner: McClintock the 2nd (`019e464d-4e44-7022-97e0-522f197e45fc`).  Scope: read-only
+  `S2LocalTwoGermAssembly.lean`, `GeometricRotationSystem.lean`, and
+  `S2SeededRawOrbitSource.lean`.  Status: completed/pruned 2026-05-20.
+  Source task: S2-C support.  Result: the smallest non-identity-order missing
+  row is route-specific
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute`
+  or equivalently
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute`.
+  No existing theorem proves these from selected-edge rows alone.
+- Claim: `S2-dyn-20260520-janiszewski-no-subcontinuum-source`.
+  Owner: pending dynamic worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only.  Status:
+  claimed/delegating 2026-05-20.  Source task: S2-B.  Deliverable: prove or
+  strictly reduce
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`.
+  This is the current topology leaf.  Do not use trace compatibility wrappers,
+  final boundary cycles, induced frontier graphs, arbitrary carriers, or the
+  now-circular no-subcontinuum-from-boundedness adapter.
+- Claim: `S2-dyn-20260520-carrier-neighbor-pair-source`.
+  Owner: pending dynamic worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` with read-only
+  `S2LocalTwoGermAssembly.lean`.  Status: claimed/delegating 2026-05-20.
+  Source task: S2-A.  Deliverable: prove or strictly reduce the actual carrier
+  neighbour-pair family `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a`
+  or carrier degree two for `unboundedFrontierCarrierGraph C inputs`.  Avoid
+  unreachable-after-delete, final cycles, endpoint-only shortcuts, and identity
+  angular order.
+- Claim: `S2-dyn-20260520-selected-head-no-between-source`.
+  Owner: pending dynamic worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  claimed/delegating 2026-05-20.  Source task: S2-C.  Deliverable: prove or
+  strictly reduce
+  `S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute`
+  or the equivalent route-specific
+  `S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute`
+  from genuine geometric outgoing-list/cyclic order rows.  No identity order,
+  endpoint-only shortcut, final cycle row, or induced frontier graph.
+- Claim: `S2-dyn-20260520-current-leaf-sanity-scout`.
+  Owner: pending dynamic explorer.  Scope: read-only S2 owner files and
+  `proof_workings/s2_route_workbook.md`.  Status: claimed/delegating
+  2026-05-20.  Source task: S2 support.  Deliverable: verify the three current
+  source leaves above are still the shortest honest route after the latest
+  reducers, and list exact theorem names that any next composer should consume.
+- Claim: `S2-dyn-20260520-relative-clopen-support-scout`.
+  Owner: Hegel the 2nd (`019e4610-ebec-7a40-85d1-880fc94f8aca`).  Scope:
+  read-only `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`,
+  topology imports, `TASK.md`, and `proof_workings/s2_route_workbook.md`.
+  Status: completed/pruned 2026-05-20.  Source task: S2-B support for Dirac.
+  Result: identified the non-circular topology leaf as
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`;
+  the relative-clopen K-side target follows by the already checked
+  Janiszewski/no-subcontinuum reducer chain.
+- Claim: `S2-dyn-20260520-neighbor-pair-support-scout`.
+  Owner: Banach the 2nd (`019e4610-ec3b-7dd1-8118-6f971cfcfedd`).  Scope:
+  read-only `S2LocalTwoGermAssembly.lean`, `ExteriorComponentTopology.lean`,
+  `FinitePlaneDrawing.lean`, `S2BoundaryFreeRawSource.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Source task: S2-A support for Confucius.  Result: identified
+  the smallest local carrier theorem as the pointwise
+  `unboundedFrontierCarrierNeighborPairCutPartitionRowsAt_of_inputs`, proving
+  two genuine incident `unboundedFrontierEdgeSet` heads plus third-neighbour
+  cut partitions for each actual unbounded-frontier vertex.
+- Claim: `S2-dyn-20260520-selected-angular-support-scout`.
+  Owner: Sagan the 2nd (`019e4610-ec9a-7972-9157-74da54690401`).  Scope:
+  read-only `S2LocalTwoGermAssembly.lean`, `S2SeededRawOrbitSource.lean`,
+  `GeometricRotationSystem.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Source task: S2-C support for Hegel.  Result: identified the
+  best angular leaf as the selected-cut-row
+  `GraphVertexAngularNoBetweenRows` family for the selected rows produced from
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs`, not
+  the larger bundled `SelectedNeighborCutPartitionGeometricOrderInputRowsAt`.
+- Claim: `S2-dyn-20260520-angular-premise-skeptic`.
+  Owner: Newton the 2nd (`019e4618-13da-7c13-a4de-a6e9666d37d0`).  Scope:
+  read-only `S2LocalTwoGermAssembly.lean`, `S2SeededRawOrbitSource.lean`,
+  `GeometricRotationSystem.lean`, `ExteriorComponentTopology.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/pruned
+  2026-05-20.  Source task: S2-C support for Hegel.  Result: confirmed
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs` alone
+  is not enough to prove the selected-head `GraphVertexAngularNoBetweenRows`
+  premise; the checked `_indexRows` theorem correctly adds the selected
+  geometric-order index row as the smallest direct angular premise.
+- Claim: `S2-worker-20260520-selected-input-source-leaf`.
+  Owner: Herschel (`019e45e2-a249-7db2-8540-825c147726a7`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, with
+  `GeometricRotationSystem.lean` only if a type-level angular helper is
+  necessary.  Status: completed/pruned 2026-05-20.  Result: added the checked
+  eraser from `BoundaryFreeLocalSectorGeometricAngularSource` to
+  `SelectedNeighborCutPartitionGeometricOrderInputSource`.  Task was to close or strictly reduce the selected
+  neighbour input leaf by proving the strongest checked theorem toward
+  `SelectedNeighborCutPartitionGeometricOrderInputSource inputs` from existing
+  local/geometric source rows.
+- Claim: `S2-explorer-20260520-janiszewski-leaf-route`.
+  Owner: Einstein (`019e45e2-b69e-7dc2-bc74-97c97089ce4b`).  Scope:
+  `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`, and local
+  topology uses.  Status: completed/pruned 2026-05-20.  Result: reduced the
+  remaining Janiszewski branch to a generic compact-Hausdorff relative-clopen
+  separator plus the genuine planar no-subcontinuum obstruction.  Task was to identify the shortest
+  honest route to the Janiszewski/boundary-bumping leaf or the smaller
+  nontrivial-relative-clopen side theorem.
+- Claim: `S2-explorer-20260520-route-workboard-minimizer`.
+  Owner: Socrates (`019e45e2-d153-7f32-8ee2-7c563bf31d0a`).  Scope:
+  `TASK.md`, `proof_workings/s2_route_workbook.md`, and S2 owner files.
+  Status: completed/pruned 2026-05-20.  Result: identified the current
+  shortest checked support route as the Janiszewski source plus
+  `SelectedNeighborCutPartitionGeometricOrderInputSource`, now further reduced
+  locally through `BoundaryFreeLocalSectorGeometricAngularSource`.  Task was to identify stale route/workboard entries and
+  give the minimal current theorem chain from source leaves to W32.
+- Claim: `S2-worker-20260520-finite-drawing-local-topology`.
+  Owner: Bacon (`019e45e2-e685-7961-ac7f-da46e7cb172c`).  Scope:
+  `FinitePlaneDrawing.lean` and `ExteriorComponentTopology.lean`.  Status:
+  completed/pruned 2026-05-20.  Result: added the checked bridge from the
+  finite-drawing nontrivial relative-clopen side source to finite-drawing
+  frontier preconnectedness.  Task was to prove any genuine small finite-drawing/local-topology theorem
+  that advances the Janiszewski or selected-frontier-edge source leaves, or
+  return the exact smallest remaining proposition without adding scaffolding.
+- Claim: `S2-worker-20260520-boundaryfree-local-no-third-source`.
+  Owner: Turing (`019e45e7-6179-7220-b70e-ba31fe288fa0`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` only, plus this
+  board for claim status.  Status: completed/pruned on 2026-05-20.  Result:
+  added
+  `boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutPartitionInputSource`,
+  reducing the boundary-free local source to
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs`;
+  `ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource` passed.
+- Claim: `S2-codex-20260520-boundaryfree-local-no-third-source-leaf`.
+  Owner: Codex.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` only, plus this
+  workboard for claim status.  Status: completed/strictly reduced on
+  2026-05-20.  Result: added
+  `boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutPartitionInputSource`,
+  reducing `boundaryFreeLocalNoThirdGermSourceRows_of_inputs` to the existing
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs`, whose
+  exact local payload is two genuine incident `unboundedFrontierEdgeSet` edges
+  at each actual unbounded-frontier vertex plus the checked third-neighbour
+  cut-partition branch.  Remaining theorem:
+  `boundaryFreeLocalNoThirdGermSourceRows_of_inputs`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+- Claim: `S2-explorer-20260520-boundaryfree-local-fields`.
+  Owner: Epicurus (`019e45e7-7ddf-7f11-938c-df67120bb0b4`).  Scope:
+  `S2BoundaryFreeRawSource.lean`, `ExteriorComponentTopology.lean`, and
+  `FinitePlaneDrawing.lean`.  Status: completed/pruned on 2026-05-20.
+  Result: identified the pointwise local no-third-germ theorem as the direct
+  missing source, and confirmed existing local finite-drawing lemmas provide
+  localization but not the two selected exterior-edge choices.
+- Claim: `S2-explorer-20260520-selected-neighbor-pair-route`.
+  Owner: Herschel (`019e45e9-6842-7741-b14d-877e2ee6c5af`).  Scope:
+  `ExteriorComponentTopology.lean`, `S2BoundaryFreeRawSource.lean`,
+  `S2LocalTwoGermAssembly.lean`, and `proof_workings/s2_route_workbook.md`.
+  Status: completed/pruned on 2026-05-20.  Result: no bare-input constructor
+  exists; the shortest checked route is still through
+  `BoundaryFreeLocalNoThirdGermSourceRows inputs`, with the cut-partition input
+  source as an even closer no-cut eraser.
+- Claim: `S2-codex-20260520-narrow-selected-neighbor-cutpartition-reducer`.
+  Owner: Codex.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and this
+  workboard only.  Status: completed on 2026-05-20.  Result: added
+  `selectedNeighborCutPartitionGeometricOrderSource_of_localSeparation_graphVertexAngularNoBetweenRows`,
+  the narrow reducer from a
+  local-separation deleted-neighbor source plus cut-row angular no-between rows
+  to `SelectedNeighborCutPartitionGeometricOrderSource`, reusing the existing
+  cut-partition and geometric-order source constructors.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.
+- Codex-main-current owns the integration thread for S2 only: keep
+  `TASK.md`/`proof_workings/s2_route_workbook.md` aligned with checked Lean
+  declarations, integrate completed worker handoffs, and run targeted owner
+  builds before any final root build.  Current next Lean gates are
+  `S2LocalTwoGermAssembly.lean`, `S2SeededRawOrbitSource.lean`, and
+  `FaceBoundaryTopologySourceW32.lean`.
+- Claim: `S2-main-20260520-post-pool-composer-integration`.
+  Owner: Codex-main-current.  Role: S2 route composer / targeted-build
+  integrator.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status: active.
+  Task: compose the newly reduced S2-B boundedness leaf and the fully split
+  selected-neighbour local route into the shortest checked theorem chain
+  without adding a new facade, endpoint/no-chord shortcut, induced frontier
+  graph, arbitrary cycle, identity angular order, or synthetic enclosure row.
+- Claim: `S2-worker-20260520-subcontinuum-boundedness`.
+  Owner: Codex-current.
+  Role: S2-B topology theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, plus this workboard
+  and `proof_workings/s2_route_workbook.md` only for status.  Status:
+  completed/strictly reduced on 2026-05-20.
+  Task: prove or strictly reduce
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`
+  without using final boundary-cycle rows, induced frontier graphs, arbitrary
+  carrier cycles, endpoint/no-chord assumptions, convex hull edges, identity
+  angular order, synthetic enclosure rows, or new trust assumptions.  Result:
+  added
+  `planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_relativeClopenKSide`
+  and claim wrapper
+  `S2_codex_20260520_subcontinuum_boundedness_of_relativeClopenKSide`,
+  reducing the boundedness leaf to the existing one-sided
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide`
+  source.  Verification:
+  `lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  passed with pre-existing warnings only.
+- Claim: `S2-worker-20260520-selected-cutpartition-source`.
+  Owner: Codex-current.
+  Role: S2-A selected exterior-neighbour worker.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, plus workboard notes
+  only after checked progress.  Status: completed/strictly reduced on
+  2026-05-20.  Result: added
+  `S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows`,
+  reducing `UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+  inputs` to the pointwise local two-germ source
+  `forall a, UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a`.  The two
+  selected heads remain actual `unboundedFrontierEdgeSet` incident heads, and
+  the third-neighbour cut-partition residual is discharged through the checked
+  local-sector/cut-partition erasers.  Verification:
+  `lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`
+  passed.
+- Claim: `S2-worker-20260520-selected-geometric-index-source`.
+  Owner: Codex-current.
+  Role: S2-A geometric angular-order worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, plus workboard
+  notes only after checked progress.  Status: completed/strictly reduced on
+  2026-05-20.  Result: added
+  `unboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows_of_graphVertexAngularNoBetweenRows`
+  and claim wrapper
+  `S2_worker_20260520_selected_geometric_index_source_of_graphVertexAngularNoBetweenRows`,
+  reducing
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows selectedRows`
+  to honest `GraphVertexAngularNoBetweenRows` for the selected cut-partition
+  heads; the proof obtains the index row via the genuine sorted
+  `geometricOutgoingDartList`.  Verification:
+  `lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`
+  passed.
+- Claim: `S2-worker-20260520-local-two-germ-source`.
+  Owner: Codex.
+  Role: S2-A local two-germ source worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, plus workboard and
+  workbook status only after checked progress.  Status: completed/strictly
+  reduced on 2026-05-20.  Result: added
+  `S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource`,
+  reducing the input-level pointwise source
+  `forall a, UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a` to the sharp
+  local source
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs`.  The
+  proof erases that source to actual carrier-neighbour rows, then uses local
+  drawing/frontier isolation and actual `unboundedFrontierEdgeSet` carrier
+  incidences; no final boundary-cycle rows, endpoint-only/all-adjacent frontier
+  shortcuts, induced frontier graph shortcuts, arbitrary cycles, identity
+  angular order, convex hull shortcuts, or synthetic enclosure rows.  Verification:
+  `lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`
+  passed.
+- Claim: `S2-worker-20260520-selected-head-angular-no-between`.
+  Owner: Averroes (`019e4605-69db-7fd0-ac52-290ec6637605`).
+  Role: S2-A selected-head angular no-between worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, plus workboard
+  and workbook status only after checked progress.  Status: completed by Codex
+  on 2026-05-20.  Result: added
+  `unboundedFrontierCarrierSelectedNeighborGraphVertexAngularNoBetweenRows_of_geometricOrderRows`
+  and `S2_worker_20260520_selected_head_angular_no_between_of_indexRows`,
+  reducing the pointwise source
+  `GeometricRotationSystem.GraphVertexAngularNoBetweenRows` for the selected
+  cut-partition heads, using actual `unboundedFrontierEdgeSet` incidences and
+  genuine angular order, without identity order, final boundary rows,
+  arbitrary cycles, induced frontier graph shortcuts, endpoint/no-chord
+  assumptions, or synthetic enclosure rows.  Verification:
+  `lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`
+  passed; touched Lean-file forbidden-token scan returned no matches.
+- Claim: `S2-main-20260520-geometric-rotation-compile-repair`.
+  Owner: Codex-main-current.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` only.  Status:
+  completed on 2026-05-20.  Result: the angular-neighbour selection existence
+  row now constructs `Nonempty` in a Lean-accepted form, the choice helper
+  remains the downstream `noncomputable def`, and
+  `lake build ErdosProblems1066.Swanepoel.GeometricRotationSystem` passes on
+  Lean 4.28 without axioms/sorries or route scaffolding.
+- Claim: `S2-main-20260520-seeded-successor-integration`.
+  Owner: Codex-main-current.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only, after the
+  geometric-rotation dependency compiles.  Status: completed on 2026-05-20.
+  Result: `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passes with the safe local-third-germ selected successor-edge composer.
+- Claim: `S2-main-20260520-w32-integration-gate`.
+  Owner: Codex-main-current.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` plus the
+  S2 owner imports.  Status: completed on 2026-05-20.  Result:
+  `lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passes, and the forbidden-token scan over the touched S2 owner files is clean
+  for `axiom`, `sorry`, `admit`, `unsafe`, `opaque`, `#check`, `#print`, and
+  `#eval`.
+- Claim: `S2-worker-20260520-dependent-source-reducer`.
+  Owner: Euclid (`019e45e0-ea6d-7df2-a095-8f51eac0154a`).  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only, plus this
+  board for claim status.  Status: completed/pruned on 2026-05-20.  Result:
+  added
+  `selectedNeighborCutPartitionGeometricOrderSource_of_localSeparation_graphVertexAngularNoBetweenRows`
+  and verified `ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+- Claim: `S2-explorer-20260520-deleted-neighbor-source-route`.
+  Owner: Hegel (`019e45e0-f9f2-7840-87dd-87841b73ffc6`).  Scope:
+  `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`,
+  `S2BoundaryFreeRawSource.lean`, and `S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned on 2026-05-20.  Result: shortest honest route is
+  `BoundaryFreeLocalNoThirdGermSourceRows inputs` to local-sector rows to
+  `UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource C inputs`;
+  the missing source belongs in `S2BoundaryFreeRawSource.lean`.
+- Claim: `S2-explorer-20260520-selected-angular-order-route`.
+  Owner: Faraday (`019e45e1-08a2-7aa0-91a7-d90480e3e83b`).  Scope:
+  `GeometricRotationSystem.lean` and `S2LocalTwoGermAssembly.lean`.  Status:
+  completed/pruned on 2026-05-20.  Result: selected-edge/cut-partition rows
+  still need genuine non-wrap sorted outgoing-list adjacency for the same
+  heads, expressible as `GraphVertexAngularNoBetweenRows` or
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows`.
+- Claim: `S2-explorer-20260520-workboard-audit`.
+  Owner: Heisenberg (`019e45e1-1afb-79c1-8fdf-08014dda8cbf`).  Scope:
+  `TASK.md` and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned on 2026-05-20.  Result: reported stale historical active
+  entries and workbook endpoint-only language; current live block above is the
+  authoritative ownership map.
+- Hubble (`019e45ce-1d45-78e3-a3a1-18eaca7f6ec9`) was stale while
+  `S2SeededRawOrbitSource.lean` still failed to build; status
+  pruned/shutdown on 2026-05-20.
+- Bohr (`019e45d1-a083-7400-a8ea-4237d4b08af6`) completed the selected
+  cut-partition source half in `S2LocalTwoGermAssembly.lean`; status
+  pruned/closed on 2026-05-20 after a targeted build.
+- Lagrange (`019e45d1-bd6f-7762-895f-2356303e0e0d`) completed the
+  sorted outgoing-dart geometric-order residual surface in
+  `S2LocalTwoGermAssembly.lean`; status pruned/closed on 2026-05-20 after a
+  targeted build.
+- Faraday (`019e45d0-d0ca-7090-9d22-b6f04e6bec36`), Meitner
+  (`019e45d6-bfc1-72e1-852d-a02c2f7671f8`), Mendel
+  (`019e45d6-ea0b-7323-8144-e2fd9195f3df`), and Godel
+  (`019e45d7-066e-70e3-9915-cdb51a05968b`) are not present in the current
+  visible subagent pool; treat their handles as stale unless a new
+  notification proves otherwise.
+
+All older entries below are historical unless one of these current live handles
+or `Codex-main-current` explicitly restates them as active.
+
+- Claim: `S2-agent-20260520-shortest-route-explorer`.
+  Owner: Wegener (`019e45bf-dea0-7b32-8e4d-af5d69547558`).  Role:
+  read-only S2 route-minimizer.  Scope: S2 owner files, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: stale/pruned on 2026-05-20;
+  worker handle was no longer present and no report was available.  Task was to identify the
+  shortest non-circular checked route from current source surfaces to
+  unconditional `UnboundedExteriorFrontierCycleRows C inputs`, naming exact
+  remaining premise families and excluding false all-adjacent endpoint/chord
+  shortcuts.  No file edits; do not treat as live ownership.
+
+- Claim: `S2-agent-20260520-selected-local-sector-explorer`.
+  Owner: Bohr (`019e45bf-f69a-74c0-8a9a-e7162819bc88`).  Role:
+  read-only local-sector/source explorer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed/pruned 2026-05-20.  Task: find the exact proof route for
+  `SelectedNeighborLocalExteriorPointSectorRows` or the incident-germ
+  membership residual from existing local drawing/frontier lemmas, without
+  all-adjacent endpoint rows, endpoint-only no-chord assumptions, identity
+  angular order, final boundary data, or induced frontier graph shortcuts.
+  No file edits.  Result: verified the global
+  `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` and global
+  `SelectedNeighborLocalExteriorPointSectorRows` are too strong as source
+  targets.  The safe route is the local-radius incident-germ membership row,
+  followed by the local-radius third-germ sector row now checked below.
+
+- Claim: `S2-agent-20260520-finite-drawing-topology-explorer`.
+  Owner: Raman (`019e45c0-07cc-7112-8b0b-9770167364e0`).  Role:
+  read-only topology residual explorer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: stale/pruned on 2026-05-20;
+  worker handle was no longer present and the S2-B residual had already been
+  reduced to the Janiszewski/boundary-bumping leaf.  Task was to isolate the
+  exact remaining theorem behind
+  `FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`
+  and its aligned K-split reducer, including any existing standard
+  planar-continuum source theorem already present in the repo.  No file edits.
+
+- Claim: `S2-main-20260520-unconditional-source-closure`.
+  Owner: Codex-main-current.  Role: S2 closure coordinator / theorem prover.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status: active.
+  Task: close the remaining input-level sources needed for the checked
+  endpoint-free S2 cycle-row route, then route the resulting unconditional
+  `UnboundedExteriorFrontierCycleRows` family through the finite-planar theorem
+  and W32 target.  Current verification gate: build only the touched owner
+  modules during development; reserve full root build and forbidden-token scan
+  for the final S2 gate.  Completed Codex subtask:
+  `S2_codex_20260520_selected_neighbor_geometric_order_source_split` strictly
+  reduces `UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows`
+  to selected incident-edge/cut-partition rows plus a genuine sorted
+  outgoing-dart consecutive-order theorem for the same selected heads.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed; touched Lean-file forbidden-token scan returned no matches.
+
+- Claim: `S2-agent-20260520-frontier-trace-connected-source`.
+  Owner: Newton (`019e4624-125b-7f43-8d71-ad0c41850d7e`).  Role:
+  S2-B topology theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+  completed/pruned on 2026-05-20.  Added checked trace-source reductions:
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceNoClosedSeparation`,
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceSubcontinuumBetween`,
+  `planarJaniszewskiBoundaryBumpingTraceConnected_of_traceNoClosedSeparation`,
+  and the relative-clopen composers
+  `S2_agent_20260520_relativeClopenKSide_of_traceNoClosedSeparation` /
+  `S2_agent_20260520_relativeClopenKSide_of_traceSubcontinuumBetween`.
+  Superseded by the frontier-topology valid-source audit: the trace surfaces
+  are retained as checked conditional adapters only, not as live S2-B source
+  leaves.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-20260520-boundaryfree-angular-input-source`.
+  Owner: Jason (`019e4624-2c8e-7cc3-9c56-6cd63c733d8f`).  Role:
+  S2-A/S2-C geometric source worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+  completed/pruned 2026-05-20.  Task: prove or strictly reduce the
+  input-level construction of
+  `BoundaryFreeLocalSectorGeometricAngularSource inputs`, preferably through
+  actual selected unbounded-frontier neighbour rows and genuine sorted outgoing
+  angular order for the same selected heads.  No endpoint-only/all-adjacent
+  chord shortcut or identity angular order.  Result: added checked selected-row
+  reducers
+  `S2_agent_20260520_boundaryFreeAngularSource_of_selectedNeighborGeometricOrder_localPointSector`,
+  `S2_agent_20260520_boundaryFreeAngularSource_family_of_selectedNeighborGeometricOrder_localPointSector`,
+  `S2_agent_20260520_localSelectedNeighborRows_of_selectedNeighborGeometricOrder_localPointSector`,
+  and
+  `S2_agent_20260520_localSelectedNeighborRows_family_of_selectedNeighborGeometricOrder_localPointSector`.
+  These reduce the boundary-free angular source to actual selected
+  `unboundedFrontierEdgeSet` neighbour/cut-partition rows, genuine sorted
+  outgoing-dart consecutive rows for the same selected heads, and the local
+  exterior point-sector theorem.  No endpoint-only/all-adjacent chord,
+  identity-order, completed-boundary, or synthetic-enclosure shortcut is used.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-agent-20260520-selected-neighbor-input-from-carrier`.
+  Owner: Lagrange (`019e4624-4631-73b1-8841-22c8224cb1e3`).  Role:
+  S2-A selected carrier-neighbour worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+  completed on 2026-05-20.  Result: added
+  `selectedNeighborCutPartitionGeometricOrderInputSource_of_geometricSelectionInputSource`
+  and the compact carrier-row/family variants, reducing
+  `SelectedNeighborCutPartitionGeometricOrderInputSource inputs` to the actual
+  selected unbounded-frontier carrier/geometric-selection source while keeping
+  the same two heads, selected frontier-edge incidences, vacuous third-neighbour
+  cut partitions, and genuine sorted outgoing-dart consecutive indices.
+  Follow-up checked reducer pass added
+  `selectedNeighborCutPartitionGeometricOrderSource_of_geometricSelectionInputSource`,
+  `selectedNeighborCutPartitionGeometricOrderSource_of_geometricNeighborSelectionRows`,
+  their family variants, and
+  `selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource` /
+  `selectedNeighborGeometricOrderSourceRows_of_geometricNeighborSelectionRows`
+  plus family variants.  These compose the same actual carrier/geometric rows
+  directly into the dependent selected-neighbour source and the geometric-order
+  source rows consumed by the local S2 route, without identity angular order,
+  all-adjacent endpoint shortcuts, induced frontier graphs, or final boundary
+  cycle rows.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`
+  passed.
+
+- Claim: `S2-agent-20260520-final-source-chain-scout`.
+  Owner: Plato (`019e4624-5fb5-7641-867c-a3a310710b51`).  Role:
+  S2 route consistency scout.  Scope: read-only
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+  completed/pruned 2026-05-20.  Result: confirmed the shortest checked W32
+  compatibility route was
+  `minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedNeighborInput_localIncident_20260520`,
+  with residuals
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceConnected`
+  and the input-level family
+  `SelectedNeighborCutPartitionGeometricOrderInputSource inputs`, plus the
+  external S1 no-cut family.  After the frontier-topology valid-source audit,
+  the trace residual is not a live topology source.  The scout found no live workboard instruction
+  requiring the false all-adjacent endpoint theorem, induced frontier graph,
+  synthetic enclosure, or identity angular shortcut.
+
+- Claim: `S2-agent-20260520-selected-edge-endpoint-closure-correction`.
+  Owner: Codex.  Role: selected-edge endpoint
+  closure worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+  completed 2026-05-20.  Result: located
+  `SelectedUnboundedFrontierEdgeEndpointClosureSource` and
+  `selectedUnboundedFrontierEdgeEndpointClosureSource_of_definition`, then
+  added
+  `selectedUnboundedFrontierEdgeEndpointClosureSource_of_selectedIncidentEdge`
+  and
+  `closedSegmentEndpointClosureSource_of_selectedEndpointClosure_incidentEdge`.
+  Local consumers can now reduce endpoint closure from actual
+  `unboundedFrontierEdgeSet` membership, in either orientation, before erasing
+  to the older adjacent-endpoint consumer shape.  No unconditional
+  all-adjacent endpoint/no-chord shortcut, induced frontier graph, synthetic
+  enclosure, or identity angular order was used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed; the touched Lean-file forbidden-token scan returned clean.
+
+- Claim: `S2-agent-20260520-actual-exterior-orbit-carrier-source`.
+  Owner: Codex.  Role: actual exterior
+  carrier/orbit source worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+  completed/strictly reduced 2026-05-20.  Result: added the selected raw-tail
+  actual-boundary and honest-carrier projections
+  `SelectedRawTailCoverageSourceRows.toActualBoundaryCycleFrontierEquivalenceRows`,
+  `SelectedRawTailCoverageSourceRows.toExteriorFrontierCarrierRows_nonempty`,
+  `actualBoundaryCycleFrontierEquivalenceRows_of_selectedRawTailCoverage_cutPartitions_20260520`,
+  `exteriorFrontierCarrierRows_nonempty_of_selectedRawTailCoverage_cutPartitions_20260520`,
+  `actualBoundaryCycleFrontierEquivalenceRows_of_connectedRawOrbitSourceRows_selectedCutPartitions_20260520`,
+  and
+  `exteriorFrontierCarrierRows_nonempty_of_connectedRawOrbitSourceRows_selectedCutPartitions_20260520`.
+  These construct the actual raw exterior boundary/carrier from selected
+  raw-tail coverage plus repeated-tail cut partitions, keeping the raw
+  open-segment frontier row and frontier-tail equivalence explicit.  Task:
+  prove or strictly reduce the
+  actual raw exterior face-orbit/carrier construction from
+  `FinitePlanarOuterComponentInputs C`, keeping edge-open-segment frontier
+  honesty and frontier-vertex equivalence explicit.  No final cycle as an
+  input, arbitrary carrier, induced frontier graph, convex-hull shortcut, or
+  synthetic enclosure.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed; scoped forbidden-token scan over
+  `ExteriorComponentTopology.lean`, `S2ExteriorBoundarySource.lean`, and
+  `S2SeededRawOrbitSource.lean` returned `clean`.
+
+- Claim: `S2-agent-20260520-frontier-topology-valid-source`.
+  Owner: Codex.  Role: topology-source validator
+  and repair worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+  completed 2026-05-20.  Result: demoted
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceConnected`,
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceNoClosedSeparation`,
+  and
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceSubcontinuumBetween`
+  to compatibility-only surfaces; the live source is now the checked
+  whole-frontier reducer
+  `S2_agent_20260520_frontier_topology_valid_source`, consuming
+  `FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit`
+  plus fixed-side local-sector rows to produce
+  `UnboundedExteriorActualFrontierPreconnectedSource C inputs` and
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`.  No final
+  boundary-cycle rows, arbitrary carrier/cycle, induced frontier graph,
+  convex hull, synthetic enclosure, or identity angular order.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+  Touched Lean-file forbidden-token scan over
+  `ExteriorComponentTopology.lean` and `FinitePlaneDrawing.lean` returned
+  `clean`.
+
+- Claim: `S2-agent-20260520-janiszewski-boundary-bumping-source`.
+  Owner: Kepler (`019e45c4-7821-7a40-9ec4-df1010c8e17c`).  Role:
+  S2-B topology theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, this
+  workboard, and optionally `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned 2026-05-20.  Result: strictly reduced
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`
+  to the Janiszewski/boundary-bumping leaf and closed the finite-drawing
+  nontrivial-relative-clopen source side, without final boundary-cycle rows,
+  induced frontier graphs, arbitrary carrier/cycles, convex hull shortcuts,
+  synthetic enclosure, or new trust assumptions.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed during integration.
+
+- Claim: `S2-agent-20260520-selected-neighbor-order-source`.
+  Owner: James (`019e45c4-9a28-7021-9201-b6e824ab19d6`).  Role:
+  S2-A selected-neighbour theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, optionally
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` or
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed/pruned 2026-05-20.  Result: split
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows` from
+  actual selected incident-edge/cut-partition neighbour rows plus genuine
+  sorted outgoing-dart order, without endpoint-only/all-adjacent no-chord rows,
+  identity angular order, final boundary rows, induced frontier graphs, or
+  synthetic enclosure.  Added the source split and family projection consumed
+  by the W32 adapter.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed after the local-radius support repair.
+
+- Claim: `S2-agent-20260520-local-radius-route-adapter`.
+  Owner: Wegener (`019e45c4-b738-75e1-99e6-8ea7ec408294`).  Role:
+  S2-A/S2-C route adapter.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and this
+  workboard.  Status: completed/pruned 2026-05-20.  Result: adapted the checked local-angular/S2 route
+  to consume `SelectedNeighborThirdGermLocalExteriorPointSectorRows` instead
+  of the too-strong global point-sector or all-radius incident-germ rows, or
+  prove the sharpest local-radius source variant and identify the precise
+  downstream theorem that must be generalized.  Added
+  `localTwoGermRows_of_selectedNeighborThirdGermLocalExteriorPointSectorRows`,
+  `localSectorRows_of_selectedNeighborThirdGermLocalExteriorPointSectorRows`,
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_geometricSelection_localThirdGerm`,
+  and local-third-germ cycle-row composers.  Verification gate: each touched
+  S2 owner module built successfully.
+
+- Claim: `S2-agent-20260520-successor-tail-geometric-source`.
+  Owner: Mill (`019e45c4-d261-7823-ba29-cceb10531ab6`).  Role:
+  S2-C selected face-successor theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, optionally
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` or
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and this
+  workboard.  Status: completed/pruned 2026-05-20.  Result: strictly reduced
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource`
+  using genuine sorted outgoing-dart geometry, without endpoint-only/no-chord
+  rows, final cycle/actual-boundary rows, induced frontier graphs, identity
+  angular order, or synthetic enclosure.  Added
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricTripleIndexNoOrbitSource`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_of_tripleIndex`,
+  and `S2_dyn_20260520_successor_tail_geometric_rows`.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-20260520-repeated-tail-real-witness-source`.
+  Owner: Descartes (`019e45c5-04eb-75c3-a7d0-f6a5d5350f69`).  Role:
+  S2-D repeated-tail theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, this workboard,
+  and optionally `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned 2026-05-20.  Result: strictly reduced
+  prove or strictly reduce `S2RepeatedBoundaryArcRealWitnessSourceRows` for
+  repeated selected raw-tail pairs, including open-arc witnesses, non-cut
+  tail coverage, same-tail-only-cut, and index-level anticompleteness, without
+  final boundary-cycle rows, actual-boundary equivalence rows, induced frontier
+  graphs, arbitrary carrier/cycles, synthetic enclosure, or endpoint shortcuts.
+  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  passed after the local-radius dependency repair.
+
+- Claim: `S2-codex-20260520-real-witness-primitive-source-direct`.
+  Owner: Codex-main-current.  Role: S2-D repeated-tail source reducer.
+  Scope: `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and this
+  workboard.  Status: completed/Lake checked 2026-05-20.  Task: directly reduce
+  `S2RepeatedBoundaryArcRealWitnessSourceRows` to the concrete primitive
+  raw-index source rows, preserving the selected open-arc witness indices and
+  using only image-level off-cut disjointness plus graph anticompleteness; no
+  final boundary-cycle rows, actual-boundary equivalence rows, induced frontier
+  graph, arbitrary carrier/cycle, synthetic enclosure, endpoint shortcut, or
+  trust command.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`
+  passed.  The requested Lake gate
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  also passed after the imported local-radius dependency was repaired.
+
+- Claim: `S2-main-20260520-local-third-germ-successor-edge-composer`.
+  Owner: Codex-main-current.  Role: S2-C/S2-A integration prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status: active.
+  Progress: added and Lake-checked W32 consumers
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNontrivialRelativeClopen_selectedNeighborOrder_safeLocalThirdGerm_20260520`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_selectedNeighborSplit_safeLocalThirdGerm_20260520`,
+  so W32 now has a direct safe local-radius consumer and no longer needs the
+  obsolete `SelectedNeighborLocalExteriorPointSectorRows` surface.  Remaining
+  task: generalize the selected successor-edge branch currently routed through
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_selectedNeighbor_pointThirdGerm_sortedBetween_20260520`
+  and
+  `unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_selectedNeighbor_pointThirdGerm_sortedBetween_20260520`
+  so it consumes the safe local-radius
+  `SelectedNeighborThirdGermLocalExteriorPointSectorRows` / local-sector rows,
+  not the false arbitrary-radius point-sector source.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and the W32 consumer build.
+
+- Claim: `S2-agent-local-third-germ-successor-edge-composer`.
+  Owner: Hubble (`019e45ce-1d45-78e3-a3a1-18eaca7f6ec9`).  Role:
+  focused theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only.  Status:
+  active.  Task: add the narrow S2Seeded theorem(s) needed to route the
+  selected successor-edge branch through the safe local-radius
+  `SelectedNeighborThirdGermLocalExteriorPointSectorRows` / local-sector rows,
+  avoiding the too-strong arbitrary-radius point-sector source and all
+  forbidden shortcuts.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- Claim: `S2-agent-shortest-local-third-germ-route-audit`.
+  Owner: Harvey (`019e45ce-3a90-7c12-a3b4-c7d281211b6b`).  Role:
+  read-only route explorer.  Scope: S2 owner files, W32 consumer, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/pruned 2026-05-20.
+  Result: reported that the shortest current chain is the local-radius
+  aligned-K route
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource`
+  -> `S2_codex_20260520_selected_third_germ_local_sector`
+  -> `unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_geometricSelection_localThirdGerm_20260520`,
+  and that the remaining source obligation is the selected neighbour
+  geometric-selection family plus the already consumed continuum split source.
+  Task: report the shortest remaining source chain after the local-radius and
+  triple-index reductions, name obsolete/too-strong theorem surfaces, and
+  identify the next smallest obligations without editing files.
+
+- Claim: `S2-agent-selected-cutpartition-source`.
+  Owner: Bohr (`019e45d1-a083-7400-a8ea-4237d4b08af6`).  Role:
+  focused theorem worker / selected carrier-neighbour source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only.  Status:
+  active.  Task: prove or strictly reduce
+  `UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs`, the
+  selected incident-edge/cut-partition half of
+  `SelectedNeighborCutPartitionGeometricOrderSource`, without final boundary
+  cycle rows, actual-boundary equivalence rows, induced frontier graph,
+  arbitrary carrier/cycle assumptions, endpoint/no-chord shortcuts, synthetic
+  enclosure, identity angular order, or trust commands.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-agent-selected-geometric-order-source`.
+  Owner: Lagrange (`019e45d1-bd6f-7762-895f-2356303e0e0d`).  Role:
+  focused theorem worker / sorted outgoing-dart source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and, only for tiny
+  helper lemmas if unavoidable,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status: active.
+  Task: prove or strictly reduce
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderRows selectedRows`,
+  the genuine geometric-order half of
+  `SelectedNeighborCutPartitionGeometricOrderSource`, using real sorted
+  outgoing-dart/angular-neighbour data and none of the forbidden shortcuts.
+  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-agent-20260520-frontier-preconnected-source-final`.
+  Owner: Kuhn (`019e45b6-f086-7b01-bfcd-8a908eb4467a`).  Role: S2-B topology theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+  completed.  Task: prove or strictly reduce the finite-drawing aligned
+  K-split / unbounded frontier preconnectedness source from the actual compact
+  connected embedded drawing, without using final cycle rows, induced frontier
+  graph, arbitrary spanning cycles, convex hulls, or synthetic enclosures.
+  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed on 2026-05-20 after the finite-drawing nontrivial relative-clopen
+  side residual and adapters landed.
+
+- Claim: `S2-agent-20260520-finite-nontrivial-relative-clopen-side`.
+  Owner: Codex.  Role: S2-B finite-drawing topology worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  optional `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this
+  workboard.  Status: completed/strictly reduced 2026-05-20.  Task: prove or strictly reduce
+  `FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`
+  to the sharp standard planar-continuum/Janiszewski boundary-bumping source,
+  without final boundary-cycle rows, induced frontier graph, arbitrary
+  spanning cycle, convex hull shortcut, or synthetic enclosure.  Verification
+  gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.  Result: added
+  `finiteDrawingUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_planarContinuum`,
+  `finiteDrawingUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_janiszewskiBoundaryBumping`,
+  and `S2_agent_20260520_finite_nontrivial_relative_clopen_side_source`.
+
+- Claim: `S2-agent-20260520-selected-neighbor-geometric-source-final`.
+  Owner: Epicurus (`019e45b6-f0d2-78b3-9e6c-f1fbd4932ed0`).  Role: S2-A selected-neighbour theorem worker.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: stale/pruned on 2026-05-20 after the worker handle was
+  no longer present.  Task was to prove or strictly reduce
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  from the actual selected unbounded-frontier carrier neighbours and genuine
+  sorted geometric outgoing-dart order; no all-adjacent endpoint/no-chord
+  shortcut and no identity angular order.  This lane is now re-owned by the
+  live selected-neighbour replacement claim below.  Verification gate for the
+  replacement remains
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-agent-20260520-point-third-germ-source-final`.
+  Owner: Huygens (`019e45b6-f130-7f73-85d2-4355a8871123`).  Role: S2-A local germ theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed/strictly reduced, then pruned on 2026-05-20
+  after the worker handle was no longer present.  Task: prove or strictly
+  reduce the
+  selected-neighbour point-third-germ local angular source for frontier points
+  in incident germs at the same vertex, using actual local drawing isolation
+  and selected frontier-edge membership.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+  Codex supplement 2026-05-20: added the exact residual
+  `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` and checked reducers
+  `S2_agent_20260520_pointThirdGerm_source_of_selectedNeighbor_incidentGermFrontierEdgeMembership`,
+  `S2_agent_20260520_local_angular_source_of_selectedNeighbor_incidentGermFrontierEdgeMembership`,
+  and
+  `S2_agent_20260520_local_angular_source_family_of_selectedNeighbor_incidentGermFrontierEdgeMembership`.
+  The owner-module verification gate above passed.  Remaining exact source for
+  this reducer is the pointwise selected incident-germ frontier-edge membership
+  row for the selected geometric-neighbour source.
+
+- Claim: `S2-codex-20260520-selected-incident-germ-membership-local-radius`.
+  Owner: Codex.  Role: S2-A selected incident-germ membership reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and this
+  workboard.  Status: completed/strictly reduced 2026-05-20.  Task: close or strictly reduce
+  `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` by extracting the
+  local-radius membership row available from vertex-star isolation and the
+  checked interior-frontier carrier-membership theorem, without final
+  boundary/cycle data, endpoint-only/no-chord closure, induced frontier graph,
+  identity angular order, axioms, or sorries.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.  Result: added
+  `SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows`,
+  `selectedNeighborIncidentGermLocalFrontierEdgeMembershipRows_of_geometricSelectionInputSource`,
+  and
+  `S2_codex_20260520_selected_incident_germ_membership_local_radius`.
+
+- Claim: `S2-agent-20260520-facesucc-propagation-source-final`.
+  Owner: Noether (`019e45b6-f17f-7892-9dbc-7d5b623bafc7`).  Role: S2-C raw face-successor propagation
+  worker.  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: completed/strictly reduced 2026-05-20 by Codex-current.
+  Result: added
+  `S2_agent_20260520_facesucc_propagation_source_final` and
+  `S2_agent_20260520_facesucc_propagation_source_final_family`, closing the
+  selected raw `faceSucc` frontier-edge and successor-point rows from the
+  boundary-free local angular-sector source plus the two strict geometric
+  `faceSucc` propagation inequalities at the selected successor tail.  No
+  completed boundary-cycle premise, actual-boundary equivalence row, or global
+  orientation-free `FaceSuccFrontierEdgeSource` is consumed.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.  Task: prove or strictly reduce the
+  selected raw `faceSucc` frontier-edge / successor-point source from the
+  genuine geometric face-successor transition and local-sector rows, without a
+  completed boundary cycle premise.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- Claim: `S2-agent-20260520-finite-drawing-relative-clopen-source`.
+  Owner: Banach (`019e45bb-22f6-77c1-8ced-008c3fec7fae`).  Role:
+  S2-B topology theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  optionally `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, this
+  workboard, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/strictly reduced and pruned on 2026-05-20.  Task: prove or
+  strictly reduce
+  `FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`
+  from the actual compact finite drawing, without final boundary-cycle rows,
+  induced frontier graphs, arbitrary carrier/cycles, convex hull shortcuts, or
+  synthetic enclosure.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.  Result: added
+  `finiteDrawingUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_planarContinuum`,
+  `finiteDrawingUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_janiszewskiBoundaryBumping`,
+  and `S2_agent_20260520_finite_nontrivial_relative_clopen_side_source`.
+  Handoff: S2-B is now reduced to
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`.
+
+- Claim: `S2-agent-20260520-selected-incident-germ-frontier-edge-source`.
+  Owner: Confucius (`019e45bb-40f9-7d11-9761-09b86f0441e1`).  Role:
+  S2-A selected incident-germ theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, optionally
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, this workboard,
+  and read-only `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+  Status: completed/strictly reduced and pruned on 2026-05-20.  Task: prove or strictly reduce
+  `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` from the selected
+  geometric-neighbour / carrier-neighbour source rows and local drawing facts,
+  without all-adjacent endpoint incident/closure, endpoint-only no-chord
+  shortcuts, identity angular order, or final boundary-cycle data.  Verification
+  gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.  Result: added
+  `SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows`,
+  `selectedNeighborIncidentGermLocalFrontierEdgeMembershipRows_of_geometricSelectionInputSource`,
+  and `S2_codex_20260520_selected_incident_germ_membership_local_radius`.
+  Handoff: the all-radius incident-germ statement remains too strong without
+  the forbidden endpoint/no-chord branch; use the local-radius source row.
+
+- Claim: `S2-codex-20260520-selected-third-germ-local-sector`.
+  Owner: Codex-main-current.  Role: S2-A safe local third-germ reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and this
+  workboard.  Status: completed/strictly reduced 2026-05-20.  Result: added
+  `SelectedNeighborThirdGermLocalExteriorPointSectorRows`,
+  `selectedNeighborThirdGermLocalExteriorPointSectorRows_of_localIncidentGermMembership`,
+  and `S2_codex_20260520_selected_third_germ_local_sector`.  This replaces the
+  too-strong global `SelectedNeighborLocalExteriorPointSectorRows` as the
+  honest local target: within a vertex-isolating radius, any non-selected third
+  germ is impossible after selected frontier-edge membership is known.  It does
+  not use all-adjacent endpoint incident/closure, endpoint-only no-chord
+  shortcuts, final boundary data, induced frontier graphs, identity angular
+  order, axioms, or sorries.  Follow-up adaptation: added
+  `localTwoGermRows_of_selectedNeighborThirdGermLocalExteriorPointSectorRows`,
+  `localSectorRows_of_selectedNeighborThirdGermLocalExteriorPointSectorRows`,
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_geometricSelection_localThirdGerm`,
+  `unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_geometricSelection_localThirdGerm_20260520`,
+  and
+  `unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_selectedThirdGermLocalSector_20260520`.
+  Direct erasure to `BoundaryFreeLocalSectorGeometricAngularSource` remains
+  impossible because that source asks for arbitrary-radius third-germ data; the
+  still-global downstream theorem needing generalization, if the selected
+  successor-edge branch is used, is
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_selectedNeighbor_pointThirdGerm_sortedBetween_20260520`
+  and its composer
+  `unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_selectedNeighbor_pointThirdGerm_sortedBetween_20260520`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed; `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource` passed; `elan run
+  leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` passed.
+
+- Claim: `S2-codex-20260520-w32-current-leaf-handoff`.
+  Owner: Codex-main-current.  Role: W32 source-surface integrator.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` and this
+  workboard.  Status: completed/checked 2026-05-20.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNontrivialRelativeClopen_geometricSelection_localPointSector_20260520`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_selectedNeighborOrder_localPointSector_20260520`,
+  composing checked reductions from Janiszewski S2-B topology and selected
+  neighbour geometric-order rows into the W32 target.  Important demotion:
+  `SelectedNeighborLocalExteriorPointSectorRows` is now a checked consumer
+  surface only, not the live source target, because it is too strong on selected
+  boundary germs.  The live local source target is the local-radius third-germ
+  row above.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.
+
+- Claim: `S2-agent-20260520-repeated-tail-primitive-source-final`.
+  Owner: Ampere (`019e45bb-5812-7793-8b93-b0184501bb59`).  Role:
+  S2-D repeated-tail primitive theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/strictly
+  reduced and pruned on 2026-05-20.  Task: prove or
+  strictly reduce `S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows` for
+  repeated selected raw-tail pairs via concrete raw-index witnesses, coverage,
+  disjointness, and anticompleteness, without final boundary-cycle rows,
+  actual-boundary equivalence rows, induced frontier graphs, arbitrary
+  carrier/cycles, synthetic enclosure, or endpoint shortcuts.  Verification
+  gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  passed.  Result: added the primitive source projections from
+  `S2RepeatedBoundaryArcRealWitnessSourceRows` and
+  `S2RepeatedBoundaryArcSourceWitnessRows`; the live repeated-tail leaf is now
+  the real raw-index witness/source row rather than the primitive image row.
+
+- Claim: `S2-codex-20260520-primitive-source-rows-projection`.
+  Owner: Codex-current.  Role: S2-D compact source projection worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/strictly
+  reduced 2026-05-20.  Result: added
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows.ofRealWitnessSourceRows`,
+  `.ofSourceWitnessRows`,
+  `S2_repeatedBoundaryPrimitiveSourceRows_of_realWitnessSourceRows_20260520`,
+  and
+  `S2_repeatedBoundaryPrimitiveSourceRows_of_sourceWitnessRows_20260520`.
+  These project concrete raw-index repeated-tail witness/source rows into
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows`, preserving the
+  selected indices and raw-tail coverage while deriving image disjointness and
+  anticompleteness from raw-index same-tail-only-cut and anticompleteness
+  rows.  No final boundary-cycle rows, actual-boundary equivalence rows,
+  induced frontier graphs, arbitrary carrier/cycles, synthetic enclosure, or
+  endpoint shortcuts.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  passed.
+
+- Claim: `S2-agent-20260520-route-minimizer-after-finite-topology`.
+  Owner: Singer (`019e45bb-6996-7b21-a3fb-096eded51aaa`).  Role:
+  read-only route mapper.  Scope: read-only `TASK.md`,
+  `proof_workings/s2_route_workbook.md`, and S2 owner files.  Status:
+  completed/pruned on 2026-05-20.  Result: the shortest honest source-facing
+  target remains `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs`;
+  the current endpoint-free route leaves are the selected geometric-neighbour
+  rows, selected incident-germ membership, local-sector rows from selected
+  neighbours, Janiszewski/boundary-bumping S2-B topology, successor-tail
+  geometric rows, and repeated-tail primitive rows.  The CO endpoint-incident
+  route is a checked consumer but not a source-level endpoint-free route.
+
+- Claim: `S2-agent-20260520-selected-neighbor-geometric-source-replacement`.
+  Owner: Codex-current.  Role: S2-A selected-neighbour theorem worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, optionally
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` or
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed/strictly reduced 2026-05-20, replacing the
+  stale Epicurus lane.  Result: added
+  `UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows.toGeometricNeighborSelectionSourceRows`,
+  `S2_agent_20260520_selected_neighbor_geometric_source_replacement`, and the
+  replacement family; the old `..._final` names are kept as compatibility
+  aliases.  This strictly reduces
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  from actual selected `unboundedFrontierEdgeSet` carrier neighbours and genuine
+  sorted outgoing-dart/consecutive rows, without all-adjacent endpoint/no-chord
+  shortcuts, endpoint-only premises, identity angular order, final boundary
+  rows, induced frontier graphs, arbitrary carrier/cycles, or synthetic
+  enclosure.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed; touched-file forbidden-token scan returned clean.
+
+- Claim: `S2-dyn-20260520-point-third-germ-source`.
+  Owner: Codex.  Role: S2-A local angular source worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, optional
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and `TASK.md`.
+  Status: completed/strictly reduced 2026-05-20.  Result: added
+  `SelectedNeighborLocalExteriorPointSectorRows`,
+  `S2_dyn_20260520_pointThirdGerm_source_of_selectedNeighbor_localPointSector`,
+  and local-angular point-sector family reducers, reducing the
+  point-third-germ source consumed by
+  `S2_dyn_20260520_local_angular_source_of_selectedNeighbor_pointThirdGerm`
+  to the selected-neighbour local exterior point-sector row for the same
+  frontier point `q`.  This uses the same selected carrier-neighbour heads and
+  no endpoint-only arbitrary adjacent-frontier classification, final
+  boundary-cycle rows, actual-boundary rows, induced frontier graph, arbitrary
+  carrier/cycle, synthetic enclosure, or identity angular order.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean
+  ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean` passed; touched-file
+  forbidden-token scan passed.
+
+- Claim: `S2-dyn-20260520-repeated-tail-primitive-source`.
+  Owner: Codex.  Role: S2 repeated-tail primitive source worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, optional
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `proof_workings/s2_route_workbook.md`, and `TASK.md`.  Status:
+  completed/strictly reduced 2026-05-20.  Result: added
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows` and
+  `S2_dyn_20260520_repeated_tail_primitive_source`, reducing
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveRows (inputs := inputs) O i j`
+  for a hypothetical repeated selected raw tail to concrete raw-index
+  witnesses on both cyclic open arcs, raw-tail coverage away from the deleted
+  tail, off-cut image disjointness, and anticompleteness across the two image
+  sides.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`
+  passed; touched-file `sorry|admit|axiom` scan passed.
+- Claim: `S2-dyn-20260520-honest-selected-route-composer`.
+  Owner: Codex-current.  Role: selected-neighbour S2 route composer.
+  Scope: primarily `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`;
+  only `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` if a missing
+  adapter for
+  `S2_dyn_20260520_local_angular_source_of_selectedNeighbor_pointThirdGerm`
+  is found.  Status: completed 2026-05-20.  Result: added
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_selectedNeighbor_pointThirdGerm_sortedBetween_20260520`
+  and
+  `unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_selectedNeighbor_pointThirdGerm_sortedBetween_20260520`
+  in `S2SeededRawOrbitSource.lean`, composing the selected-neighbour route
+  through the honest point-third-germ local-angular source and genuine
+  sorted-between successor rows instead of the old `endpoint_only` shortcut.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  passed with one pre-existing style warning; touched-file forbidden-token
+  scan passed.
+
+- Claim: `S2-dyn-20260520-geometric-neighbor-selection-source`.
+  Owner: Codex.  Role: S2-A source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, optional
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, `TASK.md`,
+  and compact residual note in `proof_workings/s2_route_workbook.md`.
+  Status: completed/strictly reduced 2026-05-20.  Result: added
+  `UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows`,
+  `.toGeometricSelectionInputSource`,
+  `S2_dyn_20260520_geometric_neighbor_selection_source`, and its family form,
+  reducing
+  `S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  to the current real carrier-neighbor pair family plus the honest non-wrap
+  consecutive geometric outgoing-list row for those same selected heads.
+  Endpoint-only/no-chord rows are not bundled and remain a separate consumer
+  residual.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`
+  passed; touched-file forbidden-token scan passed.
+- Claim: `S2-main-20260520-cp-active-closure`.
+  Owner: Codex-main.  Role: current S2 closure coordinator / proof
+  integrator.  Scope: `TASK.md`, `proof_workings/s2_route_workbook.md`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`.
+  Status: active.  Source task: S2-A/S2-B/S2-C/S2-D.  Current decomposition:
+  close the three remaining input-level source families feeding the checked
+  CO/CT S2 composers: local two-germ rows, component/frontier connectedness
+  rows, and selected raw face-successor orbit/frontier rows; then use the
+  existing `UnboundedExteriorFrontierCycleRows` and W32 reducers.  This claim
+  may repair theorem signatures and consumers, but not by adding another
+  W-numbered facade, induced frontier graph shortcut, arbitrary spanning
+  cycle, identity angular-order shortcut, convex-hull shortcut, or synthetic
+  enclosure.
+- Claim: `S2-agent-20260520-cp-local-two-germ-input`.
+  Owner: Codex-agent.  Role: proof-route worker for S2-A.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/strictly reduced 2026-05-20.  Result: added
+  `localTwoGermRows_of_boundaryFree_geometricAngularSource`,
+  `S2_agent_cp_local_two_germ_input_source_20260520`, and
+  `S2_agent_cp_local_two_germ_inputRows_source_20260520`, reducing the
+  pointwise `UnboundedFrontierCarrierLocalTwoGermRowsAt` family to the
+  selected actual unbounded-frontier germ source plus genuine geometric
+  angular no-between rows.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`
+  passed.
+- Claim: `S2-agent-20260520-cp-component-frontier-source`.
+  Owner: Codex-agent.  Role: proof-route worker for S2-B.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/strictly reduced 2026-05-20.  Result: the component/frontier
+  source now routes through the sharper aligned K-split residual via
+  `S2_agent_20260520_cp_aligned_K_split_component_frontier_source`;
+  remaining positive sources are
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit`
+  and the existing fixed-side local-sector family for selected
+  `unboundedFrontierEdgeSet` cover.  Original deliverable: prove or strictly
+  reduce the component/frontier connectedness
+  source for the unbounded exterior component, preferably the closed-split
+  planar-continuum theorem or its finite-drawing specialization.
+- Claim: `S2-agent-20260520-cp-raw-facesucc-input`.
+  Owner: Codex-agent.  Role: proof-route worker for S2-C.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  active.  Deliverable: prove or strictly reduce the selected raw
+  face-successor orbit/frontier source rows from inputs without assuming a
+  completed boundary cycle.
+- Claim: `S2-agent-20260520-cp-route-sanity`.
+  Owner: Codex-agent.  Role: read-only route auditor / composer.  Scope:
+  S2 owner files, `TASK.md`, and `proof_workings/s2_route_workbook.md`.
+  Status: completed 2026-05-20.  Result: the shortest non-circular checked
+  path remains the actual-sector route:
+  `ActualExteriorSectorInputSourceRows` plus exact frontier-iff rows feed
+  `S2_unboundedExteriorFrontierCycleRows_family_of_actualExteriorSectorInputSourceRows`,
+  then the existing finite-planar and W32 reducers.  The audit also confirmed
+  that unconditional all-adjacent-frontier endpoint/incident rows must stay
+  off the live path because boundary chords make them false.
+
+- Claim: `S2-main-20260520-current-local-source-integration`.
+  Owner: Codex-main.  Role: proof integrator / S2-A source composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status: active.
+  Deliverable: thread the completed local two-germ strict reducer into the
+  shortest raw-orbit/exterior-sector composers without reviving the global
+  `BoundaryFreeNoThirdGermSource` shortcut, all-adjacent endpoint route, final
+  cycle premise, induced frontier graph, arbitrary cycle, or identity angular
+  order.
+
+- Claim: `S2-agent-20260520-current-alignedK-input`.
+  Owner: Codex-agent.  Role: theorem/API worker for S2-B.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/strictly reduced
+  2026-05-20.  Result: added the nontrivial relative-clopen source for
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit`
+  and the finite-drawing aligned split source
+  `FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit`;
+  S2-B can now consume the finite-drawing source directly via
+  `S2_agent_20260520_current_alignedK_input_component_frontier_source`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FinitePlaneDrawing.lean`
+  passed.
+
+- Claim: `S2-agent-20260520-current-strict-angular-input`.
+  Owner: Codex-agent.  Role: theorem/API worker for S2-C.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/strictly reduced
+  2026-05-20.  Result: added the sorted-list strict-argument lemma
+  `GeometricRotationSystem.graphDartArg_lt_of_dartFromGeometricList_index_lt`
+  and the selected raw-orbit source
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource`, with
+  reducer
+  `rawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource_of_sortedBetween`.
+  The residual is now the pointwise sorted outgoing-dart index row placing the
+  left local-angular carrier, selected `faceSucc` head, and right
+  local-angular carrier in increasing geometric list order.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.GeometricRotationSystem`
+  passed, and
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  passed.  The targeted Lake build for
+  `ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` is currently blocked by
+  unrelated pre-existing errors in
+  `Swanepoel/ExteriorComponentTopology.lean`.
+
+- Claim: `S2-agent-20260520-current-actual-sector-composer`.
+  Owner: Codex-agent.  Role: checked composer / stale-route pruner.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: active.  Deliverable:
+  use only source rows already proved from `FinitePlanarOuterComponentInputs C`
+  to compose toward `UnboundedExteriorFrontierCycleRows`; any missing row must
+  be named as the next source theorem rather than hidden behind another
+  consumer bridge.
+  Checkpoint, 2026-05-20: the shortest checked route is explicit through
+  `unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbitSourceRows_localTwoGerm_incident_selectedSuccessorEdge_20260520co`,
+  then
+  `finitePlanarStraightLineOuterComponentTheorem_of_rawFaceSuccOrbitSourceRows_localTwoGerm_incident_selectedSuccessorEdge_20260520co`,
+  then the W32 consumer
+  `minimalFailureExactActualTopologyFieldsTarget_of_rawFaceSuccOrbitSourceRows_localTwoGerm_incident_selectedSuccessorEdge_20260520co`.
+  The route consumes raw face-successor orbit source rows, pointwise local
+  two-germ rows, selected adjacent-endpoint incident-edge rows, and selected
+  successor-edge propagation.  Do not resurrect all-adjacent endpoint closure
+  as an input-level theorem.
+
+Dynamic S2 claims, 2026-05-20:
+
+- Claim: `S2-dyn-20260520-successor-tail-geometric-rows`.
+  Owner: Codex-current.  Role: theorem prover / S2-C sorted successor-tail
+  geometric row.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, optionally tiny
+  support in `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` or
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and `TASK.md`.
+  Status: completed/strictly reduced 2026-05-20.  Source task: S2-C.
+  Result: added
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricTripleIndexNoOrbitSource`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_of_tripleIndex`,
+  and `S2_dyn_20260520_successor_tail_geometric_rows`, reducing
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource`
+  to a single nonwrap triple-index source in the genuine sorted outgoing-dart
+  list at the selected geometric `faceSucc` successor tail.  Tiny support:
+  made the local ball-membership coercion explicit in
+  `S2LocalTwoGermAssembly.lean` so the dependency builds.  No selected-edge
+  equality shortcut, endpoint-only/no-chord row, final cycle row,
+  actual-boundary row, induced frontier graph, arbitrary carrier/cycle,
+  synthetic enclosure, identity angular order, axiom, sorry, admit, unsafe,
+  opaque, or debug command.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-dyn-20260520-sorted-between-source`.
+  Owner: Codex.  Role: theorem prover / selected sorted outgoing-dart source.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  optionally `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` /
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/strictly reduced
+  2026-05-20.  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource` for
+  the local angular carriers produced from the selected geometric neighbour
+  source.  The source must be the real sorted outgoing-dart/geometric
+  neighbour-selection row plus the selected `faceSucc` successor-tail data,
+  not a selected-edge equality shortcut.  No endpoint-only/no-chord
+  assumptions, final cycle rows, actual-boundary rows, induced frontier graph,
+  arbitrary carrier/cycle, synthetic enclosure, or identity angular order.
+  Result: added
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource`,
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource_of_successorTailGeometricRows`,
+  and `S2_dyn_20260520_sorted_between_source`, reducing the sorted-between
+  residual to two genuine successor-tail geometric neighbour rows with the
+  selected `faceSucc` head as the shared middle outgoing dart.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  passed; touched Lean-file forbidden-token scan passed.
+
+- Claim: `S2-dyn-20260520-crosscut-K-split-source`.
+  Owner: Codex-agent Lorentz.  Role: theorem prover / planar-continuum
+  crosscut source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Source task: S2-B.
+  Deliverable: prove or strictly reduce
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation`,
+  the remaining K-split/boundary-bumping source.  No reducers into the already
+  checked `NoClosedSeparation` surface, final S2 cycle rows, exterior carrier
+  rows, induced frontier graph, arbitrary carrier/cycle, convex hull, or
+  synthetic enclosure.
+
+- Claim: `S2-dyn-20260520-local-radius-selected-edge-source`.
+  Owner: Codex-agent Lovelace.  Role: theorem prover / pointwise selected
+  local sector source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  optionally `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed 2026-05-20.
+  Source task: S2-A.  Result: added
+  `LocalRadiusSelectedEdgeSourceRows`,
+  `LocalRadiusSelectedEdgeSourceRows.toExistsSource`,
+  `LocalRadiusSelectedEdgeSourceRows.toLocalSectorRows`, and
+  `S2_dyn_20260520_local_radius_selected_edge_source` in
+  `S2LocalTwoGermAssembly.lean`.  This strictly names and erases the explicit
+  source feeding
+  `S2_dyn_20260520_local_sector_source_at_frontier_vertex`: two distinct
+  selected incident `unboundedFrontierEdgeSet` edges and a positive local
+  radius excluding all third incident frontier germs.  No completed boundary
+  cycle, `BoundaryVertexExteriorSectorRowsAt`, induced frontier graph,
+  arbitrary carrier/cycle, synthetic enclosure, identity angular-order
+  shortcut, or universal adjacent endpoint source.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.
+
+- Claim: `S2-dyn-20260520-geometric-faceSucc-propagation-source`.
+  Owner: Codex-agent Halley + Codex-current.  Role: theorem prover / selected geometric
+  `faceSucc` propagation.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, optionally
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, `TASK.md`,
+  and `proof_workings/s2_route_workbook.md`.  Status: checked/strictly
+  reduced on 2026-05-20.  Source task:
+  S2-C.  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedGeometricFaceSuccPropagationNoOrbitSource inputs
+  localAngularSource`.  No global orientation-free `FaceSuccFrontierEdgeSource`,
+  final cycle rows, actual-boundary rows, induced frontier graph, arbitrary
+  carrier/cycle, synthetic enclosure, or all-adjacent endpoint shortcut.
+  Result: added
+  `RawOrbitIteratedGeometricFaceSuccPropagationLeftNoOrbitSource`,
+  `RawOrbitIteratedGeometricFaceSuccPropagationRightNoOrbitSource`,
+  `S2_dyn_20260520_geometric_faceSucc_propagation_source`, and its family
+  wrapper.  The live propagation row is now reduced to the two pointwise
+  local angular inequalities for the selected geometric `faceSucc` head at
+  the successor tail.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean
+  ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean` and
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` passed; touched-region
+  scan found no new positive use of the forbidden global/final/cycle routes.
+
+- Claim: `S2-dyn-20260520-selector-avoidance-halves-source`.
+  Owner: Codex-agent GPT-5.  Role: theorem prover / selector avoidance
+  halves.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, optionally
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: strictly reduced
+  2026-05-20.  Source task: S2-C.
+  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccHeadAvoidsLocalAngularCarrierLeftSelectorNoOrbitSource`
+  and
+  `RawOrbitIteratedFaceSuccHeadAvoidsLocalAngularCarrierRightSelectorNoOrbitSource`
+  for the `localAngularCarrierLeft/Right` selectors.  This is the local
+  angular third-germ/faceSucc-head-between lane, not a selected-edge equality
+  lane.  No final cycle rows, actual-boundary equivalence rows, induced
+  frontier graph, arbitrary carrier/cycle, synthetic enclosure, global
+  orientation-free `FaceSucc`, or endpoint shortcut.  Status: completed as a
+  strict reduction.  Residual: prove the two one-sided strict angular-order
+  rows
+  `RawOrbitIteratedFaceSuccHeadAfterLocalAngularCarrierLeftSelectorNoOrbitSource`
+  and
+  `RawOrbitIteratedFaceSuccHeadBeforeLocalAngularCarrierRightSelectorNoOrbitSource`.
+  Follow-up 2026-05-20: those strict rows are now reduced by the strict-angular
+  claim to the sorted outgoing-dart index source
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource`.
+
+- Claim: `S2-dyn-20260520-strict-angular-order-source-rows`.
+  Owner: Codex-current.  Role: theorem prover / strict geometric
+  angular-order source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/strictly reduced
+  2026-05-20.  Deliverable: prove or strictly reduce the two pointwise
+  `graphDartArg` inequality rows at the selected `faceSucc` successor tail.
+  Result: `RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource`
+  is the common selector-parametric strict-order package feeding both selector
+  residuals and Halley's propagation-left/right residuals; the sharper
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSortedBetweenNoOrbitSource` reduces
+  it to genuine sorted geometric outgoing-dart list indices at the successor
+  tail.  Checked:
+  `S2_dyn_20260520_strict_angular_order_source_rows` and the strict-order
+  selected-neighbour composer.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean
+  ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean` passed.  No
+  selected-edge equality shortcut, final cycle rows, actual-boundary rows,
+  induced frontier graph, arbitrary carrier/cycle, synthetic enclosure, global
+  orientation-free `FaceSucc`, or endpoint shortcut.
+
+- Claim: `S2-dyn-20260520-current-leaf-audit`.
+  Owner: Codex-agent Laplace.  Role: read-only route auditor.  Scope:
+  `TASK.md`, `proof_workings/s2_route_workbook.md`, and current S2 owner files.
+  Status: active.  Deliverable: report the shortest compiling route to
+  `UnboundedExteriorFrontierCycleRows C inputs`, exact live mathematical
+  leaves after the latest reductions, and stale claims to prune.  No edits.
+  Result: added one-sided strict angular-order sources
+  `RawOrbitIteratedFaceSuccHeadAfterLocalAngularCarrierLeftSelectorNoOrbitSource`
+  and
+  `RawOrbitIteratedFaceSuccHeadBeforeLocalAngularCarrierRightSelectorNoOrbitSource`,
+  plus `S2_dyn_20260520_selector_avoidance_halves_source`, reducing the two
+  live selector halves to those strict inequalities.  Verification:
+  `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` passed.
+
+- Claim: `S2-dyn-20260520-selector-aware-short-route-composer`.
+  Owner: Codex-current.  Role: route cleanup / checked composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed 2026-05-20.
+  Result: added
+  `unboundedExteriorFrontierCycleRows_of_geometricSelection_endpointOnly_successorPoint_selectorAvoidance_20260520`.
+  This is a thin replacement for the older
+  `...successorPoint_notLocalCarrier...` composer: it consumes the left/right
+  selector-avoidance leaves directly, then reuses the existing selected
+  neighbour endpoint-only source, local-angular source, carrier-connectedness
+  reducer, head-between reducer, iterated `faceSucc` edge source, and cycle-row
+  eraser.  It adds no new source premise and does not use final cycle rows,
+  actual-boundary rows, induced frontier graph, arbitrary carrier/cycle,
+  synthetic enclosure, global orientation-free `FaceSucc`, or endpoint
+  shortcuts.  Verification: direct `lake env lean` and targeted Lake build
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` passed after replacing a
+  brittle equality rewrite in the selector-avoidance half proofs by explicit
+  dart-argument equality contradictions.
+
+- Claim: `S2-dyn-20260520-aligned-K-split-source`.
+  Owner: Codex-current.  Role: theorem prover / aligned continuum
+  K-split source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, optionally
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed as a strict
+  reduction on 2026-05-20.  Deliverable: prove or strictly reduce
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit`,
+  the residual left by the crosscut K-split reducer.  Result: reduced through
+  the one-sided relative-clopen source
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide`
+  and the checked adapter
+  `planarContinuumUnboundedComplementFrontierAlignedKSplit_of_relativeClopenKSide`,
+  then through the degenerate-case adapter from the sharper nontrivial source
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`,
+  exposed by `S2_dyn_20260520_aligned_K_split_source`.  The new residual is:
+  for each closed disjoint frontier split with `A.Nonempty` and `B.Nonempty`,
+  `frontier (connectedComponentIn Ká¶œ x) = A âˆª B`, choose one closed side
+  `Kâ‚ âŠ† K` with closed relative complement `K \ Kâ‚`, `A âŠ† Kâ‚`, and
+  `Disjoint Kâ‚ B`; the adapters handle empty `A`/`B`, set `Kâ‚‚ = K \ Kâ‚`,
+  and prove the aligned closed disjoint cover of `K`, using the checked
+  frontier-subset lemma to place `B` inside `Kâ‚‚`.  No reducer was added into
+  the already checked
+  `NoClosedSeparation` surface, and no final S2 cycle rows, carrier rows,
+  induced frontier graph, arbitrary carrier/cycle, convex hull, or synthetic
+  enclosure were used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean
+  ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.ExteriorComponentTopology` passed with only
+  existing lint/style warnings.
+
+- Claim: `S2-dyn-20260520-nontrivial-relative-clopen-source`.
+  Owner: Codex.  Role: S2-B topology leaf worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and `TASK.md`.
+  Status: completed 2026-05-20 as a strict reduction.  Result: added
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`
+  and the checked reducer
+  `S2_dyn_20260520_nontrivial_relative_clopen_source`, specializing that
+  standard planar compactum boundary-bumping/Janiszewski source to
+  `U = connectedComponentIn Ká¶œ x` and proving
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`
+  without final cycle/carrier rows, induced frontier graph, arbitrary
+  carrier/cycle, convex hull, or synthetic enclosure.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean
+  ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean` passed with only
+  existing lint warnings; touched Lean-file forbidden-token scan returned
+  `clean`.  The requested owner Lake gate
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.ExteriorComponentTopology` also passed on
+  2026-05-20 with only existing lint/style warnings.
+
+- Claim: `S2-dyn-20260520-inhabit-local-radius-selected-edge-rows`.
+  Owner: Codex.  Role: theorem prover / local selected-edge source.
+  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, optionally
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: checked/strictly reduced.
+  Result: added
+  `localRadiusSelectedEdgeSourceRows_of_neighborPairRows` and
+  `S2_dyn_20260520_inhabit_local_radius_selected_edge_rows`, reducing
+  `LocalRadiusSelectedEdgeSourceRows inputs` to the concrete carrier
+  neighbour-pair family
+  `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a`.  The selected
+  heads are the two actual incident `unboundedFrontierEdgeSet` carrier
+  neighbours, and the radius is the finite graph-vertex isolation radius, which
+  excludes third endpoint germs while open-germ points are promoted by the
+  checked interior-frontier carrier source.  No completed boundary cycle,
+  `BoundaryVertexExteriorSectorRowsAt`, induced frontier graph, arbitrary
+  carrier/cycle, synthetic enclosure, identity angular order, or universal
+  adjacent endpoint source was used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed; the touched-file forbidden-token scan is clean.
+
+- Claim: `S2-dyn-20260520-repeated-tail-actual-exterior-arc-rows`.
+  Owner: Codex-current.  Role: theorem prover / repeated-tail actual
+  exterior arc source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, optionally
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: checked/strictly reduced.
+  Deliverable: prove or strictly reduce
+  `RawFaceSuccOrbitRepeatedTailActualExteriorArcRows` for each hypothetical
+  repeated selected raw-tail pair.  Result: added
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveRows.toRepeatedTailActualExteriorArcRows`,
+  the input-shaped
+  `S2_repeatedTailActualExteriorArcRows_of_primitiveTwoOpenArcRows_20260520`,
+  and
+  `S2_repeatedBoundaryArcSeparationSource_of_primitiveTwoOpenArcRows_via_actualExteriorArcRows_20260520`.
+  The residual is now the primitive actual two-open-arc source after deleting
+  the repeated tail: non-cut witnesses on both cyclic open raw arc images,
+  raw-tail coverage away from the deleted tail, off-cut image disjointness,
+  and anticompleteness across the two image sides.  The final handoff feeds
+  `S2_repeatedBoundaryArcSeparationSource_of_repeatedTailActualExteriorArcRows_20260520`.
+  No final boundary-cycle rows, actual-boundary equivalence rows, induced
+  frontier graph, arbitrary carrier/cycle, synthetic enclosure, or endpoint
+  shortcut.  Verification:
+  `lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`;
+  no `sorry`/`admit`/`axiom` scan hits in the touched Lean file.
+
+- Claim: `S2-dyn-20260520-repeated-tail-primitive-rows-source`.
+  Owner: Codex-current.  Role: theorem prover / repeated-tail primitive
+  two-open-arc rows.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, optionally
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: checked/strictly reduced.
+  Source task: repeated-tail/no-cut injectivity.  Result: added
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveRows.ofRepeatedTailActualExteriorArcRows`,
+  `S2_repeatedBoundaryPrimitiveRows_of_repeatedTailActualExteriorArcRows_20260520`,
+  and
+  `S2_repeatedBoundaryArcSeparationSource_of_repeatedTailActualExteriorArcRows_20260520`.
+  The exact primitive row is now obtained from the selected raw pair-level
+  `RawFaceSuccOrbitRepeatedTailActualExteriorArcRows`: non-cut witnesses on
+  both cyclic open raw arc images, raw-tail coverage away from the deleted
+  tail, off-cut disjointness of the two arc images, and anticompleteness
+  across the two image sides.  No final boundary-cycle rows, actual-boundary
+  equivalence rows, induced frontier graph, arbitrary carrier/cycle, synthetic
+  enclosure, or endpoint shortcut.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`;
+  no `sorry`/`admit`/`axiom` scan hits in the touched file.
+
+- Claim: `S2-dyn-20260520-cutpartition-interface-helper`.
+  Status: stale/closed after Godel's completed
+  `S2_repeated_tail_two_arc_cutpartition_20260520` and callback in
+  `Swanepoel/S2ExteriorBoundarySource.lean`.  Codex-current pruned its
+  duplicate boundary-arc cutpartition callback attempt and did not add a new
+  two-deleted-raw-arc source proof.  Remaining honest source is still to prove
+  or strictly reduce `S2RepeatedBoundaryArcSeparationSource` for repeated
+  selected raw-tail pairs, without final boundary-cycle rows, induced frontier
+  graph shortcuts, arbitrary carrier/cycle choices, or endpoint shortcuts.
+  Build note: the earlier upstream `S2LocalTwoGermAssembly.lean:679` blocker
+  is resolved; the current combined S2 owner build passes under the pinned
+  toolchain.
+
+- Pruning / live-agent map, 2026-05-20:
+  Claim `S2-dyn-20260520-agent-prune-and-live-map` completed by
+  Codex-current.  Scope was `TASK.md` and agent orchestration only; no Lean
+  proof route changed.  Closed completed or stale workers:
+  Godel (`S2-dyn-20260520-repeated-tail-two-arc-cutpartition` completed),
+  Gibbs (selector-avoidance lane superseded by checked split reducers), and
+  Galileo (verification-only lane stale after the current seeded/boundary-free
+  builds; only binder cleanup reported).  Redirected Hypatia away from
+  duplicate cut-partition adapters toward the actual
+  `S2RepeatedBoundaryArcSeparationSource`/two-arc source if it remains useful.
+  Current live dynamic worker set after pruning is ready for fresh exact
+  source tasks: Nash/Ohm/Russell completed the topology reductions down to
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation`;
+  Erdos completed the repeated-tail reduction down to
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveRows`; Meitner completed the
+  successor-point reduction down to local-angular plus selected geometric
+  propagation; Hooke completed the local-sector reduction down to a pointwise
+  selected-edge/local-radius source; Cicero completed the read-only route
+  audit.  Socrates confirmed the fixed-side edge-chain reducer is a live
+  downstream consumer rather than a stale final-cycle shortcut.  This keeps the
+  running worker set below the requested cap of ten and removes the older
+  pool/wave entries as live work.
+
+- Claim: `S2-dyn-20260520-two-arc-separation-source`.
+  Owner: Codex-current.  Role: selected raw-tail two-open-arc source reducer.
+  Scope: `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.
+  Status: completed as a strict reduction on 2026-05-20.  Source task: S2
+  repeated-tail/no-cut injectivity.  Added the direct pair-level reducer
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveRows.toRepeatedBoundaryArcSeparationSource`
+  and the input-shaped reducer
+  `S2_repeatedBoundaryArcSeparationSource_of_primitiveTwoOpenArcRows_20260520`.
+  These prove `S2RepeatedBoundaryArcSeparationSource`, feeding
+  `S2_repeated_tail_two_arc_cutpartition_20260520`, from the smaller primitive
+  two-open-arc deleted-tail row.  No final boundary-cycle rows,
+  actual-boundary equivalence rows, induced frontier graph, arbitrary
+  carrier/cycle, synthetic enclosure, or endpoint shortcut.  Exact residual:
+  for each hypothetical repeated selected raw-tail pair, prove
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveRows (inputs := inputs) O i j`:
+  non-cut witnesses on the two cyclic open raw arc images, raw-tail coverage
+  away from the deleted tail, off-cut disjointness of the two arc images, and
+  anticompleteness across the two arc images.  Touched Lean-file
+  forbidden-token scan returned `clean`, and the targeted owner build
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource` passed.  The earlier
+  `S2SeededRawOrbitSource.lean:2976` `htail` blocker is resolved; the combined
+  S2 owner build
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource
+  ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource
+  ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly
+  ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed on 2026-05-20.
+
+- Claim: `S2-dyn-20260520-successor-frontier-point-source`.
+  Owner: Codex-agent Meitner.  Role: theorem prover / selected successor
+  frontier point.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` only if needed.
+  Status: checked.  Source task: S2-C.  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`, or the
+  stronger selected successor frontier-edge no-orbit source, from selected
+  local-angular/frontier propagation ingredients.  No global orientation-free
+  `FaceSucc`, final boundary-cycle rows, actual-boundary equivalence rows,
+  induced frontier graph, arbitrary carrier/cycle, synthetic enclosure, or
+  all-adjacent endpoint shortcut.  Result: added
+  `S2_dyn_20260520_successor_frontier_point_source` and family wrapper
+  `S2_dyn_20260520_successor_frontier_point_source_family`, reducing the point
+  source to `BoundaryFreeLocalSectorGeometricAngularSource inputs` plus
+  `RawOrbitIteratedGeometricFaceSuccPropagationNoOrbitSource inputs
+  localAngularSource`; the latter already closes the stronger selected
+  successor frontier-edge no-orbit source through the checked CO/CH reducers.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` passed.
+
+- Claim: `S2-dyn-20260520-local-sector-source-at-frontier-vertex`.
+  Owner: Codex-agent Hooke.  Role: theorem prover / local selected
+  two-germ-sector source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` only if required.
+  Status: active.  Source task: S2-A.  Deliverable: prove or strictly reduce
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a` by selecting
+  the two incident unbounded-frontier edges at a frontier vertex and proving
+  the local only/no-third row.  No completed boundary cycle,
+  `BoundaryVertexExteriorSectorRowsAt`, induced frontier graph, arbitrary
+  carrier/cycle, synthetic enclosure, identity angular-order shortcut, or
+  universal adjacent endpoint source.
+
+- Claim: `S2-dyn-20260520-no-closed-separation-source`.
+  Owner: Codex-agent Russell.  Role: theorem prover / continuum crosscut
+  source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status: active.
+  Source task: S2-B.  Deliverable: prove or strictly reduce Nash's sharper
+  residual
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation`,
+  or the complementary boundedness route
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesBounded`,
+  coordinating with Ohm and avoiding duplicate generic reducers already
+  checked.
+  No final S2 cycle rows, exterior carrier rows, induced frontier graph,
+  arbitrary carrier/cycle, convex hull, or synthetic enclosure.
+
+- Claim: `S2-dyn-20260520-crosscut-K-split-source`.
+  Owner: Codex-current.  Role: theorem prover / continuum crosscut K-split
+  reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed as a strict
+  reduction on 2026-05-20.  Added the aligned
+  Janiszewski/boundary-bumping source
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit`
+  and the checked adapter
+  `planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_alignedKSplit`,
+  exposed by
+  `S2_dyn_20260520_crosscut_K_split_source`.  This proves the exact live source
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation`
+  from the smaller residual that any closed split `A âˆª B` of the unbounded
+  complement component frontier produces closed disjoint `Kâ‚/Kâ‚‚` with
+  `K = Kâ‚ âˆª Kâ‚‚`, `A âŠ† Kâ‚`, and `B âŠ† Kâ‚‚`; the adapter derives the nonempty
+  `K`-side fields from the existing nonempty frontier-piece hypotheses.  No
+  reducer was added into
+  `PlanarContinuumUnboundedComplementFrontierNoClosedSeparation`, and no final
+  S2 cycle rows, exterior carrier rows, induced frontier graph, arbitrary
+  carrier/cycle, convex hull, or synthetic enclosure were used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean
+  ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` passed; touched
+  Lean-file forbidden scan was clean for new banned declarations and no route
+  forbidden-token hits were introduced by the diff.
+
+- Claim: `S2-dyn-20260520-shortest-source-gap-audit`.
+  Owner: Codex-agent Cicero.  Role: read-only source-gap auditor.  Scope:
+  `S2SeededRawOrbitSource.lean`, `S2BoundaryFreeRawSource.lean`,
+  `S2LocalTwoGermAssembly.lean`, `ExteriorComponentTopology.lean`,
+  `S2ExteriorBoundarySource.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Deliverable: report
+  the shortest currently compiling route from
+  `FinitePlanarOuterComponentInputs C` to
+  `UnboundedExteriorFrontierCycleRows C inputs` and name any stale active
+  claims to prune.  Read-only; no build required unless stale declarations are
+  found by a separate prover claim.
+
+- Residual board refresh, 2026-05-20:
+  Claim `S2-dyn-20260520-residual-board-pruner` completed by Codex-current.
+  Scope was `TASK.md` and `proof_workings/s2_route_workbook.md` only; no Lean
+  edits.  Current exact live residual names:
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`;
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`;
+  `PlanarContinuumUnboundedComplementFrontierConnected`;
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`;
+  `RawOrbitIteratedFaceSuccHeadAvoidsLocalAngularCarrierSelectorsNoOrbitSource
+  inputs localAngularSource`; and the repeated selected raw-tail callback
+  `forall {i j}, i != j -> (rows.O.dart i).tail = (rows.O.dart j).tail ->
+    Nonempty (CutVertexInterface.CutVertexPartition C)`.
+  Treat these older active-status entries as stale/superseded, not live claims:
+  `S2-pool-cx-frontier-topology-source`,
+  `S2-pool-cx-raw-facesucc-source`,
+  `S2-pool-cx-final-route-consistency`,
+  `S2-agent-cv-raw-orbit-direct-source`,
+  `S2-agent-cv-deleted-neighbor-source`,
+  `S2-agent-cv-finite-frontier-preconnected-source`,
+  `S2-agent-cw-exterior-raw-orbit-seed-source`,
+  `S2-agent-cw-planar-frontier-preconnected-api-scout`,
+  `S2-agent-cu-neighbor-cutpartition-source`,
+  `S2-agent-cu-raw-face-orbit-source`, and
+  `S2-agent-ct-route-circularity-audit`.
+- Claim: `S2-dyn-20260520-nash-planar-frontier-connected-source`.
+  Owner: Nash.  Role: theorem prover / planar continuum frontier source.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and route notes.
+  Status: completed 2026-05-20.  Source task: S2-B.  Result: added/checked
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation`,
+  `planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_closedSeparationForcesContinuumSeparation`,
+  `S2_dyn_20260520_planar_continuum_frontier_no_closed_separation`,
+  `S2_dyn_20260520_planar_continuum_frontier_closed_split_forces_K_split`,
+  and `S2_dyn_20260520_noOpenSeparation_source_of_noClosedSeparation`.  The
+  exact remaining continuum source is now: any closed split of the frontier of
+  the unbounded complement component forces a closed split of the original
+  compact continuum `K`, or the complementary bounded-component contradiction.
+  Verification: direct JSON Lean check of `ExteriorComponentTopology.lean`
+  passed with only existing warnings; serialized Lake owner build still hits
+  the workspace silent nonzero during dependency/linter replay before any
+  touched-file Lean error.
+- Claim: `S2-dyn-20260520-planar-frontier-no-closed-separation-crosscut-source`.
+  Owner: Codex-current supporting Nash.  Role: direct crosscut residual
+  reducer.  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  and `TASK.md`.  Status: completed strict reduction on 2026-05-20.  Result:
+  added the exact further standard topology source
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation`:
+  any closed split of the frontier of the unbounded complement component
+  forces a closed split of the original compact continuum `K`.  Checked
+  reducers:
+  `noClosedSeparation_of_isPreconnected`,
+  `planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_closedSeparationForcesContinuumSeparation`,
+  `S2_dyn_20260520_planar_continuum_frontier_no_closed_separation`,
+  `S2_dyn_20260520_planar_continuum_frontier_closed_split_forces_K_split`,
+  and `S2_dyn_20260520_noOpenSeparation_source_of_noClosedSeparation`.
+  No final S2 cycle rows, boundary-cycle rows, exterior carrier rows, induced
+  frontier graph, arbitrary carrier/cycle, convex hull, or synthetic enclosure
+  was used.  Verification: direct pinned Lean check
+  `elan run leanprover/lean4:v4.28.0 lake env lean --json ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  passed with only existing lint warnings.  The serialized Lake module build
+  still returns nonzero during upstream dependency linter replay, before any
+  Lean error in the touched file.
+- Claim: `S2-dyn-20260520-closed-separation-forces-bounded`.
+  Owner: Ohm/Codex-current.  Role: complementary boundedness-route reducer.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  route notes.  Status: completed strict reduction on 2026-05-20.  Result:
+  retargeted away from the now-completed no-closed-separation pivot to the
+  exact residual
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesBounded`.
+  Added/kept
+  `planarContinuumUnboundedComplementFrontierClosedSeparationForcesBounded_of_closedSeparationForcesContinuumSeparation`
+  and `S2_dyn_20260520_closed_separation_forces_bounded`, reducing the
+  boundedness route to Nash's exact K-split residual by a bounded/unbounded
+  case split.  In the unbounded branch, the K-split source gives a nonempty
+  disjoint closed cover of the compact continuum `K`, contradicting
+  `hconnected.isPreconnected`; no new reducer into
+  `PlanarContinuumUnboundedComplementFrontierNoClosedSeparation` remains in
+  this Ohm lane.  Verification: targeted Lake replay still returns the
+  workspace dependency-linter nonzero before touched-file errors; no new
+  `NoClosedSeparation` wrapper was added after the retarget.
+- Claim: `S2-dyn-20260520-planar-continuum-crosscut-approach`.
+  Owner: Codex-current supporting Nash.  Role: direct contradiction /
+  crosscut-style reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and `TASK.md`.
+  Status: completed checked reduction on 2026-05-20.  Result: added the
+  generic closed-piece separation surface `NoClosedSeparation`, the checked
+  reducers `isPreconnected_of_noClosedSeparation` and
+  `isConnected_of_noClosedSeparation`, the planar residual
+  `PlanarContinuumUnboundedComplementFrontierNoClosedSeparation`, the
+  nonempty-frontier lemma
+  `planarContinuumUnboundedComplement_frontier_nonempty`, and
+  `planarContinuumUnboundedComplementFrontierConnected_of_noClosedSeparation`.
+  Thus Nash's connected-frontier theorem is now strictly reduced to the exact
+  missing crosscut/contradiction lemma: the frontier of the unbounded
+  complement component cannot be written as two nonempty disjoint closed
+  pieces.  No final S2 cycle rows, boundary-cycle rows, exterior carrier rows,
+  induced frontier graph, arbitrary carrier/cycle, convex hull, or synthetic
+  enclosure was used.  Verification: direct pinned Lean check
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`
+  passed; the serialized Lake owner build returned the workspace's silent
+  `-1` after dependency replay, with no Lean error in
+  `proof_logs/s2_planar_continuum_crosscut_owner_build_20260520.log`.
+- Claim: `S2-dyn-20260520-continuum-frontier-connected-api-scout`.
+  Owner: Codex-current supporting Nash.  Role: read-only mathlib/project API
+  scout.  Scope: `ExteriorComponentTopology.lean`, `FinitePlaneDrawing.lean`,
+  `proof_workings/s2_route_workbook.md`, and `TASK.md`.  Status: completed
+  notes-only on 2026-05-20.  Result: no existing mathlib or project theorem
+  was found that proves `PlanarContinuumUnboundedComplementFrontierConnected`
+  or a shorter standard lemma for connected frontiers of unbounded
+  complementary components of compact connected plane continua.  The shortest
+  checked project surface remains the current definition plus existing
+  reducers:
+  `planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_connected`,
+  `planarContinuumUnboundedComplementFrontierPreconnected_of_connected`, and
+  `finiteDrawingUnboundedComplementFrontierPreconnected_of_connected`.
+  Useful available APIs are generic only: `connectedComponentIn`,
+  `mem_connectedComponentIn`, `connectedComponentIn_subset`,
+  `isPreconnected_connectedComponentIn`, `isConnected_connectedComponentIn_iff`,
+  `IsOpen.connectedComponentIn`, `frontier_subset_closure`,
+  `frontier_compl`, `IsOpen.frontier_eq`, `IsOpen.inter_frontier_eq`,
+  `isClosed_frontier`, `IsCompact.of_isClosed_subset`, and
+  `isPreconnected_of_forall_pair`.  No Lean edits were made; no build needed.
+- Claim: `S2-dyn-20260520-selector-avoidance-source`.
+  Owner: Codex-current.  Role: theorem prover / selected local-angular carrier
+  avoidance.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and route notes.
+  Status: completed 2026-05-20.  Source task: S2-C.  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccHeadAvoidsLocalAngularCarrierSelectorsNoOrbitSource
+  inputs localAngularSource`, the selector-only residual left by the checked
+  local-angular head-between reducer.  Result: strictly reduced the paired
+  selector residual to the two pointwise source halves
+  `RawOrbitIteratedFaceSuccHeadAvoidsLocalAngularCarrierLeftSelectorNoOrbitSource`
+  and
+  `RawOrbitIteratedFaceSuccHeadAvoidsLocalAngularCarrierRightSelectorNoOrbitSource`,
+  with checked combiner
+  `S2_dyn_20260520_selector_avoidance_source`.  Also recorded the pointwise
+  guardrail
+  `rawOrbitIteratedFaceSuccHeadAvoidsLocalAngularCarrierSelectorsNoOrbitSource_contra_of_selectedEdge_localAngular`,
+  showing this avoidance premise is incompatible with an already promoted
+  selected successor carrier edge.  No final boundary-cycle rows,
+  actual-boundary equivalence rows, induced frontier graph, arbitrary
+  carrier/cycle, synthetic enclosure, global orientation-free `FaceSucc`,
+  endpoint shortcuts, or identity angular-order shortcuts were used.
+  Verification: `lake env lean
+  ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean` passed with only
+  existing unused-variable warnings.
+
+- Current active S2 ownership refresh, 2026-05-20:
+  - `S2-main-actual-exterior-sector-source`: Codex-current owns the final
+    source assembly
+    `forall C inputs, Exists B, frontier_iff_cycle_vertex B /\ Nonempty
+    (ActualExteriorSectorInputSourceRows inputs B)`, then the existing
+    S2/W32 reducers.  This claim may edit the S2 owner files and route notes.
+  - `S2-agent-actual-boundary-cycle-construction`: worker-owned proof task.
+    Construct the actual exterior `UnitDistanceCycleBoundary B`, prove graph
+    frontier vertices are exactly `B` vertices, and prove consecutive `B`
+    edges lie in `unboundedFrontierEdgeSet`.
+  - `S2-agent-local-sector-honesty-repair`: worker-owned proof task.  Work
+    only with the local selected-edge/two-germ rows
+    `UnboundedFrontierCarrierLocalSectorRowsAt`; do not prove or use the
+    false all-adjacent-frontier endpoint or global closed-germ shortcut.
+  - `S2-agent-planar-continuum-subcontinuum`: worker-owned proof task.  Close
+    or strictly reduce the planar-continuum frontier subcontinuum/preconnected
+    source without final boundary-cycle assumptions.
+  - `S2-agent-raw-orbit-to-actual-sector`: worker-owned proof task.  Connect
+    the selected raw `faceSucc` orbit and repeated-tail/no-cut rows to the
+    actual exterior-sector package on the same boundary, avoiding induced
+    frontier graph and arbitrary spanning-cycle shortcuts.
+    Status 2026-05-20: completed by
+    `S2_agent_rawOrbit_actualSectorInputSourceRows_of_selectedRawTailCoverage_cutRows_rawOrientation_20260520`
+    and
+    `S2_agent_rawOrbit_actualSectorInputSourceRows_of_selectedRawTailCoverage_repeatedBoundaryRows_rawOrientation_20260520`;
+    verified with
+    `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- Claim: `S2-codex-20260520-boundaryfree-local-germ-source`.
+  Owner: Codex-current thread.  Role: theorem prover / local no-third-germ
+  source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for tiny
+  helper lemmas.  Status: active, sharpened by local-sector honesty repair.
+  Deliverable: prove or strictly reduce the honest pointwise
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a` source from
+  `FinitePlanarOuterComponentInputs C`: select the two actual unbounded-frontier
+  carrier edges at each frontier vertex and prove the local carrier `only`
+  row for those selected edges.  The local-radius no-third source
+  `BoundaryFreeLocalNoThirdGermSourceRows inputs` is an acceptable intermediate
+  only because it erases to the same local-sector rows.  Do not prove or use
+  the stronger endpoint-only row for arbitrary adjacent frontier endpoints, or
+  the global closed-germ `BoundaryFreeNoThirdGermSource inputs`, as bare-input
+  source theorems; boundary chords make those live targets false.  Gate:
+
+- Claim: `S2-main-ct-current-composition-and-selected-carrier-20260520ct`.
+  Owner: Codex-current.  Role: final-source composer / selected carrier
+  prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  this workboard.  Status: active.  Source task: S2-A/S2-C/S2-D.
+  Deliverable: compose the current honest local-radius neighbour-pair route
+  with selected raw-orbit/actual-sector rows, then close or strictly reduce
+  the remaining selected carrier sources:
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`,
+  `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a`, selected
+  repeated-tail cut partitions, and selected raw-orientation rows.  This claim
+  may only use selected `unboundedFrontierEdgeSet` carrier edges; no induced
+  frontier graph, arbitrary spanning cycle, all-adjacent endpoint source,
+  global closed-germ shortcut, convex-hull shortcut, identity angular-order
+  shortcut, or new W facade.
+
+- Claim: `S2-agent-ct-seeded-raw-orbit-build-and-actual-sector-route`.
+  Owner: new worker.  Role: proof engineer for
+  `S2SeededRawOrbitSource.lean`.  Status: active.  Deliverable: repair and
+  extend the selected raw-orbit to actual-sector route so the file builds and
+  the residual is stated as concrete selected repeated-tail cut partitions and
+  selected raw-orientation rows, not as another exterior-boundary premise.
+
+- Claim: `S2-agent-ct-neighbor-pair-input-source`.
+  Owner: new worker.  Role: local topology proof engineer.  Status: active.
+  Deliverable: prove or strictly reduce
+  `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a` from
+  `FinitePlanarOuterComponentInputs C`, using selected exterior carrier germs
+  and local star isolation only.
+
+- Claim: `S2-agent-ct-edge-chain-input-source`.
+  Owner: new worker.  Role: carrier connectedness proof engineer.  Status:
+  active.  Deliverable: prove or strictly reduce
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` from the actual
+  unbounded exterior frontier, keeping selected carrier-edge honesty visible.
+
+- Claim: `S2-agent-ct-route-consistency-and-minimal-w32-composer`.
+  Owner: new worker.  Role: integration auditor / minimal composer.  Status:
+  active.  Deliverable: map the shortest currently checked route from selected
+  carrier rows to
+  `FinitePlanarStraightLineOuterComponentTheorem` and the W32 target, identify
+  the exact missing premises by theorem name, and avoid adding any duplicate
+  source packages or facade layers.
+  targeted builds for the owner modules.
+- Claim: `S2-agent-seeded-source-build-repair`.
+  Owner: Codex-agent Nash (`019e458a-c5bb-7341-a029-c74516524adb`).
+  Role: source-build repair.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only, plus
+  disposable diagnostics in `proof_logs/`.  Status: active.  Deliverable:
+  make the direct pinned source check
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+  pass without changing S2 source surfaces.
+- Claim: `S2-agent-current-residual-route-map`.
+  Owner: Codex-agent Gibbs (`019e458a-dba1-7081-a21c-e7ffc08e8130`).
+  Role: read-only route mapper.  Scope: S2 owner files, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Deliverable:
+  return the shortest checked theorem chain from current source obligations to
+  `UnboundedExteriorFrontierCycleRows`, the finite planar theorem, and W32,
+  with exact remaining source obligation type names.
+- Claim: `S2-agent-local-selected-neighbor-source`.
+  Owner: Codex-agent Aquinas (`019e458a-ee21-7ec2-abe2-0a987883b563`).
+  Role: local selected-neighbour source prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.
+  Status: active.  Deliverable: prove or strictly reduce the pointwise
+  selected local source `forall a, UnboundedFrontierCarrierNeighborPairAt
+  inputs a` / `UnboundedFrontierCarrierLocalSectorRowsAt inputs a` from
+  `FinitePlanarOuterComponentInputs C`, without all-adjacent endpoint,
+  global closed-germ, or final-boundary-cycle shortcuts.
+- Claim: `S2-agent-carrier-connectedness-source`.
+  Owner: Codex-agent Sartre (`019e458b-0637-7030-b198-343d99ef2b24`).
+  Role: selected carrier connectedness prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only, plus
+  disposable diagnostics in `proof_logs/`.  Status: active.  Deliverable:
+  prove or strictly reduce `UnboundedFrontierEdgeCarrierSegmentChainConnected
+  inputs` / connectedness of the selected exterior frontier carrier from the
+  actual unbounded exterior frontier, keeping selected-edge honesty visible.
+- Claim: `S2-agent-actual-frontier-preconnected-source`.
+  Owner: Codex-agent Poincare (`019e4590-3da5-7242-acac-9a0c348363bc`).
+  Role: actual-frontier topology prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only, plus
+  disposable diagnostics in `proof_logs/`.  Status: active.  Deliverable:
+  prove or strictly reduce `UnboundedExteriorActualFrontierPreconnectedSource
+  C inputs` / `PlanarContinuumUnboundedComplementFrontierPreconnected` for the
+  unbounded exterior component, without final-cycle, induced-graph, arbitrary
+  cycle, synthetic enclosure, convex-hull, or identity-order shortcuts.
+- Claim: `S2-agent-selected-frontier-edge-cover-source`.
+  Owner: Codex-agent Beauvoir (`019e4590-51fd-76b0-afd8-137fedc03bdc`).
+  Role: selected frontier-edge cover prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  active.  Deliverable: prove or strictly reduce
+  `UnboundedExteriorSelectedFrontierEdgeCover C inputs` from the finite
+  straight-line drawing/local segment facts, with every cover edge selected in
+  `unboundedFrontierEdgeSet C inputs`.
+- Claim: `S2-agent-raw-orientation-source`.
+  Owner: Codex-agent Carver (`019e4590-7122-7b82-a1b8-c295c0022538`).
+  Role: selected raw-orbit orientation prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.
+  Status: active.  Deliverable: prove or strictly reduce
+  `SelectedRawOrbitOrientationRows rows` from genuine geometric rotation/order
+  data for the selected raw-tail package; no identity-order or final-sector
+  shortcut.
+- Claim: `S2-agent-repeated-tail-cutpartition-source`.
+  Owner: Codex-agent Singer (`019e4590-8804-74c0-8f61-11f7ed63f619`).
+  Role: repeated-tail cut-partition prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and, only if
+  needed, `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+  Status: active.  Deliverable: prove or strictly reduce
+  `SelectedRawOrbitRepeatedTailCutPartitions rows` by turning each repeated
+  selected raw tail into a concrete `CutVertexInterface.CutVertexPartition C`.
+- Claim: `S2-agent-current-endgame-composer`.
+  Owner: Codex-agent Turing (`019e4590-a9c5-7901-b718-b17fc5852a0f`).
+  Role: endgame route composer.  Scope: small composition lemmas only in S2
+  owner files or W32.  Status: active.  Deliverable: expose the shortest
+  checked route from current input-level residuals to
+  `UnboundedExteriorFrontierCycleRows`, the finite planar theorem, and W32,
+  with exact residual source types and no duplicate source package/facade.
+- Claim: `S2-codex-20260520-repeated-tail-separation`.
+  Owner: Codex-current thread.  Role: theorem prover / no-cut repeated-tail
+  separation.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and route
+  notes.  Status: active.  Deliverable: prove or strictly reduce the
+  repeated-tail `RepeatedExteriorBoundarySeparationRows` premise for the
+  selected raw orbit used by
+  `exists_rawFaceSuccOrbit_sourceRows_of_connectedRawOrbitSourceRows_selectedRepeatedTail_20260520cx`.
+  Gate: targeted build of `S2ExteriorBoundarySource` or the touched owner
+  module.
+- Claim: `S2-codex-20260520-edgechain-component-source`.
+  Owner: Codex-current thread.  Role: theorem prover / selected edge-chain
+  connectedness.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Deliverable: prove
+  or strictly reduce `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`
+  and the associated actual-component topology source without induced-frontier
+  graph shortcuts.  Gate: targeted build of `ExteriorComponentTopology`.
+- Claim: `S2-codex-20260520-live-route-composer`.
+  Owner: Codex-current thread.  Role: route composer / circularity check.
+  Scope: read-only S2 owner files except small checked composition lemmas in
+  `FaceBoundaryTopologySourceW32.lean`.  Status: active.  Deliverable: keep the
+  shortest non-circular route to
+  `UnboundedExteriorFrontierCycleRows C inputs`, the finite planar theorem,
+  and the W32 target buildable while the source rows are closed.  Gate:
+  targeted build of `FaceBoundaryTopologySourceW32`.
+
+- Claim: `S2-dyn-20260520-frontier-edge-propagation`.
+  Owner: Codex-agent Archimedes (`019e4557-ae85-72d2-b7b8-42d8dcc7de76`).
+  Role: theorem prover / selected raw face-successor frontier-edge source.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`; only a tiny
+  `ExteriorComponentTopology.lean` helper if unavoidable.  Status: completed
+  by checked reducer.
+  Deliverable: `S2_dyn_20260520_frontier_edge_propagation` in
+  `S2SeededRawOrbitSource.lean` strictly reduces
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` to the selected
+  local-angular source plus the exact residual
+  `RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource inputs
+  localAngularSource`.  It routes through the checked CH local-sector
+  transition theorem and uses no final boundary-cycle rows, actual-boundary
+  equivalence rows, induced frontier graph, arbitrary carrier/cycle, synthetic
+  enclosure, all-adjacent endpoint closure rows, or global orientation-free
+  `FaceSuccFrontierEdgeSource`.  Gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+- Claim: `S2-dyn-20260520-repeated-tail-witness-source`.
+  Owner: Codex, closing Codex-agent Aristotle
+  (`019e4557-dd09-70a3-af82-0ddf34be36a9`).  Role: reducer integrator /
+  repeated-tail minimality source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`; no-cut and
+  exterior files read-only unless a tiny helper is needed.  Status: completed
+  strict reduction on 2026-05-20.  Result: added
+  `S2RepeatedTailExteriorCutWitnessSource.toCutVertexPartition`,
+  `S2RepeatedTailExteriorCutWitnessSource.false_of_noCutVertex`,
+  `S2_repeatedTailExteriorCutWitnessSource_of_cutPartitions_20260520`, and
+  `S2_repeatedTailExteriorCutWitnessSource_input_source_of_cutPartitions_20260520`.
+  These reduce the repeated selected raw-tail witness callback to the
+  selected raw-orbit geometry/minimality row that the repeated pair gives a
+  concrete `CutVertexInterface.CutVertexPartition C`; `inputs.noCutVertex`
+  then inhabits the witness callback by contradiction.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`;
+  touched Lean-file forbidden-token scan returned `clean`.
+- Claim: `S2-dyn-20260520-repeated-tail-cutpartition-source`.
+  Owner: Codex.  Role: repeated-tail cut-partition source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, plus one tiny
+  graph-helper ordering repair in
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` required to
+  rebuild the dirty dependency.  Status: completed strict reduction on
+  2026-05-20.  Result: added
+  `S2_repeatedTailExteriorCutWitnessSource_of_concreteCutPartitions_20260520`
+  and
+  `S2_repeatedTailExteriorCutWitnessSource_input_source_of_concreteCutPartitions_20260520`.
+  These expose the sharper residual from Aristotle's repeated-tail lane: for
+  every hypothetical repeated selected raw-tail pair, provide the concrete
+  `CutVertexInterface.CutVertexPartition C`; the existing
+  `S2_repeatedTailExteriorCutWitnessSource_input_source_of_cutPartitions_20260520`
+  then wraps it as nonempty and uses `inputs.noCutVertex` to make the witness
+  callback contradictory.  The exterior helper only moved
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected` before its first use.
+  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`;
+  touched Lean-file forbidden-token scan returned `clean`.
+- Claim: `S2-dyn-20260520-frontier-preconnected-source`.
+  Owner: Codex-agent Bacon (`019e4557-f0a7-7081-b166-512c522ff32a`).
+  Role: theorem prover / finite drawing frontier topology.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed strict reduction
+  on 2026-05-20.  Deliverable:
+  `finiteDrawingUnboundedComplementFrontierPreconnected_of_planarContinuum`
+  reduces `FiniteDrawingUnboundedComplementFrontierPreconnected` to the
+  reusable theorem surface
+  `PlanarContinuumUnboundedComplementFrontierPreconnected`.  Added the
+  actual-component adapters
+  `S2_dyn_20260520_frontier_preconnected_source_of_planarContinuum` and
+  `S2_dyn_20260520_noOpenSeparation_source_of_planarContinuumPreconnected`.
+  No final S2 cycle rows or exterior-boundary assumptions are used.  Gate
+  passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+- Claim: `S2-dyn-20260520-boundaryfree-input-source`.
+  Owner: Codex-agent Ptolemy (`019e4558-0482-73f0-ad98-976b9d3c2162`).
+  Role: theorem prover / local no-third-germ source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed by checked reducer.  Deliverable: `BoundaryFreeInputSourceReduction`
+  and `S2_dyn_20260520_boundaryfree_input_source` in
+  `S2BoundaryFreeRawSource.lean` split the source cleanly: the local two-germ
+  row is proved endpoint-free from concrete carrier neighbour-pair rows via
+  `S2LocalTwoGermAssembly.localTwoGermRows_of_neighborPairRows`, while the full
+  `BoundaryFreeNoThirdGermSource inputs` is strictly reduced to
+  `BoundaryFreeNeighborPairEndpointOnlySourceRows` through the existing
+  incident-only eraser.  No all-adjacent endpoint incident/closure source,
+  final boundary-cycle rows, induced frontier graph, arbitrary carrier, or
+  synthetic enclosure are used.  Gate passed: targeted builds for both owner
+  modules and touched-file scan.
+- Claim: `S2-dyn-20260520-selected-raw-tail-repeated-separation`.
+  Owner: Codex-agent Peirce (`019e4558-15dc-7793-8047-3b057c601257`).
+  Role: theorem prover / selected repeated-tail source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`; exterior files
+  read-only unless a small helper is unavoidable.  Status: checked
+  2026-05-20 after Codex-agent Nietzsche completed the generic selected
+  raw-tail coverage package.  Result: added
+  `SelectedRawTailCoverageSourceRows.repeatedTailRows_of_deletedTailWitnesses`,
+  `SelectedRawTailCoverageSourceRows.toRawFaceSuccOrbitSourceRows_of_deletedTailWitnesses`,
+  `SelectedRawTailCoverageSourceRows.existsRawFaceSuccOrbitSourceRows_of_deletedTailWitnesses`,
+  and
+  `exists_rawFaceSuccOrbit_sourceRows_of_selectedRawTailCoverage_deletedTailWitnesses_20260520`.
+  Exact residual: for each hypothetical repeated selected raw tail
+  `i â‰  j` with `(rows.O.dart i).tail = (rows.O.dart j).tail`, inhabit
+  `S2RepeatedTailExteriorCutWitnessSource (inputs := inputs) rows.O i j`:
+  one non-cut raw-tail index on each cyclic open arc, plus nonreachability
+  after deleting the repeated tail.  These adapters supply the
+  `RepeatedExteriorBoundarySeparationRows` field needed by
+  `SelectedRawTailCoverageSourceRows.toRawFaceSuccOrbitSourceRows` and
+  `RawFaceSuccOrbitSourceRows`.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+  Follow-up adapter `S2-dyn-20260520-selected-tail-repeated-witness-adapter`
+  now sharpens this residual to Mendel's concrete cut-partition callback.
+- Claim: `S2-dyn-20260520-deleted-neighbor-local-separation-source`.
+  Owner: Codex-agent Beauvoir (`019e4558-27c6-73a0-94bf-d4e0ecf484af`).
+  Role: theorem prover / deleted-neighbor local separation.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed smaller reduction on 2026-05-20.  Result: added
+  `UnboundedFrontierCarrierDeletedNeighborLocalSeparationRowsAt.ofLocalSectorRowsAt`,
+  `unboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource_of_localSectorRows`,
+  and `S2_dyn_20260520_deleted_neighbor_local_separation_source` in
+  `ExteriorComponentTopology`, plus the S2Local boundary-free
+  two-selected-edge/no-third-germ handoff
+  `deletedNeighborLocalSeparationInputSource_of_boundaryFree_twoSelectedEdges_noThirdGerm_source`.
+  The explicit Boolean side-separation package is now reduced to genuine
+  local-sector rows, and in S2Local to the existing local no-third-germ source;
+  every third-neighbour branch is contradictory by the carrier `only` row.
+  No endpoint shortcut, final boundary-cycle rows, induced frontier graph,
+  arbitrary cycle/carrier, or synthetic enclosure is used.  Verification:
+  `lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology` and
+  `lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly` passed.
+- Claim: `S2-dyn-20260520-exterior-seed-to-raw-orbit-source`.
+  Owner: Codex-agent Newton (`019e4558-3f87-7313-b12d-dd2319821c6e`)
+  and Codex current thread.  Role: theorem prover / exterior seed to selected
+  raw orbit.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `proof_workings/s2_route_workbook.md`; read-only
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed smaller reduction on 2026-05-20.  Result: added
+  `exists_selectedRawFaceSuccOrbit_sourceRows_of_seed_edgeFrontier_tailCoverage_localTwoGerm_directCyclic_20260520dyn`,
+  `exists_selectedRawFaceSuccOrbit_sourceRows_of_seed_dartFrontier_tailCoverage_localTwoGerm_directCyclic_20260520dyn`,
+  and
+  `exists_rawFaceSuccOrbit_sourceRows_of_seed_dartFrontier_tailCoverage_localTwoGerm_directCyclic_20260520dyn`.
+  These keep the supplied `UnboundedExteriorFrontierSeed inputs`, selected
+  local edge rows, start dart, and geometric raw `faceSucc` orbit visible while
+  filling `RawFaceSuccOrbitSourceRows` from local two-germ rows, selected raw
+  frontier propagation, raw-tail coverage, and repeated-tail separation.
+  Consecutive-edge frontier, period/cyclic carrier coverage, and
+  frontier-iff-tail are derived internally from that same selected raw orbit.
+  No final boundary-cycle rows, actual-boundary equivalence rows, induced
+  frontier graph, arbitrary cycle/carrier, convex hull, synthetic enclosure,
+  or orientation-free global `FaceSucc` source is used.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`;
+  touched Lean-file forbidden-token scan returned clean.
+- Claim: `S2-dyn-20260520-route-composer-and-circularity-audit`.
+  Owner: Codex-agent Maxwell (`019e4558-51d6-7b82-bc09-0b5422ef6831`).
+  Role: route composer / circularity audit.  Scope: read-only S2 owner files,
+  with only small checked composition lemmas if all premises are genuinely
+  present.  Status: completed audit on 2026-05-20; no Lean edits.  Result:
+  the checked downstream route is already present, but the input-level
+  premises are not all available.  The shortest non-circular composition found
+  is
+  `S2SeededRawOrbitSource.unboundedExteriorFrontierCycleRows_of_connectedIteratedFaceSuccEdgeSource`
+  followed by
+  `ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows`
+  and
+  `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows`.
+  Exact remaining input theorem names, after the local-sector honesty repair:
+  `localSectorRows_of_inputs :
+  forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`,
+  `unboundedFrontierCarrierGraph_connected_of_inputs`, and
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_inputs` (then
+  `rawOrbitIteratedFaceSuccFrontierEdgeSource_of_noOrbitSource` supplies the
+  orbit-indexed edge source used by the checked route).  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`;
+  touched S2 owner forbidden-token scan returned clean.
+- Claim: `S2-dyn-20260520-import-order-and-owner-build-audit`.
+  Owner: Codex-agent Parfit (`019e4559-3e9b-7191-b29c-fa3c4d02edfe`).
+  Role: compile-surface auditor / declaration-order repair.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, plus route notes.
+  Status: completed on 2026-05-20; no Lean repair was needed.  Result: the
+  owner import chain
+  `S2ExteriorBoundarySource -> S2BoundaryFreeRawSource -> S2SeededRawOrbitSource`
+  builds cleanly under the pinned toolchain.  This audit's local residual is
+  superseded by the local-sector honesty repair; the current local residual is
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`.  The older
+  smallest residual names were recorded as
+  `BoundaryFreeNeighborPairEndpointOnlySourceRows inputs`,
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`,
+  `FiniteDrawingUnboundedComplementFrontierPreconnected`,
+  `SelectedRawTailCoverageSourceRows inputs`, and the selected-orbit repeated
+  witness callback
+  `forall {i j}, i != j -> (rows.O.dart i).tail = (rows.O.dart j).tail ->
+    S2RepeatedTailExteriorCutWitnessSource (inputs := inputs) rows.O i j`.
+  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`;
+  touched owner forbidden-token scan returned `clean`.
+- Claim: `S2-dyn-20260520-selected-tail-repeated-witness-adapter`.
+  Owner: Codex-agent Anscombe (`019e455a-62d6-7842-b7c7-a71bc82b63b1`).
+  Role: small adapter prover / repeated-tail witness handoff.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed on 2026-05-20.  Result: added the claim-named witness adapter
+  `S2_dyn_selected_tail_repeated_witness_adapter_20260520`, the cut-partition
+  adapter
+  `S2_dyn_selected_tail_repeated_witness_adapter_of_cutPartitions_20260520`,
+  selected-package methods
+  `SelectedRawTailCoverageSourceRows.repeatedTailRows_of_cutPartitions`,
+  `SelectedRawTailCoverageSourceRows.toRawFaceSuccOrbitSourceRows_of_cutPartitions`,
+  and
+  `SelectedRawTailCoverageSourceRows.existsRawFaceSuccOrbitSourceRows_of_cutPartitions`,
+  plus CX wrappers
+  `exists_rawFaceSuccOrbit_sourceRows_of_selectedTailRepeatedWitnessAdapter_20260520cx`,
+  `exists_rawFaceSuccOrbit_sourceRows_of_selectedRawTailCoverage_cutPartitions_20260520cx`,
+  and
+  `exists_rawFaceSuccOrbit_sourceRows_of_connectedRawOrbitSourceRows_selectedCutPartitions_20260520cx`.
+  The exact remaining source is Mendel's callback: for each hypothetical
+  repeated selected raw-tail pair, provide
+  `Nonempty (CutVertexInterface.CutVertexPartition C)`.  This is only a
+  bridge through Aristotle's checked no-cut witness reducer; it does not prove
+  the cut partition.  Gate passed: targeted builds for both owner modules and
+  touched-file forbidden-token scan.
+- Claim: `S2-dyn-20260520-carrier-connected-of-inputs`.
+  Owner: Codex-agent Einstein (`019e455d-bcb3-7e11-9371-084d2d82120a`)
+  and Codex current thread.  Role: theorem prover / carrier connectedness
+  input source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and route notes.
+  Status: completed strict reduction on 2026-05-20.  Result: added
+  `UnboundedFrontierCarrierConnectedInputSourceRows`,
+  `UnboundedFrontierCarrierConnectedInputSourceRows.toComponentTopologyRows`,
+  `UnboundedFrontierCarrierConnectedInputSourceRows.connected`,
+  `unboundedFrontierCarrierGraph_connected_of_inputs`, and
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_localSectorRows`.
+  The exact current input source is now the reusable
+  `PlanarContinuumUnboundedComplementFrontierPreconnected` theorem plus the
+  fixed-side local-sector rows on the actual unbounded exterior frontier.
+  These erase through `UnboundedExteriorFrontierComponentTopologySourceRows`
+  before invoking the existing carrier-connectedness reducer.  No final
+  boundary-cycle rows, actual-boundary equivalence rows, induced frontier
+  graph, arbitrary carrier/cycle, convex hull, synthetic enclosure, or
+  endpoint shortcut is used.  Verification: with `$env:LAKE_JOBS='1'`,
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  passed; touched Lean-file forbidden-token scan returned clean.
+- Claim: `S2-dyn-20260520-local-angular-source-of-inputs`.
+  Owner: Codex-agent Euler (`019e455d-d4ae-7540-8ff5-c731eefa3601`).
+  Role: theorem prover / input local-angular source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed on 2026-05-20 as strict reducer.  Result: added
+  `S2_dyn_20260520_local_angular_source_of_inputs` and
+  `S2_dyn_20260520_local_angular_source_of_inputs_family` in
+  `S2LocalTwoGermAssembly.lean`.  The input-level local angular source needed
+  before Planck's selected head-between theorem is now reduced to exactly
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  plus the endpoint-only/no-third-neighbour row aligned to the selected
+  carrier neighbours.  It does not prove or duplicate
+  `RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource`; it only
+  supplies the `BoundaryFreeLocalSectorGeometricAngularSource inputs` consumed
+  by that lane.  No final boundary-cycle rows, actual-boundary equivalence
+  rows, induced frontier graph, arbitrary carrier/cycle, synthetic enclosure,
+  global orientation-free `FaceSucc`, or all-adjacent endpoint selected-edge
+  shortcut is used.  Verification: direct Lean checks for the three owner
+  files passed; targeted Lake builds for `GeometricRotationSystem`,
+  `S2LocalTwoGermAssembly`, and `S2BoundaryFreeRawSource` passed; touched-owner
+  scan for `sorry`/`admit`/`axiom`/`unsafe` returned clean.
+- Claim: `S2-dyn-20260520-input-premise-composer`.
+  Owner: Codex-agent Dirac (`019e455d-ee89-7ed3-a7af-929c98420408`).
+  Role: narrow composer / residual stabilizer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and
+  `TASK.md`.  Status: completed.  Deliverable: added only small checked
+  composition lemmas from the current smaller source packages to the shortest
+  S2 route, and recorded the exact residual source names.  New S2 names:
+  `carrierConnected_of_boundaryFreeInputSourceReduction_planarContinuumPreconnected_20260520`,
+  `iteratedFaceSuccEdgeSource_of_localAngularHeadBetween_20260520`, and
+  `unboundedExteriorFrontierCycleRows_of_inputPremiseComposer_20260520`.  New
+  W32 consumer:
+  `minimalFailureExactActualTopologyFieldsTarget_of_inputPremiseComposer_20260520`.
+  The three live premises of
+  `unboundedExteriorFrontierCycleRows_of_connectedIteratedFaceSuccEdgeSource`
+  are now reduced to `BoundaryFreeInputSourceReduction`,
+  `PlanarContinuumUnboundedComplementFrontierPreconnected`,
+  `BoundaryFreeLocalSectorGeometricAngularSource`, and
+  `RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource`.  The W32
+  eraser still keeps `noCutRows : ... -> CutVertexInterface.NoCutVertex C`
+  explicit.  The selected raw-tail/repeated-tail lane remains recorded by the
+  existing reducers
+  `SelectedRawTailCoverageSourceRows.existsRawFaceSuccOrbitSourceRows_of_cutPartitions`
+  and
+  `exists_rawFaceSuccOrbit_sourceRows_of_selectedRawTailCoverage_cutPartitions_20260520cx`;
+  its residual is still the per-repeated-tail
+  `Nonempty (CutVertexInterface.CutVertexPartition C)` callback, not a final
+  boundary-cycle assumption.  Gate:
+  targeted builds for touched modules and touched-file scan.
+- Claim: `S2-dyn-20260520-composer-residual-recheck`.
+  Owner: Codex current thread.  Role: post-Dirac residual recheck / narrow
+  composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and
+  `TASK.md`.  Status: completed.  Result: added the checked local-angular
+  composition lemma
+  `unboundedExteriorFrontierCycleRows_of_boundaryFree_geometricSelection_endpointOnly_successorPoint_notLocalCarrier_20260520`.
+  This consumes Euler's
+  `S2_dyn_20260520_local_angular_source_of_inputs` and Planck's
+  `S2_dyn_20260520_local_angular_head_between_source`, reducing the
+  head-between premise to
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource` plus
+  `RawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource` for the
+  same Euler local-angular source.  Current exact residuals for this composer
+  are:
+  `BoundaryFreeInputSourceReduction`,
+  `PlanarContinuumUnboundedComplementFrontierPreconnected`,
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource`, the
+  aligned endpoint-only row
+  `forall a x, (canonicalGraph C).Adj a.1 x -> (canonicalGraph C).point x in frontier ... -> x = left.1 or x = right.1`,
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource`, and
+  `RawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource`.
+  Recheck note: Einstein/Pascal's sharper carrier reducer
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_geometricSelection_endpointOnly`
+  is present in `S2BoundaryFreeRawSource.lean`, but could not be consumed in
+  this touched module because that source file is not currently build-clean
+  (`Prod` applied to Prop at lines 4436/4454, and bool/Prop tail-inequality
+  mismatches around 4844/4851 and 5037/5046).  Mendel's selected raw-tail
+  cut-partition adapter remains unchanged and already checked at
+  `SelectedRawTailCoverageSourceRows.existsRawFaceSuccOrbitSourceRows_of_cutPartitions`,
+  `exists_rawFaceSuccOrbit_sourceRows_of_selectedRawTailCoverage_cutPartitions_20260520cx`,
+  and
+  `exists_rawFaceSuccOrbit_sourceRows_of_connectedRawOrbitSourceRows_selectedCutPartitions_20260520cx`;
+  its exact residual is still the per-repeated-selected-raw-tail callback
+  `Nonempty (CutVertexInterface.CutVertexPartition C)`, not any final boundary
+  cycle, induced frontier graph, or facade row.  Gate: direct Lean checks
+  passed for `S2SeededRawOrbitSource.lean`, `S2ExteriorBoundarySource.lean`,
+  and `FaceBoundaryTopologySourceW32.lean`; touched Lean-file scan for
+  `sorry`/`admit`/`axiom`/`unsafe`/`opaque` returned clean.
+- Claim: `S2-dyn-20260520-cutpartition-interface-helper`.
+  Owner: Codex-agent Hypatia (`019e455f-3ecd-76b1-9f5a-fd08dd0078ea`).
+  Role: helper prover / cut-partition interface support.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` or the existing
+  cut/no-cut interface owner file, plus `TASK.md`.  Status: stale/closed after
+  Godel completed `S2-dyn-20260520-repeated-tail-two-arc-cutpartition`.
+  Duplicate boundary-arc cutpartition callback work was pruned; the useful
+  remaining source task is now the upstream two-arc source
+  `S2RepeatedBoundaryArcSeparationSource` for repeated selected raw-tail pairs.
+- Claim: `S2-dyn-20260520-repeated-tail-two-arc-cutpartition`.
+  Owner: Codex-current.  Role: claim-specific S2 adapter / repeated-tail
+  concrete cut-partition reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and `TASK.md`;
+  no cut-interface-owner edit.  Status: completed on 2026-05-20.  Result: added
+  `S2_repeated_tail_two_arc_cutpartition_20260520` and
+  `S2_repeatedTail_cutPartition_callback_of_twoArcSeparationSource_20260520`.
+  Coordination with Hypatia: this reuses the existing
+  `S2RepeatedBoundaryArcSeparationSource.toCutVertexPartition` helper and does
+  not introduce duplicate helper names.  The residual remains exactly the two
+  cyclic open raw arcs after deleting the repeated tail; no final
+  boundary-cycle rows, actual-boundary equivalence rows, induced frontier
+  graph, arbitrary carrier/cycle, synthetic enclosure, or endpoint shortcut is
+  introduced.  Verification: direct owner-file Lean check passed with
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`;
+  touched Lean-file forbidden-token scan returned `clean`.  The exact Lake
+  module build was attempted, but concurrent S2 Lake jobs in the shared
+  workspace triggered the known silent `-1` Lake exit; retry the module build
+  once the workspace is idle.
+- Claim: `S2-dyn-20260520-planar-frontier-subcontinuum-between`.
+  Owner: Codex-agent Pascal (`019e4560-3c5a-7422-a1a0-5f90438e86a8`).
+  Role: theorem prover / continuum frontier connectedness.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and route notes.
+  Status: completed by checked reducer on 2026-05-20.  Deliverable:
+  `PlanarContinuumUnboundedComplementFrontierConnected` is now the exact
+  standard continuum theorem left: the frontier of the unbounded complement
+  component of a compact connected planar set is connected.  Added
+  `planarContinuumUnboundedComplement_frontier_compact` to prove compactness
+  of that frontier from component-frontier inclusion and compactness of `K`,
+  `planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_connected`
+  to take the whole frontier as the required compact connected subset, and
+  `S2_dyn_20260520_planar_frontier_subcontinuum_between` as the S2-facing
+  reducer.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`;
+  touched Lean-file forbidden-token scan returned `clean`.
+- Claim: `S2-dyn-20260520-successor-point-source-of-inputs`.
+  Owner: Codex-agent Linnaeus (`019e4563-cced-78b3-b873-e82a3c3eb69f`).
+  Role: theorem prover / selected successor frontier point source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, with a tiny
+  `ExteriorComponentTopology.lean` helper only if unavoidable.  Status:
+  active.  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`, the
+  `successorPoint` residual feeding the local-angular head-between reducer.
+  Gate: targeted S2 seeded build and touched-file scan.
+- Claim: `S2-dyn-20260520-not-local-carrier-source`.
+  Owner: Codex-agent McClintock (`019e4563-e3c3-79a3-9c73-5579332859a7`).
+  Role: theorem prover / non-local-carrier source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed 2026-05-20.  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource inputs
+  localAngularSource`, the `notLocalCarrier` residual feeding the
+  local-angular head-between reducer.  Gate: targeted S2 seeded build and
+  touched-file scan.  Result: added selector abbreviations
+  `localAngularCarrierLeft` and `localAngularCarrierRight`, the strict
+  selector-only residual
+  `RawOrbitIteratedFaceSuccHeadAvoidsLocalAngularCarrierSelectorsNoOrbitSource`,
+  and the checked reducers
+  `S2_dyn_20260520_not_local_carrier_source` and
+  `S2_dyn_20260520_local_angular_head_between_source_of_selectorAvoidance`.
+  The old residual is now sourced only from explicit avoidance of the two
+  chosen local-angular carrier heads; no final boundary-cycle rows,
+  actual-boundary equivalence rows, induced frontier graph, arbitrary
+  carrier/cycle, synthetic enclosure, global orientation-free `FaceSucc`, or
+  endpoint shortcuts are used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+- Claim: `S2-dyn-20260520-s2-owner-build-hotspot-verifier`.
+  Owner: Codex-agent Rawls (`019e4563-f762-7ce2-a41a-f4b954fa0a86`).
+  Role: compile-surface verifier / mechanical repair.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed 2026-05-20.  Result: no mechanical repair was needed at the
+  earlier edge-chain adapter hotspot; `toEdgeChainIncidentSources` and
+  `S2_agent_edge_chain_incident_input_source_20260520bv` still build as the
+  intended strict record-to-conjunction reducer.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.ExteriorComponentTopology`,
+  `... S2SeededRawOrbitSource`, and `... S2ExteriorBoundarySource` all passed.
+  The touched-owner scan over the three Lean files for
+  `axiom`/`constant`/`sorry`/`admit`/`unsafe`/`opaque`/debug commands returned
+  clean.  Current residual names remain
+  `BoundaryFreeInputSourceReduction`,
+  `PlanarContinuumUnboundedComplementFrontierPreconnected`,
+  `BoundaryFreeLocalSectorGeometricAngularSource`,
+  `RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource`, plus the
+  selected raw-tail lane's per-repeated-tail
+  `Nonempty (CutVertexInterface.CutVertexPartition C)` callback.
+- Claim: `S2-dyn-20260520-selected-carrier-neighbor-pair-source`.
+  Owner: Codex-agent Arendt (`019e4565-8989-72b0-914d-33cf9068f406`).
+  Role: theorem prover / actual selected carrier-neighbor source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, with tiny
+  `ExteriorComponentTopology.lean` helpers only if unavoidable.  Status:
+  completed strict reduction on 2026-05-20.  Result: added
+  `boundaryFreeNeighborPairEndpointOnlySourceRows_of_selectedCarrierNeighborPairSource`,
+  `S2_dyn_20260520_selected_carrier_neighbor_pair_source`, its family form,
+  and
+  `S2_dyn_20260520_neighbor_pair_endpoint_only_source_of_selectedCarrierNeighborPairSource`
+  in `S2BoundaryFreeRawSource.lean`.  The actual selected
+  unbounded-frontier carrier-neighbour source is
+  `S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource`;
+  the endpoint residual is aligned to the two heads erased from that same
+  source, and then fed through Volta's
+  `S2_dyn_20260520_neighbor_pair_endpoint_only_source`.  No all-adjacent
+  endpoint incident/closure row, final boundary-cycle row, induced frontier
+  graph, arbitrary carrier/cycle, or synthetic enclosure is used.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`;
+  touched-file scan checked the new declarations.
+- Claim: `S2-dyn-20260520-geometric-selection-neighbor-source`.
+  Owner: Codex-agent Dalton (`019e456a-cc06-7f51-8988-a07facdb12b5`).
+  Role: theorem prover / geometric angular neighbor selection.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, with a tiny
+  `ExteriorComponentTopology.lean` helper only if unavoidable.  Status:
+  completed strict reduction on 2026-05-20.  Result: added
+  `S2_dyn_20260520_geometric_selection_neighbor_source` and its family form in
+  `S2LocalTwoGermAssembly.lean`.  The local-angular residual
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  now reduces exactly to Arendt's selected-carrier neighbour-pair family plus
+  the genuine non-wrap consecutive
+  `GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow`
+  family for those same two heads.  This lane uses no endpoint-only/no-third
+  wrapper, all-adjacent endpoint shortcut, final boundary-cycle rows,
+  actual-boundary equivalence rows, induced frontier graph, arbitrary
+  carrier/cycle, synthetic enclosure, or identity angular-order shortcut.
+  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.GeometricRotationSystem`;
+  touched-file forbidden-token scan returned clean.
+- Claim: `S2-dyn-20260520-nonwrap-angular-neighbor-row-source`.
+  Owner: Codex-agent.  Role: theorem prover / selected-head nonwrap angular
+  neighbour row.  Scope:
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, with a tiny
+  dependency repair in `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  needed to replay the requested owner build.  Status: completed strict
+  reduction on 2026-05-20.  Result: added
+  `S2_dyn_20260520_nonwrap_angular_neighbor_row_source`, its family form, and
+  `S2_dyn_20260520_geometric_selection_neighbor_source_of_nonwrap_angular_neighbor_row_source`
+  in `S2LocalTwoGermAssembly.lean`.  The genuine non-wrap consecutive
+  `GraphVertexGeometricAngularNeighborSelectionRow` family for the two
+  selected carrier-neighbour heads is projected from the same strict
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource` that
+  names those heads, and then fed through Dalton's reducer.  No final
+  boundary-cycle rows, actual-boundary equivalence rows, induced frontier graph,
+  arbitrary carrier/cycle, synthetic enclosure, endpoint shortcut, or identity
+  angular-order shortcut is used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.GeometricRotationSystem`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`;
+  touched-file forbidden-token scan returned clean.
+- Claim: `S2-dyn-20260520-fixed-side-local-sector-source`.
+  Owner: Codex-agent Fermat (`019e456a-f056-7371-96a5-7d9ce89b6ec6`).
+  Role: theorem prover / fixed-side local-sector source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+  completed strict reduction on 2026-05-20.  Result: added
+  `BoundaryFreeInputSourceReduction.toLocalSectorRows`,
+  `BoundaryFreeInputSourceReduction.toConnectedInputSourceRows`,
+  `BoundaryFreeInputSourceReduction.connected_of_planarContinuum`,
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_boundaryFreeInputSourceReduction`,
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_boundaryFreeGeometricAngularSource`,
+  and
+  `unboundedFrontierCarrierGraph_connected_of_planarContinuum_geometricSelection_endpointOnly`.
+  Einstein's connected-carrier input source now obtains its fixed-side
+  local-sector field from the positive local-two-germ row in
+  `BoundaryFreeInputSourceReduction`; Arendt/Dalton can feed the same reducer
+  through the aligned geometric-selection plus endpoint-only row.  No final
+  boundary-cycle rows, actual-boundary equivalence rows, induced frontier
+  graph, arbitrary carrier/cycle, convex hull, synthetic enclosure, endpoint
+  shortcut, or identity angular-order shortcut is used.  Verification: direct
+  Lean check of `S2BoundaryFreeRawSource.lean` passed; the same pass also
+  repaired stale local packaging in that file from `Prod` over a `Prop` to
+  `PProd` and normalized two raw predecessor/successor tail inequalities from
+  boolean `!=` to propositional `â‰ `.
+
+- Claim: `S2-dyn-20260520-frontier-edge-chain-from-fixed-side`.
+  Owner: Codex-current thread / Socrates board refresh.  Role: live-route
+  reporter and strict reducer for selected edge-chain plus component-topology
+  rows.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` only.  Status:
+  live on the current S2-B route, not stale.  Exact source theorem name:
+  `ExteriorComponentTopology.S2_dyn_20260520_frontier_edge_chain_from_fixed_side`.
+  Source surface: `PlanarContinuumUnboundedComplementFrontierConnected`
+  together with the fixed-side local-sector family
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`.  Result
+  shape:
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` and
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`.  The theorem
+  uses Einstein's component-topology/carrier-connected reducer and Fermat's
+  fixed-side selected-edge cover.  It does not depend on final boundary-cycle
+  rows, actual-boundary equivalence rows, induced frontier graph, arbitrary
+  carrier/cycle, convex hull, synthetic enclosure, endpoint shortcuts, or
+  identity angular-order shortcuts.  Build gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`;
+  then
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  if the S2 exterior source consumes the new name.  Current gate status:
+  pending serialized rerun because concurrent S2 Lean/Lake checks are active
+  in the shared workspace.
+
+Current co-claims, 2026-05-20:
+
+- Claim: `S2-pool-cx-frontier-topology-source`.
+  Owner: Codex-agent.  Role: theorem prover / finite drawing frontier
+  topology.  Scope: `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Source task:
+  S2-B.  Deliverable: prove or strictly reduce
+  `FiniteDrawingUnboundedComplementFrontierPreconnected` without using final
+  S2 cycle rows.  Gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+- Claim: `S2-pool-cx-local-two-germ-source`.
+  Owner: Codex-agent.  Role: theorem prover / local no-third source.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed 2026-05-20.
+  Source task: S2-A.  Deliverable: prove or strictly reduce
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource C inputs`
+  or the pointwise no-chord/two-neighbor row feeding
+  `BoundaryFreeNoThirdGermSource inputs`.  Gate: targeted builds for
+  `S2LocalTwoGermAssembly` and `S2BoundaryFreeRawSource`.  Result: added
+  `BoundaryFreeNoThirdGermSource.toDeletedNeighborLocalSeparationInputSource`
+  and
+  `S2_pool_cx_unreachableAfterDeleteInputSource_of_boundaryFreeNoThirdGermSource`,
+  so the deleted-neighbour residual now factors through the explicit
+  local-separation surface and the remaining S2-A source is the input-level
+  `BoundaryFreeNoThirdGermSource inputs`.  CX follow-up: added
+  `BoundaryFreeNeighborPairEndpointOnlySourceRows` plus
+  `S2_pool_cx_unreachableAfterDeleteInputSource_of_neighborPairEndpointOnlyRows`
+  and its family form, reducing the deleted-neighbour source to the exact
+  pointwise no-chord/two-neighbour premise: concrete
+  `UnboundedFrontierCarrierNeighborPairAt` rows and the endpoint-only row that
+  any adjacent frontier endpoint is one of those two carrier neighbours.
+- Claim: `S2-pool-cx-raw-facesucc-source`.
+  Owner: Codex-agent.  Role: theorem prover / selected raw face-successor
+  propagation.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Source task:
+  S2-C.  Deliverable: prove or strictly reduce the selected raw
+  face-successor frontier-edge source or raw-tail coverage source from
+  input-level exterior data.  Gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+- Claim: `S2-pool-cx-final-route-consistency`.
+  Owner: Codex-agent.  Role: route verifier / final composer scout.  Scope:
+  read-only S2 owner files, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Source task:
+  S2-D.  Deliverable: identify the shortest non-circular composition from
+  proved source rows to `UnboundedExteriorFrontierCycleRows C inputs`, the
+  finite planar theorem, and W32.  Gate: report exact declaration names and
+  any stale/circular workboard entries before pruning.
+
+- Claim: `S2-agent-cw-planar-frontier-preconnected-api-scout`.
+  Owner: Codex-agent.  Role: mathlib/project API scout.  Scope:
+  `TASK.md` and `proof_workings/s2_route_workbook.md` only, except read-only
+  inspection of topology and S2 source files.  Status: completed 2026-05-20.
+  Source task:
+  S2-B.  Deliverable: identify exact mathlib/project theorem names that prove
+  or strictly reduce `FiniteDrawingUnboundedComplementFrontierPreconnected`
+  for compact connected finite embedded drawings, or state the missing
+  planar-continuum theorem precisely.  Immediate premise policy: Swanepoel S2
+  only; no final cycle rows, induced frontier graph, arbitrary carrier,
+  synthetic enclosure, or facade theorem proposal.  Verification gate:
+  workbook route-demotion recorded: no existing mathlib/project theorem was
+  found that closes the planar-continuum step.  Exact next theorem to attack is
+  `FiniteDrawingUnboundedComplementFrontierPreconnected`, or the reusable
+  continuum theorem
+  `forall (K : Set PlanarInterface.Point) (x : PlanarInterface.Point),
+    IsCompact K -> IsConnected K -> x âˆˆ Ká¶œ ->
+    Â¬ Bornology.IsBounded (connectedComponentIn Ká¶œ x) ->
+    IsPreconnected (frontier (connectedComponentIn Ká¶œ x))`.
+
+- Claim: `S2-agent-cw-exterior-raw-orbit-seed-source`.
+  Owner: Codex-agent Curie (`direct-thread-cw-exterior-seed-20260520`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and `TASK.md`.
+  Status: completed smaller reduction on 2026-05-20.  Source task: S2-C.
+  Result: added
+  `exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localTwoGermRows_20260520cw`,
+  `exists_rawFaceSuccOrbit_sourceRows_of_edgeFrontier_tailCoverage_localTwoGerm_directCyclic_20260520cw`,
+  and
+  `exists_rawFaceSuccOrbit_sourceRows_of_dartFrontier_tailCoverage_localTwoGerm_directCyclic_20260520cw`.
+  The route selects the geometric raw `faceSucc` seed from
+  `unboundedExteriorFrontierSeed` plus local two-germ rows, then reduces the
+  raw orbit source package to selected raw frontier propagation, raw-tail
+  coverage, and repeated-tail separation.  It uses no final boundary-cycle
+  rows, actual-boundary equivalence rows, induced frontier graph, arbitrary
+  cycle/carrier, convex hull, or synthetic enclosure.  Verification:
+  serialized pinned `ExteriorComponentTopology` build passed; direct pinned
+  Lean check of `S2SeededRawOrbitSource.lean` passed.  The Lake target for
+  `S2SeededRawOrbitSource` is currently blocked by the out-of-scope upstream
+  `S2ExteriorBoundarySource.lean` unknown identifiers
+  `S2RepeatedTailExteriorCutWitnessSource` and
+  `S2_repeatedBoundarySeparationRows_of_deletedTailWitness`.
+- Claim: `S2-agent-cw-repeated-tail-cut-source`.
+  Owner: Codex-agent Weyl (`S2-agent-cw-repeated-tail-cut-source`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and only a
+  very small graph lemma in
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` if unavoidable.
+  Status: completed smaller reduction on 2026-05-20.  Source task:
+  S2-C/S2-E.  Result: added
+  `S2_repeatedBoundarySeparationRows_of_deletedTailWitness`,
+  `S2_repeatedBoundarySeparationRows_source_of_deletedTailWitnesses`, and
+  `S2_rawFaceSuccOrbitSourceRows_of_dart_frontier_period_deletedTailWitnesses`
+  in `Swanepoel/S2ExteriorBoundarySource.lean`.  These reduce the
+  `RawFaceSuccOrbitSourceRows` repeated-tail separation field directly to the
+  primitive deleted-tail witness package
+  `S2RepeatedTailExteriorCutWitnessSource`: one non-cut raw-tail index on each
+  cyclic open arc plus nonreachability after deleting the repeated tail.  No
+  final boundary-cycle rows, actual-boundary equivalence rows, induced
+  frontier graph, arbitrary cycle, synthetic enclosure, or
+  `ExteriorComponentTopology.lean` edit was used.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`;
+  touched-file forbidden-token scan returned `clean`.  Residual: positively
+  inhabit `S2RepeatedTailExteriorCutWitnessSource` for each hypothetical
+  repeated selected raw tail from selected raw-orbit geometry/minimality.
+- Claim: `S2-agent-cw-selected-faceSucc-transition-source`.
+  Owner: Codex-agent Noether-CW (`codex-current-thread-20260520-cw`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and `TASK.md`;
+  read-only
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` unless a tiny
+  helper is unavoidable.  Status: completed smaller reduction on 2026-05-20.
+  Source task: S2-C.  Result: added
+  `rawOrbitIteratedFaceSuccBoundaryFreeLocalTwoGermTransitionNoOrbitSource_of_boundaryFree_selectedEdgeSource`
+  and
+  `S2_agent_cw_selected_faceSucc_transition_source_20260520cw` in
+  `Swanepoel/S2SeededRawOrbitSource.lean`.  These prove
+  `RawOrbitIteratedFaceSuccBoundaryFreeLocalTwoGermTransitionNoOrbitSource localSource`
+  from `BoundaryFreeNoThirdGermSource` plus the selected Nat-indexed geometric
+  `faceSucc` edge propagation row
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource`, with no final
+  boundary-cycle rows, `ActualBoundaryCycleFrontierEquivalenceRows`, induced
+  frontier graph, arbitrary cycle, synthetic enclosure, or orientation-free
+  global `FaceSucc` source.  A tiny pre-existing `ExteriorComponentTopology`
+  inference blocker in the deleted-neighbour local-separation eraser was also
+  repaired by giving the deleted-graph nonreachability proof an explicit type.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`;
+  touched-file forbidden-token scan returned `clean`.  Residual: positively
+  inhabit the selected `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource`
+  from geometric propagation/frontier facts.
+- Claim: `S2-agent-cw-raw-tail-coverage-source`.
+  Owner: Codex-agent Noether (`direct-thread-cw-20260520`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and `TASK.md`;
+  read-only `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  unless a small consumer theorem is needed.  Status: completed 2026-05-20.
+  Source task:
+  S2-C raw-tail coverage.  Deliverable: prove or strictly reduce coverage of
+  all `unboundedFrontierCarrierGraph` vertices by the selected raw
+  face-successor orbit, field-by-field through cyclic carrier coverage,
+  raw-tail coverage, and period-three if relevant, feeding
+  `RawFaceSuccOrbitSourceRows` / Archimedes residual.  Immediate premise
+  policy: no final boundary cycle rows, actual-boundary equivalence, induced
+  frontier graph, arbitrary carrier/cycle, or synthetic enclosure.  Verification
+  gate: targeted `S2SeededRawOrbitSource` build plus touched Lean-file
+  forbidden-token scan.  Result: added
+  `SelectedRawTailCoverageSourceRows`,
+  `SelectedRawTailCoverageSourceRows.toRawOrbitCoverageSourceRows`,
+  `SelectedRawTailCoverageSourceRows.toRawFaceSuccOrbitSourceRows`,
+  `SelectedRawTailCoverageSourceRows.existsRawFaceSuccOrbitSourceRows`,
+  `rawFaceSuccOrbitSourceRows_of_selectedRawTailCoverage_repeatedTail_20260520cw`,
+  and
+  `S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw`.
+  The connected raw-orbit package now explicitly produces dart-frontier,
+  consecutive-tail frontier, raw-tail coverage of every concrete frontier
+  carrier vertex, period-three, and cyclic carrier coverage for the selected
+  raw orbit; the remaining Archimedes/raw-source residual is repeated-tail
+  exterior separation on that selected orbit.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`;
+  touched Lean-file forbidden-token scan returned clean.
+- Claim: `S2-agent-cv-raw-orbit-direct-source`.
+  Owner: Codex-agent Pasteur (`019e4549-a30b-7010-a3a8-e26a04954b5c`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `proof_workings/s2_route_workbook.md`, and `TASK.md`.  Status: active.
+  Source task: S2-C.  Deliverable: inhabit or strictly reduce the
+  input-level source
+  `Exists R start O, Nonempty (RawFaceSuccOrbitSourceRows (inputs := inputs) O)`.
+  Work must stay at the raw source level: no final boundary-cycle rows,
+  `ActualBoundaryCycleFrontierEquivalenceRows`, induced frontier graph,
+  arbitrary spanning cycle, synthetic enclosure, identity angular-order
+  shortcut, or new W/facade.  Preferred strict reductions are selected raw
+  consecutive-edge frontier propagation, raw-tail coverage, repeated-tail
+  separation, or genuine selected exterior raw face-orbit construction.
+  Verification gate: targeted `S2SeededRawOrbitSource` build plus touched
+  Lean-file forbidden-token scan.
+- Claim: `S2-agent-cv-selected-edge-endpoint-cleanup`.
+  Owner: Codex-agent Copernicus (`019e4549-8ec3-70f1-bf5e-0f220b2f1d66`) /
+  Codex-main handoff.  Role: source-surface cleanup.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `proof_workings/s2_route_workbook.md`, and `TASK.md`.  Status: active.
+  Source task: S2-B/S2-C hygiene.  Deliverable: align endpoint-source
+  declarations, docstrings, claim text, and downstream reducers with the
+  corrected rule that adjacent endpoint closure/incident-edge sources are not
+  unconditional consequences of `FinitePlanarOuterComponentInputs C`; selected
+  exterior-edge premises must be consumed explicitly.  Codex-main has added
+  `SelectedUnboundedFrontierEdgeEndpointClosureSource` and
+  `selectedUnboundedFrontierEdgeEndpointClosureSource_of_definition`; the
+  remaining cleanup is downstream audit/tightening, not duplicate endpoint
+  declarations.  Verification gate:
+  targeted owner builds for touched Lean modules plus touched Lean-file scan
+  for forbidden endpoint-source claims.
+- Claim: `S2-agent-cv-deleted-neighbor-source`.
+  Owner: Codex-agent Mencius (`019e4549-c615-7d82-a7e1-13d92e0cbb19`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and `TASK.md`.
+  Status: active.  Source task: S2-A.  Deliverable: prove or strictly reduce
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource C inputs`
+  from `FinitePlanarOuterComponentInputs C`, with the source choosing two
+  selected incident `unboundedFrontierEdgeSet` edges at each frontier vertex and
+  proving every third carrier neighbour is unreachable from the selected left
+  head in the ambient unit-distance graph after deleting the vertex.  Immediate
+  premise policy: no final boundary cycle, actual-boundary rows, selected
+  successor rows, induced frontier graph, arbitrary cycle, convex hull, or
+  synthetic enclosure shortcuts.  Verification gate: pinned
+  `ExteriorComponentTopology` build plus touched Lean-file forbidden-token
+  scan.
+- Claim: `S2-agent-cv-finite-frontier-preconnected-source`.
+  Owner: Codex-agent Chandrasekhar (`019e4549-b3f3-7f72-b5fe-825a341967cd`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `proof_workings/s2_route_workbook.md`, and `TASK.md`.  Status: active.
+  Source task: S2-B.  Deliverable: prove or strictly reduce
+  `FiniteDrawingUnboundedComplementFrontierPreconnected` /
+  `UnboundedExteriorFrontierNoOpenSeparationSource C inputs` from finite
+  drawing facts, using the actual
+  `unboundedExteriorComponentRows C inputs`.  Immediate premise policy: no
+  induced frontier graph, final cycle, arbitrary carrier, synthetic enclosure,
+  or carrier-connectedness sourced from final rows.  Verification gate: pinned
+  owner builds for `ExteriorComponentTopology` and `FinitePlaneDrawing` plus
+  touched Lean-file forbidden-token scan.
+- Claim: `S2-agent-cw-selected-faceSucc-transition-source`.
+  Owner: Codex-agent Raman (`019e454f-8d41-78c1-905f-67578215259c`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  superseded by completed claim
+  `S2-agent-cw-selected-faceSucc-transition-source` from Codex-agent
+  Noether-CW on 2026-05-20.  Source task: S2-C.  Deliverable was to prove or
+  strictly reduce
+  `RawOrbitIteratedFaceSuccBoundaryFreeLocalTwoGermTransitionNoOrbitSource`
+  from selected geometric `faceSucc` propagation plus
+  `BoundaryFreeNoThirdGermSource`, without orientation-free global face-successor
+  rows, final cycle rows, actual-boundary rows, induced frontier graph,
+  arbitrary cycle, or synthetic enclosure.  Verification gate: pinned owner
+  builds plus touched Lean-file forbidden-token scan.
+- Claim: `S2-agent-cw-raw-tail-coverage-source`.
+  Owner: Codex-agent Nietzsche (`019e454f-8d8e-74c3-9144-48a800a3945f`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed generic selected raw-tail coverage package; no duplicate
+  raw-tail/cyclic coverage work should continue under this claim.
+  Source task: S2-C.  Result: the residual moved to
+  `S2-dyn-20260520-selected-raw-tail-repeated-separation`, namely the
+  repeated-tail exterior separation callback for an already chosen
+  `SelectedRawTailCoverageSourceRows` package.  Verification gate: pinned
+  `S2SeededRawOrbitSource` build plus touched Lean-file forbidden-token scan.
+- Claim: `S2-agent-cw-repeated-tail-cut-source`.
+  Owner: Codex-agent Plato (`019e454f-8deb-70f1-9412-86a88ec72d8a`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`; touch
+  `ExteriorComponentTopology.lean` only for a tiny graph lemma if unavoidable.
+  Status: superseded by completed
+  `S2-agent-cw-repeated-tail-cut-source` / Codex-agent Weyl reduction above.
+  Source task: S2-C.  Result: the repeated-tail separation field is now
+  reduced to `S2RepeatedTailExteriorCutWitnessSource` by the checked
+  declarations recorded in the completed Weyl claim.  Residual remains
+  positive inhabitation of that deleted-tail unreachable witness package.
+- Claim: `S2-agent-cw-boundaryfree-from-deleted-neighbor`.
+  Owner: Codex direct thread, continuing the Gauss lane
+  (`019e454f-8e39-7e31-a3aa-0695af53f8f5`).  Role: reducer integrator.
+  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`; read-only
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  partially checked / blocked upstream on the second owner build.  Source task:
+  S2-A.  Result: added
+  `S2_agent_cw_local_sector_from_unreachableAfterDelete_20260520` and its
+  family form in `S2LocalTwoGermAssembly`, composing the Averroes
+  deleted-neighbour-to-cut-partition reducer with the Lovelace
+  cut-partition-to-local-sector reducer.  Added
+  `BoundaryFreeNoThirdGermSource.toUnreachableAfterDeleteInputSource`,
+  `S2_agent_cw_unreachableAfterDeleteInputSource_of_boundaryFreeNoThirdGermSource_20260520`,
+  and the nonempty form in `S2BoundaryFreeRawSource`, projecting the
+  boundary-free source to the deleted-neighbour source without adjacent-endpoint
+  incident/closure rows, actual/final boundary-cycle rows, selected successor
+  rows, induced frontier graphs, arbitrary cycles, or synthetic enclosure.
+  Verification: pinned
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed; touched-file forbidden-token scan over the two owner files returned
+  `clean`.  The pinned `S2BoundaryFreeRawSource` build is blocked before this
+  file by the out-of-scope upstream import error in
+  `S2ExteriorBoundarySource.lean`: unknown
+  `S2RepeatedTailExteriorCutWitnessSource` and
+  `S2_repeatedBoundarySeparationRows_of_deletedTailWitness`.
+- Claim: `S2-agent-cw-exterior-raw-orbit-seed-source`.
+  Owner: Codex-agent Zeno (`019e454f-8ea7-77e1-a0fb-98e4514347b8`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status: active.
+  Source task: S2-C.  Deliverable: construct or strictly reduce the selected
+  exterior raw `faceSucc` orbit seed from `unboundedExteriorFrontierSeed` plus
+  local two-germ rows, producing raw-orbit source package fields without final
+  boundary-cycle or actual-boundary rows.  Verification gate: pinned owner
+  builds plus touched Lean-file forbidden-token scan.
+- Claim: `S2-agent-cw-planar-frontier-preconnected-api-scout`.
+  Owner: Codex-agent Franklin (`019e454f-8f03-79c3-9084-a3f2192c5f3c`).
+  Role: read-only topology/API scout.  Scope:
+  `TASK.md`, `proof_workings/s2_route_workbook.md`, Mathlib topology imports,
+  and S2 owner files.  Status: active; read-only unless demoting a route in the
+  workbook.  Source task: S2-B.  Deliverable: exact Mathlib/project theorem
+  route for `FiniteDrawingUnboundedComplementFrontierPreconnected`, or the
+  precise missing planar-continuum theorem if Mathlib does not provide it.
+  Verification gate: no build unless files are edited.
+- Claim: `S2-agent-ct-local-two-germ-input-source`.
+  Owner: Codex-agent Lovelace (`019e453f-3673-7783-80d5-3931506f898b`).  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed smaller reduction on 2026-05-20.  Source task: S2-A.
+  Result:
+  `S2_agent_ct_local_sector_from_cutPartitionRows_20260520` and
+  `S2_agent_ct_local_sector_input_source_family_of_cutPartitionRows_20260520`
+  prove the pointwise local-sector family from only
+  `UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt` rows, removing the
+  adjacent-endpoint incident-edge and angular-row premises from the older
+  `S2_agent_local_sector_from_inputs_20260520au` local-sector reducer.  No
+  final boundary cycle, actual-boundary rows, selected successor rows,
+  synthetic enclosure, induced frontier graph, or arbitrary spanning cycle is
+  used.  Residual: prove the cut-partition neighbour rows from
+  `FinitePlanarOuterComponentInputs C`, or continue reducing that exact source.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`;
+  touched-file forbidden-token scan returned `clean`.
+- Claim: `S2-agent-cu-neighbor-cutpartition-source`.
+  Owner: Codex direct thread.  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed smaller reduction on 2026-05-20.  Source task: S2-A.
+  Result:
+  `S2_agent_cu_neighbor_cutpartition_source_of_unreachableAfterDelete_20260520`
+  and
+  `S2_agent_cu_neighbor_cutpartition_source_family_of_unreachableAfterDelete_20260520`
+  reduce the input-level residual
+  `forall a, UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt inputs a`
+  to
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource C inputs`.
+  The remaining source now names two selected incident `unboundedFrontierEdgeSet`
+  edges and proves ambient unit-distance graph nonreachability for every third
+  carrier neighbour after deleting `a.1`, instead of producing a concrete
+  `CutVertexPartition` directly.  No final boundary cycle, actual-boundary
+  rows, selected successor rows, induced frontier graph, arbitrary cycle,
+  synthetic enclosure, or convex hull is used.  Residual: prove
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource C inputs`
+  from `FinitePlanarOuterComponentInputs C`, or continue reducing that
+  deleted-neighbour source to a smaller local planar separation row.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+- Claim: `S2-agent-ct-frontier-cover-source`.
+  Owner: Codex-agent Hubble (`019e453f-5251-7781-8468-3c53d7424348`).  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  active.  Source task: S2-B.
+  Deliverable: strictly prove or reduce the selected-edge cover/preconnected
+  source feeding `EdgeChainIncidentFrontierTopologySourceRows`, especially
+  the input-level frontier cover by `unboundedFrontierEdgeSet`.  Immediate
+  premise policy: no final cycle, induced frontier graph, arbitrary carrier,
+  or deferred `ActualBoundary...` row.  Verification gate: pinned
+  `ExteriorComponentTopology` and `FinitePlaneDrawing` builds plus
+  touched-file forbidden-token scan.
+  Current direct-thread progress: added the strictly smaller finite-drawing
+  residual
+  `FiniteDrawingUnboundedComplementFrontierNoOpenSeparation`, its reduction
+  from `PlanarContinuumUnboundedComplementFrontierNoOpenSeparation` using
+  `embeddedEdgeSet_connected_of_inputs`, and the source theorem
+  `S2_agent_ct_frontier_cover_source_noOpenSeparation_20260520ct`.
+  Residual: prove the finite-drawing no-open-separation theorem, or continue
+  reducing it without final cycle rows, induced frontier graphs, arbitrary
+  cycles, or synthetic enclosure.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`;
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FinitePlaneDrawing`;
+  touched-file forbidden-token scan returned `clean`.
+- Claim: `S2-agent-ct-endpoint-closure-source`.
+  Owner: pending subagent spawn.  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  spawn rejected by runtime agent-thread cap on 2026-05-20; no subagent is
+  active for this claim and no edits were made.  Source task: S2-B.
+  Corrected deliverable: do not prove
+  `AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource C inputs`
+  unconditionally for arbitrary adjacent exterior-frontier endpoints.  That
+  target is too strong in the presence of boundary chords.  Endpoint closure is
+  available only after an edge is selected in `unboundedFrontierEdgeSet`, via
+  `closedSegmentEndpointClosureSource_of_incidentUnboundedFrontierEdgeSource`
+  and the direct selected-edge row
+  `selectedUnboundedFrontierEdgeEndpointClosureSource_of_definition`.
+  Remaining live task: construct/source the actual selected exterior
+  carrier/orbit from `FinitePlanarOuterComponentInputs C`, so the selected-edge
+  premise is produced rather than deferred.  Status remains open as S2-B route
+  work; do not mark S2-B complete from the endpoint reducer alone.
+- Claim: `S2-agent-ct-selected-facesucc-source`.
+  Owner: Codex-agent Sagan (`019e453f-6735-70a3-8b2f-efe023f6dbfb`) /
+  Codex thread handoff.  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed as a strict reduction on 2026-05-20.  Source task: S2-C.
+  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` from genuine
+  selected geometric `faceSucc` propagation and S2-A local rows.  Immediate
+  premise policy: no orientation-free global `FaceSuccFrontierEdgeSource` as
+  the live target and no completed boundary cycle as input.  Verification
+  gate: pinned `S2SeededRawOrbitSource` and `GeometricRotationSystem` builds
+  passed; touched-file forbidden-token scan returned clean.
+  Result: added the split row
+  `RawOrbitIteratedFaceSuccBoundaryFreeLocalTwoGermTransitionNoOrbitSource`
+  and reducers to
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` and
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`.
+  Residual: prove the split transition row from input-level selected
+  geometric `faceSucc` propagation; S2-A local rows are now a separate input
+  through `BoundaryFreeNoThirdGermSource`.
+- Claim: `S2-agent-cu-raw-face-orbit-source`.
+  Owner: Codex-agent Codex.  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and `TASK.md`;
+  `GeometricRotationSystem.lean` is read-only unless a strictly local
+  geometric helper is unavoidable.  Status: completed smaller reduction on
+  2026-05-20.  Source task: S2-C.  Result:
+  `exists_rawFaceSuccOrbit_sourceRows_of_edgeFrontier_tailCoverage_20260520cu`
+  proves the exact source
+  `Exists R start O, Nonempty (RawFaceSuccOrbitSourceRows (inputs := inputs) O)`
+  from local sectors, cyclic carrier coverage, selected consecutive raw-edge
+  frontier rows, positive raw-tail coverage of all unbounded-frontier carrier
+  vertices, and repeated-tail separation; the period lower bound is derived
+  internally.  The companion
+  `exists_rawFaceSuccOrbit_sourceRows_of_dartFrontier_tailCoverage_20260520cu`
+  uses the selected raw dart-frontier row instead of consecutive-edge frontier
+  rows.  No final boundary-cycle rows,
+  `ActualBoundaryCycleFrontierEquivalenceRows`, arbitrary spanning cycles,
+  induced frontier graph, synthetic enclosure, or final-row carrier
+  connectedness are used.  Residual: prove the dart-frontier row, cyclic
+  carrier coverage, raw-tail coverage, local sectors, and repeated-tail
+  separation from `FinitePlanarOuterComponentInputs C`, or continue reducing
+  those exact rows.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`;
+  touched Lean-file forbidden-token scan returned `clean`.
+- Claim: `S2-agent-cu-neighbor-cutpartition-source`.
+  Owner: Codex-agent Averroes (`019e4545-02d5-71d3-abfa-24f88574e784`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and, only for
+  consumption, `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+  Status: active.  Source task: S2-A.  Deliverable: prove or strictly reduce
+  the input-level family
+  `forall a, UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt inputs a`,
+  preferably through `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource`.
+  Immediate premise policy: no boundary-cycle, actual-boundary, selected
+  successor, induced-frontier, arbitrary-cycle, convex-hull, or synthetic
+  enclosure shortcut.  Verification gate: targeted owner build plus
+  touched-file forbidden-token scan.
+- Claim: `S2-agent-cu-finite-drawing-frontier-topology`.
+  Owner: Codex-agent Dalton (`019e4545-1d66-7bf2-a965-05214089af9c`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and a small
+  imported topology helper only if it directly proves the source row.  Status:
+  completed strict reduction on 2026-05-20.  Source task: S2-B.  Deliverable: prove or strictly reduce
+  `FiniteDrawingUnboundedComplementFrontierNoOpenSeparation` or directly
+  `UnboundedExteriorFrontierNoOpenSeparationSource C inputs` from finite
+  drawing facts.  Immediate premise policy: no final cycle, induced frontier
+  graph, arbitrary carrier, carrier-connectedness-from-itself, or synthetic
+  enclosure.  Verification gate: targeted owner build plus touched-file
+  forbidden-token scan.  Result: added
+  `FiniteDrawingUnboundedComplementFrontierPreconnected`,
+  `finiteDrawingUnboundedComplementFrontierNoOpenSeparation_of_frontierPreconnected`,
+  `unboundedExterior_frontier_noOpenSeparation_of_finiteDrawing_frontierPreconnected`,
+  and `S2_agent_cu_finite_drawing_frontier_topology_20260520cu`.
+  Residual: prove
+  `FiniteDrawingUnboundedComplementFrontierPreconnected`, i.e. direct
+  preconnectedness of the frontier of each unbounded complement component of
+  the embedded finite drawing.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`;
+  touched-file forbidden-token scan returned `clean`.
+- Claim: `S2-agent-cu-raw-face-orbit-source`.
+  Owner: Codex-agent Archimedes (`019e4545-31d3-7e00-a6b3-3a8407f34809`).
+  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status: active.
+  Source task: S2-C.  Deliverable: prove or strictly reduce the input-level
+  source `Exists R start O, Nonempty (RawFaceSuccOrbitSourceRows (inputs := inputs) O)`.
+  Immediate premise policy: no final boundary cycle, actual-boundary
+  equivalence rows, arbitrary spanning cycle, induced frontier graph,
+  synthetic enclosure, or final-row carrier connectedness.  Verification gate:
+  targeted owner build plus touched-file forbidden-token scan.
+- Claim: `S2-agent-ct-raw-coverage-source`.
+  Owner: pending subagent spawn.  Role: source theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  spawn rejected by runtime agent-thread cap on 2026-05-20; no subagent is
+  active for this claim and no edits were made.  Source task: S2-C.
+  Deliverable: prove or strictly reduce `RawOrbitCoverageSourceRows` from
+  actual exterior raw face orbit data and no-cut/repeated-tail rows without
+  assuming the final cycle.  Immediate premise policy: missing carrier or
+  selected successor premises must be proved here or the claim is rewritten as
+  those source rows.  Verification gate: pinned `S2SeededRawOrbitSource`
+  build plus touched-file forbidden-token scan.
+- Claim: `S2-agent-ct-route-circularity-audit`.
+  Owner: Codex-agent Newton (`019e4545-4214-7130-a90e-28be12ee6013`).  Role: route verifier.  Scope:
+  `TASK.md`, `proof_workings/s2_route_workbook.md`, and read-only S2 owner
+  files.  Status: active; read-only.  Source task:
+  S2-A/B/C audit.  Deliverable: identify circular dependencies among the current S2
+  source-row reducers and name the smallest non-circular theorem to attack
+  next.  Immediate premise policy: report source rows, not new facades.
+  Verification gate: no code build required unless files are edited; workbook
+  update only if a route is proved, demoted, or shown circular.
+
+- Claim: `S2-B-co-embedded-drawing-connected`.
+  Owner: Codex-agent Darwin.  Role: theorem prover / finite drawing connectedness.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Target:
+  `embeddedEdgeSet_connected_of_inputs` or an equivalent connectedness theorem
+  for the finite union of embedded unit-edge segments.  Status: completed and
+  pruned.  Result: added `embeddedEdgeSet_preconnected_of_inputs` and
+  `embeddedEdgeSet_connected_of_inputs`, plus connected-component bridge
+  helpers.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FinitePlaneDrawing`.
+- Claim: `S2-B-co-planar-continuum-frontier`.
+  Owner: Codex-agent Dirac.  Role: theorem prover / planar topology.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and a separate
+  topology helper only if needed.  Target:
+  `unboundedExterior_frontier_preconnected_of_drawing_continuum`, then the
+  no-open-separation row for the unbounded exterior frontier.
+  Current reduction: the remaining theorem has been narrowed to
+  `FiniteDrawingUnboundedComplementFrontierNoOpenSeparation`, which is
+  restricted to embedded unit-distance drawings with
+  `FinitePlanarOuterComponentInputs C` and still proves
+  `UnboundedExteriorFrontierNoOpenSeparationSource C inputs`.
+- Claim: `S2-C-co-raw-coverage-source`.
+  Owner: Codex-agent Carver.  Role: theorem prover / raw orbit coverage.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Target: source
+  `RawOrbitCoverageSourceRows` from actual exterior raw face orbit data.
+- Claim: `S2-C-co-selected-successor-edge-source`.
+  Owner: Codex-agent Mill.  Role: theorem prover / selected successor edge.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Target:
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` from genuine
+  geometric `faceSucc` propagation.
+- Claim: `S2-D-co-final-source-composition`.
+  Owner: Codex-main.  Role: final composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` and S2 owner
+  files.  Target: compose the unconditional S2 source rows into
+  `UnboundedExteriorFrontierCycleRows`, then W32.
+
+- [ ] S2-A. Prove the local two-germ/no-third source from inputs.
+  - Owner surface:
+    `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+    `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+    `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+    `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.
+  - Target, preferred:
+    `forall a : {v : Fin n // v is in unboundedFrontierVertexSet C inputs},
+      UnboundedFrontierCarrierLocalSectorRowsAt inputs a`.
+  - Acceptable intermediate:
+    `BoundaryFreeLocalNoThirdGermSourceRows inputs`, only because it erases to
+    the preferred local-sector row without a global closed-segment endpoint
+    theorem.
+  - Proof obligation: use finite vertex-star isolation, genuine geometric
+    angular order, and the unbounded exterior component to show that a frontier
+    vertex has exactly the two exterior-facing incident frontier germs bounding
+    the exterior angular gap.
+  - Forbidden route: do not prove this from an already constructed boundary
+    cycle, `BoundaryVertexExteriorSectorRowsAt`, `ActualBoundaryCycle...`, any
+    selected-successor edge premise, arbitrary adjacent-frontier endpoint
+    closure, or a bare-input global `BoundaryFreeNoThirdGermSource`.
+  - Completion gate: the owner files build with the pinned toolchain and the
+    forbidden-token scan is clean on touched Lean files.
+
+- [ ] S2-B. Prove exterior carrier connectedness/component topology from
+  inputs.
+  - Owner surface:
+    `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+    `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.
+  - Target, preferred:
+    `unboundedExteriorFrontierComponentTopologySourceRows_of_inputs`, proving
+    `UnboundedExteriorFrontierComponentTopologySourceRows inputs`.
+  - Target, acceptable direct row:
+    `unboundedFrontierCarrierGraph_connected_of_inputs`, proving the concrete
+    `unboundedFrontierCarrierGraph C inputs` is connected from the unbounded
+    component and actual frontier-edge carrier.
+  - Proof obligation: source the connected exterior frontier/carrier from the
+    unbounded component of the finite straight-line drawing, not from a final
+    cycle, not from induced frontier vertices, and not from carrier
+    connectedness previously erased from the same row.
+  - Endpoint-closure correction: do not try to prove
+    `AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource C inputs` or
+    `AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource C inputs`
+    unconditionally for arbitrary adjacent exterior-frontier graph vertices.
+    That all-adjacent statement is false when boundary chords are present.
+    The checked safe endpoint theorem is
+    `ExteriorComponentTopology.closedSegmentEndpointClosureSource_of_incidentUnboundedFrontierEdgeSource`,
+    which applies only after the adjacent edge has already been selected in
+    `unboundedFrontierEdgeSet C inputs` in one orientation.  The unfinished
+    S2-B source work is therefore the actual selected exterior carrier/orbit,
+    not a universal adjacent-endpoint closure theorem.
+  - Completion gate: `ExteriorComponentTopology` and `FinitePlaneDrawing`
+    build individually; no circular dependency through final S2 rows appears
+    in the proof term.
+
+- [ ] S2-C. Prove selected geometric `faceSucc` frontier propagation from
+  inputs.
+  - Owner surface:
+    `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+    `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and local rows
+    in `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+  - Target, preferred:
+    `rawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource_of_inputs`,
+    proving `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`.
+  - Target, acceptable edge version:
+    `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_inputs`, proving
+    `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs`.
+  - Proof obligation: from an exterior-side point on the current frontier edge,
+    pass through a small neighbourhood of the head vertex, use the local
+    two-germ/no-third row and genuine geometric `faceSucc`, and produce an
+    interior frontier point or whole frontier edge on the selected successor
+    edge.
+  - Forbidden route: do not use orientation-free `FaceSuccFrontierEdgeSource`
+    as the live target and do not assume the completed boundary cycle or
+    selected successor edge as input.
+  - Completion gate: `S2SeededRawOrbitSource`, `GeometricRotationSystem`, and
+    affected S2 owner files build individually.
+
+- [ ] S2-D. Compose the final S2 theorem, discharging any unmet source rows
+  inside the same claim.
+  - Owner surface:
+    `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and
+    `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`.
+  - Target:
+    `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs`,
+    then
+    `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows`.
+  - Rule: this is not a waiting claim.  If any S2-A/S2-B/S2-C premise is still
+    missing, the S2-D owner must prove it in the same work item or close S2-D
+    and claim that missing source task instead.  Reducer-only composition is
+    closed history, not current S2 progress.
+
+- Dynamic delegation note, 2026-05-20: a fresh six-task spawn attempt for
+  selected-edge final erasure, selected `faceSucc` edge source, edge-chain
+  connectedness, adjacent-endpoint incident edges, boundary-sector input rows,
+  and route reconciliation was rejected by the global agent-thread cap.  Live
+  S2 worker claims already present below should be allowed to finish; retry
+  new delegation only after completed or stale workers are actually pruned by
+  the runtime.
+
+- Dynamic delegation note, 2026-05-20: a fresh four-task spawn attempt for
+  frontier-vertex incidence, neighbour-pair/geometric selection, point-third
+  germ rows, and selected successor point rows was rejected by the same global
+  agent-thread cap.  No new subagent claim was opened; the main worker is
+  continuing the narrow S2 residuals locally until runtime capacity is freed.
+
+- Dynamic delegation note, 2026-05-20: after the BY source compression landed,
+  a two-task spawn attempt for the two live source theorems
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource` and
+  `RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource` was also
+  rejected by the global agent-thread cap.  No subagent claim was opened.
+
+- Dynamic delegation note, 2026-05-20: after the seeded-transition build
+  passed, a fresh worker spawn for the geometric-selection source was again
+  rejected by the global agent-thread cap.  No phantom subagent claim was
+  opened; Codex-main closed that source reducer locally.
+
+- Claim: `S2-agent-component-topology-input-source-20260520bx`.
+  Owner: Codex-agent.  Role: theorem prover / component-topology input source.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: completed.  Task: prove or sharply reduce
+  `forall {n} (C : UDConfig n) (inputs : FinitePlanarOuterComponentInputs C),
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs` from honest
+  finite-plane drawing and unbounded complement frontier facts, without final
+  cycle rows, actual-boundary equivalence rows, induced frontier graph
+  shortcuts, arbitrary spanning cycles, convex hull shortcuts, synthetic
+  enclosure, identity angular-order shortcuts, or W-numbered facades.
+  Result: added
+  `UnboundedExteriorFrontierComponentTopologyInputSourceRows`,
+  `unboundedExteriorFrontierComponentTopologySourceRows_of_frontierPreconnected_vertexIncident`,
+  `UnboundedExteriorFrontierComponentTopologyInputSourceRows.toComponentTopologyRows`,
+  and `S2_agent_component_topology_input_source_20260520bx`.  The family is
+  now reduced to exactly two residual source rows for every input:
+  preconnectedness of
+  `frontier (unboundedExteriorComponentRows C inputs).exterior`, and
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs`.  The
+  selected-edge cover field is then proved internally from the embedded
+  drawing frontier decomposition plus the fixed-side half-ball open-edge
+  proof.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-main-input-source-inhabitation-20260520bu`.
+  Owner: Codex-main.  Role: theorem prover / source inhabitation.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this
+  workboard.  Status: in progress.  Task: inhabit the current no-orientation
+  S2 source rows from `FinitePlanarOuterComponentInputs C`: boundary-free
+  no-third/local-sector rows, component-topology/source connectedness rows, and
+  selected successor local two-germ no-orbit rows.  Completion gate: an
+  unconditional family
+  `forall {n} (C : UDConfig n) (inputs : FinitePlanarOuterComponentInputs C),
+    UnboundedExteriorFrontierCycleRows C inputs`, routed through
+  `FinitePlanarStraightLineOuterComponentTheorem` and the W32 S2 target.
+
+- Claim: `S2-main-bx-residual-composition-20260520bx`.
+  Owner: Codex-main.  Role: W32 source composer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` and this
+  workboard.  Status: completed.  Task: compose the four current strict
+  source tracks into the W32 S2 target: component-frontier topology rows,
+  adjacent endpoint local component-interval closure, pointwise local
+  star/angular third-germ rows, and selected raw `faceSucc` local-sector
+  transition rows.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_bx_residualSources`,
+  `minimalFailureExactActualTopologyFieldsTarget_of_bx_inputSourceRows`,
+  `minimalFailureExactActualTopologyFieldsTarget_of_bx_inputSourceRows_successorPoint`,
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_bx_pointThirdGerm_successorPoint`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.
+
+- Claim: `S2-main-by-source-compression-20260520bz`.
+  Owner: Codex-main.  Role: theorem prover / W32 source compression.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this
+  workboard.  Status: completed.  Task: collapse the current BY source
+  surface so W32 consumes one geometric-selection input source plus
+  adjacent-endpoint incident-edge rows, instead of separate neighbour-pair,
+  angular-selection, and point-third-germ families.  Completion gate: targeted
+  builds for `S2LocalTwoGermAssembly` and `FaceBoundaryTopologySourceW32`.
+  Result: added
+  `S2_main_local_angular_source_of_geometricSelection_incidentEdge_20260520bz`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_by_geometricSelection_localTransition_20260520bz`.
+  The W32 S2 route now carries component input rows, adjacent-endpoint
+  incident edges, one geometric-selection input source, selected local
+  transition rows, and no-cut rows.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+
+- Claim: `S2-main-faceSucc-between-transition-20260520bz`.
+  Owner: Codex-main.  Role: theorem prover / selected `faceSucc` transition.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: completed.  Task: reduce
+  `RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource inputs` to the
+  geometric fact that the selected `faceSucc` head lies in the actual
+  boundary-free angular sector determined by the local angular source at the
+  successor tail.  Completion gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+  Result: added
+  `RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource` and
+  `rawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource_of_localAngular_headBetween`.
+  This keeps the selected-transition row as a strict local-angular reducer; the
+  remaining source is the genuine sector-head-between fact for the chosen
+  `faceSucc` dart.  Verification passed for both the seeded source module and
+  the W32 consumer.
+
+- Claim: `S2-main-ca-primitive-source-closure-20260520ca`.
+  Owner: Codex-main.  Role: theorem prover / primitive source closer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: in progress.  Task: close or strictly reduce the
+  remaining primitive inputs feeding the W32 S2 route: frontier vertex
+  punctured accumulation, adjacent endpoint closed-segment closure, genuine
+  geometric neighbour-pair selection, selected raw `faceSucc` local transition,
+  and edge-carrier chain connectedness.  Subtask owners:
+  `S2-agent-punctured-frontier-accumulation-20260520ca`,
+  `S2-agent-adjacent-endpoint-closedsegment-20260520ca`,
+  `S2-agent-neighbor-selection-input-20260520ca`, and
+  `S2-agent-local-transition-source-20260520ca`.  Completion gate: the owner
+  files build individually, and the W32 consumer still builds.
+
+- Claim: `S2-main-cb-geometric-selection-from-sectorRows-20260520cb`.
+  Owner: Codex-main.  Role: theorem prover / geometric-selection source
+  closer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and this
+  workboard.  Status: completed.  Task: derive
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  from an actual boundary cycle, its graph-frontier equivalence, actual
+  `faceSucc` rows, and the primitive `BoundaryVertexExteriorSectorRowsAt`
+  family, eliminating the separate geometric-order residual.  Completion gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+  Result: added
+  `S2_main_geometricSelectionInputSource_of_faceSucc_sectorRows_20260520cb`.
+  The geometric-selection source now follows from the same primitive
+  exterior-sector rows plus actual geometric `faceSucc` rows; the ordinary
+  non-wrap rotation order is derived internally from
+  `BoundaryVertexExteriorSectorRowsAt.toBoundaryVertexAngularNoBetweenRows`.
+  Verification passed.
+
+- Claim: `S2-main-cc-geometric-selection-actual-boundary-source-20260520cc`.
+  Owner: Codex-main.  Role: theorem prover / actual-boundary source
+  composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and this
+  workboard.  Status: completed.  Task: use the completed sector-row
+  geometric-selection reducer to derive
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  directly from actual boundary rows, actual `faceSucc` rows, boundary
+  orientation, and incident frontier-edge completeness.  This is not a new
+  S2 target; it removes the separate geometric-selection source premise from
+  the actual-boundary route.  Dynamic delegation note: a fresh explorer spawn
+  for this residual was attempted, but the global agent-thread cap rejected
+  it, so no phantom subagent claim is open.  Completion gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`.
+  Result: added
+  `S2_geometricSelectionInputSource_of_actualBoundaryRows_faceSuccIncidentComplete_20260520cc`.
+  The theorem composes incident completeness into sector rows and then uses
+  `S2_main_geometricSelectionInputSource_of_faceSucc_sectorRows_20260520cb`;
+  both the owner module and the W32 consumer build passed.
+
+- Claim: `S2-main-cc-geometric-selection-boundaryfree-source-20260520cd`.
+  Owner: Codex-main.  Role: theorem prover / boundary-free source composer.
+  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and this
+  workboard.  Status: completed.  Task: compose the completed
+  actual-boundary/incident-completeness geometric-selection theorem with the
+  existing boundary-free source theorem
+  `boundaryCycleIncidentFrontierEdgeCompleteness_of_actualBoundaryRows`, so
+  the W32 geometric-selection source can be obtained from
+  `ActualBoundaryCycleFrontierEquivalenceRows`, `BoundaryFreeNoThirdGermSource`,
+  actual `faceSucc` rows, and boundary orientation.  Completion gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`.
+  Result: `geometricSelectionInputSource_of_actualBoundaryRows_faceSuccIncidentComplete`
+  is present in `S2BoundaryFreeRawSource.lean`; the target-file build and W32
+  consumer build both passed.
+
+- Claim: `S2-agent-raw-orbit-source-closure-20260520cc`.
+  Owner: Codex-agent.  Role: raw-orbit source route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: completed as strict reducer.  Task: identify the smallest non-circular
+  theorem that turns the selected unbounded-exterior seed orbit into
+  `RawFaceSuccOrbitSourceRows`, including the exact remaining rows for
+  frontier edge membership, tail coverage, and repeated-tail separation.
+  Completion gate: Codex-main either implements the identified theorem or
+  records the sharper replacement claim before this item is closed.  Result:
+  added `S2_agent_raw_orbit_source_closure_20260520cc` in
+  `S2SeededRawOrbitSource.lean`, assembling
+  `BoundaryFreeConnectedRawOrbitSourceRows inputs` from
+  `BoundaryFreeNoThirdGermSource inputs`,
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`, and
+  `RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource inputs`.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- Claim: `S2-agent-boundary-sector-source-closure-20260520cc`.
+  Owner: Codex-agent.  Role: boundary-sector source route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: completed as route decomposition.  Task: find the shortest route from an
+  actual exterior boundary cycle plus face-successor rows to the
+  `BoundaryVertexExteriorSectorRowsAt` / local-sector rows used by the current
+  S2 source chain, without identity angular-order shortcuts.  Completion gate:
+  Codex-main implements or replaces the resulting source theorem and target
+  owner files build.  Result: the existing owner route is
+  `S2_boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_faceSuccOpenSegmentSector`
+  in `S2ExteriorBoundarySource.lean`, with incident-completeness variant
+  `S2_boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_faceSuccIncidentComplete`.
+  It decomposes to actual boundary-cycle rows, actual geometric `faceSucc`
+  rows plus ordinary boundary orientation, and either
+  `BoundaryFrontierOpenSegmentLocalExteriorSector` or
+  `BoundaryCycleIncidentFrontierEdgeCompleteness`.
+
+- Claim: `S2-agent-component-frontier-primitive-closure-20260520cc`.
+  Owner: Codex-agent.  Role: finite-drawing/topology primitive scout.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed as route decomposition.  Task: isolate the concrete finite-drawing
+  theorem needed for `UnboundedExteriorFrontierComponentTopologyInputSourceRows`
+  and the incident/frontier-edge primitive rows, especially avoiding induced
+  frontier-graph and arbitrary spanning-cycle shortcuts.  Completion gate:
+  Codex-main either proves the primitive row or replaces it with a strictly
+  sharper local claim.  Result: decomposed the component-frontier primitive
+  into two exact rows:
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs` and
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`; the checked
+  consumer is
+  `S2_agent_component_topology_source_20260520bu`.  The open-edge
+  frontier-interior branch is already covered by fixed-side half-ball helpers;
+  the remaining topology work is selected frontier-edge incidence at graph
+  frontier vertices and connectedness of the selected edge carrier.
+
+- Claim: `S2-main-cd-component-topology-primitives-20260520cd`.
+  Owner: Codex-main.  Role: theorem prover / component-topology primitive
+  closer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: in progress.  Task: close the current component
+  topology route by proving or strictly sharpening the two selected
+  unbounded-frontier primitives,
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs` and
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`, then feed them
+  through the checked raw-orbit/component-topology consumers.  Subagent roles:
+  `S2-agent-cd-frontier-incident-api` maps the shortest incident-edge route;
+  `S2-agent-cd-edge-chain-api` maps the selected-edge chain route;
+  `S2-agent-cd-raw-consumer-sync` checks the raw-orbit consumer handoff.
+  Completion gate: the owner file builds individually with the pinned
+  toolchain, and any narrowed residuals replace this claim before it closes.
+  Progress: added
+  `frontierVertexIncidentSource_of_localSectorRows` in
+  `ExteriorComponentTopology.lean`, naming the shortest checked
+  non-circular incident-edge route from pointwise local-sector rows.  The
+  selected-edge chain route is already named by
+  `S2_agent_edge_chain_from_component_topology_20260520au` or, when raw
+  coverage is the source, `RawOrbitCoverageSourceRows.toEdgeCarrierSegmentChainConnected`.
+  Follow-up progress: added
+  `BoundaryFreeNoThirdGermSource.toComponentTopologyInputRowsFromEdgeChain`
+  and `RawOrbitCoverageSourceRows.toComponentTopologyInputRows` in
+  `S2BoundaryFreeRawSource.lean`, so raw coverage plus the boundary-free
+  source now inhabit the exact W32 input-row shape
+  `UnboundedExteriorFrontierComponentTopologyInputSourceRows`.
+  Added
+  `finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_boundaryFree_selectedSuccessorLocalTwoGerm_20260520cd`
+  in `S2SeededRawOrbitSource.lean`, deriving the component-topology package
+  internally from boundary-free local rows plus selected edge-chain
+  connectivity before applying the checked raw-orbit closure.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+  Additional verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`.
+  Additional verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- Claim: `S2-main-ce-boundaryfree-selected-edge-cut-20260520ce`.
+  Owner: Codex-main.  Role: theorem prover / residual-surface reducer.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Task: use the checked
+  `BoundaryFreeNoThirdGermSource.toLocalTwoGermRows` eraser to replace the
+  selected-successor local-two-germ residual by the sharper selected
+  `faceSucc` edge residual.  This is not a new W32 facade; it is a smaller
+  S2 source cut for the current edge-chain/boundary-free route.  Subagent
+  status: attempted a route-mapping explorer for this cut, but spawning is
+  still blocked by the thread limit, so no phantom worker is active.  Result:
+  added
+  `rawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource_of_boundaryFree_selectedEdgeSource`,
+  `S2_main_selected_successor_local_two_germ_source_of_boundaryFree_selectedEdge_20260520ce`,
+  and
+  `finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_boundaryFree_selectedSuccessorEdge_20260520ce`.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`;
+  a targeted forbidden-token scan of the edited seeded source file returned no
+  matches.
+
+- Claim: `S2-main-ce-orbit-indexed-selected-edge-erasure-20260520ce`.
+  Owner: Codex-main.  Role: theorem prover / selected-edge source eraser.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Task: erase orbit-indexed selected
+  `faceSucc` edge sources to the orbit-free source required by the compact
+  edge-chain/boundary-free route, then expose the actual boundary plus
+  boundary-face-successor selected-edge variants.  This should not add a W32
+  facade or a final-cycle assumption; it only removes raw-orbit bookkeeping
+  from a source row already proved upstream.  Result: added
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_orbitSource`,
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_boundaryFaceSuccRows_edgeRowsBoundarySucc`,
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_actualBoundaryRows_faceSuccRows_edgeRowsBoundarySucc`,
+  and
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_actualBoundaryRows_geometricSuccessorRows_edgeRowsBoundarySucc`.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`;
+  a targeted forbidden-token scan of the edited seeded source file returned no
+  matches.
+
+- Claim: `S2-main-ce-actual-boundary-selected-edge-route-20260520ce`.
+  Owner: Codex-main.  Role: theorem prover / source route composer.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Task: compose actual boundary-cycle rows,
+  boundary-free local no-third rows, boundary `faceSucc` rows, and selected
+  boundary-successor edge orientation into the compact
+  edge-chain/boundary-free/selected-edge finite S2 route.  This keeps the
+  proof split across the boundary-free source file and seeded raw-orbit source
+  file instead of adding more topology-owner bulk.  Result: added
+  `finitePlanarStraightLineOuterComponentTheorem_of_actualBoundaryRows_boundaryFree_faceSuccRows_edgeRowsBoundarySucc_20260520ce`.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`;
+  a targeted forbidden-token scan of the edited seeded source file returned no
+  matches.
+
+- Claim: `S2-main-cf-faceSucc-openSegment-selected-edge-route-20260520cf`.
+  Owner: Codex-main.  Role: theorem prover / source route composer.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Task: remove the primitive
+  `BoundaryFreeNoThirdGermSource` premise from the compact selected-edge S2
+  route when actual boundary-cycle rows, geometric `faceSucc` rows, ordinary
+  boundary orientation, open-segment exterior-sector rows, endpoint-only
+  incidence, and selected boundary-successor edge rows are available.  This is
+  a strict source-premise reduction and not a new W32 facade.  Dynamic
+  delegation note: a narrow S2 route-mapping explorer was attempted, but the
+  global agent-thread cap rejected it, so no subagent claim is active for this
+  item.  Result: added
+  `BoundaryFreeNoThirdGermSource.ofActualBoundaryRowsFaceSuccOpenSegmentEndpoint`
+  and refactored the seeded selected-edge finite route through it, then added
+  `finitePlanarStraightLineOuterComponentTheorem_of_actualBoundaryRows_faceSuccOpenSegmentEndpoint_edgeRowsBoundarySucc_20260520cf`.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`,
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`;
+  a targeted forbidden-token scan of the edited seeded source file returned no
+  matches.
+
+- Claim: `S2-main-cg-sectorRows-adjacentIncident-localSource-20260520cg`.
+  Owner: Codex-main.  Role: theorem prover / source premise reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: checked.  Task: derive the boundary-free
+  no-third-germ source from primitive boundary-sector rows plus the honest
+  adjacent-endpoint selected-edge source, then use that derived source in the
+  selected raw-orbit sector-row route.  This removes a local-source premise
+  from the actual-boundary/sector-row route; it does not add a new S2 facade.
+  Dynamic delegation note: a fresh S2 explorer spawn for this exact reduction
+  was attempted, but the global agent-thread cap rejected it, so no subagent
+  claim is active for this item.  Result: added
+  `BoundaryFreeEndpointIncidentSourceRows.boundaryFreeNoThirdGermSource_of_boundaryVertexExteriorSectorRows_adjacentIncident`
+  in `S2BoundaryFreeRawSource.lean`, and added
+  `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_sectorRows_adjacentIncident_orientation`
+  plus
+  `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_sectorRows_adjacentIncident_orientation`
+  in `S2SeededRawOrbitSource.lean`.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`;
+  a targeted forbidden-token scan of the edited S2 files returned no matches.
+
+- Claim: `S2-main-ce-exterior-frontier-cycle-proof-20260520ce`.
+  Owner: Codex-main.  Role: theorem prover / exterior frontier-cycle source.
+  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this
+  workboard.  Status: superseded by
+  `S2-main-cf-exterior-frontier-cycle-proof-20260520cf`.  Task: inhabit the input-only exterior
+  frontier-cycle row by closing the remaining non-circular source rows:
+  boundary-free local two-germ/no-third rows, selected exterior edge-chain
+  connectedness, and selected raw-orbit coverage for the unbounded exterior
+  component.  Subagent roles:
+  `S2-agent-ce-boundaryfree-input-source` checks the shortest route to
+  `BoundaryFreeNoThirdGermSource inputs`;
+  `S2-agent-ce-edge-chain-input-source` checks the selected edge-chain source
+  to `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`;
+  `S2-agent-ce-raw-coverage-source` checks the raw exterior orbit coverage
+  source feeding the cycle-row erasers.  Completion gate: the owner files build
+  individually, then the final S2 theorem is root-imported and TASK S2 is
+  marked done only after the root build and forbidden-token scan pass.
+  Progress: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_boundaryFree_selectedSuccessorEdge_20260520ce`
+  in `FaceBoundaryTopologySourceW32.lean`, synchronizing W32 with the current
+  three-source owner route:
+  `BoundaryFreeNoThirdGermSource inputs`,
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`, and
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs`.  Targeted build
+  passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+  Pruned note: this CE umbrella is no longer the live coordinating claim; use
+  the CF input-level source claim below for further S2 work.
+
+- Claim: `S2-main-cf-exterior-frontier-cycle-proof-20260520cf`.
+  Owner: Codex-main.  Role: theorem prover / exterior frontier-cycle source.
+  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this
+  workboard.  Status: in progress.  Task: close the actual input-level S2
+  source rather than add more route synonyms.  Current decomposition:
+  prove the endpoint/incident local source for graph vertices on the
+  unbounded exterior frontier; prove the selected exterior edge-chain/raw
+  coverage source from the geometric seed orbit; then compose those with the
+  existing boundary-free and W32 consumers to obtain
+  `UnboundedExteriorFrontierCycleRows C inputs`,
+  `FinitePlanarStraightLineOuterComponentTheorem`, and the W32 S2 target.
+  Subagent roles:
+  `S2-agent-cf-endpoint-incident-source` owns the endpoint/incident local
+  topology proof route;
+  `S2-agent-cf-raw-coverage-source` owns the selected raw-orbit edge-chain
+  proof route;
+  `S2-agent-cf-boundaryfree-composition` owns the boundary-free/source
+  composition check.
+  CF subagent results: endpoint/incident reducer
+  `S2_agent_cf_endpoint_incident_source` is checked in
+  `ExteriorComponentTopology.lean`; raw-coverage reducer
+  `rawCoverage_edgeChain_source_of_componentTopology_selectedSuccessorEdge_20260520cf`
+  is checked in `S2SeededRawOrbitSource.lean`; boundary-free local-two-germ
+  composition reducers are checked in `S2BoundaryFreeRawSource.lean`.
+  Next local gate: replace the remaining source assumptions by an honest
+  input-level exterior-boundary proof, not another route synonym.
+
+- Claim: `S2-agent-cg-unconditional-source-harvest`.
+  Owner: Codex-agent.  Role: API scout / residual source minimizer.  Scope:
+  read-only over `ExteriorComponentTopology.lean`,
+  `S2BoundaryFreeRawSource.lean`, `S2SeededRawOrbitSource.lean`,
+  `S2ExteriorBoundarySource.lean`, and this workboard.  Status: completed
+  and pruned.
+  Task: identify the shortest currently checked path from bare
+  `FinitePlanarOuterComponentInputs C` to
+  `UnboundedExteriorFrontierCycleRows C inputs`, listing exactly which source
+  rows remain genuinely uninhabited and which reducers should be bypassed as
+  route synonyms.  Result: the shortest checked route still needs the three
+  true source families
+  `BoundaryFreeNoThirdGermSource inputs`,
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`, and
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs`, followed by the
+  checked selected-edge reducer.  The next proof work must inhabit those
+  families from the unbounded exterior component rather than add route
+  synonyms.
+
+- Claim: `S2-agent-cg-carrier-soundness-check`.
+  Owner: Codex-agent.  Role: proof-route soundness checker.  Scope: read-only
+  over the S2 owner files and this workboard.  Status: completed and pruned.
+  Task: check
+  whether the adjacent-frontier-endpoint incident row is valid from bare
+  inputs or needs a boundary-edge/no-chord refinement, and identify the
+  soundest route to local no-third-germ rows.  Result: the universal
+  adjacent-frontier-endpoint incident row is not a bare-input theorem, because
+  a unit chord may have both endpoints on the exterior frontier while its open
+  segment is not an exterior frontier edge.  Treat any adjacent-endpoint
+  incident source as selected-boundary/no-chord data only, not as an
+  input-level S2 source.
+
+- Claim: `S2-agent-cg-exterior-face-orbit-proof-map`.
+  Owner: Codex-agent.  Role: exterior-face theorem mapper.  Scope: read-only
+  over `FinitePlaneDrawing.lean`, `GeometricRotationSystem.lean`,
+  `ExteriorComponentTopology.lean`, and this workboard.  Status: completed
+  and pruned.
+  Task: map the exact Lean lemmas still needed to turn the unbounded exterior
+  component into a raw geometric face-successor orbit with frontier-exact
+  tails and selected edge segments.  Completion gate: Codex-main implements a
+  concrete owner-file lemma from that map or narrows the claim.  Result: the
+  proof route splits into local two-germ/no-third rows at frontier vertices,
+  connectedness of the selected exterior edge-segment carrier, and selected
+  `faceSucc` frontier-edge propagation for the raw orbit.
+
+- Claim: `S2-main-ch-exterior-frontier-cycle-proof-20260520ch`.
+  Owner: Codex-main.  Role: theorem prover / input-level exterior cycle
+  source.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this
+  workboard.  Status: in progress.  Task: prove the input-level S2 theorem by
+  inhabiting the genuine exterior-boundary source families from
+  `FinitePlanarOuterComponentInputs C`, with no adjacent-chord shortcut.  The
+  active decomposition is:
+  (1) selected frontier-edge incidence/local two-germ rows at each exterior
+  frontier graph vertex;
+  (2) connected exterior edge-segment carrier or raw-orbit coverage from the
+  unbounded component;
+  (3) selected `faceSucc` frontier-edge propagation for the geometric raw
+  face orbit; and
+  (4) compose the resulting
+  `UnboundedExteriorFrontierCycleRows C inputs` into the finite planar theorem
+  and W32 target.  Subagent roles below own the first proof slices; close or
+  summarize each role before pruning.
+
+- Claim: `S2-agent-ch-local-two-germ-source`.
+  Owner: Codex-agent.  Role: theorem prover / local frontier two-germ source.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and this
+  workboard.  Status: completed/pruned.  Task: prove or strictly reduce
+  `BoundaryFreeNoThirdGermSource inputs` from input-level exterior frontier
+  geometry, avoiding the invalid adjacent-chord endpoint shortcut.  Completion
+  gate: touched owner files build individually.  Result: added the sound
+  endpoint-only reduction
+  `boundaryFreeIncidentOnlyRows_of_neighborPairRows_endpointOnly`,
+  `boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointOnly`, and
+  `nonempty_boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointOnly`
+  in `Swanepoel/S2BoundaryFreeRawSource.lean`.  The local/open branch is
+  discharged from actual `InteriorFrontierEdgeCarrierMembershipSource` and
+  concrete carrier neighbour-pair rows; the remaining endpoint branch is the
+  sharp no-chord row `x = (neighborRows a).left.1 âˆ¨ x =
+  (neighborRows a).right.1`, not the invalid universal adjacent-frontier
+  endpoint incident-edge shortcut.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-agent-ch-carrier-connectedness-source`.
+  Owner: Codex-agent.  Role: theorem prover / selected exterior carrier
+  connectedness.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: completed as strict reducer.  Result: exposed
+  `ExteriorComponentTopology.S2_agent_ch_carrier_connectedness_source` and
+  family wrapper, reducing
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` to
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`.  This is the
+  existing non-circular route: actual unbounded-frontier preconnectedness plus
+  a cover by selected `unboundedFrontierEdgeSet` edges connects the concrete
+  carrier graph, then graph walks lift to overlapping selected edge-segment
+  chains.  Verification: targeted `ExteriorComponentTopology` build passed.
+
+- Claim: `S2-agent-ch-selected-faceSucc-edge-source`.
+  Owner: Codex-agent.  Role: theorem prover / geometric raw-orbit propagation.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and this
+  workboard.  Status: completed.  Task: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` from the selected
+  geometric exterior seed orbit and local angular sector facts.  Completion
+  gate: targeted `S2SeededRawOrbitSource` build.  Result: added
+  `S2_agent_ch_selected_faceSucc_edge_source_20260520ch` and
+  `S2_agent_ch_selected_faceSucc_edge_source_family_20260520ch`, reducing the
+  selected successor edge source to the genuine local angular-sector row plus
+  the selected head-between fact, with no final-cycle, actual-boundary,
+  induced-frontier, arbitrary-cycle, convex-hull, synthetic-enclosure, or
+  identity-order shortcut.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-ci-frontier-component-topology-source`.
+  Owner: Codex-agent.  Role: theorem prover / unbounded component frontier
+  topology.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: completed as strict reducer.  Result: added
+  `UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows`,
+  `UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows.toInputSourceRows`,
+  `S2_agent_ci_frontier_component_topology_source_20260520ci`, and
+  `S2_agent_ci_frontier_component_topology_source_args_20260520ci`.  The exact
+  residual for
+  `UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs` is:
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` plus
+  `forall a : {v : Fin n // v âˆˆ unboundedFrontierVertexSet C inputs},
+  UnboundedFrontierCarrierLocalSectorRowsAt inputs a`.  These rows produce the
+  target fields by
+  `S2_agent_frontier_preconnected_source_20260520bm` and
+  `frontierVertexIncidentSource_of_localSectorRows`, with the open-edge branch
+  still routed through the existing fixed-side finite-drawing row.  No
+  downstream completed cycle row, induced frontier graph shortcut, arbitrary
+  cycle, convex hull, identity-order shortcut, or synthetic enclosure was used.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-ci-local-angular-neighbor-source`.
+  Owner: Codex-agent.  Role: theorem prover / local angular two-germ source.
+  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed as strict reducer.  Task: prove or strictly reduce
+  `BoundaryFreeLocalSectorGeometricAngularSource inputs`, preferably through
+  concrete carrier neighbour-pair rows and genuine sorted angular selection
+  rows.  The result must select actual `unboundedFrontierEdgeSet` neighbours
+  and preserve the no-third-germ/point-sector obligation without using
+  identity angular order or an already completed boundary cycle.
+  Result: added `S2_agent_ci_local_angular_neighbor_source` and
+  `S2_agent_ci_local_angular_neighbor_source_family` in
+  `S2LocalTwoGermAssembly.lean`.  Corrected residual rows:
+  selected-edge endpoint support only after `unboundedFrontierEdgeSet`
+  membership, plus
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`.
+  The geometric-selection source supplies the actual carrier neighbour-pair
+  rows and genuine non-wrap consecutive
+  `GraphVertexGeometricAngularNeighborSelectionRow` rows; the incident-edge
+  source discharges the closed-germ endpoint case in the point-sector/no-third
+  obligation only for an actually selected carrier edge.  Do not read this as
+  an all-adjacent frontier-endpoint incident-edge source.  No identity angular
+  order, downstream completed cycle,
+  convex-hull shortcut, or synthetic enclosure is used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.
+
+- Claim: `S2-agent-ci-faceSucc-head-between-source`.
+  Owner: Codex-agent.  Role: theorem prover / selected geometric face-successor
+  sector source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: completed as strict reduction.  Task: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource inputs
+  localAngularSource`: at each selected raw-orbit step, the geometric
+  `faceSucc` head must lie in the exterior angular sector bounded by the two
+  selected local carrier heads.  Do not replace this with a cycle, convex-hull,
+  or identity-order shortcut.
+  Result: added
+  `RawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource`,
+  `rawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource_of_successorPoint_notLocalCarrier`,
+  `S2_agent_ci_faceSucc_head_between_source_20260520ci`, and
+  `S2_agent_ci_selected_faceSucc_edge_source_20260520ci`.  The exact residual
+  is now the selected orbit-free successor interior-frontier point row
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs` plus
+  the pointwise non-carrier row
+  `RawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource inputs
+  localAngularSource`.  The proof uses the actual geometric `faceSucc` dart,
+  turns the successor open-segment frontier point into a W3 incident germ at
+  the successor tail, invokes the local angular third-germ row, and then routes
+  the selected edge source through the already checked
+  `S2_agent_ch_selected_faceSucc_edge_source_20260520ch`.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- Claim: `S2-agent-ci-current-route-composer`.
+  Owner: Codex-agent.  Role: route composer / W32 consumer simplifier.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: completed.  Task: compose the CH reducers into the shortest
+  displayed S2 route and keep this workboard task-shaped: exact input rows,
+  exact consumer theorem, and no obsolete wave/facade bookkeeping.  Implement a
+  checked helper theorem only if it shortens the owner route.
+  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_ch_endpointOnly_componentTopology_faceSuccEdge_20260520ci`
+  in `FaceBoundaryTopologySourceW32.lean`.  The checked W32 consumer composes
+  `boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointOnly`,
+  `S2_agent_ch_carrier_connectedness_source_family`, and
+  `S2_agent_ch_selected_faceSucc_edge_source_family_20260520ch` into
+  `MinimalFailureExactActualTopologyFieldsTarget`.  Exact residual source
+  families: `UnboundedFrontierCarrierNeighborPairAt inputs a`,
+  the endpoint-only adjacent-frontier row selecting one of those two neighbors,
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`,
+  `BoundaryFreeLocalSectorGeometricAngularSource inputs`,
+  `RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource inputs
+  (localAngularSource C inputs)`, and the usual minimal-failure
+  `CutVertexInterface.NoCutVertex C` row.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32` passed.
+
+- Claim: `S2-main-cj-residual-composition-and-build`.
+  Owner: current Codex thread.  Role: residual composer / targeted build
+  verifier.  Scope: `TASK.md`, owner-file build commands, and only
+  non-overlapping helper theorems needed to compose already checked S2 source
+  reducers.  Status: checked as current composition.  Task: keep the current proof route executable
+  while the CI source agents work: identify the exact residual families,
+  compose any completed source reducers into the shortest checked consumer, and
+  run targeted owner-file builds after integrations.  Do not edit the CI
+  agents' claimed proof bodies unless one finishes and its result needs
+  integration.  Current local subagent note: four fresh dynamic S2 explorer
+  launches for the CI residuals were attempted, but each was rejected by the
+  global agent-thread cap; this claim proceeds only on non-overlapping local
+  composition until more agent slots become available.  Current edit target:
+  compose the checked CI finite-drawing component-topology reducer into the
+  W32 `ca` route so the displayed W32 source surface carries selected
+  edge-chain connectivity plus geometric-selection/local-transition rows,
+  rather than a separate `componentRows` family.  Result: checked
+  `minimalFailureExactActualTopologyFieldsTarget_of_ci_edgeChain_geometricSelection_successorLocalTwoGerm_20260520cj`
+  and
+  `minimalFailureExactActualTopologyFieldsTarget_of_cj_edgeChain_incident_geometricSelection_successorPoint_notLocalCarrier`
+  in `FaceBoundaryTopologySourceW32.lean`.  Also mechanically fully qualified
+  `JordanTopologyFactsConcrete.canonicalGraph` references in W32 after Lean
+  rejected the shorter namespace reference.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`;
+  a targeted forbidden-token scan over the touched S2 Lean owner files returned
+  no matches.
+
+- Claim: `S2-agent-cj-selected-edge-chain-source`.
+  Owner: Codex-agent.  Role: theorem prover / selected exterior
+  edge-chain source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and this
+  workboard.  Status: completed/pruned.  Task: prove or strictly reduce
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` from actual
+  unbounded exterior frontier data without using a completed final cycle row,
+  induced frontier graph shortcut, arbitrary spanning cycle, convex hull, or
+  synthetic enclosure.  Result: added
+  `FaceDartOrbitExteriorCarrierRows.S2_agent_cj_selected_edge_chain_source_20260520cj`,
+  which reduces the selected closed-segment chain to the honest
+  `FaceDartOrbitExteriorCarrierRows C inputs` primitive: an exterior face-dart
+  orbit with exact unbounded-frontier vertex equivalence, actual
+  unbounded-frontier orbit-side segments, and predecessor/successor-only
+  incident carrier neighbours.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-cj-endpoint-and-geometric-selection-source`.
+  Owner: Codex-agent.  Role: theorem prover / endpoint and local
+  geometric-selection source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed/pruned.  Task: remove or strictly justify
+  the endpoint residuals used by the local-angular route.  If bare
+  `AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource` is too strong
+  because of boundary chords, replace the consumer with the sharper
+  endpoint-only/no-chord row already used by
+  `boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointOnly`; otherwise
+  prove the endpoint row only under the exact selected-boundary hypotheses that
+  make it sound.  Result: added
+  `boundaryFree_third_frontier_germ_impossible_of_neighborPair_endpointOnly`,
+  `boundaryFreePointThirdGermRows_of_neighborPair_endpointOnly_source`,
+  `unboundedFrontierCarrierNeighborPairGeometricSelectionInputSource_of_neighborPair_selectionRows`,
+  `S2_agent_cj_local_angular_neighbor_source_endpointOnly`,
+  `S2_agent_cj_local_angular_neighbor_source_from_neighborPair_selection_endpointOnly`,
+  and `S2_agent_cj_local_angular_neighbor_source_family_endpointOnly` in
+  `S2LocalTwoGermAssembly.lean`.  The local-angular residual is now the sound
+  endpoint-only/no-chord row plus actual carrier neighbour-pair rows and
+  genuine sorted-list geometric selection rows; it no longer needs the bare
+  adjacent-frontier endpoint incident-edge theorem.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-main-ck-endpointOnly-local-angular-route-20260520ck`.
+  Owner: Codex-main.  Role: theorem prover / endpoint residual reducer.
+  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this
+  workboard.  Status: completed/checked.  Task: replace the too-strong
+  `AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource` dependency in
+  the local-angular/W32 route by the sharper endpoint-only/no-chord row paired
+  with the geometric-selection neighbour rows.  Do not assert that every
+  adjacent pair of frontier endpoints is an unbounded-frontier edge.
+  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_ck_edgeChain_endpointOnly_geometricSelection_successorPoint_notLocalCarrier`
+  in `FaceBoundaryTopologySourceW32.lean`, consuming selected edge-chain
+  connectedness, geometric carrier-neighbour selection, the endpoint-only
+  no-chord row, selected successor points, the non-local-carrier row, and
+  no-cut rows.  This removes the adjacent-frontier-endpoint incident-edge
+  source from the current W32 local-angular composition.  Verification passed:
+  direct W32 Lean check, targeted W32 Lake build, serialized pinned root build
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`, and the
+  full Lean forbidden-token scan returned `clean`.
+  Dynamic delegation note: a worker launch for the queued endpoint/geometric
+  selection claim was attempted, but the global agent-thread cap rejected it;
+  this claim is being handled locally in disjoint owner files.
+
+- Claim: `S2-main-cl-exterior-cycle-source-20260520cl`.
+  Owner: current Codex thread.  Role: exterior-cycle source integrator.
+  Scope: `TASK.md`, targeted owner-file builds, and integration-only edits
+  after worker results.  Status: in progress.  Task: close the remaining S2
+  exterior-cycle source by turning the actual unbounded exterior frontier into
+  `UnboundedExteriorFrontierCycleRows C inputs`, then route it to
+  `FinitePlanarStraightLineOuterComponentTheorem` and the W32 target.  This
+  claim coordinates three disjoint proof slices: (1) construct/strictly reduce
+  `FaceDartOrbitExteriorCarrierRows C inputs`; (2) prove the selected raw
+  `faceSucc` successor-point/non-carrier rows from the exterior carrier; (3)
+  compose the endpoint-only W32 route once those sources exist.  Do not add a
+  W-numbered facade, duplicate source package, synthetic enclosure, induced
+  frontier graph shortcut, arbitrary spanning cycle, identity angular-order
+  shortcut, or convex-hull shortcut.
+
+- Claim: `S2-agent-cl-face-orbit-carrier-source-20260520cl`.
+  Owner: Codex-agent.  Role: theorem prover / exterior face-orbit carrier.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard only.  Status: completed as strict reduction.  Result: added
+  `faceDartOrbitExteriorCarrierRows_of_actualExteriorSectorInputSourceRows`
+  and `S2_agent_cl_face_orbit_carrier_source_20260520cl`.  The residual source
+  for `FaceDartOrbitExteriorCarrierRows C inputs` is exactly an actual
+  boundary cycle `B` with
+  `forall v, (canonicalGraph C).point v âˆˆ frontier
+  (unboundedExteriorComponentRows C inputs).exterior â†” Exists fun k :
+  Fin B.length => B.vertex k = v`, plus
+  `Nonempty (ActualExteriorSectorInputSourceRows inputs B)`.  The proof
+  composes the existing
+  `faceDartOrbitExteriorCarrierRows_of_boundaryVertexExteriorSectorRows` rows;
+  it does not use the final `UnboundedExteriorFrontierCycleRows`, an induced
+  frontier graph shortcut, an arbitrary spanning cycle, convex hull, synthetic
+  enclosure, or identity angular order.  Verification:
+  `lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-cl-selected-facesucc-source-20260520cl`.
+  Owner: Codex-agent.  Role: theorem prover / selected `faceSucc`
+  propagation.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard only.  Status: completed.  Task: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs` and
+  `RawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource inputs
+  localAngularSource` from the actual exterior carrier/local-sector rows, so
+  the checked selected-`faceSucc` edge reducer can be used without a
+  too-strong adjacent-endpoint incident-edge assumption.
+  Result: added in `Swanepoel/S2SeededRawOrbitSource.lean`
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource_of_actualBoundaryRows_sectorRows_orientation`,
+  which proves the no-orbit successor point row from actual
+  boundary/frontier equivalence rows, primitive boundary exterior-sector rows,
+  and the selected-edge reverse-orientation exclusion.  Also added
+  `rawOrbitIteratedFaceSuccHeadLocalAngularCarrierNoOrbitSource_of_selectedEdge_localAngular`
+  and its actual-boundary wrapper
+  `rawOrbitIteratedFaceSuccHeadLocalAngularCarrierNoOrbitSource_of_actualBoundaryRows_sectorRows_orientation`,
+  plus the pointwise incompatibility theorems
+  `rawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource_contra_of_selectedEdge_localAngular`
+  and
+  `rawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource_contra_of_actualBoundaryRows_sectorRows_orientation`.
+  Thus the honest carrier/local-sector route supplies the successor point and
+  the positive local-carrier fact; the old non-local-carrier residual is
+  recorded as contradictory pointwise once the actual selected `faceSucc` edge
+  row is available.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-main-cm-actualSector-successorPoint-noOrbit-20260520cm`.
+  Owner: Codex-main.  Role: theorem prover / selected successor source
+  reducer.  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`
+  and this workboard only.  Status: completed/checked.  Result: added
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource_of_actualExteriorSectorInputSourceRows`,
+  deriving the no-orbit selected-successor source from the existing actual
+  exterior-sector package and reverse-edge exclusion row via
+  `S2_agent_raw_iterated_successor_source_20260520br`.  This shrinks the active
+  `S2-agent-cl-selected-facesucc-source-20260520cl` residual by deriving
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs` without
+  touching the non-local-carrier residual or W32.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-main-cn-actualSector-selectedEdge-noOrbit-20260520cn`.
+  Owner: Codex-main.  Role: theorem prover / selected successor edge
+  reducer.  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`
+  and this workboard only.  Status: completed/checked.  Result: added
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_actualExteriorSectorInputSourceRows`,
+  promoting the checked actual exterior-sector no-orbit successor-point row to
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` via the existing
+  interior-frontier carrier-membership promotion.  This keeps raw successor
+  propagation in its owner file and leaves actual boundary-cycle construction
+  to `S2ExteriorBoundarySource.lean` / `ExteriorComponentTopology.lean`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-main-co-actualSector-rawOrbit-composition-20260520co`.
+  Owner: Codex-main.  Role: theorem prover / actual-sector raw-orbit
+  composition.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard only.  Status: completed/checked.  Result: added
+  `S2_agent_co_rawOrbitCycleRows_of_actualExteriorSectorInputSourceRows_20260520co`,
+  composing the checked actual exterior-sector selected-edge row with the
+  connected raw-orbit carrier reducer.  The supplied actual boundary
+  edge-membership/frontier rows are used only to build
+  `ActualBoundaryCycleFrontierEquivalenceRows` for carrier connectedness.
+  Remaining CO-surface inputs are actual exterior-sector source rows,
+  boundary-free no-third-germ rows, and the explicit reverse-orientation
+  exclusion.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-main-co-actualSector-boundaryVertex-source-20260520co`.
+  Owner: Codex-main.  Role: source assembler / actual-sector handoff.
+  Scope: `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and this
+  workboard only.  Status: completed/checked.  Result: added
+  `S2_boundaryVertexExteriorSectorRows_source_of_actualExteriorSectorInputSourceRows`,
+  exposing the live `BoundaryVertexExteriorSectorRowsAt` source directly from
+  a constructed actual exterior-sector package plus graph-vertex frontier
+  equivalence.  The source-facing S2 owner file now has the same reduced
+  actual-sector residual as the raw-orbit owner file, without adding a W32
+  facade.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-main-cp-actualSector-boundarySeed-noReverse-20260520cp`.
+  Owner: Codex-main.  Role: theorem prover / boundary-oriented raw seed.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard only.  Status: completed/checked.  Result: added
+  `rawOrbitCoverageSourceRows_of_actualBoundaryRows_actualExteriorSectorRows_seed`
+  and
+  `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_actualExteriorSectorRows_seed`.
+  These route actual exterior-sector rows through the existing
+  boundary-oriented selected-seed theorem and avoid the reverse-orientation
+  exclusion residual.  The remaining no-reverse residual is actual
+  boundary-cycle rows, actual exterior-sector rows for that boundary, and
+  boundary-free no-third-germ rows.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-main-cq-closedSegment-sector-from-incident-endpoint-20260520cq`.
+  Owner: Codex-main.  Role: theorem prover / local exterior-sector closure.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard only.  Status: completed/checked.  Result: added
+  `boundary_frontier_closedSegment_local_exterior_angular_sector_of_incident_edge_angular_endpoint_incident_only`
+  and the later dependency-safe completeness wrapper
+  `boundary_frontier_closedSegment_local_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness_endpoint`.
+  These derive `BoundaryFrontierClosedSegmentLocalExteriorAngularSector
+  inputs B` from honest open-segment incident-edge angular control plus the
+  endpoint-only predecessor/successor row, using the existing open-segment and
+  endpoint reducers.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-main-cr-actualSector-noReverse-family-20260520cr`.
+  Owner: Codex-main.  Role: theorem prover / family route composer.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard only.  Status: completed/checked.  Result: added
+  `unboundedExteriorFrontierCycleRows_family_of_actualBoundaryRows_actualExteriorSectorRows_localSource`,
+  lifting the checked boundary-oriented actual-sector selected-seed proof to
+  the family-level `forall C inputs, UnboundedExteriorFrontierCycleRows C
+  inputs` route.  Residuals are only actual boundary-cycle rows, actual
+  exterior-sector rows for that same boundary, and boundary-free no-third-germ
+  rows.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-main-cs-actualSector-direct-cycle-eraser-20260520cs`.
+  Owner: Codex-main.  Role: source assembler / actual-sector final row
+  eraser.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and this
+  workboard only.  Status: completed/checked.  Result: added
+  `S2_unboundedExteriorFrontierCycleRows_of_actualExteriorSectorInputSourceRows`
+  and
+  `S2_unboundedExteriorFrontierCycleRows_family_of_actualExteriorSectorInputSourceRows`.
+  A same-boundary `ActualExteriorSectorInputSourceRows` package plus exact
+  graph-vertex frontier equivalence now erases directly to
+  `UnboundedExteriorFrontierCycleRows C inputs`, through the primitive
+  `BoundaryVertexExteriorSectorRowsAt` sector rows.  The live source residual
+  is therefore sharpened to constructing the actual exterior boundary cycle,
+  proving its vertex/frontier equivalence, and proving actual exterior-sector
+  rows on that same boundary.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-agent-cl-w32-final-composition-20260520cl`.
+  Owner: Codex-agent.  Role: route composer / W32 final source surface.
+  Scope: `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` and
+  this workboard only.  Status: completed.  Result: the checked shortest W32
+  erasers are
+  `minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows`,
+  `minimalFailureExactActualTopologyFieldsTarget_of_faceDartOrbitExteriorCarrierRows`,
+  and the endpoint-only local-angular composition
+  `minimalFailureExactActualTopologyFieldsTarget_of_ck_edgeChain_endpointOnly_geometricSelection_successorPoint_notLocalCarrier`.
+  Residuals remain explicit: selected edge-chain connectedness, geometric
+  carrier-neighbour selection, endpoint-only/no-chord rows, selected
+  successor point rows, non-local-carrier rows for the endpoint-only angular
+  source, and minimal-failure no-cut rows.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed on 2026-05-20.
+
+- Claim: `S2-main-cm-exterior-boundary-source-20260520cm`.
+  Owner: current Codex thread.  Role: exterior-boundary source owner.
+  Scope: `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: in progress.  Task: prove the actual input-level
+  source theorem, not another reducer: construct an honest boundary cycle for
+  `unboundedExteriorComponentRows C inputs`, prove frontier-vertex equivalence
+  for that same cycle, prove the actual exterior-sector rows, erase to
+  `FaceDartOrbitExteriorCarrierRows C inputs`, and then to
+  `UnboundedExteriorFrontierCycleRows C inputs`.  Keep logically separate
+  infrastructure in the relevant owner files rather than forcing all proof
+  steps into one file.
+  Current decomposition: first construct or source the actual unbounded
+  frontier carrier, then extract the concrete cycle `B`, then prove on the
+  same `B` the frontier-vertex equivalence, consecutive edge membership in
+  `unboundedFrontierEdgeSet`, angular no-between rows, and
+  `BoundaryFrontierIncidentEdgeExteriorAngularSector`.  The checked consumer is
+  `S2_agent_cm_actual_sector_source_20260520cm`, followed by the existing
+  `BoundaryVertexExteriorSectorRowsAt` and W32 erasers.
+
+- Claim: `S2-agent-cn-route-board-20260520cn`.
+  Owner: Codex-agent.  Role: route-board maintainer / theorem dependency
+  mapper.  Scope: `TASK.md` and `proof_workings/remaining_fields_matrix.md`
+  only.  Status: completed.  Task: make the displayed S2 route match the
+  current proof shape without adding bookkeeping layers: construct actual
+  unbounded frontier carrier/cycle `B`; prove frontier iff for graph vertices;
+  prove consecutive boundary edge membership in `unboundedFrontierEdgeSet`;
+  prove angular/no-between rows; prove
+  `BoundaryFrontierIncidentEdgeExteriorAngularSector`; then use
+  `S2_agent_cm_actual_sector_source_20260520cm` ->
+  `BoundaryVertexExteriorSectorRowsAt` -> existing
+  `UnboundedExteriorFrontierCycleRows`/W32 erasers.
+
+- Claim: `S2-agent-cn-boundary-free-local-source-20260520cn`.
+  Owner: Codex-agent.  Role: theorem prover / local frontier germs.
+  Scope: `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed.  Task: prove or strictly reduce `BoundaryFreeNoThirdGermSource`
+  from local finite-drawing/frontier rows without assuming a final boundary
+  cycle.  Use the completed `edgePositiveSideBall_*_local_patch` lemmas when
+  useful.  Result: added
+  `S2_boundaryFree_twoSelectedEdges_noThirdGerm_source_of_localSector_interiorClosure`
+  in `S2ExteriorBoundarySource.lean`, reducing the upstream existential source
+  consumed by `BoundaryFreeNoThirdGermSource.ofExistsSource` from local-sector
+  rows plus explicit endpoint incident-edge closure to local-sector rows plus
+  `AdjacentFrontierEndpointsInteriorClosurePointSource`.  The endpoint
+  incident edge is derived internally through
+  `incidentUnboundedFrontierEdgeSource_of_interiorClosure`, which uses the
+  fixed-side half-ball interior carrier theorem.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`.
+
+- Claim: `S2-agent-cn-raw-orbit-carrier-composition-20260520cn`.
+  Owner: Codex-agent.  Role: theorem prover / raw orbit composition.
+  Scope: `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: completed.  Task: compose the completed selected
+  face-successor rows with the existing connected-carrier/raw-orbit reducers,
+  and identify the smallest remaining source theorem needed to turn that into
+  `UnboundedExteriorFrontierCycleRows C inputs`.  Result: added
+  `S2_agent_cn_connectedCarrier_rawOrbitCycleRows_of_selectedFaceSuccEdge_20260520cn`
+  and `S2_agent_cn_raw_orbit_carrier_composition_20260520cn` in
+  `S2SeededRawOrbitSource.lean`.  The smallest remaining row surface on this
+  route is actual boundary/frontier equivalence rows, primitive exterior
+  sector rows for that boundary, a boundary-free no-third-germ source, and the
+  selected-edge reverse-exclusion/orientation row; the selected
+  `faceSucc` edge row is closed by
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_actualBoundaryRows_sectorRows_orientation`,
+  and the compatible positive local-carrier row is
+  `rawOrbitIteratedFaceSuccHeadLocalAngularCarrierNoOrbitSource_of_actualBoundaryRows_sectorRows_orientation`.
+  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- Claim: `S2-main-co-interior-closure-source-20260520co`.
+  Owner: Codex-main.  Role: theorem prover / adjacent endpoint closure.
+  Scope: `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed as endpoint-closure reducer.  Task: prove or strictly reduce
+  `AdjacentFrontierEndpointsInteriorClosurePointSource C inputs` from the
+  finite drawing/exterior component rows, using the current local half-ball
+  and component-interval closure APIs.  Result: added
+  `AdjacentFrontierEndpointsInteriorClosurePointSource_of_endpointClosure`
+  in `ExteriorComponentTopology.lean`, reducing the interior-closure source to
+  the existing endpoint one-sided closed-segment closure row through the
+  checked closed-segment relative-openness route.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`.
+
+- Claim: `S2-main-co-endpoint-closure-source-20260520co`.
+  Owner: Codex-main.  Role: theorem prover / endpoint one-sided closure.
+  Scope: `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed/checked as a strict source-row reduction.
+  Result: added
+  `closedSegmentEndpointClosureSource_of_interiorClosurePointSource` and
+  `S2_main_co_endpoint_closure_source_20260520ct` in
+  `ExteriorComponentTopology.lean`.  The endpoint one-sided closure source now
+  reduces directly to the strictly smaller
+  `AdjacentFrontierEndpointsInteriorClosurePointSource C inputs`, using the
+  checked fixed-side open-edge propagation row to put every open point of the
+  adjacent edge in the exterior closure.  This avoids the previous circular
+  bounce through `AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource`
+  and uses no final boundary-cycle, actual-boundary, induced-frontier, or
+  synthetic-enclosure row.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed on 2026-05-20, and the touched-file no-axiom/no-sorry/no-debug scan
+  was clean.
+
+- Claim: `S2-agent-co-local-sector-source-20260520co`.
+  Owner: Codex-agent.  Role: theorem prover / vertex local sectors.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: delegated.  Task: construct or sharply reduce
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a` from
+  vertex-star isolation plus genuine geometric angular order, without using a
+  final boundary cycle, induced frontier graph, or identity angular-order
+  shortcut.  Completion gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-co-component-topology-source-20260520co`.
+  Owner: Codex-agent.  Role: theorem prover / exterior component topology.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and this
+  workboard.  Status: completed as fixed-side local-sector reduction.  Result:
+  added `S2_agent_co_component_topology_source_20260520co` in
+  `ExteriorComponentTopology.lean`, proving
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs` from the
+  selected closed-segment edge chain plus the fixed-side local-sector family.
+  The local-sector rows source the vertex-incident/endpoint cover branch via
+  the existing selected-edge cover route, leaving the honest global residual
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`.  It does not
+  use completed cycle rows, induced frontier graph shortcuts, arbitrary
+  spanning cycles, or synthetic enclosures.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`.
+
+- Claim: `S2-agent-cm-actual-sector-source-20260520cm`.
+  Owner: Codex-agent.  Role: theorem prover / actual exterior-sector rows.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed as strict same-boundary reduction.  Result: added
+  `boundaryVertexExteriorSectorRows_source_of_boundaryCycleEdgeMem_angular_incidentEdgeAngular`
+  and `S2_agent_cm_actual_sector_source_20260520cm`.  The target now reduces,
+  for the same witness `B`, to frontier-vertex equivalence, actual boundary
+  edge membership in `unboundedFrontierEdgeSet`, angular/no-between rows, and
+  `BoundaryFrontierIncidentEdgeExteriorAngularSector`.  Verification:
+  targeted build of `ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-cm-finite-drawing-local-topology-20260520cm`.
+  Owner: Codex-agent.  Role: theorem prover / finite drawing local topology.
+  Scope: `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed as drawing-layer reducer.  Result: added
+  `edgePositiveSideBall_local_patch_of_local_closedSegment`,
+  `edgePositiveSideBall_swap_local_patch_of_local_closedSegment`, and
+  `exists_edgePositiveSideBall_local_patches_of_edge_inOpenSegment` in
+  `FinitePlaneDrawing.lean`.  These provide both oriented local half-ball
+  patches along an isolated edge interior point: preconnected side ball,
+  containment in the drawing complement, containment in the chosen metric
+  ball, and closure accumulation at nearby same-edge line points.  Verification:
+  targeted build of `ErdosProblems1066.Swanepoel.FinitePlaneDrawing` passed.
+
+- Claim: `S2-agent-cm-raw-successor-propagation-20260520cm`.
+  Owner: Codex-agent.  Role: theorem prover / selected raw successor rows.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed as read-only route check.  Result: the successor-point row already
+  reduces through
+  `S2_agent_raw_successor_from_selected_carrier_20260520au` once
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` and local-sector
+  rows are available.  The proposed non-carrier row has the wrong polarity for
+  actual carrier data: the checked route proves local carrier membership and
+  gives contradiction lemmas for the non-carrier shape.  Continue by producing
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` from the actual
+  face-orbit carrier/source alignment, not by pursuing the non-carrier row.
+
+- Claim: `S2-agent-punctured-frontier-accumulation-20260520ca`.
+  Owner: Codex-agent.  Role: proof-route/API discovery.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed as route discovery.  Task: identify the shortest existing route
+  to the punctured
+  frontier accumulation row consumed by
+  `frontierVertexIncidentSource_of_punctured_vertex`, or the next local
+  lemma needed to prove it without downstream boundary-cycle rows.  Result:
+  no bare-input theorem was found; the exact next theorem is
+  `S2_agent_punctured_frontier_accumulation_20260520ca`, proving every graph
+  vertex on the unbounded exterior frontier is a punctured accumulation point
+  of that same frontier.  Owner remains
+  `ExteriorComponentTopology.lean`, immediately before the existing
+  `S2_agent_frontier_vertex_incident_source_20260520by` wrapper.
+
+- Claim: `S2-agent-adjacent-endpoint-closedsegment-20260520ca`.
+  Owner: Codex-agent.  Role: proof-route/API discovery.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/pruned as historical reducer support.  Task: identify the shortest
+  existing route to endpoint closure, but not as an unconditional all-adjacent
+  frontier-endpoint source.
+  Result: added the claim-named checked eraser
+  `S2_agent_adjacent_endpoint_closedsegment_20260520ca`; the row reduces to
+  selected-edge incident membership.  Live work must still construct the
+  selected carrier/orbit from inputs before using this support.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-neighbor-selection-input-20260520ca`.
+  Owner: Codex-agent.  Role: proof-route/API discovery.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed as strict reducer.  Task: identify how to prove
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  from genuine angular order and local exterior sectors, without identity-order
+  or induced-frontier shortcuts.  Result: added
+  `unboundedFrontierCarrierNeighborPairGeometricSelectionRowsAt_of_boundaryVertexExteriorSectorRow_geometricOrder`,
+  reducing one carrier vertex to a real boundary exterior-sector row plus the
+  genuine sorted outgoing-dart order row.  Follow-up reducer:
+  `S2_main_geometricSelectionInputSource_of_faceSucc_sectorRows_20260520cb`
+  now derives the ordinary geometric order internally from actual
+  `faceSucc` rows and
+  `BoundaryVertexExteriorSectorRowsAt.toBoundaryVertexAngularNoBetweenRows`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.
+
+- Claim: `S2-agent-local-transition-source-20260520ca`.
+  Owner: Codex-agent.  Role: proof-route/API discovery.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed as strict reducer.  Task: identify the shortest non-circular route to
+  `RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource inputs`, or a
+  stricter local transition lemma that proves the current selected successor
+  point source.  Result: added
+  `rawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource_of_selected_successor_localTwoGermRows`,
+  `S2_agent_local_transition_source_from_successor_localTwoGerm_20260520ca`,
+  and the W32 consumer
+  `minimalFailureExactActualTopologyFieldsTarget_of_ca_geometricSelection_successorLocalTwoGerm_20260520ca`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.
+
+- Claim: `S2-agent-frontier-preconnected-source-20260520by`.
+  Owner: Codex-agent.  Role: theorem prover / component frontier
+  preconnectedness.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: completed.  Task: prove or sharply reduce
+  `IsPreconnected (frontier (unboundedExteriorComponentRows C inputs).exterior)`
+  for `FinitePlanarOuterComponentInputs C`, without final cycle rows,
+  actual-boundary equivalence rows, induced frontier graph shortcuts,
+  arbitrary cycles, convex hulls, synthetic enclosures, or identity
+  angular-order shortcuts.  Result: added
+  `S2_agent_frontier_preconnected_source_20260520by`, a family-level reducer
+  from two honest residual rows:
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` and
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs`.  The proof
+  identifies the actual frontier with the selected closed-edge carrier using
+  the existing fixed-side finite-drawing interior-edge cover plus the
+  vertex-incident source, then transfers preconnectedness from the selected
+  edge-segment chain.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-frontier-vertex-incident-source-20260520by`.
+  Owner: Codex-agent.  Role: theorem prover / frontier-vertex incident
+  selected edge.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: completed as strict reducer.  Task: prove or sharply reduce
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs`; this is the
+  graph-vertex endpoint part of the actual unbounded exterior frontier cover.
+  Result: added
+  `frontierVertexIncidentSource_of_incident_openSegment_closure`,
+  `frontierVertexIncidentSource_of_punctured_vertex_and_relative_ball_closure`,
+  `frontierVertexIncidentSource_of_punctured_vertex`, and
+  `S2_agent_frontier_vertex_incident_source_20260520by` in
+  `ExteriorComponentTopology.lean`.  The selected incident edge source is now
+  reduced to the honest local unbounded-frontier fact that every graph vertex
+  on `frontier (unboundedExteriorComponentRows C inputs).exterior` is a
+  punctured accumulation point of that same frontier; finite-drawing
+  fixed-side half-ball propagation supplies the open-edge closure part.  No
+  final cycle rows, actual-boundary equivalence rows, induced frontier graph
+  shortcut, arbitrary cycle, convex hull shortcut, synthetic enclosure, or
+  identity angular-order shortcut is used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-adjacent-endpoint-incident-source-20260520by`.
+  Owner: Codex-agent.  Role: theorem prover / adjacent endpoint selected
+  edge.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: corrected/pruned.  The original all-adjacent endpoint incident-edge
+  target is not a valid unconditional source task: boundary chords can connect
+  two exterior-frontier vertices without being exterior boundary edges.  Result:
+  added `S2_agent_adjacent_endpoint_incident_source_20260520by` in
+  `Swanepoel/ExteriorComponentTopology.lean`, a historical reducer branch.  The
+  live S2 source task is the actual selected carrier/orbit construction that
+  produces `unboundedFrontierEdgeSet` membership, after which endpoint support
+  may be used safely.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-neighbor-pair-selection-source-20260520by`.
+  Owner: Codex-agent.  Role: theorem prover / local carrier neighbour pair
+  and angular selection.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed as strict reducer.  Task: prove or sharply reduce the pair
+  `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a` and
+  `forall a, Nonempty (GraphVertexGeometricAngularNeighborSelectionRow C a.1
+  left right)` from the actual local frontier carrier.  Result: added
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionRowsAt`,
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource`,
+  `unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource`,
+  `graphVertexGeometricAngularNeighborSelectionRows_of_geometricSelectionInputSource`,
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionFamilies`, and
+  `S2_agent_neighbor_pair_selection_source_20260520by` in
+  `Swanepoel/S2LocalTwoGermAssembly.lean`.  The pair is now reduced to one
+  local row at each unbounded-frontier carrier vertex: two actual selected
+  `unboundedFrontierEdgeSet` incidences whose heads are adjacent entries in
+  the genuine sorted `geometricOutgoingDartList`, plus the proof that every
+  concrete carrier neighbour is one of those two heads.  No final cycle rows,
+  actual-boundary equivalence, induced frontier graph shortcut, arbitrary
+  cycle, convex hull, synthetic enclosure, identity angular order, or W facade
+  is used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.
+
+- Claim: `S2-agent-point-third-germ-source-20260520by`.
+  Owner: Codex-agent.  Role: theorem prover / point-ray third-germ sector.
+  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed.  Task: prove or sharply reduce the point-ray
+  third-germ source consumed by
+  `minimalFailureExactActualTopologyFieldsTarget_of_bx_pointThirdGerm_successorPoint`.
+  Result: added
+  `boundaryFreePointThirdGermRows_of_neighborPair_incidentEdge_source` and
+  `S2_agent_point_third_germ_source_of_neighborPair_incidentEdge_20260520by`.
+  The consumed point-ray third-germ row is reduced to selected-edge endpoint
+  support plus the actual carrier
+  `UnboundedFrontierCarrierNeighborPairAt inputs a` rows:
+  any noncenter exterior-frontier point carried by an incident germ whose head
+  is not one of the two selected carrier heads would determine a third actual
+  unbounded-frontier carrier edge, contradicting the neighbour-pair row; the
+  point-sector conclusion follows from the empty case.  Build gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-agent-successor-point-source-20260520by`.
+  Owner: Codex-main.  Role: theorem prover / selected successor frontier
+  point.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed as strict reducer.  Task: prove or sharply reduce
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`.
+  Result: added
+  `S2_main_successor_point_source_from_localTransition_20260520by`,
+  reducing the selected successor frontier point source to the strict local
+  transition source
+  `RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource inputs`.
+  Verification was covered by the prior
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  gate.
+
+- Claim: `S2-agent-local-component-interval-source-20260520bx`.
+  Owner: Codex-agent.  Role: theorem prover / local component-interval
+  closure source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: completed.  Task: prove or sharply reduce the family
+  `AdjacentFrontierEndpointsLocalComponentIntervalClosureSource C inputs` for
+  finite planar inputs, using local segment/component topology and avoiding
+  final cycle rows, actual-boundary equivalence, arbitrary cycle, synthetic
+  enclosure, convex hull, and identity angular-order shortcuts.  Result:
+  added
+  `AdjacentFrontierEndpointsLocalComponentIntervalClosureSource_of_incidentUnboundedFrontierEdgeSource`
+  and `S2_agent_local_component_interval_source_20260520bx`, reducing the
+  family to selected-edge endpoint support.  This support is usable only after
+  the selected exterior carrier/orbit has produced `unboundedFrontierEdgeSet`
+  membership; it is not an all-adjacent frontier-endpoint source from inputs.
+  Verification gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-component-topology-source-20260520bu`.
+  Owner: Pauli the 5th (`019e44ae-44a2-7c42-b93b-effd679f0c19`).
+  Role: theorem prover / component-topology source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: completed and pruned.  Result: added the checked
+  reducer `S2_agent_component_topology_source_20260520bu`, which proves
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs` from exactly
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` and
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs`.  No existing
+  non-circular API was found that derives both rows from only
+  `FinitePlanarOuterComponentInputs C` without final cycle rows,
+  actual-boundary equivalence rows, induced frontier graph shortcuts,
+  arbitrary cycles, convex hulls, or synthetic enclosure predicates.
+  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-selected-successor-local-two-germ-source-20260520bu`.
+  Owner: Locke the 5th (`019e44ae-44eb-7c53-a250-6fd4892cdec0`).
+  Role: theorem prover / selected-successor local source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: completed; see retained handoff below.  Task: prove or reduce
+  `RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource inputs`
+  from the existing geometric rotation, local-sector, and two-germ APIs,
+  without final cycle rows, reverse-exclusion detours, principal-argument
+  ordinary-orientation residuals, or identity angular-order shortcuts.
+  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- Claim: `S2-main-selected-edge-final-eraser-20260520bv`.
+  Owner: Codex-main.  Role: theorem prover / final source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this
+  workboard.  Status: completed.  Task: add the direct no-orientation final
+  eraser from `BoundaryFreeNoThirdGermSource inputs`,
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`, and
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` to
+  `UnboundedExteriorFrontierCycleRows C inputs`, plus the W32-facing family
+  consumer if it shortens the live residual surface.  This avoids final cycle
+  rows as premises, actual-boundary equivalence rows, reverse-exclusion, and
+  identity angular-order shortcuts.  Result: added
+  `unboundedExteriorFrontierCycleRows_of_componentTopology_boundaryFree_selectedSuccessorEdge_20260520bv`
+  and
+  `unboundedExteriorFrontierCycleRows_family_of_componentTopology_boundaryFree_selectedSuccessorEdge_20260520bv`
+  in `S2SeededRawOrbitSource.lean`; refactored
+  `S2_agent_raw_orbit_final_no_orientation_assembly_20260520bt` through the
+  selected-edge eraser; added W32 consumer
+  `minimalFailureExactActualTopologyFieldsTarget_of_componentTopology_boundaryFree_selectedSuccessorEdge`;
+  and imported/opened `S2LocalTwoGermAssembly` in W32 so the concurrently
+  added geometric-angular W32 reducer resolves.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.
+
+- Claim: `S2-agent-local-sector-input-source-20260520bv`.
+  Owner: Franklin the 5th (`019e44b3-a61a-71d3-83ef-d960c44dca0b`).
+  Role: theorem prover / local-sector input source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: completed.  Result: added the strict boundary-free
+  reducer `BoundaryFreeLocalSectorGeometricAngularSource`,
+  `localSectorRows_of_boundaryFree_geometricAngularSource`, and
+  `S2_agent_local_sector_input_source_20260520bv` in
+  `Swanepoel/S2LocalTwoGermAssembly.lean`.  The target pointwise family
+  `forall a : {v : Fin n // v âˆˆ unboundedFrontierVertexSet C inputs},
+    UnboundedFrontierCarrierLocalSectorRowsAt inputs a` is now reduced to,
+  at each frontier vertex, two genuine incident `unboundedFrontierEdgeSet`
+  edges with distinct heads, a consecutive non-wrap witness in the actual
+  sorted geometric outgoing-dart list, and the local third-germ angular row
+  for nearby frontier points.  This route uses no final cycle rows,
+  actual-boundary equivalence rows, induced frontier graph shortcuts,
+  arbitrary cycles, convex-hull shortcuts, synthetic enclosure predicates, or
+  identity angular-order shortcuts.  Verification gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-agent-local-angular-input-source-20260520bx`.
+  Owner: Codex-agent.  Role: theorem prover / local angular input source.
+  Scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed.  Result: added
+  `BoundaryFreeGraphVertexPointAngularBetween`,
+  `boundaryFreeGraphVertexAngularBetween_of_pointAngularBetween`,
+  `boundaryFreeThirdGermAngularRows_of_pointAngularRows`,
+  `boundaryFreeLocalSectorGeometricAngularInputRows_of_neighborPair_selection_pointThirdGerm`,
+  `S2_agent_local_angular_input_source_of_neighborPair_selection_thirdGerm_20260520bx`,
+  and
+  `S2_agent_local_angular_input_source_of_neighborPair_selection_pointThirdGerm_20260520bx`
+  in `Swanepoel/S2LocalTwoGermAssembly.lean`.  This proves the Skolemized
+  input rows from the strict convenience surface: concrete carrier
+  neighbour-pair rows, nonempty consecutive non-wrap rows in the genuine
+  sorted geometric outgoing-dart list, and either graph-dart third-germ
+  angular rows or the sharper point-ray third-germ exterior-sector rows
+  converted via the existing incident-germ angle equality.  It uses no final
+  cycle rows, actual-boundary equivalence, induced frontier graph shortcut,
+  arbitrary cycle, convex hull shortcut, synthetic enclosure, or identity
+  angular-order shortcut.  Verification passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-agent-edge-chain-incident-input-source-20260520bv`.
+  Owner: Aristotle the 5th (`019e44b3-a664-73c1-9943-4898bc1b37dc`).
+  Role: theorem prover / selected-edge carrier source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and this
+  workboard.  Status: completed as strict reducer.  Task: prove or reduce the
+  input-level sources
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`,
+  selected-edge endpoint support after `unboundedFrontierEdgeSet` membership,
+  and `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs` from
+  `FinitePlanarOuterComponentInputs C` and the unbounded exterior
+  component/drawing facts.  Do not use final cycle rows, actual-boundary
+  equivalence rows, induced frontier graph shortcuts, arbitrary cycles,
+  convex-hull shortcuts, or synthetic enclosure predicates.  Verification
+  gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+  Result: added `EdgeChainIncidentFrontierTopologySourceRows` and
+  `S2_agent_edge_chain_incident_input_source_20260520bv` in
+  `ExteriorComponentTopology.lean`.  The checked reducer derives all three
+  selected-edge source rows from the strict residuals
+  `IsPreconnected (frontier (unboundedExteriorComponentRows C inputs).exterior)`,
+  a selected-edge cover of that frontier by `unboundedFrontierEdgeSet`, and
+  `AdjacentFrontierEndpointsInteriorClosurePointSource C inputs`.  The edge
+  chain and frontier-vertex incident rows are now sourced from honest frontier
+  preconnectedness plus selected edge cover; the adjacent-endpoint selected
+  edge row is reduced to the local endpoint-to-open-edge closure point.
+
+- Claim: `S2-agent-local-angular-source-20260520bw`.
+  Owner: Avicenna the 5th (`019e44bb-d522-7403-b954-2206bab8cdd8`).
+  Role: theorem prover / local angular source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed as strict reducer.  Result: added
+  `BoundaryFreeLocalSectorGeometricAngularInputRows`,
+  `boundaryFreeLocalSectorGeometricAngularSource_of_inputRows`,
+  `boundaryFreeLocalSectorGeometricAngularInputRows_of_neighborPair_selection_thirdGerm`,
+  `S2_agent_local_angular_source_20260520bw`, and
+  `S2_agent_local_angular_source_of_neighborPair_selection_thirdGerm_20260520bw`
+  in `Swanepoel/S2LocalTwoGermAssembly.lean`.  The remaining non-circular
+  residual is exactly the local star/angular/frontier-germ row: at each
+  unbounded-frontier vertex, two actual incident `unboundedFrontierEdgeSet`
+  heads with distinct heads, a nonempty
+  `GraphVertexGeometricAngularNeighborSelectionRow` for the consecutive
+  non-wrap sorted outgoing darts, and the local third-germ angular row for
+  nearby frontier points.  The convenience reducer can instead consume
+  carrier-neighbour-pair rows plus the sorted-list selection and third-germ
+  rows, while still producing the concrete incident edge memberships via
+  `unboundedFrontierCarrierGraph_adj_iff`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
+
+- Claim: `S2-agent-frontier-topology-source-20260520bw`.
+  Owner: Anscombe the 5th (`019e44bb-d578-72f0-b538-8fadf0148ee9`).
+  Role: theorem prover / global frontier topology source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this
+  workboard.  Status: completed as strict reducer.  Task: prove or reduce
+  `EdgeChainIncidentFrontierTopologySourceRows inputs` from unbounded
+  complement-component frontier topology, selected-edge cover, and local
+  endpoint-to-open-edge closure facts.  Completion gate: build the touched
+  owner module.  Result: added
+  `edgeChainIncidentFrontierTopologySourceRows_of_componentTopology_interiorClosure`,
+  `edgeChainIncidentFrontierTopologySourceRows_of_componentTopology_localComponentIntervalClosure`,
+  and family reducer `S2_agent_frontier_topology_source_20260520bw` in
+  `ExteriorComponentTopology.lean`.  The family now reduces to
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs` (frontier
+  preconnectedness plus selected-edge cover by `unboundedFrontierEdgeSet`) and
+  `AdjacentFrontierEndpointsLocalComponentIntervalClosureSource C inputs`,
+  which supplies `AdjacentFrontierEndpointsInteriorClosurePointSource C inputs`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-main-geometric-frontier-successor-point-w32-20260520bw`.
+  Owner: Codex-main.  Role: W32 source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean` and this
+  workboard.  Status: completed.  Task: add the W32 consumer that replaces
+  the selected `faceSucc` edge family in
+  `minimalFailureExactActualTopologyFieldsTarget_of_geometricAngular_frontierTopology_selectedSuccessorEdge`
+  with the weaker
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`, using
+  the checked selected-edge promotion
+  `S2_agent_selected_edge_noorbit_source_20260520av`.  This keeps the active
+  S2 residuals aligned with local-angular source, frontier-topology source,
+  and orbit-free successor point source.  Result: added
+  `minimalFailureExactActualTopologyFieldsTarget_of_geometricAngular_frontierTopology_successorPoint`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.
+
+- Claim: `S2-agent-selected-facesucc-edge-source-20260520bw`.
+  Owner: Cicero the 5th (`019e44bb-d5d4-76d1-a014-d4479fd8f3ab`).
+  Role: theorem prover / selected `faceSucc` edge propagation.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed as strict reducer.  Task: prove or reduce
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` from local
+  sector-transition and geometric face-successor edge facts.  Completion
+  gate: build the touched owner module.  Result: added the strict local
+  residual
+  `RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource`, the eraser
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_localSectorTransition`,
+  the object-level wrapper
+  `S2_agent_selected_faceSucc_edge_source_from_localSectorTransition_20260520bw`,
+  and the family wrapper
+  `S2_agent_selected_faceSucc_edge_source_family_20260520bw`.  The remaining
+  assumption is exactly the local-sector transition row: at each selected
+  Nat-indexed raw iterate, the geometric `faceSucc` head is one of the two
+  actual local-sector heads at the `faceSucc` tail.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-faceSucc-local-transition-source-20260520bx`.
+  Owner: Codex.  Role: theorem prover / local-sector transition source.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and this
+  workboard.  Status: completed as strict reducer.  Task: prove or sharply reduce
+  `RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource inputs`: each
+  selected raw-iterate geometric `faceSucc` head is one of the two actual
+  local-sector heads at the `faceSucc` tail.  Use genuine geometric
+  rotation/local-sector facts.  Avoid final cycle rows, actual-boundary
+  equivalence, reverse-exclusion detours, arbitrary cycles, synthetic
+  enclosures, convex hulls, and identity angular-order shortcuts.  Result: added
+  `rawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource_of_successorInteriorPoint_localSectorRows`,
+  `S2_agent_faceSucc_local_transition_source_20260520bx`, and
+  `S2_agent_faceSucc_local_transition_source_family_20260520bx`.  Exact
+  residual assumptions: `BoundaryFreeLocalSectorGeometricAngularSource inputs`
+  and `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-boundary-free-no-third-input-source-20260520bu`.
+  Owner: James the 5th (`019e44ae-453b-79f2-83fa-d7f37e482494`).
+  Role: theorem prover / boundary-free local source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed.  Task: prove or reduce
+  `BoundaryFreeNoThirdGermSource inputs` from endpoint/source rows, selected
+  edge-carrier rows, and local-sector rows, including the checked endpoint
+  reducer `S2_agent_endpoint_one_sided_closure_source_20260520bt`, without
+  final cycle rows or actual-boundary equivalence rows.  Result: added
+  `S2_agent_boundary_free_no_third_input_source_20260520bu` and the family
+  wrapper `S2_agent_boundary_free_no_third_input_source_family_20260520bu` in
+  `S2BoundaryFreeRawSource.lean`.  Corrected minimal residual rows are
+  pointwise `UnboundedFrontierCarrierLocalSectorRowsAt` plus actual selected
+  carrier/orbit rows that produce `unboundedFrontierEdgeSet` membership;
+  endpoint one-sided closure is supplied for selected edges by
+  `S2_agent_endpoint_one_sided_closure_source_20260520bt`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`.
+
+Completed S2 claims retained for handoff:
+
+- Claim: `S2-agent-selected-successor-local-two-germ-source-20260520bu`.
+  Owner: Codex.  Role: theorem prover / selected-successor source reducer.
+  Scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked as reducer.  Task: prove or sharply reduce
+  `RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource inputs`
+  from existing local sector/two-germ/geometric raw face-successor APIs,
+  without final cycle rows, reverse-exclusion, ordinary principal-argument
+  orientation, or identity angular-order shortcuts.  Result: added
+  `rawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource_of_selected_edgeSource_localTwoGermRows`
+  and wrapper `S2_agent_selected_successor_local_two_germ_source_20260520bu`,
+  reducing the row to the pointwise unbounded-frontier carrier
+  `UnboundedFrontierCarrierLocalTwoGermRowsAt` family plus the selected
+  no-orbit geometric successor edge source
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-main-reverse-exclusion-storage-reducer-20260520bt`.
+  Owner: Codex-main.  Role: theorem prover / residual clarifier.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: completed.  Task: add the small non-topological
+  reducer from explicit canonical boundary-edge storage orientation to
+  `EdgeLocalRowsBoundaryReverseExcluded inputs B`, so reverse-exclusion is
+  recorded as an orientation/storage residual rather than a false exterior
+  topology target.  Result: `edgeLocalRows_boundaryReverseExcluded_of_boundaryReverse_not_edge`
+  and `edgeLocalRows_boundaryReverseExcluded_of_not_boundarySucc_lt` already
+  provide exactly this storage-orientation eraser in
+  `ExteriorComponentTopology.lean`.  This claim is closed; the live final path
+  should avoid reverse-exclusion when the no-orientation raw-orbit route
+  applies.
+
+- Claim: `S2-main-raw-orbit-final-no-orientation-20260520bt`.
+  Owner: Codex-main.  Role: integration prover / route closer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this
+  workboard.  Status: checked as reducer.  Task: keep the active final S2 route on
+  the no-orientation raw face-successor orbit handoff: construct
+  `BoundaryFreeConnectedRawOrbitSourceRows inputs`, use
+  `.toUnboundedExteriorCycleRows` /
+  `unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbit_noOrientation`, then
+  route to `FinitePlanarStraightLineOuterComponentTheorem` and the W32 target.
+  Do not reintroduce reverse-exclusion, a principal-argument orientation row,
+  induced frontier graphs, arbitrary cycles, or synthetic enclosure predicates.
+  Current residual source rows are input-level boundary-free no-third/local
+  sector rows, carrier/frontier connectedness or edge-chain rows, raw selected
+  dart-edge frontier coverage, repeated-tail cut rows, and the endpoint
+  one-sided exterior-closure theorem feeding the closed-segment source.
+  Result: `minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows`
+  was added to `FaceBoundaryTopologySourceW32.lean`, and
+  `S2_agent_raw_orbit_final_no_orientation_assembly_20260520bt` was added to
+  `S2SeededRawOrbitSource.lean`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.  The serialized pinned root build
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed with
+  output in `proof_logs/root_build_20260520_s2_no_orientation_bt.log`, and the
+  full Lean forbidden-token scan returned `clean`.
+
+- Claim: `S2-agent-endpoint-one-sided-closure-source-20260520bt`.
+  Owner: Copernicus the 5th (`019e44a5-b013-72f2-af12-eb720a077403`).  Role:
+  theorem prover / endpoint topology source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: completed and pruned as selected-edge support.  The original
+  all-adjacent endpoint-closure target is not a valid unconditional source
+  task.  Retained value: reduce endpoint closure for an already selected
+  unbounded-frontier edge from local vertex-star, edge-side, and unbounded
+  exterior component facts, without final cycle rows or actual-boundary
+  equivalence rows.  Result: added
+  `S2_agent_endpoint_one_sided_closure_source_20260520bt`, reducing endpoint
+  one-sided closure to honest selected-edge carrier membership; also
+  repaired the storage-orientation helper
+  `edgeLocalRows_boundaryReverseExcluded_of_boundaryReverse_not_edge`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-raw-orbit-final-no-orientation-assembly-20260520bt`.
+  Owner: Einstein the 5th (`019e44a5-b05f-79d1-82db-59f5c98a133d`).  Role:
+  integration prover / raw-orbit source composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: completed and pruned.  Task: shorten the checked no-orientation
+  raw-orbit final-row route from source rows to
+  `UnboundedExteriorFrontierCycleRows C inputs`, without adding another
+  source package or W-numbered facade.  Result: added
+  `S2_agent_raw_orbit_final_no_orientation_assembly_20260520bt`, directly
+  erasing `BoundaryFreeNoThirdGermSource inputs`,
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`, and
+  `RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource inputs` to
+  `UnboundedExteriorFrontierCycleRows C inputs`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-s2-route-display-sync-20260520bt`.
+  Owner: Heisenberg the 5th (`019e44a5-b0af-76a1-a8a2-716fddd1a846`).  Role:
+  route display verifier.  Scope: `TASK.md`,
+  `proof_workings/theorem_dependency_map.md`,
+  `proof_workings/remaining_fields_matrix.md`, and S2 source files.  Status:
+  completed and pruned.  Task: read-only check that the displayed S2 route names the
+  no-orientation raw-orbit final handoff and the endpoint one-sided closure
+  residual, while staying task-shaped rather than orchestration-shaped.
+  Result: identified the exact display update now integrated above and in
+  `proof_workings/theorem_dependency_map.md` /
+  `proof_workings/remaining_fields_matrix.md`.
+
+- Claim: `S2-main-actual-sector-residual-composition-20260520bq`.
+  Owner: Codex-main.  Role: source composer / theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked as reducer.  Task: tighten the checked
+  closed-segment residual theorem so the local-sector family can be supplied
+  by the existing `ActualExteriorSectorInputSourceRows` package, leaving the
+  honest residuals explicit and avoiding final cycle rows, actual-boundary
+  equivalence rows, induced frontier graphs, arbitrary cycles, and synthetic
+  enclosure shortcuts.  Result: the actual-sector route now composes through
+  `boundaryFreeConnectedRawOrbitSourceRows_nonempty_of_actualSector_closedSegmentSources_20260520bq`,
+  `unboundedExteriorFrontierCycleRows_family_of_actualSector_closedSegmentSources_20260520bq`,
+  `finitePlanarStraightLineOuterComponentTheorem_of_actualSector_closedSegmentSources_20260520bq`,
+  and the W32 wrapper
+  `minimalFailureExactActualTopologyFieldsTarget_of_actualSector_closedSegmentSources_20260520bq`.
+  The remaining positive rows are the actual boundary/sector source, the
+  closed-segment closure source, frontier preconnectedness, and raw successor
+  source; those are separate active claims below.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.  The serialized pinned root build
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` also passed,
+  with output in `proof_logs/root_build_20260520_s2_actual_sector_residual.log`;
+  the full Lean forbidden-token scan returned `clean`.
+
+- Claim: `S2-agent-boundary-free-no-third-source-20260520bq`.
+  Owner: Codex.  Role: theorem prover / source tightener.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and this
+  workboard.  Status: checked.  Task: prove or tighten the source for
+  `BoundaryFreeNoThirdGermSource inputs` from currently checked local-sector,
+  endpoint-incident, and closed-segment source rows, without final cycle rows
+  or actual boundary equivalence rows.  Result: added the shortest checked
+  endpoint-package erasers
+  `S2_agent_boundaryFreeNoThirdGermSource_of_endpointIncidentRows_20260520bq`
+  and
+  `S2_agent_boundaryFreeNoThirdGermSource_nonempty_of_endpointIncidentRows_20260520bq`,
+  plus the explicit checked local-sector/closed-segment compositions
+  `S2_agent_boundaryFreeNoThirdGermSource_of_localSectorRows_closedSegmentClosure_20260520bq`
+  and
+  `S2_agent_boundaryFreeNoThird_nonempty_of_localSector_closedSegment_20260520bq`.
+  These route through the existing `20260520bp` endpoint-incident source row
+  and use no final cycle rows or actual boundary equivalence rows.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-agent-edge-chain-from-component-or-local-source-20260520bq`.
+  Owner: Codex.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: completed.  Task: prove or tighten the non-circular
+  source for `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` from
+  existing input-level component/frontier preconnectedness/local sector rows,
+  without using final `UnboundedExteriorFrontierCycleRows` or
+  `ActualBoundaryCycleFrontierEquivalenceRows` as a premise.  Result: added
+  `edgeChain_of_frontierPreconnected_localSectorRows_fixedSide`
+  and the claim-named wrapper
+  `S2_agent_edge_chain_from_frontier_preconnected_localSectorRows_20260520bq`,
+  reducing the edge-chain source to the existing primitive rows
+  `frontier_preconnected` plus pointwise `UnboundedFrontierCarrierLocalSectorRowsAt`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-frontier-preconnected-input-source-20260520br`.
+  Owner: Bacon the 5th (`019e4498-7a07-78b1-92cd-65e81a5fdb8f`).  Role: theorem prover / topology source.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: completed.  Task: prove or sharply reduce the input-level source
+  for
+  `IsPreconnected (frontier (unboundedExteriorComponentRows C inputs).exterior)`
+  from the finite straight-line drawing/component topology, without using
+  completed exterior-cycle rows.  Result: added
+  `unboundedExterior_frontier_preconnected_of_edgeChain_vertexIncident`,
+  `unboundedExterior_frontier_preconnected_of_edgeChain_neighborPairRows`, and
+  the claim-named wrapper
+  `S2_agent_frontier_preconnected_input_source_20260520br`, reducing the
+  frontier-preconnected row to the non-circular residuals
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` plus pointwise
+  `UnboundedFrontierCarrierNeighborPairAt inputs a`.  The sharper blocker for
+  a no-extra-argument theorem is now exactly positive inhabitation of those two
+  rows from the actual exterior face/source data, not a cycle/equivalence
+  package.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-actual-sector-source-closure-20260520br`.
+  Owner: Tesla the 5th (`019e4498-7a55-7331-a64a-2f4b204949d9`).  Role: theorem prover / angular source closer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: completed.  Task: prove or sharply reduce the honest
+  source
+  `Exists fun B => Nonempty (ActualExteriorSectorInputSourceRows inputs B)`
+  from non-final exterior boundary data, avoiding actual final cycle rows,
+  induced frontier graphs, arbitrary cycles, and synthetic enclosure rows.
+  Result: added
+  `exists_actualExteriorSectorInputSourceRows_of_boundaryVertexExteriorSectorRows_source`
+  and the claim-named wrapper
+  `S2_agent_actual_sector_source_closure_20260520br` in
+  `Swanepoel/ExteriorComponentTopology.lean`.  The existential source is now
+  reduced to one concrete boundary object `B`, exact actual frontier-vertex
+  coverage for `B`, and the primitive
+  `BoundaryVertexExteriorSectorRowsAt inputs B k` family.  The reducer uses no
+  final exterior-cycle rows, `ActualBoundaryCycleFrontierEquivalenceRows`,
+  induced frontier graph, arbitrary cycle, convex hull, identity angular
+  order, or synthetic enclosure rows.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-raw-iterated-successor-source-20260520br`.
+  Owner: Kierkegaard the 5th (`019e4498-7aa4-7f42-8657-a3e8c343fd6f`).  Role: theorem prover / raw orbit source.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and this
+  workboard.  Status: checked as reducer.  Task: prove or sharply reduce
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs` from the
+  geometric raw face-successor orbit source, without requiring completed
+  `UnboundedExteriorFrontierCycleRows`.  Result: added the checked reducer
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource_of_orbitSource`
+  and claim wrapper `S2_agent_raw_iterated_successor_source_20260520br`,
+  reducing the orbit-free source exactly to
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointSource inputs`; the reducer
+  only instantiates `RawFaceSuccOrbit.nonempty` for the selected geometric
+  start dart.  The transient upstream parser failure in
+  `ExteriorComponentTopology.lean` was repaired by
+  `S2-agent-actual-sector-source-closure-20260520br`; verification
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.  Follow-up result from Kepler the 5th
+  (`019e449e-70cb-7cd1-ad4d-9e93f149b6c1`): added
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointSource_of_boundarySectorRows_frontierIff_reverseExcluded`
+  and
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointSource_of_actualExteriorSectorInputSourceRows`,
+  reducing the positive raw successor source to exact boundary frontier
+  coverage, primitive `BoundaryVertexExteriorSectorRowsAt` rows, and
+  `EdgeLocalRowsBoundaryReverseExcluded inputs B`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-main-adjacent-frontier-edge-source-20260520bs`.
+  Owner: Codex-main.  Role: theorem prover / local exterior-edge source.
+  Scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: redirected/demoted.  The all-adjacent incident-edge source is too
+  strong: adjacent graph vertices on the unbounded exterior frontier can be
+  joined by an interior chord.  Do not use completed exterior-cycle rows,
+  induced frontier graphs, arbitrary cycles, or synthetic enclosure predicates.
+  Result: read-only route inspection found historical reducer support, but the
+  honest remaining source is no longer endpoint-to-interior closure for
+  arbitrary adjacent frontier endpoints.  Live work is construction of the
+  actual selected exterior carrier/orbit, which supplies selected
+  `unboundedFrontierEdgeSet` membership before endpoint support is used.
+  Next gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-reverse-orientation-source-20260520bs`.
+  Owner: Fermat the 5th (`019e44a0-b0e7-7eb1-ab3b-8b71c79d0537`).  Role:
+  proof-route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard.  Status: completed and pruned.  Task: find the shortest
+  non-circular route to `EdgeLocalRowsBoundaryReverseExcluded inputs B`, or the
+  smallest honest source theorem that implies it, without final
+  `UnboundedExteriorFrontierCycleRows`.  Result: no honest topology route to
+  reverse-exclusion was found; the reverse-tail no-frontier route is
+  incompatible with actual boundary open-segment frontier rows.  Prefer the
+  existing orientation-selected seed API, or reduce reverse-exclusion only to
+  an explicit canonical storage-orientation hypothesis if a consumer cannot be
+  migrated.
+
+- Claim: `S2-agent-boundary-sector-source-route-20260520bs`.
+  Owner: Pasteur the 5th (`019e44a0-bfcb-7a23-abdc-111a6fa562df`).  Role:
+  proof-route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: completed and pruned.  Task: identify the current smallest
+  theorem producing a concrete boundary `B`, exact exterior-frontier vertex
+  coverage for `B`, and `forall k, BoundaryVertexExteriorSectorRowsAt inputs B k`
+  without final cycle rows or synthetic enclosure.  Result: the smallest useful
+  theorem is the boundary-sector source
+  `Exists fun B => frontier_iff_cycle_vertex B âˆ§ forall k, BoundaryVertexExteriorSectorRowsAt inputs B k`.
+  The checked route is through
+  `boundaryVertexExteriorSectorRows_source_of_rawCoverage_boundaryFreeSource_rawOrientation`,
+  then `S2_agent_actual_sector_source_closure_20260520br` erases it to
+  `Exists fun B => Nonempty (ActualExteriorSectorInputSourceRows inputs B)`.
+
+- Claim: `S2-agent-closed-segment-closure-source-20260520bs`.
+  Owner: Ampere the 5th (`019e44a0-d2e1-7403-a4b1-3095b926f85d`).  Role:
+  proof-route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed and pruned.  Task: determine whether
+  `AdjacentFrontierEndpointsClosedSegmentClosureLocusRelativeOpenSource` or
+  `AdjacentFrontierEndpointsInteriorClosurePointSource` can be proved from
+  existing local component/vertex-star/edge-side topology without assuming the
+  incident-edge row or final cycle rows.  Result: interior closure already
+  follows from the closed-segment locus source, and the locus source follows
+  from `AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource`; this is
+  retained only as historical reducer support.  The all-adjacent endpoint
+  source is false with boundary chords, so the honest residual is selected
+  carrier/orbit construction plus selected-edge endpoint support.
+
+- Claim: `S2-agent-endpoint-incident-status-repair-20260520bp`.
+  Owner: Codex.  Role: theorem prover / source-lane reconciler.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and this
+  workboard.  Status: completed.  Task: reconcile the endpoint incident
+  source lane after the `20260520bm` adjacent-endpoint and boundary-free local
+  source additions, adding the smallest checked composition if an input-level
+  closed-segment/incident source already exists; otherwise record the exact
+  residual source theorem.  Result: added
+  `S2_agent_endpoint_incident_source_rows_of_closedSegmentClosure_20260520bp`,
+  composing pointwise local-sector rows with the existing input-level
+  `AdjacentFrontierEndpointsClosedSegmentClosureLocusRelativeOpenSource`
+  through
+  `S2_agent_adjacent_frontier_endpoints_incident_edge_source_of_closedSegmentClosure_20260520bm`;
+  no actual boundary-cycle rows or final cycle rows are used.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-main-edgeChain-boundaryFree-source-eraser-20260520bp`.
+  Owner: Codex-main.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and this
+  workboard.  Status: checked.  Task: add the compact checked eraser from
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` plus
+  `BoundaryFreeNoThirdGermSource inputs` to
+  `UnboundedExteriorFrontierCycleRows C inputs`, matching the current
+  shortest non-circular S2 route.  Result: added
+  `unboundedExteriorCycleRows_of_edgeChain_boundaryFreeSource` and
+  `finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_boundaryFreeSource`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-agent-actual-sector-input-source-route-20260520bp`.
+  Owner: Codex.  Role: proof-route scout / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: checked.  Task: investigate whether existing local
+  topology/geometric declarations can produce
+  `Exists fun B => Nonempty (ActualExteriorSectorInputSourceRows inputs B)`
+  from `FinitePlanarOuterComponentInputs C`, or a strictly stronger honest
+  source that erases to it, without deriving from
+  `UnboundedExteriorFrontierCycleRows` or final actual-boundary equivalence
+  rows.  Result: no bare-input constructor exists in this file.  Added the
+  non-final eraser
+  `exists_actualExteriorSectorInputSourceRows_of_faceSuccRows_orientation_boundary_cycle_edge_mem_closedSegment_local_exterior_angular_sector_source`.
+  Remaining source obligations are the same-boundary `B`, exact actual
+  frontier-vertex coverage, actual successor edge membership in
+  `unboundedFrontierEdgeSet`, `UnitDistanceCycleFaceSuccRows`, exterior
+  orientation, and
+  `BoundaryFrontierClosedSegmentLocalExteriorAngularSector inputs B`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-source-assumption-tightener-20260520bp`.
+  Owner: Codex.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Task: compose the newly available checked
+  cuts into the strongest non-circular `UnboundedExteriorFrontierCycleRows`
+  family possible, reducing residual assumptions to an existing honest source
+  package if one is already available.  Result: added the single-package
+  family eraser
+  `unboundedExteriorFrontierCycleRows_family_of_connectedRawOrbitSourceRows_20260520bp`
+  and the current-cut family
+  `unboundedExteriorFrontierCycleRows_family_of_componentTopology_boundaryFree_selectedSuccessorLocalTwoGerm_20260520bp`,
+  which composes component topology, `BoundaryFreeNoThirdGermSource`, and the
+  selected successor local two-germ source through the existing
+  `BoundaryFreeConnectedRawOrbitSourceRows` package.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-main-exterior-frontier-cycle-theorem-20260520ag`.
+  Owner: Codex-main.  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and this
+  workboard.  Status: in progress.  Handoff: unconditional
+  `UnboundedExteriorFrontierCycleRows C inputs`, then
+  `FinitePlanarStraightLineOuterComponentTheorem` and the W32 S2 target.
+  Next gate: targeted owner-file builds; full root build only after the
+  unconditional S2 row is root-imported.
+
+- Claim: `S2-main-edge-chain-from-inputs-20260520bb`.
+  Owner: Codex-main.  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and this
+  workboard.  Status: in progress.  Task: prove the selected unbounded-frontier
+  edge carrier is chain-connected from `FinitePlanarOuterComponentInputs C`,
+  without deriving connectivity from an already constructed exterior cycle.
+  Completion gate: a source theorem for
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` or a strictly
+  stronger non-circular carrier-connectedness row, checked by targeted owner
+  builds.
+
+- Claim: `S2-main-local-neighbor-rows-from-inputs-20260520bb`.
+  Owner: Codex-main.  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and this
+  workboard.  Status: in progress.  Task: prove the pointwise two-neighbor
+  frontier row for the actual unbounded-frontier carrier from local straight-line
+  topology and `inputs.noCutVertex`, without using an induced-frontier shortcut
+  or an arbitrary spanning cycle.  Completion gate: a source theorem for
+  `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a` or a strictly
+  stronger local two-germ row, checked by targeted owner builds.
+
+- Claim: `S2-agent-edge-chain-proof-route-20260520bc`.
+  Owner: Epicurus the 4th (`019e4460-9af7-7193-b79d-b23ab802764f`).  Role:
+  proof-route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and local Mathlib
+  topology APIs.  Status: completed and pruned.  Result: the shortest
+  missing input-only theorem is
+  `(unboundedFrontierCarrierGraph C inputs).Connected`; this immediately gives
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`.  The clean
+  non-circular route is still through genuine unbounded-frontier
+  preconnectedness plus selected-edge cover, not through a completed cycle row.
+
+- Claim: `S2-agent-local-two-germ-proof-route-20260520bc`.
+  Owner: Helmholtz the 5th (`019e4460-9b48-7642-bd54-6060105f33ba`).  Role:
+  proof-route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed and pruned.  Result: the shortest local route is to prove
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs` from
+  local straight-line topology, then erase it to neighbour-pair rows and local
+  two-germ rows.  The geometric angular APIs are useful only after the two real
+  carrier neighbours are selected.
+
+- Claim: `S2-agent-cutpartition-third-germ-proof-route-20260520bc`.
+  Owner: Peirce the 5th (`019e4460-9b98-7dd2-a041-8232e38b3bf8`).  Role:
+  proof-route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/CutVertexInterface.lean`, and local graph
+  connectivity APIs.  Status: completed and pruned.  Result: the sharp
+  theorem shape is an ambient deleted-graph unreachability handoff.  Given a
+  proposed cut vertex `a`, a selected neighbour `w`, and a third carrier
+  neighbour `b`, prove they are unreachable in
+  `(GraphBridge.unitDistanceSimpleGraph C).induce ({a.1}á¶œ)`; the existing
+  `cutVertexPartition_of_unreachable_after_delete` then produces
+  `Nonempty (CutVertexInterface.CutVertexPartition C)`.  `inputs.noCutVertex`
+  remains only in the checked eraser from cut rows to neighbour-pair rows.
+
+- Claim: `S2-main-third-neighbor-cutpartition-handoff-20260520bd`.
+  Owner: Codex-main.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: checked.  Task: add the ambient deleted-graph
+  unreachability handoff for third unbounded-frontier carrier neighbours, so
+  the geometric/topological proof only has to establish the true ambient path
+  obstruction after deleting the frontier vertex.  Result: checked
+  `third_unboundedFrontierCarrierNeighbor_cutPartition_of_unreachable_after_delete`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-main-third-neighbor-unreachable-source-20260520be`.
+  Owner: Codex-main.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: checked.  Task: add the selected-incident-edge
+  adapter that fills
+  `UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt` from the real
+  ambient deleted-graph unreachable row for each third carrier neighbour.
+  Result: added
+  `unboundedFrontierCarrierNeighborPairCutPartitionRowsAt_of_selectedIncidentEdges_unreachableAfterDelete`
+  and
+  `unboundedFrontierCarrierNeighborPairAt_of_selectedIncidentEdges_unreachableAfterDelete`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-main-carrier-adj-noncut-source-20260520bf`.
+  Owner: Codex-main.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: checked.  Task: prove a carrier-adjacency
+  nonloop/noncut helper and tighten the ambient-deleted-graph source adapter
+  so future S2 topology proofs do not separately provide `b.1 != a.1` for
+  every third carrier neighbour.  Result: added
+  `selectedIncidentUnboundedFrontierEdge_head_ne_cut`,
+  `unboundedFrontierCarrierGraph_adj_val_ne`, and the auto-noncut
+  selected-edge/unreachability cut-row adapter.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-edge-chain-input-proof-search-20260520bg`.
+  Owner: Nietzsche the 5th (`019e446b-65f7-70d3-8f4e-c42cf81a3974`).  Role:
+  proof-route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and S2 source files.
+  Status: completed and pruned.  Task: find the shortest non-circular existing route
+  and exact missing theorem statement for
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` from
+  `FinitePlanarOuterComponentInputs C`.  Result: the shortest non-circular
+  path is a geometric raw-orbit coverage source, not component-topology rows:
+  construct a selected geometric raw face-successor orbit with
+  `RawOrbitCoverageSourceRows`, then use
+  `RawOrbitCoverageSourceRows.toEdgeCarrierSegmentChainConnected`.
+
+- Claim: `S2-main-raw-orbit-coverage-source-20260520bh`.
+  Owner: Codex-main.  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: checked as source composition; source proofs still active.  Task:
+  prove the input-level selected geometric raw orbit coverage source
+  `Exists start, Exists O, RawOrbitCoverageSourceRows (inputs := inputs) O`
+  for the unbounded exterior component, then erase it to the selected-edge
+  segment-chain row.  Checked result:
+  `boundaryFreeConnectedRawOrbitSourceRows_of_componentTopology_sources`
+  assembles the three live source lanes into
+  `BoundaryFreeConnectedRawOrbitSourceRows`, and
+  `finitePlanarStraightLineOuterComponentTheorem_of_componentTopology_rawOrbitSourceRows`
+  routes those lanes to the reusable finite-plane theorem.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-main-raw-coverage-edge-chain-source-20260520bo`.
+  Owner: Codex-main.  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: checked.  Task: complete one source cut from
+  component-topology connectedness, boundary-free local rows, and the selected
+  successor local two-germ row to input-level selected raw coverage plus
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`, without deriving
+  coverage or the edge chain from final exterior-cycle rows.  Result: added
+  `rawCoverage_edgeChain_source_of_componentTopology_selectedSuccessorLocalTwoGerm_20260520bo`.
+  Also repaired the local-sector source package family binder by qualifying
+  `_root_.Nonempty` in `S2_agent_local_sector_input_source_20260520bn`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-local-neighbor-input-proof-search-20260520bg`.
+  Owner: Curie the 5th (`019e446b-6641-7951-99b5-fdb56f8fbf71`).  Role:
+  proof-route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and S2 source
+  files.  Status: completed and pruned.  Task: find the shortest non-circular existing
+  route and exact missing theorem statement for pointwise
+  `UnboundedFrontierCarrierNeighborPairAt inputs a` or
+  `UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt inputs a` from
+  `FinitePlanarOuterComponentInputs C`, using the ambient deleted-graph
+  unreachability handoff.  Result: the shortest non-circular pointwise source
+  is to choose two actual selected incident frontier edges and prove every
+  third carrier neighbour is ambient-unreachable from one selected side in
+  `(GraphBridge.unitDistanceSimpleGraph C).induce ({a.1}á¶œ)`; the checked
+  auto-noncut adapter then gives the cut rows, and `.toNeighborPairAt` gives
+  the neighbour row.
+
+- Claim: `S2-main-neighbor-unreachable-source-20260520bh`.
+  Owner: Codex-main.  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and this
+  workboard.  Status: checked as source eraser; input proof still active.
+  Task: prove the pointwise source that selects the two actual
+  unbounded-frontier incident edges at `a` and gives ambient deleted-graph
+  unreachability for every third carrier neighbour.  Checked result:
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource`
+  now erases to pointwise cut rows, neighbour rows, and carrier degree two via
+  `unboundedFrontierCarrierGraph_degree_two_of_unreachableAfterDeleteInputSource`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-raw-orbit-source-search-20260520bj`.
+  Owner: Zeno the 5th (`019e4471-fe9a-7923-8f92-1143b919b620`).  Role:
+  read-only route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed and pruned.  Task: identify the shortest non-circular route from
+  `FinitePlanarOuterComponentInputs C` to `RawOrbitCoverageSourceRows` or an
+  existing selected-orbit family eraser.  Result: the shortest non-circular
+  selected-orbit route is to prove
+  `Nonempty (BoundaryFreeConnectedRawOrbitSourceRows inputs)`, then use
+  `.existsRawCoverage` and
+  `finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows`.
+  Its fields are exactly `BoundaryFreeNoThirdGermSource inputs`,
+  `(unboundedFrontierCarrierGraph C inputs).Connected`, and
+  `RawOrbitDartEdgeFrontierSource inputs`.
+
+- Claim: `S2-agent-boundary-free-local-source-20260520bk`.
+  Owner: Banach the 5th (`019e4479-aaf4-7722-9fa8-413e067a922b`).  Role:
+  proof-route worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed and pruned.  Task: work the input-level route to
+  `BoundaryFreeNoThirdGermSource inputs`, starting from the local exterior
+  side / endpoint closure rows and avoiding any actual-boundary-cycle premise.
+  Result: added
+  `BoundaryFreeEndpointIncidentSourceRows.toIncidentOnlyRowsWithInteriorEdgeMem`,
+  `BoundaryFreeEndpointIncidentSourceRows.toBoundaryFreeNoThirdGermSourceWithInteriorEdgeMem`,
+  `boundaryFreeNoThirdGermSource_of_localSectorRows_endpointFrontier_interiorEdgeMem`,
+  and `S2_agent_boundary_free_local_source_20260520bk`.  Corrected remaining
+  source rows are pointwise local-sector rows,
+  `InteriorEdgeLocalExteriorSideSource C inputs`, and actual selected
+  carrier/orbit rows.  Do not use
+  `AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource C inputs` as an
+  unconditional source target.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-agent-carrier-connected-source-20260520bk`.
+  Owner: Newton the 5th (`019e4479-ab45-7a40-ba28-b8202f42aa10`).  Role:
+  proof-route worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed and pruned.  Task: work the input-level route to
+  `(unboundedFrontierCarrierGraph C inputs).Connected`, preferably through
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs` without
+  routing through raw-orbit coverage.  Result: added
+  `componentTopologySourceRows_of_frontierPreconnected_localSectorRows` and
+  `S2_agent_carrier_connected_source_20260520bk`, reducing carrier
+  connectedness to preconnectedness of the actual unbounded exterior frontier
+  plus pointwise `UnboundedFrontierCarrierLocalSectorRowsAt`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  replayed and passed through `ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-raw-dart-frontier-source-20260520bk`.
+  Owner: Carver the 5th (`019e4479-ab93-7580-b429-137b15cd0986`).  Role:
+  proof-route worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed and pruned.  Task: work the input-level route to
+  `RawOrbitDartEdgeFrontierSource inputs`, using the seeded raw face-successor
+  orbit and actual exterior-edge frontier rows, without assuming the final
+  exterior cycle.  Result: added
+  `S2_agent_raw_dart_frontier_source_20260520bk` and
+  `boundaryFreeConnectedRawOrbitSourceRows_nonempty_of_componentTopology_iteratedFaceSuccInteriorPointNoOrbitSource_20260520bk`.
+  The raw dart-frontier lane is reduced to
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`; the
+  connected raw-orbit package additionally needs
+  `BoundaryFreeNoThirdGermSource inputs` and
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-local-sector-source-20260520bl`.
+  Owner: Nash the 5th (`019e4483-9876-79e0-9d4c-b97b1bf917a5`).  Role:
+  proof worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: completed.  Task: prove the pointwise
+  `UnboundedFrontierCarrierLocalSectorRowsAt inputs a` source from the
+  unbounded exterior frontier local star/sector data, then expose the shortest
+  input-family eraser used by both the boundary-free and carrier-connected
+  lanes.  Completion gate: target owner file builds; no final S2 claim unless
+  the unconditional row family is produced.  Result: the existing pointwise
+  source is `S2_agent_actual_exterior_sector_source` /
+  `localSectorRows_of_vertex_star_isolation_local_exterior_sector`; added
+  `LocalSectorRowsSharedSourceErasers`,
+  `localSectorRowsSharedSourceErasers_of_frontierPreconnected`, and
+  `unboundedExteriorFrontierCycleRows_of_frontierPreconnected_localSectorRows`
+  so one local-sector family feeds both
+  `componentTopologySourceRows_of_frontierPreconnected_localSectorRows` and
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_localSectorRows`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.
+
+- Claim: `S2-agent-endpoint-interior-side-source-20260520bl`.
+  Owner: Russell the 5th (`019e4483-98c6-77e1-9706-9e8224e96fe9`).  Role:
+  proof worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: active, partially discharged.  Progress: added
+  `interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_fixed_side_halfballs`
+  and `S2_agent_interior_edge_local_exterior_side_source_20260520bl`, proving
+  the exact input-level `InteriorEdgeLocalExteriorSideSource C inputs` from
+  fixed-side half-ball topology.  Added
+  `S2_agent_endpoint_closure_source_of_incident_edge_20260520bl` and the
+  helper erasers
+  `S2_agent_boundary_free_local_source_of_endpointClosure_20260520bl` /
+  `S2_agent_boundary_free_local_source_of_incidentEdge_20260520bl`, so
+  `S2_agent_boundary_free_local_source_20260520bk` now has an input-side route
+  with the interior row discharged and the endpoint branch reduced to
+  selected-edge support.  Correction: there is no remaining unconditional
+  endpoint-closure task; that target is false for arbitrary adjacent frontier
+  endpoints when boundary chords exist.  Remaining task: construct/source the
+  actual selected exterior carrier/orbit from `FinitePlanarOuterComponentInputs
+  C`, so selected-edge membership is produced instead of assumed.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-agent-incident-edge-closedSegmentClosure-cut-20260520bm`.
+  Owner: Codex (this session).  Role: theorem prover/API closer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and this
+  workboard.  Status: checked as historical reducer support.  Task: expose the
+  selected-edge endpoint-support cut from the closed-segment relative-openness
+  source, and wire it
+  through the BL endpoint-closure / boundary-free-local erasers without using
+  `ActualBoundaryCycleFrontierEquivalenceRows` or
+  `UnboundedExteriorFrontierCycleRows`.  Result: added
+  `S2_agent_adjacent_frontier_endpoints_incident_edge_source_of_closedSegmentClosure_20260520bm`
+  and
+  `S2_agent_boundary_free_local_source_of_closedSegmentClosure_20260520bm`,
+  composing
+  `adjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource_of_closedSegmentClosure`,
+  `S2_agent_endpoint_closure_source_of_incident_edge_20260520bl`, and
+  `S2_agent_boundary_free_local_source_of_incidentEdge_20260520bl` into the
+  current BL source surface.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-agent-raw-faceSucc-interior-frontier-source-20260520bl`.
+  Owner: Hume the 5th (`019e4483-9914-7a53-9caf-f8a830207272`).  Role:
+  proof worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: completed and pruned.  Task: prove
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs` from the
+  seeded raw face-successor orbit and actual exterior-edge local topology, not
+  from final cycle rows.  Completion gate:
+  `boundaryFreeConnectedRawOrbitSourceRows_nonempty_of_componentTopology_iteratedFaceSuccInteriorPointNoOrbitSource_20260520bk`
+  consumes the result and the target owner file builds.  Result: added
+  `S2_agent_raw_faceSucc_interior_frontier_source_20260520bl`, exposing the
+  non-circular cut from `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource`
+  plus pointwise `UnboundedFrontierCarrierLocalSectorRowsAt` to
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-selected-faceSucc-edge-source-20260520bm`.
+  Owner: Euclid the 5th (`019e4486-e645-78b0-93ae-1a6771aa9714`).  Role:
+  proof worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and this
+  workboard.  Status: completed and pruned.  Task: prove
+  `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs` directly from
+  finite straight-line exterior local topology and the geometric rotation
+  system, without deriving it from
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource` or any final
+  cycle row.  Completion gate: the selected successor edge row can feed
+  `S2_agent_raw_faceSucc_interior_frontier_source_20260520bl`.  Result:
+  changed
+  `rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_selected_successor_localSectorRows`
+  to use the local-sector carrier edge-membership handoff directly, and added
+  `S2_agent_selected_faceSucc_edge_source_20260520bm` as the local two-germ
+  exterior-topology source.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-frontier-preconnected-source-20260520bm`.
+  Owner: Faraday the 5th (`019e4486-e68c-7223-bc5d-ca6afd2060c6`).  Role:
+  proof worker.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and this workboard.
+  Status: checked.  Task: prove preconnectedness of
+  `frontier (unboundedExteriorComponentRows C inputs).exterior` or the compact
+  source rows consumed by
+  `componentTopologySourceRows_of_frontierPreconnected_localSectorRows`.
+  Result: added
+  `S2_agent_frontier_preconnected_source_20260520bm`,
+  `S2_agent_componentTopologySourceRows_of_frontier_preconnected_source_20260520bm`,
+  and
+  `S2_agent_carrier_connected_of_frontier_preconnected_source_20260520bm`.
+  These combine the selected-edge segment-chain source with fixed-side
+  local-sector rows into
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`, then derive
+  connectedness of `unboundedFrontierCarrierGraph C inputs`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-local-sector-input-source-20260520bn`.
+  Owner: Codex-main.  Role:
+  proof worker / source eraser.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and this
+  workboard.  Status: checked.  Task: prove the input-level pointwise local
+  sector family
+  `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`, or a
+  stronger source that erases to it, without using final cycle rows or
+  synthetic enclosure predicates.  Completion gate: the row feeds both the
+  component-topology and boundary-free local-source routes, and the owner
+  module build passes.  Result: added
+  `localSectorRows_of_actualExteriorSectorInputSourceRows`,
+  `S2_agent_local_sector_input_source_20260520bn`, and
+  `localSectorRowsSharedSourceErasers_of_actualExteriorSectorInputSourceRows`
+  in `ExteriorComponentTopology.lean`.  The stronger source is
+  `Exists fun B => Nonempty (ActualExteriorSectorInputSourceRows inputs B)`;
+  it erases
+  immediately to the requested pointwise local-sector family and, with
+  frontier preconnectedness, to `LocalSectorRowsSharedSourceErasers`.  No
+  final exterior-cycle rows, actual-boundary-cycle equivalence rows, induced
+  frontier graph, arbitrary cycle, synthetic enclosure, or identity angular
+  order are used by the new declarations.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-endpoint-incident-input-source-20260520bn`.
+  Owner: Turing the 5th (`019e448a-c51f-7d30-b239-ceac524f3e5d`).  Role:
+  proof worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: pruned; `wait_agent` returned `not_found` on
+  2026-05-20, so this is no longer a live worker.  Task was superseded: the
+  input-level all-adjacent endpoint incident-edge row is not a sound source
+  target because boundary chords refute it.  Any future work on this lane must
+  prove selected carrier/orbit rows from inputs, then use selected
+  `unboundedFrontierEdgeSet` membership for endpoint support.  Completion gate:
+  `S2_agent_boundary_free_local_source_of_incidentEdge_20260520bl` consumes
+  the result and the owner module build passes.
+
+- Claim: `S2-agent-raw-coverage-input-source-20260520bn`.
+  Owner: Chandrasekhar the 5th (`019e448a-db49-79f1-bd40-30210374a348`).
+  Role: proof worker.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: pruned; `wait_agent` returned `not_found` on
+  2026-05-20, so this is no longer a live worker.  Task was to prove the
+  input-level selected raw-orbit
+  coverage or edge-chain source needed by the current S2 assembly, without
+  deriving it from `UnboundedExteriorFrontierCycleRows` or actual boundary
+  equivalence rows.  Completion gate: the source feeds the raw-orbit coverage
+  / component-topology path and the owner module build passes.
+
+- Claim: `S2-main-current-source-composition-20260520bn`.
+  Owner: Codex-main.  Role: source composer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Result: added
+  `unboundedExteriorFrontierCycleRows_of_localSector_edgeChain_incident_selectedSuccessorLocalTwoGerm_20260520bn`
+  and its finite-theorem family companion.  This records the current shortest
+  checked route from four source cuts to `UnboundedExteriorFrontierCycleRows`:
+  pointwise local-sector rows, adjacent-frontier endpoint incident-edge rows,
+  selected-edge carrier chain connectivity, and selected successor local
+  two-germ rows.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-agent-local-neighbor-source-search-20260520bj`.
+  Owner: Euler the 5th (`019e4472-1138-75e0-a2b3-700be72a17d6`).  Role:
+  read-only route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed and pruned.  Task: identify the shortest pointwise route from
+  `FinitePlanarOuterComponentInputs C` to the neighbour-pair row, preferably
+  through the ambient deleted-graph cut handoff.  Result: the shortest route
+  is
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteRowsAt.toNeighborPairAt`;
+  the exact remaining theorem is the pointwise input producer
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteRowsAt_of_inputs`
+  in `ExteriorComponentTopology.lean`, followed by the family wrapper
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_inputs`.
+
+- Claim: `S2-agent-plane-topology-api-search-20260520bj`.
+  Owner: Meitner the 5th (`019e4472-22a4-7ba1-8e05-edb8152f6da3`).  Role:
+  read-only API scout.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and already
+  imported topology APIs.  Status: completed and pruned.  Task: list the existing
+  local drawing/frontier/component lemmas that can feed carrier connectivity
+  or local-neighbour rows.  Result: the strongest existing direct carrier
+  connectivity target is
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`; once proved
+  from inputs, `unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows`
+  gives `(unboundedFrontierCarrierGraph C inputs).Connected`.  Existing
+  support includes frontier-subset-drawing lemmas, graph-vertex-not-in-exterior
+  rows, local edge-interior isolation rows, and
+  `unboundedExterior_frontier_point_vertex_or_ordered_edgeInterior`.
+
+- Claim: `S2-main-rawCoverage-cutRows-direct-route-20260520bi`.
+  Owner: Codex-main.  Role: source-route integrator.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and this
+  workboard.  Status: checked.  Task: add the direct final S2 eraser from
+  raw-orbit coverage plus pointwise cut-partition rows, using the checked
+  edge-chain and no-cut neighbour-row reducers without component-topology
+  connectedness.  Result: added
+  `unboundedExteriorCycleRows_of_rawCoverage_cutPartitionRows`, plus the
+  ambient-deleted-graph variant
+  `unboundedExteriorCycleRows_of_rawCoverage_unreachableAfterDeleteInputSource`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-main-rawCoverage-cutRows-family-route-20260520bj`.
+  Owner: Codex-main.  Role: source-route integrator.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and this
+  workboard.  Status: checked.  Task: expose the family-level
+  `FinitePlanarStraightLineOuterComponentTheorem` eraser from raw-orbit
+  coverage sources plus pointwise cut-partition rows.  Result: added
+  `finitePlanarStraightLineOuterComponentTheorem_of_rawCoverage_cutPartitionRows`
+  and
+  `finitePlanarStraightLineOuterComponentTheorem_of_rawCoverage_unreachableAfterDeleteInputSource`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed.
+
+- Claim: `S2-main-localSector-to-unreachable-source-20260520bk`.
+  Owner: Codex-main.  Role: source-route theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: checked.  Task: connect genuine pointwise
+  local-sector rows to
+  `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource`, so
+  the ambient deleted-graph neighbour source is discharged by the same local
+  two-germ proof instead of a separate branch.  Result: added
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteRowsAt_of_localSectorRowsAt`,
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_localSectorRows`,
+  and
+  `unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_localTwoGermRows`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+2026-05-20 S2 dynamic delegation note: attempted ten fresh, narrow S2
+subagent tasks across finite drawing topology, local neighbour rows, raw orbit
+coverage, angular face-successor data, repeated-tail rows, and workboard
+hygiene.  All ten Codex-main spawn attempts were rejected by the global
+agent-thread cap.  A concurrent worker later opened the active S2 tasks
+`S2-agent-boundary-free-local-source-20260520bk`,
+`S2-agent-carrier-connected-source-20260520bk`, and
+`S2-agent-raw-dart-frontier-source-20260520bk`; leave those running until they
+complete or become stale.
+
+2026-05-20 S2 certification/order refresh: after pruning the 20260520bk
+workers, repaired the declaration order for
+`unboundedExteriorFrontierCycleRows_of_componentTopology_unreachableAfterDelete`
+so it lives after the concrete carrier cycle-row reducer.  The targeted build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+passed, the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed, and
+the full Lean forbidden-token scan returned `clean`.  A follow-up dynamic
+S2 dispatch attempt was still rejected by the global agent-thread cap.
+
+- Claim: `S2-main-current-residual-composition-20260520bl`.
+  Owner: Codex-main.  Role: source-route integrator.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Task: expose the current checked S2 route
+  as one residual theorem using the 20260520bk source reductions: local-sector
+  rows, local exterior-side rows, endpoint closure, frontier preconnectedness,
+  and the orbit-free iterated `faceSucc` successor source.  Result: added
+  `boundaryFreeConnectedRawOrbitSourceRows_nonempty_of_currentLocalSources_20260520bl`
+  and
+  `finitePlanarStraightLineOuterComponentTheorem_of_currentLocalSources_20260520bl`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+2026-05-20 S2 current-residual certification: after the current-residual
+composition theorem, the full Lean forbidden-token scan returned `clean`, and
+the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed.
+Another focused read-only S2 dispatch attempt was rejected by the global
+agent-thread cap.
+
+- Claim: `S2-main-closedSegment-residual-composition-20260520bm`.
+  Owner: Codex-main.  Role: source-route integrator.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Task: tighten the current S2 composition
+  to the sharper boundary-free route where the interior-edge side source is
+  discharged and the endpoint branch is reduced to
+  `AdjacentFrontierEndpointsClosedSegmentClosureLocusRelativeOpenSource`.
+  Result: added
+  `boundaryFreeConnectedRawOrbitSourceRows_nonempty_of_closedSegmentLocalSources_20260520bm`
+  and
+  `finitePlanarStraightLineOuterComponentTheorem_of_closedSegmentLocalSources_20260520bm`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+2026-05-20 S2 closed-segment residual certification: after the sharper
+four-residual composition theorem, the full Lean forbidden-token scan returned
+`clean`, and the serialized pinned root build
+`elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` passed.
+
+- Claim: `S2-main-frontier-cover-endpoint-erasure-20260520bc`.
+  Owner: Codex-main.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard.  Status: checked.  Task: derive the endpoint-incidence source
+  from any full selected-edge cover of the unbounded exterior frontier, so the
+  component-topology source can be reused without restating endpoint cases.
+  Result: added
+  `frontierVertexIncidentSource_of_frontier_edge_cover` and
+  `frontierVertexIncidentSource_of_componentTopologySourceRows`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-route-noncircularity-check-20260520bb`.
+  Owner: Herschel the 4th (`019e445c-5946-7fa1-8ff6-27ad7fc6dc6e`).
+  Role: route checker.  Scope: read-only over S2
+  owner files and this workboard.  Status: completed and pruned.  Result:
+  shortest non-circular composition is edge-chain plus neighbour-pair rows
+  routed through component-topology rows, local-sector rows, actual boundary
+  equivalence rows, and the existing W32 consumer.  No induced frontier graph,
+  convex-hull cycle, identity angular-order shortcut, or synthetic enclosure
+  is used as a source premise in that composition.
+
+- Claim: `S2-agent-edge-chain-source-search-20260520bb`.
+  Owner: Aristotle the 4th (`019e445c-598e-7382-9691-7d718183f703`).
+  Role: read-only theorem/API scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, relevant S2
+  owner imports, and Mathlib topology APIs.  Status: completed and pruned.
+  Result: no input-only theorem currently proves
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`; the smallest
+  missing edge-chain source is either
+  `(unboundedFrontierCarrierGraph C inputs).Connected` from inputs, then
+  `unboundedFrontierEdgeCarrierSegmentChainConnected_of_unboundedFrontierCarrierGraph_connected`,
+  or the stronger component-topology source rows from inputs.
+
+- Claim: `S2-agent-neighbor-row-source-search-20260520bb`.
+  Owner: Pasteur the 4th (`019e445c-59dd-7ff2-9bcb-424f9773ccbc`).
+  Role: read-only theorem/API scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and local
+  no-cut/frontier-germ APIs.  Status: completed and pruned.  Result: the
+  smallest local source is a theorem constructing
+  `UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a` for every frontier
+  vertex `a` from inputs, or equivalently a cut-partition row selecting the two
+  actual incident frontier germs and deriving a `CutVertexPartition` from any
+  third carrier neighbour.  Existing erasers then produce the neighbour-pair
+  family.
+
+- Claim: `S2-main-faceSucc-local-sector-from-edge-source-20260520ah`.
+  Owner: Codex-main.  Role: source-row reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard.  Status: checked.  Task: prove
+  `FaceSuccSuccessorLocalSectorRowsSource` from a checked
+  `FaceSuccFrontierEdgeSource` plus the pointwise local-sector family, then
+  route it to `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource`.
+  This is an S2 source-row reduction only; it does not add a new facade or
+  change the public bound surface.  Result: added
+  `faceSuccSuccessorLocalSectorRowsSource_of_faceSuccFrontierEdgeSource`
+  and
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource_of_faceSuccFrontierEdgeSource`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.  Subagent note: a dynamic read-only route-mapping subagent for
+  `FaceSuccFrontierEdgeSource` was attempted, but the global agent-thread cap
+  rejected the spawn, so no phantom worker is active for this claim.
+
+- Claim: `S2-main-component-topology-actual-boundary-rows-20260520ah`.
+  Owner: Codex-main.  Role: source-row reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean` and this
+  workboard.  Status: checked.  Task: add the direct reducer from
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs` plus
+  pointwise `UnboundedFrontierCarrierLocalSectorRowsAt` to
+  `ActualBoundaryCycleFrontierEquivalenceRows C inputs`, and expose the
+  matching `UnboundedExteriorFrontierCycleRows C inputs`.  This keeps the
+  component-topology primitive route explicit without going back through the
+  older edge-chain-only surface.  Result: added
+  `S2_actualBoundaryCycleFrontierEquivalenceRows_of_componentTopology_localSectorRows`
+  and
+  `S2_unboundedExteriorFrontierCycleRows_of_componentTopology_localSectorRows`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+  passed; downstream
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed; forbidden-token scan over `ErdosProblems1066` and
+  `ErdosProblems1066.lean` is clean.
+
+- Claim: `S2-worker-component-topology-source-20260520ai`.
+  Owner: McClintock the 4th (`019e43ff-e2fe-74d0-b5d2-6129121379e1`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard only.  Status: checked.  Task: prove or sharply
+  reduce `unboundedExteriorFrontierComponentTopologySourceRows_of_inputs`
+  from `FinitePlanarOuterComponentInputs C`, owning the frontier
+  preconnectedness/edge-cover source route for the unbounded exterior
+  component.  Result: added the endpoint-only source
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource`, the cover reducer
+  `frontier_edge_cover_of_frontierVertexIncidentSource`, and the checked
+  input-level reducer
+  `unboundedExteriorFrontierComponentTopologySourceRows_of_inputs`.  The exact
+  remaining non-circular inputs are
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` and
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs`; the open-edge
+  cover branch is already discharged by fixed-side half-ball topology, with no
+  downstream cycle row, induced frontier graph, enclosure, hull, or W-facade.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-worker-local-two-germ-degree-source-20260520ai`.
+  Owner: Banach the 4th (`019e43ff-e34c-7b41-913c-a3c0f61d3146`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and this
+  workboard only.  Status: checked/sharply reduced.  Result: added the
+  concrete-carrier degree erasers
+  `unboundedFrontierCarrierGraph_neighborFinset_card_two_of_degree_two`,
+  `unboundedFrontierCarrierGraph_neighborFinset_card_two_of_neighborPairRows`,
+  `localSectorRows_of_unboundedFrontierCarrierGraph_simple_degree_two`,
+  `localSectorRows_of_unboundedFrontierCarrierGraph_neighborPairRows`, and
+  `localSectorRows_of_unboundedFrontierCarrierGraph_neighborPairRows_source`.
+  The smallest non-circular remaining input for this route is now exactly
+  `forall a, UnboundedFrontierCarrierNeighborPairAt inputs a`: exhibit the two
+  actual neighbours of each vertex in the concrete
+  `unboundedFrontierCarrierGraph C inputs` and prove every incident carrier
+  edge goes to one of them.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.
+
+- Claim: `S2-worker-raw-successor-frontier-source-20260520ai`.
+  Owner: Noether the 4th (`019e43ff-e397-7f32-b258-8d493faf846a`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and this
+  workboard only.  Status: checked.  Task: prove or sharply
+  reduce the input-level `FaceSuccFrontierEdgeSource` /
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource` route from the
+  existing local-sector and frontier-edge rows, without adding a new facade.
+  Result: the owner file proves
+  `faceSuccSuccessorLocalSectorRowsSource_of_faceSuccFrontierEdgeSource` and
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource_of_faceSuccFrontierEdgeSource`;
+  no downstream cycle rows, identity angular-order shortcut, arbitrary cycle,
+  or synthetic enclosure is used in this reducer.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-main-source-split-current-primitive-tightening-20260520aj`.
+  Owner: Codex-main.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and this
+  workboard only.  Status: checked.  Task: tighten the live S2 primitive
+  source surface across the natural owner files while leaving the active
+  `ExteriorComponentTopology.lean` and `S2LocalTwoGermAssembly.lean` workers
+  undisturbed.  Component-topology plus boundary-free local rows should erase
+  directly in the boundary-free owner, and the selected raw-orbit owner should
+  consume the sharper `FaceSuccFrontierEdgeSource` row rather than requiring
+  downstream users to provide the orbit-free successor point row.  This is not
+  an S2 completion claim and must not introduce another facade,
+  induced-frontier route, arbitrary cycle, or identity angular-order shortcut.
+  Result: added the component-topology/boundary-free eraser in
+  `S2BoundaryFreeRawSource.lean` and the face-successor edge-source primitive
+  family eraser in `S2SeededRawOrbitSource.lean`.  Verification gates:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  both passed on 2026-05-20.  A fresh dynamic S2-B route-mapper spawn was
+  attempted after this check and was rejected by the global thread cap, so no
+  phantom worker is active for that intended task.
+
+- Claim: `S2-main-frontier-carrier-neighbor-pair-route-20260520aj`.
+  Owner: Codex-main.  Role: theorem prover / route tightener.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and this
+  workboard only.  Status: checked.  Task: use the newly isolated
+  neighbour-pair source shape to wire the pointwise
+  `UnboundedFrontierCarrierNeighborPairAt` row into the final S2 erasers, and
+  keep the remaining proof obligation focused on constructing those two true
+  exterior-boundary neighbours from `inputs.noCutVertex` and local topology.
+  Result: added the neighbour-pair endpoint/local source erasers
+  `boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointFrontier` and
+  `boundaryFreeNoThirdGermSource_of_neighborPairRows_incidentEdge`, plus the
+  final-row/family erasers
+  `unboundedExteriorFrontierCycleRows_of_neighborPairRows_incidentEdge_carrierConnected`,
+  `unboundedExteriorFrontierCycleRows_of_componentTopology_neighborPairRows_incidentEdge`,
+  `unboundedExteriorFrontierCycleRows_of_edgeChain_neighborPairRows_incidentEdge`,
+  `finitePlanarStraightLineOuterComponentTheorem_of_componentTopology_neighborPairRows_incidentEdge`,
+  `finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_neighborPairRows_incidentEdge`,
+  and the no-cut source variants
+  `unboundedExteriorFrontierCycleRows_of_componentTopology_neighborPairCutRows_incidentEdge`
+  `unboundedExteriorFrontierCycleRows_of_edgeChain_neighborPairCutRows_incidentEdge`,
+  `finitePlanarStraightLineOuterComponentTheorem_of_componentTopology_neighborPairCutRows_incidentEdge`,
+  and
+  `finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_neighborPairCutRows_incidentEdge`.
+  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  passed on 2026-05-20.
+
+- Claim: `S2-worker-mathlib-local-topology-api-20260520ak`.
+  Owner: Boyle the 4th (`019e4407-bde5-75d3-a44b-22f268b0e273`).
+  Role: read-only API scout.  Scope:
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and already
+  imported Mathlib/local topology APIs.  Status: closed/pruned.  Result:
+  edge-chain source should use either independent carrier connectedness or the
+  existing raw-orbit route
+  `unboundedFrontierEdgeCarrierSegmentChainConnected_of_rawFaceSuccOrbit_edges`.
+  Neighbour pairs should use either `localSectorRows a |>.toNeighborPairAt`
+  or Bohr's
+  `unboundedFrontierCarrierNeighborPairRows_of_noCutVertex_cutPartitionRows`.
+  No missing Mathlib API was identified; the real work is the raw edge
+  coverage/carrier connectedness row and the pointwise third-neighbour
+  cut-partition or local-sector proof.  No file edits.
+
+- Claim: `S2-main-vertex-incident-from-neighbor-pair-20260520ak`.
+  Owner: Codex-main.  Role: theorem prover / source reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard only.  Status: checked.  Task: prove
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs` from the
+  pointwise `UnboundedFrontierCarrierNeighborPairAt` family, so component
+  topology can use neighbour-pair rows for the frontier-vertex cover without
+  adding a boundary cycle or induced frontier graph.  Result: added
+  `frontierVertexIncidentSource_of_neighborPairRows`.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed on 2026-05-20.
+
+- Claim: `S2-worker-carrier-chain-source-20260520ak`.
+  Owner: Bernoulli the 4th (`019e4407-cfbe-7900-964a-b6b54c71c46a`).
+  Role: read-only route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and the S2
+  source files that already consume
+  `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`.  Status:
+  closed/pruned.  Result: shortest chain route is the raw-orbit coverage row:
+  `RawOrbitCoverageSourceRows.toEdgeCarrierSegmentChainConnected`, routing
+  through
+  `S2_edgeCarrierSegmentChainConnected_of_rawFaceSuccOrbit_dartFrontier_edgeCoverage`
+  and
+  `unboundedFrontierEdgeCarrierSegmentChainConnected_of_rawFaceSuccOrbit_edges`.
+  It chains actual selected frontier-edge segments along the raw
+  face-successor orbit and uses `edge_coverage` for arbitrary selected carrier
+  edges; it does not use an induced frontier graph, arbitrary spanning cycle,
+  or downstream cycle row.  No file edits.
+
+- Claim: `S2-worker-neighbor-pair-source-20260520ak`.
+  Owner: Halley the 4th (`019e4407-e0d0-79e1-9e5c-2b961e3e87e3`).
+  Role: read-only route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  closed/pruned.  Result: the shortest local handoff is
+  `fun a => (localSectorRows a).toNeighborPairAt`; boundary-cycle sector rows
+  can feed this through
+  `S2LocalTwoGermAssembly.localSectorRows_of_boundaryVertexExteriorSectorRows`.
+  The no-cut-specific handoff is
+  `unboundedFrontierCarrierNeighborPairRows_of_noCutVertex_cutPartitionRows`,
+  whose residual is exactly Bohr's cut-partition source row.  No file edits.
+
+- Claim: `S2-worker-frontier-carrier-nocut-source-20260520ai`.
+  Owner: Bohr the 4th (`019e4404-bb6a-7362-980b-983b6858e375`).
+  Role: theorem prover.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard only.  Status: completed.  Result: implemented the exact
+  non-circular cut-partition surface for pointwise carrier two-regularity:
+  `UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt`, its no-cut eraser
+  `UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt.toNeighborPairAt`,
+  the family handoff
+  `unboundedFrontierCarrierNeighborPairRows_of_noCutVertex_cutPartitionRows`,
+  and the degree-two wrapper
+  `unboundedFrontierCarrierGraph_degree_two_of_noCutVertex_cutPartitionRows`.
+  The remaining source theorem is precisely to produce, for each actual
+  unbounded-frontier carrier vertex, the two selected incident frontier edges
+  and a concrete `CutVertexPartition` for any third carrier neighbour.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-worker-raw-orbit-to-current-carrier-sources-20260520al`.
+  Owner: Locke the 4th (`019e440a-53da-7cc3-8ee4-4585b21e469f`).
+  Role: read-only route scout.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  closed/pruned.  Result: raw coverage plus boundary-free local rows give
+  both current concrete-carrier families through
+  `RawOrbitCoverageSourceRows.toEdgeCarrierSegmentChainConnected` and
+  `BoundaryFreeNoThirdGermSource.toNeighborPairRows`, bundled by
+  `RawOrbitCoverageSourceRows.toEdgeChainNeighborPairRows`.  Starting from
+  `BoundaryFreeConnectedRawOrbitSourceRows`, use `.existsRawCoverage`; starting
+  from endpoint-incident rows, use
+  `S2_edgeChain_boundaryFreeNoThirdGermSource_of_rawCoverage_endpointIncidentRows`.
+  No file edits.
+
+- Claim: `S2-agent-carrier-connected-input-route-20260520ag`.
+  Owner: Feynman the 4th (`019e43f6-9985-7ff1-962b-12d739a035af`).  Role:
+  route mapper.  Scope: read-only
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  closed/pruned.  Handoff: smallest non-circular route to
+  `(unboundedFrontierCarrierGraph C inputs).Connected`.  Result: connectedness
+  is best sourced from
+  `UnboundedExteriorFrontierComponentTopologySourceRows inputs`, whose exact
+  remaining input theorem is
+  `unboundedExteriorFrontierComponentTopologySourceRows_of_inputs`.  Avoid
+  carrier-connectedness cycles through edge-chain, raw coverage, or completed
+  boundary rows.  Verification: read-only route map.
+
+- Claim: `S2-agent-local-sector-input-route-20260520ag`.
+  Owner: James the 4th (`019e43f6-99d0-7401-adc5-496c524b6741`).  Role:
+  route mapper.  Scope: read-only
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  closed/pruned.  Handoff: smallest non-circular route to the pointwise
+  `UnboundedFrontierCarrierLocalSectorRowsAt` family or
+  `BoundaryFreeNoThirdGermSource inputs`.  Result: shortest route is a direct
+  proof of carrier degree two for the concrete
+  `unboundedFrontierCarrierGraph`, then
+  `localSectorRows_of_unboundedFrontierCarrierGraph_degree_two`.  Avoid
+  deriving degree two from local-sector rows and feeding it back.  Verification:
+  read-only route map.
+
+- Claim: `S2-agent-raw-orbit-input-route-20260520ag`.
+  Owner: Tesla the 4th (`019e43f6-9a1e-7d93-856d-1bdb577a245c`).  Role:
+  route mapper.  Scope: read-only
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  closed/pruned.  Handoff: smallest non-circular selected raw-face-successor route
+  from `FinitePlanarOuterComponentInputs C` to the raw orbit coverage /
+  successor frontier rows.  Result: current checked plumbing reduces the pure
+  raw route to three independent input-level sources:
+  `BoundaryFreeNoThirdGermSource inputs`,
+  `(unboundedFrontierCarrierGraph C inputs).Connected`, and
+  `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`, then
+  `S2_agent_iterated_faceSucc_edge_source_from_input_topology_20260520ae`.
+  Repeated-tail rows are only needed for the actual-boundary/W32 route beyond
+  the direct cycle-row eraser.  Verification: read-only route map.
+
+- Claim: `S2-agent-boundary-sector-w32-route-20260520ag`.
+  Owner: Ampere the 4th (`019e43f6-e4c9-7dc3-a7ee-e919549e7adb`).  Role:
+  route mapper.  Scope: read-only
+  `ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  closed/pruned.  Handoff: shortest route from the unconditional exterior cycle row
+  or raw-orbit source row to the W32 S2 target, including the exact checked
+  no-cut family theorem name.  Result: W32 can consume the family
+  `forall C inputs, UnboundedExteriorFrontierCycleRows C inputs` directly via
+  `minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows`;
+  current S2 steering still prefers the boundary-sector source theorem
+  `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs`
+  because it proves the actual cycle, frontier iff, and local sector rows
+  before erasing to the older cycle-row family.  Use
+  `NoCutPointwiseBridgeW32.minimalFailureNoCutVertexFamily_of_refuting_bothPlusSidesCutForced`
+  or the W34 re-export as the no-cut row.  Verification: read-only route map.
+
+- Claim: `S2-codex-incident-edge-carrier-source-20260520`.
+  Owner: Codex.  Role: local exterior-frontier carrier prover/reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and this
+  workboard only.  Status: checked as historical reducer support.  Result:
+  reduced selected-edge endpoint support to the existing adjacent endpoint
+  interior-closure row plus the local interior-edge carrier theorem.  This is
+  not a live source claim for all adjacent frontier endpoints.  Added
+  `incidentUnboundedFrontierEdgeSource_of_interiorClosure_and_interiorCarrier`,
+  `incidentUnboundedFrontierEdgeSource_of_interiorClosure`,
+  `incidentUnboundedFrontierEdgeSource_of_closedSegmentClosureLocus`, and
+  `incidentUnboundedFrontierEdgeSource_of_endpointClosure`.  These keep the
+  selected edge tied to actual `unboundedFrontierEdgeSet` membership in one
+  orientation, with no induced-frontier, cycle, enclosure, or hull shortcut.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-codex-endpoint-one-sided-closure-source-20260520`.
+  Owner: Codex-aux.  Role: local topology prover/reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and, only for
+  tiny drawing facts if required,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`; this workboard for
+  claim updates.  Status: checked as selected-edge support.  Result: added the
+  primitive actual-edge carrier row
+  `AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource` and the reducer
+  `closedSegmentEndpointClosureSource_of_incidentUnboundedFrontierEdgeSource`,
+  which proves the endpoint one-sided closure source from concrete
+  `unboundedFrontierEdgeSet` membership for a selected edge orientation.  This
+  is reducer support for the real frontier-edge carrier, not an induced-frontier
+  or cycle shortcut, and it must not be used as a source for arbitrary
+  adjacent frontier-endpoint chords.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-codex-raw-orbit-successor-interior-frontier-20260520`.
+  Owner: Codex.  Role: local successor-sector topology prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: checked.  Result: added
+  `UnboundedFrontierCarrierLocalSectorRowsAt.edge_mem_or_symm_of_head_eq`,
+  `UnboundedFrontierCarrierLocalSectorRowsAt.openSegment_frontier_of_head_eq`,
+  `FaceSuccSuccessorLocalSectorRowsSource`,
+  `faceSucc_tail_mem_unboundedFrontierVertexSet_of_openSegment_frontier`,
+  `faceSucc_interior_frontier_point_of_successor_localSectorRows`, and
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource_of_successor_localSectorRows`.
+  This sharply reduces the no-orbit raw successor point source to genuine
+  local-sector rows at the geometric successor tail/head plus the local
+  successor-head sector identification, without actual-boundary rows.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`,
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`,
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+  passed.
+
+- Claim: `S2-main-endpoint-edge-to-closed-segment-closure-20260520z`.
+  Owner: Codex-main.  Role: local endpoint-topology reducer.  Scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` and this
+  workboard.  Status: checked.  Task: prove that the selected
+  endpoint-frontier-edge row supplies
+  `AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource`, then route it
+  through the existing closed-segment relative-open reducer.  This keeps the
+  endpoint source tied to actual `unboundedFrontierEdgeSet` edges, not to an
+  induced frontier graph or a synthetic boundary cycle.  Dynamic subagent
+  attempt `S2-agent-branch-sector-source-20260520z` was rejected by the global
+  agent-thread cap, so this claim was advanced locally.  Added
+  `adjacentFrontierEndpointsClosedSegmentEndpointClosureSource_of_endpointFrontierEdge`
+  and
+  `adjacentFrontierEndpointsClosedSegmentClosureLocusRelativeOpenSource_of_endpointFrontierEdge`.
+  Verification: `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource` and `elan run
+  leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` both pass.  The
+  forbidden-token scan over `ErdosProblems1066` and `ErdosProblems1066.lean`
+  is clean.
+
+- Claim: `S2-main-boundary-cycle-to-no-third-structure`.
+  Owner: Codex-main.  Role: package the already checked boundary-cycle /
+  angular no-third-germ source as the structured
+  `BoundaryFreeNoThirdGermSource` API, without changing the import direction or
+  adding another facade.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean` plus this
+  workboard.  Status: checked.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`,
+  then the serialized pinned root build and forbidden-token scan all passed.
+  Added `BoundaryFreeNoThirdGermSource.ofBoundaryCycleAngularRows`, consuming
+  the existing boundary-cycle / angular no-third-germ theorem through the
+  structured source API.  Fresh dynamic delegation was attempted for an S2
+  source-target explorer, but the global agent-thread cap again rejected the
+  spawn, so this claim was advanced locally.
+
+- Claim: `S2-main-boundaryfree-iterated-edge-family`.
+  Owner: Codex-main.  Role: add the family-level reducer from a structured
+  `BoundaryFreeNoThirdGermSource`, connected carrier, and the narrow
+  `RawOrbitIteratedFaceSuccFrontierEdgeSource` to the S2 finite-plane theorem.
+  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` plus this
+  workboard.  Status: checked.  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`,
+  then the serialized pinned root build and forbidden-token scan all passed.
+  Checked
+  portion already added
+  `finitePlanarStraightLineOuterComponentTheorem_of_connectedIteratedFaceSuccEdgeSource`,
+  `rawOrbitIteratedFaceSuccFrontierEdgeSource_of_successor_interior_frontier_point`,
+  and `rawOrbitIteratedFaceSuccFrontierEdgeSource_of_boundarySectorRows`.
+  A proposed reverse-tail actual-boundary extension was rejected and removed:
+  `BoundaryReverseTailOpenSegmentExteriorSector` is already incompatible with
+  actual boundary-cycle open-segment frontier, via
+  `not_boundaryReverseTailOpenSegmentExteriorSector_of_cycle_edge_openSegment_frontier`.
+  Do not use the reverse-tail sector row as a live S2 source.
+
+- Claim: `S2-main-actual-boundary-raw-source-package-20260520k`.
+  Owner: Codex-main.  Role: reducer integrator.  Scope:
+  `Swanepoel/S2SeededRawOrbitSource.lean` and this workboard only.  Status:
+  closed as dead route; no Lean code retained.  Handoff: the reverse-tail
+  exterior-sector premise cannot be part of an actual-boundary proof, because
+  it implies the no-frontier row for the reverse-oriented open boundary side,
+  while actual boundary rows put every interior point of that same side on the
+  frontier.  Verification gate: the owner module still builds after removal.
+
+- Claim: `S2-main-reverse-tail-orientation-route-repair-20260520ad`.
+  Owner: Codex-main.  Role: integration prover.  Scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`, and this
+  workboard.  Status: checked.  Result: removed the dead dependency on
+  `BoundaryReverseTailOpenSegmentExteriorSector` from the selected-edge
+  orientation route by making
+  `S2_agent_selected_edge_boundary_succ_real_source_20260520ab` consume the
+  live `EdgeLocalRowsBoundaryReverseExcluded` row directly.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+
+- Claim: `S2-main-workboard-active-primitive-sources-20260520ae`.
+  Owner: Codex-main.  Role: coordinator/integration prover.  Scope:
+  `TASK.md`, `S2BoundaryFreeRawSource.lean`, `S2ExteriorBoundarySource.lean`,
+  `S2SeededRawOrbitSource.lean`, and `ExteriorComponentTopology.lean`.
+  Status: checked.  Result: wired the non-circular closed-segment endpoint
+  source into the boundary-free no-third-germ route via
+  `S2_agent_local_sector_endpoint_frontier_input_source_of_closedSegmentClosure_20260520ae`
+  and
+  `S2_boundaryFreeNoThirdGermSource_of_localSectorRows_closedSegmentClosure_20260520ae`,
+  then added
+  `unboundedExteriorFrontierCycleRows_of_localSectorRows_closedSegmentClosure_connected_iteratedFaceSuccEdgeSource`
+  as the current object-level final eraser from primitive local-sector,
+  endpoint-closure, carrier-connectedness, and selected raw successor rows to
+  `UnboundedExteriorFrontierCycleRows`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+
+- Claim: `S2-main-primitive-source-family-assembly-20260520af`.
+  Owner: Codex-main.  Role: integration prover.  Scope:
+  `S2BoundaryFreeRawSource.lean`, `S2SeededRawOrbitSource.lean`,
+  `ExteriorComponentTopology.lean`, and this workboard.  Status: checked.
+  Task: assemble the current non-circular primitive source rows into the
+  strongest object-level and family-level `UnboundedExteriorFrontierCycleRows`
+  erasers, using the new endpoint-closure, carrier-connectedness, and
+  interior-frontier successor-point reductions while keeping the remaining
+  primitives explicit.  Result: `S2SeededRawOrbitSource.lean` now has
+  `unboundedExteriorFrontierCycleRows_of_currentPrimitiveSources_20260520af`
+  and
+  `unboundedExteriorFrontierCycleRows_of_incidentEdgePrimitiveSources_20260520af`,
+  exposing the exact remaining primitive rows without adding another W-layer:
+  local angular source, endpoint or incident-edge endpoint topology,
+  unbounded-frontier component topology, and the selected successor interior
+  frontier point source.  Added the family companions
+  `finitePlanarStraightLineOuterComponentTheorem_of_currentPrimitiveSources_20260520af`
+  and
+  `finitePlanarStraightLineOuterComponentTheorem_of_incidentEdgePrimitiveSources_20260520af`
+  so the same primitive surface can be consumed uniformly across all
+  `FinitePlanarOuterComponentInputs`.  Verification: `elan run
+  leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource` and `elan run
+  leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` both pass; after the
+  family companions were added, the seeded owner build passed again and the
+  forbidden-token scan over `ErdosProblems1066` plus `ErdosProblems1066.lean`
+  returned `clean`.  Fresh
+  dynamic delegation for the successor interior-frontier source was attempted
+  again on 2026-05-20, but the global agent-thread cap rejected the spawn, so
+  no new running subagent was recorded for this claim.
+
+- Claim: `S2-agent-endpoint-closure-source-20260520af`.
+  Owner: subagent-worker.  Role: theorem prover/API finder.  Scope:
+  `Swanepoel/ExteriorComponentTopology.lean` and tiny drawing facts if needed.
+  Status: closed/pruned.  Result: added
+  `AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource` and
+  `closedSegmentEndpointClosureSource_of_incidentUnboundedFrontierEdgeSource`,
+  reducing endpoint closure to the actual incident `unboundedFrontierEdgeSet`
+  carrier row for adjacent exterior-frontier endpoints.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-dyn-20260520-successor-point-source-of-inputs`.
+  Owner: Codex.  Role: theorem prover/source reducer.  Scope:
+  `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: checked.  Task: prove or
+  strictly reduce the `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource
+  inputs` residual feeding
+  `S2_dyn_20260520_local_angular_head_between_source`, without consuming the
+  head-between theorem itself.  Result: added
+  `S2_dyn_20260520_successor_point_source_of_inputs` and family wrapper
+  `S2_dyn_20260520_successor_point_source_family_of_inputs`, reducing the
+  residual to non-circular local-sector rows plus an independently supplied
+  selected Nat-indexed geometric `faceSucc` edge row.  The proof reuses the
+  checked carrier/local-sector midpoint eraser and avoids final boundary-cycle
+  rows, actual-boundary equivalence rows, induced frontier graph rows,
+  arbitrary carrier/cycle rows, synthetic enclosure rows, all-adjacent endpoint
+  shortcuts, and the global orientation-free `FaceSuccFrontierEdgeSource`.
+  Verification: `lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` passes.
+
+- Claim: `S2-dyn-20260520-head-between-compose-selector-successor`.
+  Owner: Codex.  Role: theorem prover/source reducer.  Scope:
+  `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: implementation added;
+  verification blocked by concurrent Lake jobs in the shared workspace.
+  Result: added `S2_dyn_20260520_head_between_compose_selector_successor`, a
+  narrow composition of Linnaeus's
+  `S2_dyn_20260520_successor_point_source_of_inputs` with McClintock's
+  selector-avoidance wrapper over Planck's
+  `S2_dyn_20260520_local_angular_head_between_source`.  The theorem consumes
+  only local-sector rows, the selected Nat-indexed geometric `faceSucc` edge
+  source, the local-angular source, and the explicit selector-avoidance row.
+  Verification attempted with `lake build
+  ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`; repeated attempts hit
+  the workspace's known silent concurrent-Lake `EXIT:-1` failure while other
+  S2 owner builds were active.  Touched-file scan found no new forbidden Lean
+  tokens in the added theorem region.
+
+- Claim: `S2-agent-successor-interior-frontier-point-source-20260520af`.
+  Owner: subagent-worker.  Role: theorem prover/API finder.  Scope:
+  `Swanepoel/S2SeededRawOrbitSource.lean`,
+  `Swanepoel/GeometricRotationSystem.lean`, and
+  `Swanepoel/ExteriorComponentTopology.lean`.  Status: checked.  Task: prove
+  or sharply reduce `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource
+  inputs` from geometric successor/local sector topology.  Result: added
+  `FaceSuccSuccessorLocalSectorRowsSource`,
+  `faceSucc_tail_mem_unboundedFrontierVertexSet_of_openSegment_frontier`,
+  `faceSucc_interior_frontier_point_of_successor_localSectorRows`, and
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource_of_successor_localSectorRows`.
+  The remaining proof obligation is now the honest successor-local-sector row:
+  when the current dart is on the unbounded exterior frontier, the geometric
+  `faceSucc` dart's head must be one of the two actual selected sector heads at
+  its tail.  Verification: the pinned
+  `ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` build passes after the
+  current S2 additions.
+
+- Claim: `S2-agent-component-topology-source-20260520af`.
+  Owner: subagent-worker.  Role: theorem prover/API finder.  Scope:
+  `Swanepoel/ExteriorComponentTopology.lean` and tiny finite-drawing facts if
+  needed.  Status: closed/pruned.  Result: added the strict component-topology
+  reducers
+  `unboundedExteriorFrontierComponentTopologySourceRows_of_edgeChain_frontierEdgeCover`,
+  `unboundedExteriorFrontierComponentTopologySourceRows_of_frontierPreconnectedSourceRows`,
+  and
+  `unboundedExteriorFrontierComponentTopologySourceRows_of_edgeChain_localSectorRows_fixedSide`.
+  These prove `UnboundedExteriorFrontierComponentTopologySourceRows inputs`
+  from the actual selected `unboundedFrontierEdgeSet` segment chain plus a
+  selected-edge cover of the real unbounded exterior frontier, with the
+  local-sector bridge supplying that cover in the fixed-side row.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+  passed.
+
+- Claim: `S2-agent-local-angular-source-20260520af`.
+  Owner: Codex (this session).  Role: theorem prover/API finder.  Scope:
+  `Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `Swanepoel/GeometricRotationSystem.lean`, and
+  `Swanepoel/ExteriorComponentTopology.lean`; this workboard for claim
+  updates.  Status: checked.  Result: added
+  `boundaryFreeGraphVertexAngularNoBetweenRows_of_boundaryVertexAngularNoBetweenRows`,
+  `S2_agent_local_angular_source_of_actualBoundary_thirdGermNoBetween_rows`,
+  and `localSectorRows_of_actualBoundary_boundaryFreeAngularSource_rows`.
+  These choose predecessor/successor actual `unboundedFrontierEdgeSet` edges
+  for each carrier vertex identified with the genuine boundary, translate the
+  boundary angular no-between row to
+  `BoundaryFreeGraphVertexAngularNoBetweenRows`, and transport the
+  third-germ between row into the boundary-free source consumed by
+  `S2_agent_local_sector_family_from_inputs_20260520ae`.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`
+  and
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+  passed.
+
+- Claim: `S2-agent-incident-frontier-edge-source-20260520af`.
+  Owner: subagent-worker.  Role: theorem prover/API finder.  Scope:
+  `Swanepoel/ExteriorComponentTopology.lean` and
+  `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status: corrected/pruned.  The
+  old all-adjacent endpoint incident-edge task is not a sound unconditional
+  source target.  Retained value: reducer support after a selected
+  unbounded-frontier edge has been produced.  Result: added
+  `adjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource_of_interiorFrontierPoint`
+  and
+  `adjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource_of_closedSegmentClosure`,
+  reducing the selected-edge endpoint-support primitive to the existing
+  adjacent-edge interior frontier point source, then to the closed-segment
+  relative-openness source.  This does not use a boundary cycle or induced
+  frontier graph, but it also must not be treated as proving all adjacent
+  frontier chords are exterior edges.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build
+  ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource` passed, and the
+  forbidden-token scan returned `clean`.
+
+- Claim: `S2-agent-closed-segment-closure-relative-open-source-20260520ae`.
+  Owner: subagent-worker.  Role: theorem prover.  Scope:
+  `Swanepoel/ExteriorComponentTopology.lean` and, only for tiny drawing facts,
+  `Swanepoel/FinitePlaneDrawing.lean`.  Status: closed/pruned as historical
+  reducer support.  Result: added
+  `AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource`,
+  `AdjacentFrontierEndpointsClosedSegmentClosureLocusRelativeOpenSource_of_endpointClosure`,
+  and
+  `S2_agent_closed_segment_closure_relative_open_source_20260520ae`,
+  reducing closed-segment relative-openness to the genuinely endpoint
+  one-sided closure source.  This is not a live unconditional source target;
+  selected carrier/orbit construction remains the endpoint-producing task.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+
+- Claim: `S2-agent-repeated-boundary-real-witness-primitive-source-20260520ae`.
+  Owner: subagent-worker.  Role: theorem prover.  Scope:
+  `Swanepoel/S2ExteriorBoundarySource.lean` and, only for primitive graph/path
+  helpers, `Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  closed/pruned.  Result: added
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveRows`,
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveRows.toRealWitnessSourceRows`,
+  `S2_agent_repeated_boundary_real_witness_primitive_source_20260520ae`,
+  `S2_repeatedTailExteriorCutWitnessSource_of_realWitnessPrimitiveSource_20260520ae`,
+  and
+  `S2_repeatedTailExteriorCutRows_input_source_of_realWitnessPrimitiveSource_20260520ae`,
+  reducing the repeated-tail cut-row callback to the primitive witness rows.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+
+- Claim: `S2-agent-local-sector-family-from-inputs-20260520ae`.
+  Owner: subagent-worker.  Role: theorem prover/API finder.  Scope:
+  `Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `Swanepoel/ExteriorComponentTopology.lean`, and
+  `Swanepoel/GeometricRotationSystem.lean`.  Status: closed/pruned.  Result:
+  added `BoundaryFreeGraphVertexAngularBetween`,
+  `BoundaryFreeGraphVertexAngularNoBetweenRows`, and
+  `S2_agent_local_sector_family_from_inputs_20260520ae`, proving the exact
+  pointwise local-sector family from a strictly local input-only angular row at
+  each unbounded-frontier carrier vertex.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`,
+  plus the owner checks for `ExteriorComponentTopology.lean` and
+  `GeometricRotationSystem.lean`.
+
+- Claim: `S2-agent-carrier-connected-from-unbounded-frontier-topology-20260520ae`.
+  Owner: subagent-worker.  Role: theorem prover/API finder.  Scope:
+  `Swanepoel/ExteriorComponentTopology.lean` and, only for integration,
+  `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed/pruned.  Result:
+  added `UnboundedExteriorFrontierComponentTopologySourceRows`,
+  `unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows`,
+  and
+  `S2_agent_carrier_connected_from_unbounded_frontier_topology_20260520ae`,
+  reducing carrier connectedness to an explicit unbounded-frontier component
+  topology source row without using a completed exterior cycle row.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.
+
+- Claim: `S2-agent-iterated-faceSucc-edge-source-from-input-topology-20260520ae`.
+  Owner: subagent-worker.  Role: theorem prover/API finder.  Scope:
+  `Swanepoel/S2SeededRawOrbitSource.lean`,
+  `Swanepoel/GeometricRotationSystem.lean`, and
+  `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.  Result:
+  added `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource`,
+  `rawOrbitIteratedFaceSuccInteriorFrontierPointSource_of_noOrbitSource`,
+  `rawOrbitIteratedFaceSuccFrontierEdgeSource_of_iteratedFaceSuccInteriorFrontierPointSource`,
+  `S2_agent_iterated_faceSucc_edge_source_from_input_topology_20260520ae`,
+  and
+  `unboundedExteriorFrontierCycleRows_of_localSectorRows_closedSegmentClosure_connected_iteratedFaceSuccInteriorPointNoOrbitSource`,
+  reducing the selected raw face-successor edge source to an interior-frontier
+  point source for each geometric successor edge.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+
+- Claim: `S2-main-selected-orientation-source-no-reverse-tail-20260520l`.
+  Owner: Codex-main.  Role: theorem prover.  Scope:
+  `Swanepoel/S2SeededRawOrbitSource.lean`,
+  `Swanepoel/ExteriorComponentTopology.lean`, and this workboard.  Status:
+  checked.  Handoff: replaced the dead reverse-tail raw-source path with
+  `rawOrbitCoverageSourceRows_of_actualBoundaryRows_sectorRows_seed`, which
+  uses the selected exterior seed, the boundary-oriented start equality, sector
+  rows, and actual boundary-cycle frontier equivalence to build raw-orbit
+  coverage directly.  Added the family reducer
+  `finitePlanarStraightLineOuterComponentTheorem_of_actualBoundaryRows_sectorRows_localSource`.
+  Verification gate: owner module, serialized pinned root build, and
+  forbidden-token scan all passed.
+
+- Claim: `S2-main-boundary-free-endpoint-from-no-third`.
+  Owner: Codex-main.  Role: prove the endpoint-incident eraser from
+  `BoundaryFreeNoThirdGermSource` inside
+  `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, keeping repeated
+  tail and raw-orbit source work in their existing owner files.  Write scope:
+  `S2BoundaryFreeRawSource.lean` plus this workboard.  Status: checked.
+  Verification gate:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`
+  passed.  Added
+  `BoundaryFreeNoThirdGermSource.toEndpointIncidentSourceRows` and its
+  nonempty wrapper, using a frontier endpoint itself as the noncenter incident
+  germ point.  Follow-up seeded-source cleanup added
+  `BoundaryFreeConnectedRawOrbitSourceRows.toEndpointIncidentConnectedRawOrbitSourceRows`
+  and
+  `boundaryFreeConnectedIteratedStepRows_nonempty_of_iteratedFaceSucc`, and
+  repaired the endpoint iterated-face-successor family surface so endpoint
+  rows are no longer placed directly inside a Prop conjunction.  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`
+  passed.
+  Dynamic delegation attempts for disjoint S2 repeated-tail and seeded-raw-orbit
+  tasks were rejected by the global agent-thread cap, so no new subagent claims
+  were opened from this pass.
+
+- [ ] Prove the input-facing boundary-sector source theorem.
+  - Treat S2 as a specialized finite straight-line plane-graph theorem, not as
+    a generic planar-graph theorem and not as another adapter.
+  - External theorem to prove, preferably in
+    `Swanepoel/S2ExteriorBoundarySource.lean` or a logically named non-W
+    owner file:
+    ```lean
+    theorem S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs
+        {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C) :
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v âˆˆ
+              frontier (unboundedExteriorComponentRows C inputs).exterior â†”
+                Exists fun k : Fin B.length => B.vertex k = v) âˆ§
+          forall k : Fin B.length,
+            BoundaryVertexExteriorSectorRowsAt inputs B k
+    ```
+  - Current narrow checked reducer:
+    `S2SeededRawOrbitSource.unboundedExteriorFrontierCycleRows_of_connectedIteratedFaceSuccEdgeSource`.
+    It constructs the row-level target from exactly three source families:
+    `BoundaryFreeNoThirdGermSource inputs`, connectedness of
+    `unboundedFrontierCarrierGraph C inputs`, and
+    `RawOrbitIteratedFaceSuccFrontierEdgeSource inputs`.
+    The theorem-level eraser
+    `S2SeededRawOrbitSource.finitePlanarStraightLineOuterComponentTheorem_of_connectedIteratedFaceSuccEdgeSource`
+    is downstream of that row construction.
+  - Design decision: prove the theorem orbit-first internally, expose the
+    boundary-sector theorem externally.  The internal route is:
+    `FinitePlanarOuterComponentInputs C` -> actual unbounded exterior component
+    -> actual frontier edge carrier -> local two-germ/no-third rows -> selected
+    geometric raw face-successor orbit -> raw orbit traces the unbounded
+    exterior frontier -> repeated tail gives a cut partition, so no-cut gives
+    injective tail sequence -> `UnitDistanceCycleBoundary B` -> frontier
+    vertices exactly `B.vertices` -> `BoundaryVertexExteriorSectorRowsAt` at
+    every boundary vertex.
+  - Immediate consumer:
+    `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows`.
+    This is the S2 Definition of Done for the source theorem.  The
+    `UnboundedExteriorFrontierCycleRows C inputs` route remains checked support
+    and may be used internally, but it is not the external workboard target.
   - Paper steps: `E8-E11`, the paper jump from a 2-connected finite planar
     straight-line graph to a simple outer boundary polygon, expressed as an
     actual unbounded-exterior frontier cycle.
+  - Csizmadia boundary-walk source note: Swanepoel invokes the simple boundary
+    polygon as a standard planar-graph fact, while Csizmadia explicitly
+    describes the useful constructive model: choose a lowest exterior seed,
+    rotate a downward ray to the first neighbour, then repeatedly rotate the
+    current boundary segment at its head to the next angular neighbour until a
+    previous vertex is encountered.  For S2, use this rotating angular walk as
+    the source model for the selected exterior face orbit.
+  - Do not import full Csizmadia into S2.  Csizmadia's `9 / 35` local deletion,
+    reducible local configurations, regular/irregular degree-3 machinery,
+    neutral/positive/negative block decomposition, adjacent-block case split,
+    Case A/B selected sets, Figure 4-7 analytic inequalities, and final
+    nine-point neighbour-counting proof are separate from Swanepoel S2.  They
+    remain Csizmadia formalization work, not prerequisites for the S2 outer
+    boundary theorem.
   - Source input:
     `JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs C`.
-  - Desired theorem:
-    an input-only theorem producing
-    `ExteriorComponentTopology.ActualBoundaryCycleFrontierEquivalenceRows C inputs`,
-    or directly producing
-    `ExteriorComponentTopology.UnboundedExteriorFrontierCycleRows C inputs`,
-    with only `C` and `inputs` as source parameters.
-  - Final S2 target:
-    `ExteriorComponentTopology.UnboundedExteriorFrontierCycleRows C inputs`,
-    then `JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarStraightLineOuterComponentTheorem`,
-    then `FaceBoundaryTopologySourceW32.MinimalFailureExactActualTopologyFieldsTarget`.
-  - Checked reducer path:
-    `ActualBoundaryCycleFrontierEquivalenceRows C inputs` erases directly via
-    `unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows`.
-    The carrier route through `FaceDartOrbitExteriorCarrierRows` and
-    `ExteriorFrontierCarrierRows` remains a checked support path, but it is a
-    consumer path; it does not construct the exterior cycle or prove outerness.
-  - Current concrete blockers, in order:
-    1. Construct the actual exterior boundary cycle
-       `B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C`.
-    2. Prove graph vertices on the unbounded exterior frontier iff they are
-       boundary-cycle vertices of `B`.
-    3. Prove every boundary-cycle edge has its open segment on the unbounded
-       exterior frontier.
-    4. Package these rows as
-       `ActualBoundaryCycleFrontierEquivalenceRows C inputs` and erase to
-       `UnboundedExteriorFrontierCycleRows C inputs`.
-    5. If using the carrier/geometric support path, additionally prove
-       `GeometricBoundarySuccessorRows` and
-       `BoundaryCycleIncidentFrontierEdgeCompleteness`.
+  - Final S2 routing after the source theorem:
+    `boundaryVertexExteriorSectorRows_of_inputs`
+    -> `finitePlanarStraightLineOuterComponentTheorem_of_boundaryVertexExteriorSectorRows`
+    -> `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows`.
   - Checked groundwork: local edge isolation, local vertex-star isolation,
     x-axis unbounded-component seed rows, concrete geometric rotation by
     `Complex.arg`, frontier vertex/edge carriers, endpoint closure, carrier
     adjacency projection, raw face-successor orbit adapters, repeated-boundary
     no-cut helper rows, and closure-to-open-segment frontier propagation.
-  - Carrier honesty requirement: the carrier graph must use actual exterior
-    boundary edges of `unboundedExteriorComponentRows C inputs`, not the
-    induced graph on all frontier vertices and not an arbitrary two-regular
-    chord cycle.  Each carrier edge must have its open segment on the unbounded
-    exterior frontier.
   - Do not use synthetic enclosure rows such as `insideOrOn := fun _ => True`,
     convex-hull vertices, the canonical/girth cycle unless it is proved outer,
-    identity cyclic-order rows as geometry, or any numbered compatibility layer
-    as the live method.
+    the induced graph on all frontier vertices, arbitrary two-regular chord
+    cycles, identity cyclic-order rows as geometry, the whole drawing
+    complement as the exterior component, older strong repeated-arc rows unless
+    their strong fields are actually proved, or any numbered compatibility
+    layer as the live method.
+  - Use only `unboundedExteriorComponentRows C inputs` as the exterior
+    component.  Do not rebuild drawing compactness, complement openness,
+    graph-vertex drawing membership, or the unbounded x-axis seed rows.
   - Completion gate: the source theorem is imported by
     `ErdosProblems1066.lean`, targeted owner-file builds pass, the pinned root
     build passes, the forbidden-token scan is clean, and this item is checked
     only after those gates.
+
+S2 concrete task split:
+  - [ ] S2-A0. Csizmadia-style rotating exterior angular walk source.
+    - Owner files: `Swanepoel/GeometricRotationSystem.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`, and
+      `Swanepoel/ExteriorComponentTopology.lean`.
+    - Deliverables:
+      ```lean
+      theorem exists_exterior_seed_dart_of_inputs
+          {n : Nat} (C : _root_.UDConfig n)
+          (inputs : FinitePlanarOuterComponentInputs C) :
+          Nonempty (ExteriorSeedDart C inputs)
+
+      theorem rotating_successor_walk_traces_unbounded_frontier
+          {n : Nat} (C : _root_.UDConfig n)
+          (inputs : FinitePlanarOuterComponentInputs C)
+          (seed : ExteriorSeedDart C inputs) :
+          Nonempty (ExteriorAngularWalkRows C inputs)
+      ```
+      or the current equivalent raw-face-successor orbit/source-row types.
+    - Proof model: lowest/exterior seed dart, genuine geometric angular
+      successor, selected raw face-successor orbit, open-segment frontier
+      tracing, and graph-frontier tail coverage for the unbounded exterior
+      component.
+    - Do not use the full Csizmadia local-deletion/block/case-analysis proof,
+      a convex hull, the induced frontier graph, a random/girth unit cycle, a
+      synthetic enclosure, or all-adjacent endpoint rows.
+  - [x] S2-A. Exterior edge source.
+    - Owner files: `Swanepoel/FinitePlaneDrawing.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`.
+    - Deliverable: a theorem equivalent to
+      `unbounded_frontier_edge_rows_of_frontier_edge_point`, proving that an
+      edge with one interior point on the unbounded exterior frontier has its
+      whole open segment on that frontier.
+    - Checked source:
+      `interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point`
+      plus `unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition`.
+      Direct wrappers include
+      `edge_openSegment_frontier_of_inOpenSegment_frontier_and_relative_ball_closure`
+      and
+      `mem_unboundedFrontierEdgeSet_of_inOpenSegment_frontier_and_nearby_edge_point_exterior_points`.
+      Current gates: root build and forbidden-token scan passed on 2026-05-20
+      after the S2 source imports and W32 endpoint consumer repair.
+    - Do not reprove compactness, closedness, complement openness, or graph
+      vertex membership in the drawing.
+  - [ ] S2-B. Boundary-free local two-germ/no-third source.
+    - Owner files: `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/GeometricRotationSystem.lean`.
+    - Deliverable:
+      `Nonempty (ExteriorComponentTopology.BoundaryFreeNoThirdGermSource inputs)`,
+      equivalently a pointwise two-selected-edge/no-third-germ source for
+      every graph vertex on the unbounded exterior frontier.
+    - Proof shape: finite vertex-star isolation + genuine geometric angular
+      order + exterior sector lies in one angular gap + predecessor/successor
+      edges bound that gap + no third incident frontier germ lies there.
+  - [ ] S2-C. Selected exterior raw orbit and edge-frontier propagation.
+    - Owner files: `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`.
+    - Deliverable: select `start : UnitDistanceDart C` from
+      `UnboundedExteriorFrontierSeed`, construct the corresponding geometric
+      `RawFaceSuccOrbit`, and prove `RawOrbitIteratedFaceSuccFrontierEdgeSource`
+      / dart-edge open-segment frontier rows for that selected orbit.
+  - [ ] S2-D. Carrier connectedness.
+    - Owner files: `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.
+    - Deliverable: prove `(unboundedFrontierCarrierGraph C inputs).Connected`.
+      Current checked routes reduce this to a genuine exterior carrier,
+      frontier preconnectedness plus frontier-edge cover, or cyclic raw-orbit
+      coverage; use the route that closes the source row without cycling
+      through the target boundary cycle.
+  - [ ] S2-E. Repeated-tail separation.
+    - Owner file: `Swanepoel/S2ExteriorBoundarySource.lean`.
+    - Deliverable:
+      `forall {i j : Fin O.period}, i != j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailExteriorCutRows (inputs := inputs) O i j`.
+    - Use the minimal repeated-tail cut row: witnesses on the two cyclic open
+      arcs plus unreachable-after-delete.  Do not switch back to the older
+      stronger arc-coverage row unless all of its fields are actually proved.
+    - Checked reducer: `RawFaceSuccOrbitRepeatedTailExteriorCutRows.toCutVertexPartition`
+      now erases the minimal unreachable-after-delete row directly to
+      `CutVertexInterface.CutVertexPartition`, and
+      `rawFaceSuccOrbit_tail_ne_of_repeatedTailExteriorCutRows` proves the
+      corresponding no-cut nonrepeat theorem.  Targeted check:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+  - [ ] S2-F. Raw orbit to actual boundary cycle.
+    - Owner files: `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.
+    - Deliverable:
+      `ActualBoundaryCycleFrontierEquivalenceRows C inputs`, using the
+      raw-orbit source package and no-cut injectivity reducers.
+  - [ ] S2-G. Boundary exterior-sector rows.
+    - Owner file: `Swanepoel/S2ExteriorBoundarySource.lean`.
+    - Deliverable:
+      `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs`.
+    - Use the actual `B`, frontier equivalence, cycle-edge open-segment
+      frontier, genuine angular rows, and local exterior-sector rows.
+  - [ ] S2-H. W32 routing.
+    - Owner file: `Swanepoel/FaceBoundaryTopologySourceW32.lean` or a small
+      final S2 routing file only if it gives a real import-boundary advantage.
+    - Deliverable:
+      `FaceBoundaryTopologySourceW32.MinimalFailureExactActualTopologyFieldsTarget`
+      by short composition from S2-G and the checked S1 no-cut family.
 
 S2 dynamic assignments:
   - Owner slots, not live claim entries:
@@ -177,20 +12109,20 @@ S2 dynamic assignments:
       `BoundaryCycleIncidentFrontierEdgeCompleteness`.  Status: claimed by
       `S2-exterior-boundary-cycle-source` / Codex-main.  The bad-incident
       repeated-separation source row is closed; any remaining incident-edge
-      work is covered by the active `S2-agent-actual-boundary-cycle-source`
-      and `S2-agent-edgeRows-boundary-succ-source` claims.  Scope:
+      work is part of the active raw-orbit/source-package route.  Scope:
       `Swanepoel/ExteriorComponentTopology.lean`.
       Next verification: owner-file Lean build.
-    - Owner slot: `S2-input-only-carrier-assembly`.  Role: assemble the source
-      rows into `ExteriorComponentTopology.exteriorFrontierCarrierRows_of_inputs`,
-      `UnboundedExteriorFrontierCycleRows C inputs`, and the W32 exact topology
-      target.  Status: claimed by `S2-exterior-boundary-cycle-source` /
+    - Owner slot: `S2-input-only-boundary-sector-assembly`.  Role: assemble
+      the orbit-first source rows into
+      `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs`
+      and then the W32 exact topology target.  Status: claimed by
+      `S2-exterior-boundary-cycle-source` /
       Codex-main, blocked only on the source rows.  Scope:
-      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`,
       `Swanepoel/FaceBoundaryTopologySourceW32.lean`, and root imports only
       after the source theorem closes.  Next verification: owner-file Lean
       builds before any root build.
-  - Active claimed tasks (refreshed 2026-05-19, S2 only):
+  - Active claimed tasks (refreshed 2026-05-20, S2 only):
     Only the `Claim:` entries in this refreshed block are active live claims.
     Older entries below are retained as history and must not be treated as
     live claims.
@@ -212,23 +12144,2568 @@ S2 dynamic assignments:
     superseded history with result, verification, and any remaining theorem
     names.  If a claim is abandoned or replaced, mark that explicitly instead
     of leaving a stale owner slot.
+    Current live refresh 2026-05-20 after pruning completed workers: the
+    following six claims are the active dynamic subagent dispatch set.  They
+    supersede older overlapping active entries in this refreshed block until
+    their worker ids are closed and the result is recorded.
+    - Claim: `S2-agent-crossing-subcontinuum-source-20260520c`.
+      Owner: Anscombe the 3rd (`019e477d-0c0c-7922-a72f-c3ecb7fed4d1`,
+      worker).  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and route notes only after a
+      checked proof or strict reduction.  Status: active in fork.
+      Handoff: prove or strictly reduce
+      `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum`.
+      Next gate: pinned owner-file build for `ExteriorComponentTopology`.
+    - Claim: `S2-agent-boundaryfree-connected-raw-orbit-source-20260520c`.
+      Owner: Beauvoir the 3rd (`019e477d-0c5c-7f31-a086-55178b4b8bbc`,
+      worker).  Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and route notes only after a
+      checked proof or strict reduction.  Status: active in fork.
+      Handoff: prove or strictly reduce `BoundaryFreeConnectedRawOrbitSourceRows
+      inputs` from input-level exterior-boundary/local-sector rows without
+      all-adjacent endpoint assumptions.  Next gate: pinned builds for both
+      scoped owner files.
+    - Claim: `S2-agent-left-pred-head-match-source-20260520c`.
+      Owner: Kant the 3rd (`019e477d-0cba-7161-9c65-ad3463c4591f`,
+      worker).  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and route notes only after a
+      checked proof or strict reduction.  Status: active in fork.
+      Handoff: prove or strictly reduce `SelectedRawOrbitLeftPredHeadMatchSource`
+      for the selected heads and raw-tail package.  Next gate: pinned owner-file
+      build for `S2SeededRawOrbitSource`.
+    - Claim: `S2-agent-geometric-successor-nonwrap-source-20260520c`.
+      Owner: Archimedes the 3rd (`019e477d-0d17-7d11-b961-a95ed1109528`,
+      worker).  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/GeometricRotationSystem.lean`, and route notes only after a
+      checked proof or strict reduction.  Status: active in fork.
+      Handoff: prove or strictly reduce
+      `SelectedRawOrbitGeometricSuccessorNonwrapRows` from actual `faceSucc`
+      and `geometricOutgoingDartList` data.  Next gate: pinned builds for both
+      scoped owner files.
+    - Claim: `S2-agent-selected-cutpartition-source-20260520c`.
+      Owner: Averroes the 3rd (`019e477d-0d73-7341-801e-0a0e4ca2af55`,
+      worker).  Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, and route notes only after a
+      checked proof or strict reduction.  Status: completed/pruned
+      2026-05-20.  Result: added
+      `S2_agent_selected_cutpartition_source_20260520c_of_neighborPairRows`,
+      `S2_agent_selected_cutpartition_source_20260520c_of_actualCarrierDegreeTwo`,
+      `S2_agent_selected_cutpartition_source_20260520c_of_localTwoGermRows`,
+      and
+      `S2_agent_selected_cutpartition_source_20260520c_of_localSelectedNoThirdGermSource`.
+      Remaining exact source surfaces are actual carrier degree two, neighbour
+      pair rows, local two-germ rows, or strict local no-third-germ rows.  Gate
+      passed: pinned `S2LocalTwoGermAssembly.lean` replay and focused scan.
+    - Claim: `S2-agent-current-final-composer-20260520c`.
+      Owner: Ptolemy the 3rd (`019e477d-0dd1-7e83-a69e-55d7acc72559`,
+      worker).  Role: reducer integrator.  Scope:
+      `Swanepoel/FaceBoundaryTopologySourceW32.lean`, this workboard, and
+      `proof_workings/s2_route_workbook.md`; read-only sources were consumed
+      only as APIs.  Status: completed/pruned 2026-05-20.  Result: added
+      `minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedIncidentEdgeRows_connectedRawOrbit_leftPred_geometricSuccessorNonwrap_20260520b`,
+      the current W32 S2 consumer that composes the 20260520b selected
+      raw-tail reducer, one-sided selected-head/raw predecessor reducer, and
+      geometric-successor nonwrap orientation reducer.  Remaining explicit
+      leaves: component avoidance, actual selected incident-edge rows,
+      boundary-free connected raw-orbit rows, one-sided left-predecessor
+      head-match rows, selected raw geometric successor nonwrap rows, and S1
+      no-cut rows.  Gate passed:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`;
+      forbidden-token scan clean on the touched Lean owner file.
+    - Claim: `S2-agent-selected-incident-edge-source-20260520c`.
+      Owner: pending subagent.  Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean` and route notes only after a
+      checked proof or strict reduction.  Status: claimed/pending spawn.
+      Handoff: prove or strictly reduce `LocalSelectedIncidentEdgePairSourceRows
+      inputs` from actual local-sector/neighbor-pair rows, preserving selected
+      `unboundedFrontierEdgeSet` incidences and avoiding all-adjacent endpoint
+      sources.  Next gate: pinned owner-file build for
+      `S2LocalTwoGermAssembly`.
+    - Claim: `S2-agent-final-topology-handoff-from-crossing-20260520c`.
+      Owner: pending subagent.  Role: reducer integrator.  Scope:
+      `Swanepoel/FaceBoundaryTopologySourceW32.lean` and route notes only after
+      a checked proof or strict reduction; topology source files are read-only.
+      Status: claimed/pending spawn.  Handoff: compose the new final selected
+      raw-orbit W32 consumer with the existing crossing-subcontinuum topology
+      reducers, leaving only the crossing-subcontinuum theorem and local/raw
+      source leaves explicit.  Next gate: pinned owner-file build for
+      `FaceBoundaryTopologySourceW32`.
+    - Claim: `S2-main-safe-selected-neighbor-cycle-composer-20260520`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/FaceBoundaryTopologySourceW32.lean`,
+      `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+      active.  Handoff: route selected geometric-neighbour rows through the
+      local-radius incident-germ theorem into local sector rows, then into the
+      existing edge-chain/cycle-row consumers without all-adjacent endpoint
+      assumptions.  Next gate: targeted builds for `S2LocalTwoGermAssembly`,
+      `S2SeededRawOrbitSource`, and any touched W32 owner file.
+    - Claim: `S2-agent-cw-boundaryfree-from-deleted-neighbor`.
+      Owner: Codex.  Role: reducer integrator.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, and this workboard only;
+      read-only `Swanepoel/ExteriorComponentTopology.lean`.  Status:
+      partially checked / blocked upstream.  Result: added the CW local-sector
+      composition in `S2LocalTwoGermAssembly` and the boundary-free-to-deleted
+      neighbour erasers in `S2BoundaryFreeRawSource`, without adjacent-endpoint
+      incident/closure false-source rows, actual/final boundary-cycle rows,
+      selected successor rows, induced frontier graphs, arbitrary cycles, or
+      synthetic enclosure.  Verification: pinned `S2LocalTwoGermAssembly`
+      build passed and touched owner-file forbidden scan returned `clean`;
+      pinned `S2BoundaryFreeRawSource` is blocked before this file by the
+      out-of-scope `S2ExteriorBoundarySource.lean` unknown identifiers
+      `S2RepeatedTailExteriorCutWitnessSource` and
+      `S2_repeatedBoundarySeparationRows_of_deletedTailWitness`.
+    - Claim: `S2-main-dependent-selected-neighbor-source-20260520`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/FinitePlaneDrawing.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `proof_workings/s2_route_workbook.md`, and this workboard.  Status:
+      active.  Handoff: prove the dependent source
+      `SelectedNeighborCutPartitionGeometricOrderSource` from
+      `FinitePlanarOuterComponentInputs C`, producing selected carrier
+      neighbours and their genuine sorted outgoing-dart order together.  Next
+      gate: targeted owner-file build for `S2LocalTwoGermAssembly`.
+    - Claim: `S2-agent-dependent-selected-neighbor-source-20260520`.
+      Owner: subagent-worker `019e45d0-bfff-7ce2-a089-adc30695abe0`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean`, with tiny support in
+      `Swanepoel/ExteriorComponentTopology.lean` only if needed.  Status:
+      active in fork.  Handoff: prove or strictly reduce
+      `SelectedNeighborCutPartitionGeometricOrderSource (C := C) inputs`
+      from `FinitePlanarOuterComponentInputs C`.  Next gate: worker reports
+      changed files and targeted build result.
+    - Claim: `S2-agent-janiszewski-boundary-bumping-20260520`.
+      Owner: subagent-worker `019e45d0-d0ca-7090-9d22-b6f04e6bec36`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/FinitePlaneDrawing.lean`.  Status: active in fork.  Handoff:
+      prove or strictly reduce
+      `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`.
+      Next gate: worker reports changed files and targeted build result.
+    - Claim: `S2-agent-selected-neighbor-existing-api-scout-20260520`.
+      Owner: subagent-explorer `019e45d0-e181-7301-b143-e7fa399ad81e`.
+      Role: route mapper.  Scope: read-only
+      `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: active.  Handoff:
+      exact existing theorem names/signatures for producing selected-neighbour
+      cut/geometric-order rows from actual boundary/local sector/raw orbit
+      rows.  Next gate: no build; close when the route handoff returns.
+    - Closed read-only claim `S2-agent-seeded-composer-scout-20260520`.
+      Result: confirmed the shortest checked route and the direct
+      local-incident composer shape.  Consumed by Codex-main as
+      `unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_selectedNeighborGeometricOrder_localIncident_20260520`
+      and its nontrivial-relative-clopen companion.  Verification:
+      `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` passed.
+    - Closed read-only claim `S2-agent-selected-neighbor-source-scout-20260520`.
+      Result: identified the next source theorem as the dependent pair
+      `SelectedNeighborCutPartitionGeometricOrderSource`; unsafe all-adjacent
+      endpoint/chord rows remain off the live path.  Consumed by Codex-main in
+      `S2-main-dependent-selected-neighbor-source-20260520`.
+    - Closed read-only claim `S2-agent-finite-topology-source-scout-20260520`.
+      Result: no mathlib theorem directly closes the Janiszewski/boundary-
+      bumping residual; the existing local reducer chain from
+      `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`
+      to the finite-drawing nontrivial relative-clopen source is the current
+      topology route.
+    - Claim: `S2-agent-local-angular-source-input-20260520ak`.
+      Owner: subagent-explorer `019e440e-7450-79b3-a3b6-dbd90c88ae3c`.
+      Role: source-row verifier.
+      Scope: read-only `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2LocalTwoGermAssembly.lean`, and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: closed/pruned.
+      Result: no shorter input-only angular source was found; the checked
+      route is actual boundary rows plus cycle-edge membership, angular rows,
+      and a local exterior-sector/no-third-germ row.  Consumed by Codex-main
+      as `BoundaryFreeNoThirdGermSource.ofBoundaryCycleAngularRows_localExteriorSector`.
+    - Claim: `S2-agent-component-topology-source-input-20260520ak`.
+      Owner: subagent-explorer `019e440e-866f-7080-a4d1-61301d53a8f2`.
+      Role: source-row verifier.
+      Scope: read-only `Swanepoel/FinitePlaneDrawing.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: closed/pruned.
+      Result: the shortest current route is still the two-residual component
+      topology source, namely
+      `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` plus
+      `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs`, consumed
+      by `unboundedExteriorFrontierComponentTopologySourceRows_of_inputs`.
+    - Claim: `S2-agent-faceSucc-frontier-edge-source-input-20260520ak`.
+      Owner: subagent-explorer `019e440e-9817-78f2-96ba-b3b22600371f`.
+      Role: source-row verifier.
+      Scope: read-only `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: closed/pruned.
+      Result: target the selected
+      `RawOrbitIteratedFaceSuccFrontierEdgeSource` rather than the global
+      face-successor source; Codex-main consumed this as
+      `rawOrbitIteratedFaceSuccFrontierEdgeSource_of_actualBoundaryRows_sectorRows_orientation`.
+    - Claim: `S2-agent-endpoint-closure-source-input-20260520ak`.
+      Owner: subagent-explorer `019e440e-ad5a-7f53-aa8d-14b1f0643a93`.
+      Role: source-row verifier.
+      Scope: read-only `Swanepoel/FinitePlaneDrawing.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, and
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: closed/pruned.
+      Result: source the endpoint row from actual boundary rows plus
+      `BoundaryFrontierEndpointIncidentOnlyPredSucc`; Codex-main consumed this
+      as
+      `adjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource_of_actualBoundaryRows_endpointIncidentOnly`
+      and
+      `closedSegmentEndpointClosureSource_of_actualBoundaryRows_endpointIncidentOnly`.
+    - Claim: `S2-main-current-source-integration-20260520am`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and this workboard.  Status:
+      active; current split subtask is the topology-owner handoff from
+      edge-chain plus neighbour-pair rows to
+      `UnboundedExteriorFrontierComponentTopologySourceRows`, followed by the
+      boundary-free source-owner projection.  Status of this subtask: checked;
+      it added
+      `unboundedExteriorFrontierComponentTopologySourceRows_of_edgeChain_neighborPairRows`,
+      `unboundedFrontierCarrierGraph_connected_of_edgeChain_neighborPairRows`,
+      `BoundaryFreeNoThirdGermSource.toFrontierVertexIncidentSource`,
+      `BoundaryFreeNoThirdGermSource.toComponentTopologyRowsFromEdgeChain`,
+      and `RawOrbitCoverageSourceRows.toComponentTopologyRows`.  Handoff:
+      continue into the first remaining input-level source theorem rather than
+      adding another facade.  Next gate: claim the next S2 source theorem with
+      a narrower writable scope before editing.
+    - Claim: `S2-agent-current-residual-minimizer-20260520am`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and
+      `Swanepoel/FinitePlaneDrawing.lean`.  Status: closed/pruned.  Result:
+      smallest non-circular endpoint theorem is
+      `AdjacentFrontierEndpointsInteriorClosurePointSource C inputs`, with
+      local subtarget
+      `AdjacentFrontierEndpointsLocalComponentIntervalClosureSource C inputs`.
+      The current S2 primitive theorem still reduces to local angular,
+      adjacent-endpoint incident/closure, component-topology, and selected
+      raw-face-successor edge sources; avoid another consumer bridge.
+    - Claim: `S2-agent-component-carrier-proof-step-20260520am`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` only.  Status:
+      closed/pruned.  Result: added
+      `S2_agent_component_carrier_proof_step_20260520am`, proving
+      `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs` from the
+      pointwise family
+      `forall a, UnboundedFrontierCarrierLocalSectorRowsAt inputs a`.
+      Remaining source: prove that pointwise local-sector family from bare
+      `FinitePlanarOuterComponentInputs C`; the full component-carrier route
+      still also needs `UnboundedFrontierEdgeCarrierSegmentChainConnected
+      inputs`.  Verification:
+      `lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+      passed.
+    - Claim: `S2-agent-selected-orbit-proof-step-20260520am`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` only.  Status: closed/pruned.
+      Result: added `S2_agent_selected_orbit_proof_step_20260520am`, proving
+      `RawOrbitIteratedFaceSuccFrontierEdgeSource inputs` from actual-boundary
+      rows, `BoundaryFreeNoThirdGermSource`, geometric boundary
+      `faceSuccRows`, boundary orientation, and `not_reverse`.  Verification:
+      `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource` passed.
+    - Claim: `S2-agent-adjacent-endpoint-interior-source-20260520an`.
+      Owner: subagent-worker `019e441b-a5ce-7441-bf87-fb2d6be33459` /
+      Mencius the 4th.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` only.  Status:
+      closed/pruned.  Result: added
+      `selectedUnboundedFrontierEdge_interiorClosurePoint` and
+      `S2_agent_adjacent_endpoint_interior_source_20260520an`, deriving the
+      adjacent interior-closure row safely from the selected incident-edge
+      source.  The arbitrary adjacent-frontier-endpoint source is overstrong
+      because boundary chords can have exterior-frontier endpoints without
+      being exterior boundary edges.  Verification:
+      `lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+      passed.
+    - Claim: `S2-agent-pointwise-local-sector-source-20260520an`.
+      Owner: subagent-worker `019e441b-a621-70f2-b723-e2b347a8f76b` /
+      Kant the 4th.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed/pruned.
+      Result: added `S2_agent_pointwise_local_sector_source_20260520an`,
+      proving the pointwise local-sector family from pointwise left/right
+      selected carrier-edge rows, distinct heads, and the boundary-free
+      no-third-germ row via the existing two-germ adapter.  Verification:
+      `lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+      passed.
+    - Claim: `S2-agent-component-chain-source-20260520an`.
+      Owner: subagent-worker `019e441b-a671-7551-8102-7cc45b559ac6` /
+      Hegel the 4th.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed/pruned.
+      Result: added
+      `unboundedExteriorFrontierComponentTopologySourceRows_of_faceDartOrbitExteriorCarrierRows_localSectorRows_fixedSide`
+      and
+      `S2_componentTopologySourceRows_of_rawFaceSuccOrbit_dartFrontier_edgeCoverage_localSectorRows`,
+      reducing component topology to an actual exterior raw boundary-edge
+      carrier plus fixed-side local-sector rows.  Verification:
+      `lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+      and
+      `lake env lean ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`
+      passed.
+    - Claim: `S2-main-current-input-source-integration-20260520ao`.
+      Owner: Codex-main.  Role: reducer integrator.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`, and this workboard.  Status:
+      active.  Checked subtask: integrated the neighbour-pair/component
+      topology handoff through
+      `unboundedExteriorFrontierComponentTopologySourceRows_of_edgeChain_neighborPairRows`,
+      `unboundedFrontierCarrierGraph_connected_of_edgeChain_neighborPairRows`,
+      `BoundaryFreeNoThirdGermSource.toComponentTopologyRowsFromEdgeChain`,
+      and `RawOrbitCoverageSourceRows.toComponentTopologyRows`; targeted owner
+      builds, pinned root build, and forbidden scan passed.  Handoff:
+      integrate the closed `20260520an` reducers into the narrowest current S2
+      route, then continue into the remaining input-level source theorem
+      rather than adding a facade.  Next gate: targeted builds of the touched
+      owner files before the next root build.
+      Remaining residual for this handoff: produce those actual-boundary,
+      boundary-free, face-successor, orientation, and reverse-exclusion rows
+      from `FinitePlanarOuterComponentInputs C`.
+    - Claim: `S2-main-actual-boundary-angular-local-sector-route-20260520aq`.
+      Owner: Codex-main.  Role: theorem prover / route integrator.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`, and this workboard.  Status:
+      checked.  Result: added
+      `BoundaryFreeNoThirdGermSource.ofActualBoundaryRowsAngularOpenSegmentEndpoint`
+      and
+      `BoundaryFreeNoThirdGermSource.nonemptyOfActualBoundaryRowsAngularOpenSegmentEndpoint`,
+      explicitly preserving the endpoint-only incident row needed to upgrade
+      open-segment local exterior-sector geometry to the W3 boundary-free
+      source.  Added
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_angularOpenSegmentEndpoint_edgeRowsBoundarySucc`
+      and
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_angularOpenSegmentEndpoint_edgeRowsBoundarySucc`,
+      consuming that split source in the selected raw-orbit final row.
+      Dynamic read-only delegation for this route was attempted, but the
+      global agent-thread cap rejected the spawn, so no phantom subagent is
+      active for this claim.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+      and
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      passed.  The serialized pinned root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned
+      `clean`.  Handoff: prove the input source rows feeding this compact
+      handoff, especially actual boundary rows, endpoint-only incident rows,
+      selected-edge boundary-successor orientation, and the open-segment local
+      exterior-sector row.
+    - Claim: `S2-main-incident-complete-selected-orbit-route-20260520ar`.
+      Owner: Codex-main.  Role: source reducer / route integrator.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`, and this workboard.  Status:
+      checked.  Result: added
+      `BoundaryFreeNoThirdGermSource.endpointIncidentOnlyPredSucc_of_actualBoundaryRows_incidentEdge_complete`,
+      deriving `BoundaryFrontierEndpointIncidentOnlyPredSucc` from actual
+      boundary rows, adjacent-frontier-endpoints selected-edge incidence, and
+      boundary-cycle incident completeness.  Added
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_angularCompleteIncident_reverseExcluded`
+      and
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_angularCompleteIncident_reverseExcluded`,
+      consuming incident completeness, adjacent endpoint incidence, angular
+      rows, and reverse-exclusion in the selected raw-orbit route.  Dynamic
+      read-only delegation for this route was attempted, but the global
+      agent-thread cap rejected the spawn, so no phantom subagent is active.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+      and
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      passed.  The serialized pinned root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned
+      `clean`.  Handoff: reduce boundary-cycle incident completeness to the
+      geometric incident-edge exterior angular sector source, then keep
+      pushing those source rows toward `FinitePlanarOuterComponentInputs C`.
+    - Claim: `S2-main-angular-sector-selected-orbit-route-20260520as`.
+      Owner: Codex-main.  Role: source reducer / route integrator.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_boundaryIncidentAngular_reverseExcluded`
+      and
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_boundaryIncidentAngular_reverseExcluded`,
+      deriving the selected raw-orbit final route from
+      `BoundaryFrontierIncidentEdgeExteriorAngularSector` plus angular rows,
+      adjacent-frontier-endpoints selected-edge incidence, and
+      reverse-exclusion.  Added
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_faceSuccBoundaryIncidentAngular_reverseExcluded`
+      and
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_faceSuccBoundaryIncidentAngular_reverseExcluded`,
+      using face-successor rows and ordinary boundary orientation to supply
+      the angular no-between rows.  Dynamic read-only delegation for the
+      upstream angular-sector route was attempted, but the global
+      agent-thread cap rejected the spawn, so no phantom subagent is active.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      passed.  The serialized pinned root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned
+      `clean`.  Handoff: prove the actual geometric incident-edge angular
+      sector source, adjacent endpoint incidence, and reverse-exclusion from
+      the unbounded exterior component inputs.
+    - Claim: `S2-main-incident-angular-from-open-segment-sector-20260520at`.
+      Owner: Codex-main.  Role: topology source reducer.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and this workboard.  Status:
+      checked.  Result: added
+      `boundary_frontier_incident_edge_exterior_angular_sector_of_openSegment_local_exterior_sector`,
+      proving
+      `BoundaryFrontierIncidentEdgeExteriorAngularSector` from the honest
+      `BoundaryFrontierOpenSegmentLocalExteriorSector` row by taking a
+      midpoint on the selected unbounded-frontier edge and converting its
+      point-ray sector back to the graph-dart sector.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+      passed.  The serialized pinned root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned
+      `clean`.
+    - Claim: `S2-main-open-segment-sector-selected-orbit-route-20260520au`.
+      Owner: Codex-main.  Role: source reducer / route integrator.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_faceSuccOpenSegmentSector_reverseExcluded`
+      and
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_faceSuccOpenSegmentSector_reverseExcluded`,
+      consuming the midpoint converse so the selected raw-orbit route can take
+      `BoundaryFrontierOpenSegmentLocalExteriorSector` directly, together with
+      face-successor rows, ordinary boundary orientation,
+      adjacent-endpoint selected-edge incidence, and reverse-exclusion.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      passed.  The serialized pinned root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned
+      `clean`.  Handoff: source `BoundaryFrontierOpenSegmentLocalExteriorSector`,
+      adjacent-endpoint selected-edge incidence, and reverse-exclusion from
+      the unbounded exterior component inputs or existing actual-boundary rows.
+    - Claim: `S2-main-boundary-free-face-orbit-carrier-20260520av`.
+      Owner: Codex-main.  Role: carrier-row source reducer.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `faceDartOrbitExteriorCarrierRows_of_actualBoundaryRows`, building the
+      existing
+      `FaceDartOrbitExteriorCarrierRows C inputs` package from actual
+      boundary rows plus `BoundaryFreeNoThirdGermSource`, face-successor rows,
+      and ordinary boundary orientation.  This avoids making the broad
+      adjacent-frontier-endpoint source part of the preferred route.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+      passed.  The serialized pinned root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned
+      `clean`.  Dynamic read-only delegation was attempted for the input to
+      `BoundaryFreeNoThirdGermSource` route and the face-successor/orientation
+      source route, but both spawns were rejected by the global agent-thread
+      cap, so no phantom subagent claim is active.
+    - Claim: `S2-main-boundary-sector-faceSucc-openSegment-source-20260520aw`.
+      Owner: Codex-main.  Role: source-row reducer.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `BoundaryFreeNoThirdGermSource.boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_faceSuccOpenSegmentEndpoint`,
+      deriving the external boundary-sector source package from actual
+      boundary rows, geometric face-successor rows, ordinary boundary
+      orientation, `BoundaryFrontierOpenSegmentLocalExteriorSector`, and
+      `BoundaryFrontierEndpointIncidentOnlyPredSucc`.  This lets the S2-G
+      target consume the local exterior-sector source without first passing
+      through the selected raw-orbit route.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned
+      `clean`.
+    - Claim: `S2-main-boundary-sector-actual-faceSucc-openSegment-20260520ax`.
+      Owner: Codex-main.  Role: source-row reducer.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `S2_boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_faceSuccOpenSegmentSector`,
+      the source-assembly owner variant that turns actual boundary rows,
+      geometric face-successor rows, ordinary boundary orientation, and
+      `BoundaryFrontierOpenSegmentLocalExteriorSector` into the external
+      `BoundaryVertexExteriorSectorRowsAt` package.  This avoids the
+      endpoint-only branch where the direct open-segment sector constructor is
+      sufficient.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned
+      `clean`.
+    - Claim: `S2-main-boundary-sector-incident-complete-source-20260520az`.
+      Owner: Codex-main.  Role: source-row reducer.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and this workboard.  Status:
+      checked.  Task: add the direct source-owner theorem from actual
+      boundary rows, geometric face-successor rows, ordinary boundary
+      orientation, and `BoundaryCycleIncidentFrontierEdgeCompleteness` to the
+      external `BoundaryVertexExteriorSectorRowsAt` package.  This keeps the
+      local open-segment sector derivation in the existing topology reducer and
+      gives the input-facing S2 target a tighter handoff than the explicit
+      open-segment-sector premise.  Dynamic delegation was attempted for the
+      matching route search, but the global agent-thread cap rejected both
+      spawns, so no new subagent claim is active.  Result: added
+      `S2_boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_faceSuccIncidentComplete`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`
+      and downstream
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+      passed.  The full Lean forbidden-token scan over `./ErdosProblems1066`
+      plus `./ErdosProblems1066.lean` returned `clean`.  The serialized pinned
+      root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed after this source-owner edit.
+    - Claim: `S2-main-boundary-free-actual-source-incident-route-20260520ba`.
+      Owner: Codex-main.  Role: source-row reducer.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and this workboard.  Status:
+      checked.  Task: add the boundary-free owner bridge from actual
+      boundary rows plus `BoundaryFreeNoThirdGermSource`, face-successor rows,
+      and ordinary orientation to the external boundary-sector source by first
+      deriving `BoundaryCycleIncidentFrontierEdgeCompleteness`.  This reuses
+      the S2 source-owner theorem from claim `az` and keeps endpoint-only rows
+      out of this handoff.  Result: added
+      `boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_faceSuccIncidentComplete`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`
+      and downstream
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      passed.  The full Lean forbidden-token scan over `./ErdosProblems1066`
+      plus `./ErdosProblems1066.lean` returned `clean`.  The serialized pinned
+      root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed after this source-owner edit.
+    - Claim: `S2-main-seeded-faceSucc-incident-complete-route-20260520bb`.
+      Owner: Codex-main.  Role: seeded raw-orbit route integrator.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and this workboard.  Status:
+      checked.  Task: add the direct seeded-owner handoff from actual
+      boundary rows, geometric face-successor rows, ordinary boundary
+      orientation, incident-completeness, adjacent selected-edge incidence,
+      and reverse-exclusion to `BoundaryFreeConnectedRawOrbitSourceRows` and
+      final `UnboundedExteriorFrontierCycleRows`.  This keeps the new
+      incident-completeness source route out of the large topology owner and
+      avoids adding a new W32/facade layer.  Dynamic delegation was retried for
+      two read-only route scouts, but both spawns were rejected by the global
+      agent-thread cap, so no new subagent claim is active.  Result: added
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_faceSuccIncidentComplete_reverseExcluded`
+      and
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_faceSuccIncidentComplete_reverseExcluded`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      passed, and the full Lean forbidden-token scan over
+      `./ErdosProblems1066` plus `./ErdosProblems1066.lean` returned `clean`.
+      The serialized pinned root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`
+      passed after this seeded-owner edit.
+    - Claim: `S2-agent-input-to-carrier-route-20260520ap`.
+      Owner: subagent-worker.  Role: route/proof mapper.  Scope: read-only
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: closed/pruned.
+      Result: confirmed the shortest checked current primitive chain is
+      `unboundedExteriorFrontierCycleRows_of_currentPrimitiveSources_20260520af`;
+      its residuals are the pointwise local angular source, endpoint closure,
+      component-topology rows, and raw successor-point source.  Existing
+      reducers derive local-sector rows, relative-open closure, carrier
+      connectedness, and the selected `faceSucc` edge source from those rows.
+    - Claim: `S2-agent-local-sector-source-proof-20260520ap`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2LocalTwoGermAssembly.lean`, and
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status: closed/pruned.
+      Result: added
+      `localTwoGermRows_of_unboundedFrontierCarrierGraph_neighborPairRows_source`
+      and `componentTopologyLocalSectorTwoGermRows_of_neighborPairRows`,
+      packaging component-topology connectedness with neighbour-pair-derived
+      local-sector and local two-germ rows.  Verification:
+      `lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`
+      passed.
+    - Claim: `S2-agent-raw-successor-source-proof-20260520ap`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: closed/pruned.
+      Result: added
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_sectorRows_edgeRowsBoundarySucc`
+      and
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_sectorRows_edgeRowsBoundarySucc`,
+      consuming `RawOrbitSelectedEdgeBoundarySuccSource` to discharge start
+      frontier, successor propagation, raw edge coverage, and final cycle rows
+      through existing raw-orbit erasers.  Verification:
+      `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      passed.
+    - Claim: `S2-agent-frontier-carrier-source-20260520aq`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, and
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed/pruned.
+      Result: confirmed the shortest non-circular carrier route reduces to
+      `IsPreconnected (frontier (unboundedExteriorComponentRows C inputs).exterior)`
+      plus pointwise `UnboundedFrontierCarrierNeighborPairAt`; these feed
+      local-sector rows, carrier connectedness, selected-edge chain
+      connectivity, and the final S2 carrier reducer.  First proof target:
+      the pointwise no-cut cut-partition row
+      `UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt`.
+    - Claim: `S2-agent-boundary-cycle-source-20260520aq`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: closed/pruned.
+      Result: confirmed the boundary-cycle handoff is already checked: edge
+      chain connectivity plus pointwise neighbour-pair rows feed
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_edgeChain_neighborPairRows_fixedSide`
+      and then `S2_unboundedExteriorFrontierCycleRows_of_edgeChain_neighborPairRows_fixedSide`.
+      Minimal residuals are exactly the selected-edge chain and pointwise
+      neighbour-pair source rows.
+    - Claim: `S2-agent-nocut-repeated-tail-20260520aq`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only
+      `Swanepoel/S2ExteriorBoundarySource.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/CutVertexInterface.lean`, and cut/no-cut owner modules.
+      Status: closed/pruned.  Result: identified
+      `RawFaceSuccOrbitRepeatedTailExteriorCutRows` as the checked no-cut
+      payload and the explicit-witness constructor
+      `S2_repeatedTailExteriorCutRows_of_unreachable_after_delete` as the
+      reusable proof surface.  The remaining raw-orbit proof is to produce
+      open-arc witnesses and deleted-tail nonreachability for each repeated
+      raw tail, then erase through the existing no-cut chain.
+    - Claim: `S2-agent-neighbor-cutpartition-source-20260520ar`.
+      Owner: Meitner (`019e442f-1f02-7143-9498-956fa171ff32`).  Role:
+      theorem prover.  Scope: `Swanepoel/ExteriorComponentTopology.lean`.
+      Status: closed/pruned.  Result: added
+      `unboundedFrontierCarrierNeighborPairAt_of_selectedIncidentEdges_cutPartitions`,
+      the family eraser
+      `unboundedFrontierCarrierNeighborPairRows_of_selectedIncidentEdges_cutPartitions`,
+      and marker `S2_agent_neighbor_cutpartition_source_20260520ar`.  The
+      remaining source is now the actual selected incident-edge/cut-partition
+      row, not another no-cut eraser.  Verification: targeted Lean check of
+      `ExteriorComponentTopology.lean` passed.
+    - Claim: `S2-agent-edge-chain-source-20260520ar`.
+      Owner: Averroes (`019e442f-1f4c-70a3-af93-93066b214055`).  Role:
+      theorem prover.  Scope: `Swanepoel/S2ExteriorBoundarySource.lean`.
+      Status: closed/pruned.  Result: added
+      `UnboundedFrontierSelectedEdgeEndpointChainConnected` and
+      `S2_agent_edge_chain_source_20260520ar`, reducing segment-chain
+      connectedness to endpoint-sharing chains of actual selected frontier
+      edges.  Verification: targeted Lean check of `S2ExteriorBoundarySource.lean`
+      passed.
+    - Claim: `S2-agent-raw-orbit-source-20260520ar`.
+      Owner: Gibbs (`019e442f-1f99-7e92-a44d-639f223191c2`).  Role:
+      theorem prover.  Scope: `Swanepoel/S2SeededRawOrbitSource.lean` and
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status: closed/pruned.
+      Result: added selected-boundary-successor raw-orbit reducers from
+      actual boundary rows, geometric successor rows, boundary-free
+      no-third-germ rows, and selected edge-boundary successor rows, with marker
+      `S2_agent_raw_orbit_source_20260520ar`.  Verification: targeted builds
+      of `S2BoundaryFreeRawSource` and `S2SeededRawOrbitSource` passed.
+    - Claim: `S2-agent-frontier-api-discovery-20260520ar`.
+      Owner: Pascal (`019e442f-1ff7-7502-a4ff-91cc104748b4`).  Role:
+      API/proof-route discovery.  Scope: read-only mathlib and S2 topology
+      owner files.  Status: closed/pruned.  Result: no imported theorem closes
+      the planar exterior-face construction directly; usable local APIs are the
+      existing connected-component/frontier/drawing-carrier lemmas and the
+      checked two-regular carrier reducers.  No file edits.
+    - Claim: `S2-agent-edge-endpoint-chain-real-source-20260520as`.
+      Owner: Zeno the 4th (`019e4437-98bd-7870-8807-1b2857f2424a`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and tiny carrier lemmas in
+      `Swanepoel/ExteriorComponentTopology.lean` only if needed.  Status:
+      closed/pruned.  Result: added endpoint-sharing chain lemmas
+      `unboundedFrontierSelectedEdgeEndpointRelated_of_common_selected_endpoint`,
+      `unboundedFrontierSelectedEdgeEndpointChain_of_unboundedFrontierCarrierGraph_walk`,
+      `unboundedFrontierSelectedEdgeEndpointChainConnected_of_unboundedFrontierCarrierGraph_connected`,
+      plus markers
+      `S2_agent_edge_endpoint_chain_real_source_20260520as`,
+      `S2_agent_edge_carrier_segment_chain_real_source_20260520as`, and
+      `S2_agent_edge_endpoint_and_segment_chain_real_source_20260520as`.
+      Residual source is exactly
+      `UnboundedExteriorFrontierComponentTopologySourceRows inputs`
+      (`frontier_preconnected` and `frontier_edge_cover`).  Verification:
+      targeted Lean check of `S2ExteriorBoundarySource.lean` passed.
+    - Claim: `S2-agent-neighbor-cutpartition-real-source-20260520as`.
+      Owner: Goodall the 4th (`019e4437-9908-7fd0-8dd2-ca16d7b97afb`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added
+      `UnboundedFrontierCarrierLocalSectorRowsAt.toNeighborPairCutPartitionRowsAt`,
+      `UnboundedFrontierCarrierLocalSectorRowsAt.toNeighborPairAt_viaCutPartitionRows`,
+      local-sector and boundary-sector family erasers into cut-partition and
+      neighbour-pair rows, and marker
+      `S2_agent_neighbor_cutpartition_real_source_20260520as`.  The
+      third-neighbor branch is discharged by the actual local two-germ row.
+      Residuals for the boundary-sector marker are the actual boundary cycle,
+      its frontier equivalence, and `BoundaryVertexExteriorSectorRowsAt`.
+      Verification: targeted Lean checks/builds of `ExteriorComponentTopology`
+      passed.
+    - Claim: `S2-agent-geometric-raw-orbit-frontier-source-20260520as`.
+      Owner: Socrates the 4th (`019e4437-9955-7db1-b4c0-77c6073c2d79`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and
+      `Swanepoel/S2BoundaryFreeRawSource.lean` only if needed.  Status:
+      closed/pruned.  Result: added
+      `rawOrbitDartEdgeFrontierSource_of_actualBoundaryRows_geometricSuccessorRows_edgeRowsBoundarySucc`,
+      `rawOrbitEdgeMemSource_of_actualBoundaryRows_geometricSuccessorRows_edgeRowsBoundarySucc`,
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_geometricRows_angularOpenSegmentEndpoint_edgeRowsBoundarySucc`,
+      and `S2_agent_geometric_raw_orbit_frontier_source_20260520as`,
+      advancing the actual-boundary/geometric-successor raw-orbit route without
+      reverse-tail or orientation-free shortcuts.  Residuals remain the actual
+      boundary rows, geometric/angular rows, local exterior sector,
+      endpoint-incident-only row, and selected boundary-successor edge row.
+      Verification: targeted Lean check of `S2SeededRawOrbitSource.lean`
+      passed.
+    - Claim: `S2-agent-current-s2-residual-board-map-20260520as`.
+      Owner: Rawls the 4th (`019e4437-9994-72f2-a8e1-588e0d3f6cda`).
+      Role: route mapper.  Scope: read-only current S2 owner files.  Status:
+      closed/pruned.  Result: mapped the shortest current bare-input route as
+      `unboundedExteriorFrontierCycleRows_of_incidentEdgePrimitiveSources_20260520af`,
+      whose residuals are the local angular source, adjacent-frontier-endpoint
+      incident-edge source, component-topology rows, and selected raw
+      face-successor interior-frontier point source.  Flagged completed cycle
+      rows and actual-boundary rows as circular if used as inputs, and global
+      orientation-free `FaceSuccFrontierEdgeSource` as overstrong.  No file
+      edits.
+    - Claim: `S2-agent-frontier-preconnected-real-source-20260520at`.
+      Owner: Euclid the 4th (`019e443d-1d6b-7d60-93d1-a4de5e469a73`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added source reducers for
+      `UnboundedExteriorFrontierComponentTopologySourceRows inputs`,
+      reducing the component-topology row to the actual segment-chain
+      connectedness row plus local-sector/edge-cover ingredients.  Verification:
+      targeted owner build passed.
+    - Claim: `S2-agent-local-angular-real-source-20260520at`.
+      Owner: Parfit the 4th (`019e443d-1db7-70a2-9858-73200f49d7ff`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean` plus tiny local topology helpers
+      in `Swanepoel/ExteriorComponentTopology.lean` only if needed.  Status:
+      closed/pruned.  Result: added the boundary-free no-third-germ eraser from
+      neighbour-pair rows and incident-edge source into local angular/local
+      sector rows.  Verification: targeted owner builds passed.
+    - Claim: `S2-agent-local-two-germ-from-inputs-20260520aw`.
+      Owner: Heisenberg the 4th (`019e4447-8c99-7ed0-92c8-d75e79360003`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed/pruned.
+      Result: added `localTwoGermRows_of_neighborPairRows_incidentEdge_source`
+      and `S2_agent_local_two_germ_from_inputs_20260520aw`, reducing the
+      pointwise `UnboundedFrontierCarrierLocalTwoGermRowsAt` family to actual
+      incident selected-edge rows plus concrete carrier neighbour-pair rows.
+      Verification: targeted owner check passed.
+    - Claim: `S2-agent-selected-successor-real-source-20260520at`.
+      Owner: Raman the 4th (`019e443d-1e15-73e1-89bf-961dddc1631d`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and
+      `Swanepoel/S2BoundaryFreeRawSource.lean` only if strictly needed.
+      Status: closed/pruned.  Result: added no-orbit selected-successor
+      source reducers for Nat-indexed face-successor edge propagation and
+      interior-frontier-point rows.  Verification: targeted raw-orbit owner
+      build passed.
+    - Claim: `S2-agent-finite-plane-graph-proof-scout-20260520at`.
+      Owner: Hypatia the 4th (`019e443d-1e64-7051-841e-a9afd71e6e2b`).
+      Role: proof-route scout.  Scope: read-only current S2 owner files and
+      imported topology/graph APIs.  Status: closed/pruned.  Result: identified
+      the boundary-free raw-orbit route and the first non-circular local source
+      as pointwise local two-germ / neighbour-pair input at the unbounded
+      frontier carrier.  No file edits.
+    - Claim: `S2-agent-angular-neighbor-selection-input-20260520ax`.
+      Owner: Godel the 4th (`019e444b-7269-73b3-954e-4ccbb55f3f79`).
+      Role: theorem/API discovery and patcher.  Scope:
+      `Swanepoel/GeometricRotationSystem.lean` and, only for consumers,
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed/pruned.
+      Result: added the input-facing angular-neighbour selection row and the
+      erasers to `BoundaryFreeGraphVertexAngularNoBetweenRows`.  Verification:
+      targeted touched-owner builds passed.
+    - Claim: `S2-agent-frontier-neighbor-pair-input-20260520ax`.
+      Owner: Nash the 4th (`019e444b-89e6-7db1-b860-6d41573e9ad3`).
+      Role: theorem/API discovery and patcher.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and, if needed,
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed/pruned.
+      Result: added the sharp `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource`
+      and erasers to pointwise cut-partition and neighbour-pair rows.
+      Verification: targeted owner builds, root build, and forbidden-token scan
+      passed.
+    - Claim: `S2-agent-selected-successor-input-20260520ax`.
+      Owner: Einstein the 4th (`019e444b-9f38-7050-9e9a-14f5c84d35d0`).
+      Role: theorem/API discovery and patcher.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status: closed/pruned.
+      Result: reduced `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource
+      inputs` to the selected local two-germ successor row, without
+      orientation-free global faceSucc assumptions.  Verification: targeted
+      raw-orbit owner build passed.
+    - Claim: `S2-agent-seeded-source-composition-20260520ay`.
+      Owner: Wegener the 4th (`019e4455-138b-7b61-8441-b7333b6a6109`).
+      Role: theorem/API discovery and patcher.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: closed/pruned.
+      Result: added current composition reducers from neighbour-pair rows,
+      component topology or edge-chain rows, endpoint incident rows, and
+      selected successor local two-germ rows to the S2 finite theorem surface.
+      Verification: targeted raw-orbit owner build passed.
+    - Claim: `S2-agent-neighbor-pair-real-proof-20260520ay`.
+      Owner: Kuhn the 4th (`019e4455-e9ce-7763-8494-75909e32cdfe`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: reduced the neighbour-pair input source to the local two-germ
+      row and added erasers to input-source, cut-partition, and neighbour-pair
+      rows.  Verification: targeted exterior-component owner build passed.
+    - Claim: `S2-agent-edge-chain-real-proof-20260520ay`.
+      Owner: Sagan the 4th (`019e4455-ea1b-74e2-b50d-5d58ef9d1f36`).
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status: closed/pruned.
+      Result: added raw-coverage and raw-tail-coverage erasers to the
+      edge-chain/component-topology source row.  Verification: targeted
+      boundary-free owner file check passed.
+    - Claim: `S2-agent-residual-map-20260520ay`.
+      Owner: Harvey the 4th (`019e4455-ea68-7373-8776-e380ded7e014`).
+      Role: read-only route mapper.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/FaceBoundaryTopologySourceW32.lean`, and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: closed/pruned.
+      Result: identified the smallest current non-circular carrier surface as
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeChain_neighborPairRows_fixedSide`,
+      reducing unconditional S2 to the selected edge-chain row and pointwise
+      neighbour-pair rows.  No edits.
+    - Claim: `S2-agent-final-source-composition-20260520ax`.
+      Owner: Codex-main.  Role: integrator.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/FaceBoundaryTopologySourceW32.lean`, and this workboard.
+      Status: active.  Task: keep the live S2 source route composed from the
+      newest non-circular input rows and expose the smallest remaining theorem
+      surface; when all residual rows are proved, route to the W32 S2 target
+      and run final gates.
+    - Claim: `S2-agent-boundaryfree-source-map-20260520y`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only
+      `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: spawn blocked by
+      thread limit; no phantom active worker.  Intended task: identify the
+      shortest non-circular route from `FinitePlanarOuterComponentInputs C` to
+      `Nonempty (BoundaryFreeNoThirdGermSource inputs)`.
+    - Claim: `S2-agent-selected-raw-successor-source-20260520y`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: spawn blocked by
+      thread limit; no phantom active worker.  Intended task: identify the
+      shortest input-level source route for
+      `RawOrbitIteratedFaceSuccInteriorFrontierPointSource inputs`.
+    - Claim: `S2-agent-carrier-connectedness-source-20260520y`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status: spawn blocked by
+      thread limit; no phantom active worker.  Intended task: identify the
+      smallest non-circular theorem proving
+      `(unboundedFrontierCarrierGraph C inputs).Connected`.
+    - Claim: `S2-agent-repeated-tail-cut-source-20260520y`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: spawn blocked by
+      thread limit; no phantom active worker.  Intended task: identify the
+      shortest honest source for repeated-tail separation/cut rows.
+    - Claim: `S2-main-raw-orbit-boundary-sector-source-20260520y`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and this workboard.  Status:
+      checked.  Handoff: added
+      `BoundaryFreeNoThirdGermSource.boundaryVertexExteriorSectorRows_source_of_rawFaceSuccOrbit_rawOrientation`
+      and
+      `boundaryVertexExteriorSectorRows_source_of_rawCoverage_boundaryFreeSource_rawOrientation`.
+      The remaining source row is now stated directly on the selected raw
+      exterior face orbit: prove raw predecessor/successor principal-argument
+      orientation, plus the already isolated cut rows.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`,
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`,
+      and the forbidden-token scan all passed.  During this gate,
+      `Swanepoel/S2ExteriorBoundarySource.lean` was mechanically repaired from
+      UTF-8 mojibake back to valid Lean Unicode, then checked directly.
+    - Claim: `S2-agent-repeated-boundary-separation-final-route-20260520x`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: spawn blocked by
+      thread limit after pruning recorded closed workers; no phantom active
+      worker.  Intended task: add the selected raw-orbit S2 reducer that
+      consumes repeated-boundary arc-separation rows directly, reusing the
+      existing actual-arc erasers.
+    - Claim: `S2-main-repeated-boundary-separation-final-route-20260520x`.
+      Owner: Codex-main.  Role: reducer integrator.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`, and this workboard.  Status:
+      checked.  Result: added
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeMemRepeatedBoundaryArcRows_carrierConnected`
+      and
+      `unboundedExteriorFrontierCycleRows_of_selectedBoundaryArcRows_dartFrontier_boundaryFree_connected`,
+      exposing `RepeatedExteriorBoundaryArcSeparationRows` as the selected
+      route's repeated-tail residual while reusing the checked actual-arc
+      erasers.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`,
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`,
+      and forbidden-token scan.
+    - Claim: `S2-agent-iterated-faceSucc-source-from-local-sector-20260520x`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: spawn blocked by
+      thread limit; no phantom active worker.  Intended task: prove the
+      exterior-oriented `RawOrbitIteratedFaceSuccFrontierEdgeSource` or its
+      interior-frontier-point predecessor from already available local
+      exterior-sector rows, without using orientation-free face-successor
+      assumptions.
+    - Claim: `S2-agent-successor-point-source-from-exterior-sector-20260520x`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: spawn blocked by
+      thread limit; no phantom active worker.  Intended task: derive
+      `RawOrbitIteratedFaceSuccInteriorFrontierPointSource` from existing
+      actual-boundary sector rows, selected-start orientation, and
+      not-reverse rows.
+    - Claim: `S2-main-repeated-boundary-separation-weak-route-20260520x`.
+      Owner: Codex-main.  Role: reducer integrator.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `unboundedExteriorFrontierCycleRows_of_selectedRepeatedBoundarySeparationRows_dartFrontier_boundaryFree_connected`,
+      exposing `RepeatedExteriorBoundarySeparationRows` as the selected route's
+      no-cut repeated-tail residual.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-main-iterated-successor-point-final-route-20260520x`.
+      Owner: Codex-main.  Role: reducer integrator.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `unboundedExteriorFrontierCycleRows_of_iteratedFaceSuccInteriorPoint_repeatedBoundarySeparationRows_boundaryFree_connected`,
+      exposing `RawOrbitIteratedFaceSuccInteriorFrontierPointSource` plus
+      `RepeatedExteriorBoundarySeparationRows` as the narrow remaining
+      selected-orbit source handoff.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-main-row-repeated-boundary-separation-route-20260520x`.
+      Owner: Codex-main.  Role: reducer integrator.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeMemRepeatedBoundarySeparationRows_carrierConnected`,
+      exposing row-level `RepeatedExteriorBoundarySeparationRows` as the
+      repeated-tail source and using `inputs.noCutVertex` to discharge the
+      actual-arc callback.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-main-successor-point-source-from-sector-20260520x`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `rawOrbitIteratedFaceSuccInteriorFrontierPointSource_of_actualBoundaryRows_sectorRows_orientation`,
+      sourcing the successor-point row from actual-boundary sector rows and
+      the selected-edge reverse-exclusion row.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Follow-up checked in the same scope: added
+      `rawOrbitIteratedFaceSuccInteriorFrontierPointSource_of_actualBoundaryRows_boundaryFreeSource`,
+      so callers can source the sector family from the live
+      `BoundaryFreeNoThirdGermSource` API.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
     - Claim: `S2-exterior-boundary-cycle-source`.  Owner: Codex-main.
       Role: theorem prover.  Scope:
-      `Swanepoel/ExteriorComponentTopology.lean` and `TASK.md`, with read-only
-      use of `Swanepoel/FinitePlaneDrawing.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean` when the input-level source
+      theorem no longer belongs in existing S2 owner files, root imports, and
+      `TASK.md`, with read-only use of `Swanepoel/FinitePlaneDrawing.lean`,
       `Swanepoel/GeometricRotationSystem.lean`, and
       `Swanepoel/JordanTopologyFactsConcrete.lean`.  Status: active.  Current
-      deliverable: construct the input-only unbounded exterior frontier cycle
-      source from the actual exterior face route, keeping existing owner files
-      green and avoiding duplicate packages/facades.  Handoff:
-      `UnboundedExteriorFrontierCycleRows C inputs` for every
-      `FinitePlanarOuterComponentInputs C`, then
-      `FinitePlanarStraightLineOuterComponentTheorem` and the W32 exact
-      topology target.  Current focus: prove the actual raw face-orbit source
-      rows: raw dart-edge frontier, raw-tail coverage of the unbounded frontier
-      carrier, pointwise actual local-sector rows, and repeated-tail separation
-      rows for no-cut injectivity.
-      New checked support rows integrated by Codex-main:
+      deliverable: construct
+      `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs`
+      from the actual exterior face route, keeping existing owner files green
+      and avoiding duplicate packages/facades.  Handoff:
+      `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows`
+      through `finitePlanarStraightLineOuterComponentTheorem_of_boundaryVertexExteriorSectorRows`.
+      Current focus: prove the orbit-first source rows in S2-A through S2-G:
+      actual frontier-edge propagation, boundary-free local two-germ rows,
+      selected exterior raw face-successor orbit, raw-orbit frontier coverage,
+      minimal repeated-tail cut rows, raw-orbit-to-cycle rows, and final
+      boundary-sector rows.  Current checked route snapshot:
+      `S2_frontierPreconnectedSourceRows_of_edgeChain_localSectorRows_fixedSide`
+      to
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_edgeChain_localSectorRows_fixedSide`
+      to
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeChain_localSectorRows_fixedSide`;
+      raw/cut route through
+      `S2_rawFaceSuccOrbitSourceRows_of_dart_frontier_period_cutRows` and
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_boundaryFree_noThirdGermCutRows_tailCoverage`;
+      local-sector route through
+      `BoundaryFrontierIncidentEdgeExteriorAngularSector` and
+      `BoundaryCycleIncidentFrontierEdgeCompleteness`.
+    - Claim: `S2-agent-unoriented-boundary-dart-classifier-20260520g`.
+      Owner: subagent-worker `019e437d-0843-7480-b9c0-8b363ce1c6eb`.
+      Role: local orientation classifier.
+      Scope: `Swanepoel/S2SeededRawOrbitSource.lean` only.  Status: closed.
+      Handoff: add the theorem that a dart whose open segment is on the actual
+      unbounded exterior frontier is, up to reversal, one of the selected
+      boundary-cycle darts, consuming `frontier_iff_cycle_vertex` and
+      `BoundaryVertexExteriorSectorRowsAt.local_two_germ`.  Next gate:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-selected-orbit-sector-route-20260520g`.
+      Owner: subagent-explorer `019e437d-088f-7b70-8344-d8f536e25766`.
+      Role: selected-orbit route mapper.
+      Scope: read-only current S2 owner files.  Status: closed.  Handoff:
+      map the shortest non-circular selected-orbit route from boundary-sector
+      rows to raw-orbit frontier coverage using
+      `rawFaceSuccOrbit_dart_on_boundary_of_sectorRows_start` and
+      `S2_agent_dart_edge_frontier_from_sectorRows`, avoiding the impossible
+      orientation-free global predecessor row.  Next gate: route result
+      consumed by Codex-main before any edit.
+    - Claim: `S2-agent-input-boundary-sector-source-20260520g`.
+      Owner: subagent-explorer `019e437d-08da-7891-9144-4ceb630f1ca6`.
+      Role: source theorem decomposer.
+      Scope: read-only `FinitePlaneDrawing.lean`,
+      `ExteriorComponentTopology.lean`, `S2ExteriorBoundarySource.lean`, and
+      `GeometricRotationSystem.lean`.  Status: closed.  Handoff: decompose the
+      input-only theorem into the exact next Lean rows needed to construct
+      the actual exterior boundary cycle `B`, `frontier_iff_cycle_vertex`,
+      and `forall k, BoundaryVertexExteriorSectorRowsAt inputs B k`.
+      Next gate: route result consumed by Codex-main before any edit.
+    - Claim: `S2-main-selected-orbit-sector-bridge-20260520h`.
+      Owner: Codex-main.  Role: selected-orbit reducer integrator.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, and this workboard.  Status:
+      closed.  Handoff: add compact checked bridges from a boundary-sector
+      selected start to raw-orbit dart-frontier coverage and raw-coverage
+      source rows, avoiding the global oriented predecessor row.  Next gate:
+      targeted builds for the edited S2 owner files.
+    - Claim: `S2-main-boundary-cycle-edge-mem-handoff-20260520i`.
+      Owner: Codex-main.  Role: final source-shape adapter.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and this workboard.  Status:
+      closed.  Handoff: expose the smallest boundary-cycle handoff from
+      actual boundary edge membership, angular rows, and incident completeness
+      to `BoundaryVertexExteriorSectorRowsAt`, then keep working on the
+      input-only rows that supply that handoff.  Next gate:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-boundary-edge-mem-family-consumer-20260520j`.
+      Owner: subagent-worker `019e4385-a1a4-71b2-a896-40dbdc280f09`.
+      Role: family-level adapter.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and
+      `Swanepoel/FaceBoundaryTopologySourceW32.lean` only.  Status: closed.
+      Handoff: add family-level finite-planar and W32 consumers for the
+      compact handoff `(B, frontier_iff_cycle_vertex, cycle_edge_mem,
+      angularRows, incident_complete)` without adding a W facade or new
+      source package.  Next gate: targeted builds for edited owner files.
+    - Claim: `S2-agent-angular-row-existing-route-20260520j`.
+      Owner: subagent-explorer `019e4385-a1f5-7772-9d07-f552d49238ec`.
+      Role: angular API mapper.  Scope:
+      read-only `GeometricRotationSystem.lean`,
+      `ExteriorComponentTopology.lean`, and `S2ExteriorBoundarySource.lean`.
+      Status: closed.  Handoff: find the exact existing route, or smallest
+      missing theorem, for constructing
+      `forall k, BoundaryVertexAngularNoBetweenRows C B k` from the geometric
+      rotation/order rows of an actual exterior boundary cycle.
+    - Claim: `S2-agent-incident-completeness-existing-route-20260520j`.
+      Owner: subagent-explorer `019e4385-a242-7a40-9384-e2e1c960856d`.
+      Role: incident-completeness mapper.
+      Scope: read-only current S2 owner files.  Status: closed.  Handoff:
+      find the exact existing route, or smallest missing theorem, deriving
+      `BoundaryCycleIncidentFrontierEdgeCompleteness inputs B` from local
+      sector/no-third or raw-orbit actual-boundary rows.
+    - Claim: `S2-agent-local-sector-incident-bridge-20260520m`.
+      Owner: subagent-worker `019e438c-85c5-72a3-ad3a-d286244b5cd6`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` only.  Status: closed.
+      Result: added
+      `incident_only_pred_succ_of_actualBoundaryCycleFrontierEquivalenceRows_localSectorRows`
+      and `S2_agent_local_sector_incident_bridge`, deriving incident
+      completeness from actual boundary rows plus pointwise local-sector rows.
+      Next gate:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+    - Claim: `S2-agent-angular-boundary-order-source-20260520m`.
+      Owner: subagent-explorer `019e438c-860e-71d3-8ab2-54be98171bed`.
+      Role: angular API mapper.  Scope: read-only
+      `Swanepoel/GeometricRotationSystem.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed.
+      Result: angular rows are already reached from actual face-successor rows
+      plus the ordinary predecessor/successor boundary orientation inequality
+      via
+      `GeometricRotationSystem.S2_agent_geometric_boundary_order_source_of_pred_arg_lt_succ_arg`
+      and `ExteriorComponentTopology.S2_agent_angle_order_from_geometric_rotation`.
+      First remaining source row: prove that boundary orientation inequality
+      for the raw exterior orbit's actual boundary cycle.
+    - Claim: `S2-agent-raw-orbit-to-compact-handoff-20260520m`.
+      Owner: subagent-explorer `019e438c-865d-72b3-bc7a-4024bd30d187`.
+      Role: source-row verifier.  Scope: read-only current S2 owner files.
+      Status: closed.  Result: shortest checked route is
+      `S2_agent_actualBoundaryCycleRows_of_rawExteriorFaceWalk_cutRows`, then
+      the compact handoff
+      `(B, frontier_iff_cycle_vertex, cycle_edge_mem, angularRows,
+      incident_complete)`.  The first remaining source row on this route is
+      the same boundary orientation inequality needed to build `angularRows`.
+    - Claim: `S2-main-actual-boundary-face-successor-sector-handoff-20260520n`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean` only if the selected raw-orbit
+      consumer needs the same handoff, and this workboard.  Status: closed.
+      Handoff: added
+      `BoundaryFreeNoThirdGermSource.boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows`
+      and
+      `BoundaryFreeNoThirdGermSource.boundaryVertexExteriorSectorRows_source_of_rawFaceSuccOrbit`,
+      exposing the exact boundary-sector source package from
+      `ActualBoundaryCycleFrontierEquivalenceRows`, a
+      `BoundaryFreeNoThirdGermSource`, `UnitDistanceCycleFaceSuccRows`, and
+      the ordinary predecessor/successor boundary orientation row, without
+      adding another S2 facade.  Verification: targeted owner build,
+      serialized pinned root build, and forbidden-token scan passed.
+    - Claim: `S2-main-geometric-nonwrap-angular-source-20260520o`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/GeometricRotationSystem.lean` and this workboard.  Status:
+      checked.  Handoff: added
+      `GeometricRotationSystem.boundaryVertexAngularNoBetweenRows_of_faceSuccRows_pred_arg_lt_succ_arg`,
+      the direct local geometry row from
+      `UnitDistanceCycleFaceSuccRows` plus ordinary predecessor/successor
+      orientation to `BoundaryVertexAngularNoBetweenRows`, reusing the
+      checked nonwrap and adjacent-list rows.  Verification: targeted owner
+      build, serialized pinned root build, and forbidden-token scan passed.
+    - Claim: `S2-main-raw-orientation-branch-route-20260520q`.
+      Owner: Codex-main.  Role: route mapper.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/GeometricRotationSystem.lean`, and this workboard only.
+      Status: closed.  Result: added
+      `BoundaryFreeNoThirdGermSource.unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbit_noOrientation`,
+      a final-cycle-row eraser from raw-orbit actual-boundary rows that does
+      not require the ordinary principal-argument orientation residual.  The
+      sector-row strengthening still records the nonwrap branch explicitly,
+      but the final S2 cycle route should not depend on it.  A fresh
+      repeated-tail worker spawn was attempted after this check and rejected
+      by the global agent-thread cap.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`.
+    - Claim: `S2-agent-boundary-orientation-proof-route-20260520o`.
+      Owner: subagent-worker pending.  Role: angular theorem prover.  Scope:
+      `Swanepoel/GeometricRotationSystem.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and if needed a small
+      logically owned helper file rather than crowding one large file.
+      Status: closed.  Result: added
+      `ActualBoundaryCycleFrontierEquivalenceRows.boundary_orientation_of_rawFaceSuccOrbitBoundaryRows`
+      and
+      `BoundaryFreeNoThirdGermSource.actualBoundaryRowsWithFaceSuccAndOrientation_of_rawFaceSuccOrbit`.
+      The actual-boundary orientation row is now transported from the raw
+      cyclic-tail inequality; the remaining geometric source row is the raw
+      orbit orientation inequality itself.
+    - Claim: `S2-agent-input-raw-premise-source-20260520o`.
+      Owner: subagent-explorer `019e4395-9531-7e11-9a6f-6ee5e1ca867d`.
+      Role: source-premise mapper.  Scope:
+      read-only current S2 owner files.  Status: closed.  Result: existing
+      checked rows map `localSource`,
+      `frontier_vertex_tail_coverage`, `dart_edge_openSegment_frontier`, and
+      `cutRows` for
+      `BoundaryFreeNoThirdGermSource.unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbit`,
+      with first input-only blockers now isolated as
+      `BoundaryFreeNoThirdGermSource inputs`, raw iterated face-successor
+      frontier rows, carrier connectedness, and repeated-tail cut rows.
+    - Claim: `S2-main-workboard-route-refresh-20260520p`.
+      Owner: Codex-main.  Role: taskboard editor.  Scope: `TASK.md` only.
+      Status: closed.  Result: rewrote S2 as an unbounded exterior
+      frontier-cycle target, with the narrow checked reducer
+      `finitePlanarStraightLineOuterComponentTheorem_of_connectedIteratedFaceSuccEdgeSource`
+      and its three source rows as the displayed route.  Verification:
+      taskboard-only edit.
+    - Claim: `S2-main-direct-final-row-route-20260520q`.
+      Owner: Codex-main.  Role: reducer implementer.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: closed.  Result:
+      added the direct row-level reducers
+      `unboundedExteriorFrontierCycleRows_of_connectedIteratedFaceSuccEdgeSource`
+      and
+      `unboundedExteriorFrontierCycleRows_of_endpointIncident_iteratedFaceSuccEdgeSource`,
+      so the displayed route now constructs
+      `UnboundedExteriorFrontierCycleRows C inputs` before erasing to the
+      finite outer-component theorem.  Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-main-actual-boundary-to-endpoint-incident-20260520q`.
+      Owner: Codex-main.  Role: reducer implementer.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status: closed.  Result:
+      added `endpointIncidentSourceRows_of_actualBoundaryRows`, bundling the
+      actual-boundary sector-row route and endpoint-only no-chord row into the
+      endpoint-incident source package.  Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+    - Claim: `S2-main-repeated-tail-cutrows-from-separation-20260520q`.
+      Owner: Codex-main.  Role: reducer integrator.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and this workboard only.
+      Status: closed.  Result: added
+      `S2_repeatedTailExteriorCutRows_of_repeatedBoundarySeparationRows`,
+      the smallest checked eraser from a repeated-tail
+      `RepeatedExteriorBoundarySeparationRows` callback to the minimal
+      `RawFaceSuccOrbitRepeatedTailExteriorCutRows` callback.  This lets S2-E
+      use the existing no-cut/cut-partition route without reviving the stronger
+      actual-arc package.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-route-file-splitting-audit-20260520o`.
+      Owner: subagent-explorer `019e4395-957f-7833-8236-b408d764c068`.
+      Role: owner-file audit.  Scope:
+      read-only S2 files and root import.  Status: closed.  Result:
+      `GeometricRotationSystem.lean` owns pure angular facts,
+      `S2BoundaryFreeRawSource.lean` owns raw-orbit/actual-boundary handoffs,
+      `S2SeededRawOrbitSource.lean` owns selected-seed coverage rows, and a
+      new non-W `S2BoundaryOrientationSource.lean` is appropriate only if the
+      boundary-orientation theorem becomes the actual next proof target.
+    - Claim: `S2-agent-boundaryfree-source-input-proof-20260520p`.
+      Owner: subagent-worker `019e439c-7dbf-7e71-a64d-e6c61c66da6a`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, and
+      `Swanepoel/ExteriorComponentTopology.lean` only if a primitive local
+      topology lemma is needed.  Status: closed.  Result: reduced the
+      input-facing family
+      `Nonempty (BoundaryFreeNoThirdGermSource inputs)` to
+      `BoundaryFreeEndpointIncidentSourceRows inputs` via checked endpoint and
+      local-sector erasers in `S2BoundaryFreeRawSource.lean`.  Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`
+      and
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`.
+    - Claim: `S2-agent-endpoint-incident-source-proof-20260520q`.
+      Owner: subagent-worker `019e439f-d827-7d80-890b-d61b0450bd42`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, with
+      `Swanepoel/S2LocalTwoGermAssembly.lean` and
+      `Swanepoel/ExteriorComponentTopology.lean` only for primitive source
+      lemmas.  Status: closed.  Result: proved the
+      `endpoint_frontier_edge` field from actual boundary-cycle rows plus the
+      endpoint-only no-chord row, and added the checked reducer
+      `BoundaryFreeEndpointIncidentSourceRows.of_actualBoundaryRows_endpointIncidentOnly`.
+      Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+- Claim: `S2-agent-actual-boundary-rows-input-proof-20260520q`.
+      Owner: subagent-worker `019e43a3-38bc-7222-bb52-e68691b4849e`
+      plus Codex actual-boundary rows source worker.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean`, with
+      `Swanepoel/ExteriorComponentTopology.lean` only for primitive
+      actual-boundary-cycle lemmas.  Status: closed.  Result: added checked
+      actual-boundary reducers
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_boundaryFree_noThirdGermActualArcRows_tailCoverage`
+      and
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_rawOrbitCoverage_boundaryFree_noThirdGermActualArcRows`,
+      so the actual-boundary row now consumes the stronger selected
+      raw-orbit actual-exterior-arc package directly instead of asking
+      separately for per-dart frontier and repeated-tail cut rows.  Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Handoff: prove or reduce
+      `ActualBoundaryCycleFrontierEquivalenceRows C inputs` from
+      `FinitePlanarOuterComponentInputs C`, preferably by constructing the
+      actual exterior boundary cycle or by routing an honest raw
+      face-successor orbit through existing actual-boundary reducers.
+      Next gate:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-carrier-connected-input-proof-20260520p`.
+      Owner: subagent-worker `019e439c-7e0e-75b0-9614-f375dc26037d`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status: closed.  Result:
+      added non-circular carrier-connected reducers
+      `unboundedFrontierCarrierGraph_connected_of_frontierPreconnectedSourceRows`,
+      `unboundedFrontierCarrierGraph_connected_of_edgeChain_localSectorRows_fixedSide`,
+      `RawOrbitCoverageSourceRows.toCarrierGraphConnected`, and
+      `unboundedFrontierCarrierGraph_connected_of_rawCoverage_boundaryFreeSource`.
+      Verified targeted owner builds for `ExteriorComponentTopology.lean`,
+      `S2BoundaryFreeRawSource.lean`, and
+      `lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`.
+    - Claim: `S2-agent-frontier-preconnected-source-proof-20260520q`.
+      Owner: subagent-worker `019e43a3-c9aa-7551-bb72-464d044f5a44`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean`, with
+      `Swanepoel/S2BoundaryFreeRawSource.lean` only for raw-coverage bridges.
+      Status: closed.  Result: proved the owner-file
+      fixed-side `frontier_edge_cover` reducer
+      `frontier_edge_cover_of_localSectorRows_fixedSide`, the compact row
+      packagers
+      `unboundedExteriorFrontierPreconnectedSourceRows_of_edgeChain_localSectorRows_fixedSide`
+      and
+      `unboundedExteriorFrontierPreconnectedSourceRows_of_connectedCarrier_localSectorRows_fixedSide`,
+      plus the cyclic-coverage handoff
+      `unboundedExteriorFrontierPreconnectedSourceRows_of_cyclicCoverageLocalSectorRows`.
+      Remaining exact input-only statement:
+      `unboundedExteriorFrontierPreconnectedSourceRows_of_inputs`, reducible
+      now to either selected edge-chain plus local-sector rows or to cyclic
+      coverage plus local-sector rows for the actual exterior face.  Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+    - Claim: `S2-agent-iterated-faceSucc-source-input-proof-20260520p`.
+      Owner: subagent-worker `019e439c-7e4b-71b2-80e4-e0c38e3b1c17`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and angular owner files only
+      if needed.  Status: closed.  Result: proved the checked bridge from
+      `RawOrbitDartEdgeFrontierSource inputs` to
+      `RawOrbitIteratedFaceSuccFrontierEdgeSource inputs` by indexing the
+      selected raw orbit modulo its period.  Added
+      `rawIterDart_eq_rawOrbit_dart_mod` and
+      `rawOrbitIteratedFaceSuccFrontierEdgeSource_of_dartEdgeFrontierSource`.
+      Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Handoff: prove `RawOrbitDartEdgeFrontierSource inputs` from
+      `FinitePlanarOuterComponentInputs C`.
+    - Claim: `S2-main-input-row-integration-20260520r`.
+      Owner: Codex-main.  Role: integration prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2ExteriorBoundarySource.lean`, and this workboard.
+      Status: active.  Task: combine the new direct row-level reducers with
+      any newly proved input-facing rows, keep the displayed S2 route current,
+      and build only the affected owner files until final root verification.
+    - Claim: `S2-agent-raw-dart-frontier-source-input-proof-20260520r`.
+      Owner: subagent-worker `019e43a7-e594-72f0-aaf4-77ad6dea6acd`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and
+      `Swanepoel/S2ExteriorBoundarySource.lean` only if an existing
+      actual-boundary or actual-arc row must be consumed.  Status: closed.
+      Result: added
+      `rawOrbitDartEdgeFrontierSource_of_actualBoundaryRows_sectorRows_orientation`
+      and
+      `rawOrbitDartEdgeFrontierSource_of_actualBoundaryRows_boundaryFreeSource`,
+      reducing the whole selected raw-orbit dart-frontier source to actual
+      boundary-cycle rows plus sector/orientation rows and the boundary-free
+      local source.  Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-endpoint-actual-boundary-input-proof-20260520r`.
+      Owner: subagent-worker `019e43a7-e5e6-7a11-9dfb-432608bcafd1`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed.  Result:
+      added
+      `BoundaryFreeEndpointIncidentSourceRows.of_actualBoundaryRows_localSector_endpointIncidentOnly`,
+      `BoundaryFreeEndpointIncidentSourceRows.nonempty_of_actualBoundaryRows_localSector_endpointIncidentOnly`,
+      and
+      `endpointIncidentSourceRows_nonempty_of_actualBoundaryRows_localSector_endpointIncidentOnly`,
+      reducing the endpoint/local-sector row to actual boundary rows,
+      pointwise local-sector rows, and the endpoint-only pred/succ branch.
+      Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`,
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`,
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`,
+      and
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource`.
+    - Claim: `S2-agent-local-two-germ-input-proof-20260520r`.
+      Owner: subagent-worker `019e43aa-419f-7180-b9bd-fe46ed518186`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed/pruned;
+      `wait_agent` returned `not_found` after the worker edits landed, and
+      Codex-main fixed the remaining degree-to-neighbor-finset bridge in
+      `S2LocalTwoGermAssembly.lean`.  Result: added the checked local-sector
+      and local-two-germ reducers around
+      `localSectorRows_of_unboundedFrontierCarrierGraph_degree_two` and
+      `localTwoGermRows_of_unboundedFrontierCarrierGraph_degree_two`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`.
+      Task:
+      prove the boundary-free pointwise two-germ/local-sector source from
+      `FinitePlanarOuterComponentInputs C`: at each
+      `unboundedFrontierVertexSet` vertex choose the two actual exterior
+      carrier germs and rule out any third incident frontier germ, using local
+      drawing isolation and the unbounded exterior component.
+    - Claim: `S2-agent-raw-faceSucc-geometric-propagation-20260520r`.
+      Owner: subagent-worker `019e43aa-41eb-7310-b719-8a922289f272`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/GeometricRotationSystem.lean`,
+      `Swanepoel/FinitePlaneDrawing.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: closed.  Result:
+      added
+      `selectedRawOrbit_faceSucc_openSegment_frontier_of_boundarySectorRows_start`,
+      `selectedRawOrbit_faceSucc_interior_frontier_point_of_boundarySectorRows_start`,
+      `rawOrbitStartAndIteratedSuccessorFrontierSource_of_actualBoundaryRows_sectorRows_orientation`,
+      and
+      `rawOrbitDartEdgeFrontierSource_of_actualBoundaryRows_sectorRows_orientation_oneStep`,
+      routing selected-side geometric `faceSucc` propagation through the
+      Nat-indexed raw-orbit induction path instead of the global
+      orientation-free shortcut.  Verified:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-actual-boundary-from-raw-coverage-20260520s`.
+      Owner: subagent-worker `019e43ae-b665-7501-9e42-26fcb858924b`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean`, with read-only use of
+      `Swanepoel/S2BoundaryFreeRawSource.lean`,
+      `Swanepoel/S2SeededRawOrbitSource.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`, and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: closed/pruned;
+      `wait_agent` returned `not_found` after code landed.  Result: added
+      `S2_unboundedExteriorFrontierCycleRows_of_boundaryFree_noThirdGermTailCoverage`,
+      reducing the final S2 row to boundary-free local rows, selected raw-tail
+      coverage, dart-edge frontier rows, edge coverage, and repeated-tail cut
+      rows.  Verification is covered by
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+      Task:
+      prove or further reduce `ActualBoundaryCycleFrontierEquivalenceRows C inputs`
+      from the existing raw-orbit coverage / actual-arc reducers, especially
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_boundaryFree_noThirdGermActualArcRows_tailCoverage`
+      and
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_rawOrbitCoverage_boundaryFree_noThirdGermActualArcRows`.
+    - Claim: `S2-agent-connected-carrier-from-raw-coverage-20260520s`.
+      Owner: subagent-worker `019e43ae-ce5c-7262-b293-5aea015e03f5`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, with read-only use of
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: closed/pruned;
+      `wait_agent` returned `not_found` after code landed.  Result: added
+      `RawOrbitCoverageSourceRows.toEdgeCarrierSegmentChainConnected`,
+      `RawOrbitCoverageSourceRows.toFrontierPreconnectedSourceRows`,
+      `RawOrbitCoverageSourceRows.toCarrierGraphConnected`,
+      `unboundedFrontierCarrierGraph_connected_of_rawCoverage_boundaryFreeSource`,
+      and
+      `unboundedFrontierCarrierGraph_connected_of_rawCoverage_boundaryFreeRows`.
+      Verification is covered by
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+      Task:
+      close or reduce `(unboundedFrontierCarrierGraph C inputs).Connected`
+      through existing raw-orbit coverage or cyclic-coverage rows without
+      overlapping the local two-germ proof.
+    - Claim: `S2-agent-input-row-proof-map-20260520s`.
+      Owner: subagent-explorer `019e43ae-dfde-7f31-81dc-cfd825aed1ae`.
+      Role: route mapper.  Scope: read-only current S2 owner files and
+      `TASK.md`.  Status: closed/pruned; `wait_agent` returned `not_found`
+      with no final message available.  Task: identify the shortest currently
+      available theorem chain to the input-facing
+      `UnboundedExteriorFrontierCycleRows C inputs` row and name the exact
+      remaining source rows without introducing a circular route.
+    - Claim: `S2-agent-actual-arc-rows-source-20260520t`.
+      Owner: subagent-worker `019e43b8-49b4-7603-8461-a33366abdf2b`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and, only if needed,
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed/pruned.
+      Result: added
+      `rawFaceSuccOrbitActualExteriorArcSeparationRows_of_edge_mem_pairRows`
+      and `S2_agent_actual_arc_rows_source`, reducing the actual-arc package to
+      selected raw edge membership plus repeated-tail arc rows.  Verified:
+      `lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+      and
+      `lake env lean ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-exterior-carrier-source-20260520t`.
+      Owner: subagent-worker `019e43b8-5e98-7c01-b65f-79b631f30e31`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added
+      `exteriorFrontierCarrierRows_nonempty_of_connected_localSectorRows_fixedSide`
+      and `S2_agent_exterior_carrier_source_20260520t`, reducing the honest
+      carrier row to actual frontier preconnectedness plus pointwise
+      `UnboundedFrontierCarrierLocalSectorRowsAt`.  Verified:
+      `lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+      `lake env lean ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`,
+      and
+      `lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+    - Claim: `S2-agent-degree-two-carrier-source-20260520t`.
+      Owner: subagent-worker `019e43b8-7384-7320-8864-31696aa277e9`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2LocalTwoGermAssembly.lean`, with
+      `Swanepoel/ExteriorComponentTopology.lean` only for primitive rows.
+      Status: closed/pruned.  Result: added
+      `frontier_cover_to_connected_carrier_of_frontier_edge_point_degree_two`,
+      `unboundedFrontierCarrierCyclicCoverageRows_of_frontierPreconnectedCarrierGraph_degree_two`,
+      `cyclicCoverageLocalSectorRows_of_frontierPreconnectedCarrierGraph_degree_two`,
+      and
+      `unboundedExteriorFrontierCycleRows_of_frontierPreconnectedCarrierGraph_degree_two`.
+      Verified:
+      `lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+      `lake env lean ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
+      and
+      `lake env lean ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.
+    - Claim: `S2-agent-local-sector-from-inputs-20260520u`.
+      Owner: subagent-worker `019e43bd-de7d-7b21-bc66-415e2c0ddaac`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed.  Result:
+      added `localSectorRows_of_actualBoundary_pointSectorNoBetween_rows`,
+      `localSectorRows_of_actualBoundary_pointSectorNoBetween_source`, and
+      `localSectorRows_of_actualBoundary_thirdGermNoBetween_source`,
+      reducing the input-level pointwise local-sector row to actual boundary
+      rows plus point-sector/no-between or third-germ/no-between geometric
+      sources.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`.
+    - Claim: `S2-agent-frontier-preconnected-from-inputs-20260520u`.
+      Owner: subagent-worker `019e43be-055e-7733-a851-9284f53e14e2`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed/pruned;
+      `wait_agent` returned `not_found` after code landed.  Result: added
+      `S2_frontier_preconnected_of_edgeChain_boundaryFree_noThirdGerm_fixedSide`,
+      `S2_frontierPreconnectedSourceRows_of_edgeChain_boundaryFree_noThirdGerm_fixedSide`,
+      and `S2_agent_frontier_preconnected_from_inputs_20260520u`,
+      reducing frontier preconnectedness to the actual selected edge-carrier
+      chain plus the boundary-free local source.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-raw-orbit-actual-arc-from-inputs-20260520u`.
+      Owner: subagent-worker `019e43be-1cf5-7043-9cde-530b754e4969`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed.  Result:
+      added
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeMemRepeatedActualArcRows_carrierConnected`,
+      `selectedRawOrbitActualArcRows_of_boundaryFreeNoThirdGermSource`, and
+      `unboundedExteriorFrontierCycleRows_of_selectedActualArcRows_boundaryFree_connected`,
+      selecting the raw exterior orbit from input/local rows and reducing the
+      actual-arc package to selected raw-edge membership plus repeated-tail
+      actual exterior arc rows.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`
+      and
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-selected-edge-mem-source-20260520v`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Status: spawn blocked by
+      thread limit; no phantom active worker.  Intended task: produce the
+      selected raw-edge membership callback for
+      `unboundedExteriorFrontierCycleRows_of_selectedActualArcRows_boundaryFree_connected`
+      from existing raw dart-edge frontier / iterated face-successor source
+      rows.
+    - Claim: `S2-agent-repeated-tail-actual-arc-source-20260520v`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: spawn blocked by
+      thread limit; no phantom active worker.  Intended task: reduce
+      `RawFaceSuccOrbitRepeatedTailActualExteriorArcRows` to existing no-cut
+      or arc-separation source rows.
+    - Claim: `S2-main-repeated-tail-actual-arc-from-arcRows-20260520v`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and this workboard.  Status:
+      checked.  Result: added
+      `RawFaceSuccOrbitRepeatedTailActualExteriorArcRows.ofRepeatedExteriorBoundaryArcSeparationRows`
+      and
+      `rawFaceSuccOrbitActualExteriorArcSeparationRows_of_edge_mem_boundaryArcRows`,
+      converting existing finite repeated-boundary arc-separation rows into the
+      pair-level and orbit-level actual-arc payloads.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`
+      passed with only pre-existing linter warnings.
+    - Claim: `S2-agent-current-source-gap-map-20260520v`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only S2
+      files and this workboard.  Status: spawn blocked by thread limit; no
+      phantom active worker.  Intended task: identify the shortest current
+      non-circular chain from `FinitePlanarOuterComponentInputs C` to
+      `UnboundedExteriorFrontierCycleRows C inputs`.
+    - Claim: `S2-main-selected-edge-mem-from-dart-frontier-20260520v`.
+      Owner: Codex-main.  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `rawOrbitEdgeMemSource_of_dartEdgeFrontierSource` and
+      `unboundedExteriorFrontierCycleRows_of_selectedActualArcRows_dartFrontier_boundaryFree_connected`,
+      proving selected consecutive-tail edge membership from
+      `RawOrbitDartEdgeFrontierSource` and narrowing the selected actual-arc
+      route to raw dart-edge frontier rows plus repeated-tail actual exterior
+      arc rows.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-repeated-tail-actual-arc-source-20260520w`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed/pruned.
+      Result: added
+      `repeatedTailActualArcRows_source_of_repeatedBoundarySeparationRows`,
+      reducing the repeated-tail actual-arc callback to repeated-boundary
+      separation rows plus `inputs.noCutVertex`.  Remaining source field:
+      for each selected edge/start/orbit and repeated tail pair, prove
+      `RepeatedExteriorBoundarySeparationRows C (fun k => (O.dart k).tail) i j`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-boundaryfree-carrier-connected-source-20260520w`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed/pruned.
+      Result: added
+      `boundaryFreeCarrierConnected_source_of_actualBoundaryRows`,
+      `boundaryFreeCarrierConnected_source_of_actualBoundaryRows_nonempty`,
+      `boundaryFreeCarrierConnected_source_of_actualBoundaryRows_endpointIncidentRows`,
+      `boundaryFreeCarrierConnected_source_of_rawCoverage_boundaryFreeSource`,
+      `boundaryFreeCarrierConnected_source_of_rawCoverage_boundaryFreeSource_nonempty`,
+      and
+      `boundaryFreeCarrierConnected_source_family_of_rawCoverage_boundaryFreeSource`.
+      Remaining source fields: actual-boundary rows plus boundary-free or
+      endpoint rows, or raw coverage plus nonempty boundary-free rows.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+    - Claim: `S2-agent-final-source-assembly-route-20260520w`.
+      Owner: subagent-explorer.  Role: route mapper.  Scope: read-only S2
+      files and this workboard.  Status: closed/pruned.  Result: confirmed
+      the shortest non-circular current route is the selected actual-arc route
+      through
+      `unboundedExteriorFrontierCycleRows_of_selectedActualArcRows_dartFrontier_boundaryFree_connected`.
+      Remaining source rows are boundary-free no-third-germ, carrier
+      connectedness, raw dart-edge frontier, and repeated-tail actual-arc rows;
+      do not source them via `UnboundedExteriorFrontierCycleRows`,
+      `ActualBoundaryCycleFrontierEquivalenceRows`, `ExteriorFrontierCarrierRows`,
+      a finite-planar theorem, or the W32 target.
+    - Claim: `S2-agent-raw-dart-frontier-input-source-20260520x`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: closed/pruned.
+      Result: added `RawOrbitIteratedFaceSuccInteriorFrontierPointSource`,
+      `rawOrbitStartAndIteratedSuccessorFrontierSource_of_iteratedFaceSuccInteriorPoint_frontierEdgePoint`,
+      and
+      `rawOrbitDartEdgeFrontierSource_of_iteratedFaceSuccInteriorPoint_frontierEdgePoint`,
+      reducing raw dart-edge frontier tracing to an iterated face-successor
+      interior-frontier point source.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-iterated-faceSucc-interior-frontier-source-20260520y`.
+      Owner: subagent-worker `019e43ce-99aa-7180-8463-9b7d97acbecd`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and, only for a tiny geometric
+      helper, `Swanepoel/GeometricRotationSystem.lean`.  Status:
+      closed/pruned.  Result: verified the existing eraser
+      `rawOrbitDartEdgeFrontierSource_of_iteratedFaceSuccInteriorPoint_frontierEdgePoint`;
+      no source theorem was added.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-faceSucc-interior-point-source-real-proof-20260520z`.
+      Owner: subagent-worker `019e43d0-735c-7951-baa9-92d2af3ba6b9`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and, only for tiny local
+      helpers, `Swanepoel/GeometricRotationSystem.lean` or
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added `RawOrbitSelectedBoundaryStartSource` and
+      `rawOrbitIteratedFaceSuccInteriorFrontierPointSource_of_boundarySectorRows_startSource`,
+      reducing
+      `RawOrbitIteratedFaceSuccInteriorFrontierPointSource inputs` from
+      primitive `BoundaryVertexExteriorSectorRowsAt` plus a selected
+      start-orientation source.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-selected-boundary-start-source-20260520z`.
+      Owner: subagent-worker `019e43d2-7d36-71e2-b186-d906840f7559`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and, only for a tiny helper,
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added `rawOrbitSelectedBoundaryStartSource_of_edgeRows_boundary_succ`
+      and
+      `rawOrbitIteratedFaceSuccInteriorFrontierPointSource_of_boundarySectorRows_edgeRowsBoundarySucc`,
+      reducing selected raw-start orientation to the minimal local row that
+      selected frontier seed edges are oriented as forward boundary successor
+      edges.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-selected-edge-boundary-succ-source-20260520aa`.
+      Owner: subagent-worker `019e43d5-1b8e-7831-a44a-cd0286bc778b`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and, only for a tiny helper,
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added `RawOrbitSelectedEdgeBoundarySuccSource`,
+      `rawOrbitSelectedEdgeBoundarySuccSource_of_boundaryStartSource`, and
+      `rawOrbitSelectedBoundaryStartSource_iff_edgeBoundarySuccSource`,
+      naming the exact selected-edge forward-boundary-start row.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-selected-edge-boundary-succ-real-source-20260520ab`.
+      Owner: subagent-worker `019e43d7-ae9c-7843-be75-81616b04ce18`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and, only for a tiny helper,
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added
+      `rawOrbitSelectedEdgeBoundarySuccSource_of_boundaryIncident_reverseExcluded`,
+      `rawOrbitSelectedEdgeBoundarySuccSource_of_boundarySectorRows_reverseExcluded`,
+      and `S2_agent_selected_edge_boundary_succ_real_source_20260520ab`,
+      reducing selected-edge orientation to primitive
+      `BoundaryVertexExteriorSectorRowsAt`, `frontier_iff_cycle_vertex`, and
+      the live `EdgeLocalRowsBoundaryReverseExcluded` row.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-boundary-reverse-tail-exterior-sector-real-source-20260520ac`.
+      Owner: subagent-worker `019e43da-7096-72c2-a4e9-255fc7d23ccb`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2SeededRawOrbitSource.lean` and
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added
+      `S2_agent_boundary_reverse_tail_exterior_sector_real_source_20260520ac`,
+      proving that primitive boundary-sector open-segment frontier rows refute
+      `BoundaryReverseTailOpenSegmentExteriorSector`.  Handoff: this row is a
+      dead-route guardrail, not a live selected-edge source.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`
+      and
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+    - Claim: `S2-agent-repeated-boundary-separation-input-source-20260520x`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/S2ExteriorBoundarySource.lean`.  Status: closed/pruned.
+      Result: added
+      `repeatedBoundarySeparationRows_source_of_repeatedTailExteriorCutRows`,
+      reducing the repeated-boundary separation callback to the minimal
+      repeated-tail exterior cut-row source.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-repeated-tail-cutrows-input-source-20260520y`.
+      Owner: subagent-worker `019e43cd-9a71-7b41-a20c-d19a77bc0f4b`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and, only if a primitive
+      source row genuinely belongs there,
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added `S2RepeatedTailExteriorCutWitnessSource` and
+      `S2_repeatedTailExteriorCutRows_input_source_of_unreachable_after_delete`,
+      reducing the selected raw-orbit repeated-tail cut callback to exactly
+      one witness on each cyclic open arc plus nonreachability after deleting
+      the repeated tail.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-repeated-tail-cut-witness-input-source-20260520z`.
+      Owner: subagent-worker `019e43d0-39a9-74f3-86a8-e18acab54877`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and, only if a primitive row
+      genuinely belongs there, `Swanepoel/ExteriorComponentTopology.lean`.
+      Status: closed/pruned.  Result: added
+      `S2RepeatedTailExteriorCutWitnessSource.ofRepeatedExteriorBoundaryArcSeparationRows`,
+      `S2RepeatedTailExteriorCutWitnessSource.ofRepeatedTailActualExteriorArcRows`,
+      `S2RepeatedTailExteriorCutWitnessSource.toRepeatedTailExteriorCutRows`,
+      `S2_repeatedTailExteriorCutWitnessSource_of_boundaryArcSeparationRows`,
+      and `S2_repeatedTailExteriorCutRows_input_source_of_boundaryArcSeparationRows`,
+      reducing the witness source to finite cyclic
+      `RepeatedExteriorBoundaryArcSeparationRows`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-repeated-boundary-arc-separation-source-20260520aa`.
+      Owner: subagent-worker `019e43d2-ca48-79d0-ac47-119cc42c1b28`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and, only for primitive
+      source rows, `Swanepoel/ExteriorComponentTopology.lean`.  Status:
+      closed/pruned.  Result: added `S2RepeatedBoundaryArcSeparationSource`,
+      `S2RepeatedBoundaryArcSeparationSource.toRepeatedExteriorBoundaryArcSeparationRows`,
+      `S2RepeatedBoundaryArcSeparationSource.unreachable_after_delete`,
+      `S2RepeatedTailExteriorCutWitnessSource.ofRepeatedBoundaryArcSeparationSource`,
+      `S2_agent_repeated_boundary_arc_separation_source_20260520aa`,
+      and `S2_repeatedTailExteriorCutWitnessSource_of_repeatedBoundaryArcSeparationSource`,
+      reducing finite cyclic arc separation to explicit witnesses, non-cut
+      cover/disjointness, and anticompleteness.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-repeated-boundary-arc-source-witnesses-20260520ab`.
+      Owner: subagent-worker `019e43d6-17fa-7dc2-9baa-b97d18e1a68b`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and, only for primitive rows,
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added `S2RepeatedBoundaryArcSourceWitnessRows` and its
+      cover/disjointness/anticompleteness erasers, plus
+      `S2_agent_repeated_boundary_arc_source_witnesses_20260520ab` and
+      `S2_repeatedBoundaryArcRows_of_source_witnesses_20260520ab`, reducing
+      the arc source to explicit witness rows.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-repeated-boundary-arc-witnesses-real-source-20260520ac`.
+      Owner: subagent-worker `019e43da-487f-7241-9f02-c86d650ce634`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and, only for primitive rows,
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added `S2RepeatedBoundaryArcRealWitnessSourceRows`,
+      `S2RepeatedBoundaryArcRealWitnessSourceRows.toSourceWitnessRows`, and
+      `S2_agent_repeated_boundary_arc_witnesses_real_source_20260520ac`,
+      reducing explicit arc witness rows to open-arc witnesses, non-cut
+      raw-tail coverage, opposite-arc same-tail only at the repeated tail, and
+      index-level anticompleteness.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-repeated-boundary-arc-real-witness-source-20260520ad`.
+      Owner: subagent-worker `019e43dc-6cb8-7452-851d-f802c8b65a7a`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2ExteriorBoundarySource.lean` and, only for primitive rows,
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added
+      `S2_agent_repeated_boundary_arc_real_witness_source_20260520ad`,
+      `S2_repeatedTailExteriorCutWitnessSource_of_realWitnessSource_20260520ad`,
+      and `S2_repeatedTailExteriorCutRows_input_source_of_realWitnessSource_20260520ad`,
+      reducing repeated selected raw-orbit tails through the existing
+      real-witness, boundary-arc separation, cut-witness, and cut-row
+      machinery.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+    - Claim: `S2-agent-boundaryfree-local-source-input-20260520x`.
+      Owner: subagent-worker.  Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed/pruned.
+      Result: added
+      `boundaryFreeNoThirdGermSource_of_localSectorRows_endpointFrontier`
+      and `S2_agent_boundaryfree_local_source_input_20260520x`, reducing the
+      boundary-free source to pointwise local-sector rows plus endpoint
+      frontier-edge membership.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+    - Claim: `S2-agent-local-sector-endpoint-frontier-input-source-20260520y`.
+      Owner: subagent-worker `019e43ce-5b0d-7d71-b2f0-f33966030adc`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and
+      `Swanepoel/S2LocalTwoGermAssembly.lean`.  Status: closed/pruned.
+      Result: added
+      `AdjacentFrontierEndpointsInteriorFrontierPointSource`,
+      `endpoint_frontier_edge_of_adjacentFrontierEndpointsInteriorFrontierPointSource`,
+      `localSectorEndpointFrontierInputSource_of_endpointInteriorFrontierPoint`,
+      and `S2_agent_local_sector_endpoint_frontier_input_source_20260520y`,
+      reducing endpoint frontier-edge membership to the local fact that
+      adjacent frontier endpoints have an interior frontier point.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+    - Claim: `S2-agent-adjacent-frontier-endpoints-interior-point-20260520z`.
+      Owner: subagent-worker `019e43d1-b7a2-7740-bc35-8bbf6a5fe345`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and, only for primitive local
+      topology rows, `Swanepoel/FinitePlaneDrawing.lean` or
+      `Swanepoel/ExteriorComponentTopology.lean`.  Status: closed/pruned.
+      Result: added `AdjacentFrontierEndpointsInteriorClosurePointSource`
+      and `S2_agent_adjacent_frontier_endpoints_interior_point_20260520z`,
+      reducing the endpoint interior frontier source to the local row that
+      adjacent frontier endpoints have an open-edge point in the closure of
+      the unbounded exterior component.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+    - Claim: `S2-agent-adjacent-frontier-endpoints-closure-point-source-20260520aa`.
+      Owner: subagent-worker `019e43d5-ed27-7f83-92cb-18ea4148fc66`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and, only for a tiny
+      reducer, `Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
+      closed/pruned.  Result: added
+      `AdjacentFrontierEndpointsLocalComponentIntervalClosureSource`,
+      `AdjacentFrontierEndpointsInteriorClosurePointSource_of_localComponentIntervalClosure`,
+      and
+      `S2_agent_adjacent_frontier_endpoints_closure_point_source_20260520aa`,
+      reducing
+      `AdjacentFrontierEndpointsInteriorClosurePointSource`: adjacent graph
+      endpoints on the unbounded exterior frontier have some relative-open
+      point of their unit edge in the closure of the unbounded exterior
+      component.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+    - Claim: `S2-agent-local-component-interval-closure-real-source-20260520ab`.
+      Owner: subagent-worker `019e43d9-5ced-7151-a77d-bfcf1147ecb2`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and, only for a tiny
+      finite-drawing helper, `Swanepoel/FinitePlaneDrawing.lean`.  Status:
+      closed/pruned.  Result: added
+      `localComponentIntervalClosure_of_frontier_edge_point`,
+      `AdjacentFrontierEndpointsLocalComponentIntervalClosureSource_of_interiorClosurePointSource`,
+      and
+      `S2_agent_local_component_interval_closure_real_source_20260520ab`,
+      reducing the interval source to the direct endpoint-to-interior closure
+      source while proving the local edge-side component theorem at an
+      interior frontier point.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+    - Claim: `S2-agent-adjacent-frontier-endpoints-interior-closure-real-source-20260520ac`.
+      Owner: subagent-worker `019e43dd-160b-73e1-b46c-5b69a96448d7`.
+      Role: theorem prover.  Scope:
+      `Swanepoel/ExteriorComponentTopology.lean` and, only for a tiny
+      finite-drawing helper, `Swanepoel/FinitePlaneDrawing.lean`.  Status:
+      closed/pruned.  Result: added
+      `AdjacentFrontierEndpointsClosedSegmentClosureLocusRelativeOpenSource`,
+      `isPreconnected_closedSegment`,
+      `AdjacentFrontierEndpointsInteriorClosurePointSource_of_closedSegmentClosureLocusRelativeOpen`,
+      and
+      `S2_agent_adjacent_frontier_endpoints_interior_closure_real_source_20260520ac`,
+      reducing `AdjacentFrontierEndpointsInteriorClosurePointSource C inputs`
+      to a non-circular closed-segment relative-openness local source.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+    - Claim: `S2-main-boundaryfree-carrier-endpoint-eraser-20260520u`.
+      Owner: Codex-main.  Role: integration prover.  Scope:
+      `Swanepoel/S2BoundaryFreeRawSource.lean` and this workboard.  Status:
+      checked.  Result: added
+      `unboundedExteriorCycleRows_of_carrierGraphConnected_endpointIncidentSource`
+      and
+      `finitePlanarStraightLineOuterComponentTheorem_of_carrierGraphConnected_endpointIncidentSource`,
+      the direct checked erasers from concrete carrier connectedness plus
+      `BoundaryFreeEndpointIncidentSourceRows` to the final unbounded exterior
+      cycle rows / family theorem.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      Spawn attempts for
+      `S2-agent-local-two-germ-source-degree-route-20260520u`,
+      `S2-agent-boundaryfree-endpoint-source-route-20260520u`,
+      `S2-agent-seeded-raw-orbit-input-reducer-20260520u`,
+      `S2-agent-actual-arc-cutrows-source-20260520u`,
+      `S2-agent-final-s2-source-assembly-20260520u`, and
+      `S2-agent-current-source-gap-map-20260520u` were blocked by the current
+      thread limit; existing open delegation claims above are being given time
+      to run rather than pruned early.
+    New checked support rows integrated by Codex-main:
+      Spawn attempt `S2-agent-boundaryfree-from-degree-two-20260520t` was
+      blocked by the current thread limit, so Codex-main kept the work local
+      instead of leaving a phantom worker claim.
+      `Swanepoel/S2BoundaryFreeRawSource.lean` now has
+      `edgeCarrierSegmentChainConnected_of_actualBoundaryRows`, proving the
+      selected-edge segment-chain row from
+      `ActualBoundaryCycleFrontierEquivalenceRows C inputs` plus
+      `BoundaryFreeNoThirdGermSource inputs`; it also has
+      `unboundedFrontierCarrierGraph_connected_of_actualBoundaryRows`, erasing
+      those same rows to connectedness of the concrete unbounded-frontier
+      carrier graph.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      `Swanepoel/S2SeededRawOrbitSource.lean` now has
+      `boundaryFreeConnectedRawOrbitSourceRows_of_actualBoundaryRows_sectorRows_orientation`
+      and
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryRows_sectorRows_orientation`,
+      wiring actual boundary rows, primitive sector rows, and selected-edge
+      reverse exclusion into the connected raw-orbit route while deriving
+      carrier connectedness internally from the actual boundary rows; this now
+      uses
+      `rawOrbitDartEdgeFrontierSource_of_actualBoundaryRows_sectorRows_orientation_oneStep`
+      as its dart-frontier field, so the route follows the selected
+      Nat-indexed one-step face-successor proof.  Verified by
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+      Closed claim `S2-agent-unoriented-boundary-dart-classifier-20260520g`
+      (`019e437d-0843-7480-b9c0-8b363ce1c6eb`): added
+      `unitDistanceDart_boundary_or_reverse_of_openSegment_frontier` in
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Closed read-only claim `S2-agent-selected-orbit-sector-route-20260520g`
+      (`019e437d-088f-7b70-8344-d8f536e25766`): selected-orbit routing should
+      use `rawFaceSuccOrbit_dart_on_boundary_of_sectorRows_start` plus
+      `BoundaryVertexExteriorSectorRowsAt.S2_agent_dart_edge_frontier_from_sectorRows`,
+      not the global oriented predecessor callback.
+      Closed read-only claim `S2-agent-input-boundary-sector-source-20260520g`
+      (`019e437d-08da-7891-9144-4ceb630f1ca6`): the smallest input-only
+      handoff is an actual boundary cycle `B`, `frontier_iff_cycle_vertex`,
+      boundary edge membership, angular no-between rows, and
+      `BoundaryCycleIncidentFrontierEdgeCompleteness inputs B`, consumed by
+      `S2_boundaryVertexExteriorSectorRows_source_of_boundaryCycleIncidentFrontierEdgeCompleteness`.
+      Closed claim `S2-main-selected-orbit-sector-bridge-20260520h`
+      (Codex-main): added
+      `selectedRawOrbit_dartEdgeFrontier_of_boundarySectorRows_start` and
+      `rawOrbitCoverageSourceRows_of_boundarySectorRows_selectedStart` in
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Closed claim `S2-main-boundary-cycle-edge-mem-handoff-20260520i`
+      (Codex-main): added
+      `S2_boundaryVertexExteriorSectorRows_source_of_boundaryCycleEdgeMem_angular_complete`
+      and
+      `S2_unboundedExteriorFrontierCycleRows_of_boundaryCycleEdgeMem_angular_complete`
+      in `Swanepoel/S2ExteriorBoundarySource.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Closed claim `S2-agent-boundary-edge-mem-family-consumer-20260520j`
+      (`019e4385-a1a4-71b2-a896-40dbdc280f09`): added
+      `finitePlanarStraightLineOuterComponentTheorem_of_boundaryCycleEdgeMem_angular_complete`
+      in `Swanepoel/S2ExteriorBoundarySource.lean` and
+      `minimalFailureExactActualTopologyFieldsTarget_of_boundaryCycleEdgeMem_angular_complete`
+      in `Swanepoel/FaceBoundaryTopologySourceW32.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource` and
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+      Closed read-only claim `S2-agent-angular-row-existing-route-20260520j`
+      (`019e4385-a1f5-7772-9d07-f552d49238ec`): use
+      `GeometricRotationSystem.boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRows`
+      or the exterior-facing alias
+      `ExteriorComponentTopology.S2_agent_angle_order_from_geometric_rotation`;
+      a face-successor-only source still needs the boundary orientation row.
+      Closed read-only claim
+      `S2-agent-incident-completeness-existing-route-20260520j`
+      (`019e4385-a242-7a40-9384-e2e1c960856d`): incident completeness is
+      already consumed directly from `BoundaryVertexExteriorSectorRowsAt`,
+      `ActualExteriorSectorInputSourceRows`, or the boundary-frontier incident
+      angular-sector route; Codex-main will test the local-sector bridge only
+      if its selected heads can be identified with boundary predecessor and
+      successor.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Closed claim `S2-agent-local-sector-incident-bridge-20260520m`
+      (`019e438c-85c5-72a3-ad3a-d286244b5cd6`): added actual-boundary plus
+      local-sector incident-completeness bridges in
+      `Swanepoel/ExteriorComponentTopology.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+      Closed read-only claim
+      `S2-agent-angular-boundary-order-source-20260520m`
+      (`019e438c-860e-71d3-8ab2-54be98171bed`): angular rows reduce to actual
+      face-successor rows plus the boundary orientation inequality.
+      Closed read-only claim
+      `S2-agent-raw-orbit-to-compact-handoff-20260520m`
+      (`019e438c-865d-72b3-bc7a-4024bd30d187`): raw-orbit actual-boundary
+      rows give the compact S2 handoff; boundary orientation is the next
+      source row.
+      Closed claim
+      `S2-main-actual-boundary-face-successor-sector-handoff-20260520n`
+      (Codex-main): added
+      `BoundaryFreeNoThirdGermSource.boundaryCycleIncidentFrontierEdgeCompleteness_of_actualBoundaryRows`,
+      `endpointIncidentOnlyPredSucc_of_actualBoundaryRows`,
+      `boundaryVertexExteriorSectorRows_of_actualBoundaryRows`,
+      `actualBoundaryRowsWithFaceSucc_of_rawFaceSuccOrbit`, and
+      `unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbit` in
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      Closed claim `S2-agent-boundarysector-noThird-bridge-20260520f`
+      (`019e4379-8549-7e02-b8dc-bfa19b18cde0`): added
+      `boundaryFreeNoThirdGermSource_of_boundaryVertexExteriorSectorRows_endpointFrontier`
+      in `Swanepoel/S2BoundaryFreeRawSource.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      Closed read-only claim `S2-agent-frontier-dart-boundary-pred-route-20260520f`
+      (`019e4379-9ade-7d31-8bee-8c389a2dd873`): the global oriented
+      predecessor row is not derivable from whole-open-segment frontier
+      membership because reversal has the same segment; the usable result is
+      the unoriented boundary-dart classifier plus selected-orbit routing.
+      Closed read-only claim `S2-agent-actual-boundary-cycle-input-source-20260520f`
+      (`019e4379-ae55-7dd2-87bb-4b80648dc2c8`): confirmed the remaining
+      input-only source is exactly an actual `B`, graph-vertex
+      `frontier_iff_cycle_vertex`, and per-boundary-vertex
+      `BoundaryVertexExteriorSectorRowsAt` family, consumed by existing
+      sector-row reducers.
+      Closed claim `S2-agent-boundarysector-successor-callback-20260520f`
+      (`019e4379-bf23-7482-934e-51ce3c09d56f`): added
+      `successor_interior_frontier_point_of_boundarySectorRows` and
+      `rawOrbitStartAndSuccessorFrontierSource_of_boundarySectorRows` in
+      `Swanepoel/S2SeededRawOrbitSource.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Closed claim `S2-agent-faceSucc-source-bridge-20260520e`
+      (`019e4376-2459-72f1-bacb-ca973105bee8`): added
+      `rawOrbitIteratedFaceSuccFrontierEdgeSource_of_faceSuccEdgeSource` and
+      `rawOrbitStartAndIteratedSuccessorFrontierSource_of_faceSuccEdgeSource_frontierEdgePoint`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Closed claim `S2-agent-boundaryfree-iterated-family-20260520e`
+      (`019e4376-3830-7041-8d45-25ed4dd4fc29`): added
+      `finitePlanarStraightLineOuterComponentTheorem_of_connectedIteratedSuccessorSource`
+      and W32 consumer
+      `minimalFailureExactActualTopologyFieldsTarget_of_connectedIteratedSuccessorSource`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      and targeted `FaceBoundaryTopologySourceW32.lean`.
+      Closed read-only claim `S2-agent-global-faceSucc-source-route-20260520e`
+      (`019e4376-4cab-76b0-bc2d-8a26b8a73997`): global
+      `FaceSuccFrontierEdgeSource` already erases to the raw-orbit source; the
+      remaining bridge is to identify arbitrary frontier darts as incoming
+      predecessor boundary darts, or prove the successor-interior callback
+      globally.
+      Closed read-only claim `S2-agent-boundaryfree-source-input-route-20260520e`
+      (`019e4376-5bda-7113-bbc9-0d3ac42be0a0`): actual boundary-sector rows
+      already bypass `BoundaryFreeNoThirdGermSource`; the no-third route also
+      needs endpoint-frontier incident closure.
+      Closed read-only claim `S2-agent-carrier-connected-input-proof-20260520d`
+      (`019e436f-5867-7fc0-bf63-dd5b862cd4ae`): carrier connectedness
+      reduces non-circularly to `Nonempty (ExteriorFrontierCarrierRows C
+      inputs)`; the raw edge-chain route reduces to `RawOrbitCoverageSourceRows
+      O`, or to raw tail coverage plus `BoundaryFreeNoThirdGermSource inputs`.
+      Closed read-only claim `S2-agent-raw-iterated-source-proof-20260520d`
+      (`019e436f-58b5-7131-b10a-0450643ec725`): the shortest checked raw source
+      route is `FaceSuccFrontierEdgeSource inputs` or the successor
+      interior-point callback, routed through
+      `rawOrbitStartAndSuccessorFrontierSource_of_faceSuccEdgeSource_frontierEdgePoint`
+      and `rawOrbitStartAndIteratedSuccessorFrontierSource_of_startAndSuccessor`.
+      Closed read-only claim `S2-agent-boundary-free-local-source-proof-20260520d`
+      (`019e436f-5819-7fa0-a7ce-df39757b3371`): the shortest existing local
+      route is through actual boundary/local-sector rows, with endpoint closure
+      available after `BoundaryFreeNoThirdGermSource`.
+      Closed read-only claim `S2-agent-frontier-edge-cover-source-20260520c`
+      (`019e4369-e74f-71b2-b4e8-c0abb23ebe5e`): frontier edge cover reduces to
+      local-sector rows plus the already checked interior-edge carrier
+      membership source.
+      Closed read-only claim `S2-agent-frontier-preconnected-source-20260520c`
+      (`019e4369-e7a3-75d2-a486-97e131feb4df`): frontier preconnectedness is
+      best consumed through the edge-chain plus local-sector route, or via
+      selected boundary-cycle completeness.
+      Closed claim `S2-agent-endpoint-incident-closure-20260520c`
+      (`019e4369-e7ef-7fc0-96fb-b09ed1bc65ab`): added
+      `BoundaryFreeNoThirdGermSource.endpoint_frontier_edge_of_noThirdGermSource`
+      and the endpoint-incident eraser in `S2BoundaryFreeRawSource.lean`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      Closed claim `S2-agent-iterated-faceSucc-source-20260520c`
+      (`019e4369-e84e-7ce0-a639-60700a91895d`): added the endpoint-incident
+      iterated-step constructor from endpoint rows, connected carrier rows,
+      and the orientation-aware selected `faceSucc` edge source.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Closed claim `S2-agent-input-raw-coverage-source-20260520b`
+      (`019e4360-905f-7981-bbb4-8cd550a495f6`): added the
+      endpoint-facing raw coverage route in
+      `Swanepoel/S2SeededRawOrbitSource.lean`, including
+      `EndpointIncidentConnectedRawOrbitSourceRows`,
+      `EndpointIncidentConnectedIteratedStepSourceRows`, their erasers to
+      raw-coverage rows, and theorem-level reducers to
+      `FinitePlanarStraightLineOuterComponentTheorem`.  Remaining source row:
+      `RawOrbitStartAndIteratedSuccessorFrontierSource inputs`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Closed claim `S2-agent-endpoint-incident-source-input-20260520b`
+      (`019e4360-90a7-7013-b280-0a5c0214539b`): added
+      `BoundaryFreeEndpointIncidentSourceRows.ofLocalSectorRows` and
+      `BoundaryFreeEndpointIncidentSourceRows.of_actualBoundary_geometricLocalExteriorSector_source`.
+      Remaining source row: endpoint-frontier incident closure for adjacent
+      frontier endpoints.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      Closed claim `S2-agent-carrier-connected-source-20260520b`
+      (`019e4360-90f6-7be0-96f3-e89e0420c2a6`): added
+      `unboundedFrontierCarrierGraph_connected_of_frontier_preconnected_and_frontier_edge_cover`
+      and integrated the connected-carrier route.  Remaining source rows:
+      actual frontier preconnectedness plus selected `frontier_edge_cover`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+      Closed claim `S2-agent-final-s2-source-assembly-20260520b`
+      (`019e4360-9144-7890-9402-1d5445b74988`): added the strongest checked
+      final S2 reducer
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeChain_localSector_endpointIncidentRows`
+      and the W32 theorem
+      `minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_localSector_endpointIncidentRows`.
+      Remaining source rows: edge-chain connectedness, local-sector rows, and
+      endpoint-frontier incident closure.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+      Closed claim `S2-agent-edge-chain-boundaryfree-source-20260520`
+      (`019e4358-60e0-7c00-822b-a24c28b34a57`): added
+      `S2_edgeChain_boundaryFreeNoThirdGermSource_of_rawCoverage_endpointIncidentRows`
+      in `Swanepoel/S2BoundaryFreeRawSource.lean`, reducing the edge-chain
+      plus boundary-free no-third source to raw-orbit coverage and endpoint
+      incident rows.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      Closed claim `S2-agent-local-sector-from-inputs-20260520`
+      (`019e4358-612d-7143-9286-97bd361e4283`): added
+      `localSectorRows_of_actualBoundary_geometricLocalExteriorSector_source`
+      in `Swanepoel/S2LocalTwoGermAssembly.lean`, reducing local-sector rows
+      to an actual boundary cycle with frontier equivalence, frontier edge
+      rows, angular no-between rows, and the local exterior sector row.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`.
+      Closed claim `S2-agent-carrier-connected-from-inputs-20260520`
+      (`019e4358-617b-79b3-8fd7-15dd513ab491`): added
+      `unboundedFrontierEdgeCarrierSegmentChainConnected_of_unboundedFrontierCarrierGraph_connected`
+      and supporting selected-edge segment-chain lemmas in
+      `Swanepoel/ExteriorComponentTopology.lean`, reducing edge-chain
+      connectedness to connectedness of `unboundedFrontierCarrierGraph`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\ExteriorComponentTopology.lean`.
+      Closed claim `S2-agent-boundary-free-endpoint-source-20260520`
+      (`019e4353-d20e-7ef3-ac3b-b08566c77f1f`): added
+      `BoundaryFreeEndpointIncidentSourceRows.nonemptyBoundaryFreeNoThirdGermSource`,
+      `unboundedExteriorCycleRows_of_exteriorCarrier_endpointIncidentSource`,
+      and
+      `finitePlanarStraightLineOuterComponentTheorem_of_exteriorCarrier_endpointIncidentSource`
+      in `Swanepoel/S2BoundaryFreeRawSource.lean`.  Codex-main then added the
+      W32 endpoint
+      `minimalFailureExactActualTopologyFieldsTarget_of_exteriorCarrier_endpointIncidentSource`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+      Closed read-only claim `S2-agent-existing-source-route-audit-20260520`
+      (`019e4353-d25d-7643-a7dc-089935bb2b31`): confirmed the shortest current
+      source target is the edge-chain plus boundary-free no-third-germ family
+      feeding
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeChain_boundaryFree_noThirdGerm_fixedSide`.
+      Closed read-only claim `S2-agent-boundary-sector-input-route-20260520`
+      (`019e4353-d2ab-7fb3-8f40-03eb4c7a5306`): verified existing
+      `S2_boundaryVertexExteriorSectorRows_source_of_openSegmentSectorRows`
+      and
+      `S2_boundaryVertexExteriorSectorRows_source_of_boundaryCycleIncidentFrontierEdgeCompleteness`;
+      no file edits were needed.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Closed claim `S2-agent-boundary-free-source-from-inputs-20260520`
+      (`019e4349-f57a-7731-b21d-a0db1a197df3`): added
+      `BoundaryFreeIncidentOnlySourceRows` and erasers to
+      `BoundaryFreeNoThirdGermSource` in
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  The local source is now
+      reduced to endpoint/open-segment incident-only rows for the two selected
+      exterior carrier edges.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      Closed claim `S2-agent-faceSucc-edge-source-20260520`
+      (`019e4349-f5d2-7071-b49e-c023f279cecd`): added
+      `faceSuccFrontierEdgeSource_of_successor_interior_frontier_point`,
+      `rawOrbitStartOpenSegmentFrontierSource_of_frontierEdgePoint`, and
+      `rawOrbitStartAndSuccessorFrontierSource_of_successor_interior_frontier_point`
+      in `Swanepoel/S2SeededRawOrbitSource.lean`.  The one-step source is now
+      reduced to producing a successor interior frontier point.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2SeededRawOrbitSource.lean`.
+      Closed claim `S2-agent-frontier-preconnected-source-20260520`
+      (`019e4349-f629-7f81-87a8-df02ad2e15d2`): added direct transfer from
+      `Nonempty (ExteriorFrontierCarrierRows C inputs)` to connectedness of
+      the concrete `unboundedFrontierCarrierGraph C inputs` in
+      `Swanepoel/S2BoundaryFreeRawSource.lean`.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource`.
+      Codex-main then added erasers from genuine exterior-carrier rows plus
+      boundary-free/incident-only local rows to
+      `FinitePlanarStraightLineOuterComponentTheorem`, and W32 endpoints
+      `minimalFailureExactActualTopologyFieldsTarget_of_exteriorCarrier_boundaryFreeSource`
+      and
+      `minimalFailureExactActualTopologyFieldsTarget_of_exteriorCarrier_incidentOnlySource`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.FaceBoundaryTopologySourceW32`.
+      Closed claim `S2-agent-carrier-chain-from-connected-20260520`
+      (`019e433e-0092-70f2-bb45-c49c48077a81`): added checked carrier
+      connectedness-to-edge-chain reducers in
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, including
+      `unboundedFrontierEdgeCarrierSegmentChainConnected_of_carrierGraph_connected`.
+      Codex-main then added the family erasers
+      `actualBoundaryCycleRows_of_carrierGraphConnected_boundaryFreeSource`,
+      `unboundedExteriorCycleRows_of_carrierGraphConnected_boundaryFreeSource`,
+      `finitePlanarStraightLineOuterComponentTheorem_of_carrierGraphConnected_boundaryFreeSource`,
+      and the W32 endpoint
+      `minimalFailureExactActualTopologyFieldsTarget_of_carrierGraphConnected_boundaryFreeSource`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`
+      and
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FaceBoundaryTopologySourceW32.lean`.
+      Closed claim `S2-agent-faceSucc-frontier-source-20260520`
+      (`019e433e-00dd-76c0-b934-fee48b378b99`): added checked successor-edge
+      erasers
+      `S2_faceSucc_interior_frontier_point_of_faceSucc_frontier_edge` and
+      `S2_successor_interior_frontier_point_of_faceSucc_frontier_edge_step`
+      in `Swanepoel/S2ExteriorBoundarySource.lean`.  The remaining source row
+      is the actual exterior-oriented proof that `faceSucc d` is a selected
+      unbounded-frontier edge when `d` is on the exterior frontier.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Closed claim `S2-agent-local-two-germ-source-20260520`
+      (`019e433e-012c-7801-ba00-e409226a6442`): added checked
+      boundary-free local erasers
+      `S2LocalTwoGermAssembly.localTwoGermRows_of_boundaryFree_twoSelectedEdges_noThirdGerm_source`
+      and
+      `S2LocalTwoGermAssembly.localSectorRows_of_boundaryFree_twoSelectedEdges_noThirdGerm_source`.
+      The remaining source row is the actual input-facing selection of the two
+      exterior incident carrier edges and the no-third-germ exclusion.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`.
+      Closed read-only claim `S2-agent-edge-chain-source-input-20260520`
+      (`019e4335-9d70-70e3-9979-c409b912e374`): no existing theorem sources
+      `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` from only
+      `FinitePlanarOuterComponentInputs C`.  The least-circular route is a
+      selected raw face-successor orbit with dart edges on the actual
+      unbounded frontier and coverage of every selected
+      `unboundedFrontierEdgeSet` edge, feeding
+      `S2_edgeCarrierSegmentChainConnected_of_rawFaceSuccOrbit_dartFrontier_edgeCoverage`.
+      Next theorem shape: package those two rows as raw-orbit coverage source
+      rows, then erase to the edge-chain source.
+      Closed read-only claim `S2-agent-local-two-germ-source-input-20260520`
+      (`019e4335-9dc4-7932-a8de-c191ee5233fb`): the smallest local source is
+      the input-only family consumed by
+      `S2_localSectorRows_of_boundaryFree_twoSelectedEdges_noThirdGerm_source`;
+      for each `a : {v // v âˆˆ unboundedFrontierVertexSet C inputs}`, select
+      two actual incident `unboundedFrontierEdgeSet` heads, prove them
+      distinct, and prove the no-third-germ exclusion.  This is not supplied
+      by the boundary-cycle angular bridge, which is downstream of S2.
+      Closed read-only claim `S2-agent-raw-orbit-cut-source-input-20260520`
+      (`019e4335-9e12-77d2-88cb-95cfa7fb2b29`): the raw route should source
+      selected dart-edge frontier first, then derive raw-tail coverage,
+      period-three, frontier-iff-tail, and cyclic coverage through checked
+      reducers; repeated-tail separation should use
+      `RawFaceSuccOrbitRepeatedTailExteriorCutRows`, not the stronger
+      actual-arc package.  First implementation target:
+      an exterior-oriented one-step geometric `faceSucc` preservation theorem
+      feeding the successor-interior-point row consumed by
+      `S2_rawFaceSuccOrbit_dart_frontier_of_successor_interior_points`.
+      Closed stale/inaccessible claims
+      `S2-agent-frontier-preconnected-source-current`
+      (`019e432a-2bbf-72b0-bb6f-edebf0e9f0b8`),
+      `S2-agent-local-sector-source-current`
+      (`019e432a-3b46-7723-8648-515504aea56a`), and
+      `S2-agent-exterior-raw-orbit-current`
+      (`019e432a-4a9d-7133-98ac-395b86b1cd33`): `wait_agent` returned
+      `not_found` on 2026-05-20 before any handoff was available.  They are
+      not live claims and should be respawned only as fresh concrete tasks
+      when capacity frees.
+      Dynamic spawn attempt on 2026-05-20: focused scout for the least-circular
+      `UnboundedFrontierCarrierLocalSectorRowsAt` /
+      `UnboundedFrontierCarrierLocalTwoGermRowsAt` source route was rejected
+      by the global agent-thread cap, so no live subagent claim was opened.
+      Dynamic spawn attempt on 2026-05-20: focused read-only scout for an
+      input-only `BoundaryFreeNoThirdGermSource` route was rejected by the
+      global agent-thread cap, so no live subagent claim was opened.  Codex-main
+      is continuing the source-selection work in the separate
+      `S2SeededRawOrbitSource.lean` owner file until capacity reopens.
+      Closed claim `S2-agent-workboard-hygiene-current`
+      (`019e432a-596a-7533-822a-f616b7b71567`): verified root import order is
+      already `FinitePlaneDrawing`, `GeometricRotationSystem`,
+      `ExteriorComponentTopology`, `S2LocalTwoGermAssembly`,
+      `S2ExteriorBoundarySource`; taskboard cleanup should keep only genuinely
+      live claims in this refreshed block and move done agents to compact
+      summaries.
+      Closed stale/inaccessible claim
+      `S2-agent-incident-angular-sector-20260520`
+      (`019e4324-72cd-78c3-95dc-79b4ba339ee4`): `wait_agent` returned
+      `not_found` before a handoff was available.  The claim is not live and
+      should be respawned only as a fresh concrete task if capacity frees.
+      Closed claim `S2-agent-plane-graph-api-search-20260520`
+      (`019e4324-7366-7df0-b343-c36d76557526`): local mathlib has no
+      ready-made finite plane graph outer-face/Jordan-curve theorem or useful
+      SimpleGraph cut-vertex API for S2.  The route should remain project
+      local: use `unboundedExteriorComponentRows`,
+      `unboundedFrontierVertexSet`, `unboundedFrontierEdgeSet`,
+      `unboundedFrontierCarrierGraph`, preconnected-frontier source rows,
+      local-sector rows, and repeated-tail/no-cut source rows.
+      Dynamic spawn attempt on 2026-05-20: focused scouts for local-sector
+      source, repeated-tail/no-cut source, and exterior successor-point source
+      were rejected by the global agent-thread cap, so no live subagent claims
+      were opened.
+      Codex-main added and checked
+      `S2_edgeCarrierSegmentChainConnected_of_rawFaceSuccOrbit_dartFrontier_edgeCoverage`,
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_rawOrbitCoverage_boundaryFree_noThirdGerm`,
+      and
+      `S2_unboundedExteriorFrontierCycleRows_of_rawOrbitCoverage_boundaryFree_noThirdGerm`.
+      These prove the carrier edge-chain source directly from a selected raw
+      orbit whose dart-edge interiors lie on the unbounded exterior frontier
+      and whose consecutive raw edges cover every selected frontier edge, then
+      combine it with the boundary-free no-third-germ local source.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Codex-main added the root-imported owner file
+      `Swanepoel/S2BoundaryFreeRawSource.lean`, containing
+      `BoundaryFreeNoThirdGermSource`, `RawOrbitCoverageSourceRows`,
+      `RawOrbitCoverageSourceRows.toEdgeCarrierSegmentChainConnected`,
+      `rawOrbitCoverageSourceRows_of_tailCoverage_boundaryFreeSource`,
+      `rawOrbitCoverageSourceRows_of_connectedCarrier_boundaryFreeSource`,
+      `actualBoundaryCycleRows_of_rawCoverage_boundaryFreeSource`,
+      `unboundedExteriorCycleRows_of_rawCoverage_boundaryFreeSource`,
+      `unboundedExteriorCycleRows_of_connectedCarrier_boundaryFreeSource`, and
+      `finitePlanarStraightLineOuterComponentTheorem_of_rawCoverage_boundaryFreeSource`.
+      This narrows the live S2 source obligation to two reusable certificates:
+      connectedness of the concrete unbounded-frontier carrier plus
+      dart-edge frontier for the selected geometric raw face orbit, and
+      pointwise boundary-free local two-germ/no-third-germ rows.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2BoundaryFreeRawSource.lean`.
+      Codex-main added and checked the separate root-imported seed-selection
+      owner file `Swanepoel/S2SeededRawOrbitSource.lean`, containing
+      `RawOrbitDartEdgeFrontierSource`,
+      `BoundaryFreeConnectedRawOrbitSourceRows`,
+      `BoundaryFreeFrontierPreconnectedSourceRows`,
+      `BoundaryFreeFrontierPreconnectedSourceRows.toConnectedRawOrbitSourceRows`,
+      `BoundaryFreeConnectedRawOrbitSourceRows.existsRawCoverage`,
+      `finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows`,
+      and
+      `finitePlanarStraightLineOuterComponentTheorem_of_frontierPreconnectedRawOrbitSourceRows`.
+      This separates actual unbounded-frontier seed/raw-orbit selection from
+      the local no-third-germ source file.  Codex-main then added the narrower
+      one-step raw-orbit source layer in the same owner file:
+      `RawOrbitStartAndSuccessorFrontierSource`,
+      `rawOrbitDartEdgeFrontierSource_of_startAndSuccessor`,
+      `BoundaryFreeConnectedStepSourceRows`,
+      `BoundaryFreeFrontierPreconnectedStepSourceRows`,
+      `BoundaryFreeConnectedStepSourceRows.toConnectedRawOrbitSourceRows`,
+      `BoundaryFreeFrontierPreconnectedStepSourceRows.toFrontierPreconnectedSourceRows`,
+      `finitePlanarStraightLineOuterComponentTheorem_of_frontierPreconnectedStepSourceRows`,
+      and
+      `finitePlanarStraightLineOuterComponentTheorem_of_connectedStepSourceRows`.
+      The remaining raw-orbit frontier source is now only the start-dart row
+      plus one exterior-oriented geometric `faceSucc` preservation step.
+      Codex-main further split that one-step source into
+      `RawOrbitStartOpenSegmentFrontierSource`,
+      `FaceSuccFrontierEdgeSource`, and
+      `rawOrbitStartAndSuccessorFrontierSource_of_faceSuccEdgeSource`, so the
+      next local proof can attack start-edge propagation and `faceSucc`
+      frontier-edge membership independently.
+      Codex-main then proved
+      `rawOrbitStartOpenSegmentFrontierSource_of_frontierEdgePoint` from the
+      existing pointwise frontier-edge carrier theorem, and added
+      `rawOrbitStartAndSuccessorFrontierSource_of_faceSuccEdgeSource_frontierEdgePoint`.
+      Therefore the raw-orbit frontier source has no remaining start-edge
+      obligation.  Codex-main then corrected this lane away from the
+      over-strong orientation-free `FaceSuccFrontierEdgeSource` as the live
+      target, because the exterior face successor should only be required to
+      preserve the selected exterior-oriented orbit.  The new live source is
+      `RawOrbitIteratedFaceSuccFrontierEdgeSource`, with erasers through
+      `RawOrbitStartAndIteratedSuccessorFrontierSource`,
+      `rawOrbitStartAndIteratedSuccessorFrontierSource_of_iteratedFaceSuccEdgeSource`,
+      `rawOrbitDartEdgeFrontierSource_of_startAndIteratedSuccessor`,
+      `BoundaryFreeConnectedIteratedStepSourceRows`,
+      `BoundaryFreeFrontierPreconnectedIteratedStepSourceRows`,
+      `finitePlanarStraightLineOuterComponentTheorem_of_frontierPreconnectedIteratedStepSourceRows`,
+      and
+      `finitePlanarStraightLineOuterComponentTheorem_of_connectedIteratedStepSourceRows`.
+      Codex-main also added W32 consumers
+      `minimalFailureExactActualTopologyFieldsTarget_of_exteriorFrontierCarrierRows`,
+      `minimalFailureExactActualTopologyFieldsTarget_of_frontierPreconnectedIteratedStepSourceRows`,
+      and
+      `minimalFailureExactActualTopologyFieldsTarget_of_connectedIteratedStepSourceRows`,
+      so the honest carrier route no longer needs an extra boundary-free
+      local source at the W32 boundary, and the corrected iterated raw-orbit
+      route has a final consumer.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
+      and
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\FaceBoundaryTopologySourceW32.lean`,
+      and
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066.lean`.
+      Dynamic spawn attempt on 2026-05-20: a focused read-only scout for
+      `RawOrbitDartEdgeFrontierSource` was rejected by the global agent-thread
+      cap, so no live subagent claim was opened.
+      Dynamic spawn attempt on 2026-05-20: a focused read-only scout for the
+      narrowed residual `FaceSuccFrontierEdgeSource` was rejected by the
+      global agent-thread cap, so no live subagent claim was opened.
+      Dynamic spawn attempt on 2026-05-20: a focused read-only scout for the
+      corrected `RawOrbitIteratedFaceSuccFrontierEdgeSource` lane was rejected
+      by the global agent-thread cap, so no live subagent claim was opened.
+      Closed claim `S2-agent-actual-cycle-source-20260520`
+      (`019e4324-7316-77b2-80e2-1676277e6c42`): least-circular carrier route
+      is frontier-preconnected source rows plus local-sector rows, giving
+      connectedness of `unboundedFrontierCarrierGraph C inputs` and degree two
+      via `S2_carrier_connected_of_frontierPreconnectedSourceRows` and
+      `S2_agent_boundary_carrier_degree_two_from_local_sectors`; then
+      `boundaryCycleEdgeMemSource_of_connected_two_regular_frontier_graph_edge_mem`
+      and
+      `ActualBoundaryCycleFrontierEquivalenceRows.ofBoundaryCycleEdgeMemSource`
+      produce the actual boundary-cycle package.
+      Codex-main added and checked
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_frontierPreconnected_localSectorRows`
+      and
+      `S2_unboundedExteriorFrontierCycleRows_of_frontierPreconnected_localSectorRows`
+      in `Swanepoel/S2ExteriorBoundarySource.lean`, implementing that route
+      without using a downstream cycle row.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Codex-main added and checked
+      `S2_frontierPreconnectedSourceRows_of_edgeChain_localSectorRows_fixedSide`,
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_edgeChain_localSectorRows_fixedSide`,
+      and
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeChain_localSectorRows_fixedSide`.
+      These reduce the carrier route further to the genuine source rows
+      `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs` plus
+      pointwise local-sector rows.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Codex-main added and checked
+      `S2_rawFaceSuccOrbitSourceRows_of_dart_frontier_period_cutRows` and
+      `S2_rawFaceSuccOrbitSourceRows_of_successor_interior_points_period_cutRows`,
+      packaging the new successor-interior-point/dart-frontier handoff as
+      `RawFaceSuccOrbitSourceRows`.  Remaining raw-orbit source obligations
+      are now carrier cyclic coverage, period-three, local-sector rows, and
+      repeated-tail separation/cut rows.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Closed claim `S2-agent-raw-to-cycle-chain-20260520`
+      (`019e431f-560d-7bc2-ba5e-ced1cf3da5f8`): the shortest existing final
+      eraser is
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows`;
+      the cleanest source target remains
+      `ActualBoundaryCycleFrontierEquivalenceRows C inputs`, with raw-orbit
+      fallback through
+      `unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbitBoundaryRows`.
+      Closed claim `S2-agent-successor-frontier-promotion-20260520`
+      (`019e431f-5657-7761-9745-5ea6f58f17b0`): verified the current
+      `S2_faceSucc_openSegment_frontier_of_faceSucc_interior_frontier_point`
+      proof shape; it is already the intended reusable successor-dart
+      promotion row, using `UnitDistanceDart.canonicalAdj`,
+      `interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point`,
+      and `mem_unboundedFrontierEdgeSet_iff`.
+      Closed claim `S2-agent-local-sector-source-next-20260520`
+      (`019e431f-56a4-7b30-993e-99d7d8814bd1`): the smallest remaining
+      actual-geometry local-sector source is
+      `BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B`, or
+      equivalently under angular no-between rows
+      `BoundaryCycleIncidentFrontierEdgeCompleteness inputs B`; existing
+      reducers then give `BoundaryVertexExteriorSectorRowsAt` and the
+      boundary-cycle S2 eraser without identity angular rows or synthetic
+      enclosures.
+      Codex-main added and checked
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_boundaryFree_noThirdGermCutRows_tailCoverage`
+      and
+      `S2_unboundedExteriorFrontierCycleRows_of_boundaryFree_noThirdGermCutRows_tailCoverage`,
+      making the raw-tail-coverage route expose an actual
+      `ActualBoundaryCycleFrontierEquivalenceRows C inputs` before erasing it
+      to the final S2 row.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Codex-main added and checked
+      `S2_actualBoundaryCycleFrontierEquivalenceRows_of_boundaryVertexExteriorSectorRows`,
+      exposing the same actual boundary-cycle frontier-equivalence package
+      from primitive `BoundaryVertexExteriorSectorRowsAt` rows before the
+      boundary-vertex route erases it to `UnboundedExteriorFrontierCycleRows`.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Closed claim `S2-agent-faceSucc-one-step-20260520`
+      (`019e4316-b8c1-7912-a9b6-9efe643fe36c`): existing propagation slot is
+      `rawFaceSuccOrbit_dart_edge_openSegment_frontier_of_start_and_faceSucc_step`.
+      The orientation-free callback is too strong for exterior tracing; the
+      useful next source theorem is instead an exterior-oriented successor row:
+      prove an interior frontier point on the geometric successor dart, promote
+      it via `interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point`
+      and `unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition`,
+      then feed the orbit propagation theorem.
+      Codex-main integrated the promoted row as
+      `S2_faceSucc_openSegment_frontier_of_faceSucc_interior_frontier_point`
+      in `Swanepoel/S2ExteriorBoundarySource.lean`; it promotes one known
+      successor-dart relative-interior frontier point to whole successor
+      open-segment frontier membership without claiming orientation-free
+      exterior preservation.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Codex-main also added
+      `S2_rawFaceSuccOrbit_dart_frontier_of_successor_interior_points`,
+      feeding those successor-point rows into the existing raw-orbit
+      propagation theorem.  Remaining source obligation is now the geometric
+      per-step row producing one unbounded-exterior frontier point on the
+      exterior-oriented successor dart.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Closed claim `S2-agent-boundary-cycle-constructor-20260520`
+      (`019e4316-b9bb-7bc2-9042-9f972c5f178d`): raw-to-cycle construction
+      should use
+      `exists_unitDistanceCycleBoundary_of_rawFaceSuccOrbit_tail_injective`
+      followed by
+      `ActualBoundaryCycleFrontierEquivalenceRows.ofRawFaceSuccOrbitBoundaryRows`;
+      the exact inputs are period at least three, raw-tail injectivity,
+      frontier iff raw tail, and consecutive edge open-segment frontier.
+      Closed claim `S2-agent-repeated-tail-cut-partition-20260520`
+      (`019e4316-b90f-7592-8984-e205a9842613`): smallest no-cut source is the
+      cut-partition callback
+      `S2_agent_repeated_tail_cut_partition_of_rawExteriorFaceWalk`; existing
+      `S2_repeatedTailExteriorCutRows_of_cutPartitions` then converts
+      `inputs.noCutVertex` into the needed vacuous repeated-tail cut rows.
+      Closed claim `S2-agent-frontier-carrier-source-20260520`
+      (`019e4316-b95b-72a1-8750-0ecb96982cca`): non-circular carrier route is
+      local two-germ rows to local sectors, independent frontier
+      preconnectedness via `UnboundedExteriorFrontierPreconnectedSourceRows`,
+      then carrier connectedness and degree two; the smallest direct
+      actual-boundary source remains
+      `ActualBoundaryCycleFrontierEquivalenceRows.BoundaryCycleEdgeMemSource`
+      from inputs.
+      Removed reserved subagent slots on 2026-05-20: the workboard should
+      contain real live claims only, not pool placeholders.  Future subagent
+      claims must be opened only after a concrete spawn succeeds.
+      Dynamic spawn attempt on 2026-05-20: a focused read-only scout for the
+      smallest remaining theorem producing
+      `BoundaryVertexExteriorSectorRowsAt inputs B k` from an actual exterior
+      boundary cycle and `FinitePlanarOuterComponentInputs C` was rejected by
+      the global agent-thread cap, so no live subagent claim was opened.
+      Dynamic spawn attempt on 2026-05-20: two focused read-only scouts for
+      the boundary-sector/local-sector route and the clean owner-file source
+      surface were rejected by the global agent-thread cap, so no live
+      subagent claims were opened.
+      Dynamic spawn attempt on 2026-05-20: three focused follow-up agents for
+      successor-dart frontier promotion, repeated-tail no-cut source, and raw
+      orbit boundary-cycle construction were rejected by the global
+      agent-thread cap, so no live subagent claims were opened.
+      Dynamic spawn attempt on 2026-05-20: after clearing stale `not_found`
+      claims, a fresh focused scout for the exterior-oriented successor
+      interior-frontier-point theorem was still rejected by the global
+      agent-thread cap, so no live subagent claim was opened.
+      Codex-main added and checked
+      `S2LocalTwoGermAssembly.localSectorRows_of_boundaryVertexExteriorSectorRows`,
+      transporting primitive `BoundaryVertexExteriorSectorRowsAt` families to
+      the carrier local-sector rows in the assembly layer.  Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2LocalTwoGermAssembly.lean`.
+      Codex-main added and checked
+      `S2_boundaryVertexExteriorSectorRows_source_of_openSegmentSectorRows`,
+      `S2_unboundedExteriorFrontierCycleRows_of_openSegmentSectorRows`,
+      `S2_boundaryVertexExteriorSectorRows_source_of_boundaryCycleIncidentFrontierEdgeCompleteness`,
+      and
+      `S2_unboundedExteriorFrontierCycleRows_of_boundaryCycleIncidentFrontierEdgeCompleteness`
+      in `Swanepoel/S2ExteriorBoundarySource.lean`.  These keep the live
+      source target on an actual boundary cycle plus consecutive edge-frontier
+      rows, angular no-between rows, and incident frontier-edge completeness.
+      Verification:
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066\Swanepoel\S2ExteriorBoundarySource.lean`.
+      Closed claim `S2-agent-boundary-cycle-existence-real-now`
+      (`019e4307-2c7e-7570-856c-8efe2684ac10`): shortest non-circular route is
+      seed exterior frontier point, geometric raw face-successor orbit, raw
+      dart-frontier tracing, carrier connectedness/tail coverage, and
+      repeated-tail cut rows, then
+      `S2_agent_actualBoundaryCycleRows_of_rawExteriorFaceWalk_cutRows`.
+      Closed claim `S2-agent-dart-frontier-propagation-now`
+      (`019e4307-2cd2-7fe2-83f1-526280d943f2`): existing checked route is
+      `S2_agent_selected_seed_dart_edge_frontier` from boundary-indexed sector
+      rows and `raw_start_on_boundary`; the boundary-free residual is the
+      face-successor frontier-preservation callback consumed by
+      `rawFaceSuccOrbit_dart_edge_openSegment_frontier_of_start_and_faceSucc_step`.
+      Closed claim `S2-agent-cut-row-source-now`
+      (`019e4307-2d21-77e0-8a3c-8b49ac977230`): the minimal repeated-tail
+      payload is `RawFaceSuccOrbitRepeatedTailExteriorCutRows`; its hard field
+      is nonreachability after deleting the repeated tail, with existing
+      erasers through `repeatedExteriorBoundarySeparationRows_of_unreachable_after_delete`.
+      Closed claim `S2-agent-boundaryfree-source-bridge-now`
+      (`019e4304-4b20-7f42-833a-6737792678d5`): Codex-main added and checked
+      `S2_boundaryFree_twoSelectedEdges_noThirdGerm_source_of_boundaryCycle_angularRows`,
+      the source bridge from an actual boundary cycle, consecutive
+      `unboundedFrontierEdgeSet` membership, angular no-between rows, and
+      `third_germ_between` to the boundary-free no-third-germ source.
+      Closed claim `S2-agent-raw-source-package-minimal-now`
+      (`019e4304-5b07-78c0-a75b-b0e613e66fe2`): Codex-main added and checked
+      `S2_unboundedExteriorFrontierCycleRows_of_boundaryFree_noThirdGermCutRows_carrierConnected`,
+      the cut-row analogue of the actual-arc carrier-connected assembly.
+      Closed claim `S2-agent-local-sector-from-two-germ-now`
+      (`019e4304-6a68-7e22-8a2d-e77c3e52901a`): fixed-side half-ball rows do
+      not by themselves source vertex-level two selected carrier neighbours;
+      the exact missing ingredient remains a boundary-free no-third-germ or
+      exactly-two-neighbour row.
+      Closed claim `S2-agent-no-third-germ-source-now`
+      (`019e4301-65d7-7303-abbc-6e4bef748ed7`): no direct existing producer
+      for the exact boundary-free source was found.  The shortest bridge is to
+      select predecessor/successor boundary edges from an actual boundary
+      cycle and use `BoundaryVertexAngularNoBetweenRows.no_between` together
+      with a `third_germ_between` row to discharge no-third-germ.
+      Closed claim `S2-agent-selected-raw-orbit-source-now`
+      (`019e4301-753c-7f31-a712-36f09207a9f2`): the shortest selected-orbit
+      surface is
+      `S2_unboundedExteriorFrontierCycleRows_of_boundaryFree_noThirdGermTailCoverage`;
+      seed/raw-orbit rows are sourced by local-sector rows, while actual-arc
+      rows remain a separate residual unless replaced by the cut-row route.
+      Closed claim `S2-agent-repeated-tail-separation-now`
+      (`019e4301-84e5-7733-b9d9-17bc80922d0a`): the minimal no-cut payload is
+      `RawFaceSuccOrbitRepeatedTailExteriorCutRows`, whose only hard field is
+      non-reachability after deleting the repeated tail; stronger actual-arc
+      rows erase to this cut-row callback.
+      Closed claim `S2-agent-existing-actual-boundary-route`
+      (`019e42fc-555a-7c20-830d-a3c62ed17234`): shortest checked eraser is
+      `ActualBoundaryCycleFrontierEquivalenceRows` to
+      `unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows`;
+      raw-orbit/local-two-germ routes remain support routes when the actual
+      boundary-cycle package is not yet directly constructed.
+      Closed claim `S2-agent-frontier-topology-lemmas`
+      (`019e42fc-6573-7832-8740-8980dab79930`): the locally provable cover is
+      the actual frontier-edge cover from local sector rows plus the
+      fixed-side half-ball interior-edge membership source; Codex-main
+      integrated this as `S2_frontier_edge_cover_of_localSectorRows_fixedSide`,
+      `S2_frontier_preconnected_of_edge_chain_localSectorRows_fixedSide`, and
+      `S2_unboundedExteriorFrontierCycleRows_of_edgeChain_boundaryFree_noThirdGermActualArcRows`.
+      Closed claim `S2-agent-taskboard-and-build-surface`
+      (`019e42fc-7476-7eb1-9ef3-0e3372d54949`): taskboard verifier found the
+      displayed blockers stale relative to the raw/source-package route and
+      caught the direct-file `propRecLargeElim` issue; Codex-main repaired the
+      direct `S2ExteriorBoundarySource.lean` build and updated this S2
+      workboard.
       `FinitePlaneDrawing.segmentPoint_eq_affineLineMap`,
       `FinitePlaneDrawing.closedSegment_subset_affineSpan_pair`,
       `FinitePlaneDrawing.edgeNormalCoord_segmentPoint_eq_zero`,
@@ -245,6 +14722,26 @@ S2 dynamic assignments:
       `FinitePlaneDrawing.sSameSide_ball_subset_drawingComplement_of_local_closedSegment`,
       `FinitePlaneDrawing.edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment`,
       `FinitePlaneDrawing.edgePositiveSideBall_swap_subset_drawingComplement_of_local_closedSegment`,
+      `ExteriorComponentTopology.UnboundedFrontierCarrierLocalTwoGermRowsAt`,
+      `ExteriorComponentTopology.UnboundedFrontierCarrierLocalTwoGermRowsAt.toLocalSectorRowsAt`,
+      `ExteriorComponentTopology.localSectorRows_of_localTwoGermRows`,
+      `ExteriorComponentTopology.exists_local_frontier_germ_two_of_vertex_star_isolation_no_third_germ`,
+      `ExteriorComponentTopology.unboundedFrontierCarrierLocalTwoGermRowsAt_of_no_third_germ`,
+      `ExteriorComponentTopology.S2_carrier_connected_of_frontier_edge_point_localTwoGermRows`,
+      `ExteriorComponentTopology.S2_rawOrbitCutRows_of_carrierConnected_localTwoGermRows`,
+      `ExteriorComponentTopology.S2_rawOrbitCutRows_of_frontier_edge_point_localTwoGermRows`,
+      `ExteriorComponentTopology.S2_localTwoGermRows_of_noThirdGermFamily`,
+      `ExteriorComponentTopology.S2_unboundedExteriorFrontierCycleRows_of_noThirdGermRawRows`,
+      `S2LocalTwoGermAssembly.frontier_cover_to_connected_carrier_of_frontier_edge_point_localTwoGermRows`,
+      `S2LocalTwoGermAssembly.rawOrbitCutRows_of_frontierPreconnectedLocalTwoGermRows`,
+      `S2LocalTwoGermAssembly.actualArcRows_of_frontierPreconnectedLocalTwoGermRows`,
+      `ExteriorComponentTopology.S2_localTwoGermRows_of_boundaryFree_twoSelectedEdges_noThirdGerm_source`,
+      `ExteriorComponentTopology.S2_frontier_edge_cover_of_localSectorRows_fixedSide`,
+      `ExteriorComponentTopology.S2_frontier_preconnected_of_edge_chain_localSectorRows_fixedSide`,
+      `ExteriorComponentTopology.S2_unboundedExteriorFrontierCycleRows_of_boundaryFree_noThirdGermActualArcRows`,
+      `ExteriorComponentTopology.S2_unboundedExteriorFrontierCycleRows_of_edgeChain_boundaryFree_noThirdGermActualArcRows`,
+      `ExteriorComponentTopology.S2_unboundedExteriorFrontierCycleRows_of_boundaryFree_noThirdGermTailCoverage`,
+      `ExteriorComponentTopology.S2_unboundedExteriorFrontierCycleRows_of_noThirdGermActualArcRows_carrierConnected`,
       `ExteriorComponentTopology.preconnected_subset_unboundedExterior_of_subset_drawingComplement_of_mem`,
       `ExteriorComponentTopology.exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_point`,
       `ExteriorComponentTopology.exists_exterior_point_in_positive_or_swapped_sideBall_of_frontier_edge_point`,
@@ -266,11 +14763,20 @@ S2 dynamic assignments:
       `ExteriorComponentTopology.S2_agent_rawExteriorFaceWalk_tail_injective_of_actualArcRows`,
       `ExteriorComponentTopology.S2_agent_rawExteriorFaceWalk_unitDistanceCycleBoundary_of_noCut`,
       `ExteriorComponentTopology.S2_agent_actualBoundaryCycleRows_of_rawExteriorFaceWalk`,
+      `ExteriorComponentTopology.S2_agent_actualBoundaryCycleRows_of_rawExteriorFaceWalk_cutRows`,
       `ExteriorComponentTopology.actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbitSourceRows`,
       `ExteriorComponentTopology.actualBoundaryCycleFrontierEquivalenceRows_of_exists_rawFaceSuccOrbit_sourceRows`,
       `ExteriorComponentTopology.actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbit_inputRows`,
       `ExteriorComponentTopology.RawFaceSuccOrbitRepeatedTailExteriorCutRows`,
       `ExteriorComponentTopology.rawFaceSuccOrbit_tail_injective_of_repeatedTailExteriorCutRows`,
+      `ExteriorComponentTopology.BoolSideSeparationRows.not_reachable_true_false_after_delete`,
+      `ExteriorComponentTopology.RepeatedExteriorBoundaryArcSeparationRows.unreachable_after_delete`,
+      `ExteriorComponentTopology.RawFaceSuccOrbitRepeatedTailActualExteriorArcRows.toRepeatedTailExteriorCutRows`,
+      `ExteriorComponentTopology.rawFaceSuccOrbitRepeatedTailExteriorCutRows_of_actualExteriorArcSeparationRows`,
+      `ExteriorComponentTopology.S2_agent_input_s2_assembly_gap_reducer_frontier_tailHitCutRows_of_frontier_edge_point`,
+      `ExteriorComponentTopology.S2_agent_input_s2_assembly_gap_reducer_rawOrbitCutRows_of_frontier_edge_point`,
+      `ExteriorComponentTopology.S2_agent_input_s2_assembly_gap_reducer_rawOrbitCutRows_of_tailCoverage`,
+      `ExteriorComponentTopology.S2_agent_input_s2_assembly_gap_reducer_rawOrbitCutRows_of_carrierConnected`,
       `ExteriorComponentTopology.localSectorRows_of_boundary_frontier_incident_edge_exterior_angular_sector`,
       `ExteriorComponentTopology.interiorRelativeBallClosureRow_of_fixed_side_halfballs`,
       `ExteriorComponentTopology.interior_frontier_edge_carrier_membership_source_of_fixed_side_halfballs`,
@@ -332,15 +14838,43 @@ S2 dynamic assignments:
       package; the minimal repeated-tail exterior cut row remains the preferred
       replacement target if the stronger actual-arc cover row is later
       weakened.
+      The checked cut-row variants now mirror this route without the
+      actual-arc package; they consume raw dart-edge frontier plus
+      `RawFaceSuccOrbitRepeatedTailExteriorCutRows` directly.
+      2026-05-20 update: the finite graph core of the cut-row route is checked:
+      Boolean anticomplete side rows imply induced-graph non-reachability after
+      deleting the cut vertex, and the stronger actual exterior-arc residual
+      now erases to the minimal repeated-tail cut-row callback.
+      Layout update: source-facing reducers that consume the boundary-free
+      local two-germ row now live in
+      `Swanepoel/S2LocalTwoGermAssembly.lean` instead of adding more assembly
+      wrappers to the already large topology owner file; the topology file
+      keeps the primitive local rows and finite graph lemmas.
+      `Swanepoel/S2ExteriorBoundarySource.lean` is the source-facing no-third
+      germ/raw-row assembly surface and imports `S2LocalTwoGermAssembly.lean`
+      rather than duplicating its frontier-preconnected local-two-germ
+      reducers.  Both S2 source files are root-imported after the topology
+      owner file.
+      Dynamic delegation note: fresh focused spawn attempts for repeated-tail
+      cut-source and dart-edge-frontier source were blocked by the global agent
+      thread cap after known closed agents were pruned/not found.  Reattempt
+      focused dispatch when slots free; do not create a static pool.
       Continue with raw face-successor selected-edge coverage of
       `unboundedFrontierEdgeSet C inputs`, actual-boundary/local-sector rows,
       and repeated-tail separation rows for no-cut injectivity.  Latest
-      targeted builds passed for
-      `Swanepoel/FinitePlaneDrawing.lean` and
-      `Swanepoel/ExteriorComponentTopology.lean`; latest targeted
-      `Swanepoel/FaceBoundaryTopologySourceW32.lean` build also passed; latest module build
-      `lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
-      also passed.  The modified Lean forbidden scan for axioms/constants/
+      targeted builds passed for `Swanepoel/FinitePlaneDrawing.lean`,
+      `Swanepoel/ExteriorComponentTopology.lean`,
+      `Swanepoel/S2LocalTwoGermAssembly.lean`, and
+      `Swanepoel/S2ExteriorBoundarySource.lean`; latest targeted
+      `Swanepoel/FaceBoundaryTopologySourceW32.lean` build also passed.
+      Latest module builds for
+      `ErdosProblems1066.Swanepoel.ExteriorComponentTopology` and
+      `ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource` passed, and
+      `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066.lean`
+      passed after adding the new root import.  The pinned full root build
+      `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066` also
+      passed on 2026-05-20 for the current Lean checkout.  The modified Lean forbidden
+      scan for axioms/constants/
       sorries/admits/unsafe/opaque/debug commands is clean for the current
       S2 owner files.  Latest S2
       subagent dispatches for selected dart-edge frontier, incident angular
@@ -355,36 +14889,49 @@ S2 dynamic assignments:
       `ExteriorComponentTopology.lean` and
       `FaceBoundaryTopologySourceW32.lean` builds before root import/root
       build work.
-    - Claim: `S2-agent-dart-edge-frontier-source`.  Owner:
-      `019e42e0-4268-74f1-8da4-314aea78a146` / Averroes the 3rd.  Role:
-      route mapper.  Scope: read-only
-      `Swanepoel/ExteriorComponentTopology.lean`,
-      `Swanepoel/FinitePlaneDrawing.lean`, and
-      `Swanepoel/GeometricRotationSystem.lean`.  Status: active.  Handoff:
-      a non-circular proof route for the selected raw face-successor orbit
-      per-dart theorem that every dart open segment is on the unbounded
-      exterior frontier.  Next gate: integrate exact theorem skeleton or move
-      to superseded history.
-    - Claim: `S2-agent-carrier-connected-source`.  Owner:
-      `019e42e0-42b3-7db0-a1eb-720db41cbd29` / Avicenna the 3rd.  Role:
-      source-row verifier.  Scope: read-only
-      `Swanepoel/ExteriorComponentTopology.lean` and
-      `Swanepoel/FinitePlaneDrawing.lean`.  Status: active.  Handoff: verify
-      the shortest route from existing frontier preconnectedness/local-sector
-      rows to connectedness of `unboundedFrontierCarrierGraph C inputs`, and
-      identify any remaining theorem that must be proved rather than assumed.
-      Next gate: route incorporated or claim moved to superseded history.
-    - Claim: `S2-agent-repeated-tail-cut-source`.  Owner:
-      `019e42e0-4301-7072-b1c3-6b912c86ccfa` / Kierkegaard the 3rd.  Role:
-      theorem prover.  Scope: read-only
-      `Swanepoel/ExteriorComponentTopology.lean` and graph reachability APIs.
-      Status: active.  Handoff: exact proof obligation for
-      `RawFaceSuccOrbitRepeatedTailExteriorCutRows` from a repeated selected
-      exterior raw face orbit tail, avoiding the obsolete actual-arc cover row.
-      Next gate: exact theorem skeleton integrated or claim moved to
-      superseded history.
   - Superseded active-claim history (closed/pruned or stale; not live):
     Retained for audit trail until the next full workboard cleanup.
+    Closed stale active-board entries:
+    `S2-agent-frontier-vertex-two-edges-source` and
+    `S2-agent-raw-trace-global-bypass`.  Result: pruned from the live
+    workboard on 2026-05-20 because the entries had no resumable agent ids,
+    contradicted the "No active subagent claims" line, and the current
+    subagent cap rejected fresh replacements.  Their route-mapping questions
+    remain valid residual source questions, but they are not live claims.
+    Closed completed/pruned claim:
+    `S2-agent-dart-edge-frontier-source`
+    (`019e42e0-4268-74f1-8da4-314aea78a146`).  Result: the input-facing
+    selected-orbit dart-edge source should be
+    `S2_agent_raw_face_orbit_dart_edge_frontier_source`, built from
+    `exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localSectorRows`.
+    Initial dart frontier comes from
+    `edge_openSegment_frontier_of_inOpenSegment_frontier_and_relative_ball_closure`
+    plus `interiorRelativeBallClosureRow_of_frontier_edge_point`; the true
+    remaining local theorem is
+    `geometric_faceSucc_preserves_unboundedExterior_dart_frontier`, then orbit
+    induction over the raw face-successor iterate gives every dart.  Avoid
+    downstream actual-boundary/cycle-row sources for this.  Verification: route
+    checked read-only.
+    Closed completed/pruned claim:
+    `S2-agent-repeated-tail-cut-source`
+    (`019e42e0-4301-7072-b1c3-6b912c86ccfa`).  Result: live theorem should be
+    `S2_agent_repeated_tail_exterior_cut_source`, producing the callback
+    `RawFaceSuccOrbitRepeatedTailExteriorCutRows (inputs := inputs) O i j`;
+    its only core proof field is the deleted-tail unreachable row between one
+    witness in each cyclic open arc.  Existing chain already erases through
+    `RawFaceSuccOrbitRepeatedTailExteriorCutRows.toRepeatedExteriorBoundarySeparationRows`
+    and `rawFaceSuccOrbit_tail_injective_of_repeatedTailExteriorCutRows`.
+    Verification: route checked read-only; Codex-main already integrated
+    cut-row assembly reducers.
+    Closed completed/pruned claim:
+    `S2-agent-carrier-connected-source`
+    (`019e42e0-42b3-7db0-a1eb-720db41cbd29`).  Result: carrier connectedness
+    is already available non-circularly from
+    `S2_agent_frontier_cover_to_connected_carrier_integration_of_frontier_edge_point`,
+    consuming `frontier_preconnected` and pointwise local-sector rows; avoid
+    `S2_agent_frontier_preconnected_source` for this because it assumes the
+    carrier-connected row.  Verification: route checked read-only; Codex-main
+    retained existing connected-carrier reducers.
     Closed completed/pruned claim:
     `S2-agent-raw-face-orbit-source`
     (`019e42d9-4e45-7da1-828d-8aecb0e814c0`).  Result: non-circular raw route
@@ -622,7 +15169,7 @@ S2 dynamic assignments:
     Existing component formalities close from a local preconnected side patch
     `S` using `IsPreconnected.subset_connectedComponentIn`; the real missing
     theorem is construction of such an exterior-side patch inside
-    `(unboundedExteriorComponentRows C inputs).exterior ∩ Metric.ball z r`
+    `(unboundedExteriorComponentRows C inputs).exterior âˆ© Metric.ball z r`
     with `z` in its closure.  No edits.
     Closed completed claim:
     `S2-local-side-component-formalizer`.  Owner: Codex-main.  Result: added
@@ -1658,6 +16205,56 @@ S2 dynamic assignments:
       passed.
   - Closed/pruned summary:
     Closed completed/pruned claim:
+    `S2-agent-carrier-local-two-germ-source`
+    (`019e42ed-f974-7631-8960-636d4262e33c`).  Result: confirmed the
+    non-circular local-sector handoff should be the boundary-free
+    `UnboundedFrontierCarrierLocalTwoGermRowsAt` family; Codex-main added
+    this structure plus `.toLocalSectorRowsAt` and
+    `localSectorRows_of_localTwoGermRows`.  Remaining source: choose the two
+    incident unbounded-frontier carrier edges at each frontier vertex and prove
+    the local no-third-germ row.  Verification: `ExteriorComponentTopology`
+    owner build passed.
+    Closed completed/pruned claim:
+    `S2-agent-carrier-connectedness-bypass-check`
+    (`019e42ed-f9c3-79c1-abe4-742422bee864`).  Result: confirmed raw orbit
+    data plus repeated-tail rows do not by themselves provide current
+    connectedness/cyclic-coverage and period-three rows; either raw-tail
+    coverage/period-three must be proved globally, or the boundary-free local
+    two-germ rows remain the source for nonbacktracking, period, and carrier
+    neighbour closure.  No file edits.
+    Closed completed/pruned claim:
+    `S2-agent-faceSucc-frontier-propagation-route`
+    (`019e42e7-73c2-7302-a4dc-dba1a53d4fac`).  Result: identified the
+    existing boundary-specific route:
+    `BoundaryVertexExteriorSectorRowsAt.geometricFaceSucc_frontier_step`,
+    `rawFaceSuccOrbit_dart_on_boundary_of_sectorRows_start`, and
+    `BoundaryVertexExteriorSectorRowsAt.S2_agent_dart_edge_frontier_from_sectorRows`.
+    Codex-main added the generic checked orbit-iteration helper
+    `rawFaceSuccOrbit_dart_edge_openSegment_frontier_of_start_and_faceSucc_step`.
+    Verification: `ExteriorComponentTopology` owner build passed.
+    Closed completed/pruned claim:
+    `S2-agent-repeated-tail-cut-route`
+    (`019e42e7-7419-7281-a739-5a2807eba49d`).  Result: identified the live
+    repeated-tail input as `RawFaceSuccOrbitRepeatedTailExteriorCutRows`, with
+    existing erasure through `.toRepeatedExteriorBoundarySeparationRows` and
+    `rawFaceSuccOrbit_tail_injective_of_repeatedTailExteriorCutRows`.  The
+    remaining source is the deleted-tail unreachable row between witnesses on
+    the two cyclic arcs.  No file edits.
+    Closed completed/pruned claim:
+    `S2-agent-local-sector-source-route`
+    (`019e42e7-7466-7371-b0ec-4ab83a52a616`).  Result: verified that current
+    pointwise local-sector rows are not yet available non-circularly from only
+    the actual unbounded-frontier carrier; the smallest live source is a
+    carrier-indexed local two-germ theorem supplying the two selected incident
+    unbounded-frontier edges and local `only` row.  No file edits.
+    Closed completed/pruned claim:
+    `S2-agent-owner-file-build-surface`
+    (`019e42e7-74b4-7e40-964d-79a08f6d908e`).  Result: confirmed no root
+    import change is needed if the final source theorem lands in
+    `ExteriorComponentTopology.lean`; targeted builds are
+    `ExteriorComponentTopology.lean` then `FaceBoundaryTopologySourceW32.lean`,
+    followed by final root build and forbidden-token scan.  No file edits.
+    Closed completed/pruned claim:
     `S2-agent-repeated-tail-actual-exterior-arc-source`
     (`019e4223-c37f-72e3-8991-d2b085665f0f`).  Result: added
     `RawFaceSuccOrbitRepeatedTailActualExteriorArcRows`,
@@ -1848,7 +16445,7 @@ S2 dynamic assignments:
     Closed completed/pruned claim:
     `S2-agent-nondegenerate-frontier-germ-choice`
     (`019e41f5-9138-7930-8e2f-bf98077d39be`).  Result: strengthened the local
-    bad-germ route with an explicit `q ≠ center` branch and discharged the
+    bad-germ route with an explicit `q â‰  center` branch and discharged the
     center case through the closed predecessor germ.  Verification:
     owner-file Lean build passed after shared raw-package repairs.
     Closed completed/pruned claim:
@@ -2160,7 +16757,7 @@ S2 dynamic assignments:
     the non-circular raw frontier-iff-tail row from actual raw edge-frontier
     rows plus exact coverage of every concrete unbounded-frontier carrier
     vertex by a raw face-successor tail.  Remaining source dependency:
-    `forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+    `forall a : {v : Fin n // v âˆˆ unboundedFrontierVertexSet C inputs},
       Exists fun k : Fin O.period => (O.dart k).tail = a.1`
     for the actual geometric exterior-seed raw orbit, or cyclic coverage rows
     pointwise identified with that raw tail sequence.  Verification:
@@ -3409,7 +18006,7 @@ S2 dynamic assignments:
     `Figure9AdjacentLeftTurnChordRows` feed
     `angleLeMiddleTurnRows_of_cosineTurnRows` /
     `angleLeMiddleTurnRows_of_turnChordRows`.  The exact remaining rows are
-    `turn (i + 1) ∈ [0, pi]` and either
+    `turn (i + 1) âˆˆ [0, pi]` and either
     `Real.cos (turn (i + 1)) <= dotAt p qi s` or
     `sqDist p s <= 2 - 2 * Real.cos (turn (i + 1))`.
     Latest Figure 9 row calculus:
@@ -3883,3 +18480,16 @@ targets are unconditional and audited.
 - [ ] Defer physical folder moves until imports are stabilized.  When moving
   later, move one semantic cluster at a time and leave old-path import shims
   until all downstream imports are migrated.
+
+### S2 Checked Topology Update 2026-05-20
+
+- [x] Reduced the planar-continuum unbounded frontier connected/no-closed lane
+  to the preconnectedness surface in
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+  New checked declarations:
+  `planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_preconnected`,
+  `planarContinuumUnboundedComplementFrontierConnected_of_preconnected`,
+  `finiteDrawingUnboundedComplementFrontierAlignedKSplit_of_preconnected`,
+  and `S2_agent_20260520_finite_aligned_K_split_source_of_preconnected`.
+  Verification:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`.

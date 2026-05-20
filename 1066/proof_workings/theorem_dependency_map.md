@@ -5,15 +5,16 @@ It explains the live theorem routes, current guardrails, and where a worker
 should look before editing.  It is not a proof claim and not an execution
 checklist.  Use `../TASK.md` for active tasks.
 
-Status note, 2026-05-19:
+Status note, 2026-05-20:
 
-- `ErdosProblems1066.lean` imports the retained Lean tree: `872 / 872`
+- `ErdosProblems1066.lean` imports the retained Lean tree: `877 / 877`
   project files, with no missing, extra, or duplicate imports in the latest
   coverage check.
 - The Lean forbidden-token/trust-source scan over `ErdosProblems1066/` and
   `ErdosProblems1066.lean` was clean.
-- A fresh full root build and CI-style axiom audit for the current checkout are
-  still tracked as pending in `../TASK.md`.
+- The pinned full root build was replayed after the current S2 source-file
+  imports.  `../TASK.md` records the CI-style axiom-audit status and proof-log
+  paths.
 
 ## Reading Order
 
@@ -96,6 +97,14 @@ These are the compact positive obligations behind the W34 route.  They are the
 right task shapes; older W20-W31 gates are compatibility context unless a task
 explicitly asks for them.
 
+Provenance/source-family rule: for Swanepoel S2, use Csizmadia only for the
+constructive rotating boundary-walk source model.  Swanepoel's paper invokes a
+simple outer boundary polygon as a standard plane-graph fact; Csizmadia gives a
+more explicit lowest-vertex rotating ray/segment walk that can guide the Lean
+exterior face-orbit construction.  Do not import Csizmadia's later `9 / 35`
+local-deletion, block-decomposition, Case A/B, or figure-geometry machinery
+into S2.  Those remain separate Csizmadia formalization obligations.
+
 | Stage | Open input | Lean surface | Purpose |
 |---|---|---|---|
 | S2 | Exact actual topology | `SelectedTopologyRowsInhabitationW33.MinimalFailureExactActualTopologyFieldsTarget` or `FaceBoundaryTopologySourceW32.MinimalFailureExactActualTopologyFieldsTarget` | Build the honest selected outer-face/topology rows from a minimal failure. |
@@ -111,8 +120,22 @@ The S5 compact package is now the preferred final angle handoff.  Atomic
 Figure 8/Figure 9 rows are still useful local proof tasks, but they are not
 the top-level blockers when the compact S5 package is available.
 
-S2 is reduced to the live actual-boundary theorem for the finite embedded
-unit-edge drawing:
+S2 is reduced to the live input-only boundary-sector theorem for the finite
+embedded unit-edge drawing.  The intended internal construction is the
+Csizmadia-style rotating exterior angular walk, followed by no-cut tail
+injectivity and boundary-sector packaging:
+
+```text
+FinitePlanarOuterComponentInputs C
+  -> unboundedExteriorComponentRows C inputs
+  -> Exists B : UnitDistanceCycleBoundary C,
+       graph vertex on frontier iff boundary-cycle vertex of B
+       + forall k, BoundaryVertexExteriorSectorRowsAt inputs B k
+  -> FaceBoundaryTopologySourceW32.
+       minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows
+```
+
+The direct actual-boundary eraser remains checked support:
 
 ```text
 FinitePlanarOuterComponentInputs C
@@ -141,9 +164,15 @@ vertex-star row saying that sufficiently near a graph vertex, every drawing
 point is carried by an incident edge segment.
 
 `Swanepoel/ExteriorComponentTopology.lean` owns the unbounded component and the
-current S2 actual-boundary surface.  The concrete unbounded component is
-`unboundedExteriorComponentRows C inputs`.  The shortest checked handoff now
-erases `ActualBoundaryCycleFrontierEquivalenceRows C inputs` directly to
+current S2 actual-boundary surface.  `Swanepoel/S2LocalTwoGermAssembly.lean`
+and `Swanepoel/S2ExteriorBoundarySource.lean` own the current source-facing
+local two-germ and boundary-sector assembly rows.  The concrete unbounded
+component is `unboundedExteriorComponentRows C inputs`.  The shortest checked
+handoff for the exact topology target now consumes a boundary cycle plus
+pointwise `BoundaryVertexExteriorSectorRowsAt` via
+`FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows`.
+The actual-boundary eraser still converts
+`ActualBoundaryCycleFrontierEquivalenceRows C inputs` to
 `UnboundedExteriorFrontierCycleRows C inputs` via
 `unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows`.
 
@@ -171,6 +200,7 @@ ExteriorComponentTopology.cyclicCoverageLocalSectorRows_of_boundaryVertexExterio
 ExteriorComponentTopology.exteriorFrontierCarrierRows_nonempty_of_boundaryVertexExteriorSectorRows
 FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_faceDartOrbitExteriorCarrierRows
 FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_cyclicCoverageLocalSectorRows
+FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows
 ```
 
 Additional checked local handoffs for the face-orbit proof:
@@ -191,11 +221,55 @@ The active final proof path is:
 ```text
 actual exterior boundary cycle B
   + frontier iff B.vertex
-  + boundary edge open-segment frontier
-  -> ActualBoundaryCycleFrontierEquivalenceRows C inputs
-  -> UnboundedExteriorFrontierCycleRows C inputs
-  -> finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows
-  -> FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+  + forall k, BoundaryVertexExteriorSectorRowsAt inputs B k
+  -> FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows
+```
+
+S2 should be proved orbit-first internally and boundary-sector externally.  The
+external theorem name to target is:
+
+```text
+S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs
+```
+
+The checked final-cycle handoffs are reducer support only.  Do not make a new
+S2 task that hands actual rows, sector rows, carrier rows, or selected
+successor-edge rows to a later worker while only adding an eraser to
+`UnboundedExteriorFrontierCycleRows`.  If a proof needs one of those premises,
+the task must first prove that premise from `FinitePlanarOuterComponentInputs C`
+or be rewritten as the missing-premise task itself.
+
+Historical checked handoff:
+
+```text
+FinitePlanarOuterComponentInputs C
+-> unboundedExteriorComponentRows C inputs
+-> BoundaryFreeNoThirdGermSource inputs
+   + UnboundedExteriorFrontierComponentTopologySourceRows inputs
+   + RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource inputs
+-> S2SeededRawOrbitSource.S2_agent_raw_orbit_final_no_orientation_assembly_20260520bt
+-> UnboundedExteriorFrontierCycleRows C inputs
+-> finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows
+```
+
+Concrete live S2 subgoals:
+
+| Task | Owner surface | Deliverable |
+|---|---|---|
+| S2-A local two-germ/no-third source | `S2BoundaryFreeRawSource`, `S2LocalTwoGermAssembly`, `ExteriorComponentTopology`, `GeometricRotationSystem` | Prove `BoundaryFreeNoThirdGermSource inputs` from `FinitePlanarOuterComponentInputs C`, or the pointwise `UnboundedFrontierCarrierLocalSectorRowsAt` family.  Do not derive it from a completed boundary cycle or `BoundaryVertexExteriorSectorRowsAt`. |
+| S2-B component topology/carrier connectedness source | `ExteriorComponentTopology`, `FinitePlaneDrawing` | Prove `UnboundedExteriorFrontierComponentTopologySourceRows inputs`, or directly prove `unboundedFrontierCarrierGraph C inputs` connected, from the unbounded component and actual frontier-edge carrier. |
+| S2-C selected geometric `faceSucc` frontier propagation | `S2SeededRawOrbitSource`, `GeometricRotationSystem`, `ExteriorComponentTopology` | Prove `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`, or the edge version `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs`, from local topology and geometric successor facts. |
+| S2-D final composition | `S2ExteriorBoundarySource`, `FaceBoundaryTopologySourceW32` | Compose `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs` and the W32 exact topology target, proving any unmet S2-A/B/C source row inside the same claim or closing S2-D and claiming the missing source row. |
+
+No-orientation raw-orbit core:
+
+```text
+BoundaryFreeConnectedRawOrbitSourceRows
+  -> BoundaryFreeConnectedRawOrbitSourceRows.toUnboundedExteriorCycleRows
+  -> unboundedExteriorFrontierCycleRows_family_of_connectedRawOrbitSourceRows_20260520bp
+
+BoundaryFreeNoThirdGermSource.unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbit_noOrientation
+  is the final-cycle eraser to keep when working below the package level.
 ```
 
 The carrier/geometric support path is:
@@ -222,6 +296,17 @@ two-regularity, graph injection, frontier-vertex coverage, and frontier-edge
 honesty to the final carrier handoff.  Do not restate those reducer outputs as
 independent S2 source targets.  The compact open proof obligations are now:
 
+Endpoint-closure correction: do not use
+`AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource C inputs` or
+`AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource C inputs` as an
+unconditional source target over arbitrary adjacent exterior-frontier graph
+vertices.  Boundary chords make that statement false.  The safe checked theorem
+is
+`ExteriorComponentTopology.closedSegmentEndpointClosureSource_of_incidentUnboundedFrontierEdgeSource`,
+which applies only after the edge has already been selected in
+`unboundedFrontierEdgeSet C inputs`.  The live source work is the selected
+exterior carrier/orbit that provides those selected edges.
+
 1. construct the actual exterior boundary cycle `B :
    JordanBoundaryConcrete.UnitDistanceCycleBoundary C`;
 2. prove graph vertices on the unbounded exterior frontier iff they are
@@ -242,8 +327,8 @@ frontier vertices: chords between frontier vertices can make that graph have
 larger degree.  Do not use synthetic enclosure rows, convex-hull edges, an
 arbitrary spanning cycle, identity angular-order rows, or any numbered
 compatibility layer as the live method.  Do not add a new W-facade or duplicate
-source package for S2; use the existing `ExteriorComponentTopology` carrier
-surface.
+source package for S2; use the existing `ExteriorComponentTopology`,
+`S2LocalTwoGermAssembly`, and `S2ExteriorBoundarySource` surfaces.
 
 ### Swanepoel Guardrails
 

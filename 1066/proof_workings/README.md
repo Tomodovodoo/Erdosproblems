@@ -39,8 +39,17 @@ interfaces without presenting either in-progress bound as verified.
 The current Lean frontier is documentation-first here: the lean-ready documents
 are roadmaps, while the checked Lean modules formalize conditional substeps with
 the remaining geometric or paper-specific obligations left as explicit theorem
-hypotheses or structure fields. See `current_frontier.md` for the exact mapping
-from document steps to Lean files and for the next modules to transcribe.
+hypotheses or structure fields. Use `../TASK.md` for the active workboard and
+`theorem_dependency_map.md`, `current_spines.md`, `remaining_fields_matrix.md`,
+and `nonvacuous_completion_route.md` for current route context.
+`current_frontier.md` is a historical mapping snapshot, not the live queue.
+For Swanepoel S2 specifically, use `s2_route_workbook.md` as the durable route
+notebook for tried routes, immediate source tasks, and research/proof tactics.
+For Swanepoel S2, use Csizmadia only as the source model for the rotating
+lowest-vertex exterior boundary walk.  The rest of Csizmadia's `9 / 35`
+development, including local deletion, block decomposition, Case A/B, and
+figure-geometry rows, is separate formalization work and should not be imported
+as a Swanepoel S2 prerequisite.
 
 CI and local audits should continue to distinguish public verified theorem
 wrappers from proposition-valued targets and conditional bridges. The intended

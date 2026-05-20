@@ -793,6 +793,23 @@ theorem dartFromGeometricList_outgoing
       geometricOutgoingDartList_get_tail C center i hi]
   · simp [UnitDistanceDart.endpointPair, dartFromGeometricList]
 
+/-- Earlier entries in the sorted geometric outgoing-dart list have strictly
+smaller graph-dart argument than later entries. -/
+theorem graphDartArg_lt_of_dartFromGeometricList_index_lt
+    (C : _root_.UDConfig n) (center : Fin n)
+    {i j : Nat}
+    (hi : i < (geometricOutgoingDartList C center).length)
+    (hj : j < (geometricOutgoingDartList C center).length)
+    (hij : i < j) :
+    graphDartArg (canonicalGeometricGraph C) center
+        (dartFromGeometricList C center i hi).head <
+      graphDartArg (canonicalGeometricGraph C) center
+        (dartFromGeometricList C center j hj).head := by
+  have hrel :=
+    (geometricOutgoingDartList_pairwise_graphDartArg_lt C center).rel_get_of_lt
+      (a := ⟨i, hi⟩) (b := ⟨j, hj⟩) (by simpa using hij)
+  simpa [dartFromGeometricList_head] using hrel
+
 /-- Away from wrap-around, `nextAround` on a dart represented by the geometric
 list advances to the next list entry. -/
 theorem geometricUnitDistanceRotationSystem_nextAround_getElem_succ
@@ -927,6 +944,55 @@ def geometricOutgoingDartListConsecutive
         ((geometricOutgoingDartList C center).length - 1)
         (Nat.sub_lt hpos Nat.zero_lt_one) /\
     second = dartFromGeometricList C center 0 hpos
+
+set_option linter.style.longLine false in
+/-- A consecutive pair in the genuine sorted outgoing-dart list is in the
+ordinary non-wrap branch whenever the first dart has smaller principal
+`graphDartArg` than the second. -/
+theorem geometricOutgoingDartListConsecutive_nonwrap_of_graphDartArg_lt
+    (C : _root_.UDConfig n) (center : Fin n)
+    (first second : UnitDistanceDart C)
+    (hconsecutive :
+      geometricOutgoingDartListConsecutive C center first second)
+    (hangle :
+      graphDartArg (canonicalGeometricGraph C) center first.head <
+        graphDartArg (canonicalGeometricGraph C) center second.head) :
+    Exists fun i : Nat =>
+      Exists fun hi : i + 1 < (geometricOutgoingDartList C center).length =>
+        first =
+          dartFromGeometricList C center i
+            (Nat.lt_trans (Nat.lt_succ_self i) hi) /\
+        second = dartFromGeometricList C center (i + 1) hi := by
+  classical
+  rcases hconsecutive with hnonwrap | hwrap
+  · exact hnonwrap
+  · exfalso
+    rcases hwrap with ⟨hpos, hfirst, hsecond⟩
+    let L := geometricOutgoingDartList C center
+    have hlen_ne_one : L.length ≠ 1 := by
+      intro hlen_one
+      have hlast_zero : L.length - 1 = 0 := by omega
+      have hsame_head : first.head = second.head := by
+        rw [hfirst, hsecond]
+        simp [L, hlast_zero]
+      rw [← hsame_head] at hangle
+      exact (lt_irrefl _ hangle)
+    have hzero_lt_last : 0 < L.length - 1 := by
+      have hposL : 0 < L.length := by simpa [L] using hpos
+      omega
+    have hlast_lt : L.length - 1 < L.length := by
+      have hposL : 0 < L.length := by simpa [L] using hpos
+      omega
+    have hwrap_angle :
+        graphDartArg (canonicalGeometricGraph C) center second.head <
+          graphDartArg (canonicalGeometricGraph C) center first.head := by
+      have hrel :=
+        (geometricOutgoingDartList_pairwise_graphDartArg_lt C center).rel_get_of_lt
+          (a := ⟨0, by simpa [L] using hpos⟩)
+          (b := ⟨L.length - 1, hlast_lt⟩)
+          hzero_lt_last
+      simpa [L, hfirst, hsecond, dartFromGeometricList_head] using hrel
+    exact (lt_asymm hangle hwrap_angle)
 
 theorem geometricOutgoingDartListConsecutive_getElem_succ
     (C : _root_.UDConfig n) (center : Fin n)
@@ -1368,6 +1434,775 @@ theorem geometricOutgoingDartListConsecutive_of_no_graphDartArg_between_branch
       geometricOutgoingDartListConsecutive_of_no_graphDartArg_between_wrap
         C center first second hfirst_tail hsecond_tail hangle hno_between
 
+/-! ## Generic graph-vertex angular no-between rows -/
+
+/-- At an arbitrary graph vertex, the dart to `other` has principal argument
+strictly between the selected `left` and `right` darts. -/
+abbrev GraphVertexAngularBetween
+    (C : _root_.UDConfig n)
+    (center left right other : Fin n) : Prop :=
+  graphDartArg (canonicalGeometricGraph C) center left <
+    graphDartArg (canonicalGeometricGraph C) center other ∧
+  graphDartArg (canonicalGeometricGraph C) center other <
+    graphDartArg (canonicalGeometricGraph C) center right
+
+/-- Honest angular no-between row at an arbitrary graph vertex. -/
+structure GraphVertexAngularNoBetweenRows
+    (C : _root_.UDConfig n)
+    (center left right : Fin n) where
+  angle :
+    graphDartArg (canonicalGeometricGraph C) center left <
+      graphDartArg (canonicalGeometricGraph C) center right
+  no_between :
+    forall other : Fin n,
+      GraphBridge.UnitDistanceAdj C center other ->
+      other ≠ left ->
+      other ≠ right ->
+        Not (GraphVertexAngularBetween C center left right other)
+
+/-- Input-level row selecting two neighbouring darts by their actual positions
+in the sorted geometric outgoing-dart list at `center`.
+
+This is the non-wrap branch: `left` is immediately followed by `right` in
+ordinary principal-argument order. -/
+structure GraphVertexGeometricAngularNeighborSelectionRow
+    (C : _root_.UDConfig n)
+    (center left right : Fin n) where
+  index : Nat
+  index_succ_lt :
+    index + 1 < (geometricOutgoingDartList C center).length
+  left_eq :
+    left =
+      (dartFromGeometricList C center index
+        (Nat.lt_trans (Nat.lt_succ_self index) index_succ_lt)).head
+  right_eq :
+    right =
+      (dartFromGeometricList C center (index + 1) index_succ_lt).head
+
+set_option linter.style.longLine false in
+/-- Nonwrap consecutive entries in the genuine sorted outgoing-dart list
+package directly as a geometric angular neighbour-selection row. -/
+def graphVertexGeometricAngularNeighborSelectionRow_of_dartFromGeometricList_nonwrap
+    (C : _root_.UDConfig n) (center : Fin n)
+    (first second : UnitDistanceDart C)
+    (i : Nat)
+    (hi : i + 1 < (geometricOutgoingDartList C center).length)
+    (hfirst :
+      first =
+        dartFromGeometricList C center i
+          (Nat.lt_trans (Nat.lt_succ_self i) hi))
+    (hsecond :
+      second = dartFromGeometricList C center (i + 1) hi) :
+    GraphVertexGeometricAngularNeighborSelectionRow C center
+      first.head second.head where
+  index := i
+  index_succ_lt := hi
+  left_eq := by rw [hfirst]
+  right_eq := by rw [hsecond]
+
+set_option linter.style.longLine false in
+/-- Existence form of
+`graphVertexGeometricAngularNeighborSelectionRow_of_dartFromGeometricList_nonwrap`. -/
+theorem exists_graphVertexGeometricAngularNeighborSelectionRow_of_dartFromGeometricList_nonwrap
+    (C : _root_.UDConfig n) (center : Fin n)
+    (first second : UnitDistanceDart C)
+    (nonwrap :
+      Exists fun i : Nat =>
+        Exists fun hi :
+            i + 1 < (geometricOutgoingDartList C center).length =>
+          first =
+            dartFromGeometricList C center i
+              (Nat.lt_trans (Nat.lt_succ_self i) hi) /\
+          second = dartFromGeometricList C center (i + 1) hi) :
+    Nonempty
+      (GraphVertexGeometricAngularNeighborSelectionRow C center
+        first.head second.head) := by
+  rcases nonwrap with ⟨i, hi, hfirst, hsecond⟩
+  exact
+    ⟨graphVertexGeometricAngularNeighborSelectionRow_of_dartFromGeometricList_nonwrap
+      C center first second i hi hfirst hsecond⟩
+
+/-- Consecutive entries in the genuine sorted geometric outgoing-dart list
+supply the ordinary angular no-between row at that graph vertex. -/
+theorem graphVertexAngularNoBetweenRows_of_geometricAngularNeighborSelectionRow
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (row :
+      GraphVertexGeometricAngularNeighborSelectionRow C center left right) :
+    GraphVertexAngularNoBetweenRows C center left right := by
+  classical
+  rcases row with ⟨i, hi, hleft, hright⟩
+  let L := geometricOutgoingDartList C center
+  let first : OutgoingUnitDistanceDart C center :=
+    L[i]'(Nat.lt_trans (Nat.lt_succ_self i) hi)
+  let second : OutgoingUnitDistanceDart C center := L[i + 1]'hi
+  have hfirst_head : first.1.head = left := by
+    symm
+    simpa [first, L] using hleft
+  have hsecond_head : second.1.head = right := by
+    symm
+    simpa [second, L] using hright
+  have hangle_list :
+      graphDartArg (canonicalGeometricGraph C) center first.1.head <
+        graphDartArg (canonicalGeometricGraph C) center second.1.head := by
+    have hrel :=
+      (geometricOutgoingDartList_pairwise_graphDartArg_lt C center).rel_get_of_lt
+        (a := ⟨i, Nat.lt_trans (Nat.lt_succ_self i) hi⟩)
+        (b := ⟨i + 1, hi⟩)
+        (by simp)
+    simpa [first, second, L] using hrel
+  refine
+    { angle := by
+        simpa [hfirst_head, hsecond_head] using hangle_list
+      no_between := ?_ }
+  intro other hAdj hother_left hother_right hbetween
+  let otherDart : UnitDistanceDart C := {
+    tail := center
+    head := other
+    adj :=
+      (GraphBridge.unitDistanceSimpleGraph_adj C center other).2 hAdj }
+  let otherOutgoing : OutgoingUnitDistanceDart C center := ⟨otherDart, rfl⟩
+  have hother_mem : otherOutgoing ∈ L := by
+    simpa [L] using mem_geometricOutgoingDartList C center otherOutgoing
+  have hother_ne_first : otherOutgoing ≠ first := by
+    intro h
+    have hhead : other = first.1.head := by
+      exact congrArg (fun d : OutgoingUnitDistanceDart C center => d.1.head) h
+    exact hother_left (by simpa [hfirst_head] using hhead)
+  have hother_ne_second : otherOutgoing ≠ second := by
+    intro h
+    have hhead : other = second.1.head := by
+      exact congrArg (fun d : OutgoingUnitDistanceDart C center => d.1.head) h
+    exact hother_right (by simpa [hsecond_head] using hhead)
+  have hno_list :
+      ∀ other' ∈ L, other' ≠ first -> other' ≠ second ->
+        ¬ (graphDartArg (canonicalGeometricGraph C) center first.1.head <
+              graphDartArg (canonicalGeometricGraph C) center other'.1.head ∧
+            graphDartArg (canonicalGeometricGraph C) center other'.1.head <
+              graphDartArg (canonicalGeometricGraph C) center second.1.head) := by
+    simpa [first, second, L] using
+      List.no_between_of_getElem_succ_pairwise_real_lt
+        (xs := L)
+        (weight := fun outgoing : OutgoingUnitDistanceDart C center =>
+          graphDartArg (canonicalGeometricGraph C) center outgoing.1.head)
+        (hsorted := geometricOutgoingDartList_pairwise_graphDartArg_lt C center)
+        i hi rfl rfl
+  exact
+    hno_list otherOutgoing hother_mem hother_ne_first hother_ne_second
+      (by
+        simpa [GraphVertexAngularBetween, otherOutgoing, otherDart,
+          hfirst_head, hsecond_head] using hbetween)
+
+/-- Consecutive selected entries in the genuine sorted geometric outgoing
+dart list supply the list-level no-between row used by the S2 selected-head
+reducers.
+
+This keeps the order source tied to `geometricOutgoingDartList`: every
+intervening candidate is an actual outgoing unit-distance dart, not an
+identity-order placeholder. -/
+theorem geometricOutgoingDartList_no_between_of_graphVertexGeometricAngularNeighborSelectionRow
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (row :
+      GraphVertexGeometricAngularNeighborSelectionRow C center left right) :
+    graphDartArg (canonicalGeometricGraph C) center left <
+        graphDartArg (canonicalGeometricGraph C) center right ∧
+      forall outgoing : OutgoingUnitDistanceDart C center,
+        outgoing ∈ geometricOutgoingDartList C center ->
+          outgoing.1.head ≠ left ->
+            outgoing.1.head ≠ right ->
+              Not (GraphVertexAngularBetween C center left right
+                outgoing.1.head) := by
+  have angularRows :
+      GraphVertexAngularNoBetweenRows C center left right :=
+    graphVertexAngularNoBetweenRows_of_geometricAngularNeighborSelectionRow
+      row
+  refine ⟨angularRows.angle, ?_⟩
+  intro outgoing _houtgoing hleft hright hbetween
+  have hAdj : GraphBridge.UnitDistanceAdj C center outgoing.1.head := by
+    exact (GraphBridge.unitDistanceSimpleGraph_adj C center
+      outgoing.1.head).1
+      (by simpa [outgoing.2] using outgoing.1.adj)
+  exact
+    angularRows.no_between outgoing.1.head hAdj hleft hright hbetween
+
+set_option linter.style.longLine false in
+/-- A genuine sorted outgoing-list no-between row gives the graph-vertex
+angular no-between row for the same two heads.
+
+This is the outgoing-list eraser used by source-facing S2 reducers: an
+arbitrary adjacent head is first represented by its real outgoing unit-distance
+dart at `center`, so the primitive no-between source remains stated against
+`geometricOutgoingDartList`. -/
+theorem graphVertexAngularNoBetweenRows_of_geometricOutgoingDartList_no_between
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (hangle :
+      graphDartArg (canonicalGeometricGraph C) center left <
+        graphDartArg (canonicalGeometricGraph C) center right)
+    (hno_between :
+      forall outgoing : OutgoingUnitDistanceDart C center,
+        outgoing ∈ geometricOutgoingDartList C center ->
+          outgoing.1.head ≠ left ->
+            outgoing.1.head ≠ right ->
+              Not (GraphVertexAngularBetween C center left right
+                outgoing.1.head)) :
+    GraphVertexAngularNoBetweenRows C center left right := by
+  refine
+    { angle := hangle
+      no_between := ?_ }
+  intro other hAdj hother_left hother_right hbetween
+  let otherDart : UnitDistanceDart C := {
+    tail := center
+    head := other
+    adj := (GraphBridge.unitDistanceSimpleGraph_adj C center other).2 hAdj }
+  let otherOutgoing : OutgoingUnitDistanceDart C center := ⟨otherDart, rfl⟩
+  exact
+    hno_between otherOutgoing
+      (mem_geometricOutgoingDartList C center otherOutgoing)
+      (by simpa [otherOutgoing, otherDart] using hother_left)
+      (by simpa [otherOutgoing, otherDart] using hother_right)
+      (by simpa [otherOutgoing, otherDart] using hbetween)
+
+set_option linter.style.longLine false in
+/-- Genuine sorted outgoing-list no-between row at one graph vertex.
+
+The quantifier ranges over entries of `geometricOutgoingDartList`, so this is
+the list-level source behind `GraphVertexAngularNoBetweenRows`; arbitrary
+adjacent heads are recovered by reattaching them to the same real outgoing
+unit-distance dart list. -/
+structure GraphVertexGeometricOutgoingListNoBetweenRows
+    (C : _root_.UDConfig n)
+    (center left right : Fin n) where
+  angle :
+    graphDartArg (canonicalGeometricGraph C) center left <
+      graphDartArg (canonicalGeometricGraph C) center right
+  no_between :
+    forall outgoing : OutgoingUnitDistanceDart C center,
+      outgoing ∈ geometricOutgoingDartList C center ->
+        outgoing.1.head ≠ left ->
+          outgoing.1.head ≠ right ->
+            Not (GraphVertexAngularBetween C center left right
+              outgoing.1.head)
+
+namespace GraphVertexGeometricOutgoingListNoBetweenRows
+
+variable {C : _root_.UDConfig n}
+variable {center left right : Fin n}
+
+/-- Erase a genuine outgoing-list no-between row to the graph-vertex angular
+no-between row for the same two heads. -/
+theorem toGraphVertexAngularNoBetweenRows
+    (rows :
+      GraphVertexGeometricOutgoingListNoBetweenRows C center left right) :
+    GraphVertexAngularNoBetweenRows C center left right :=
+  graphVertexAngularNoBetweenRows_of_geometricOutgoingDartList_no_between
+    rows.angle rows.no_between
+
+end GraphVertexGeometricOutgoingListNoBetweenRows
+
+set_option linter.style.longLine false in
+/-- An honest graph-vertex angular no-between row restricts to the genuine
+sorted outgoing-dart list at the same vertex.
+
+This is the pointwise eraser between the two selected-head source faces: every
+candidate in the list is first read as an actual unit-distance outgoing dart,
+so the resulting row is still stated over `geometricOutgoingDartList`. -/
+theorem graphVertexGeometricOutgoingListNoBetweenRows_of_graphVertexAngularNoBetweenRows
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (rows : GraphVertexAngularNoBetweenRows C center left right) :
+    GraphVertexGeometricOutgoingListNoBetweenRows C center left right := by
+  refine
+    { angle := rows.angle
+      no_between := ?_ }
+  intro outgoing _houtgoing hleft hright hbetween
+  have hAdj : GraphBridge.UnitDistanceAdj C center outgoing.1.head := by
+    exact (GraphBridge.unitDistanceSimpleGraph_adj C center
+      outgoing.1.head).1
+      (by simpa [outgoing.2] using outgoing.1.adj)
+  exact rows.no_between outgoing.1.head hAdj hleft hright hbetween
+
+set_option linter.style.longLine false in
+/-- Pointwise equivalence between the angular source and the genuine
+outgoing-list source for the same selected heads.
+
+The reverse direction reattaches an arbitrary adjacent head to the real
+`geometricOutgoingDartList`; the forward direction simply restricts the
+angular no-between row to actual outgoing darts. -/
+theorem graphVertexAngularNoBetweenRows_iff_geometricOutgoingListNoBetweenRows
+    {C : _root_.UDConfig n}
+    {center left right : Fin n} :
+    GraphVertexAngularNoBetweenRows C center left right <->
+      GraphVertexGeometricOutgoingListNoBetweenRows C center left right := by
+  constructor
+  · intro rows
+    exact
+      graphVertexGeometricOutgoingListNoBetweenRows_of_graphVertexAngularNoBetweenRows
+        rows
+  · intro rows
+    exact rows.toGraphVertexAngularNoBetweenRows
+
+set_option linter.style.longLine false in
+/-- Family eraser from honest graph-vertex angular no-between rows to the
+genuine outgoing-list no-between rows for the same selected heads.
+
+Each pointwise row is restricted to entries of the real sorted
+`geometricOutgoingDartList`; no synthetic cyclic order is introduced. -/
+theorem graphVertexGeometricOutgoingListNoBetweenRows_family_of_graphVertexAngularNoBetweenRows
+    {ι : Type*}
+    {C : _root_.UDConfig n}
+    (center left right : ι -> Fin n)
+    (rows :
+      forall a : ι,
+        GraphVertexAngularNoBetweenRows C (center a) (left a) (right a)) :
+    forall a : ι,
+      GraphVertexGeometricOutgoingListNoBetweenRows C
+        (center a) (left a) (right a) := by
+  intro a
+  exact
+    graphVertexGeometricOutgoingListNoBetweenRows_of_graphVertexAngularNoBetweenRows
+      (rows a)
+
+set_option linter.style.longLine false in
+/-- Consecutive selected entries in the genuine sorted geometric outgoing
+dart list supply the named outgoing-list no-between source for the same two
+heads. -/
+theorem graphVertexGeometricOutgoingListNoBetweenRows_of_geometricAngularNeighborSelectionRow
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (row :
+      GraphVertexGeometricAngularNeighborSelectionRow C center left right) :
+    GraphVertexGeometricOutgoingListNoBetweenRows C center left right := by
+  rcases
+      geometricOutgoingDartList_no_between_of_graphVertexGeometricAngularNeighborSelectionRow
+        row with
+    ⟨hangle, hno_between⟩
+  exact
+    { angle := hangle
+      no_between := hno_between }
+
+/-- An honest non-wrap angular no-between row for two actual incident heads
+forces those heads to occupy adjacent entries in the genuine sorted geometric
+outgoing-dart list. -/
+theorem exists_graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (hleft_adj : GraphBridge.UnitDistanceAdj C center left)
+    (hright_adj : GraphBridge.UnitDistanceAdj C center right)
+    (rows : GraphVertexAngularNoBetweenRows C center left right) :
+    Nonempty
+      (GraphVertexGeometricAngularNeighborSelectionRow C center left right) := by
+  classical
+  let leftDart : UnitDistanceDart C := {
+    tail := center
+    head := left
+    adj := (GraphBridge.unitDistanceSimpleGraph_adj C center left).2 hleft_adj }
+  let rightDart : UnitDistanceDart C := {
+    tail := center
+    head := right
+    adj := (GraphBridge.unitDistanceSimpleGraph_adj C center right).2 hright_adj }
+  let leftOutgoing : OutgoingUnitDistanceDart C center := ⟨leftDart, rfl⟩
+  let rightOutgoing : OutgoingUnitDistanceDart C center := ⟨rightDart, rfl⟩
+  have hleft_mem :
+      leftOutgoing ∈ geometricOutgoingDartList C center :=
+    mem_geometricOutgoingDartList C center leftOutgoing
+  have hright_mem :
+      rightOutgoing ∈ geometricOutgoingDartList C center :=
+    mem_geometricOutgoingDartList C center rightOutgoing
+  have hno_list :
+      ∀ other ∈ geometricOutgoingDartList C center,
+        other ≠ leftOutgoing -> other ≠ rightOutgoing ->
+          ¬ (graphDartArg (canonicalGeometricGraph C) center
+                leftOutgoing.1.head <
+              graphDartArg (canonicalGeometricGraph C) center
+                other.1.head ∧
+            graphDartArg (canonicalGeometricGraph C) center
+                other.1.head <
+              graphDartArg (canonicalGeometricGraph C) center
+                rightOutgoing.1.head) := by
+    intro other _hmem hother_ne_left hother_ne_right
+    have hother_adj :
+        GraphBridge.UnitDistanceAdj C center other.1.head := by
+      exact (GraphBridge.unitDistanceSimpleGraph_adj C center other.1.head).1
+        (by simpa [other.2] using other.1.adj)
+    have hother_head_ne_left : other.1.head ≠ left := by
+      intro hhead
+      apply hother_ne_left
+      apply Subtype.ext
+      apply UnitDistanceDart.endpointPair_injective
+      simp [UnitDistanceDart.endpointPair, leftOutgoing, leftDart, other.2,
+        hhead]
+    have hother_head_ne_right : other.1.head ≠ right := by
+      intro hhead
+      apply hother_ne_right
+      apply Subtype.ext
+      apply UnitDistanceDart.endpointPair_injective
+      simp [UnitDistanceDart.endpointPair, rightOutgoing, rightDart, other.2,
+        hhead]
+    simpa [GraphVertexAngularBetween, leftOutgoing, rightOutgoing,
+      leftDart, rightDart] using
+      rows.no_between other.1.head hother_adj
+        hother_head_ne_left hother_head_ne_right
+  rcases
+    List.exists_getElem_succ_eq_of_pairwise_real_lt_no_between
+      (xs := geometricOutgoingDartList C center)
+      (weight := fun outgoing : OutgoingUnitDistanceDart C center =>
+        graphDartArg (canonicalGeometricGraph C) center outgoing.1.head)
+      (hsorted := geometricOutgoingDartList_pairwise_graphDartArg_lt C center)
+      hleft_mem hright_mem
+      (by simpa [leftOutgoing, rightOutgoing, leftDart, rightDart] using rows.angle)
+      hno_list with
+    ⟨i, hi, hget_left, hget_right⟩
+  refine ⟨?_⟩
+  refine
+    { index := i
+      index_succ_lt := hi
+      left_eq := ?_
+      right_eq := ?_ }
+  · have hhead :=
+      congrArg (fun d : OutgoingUnitDistanceDart C center => d.1.head)
+        hget_left
+    simpa [leftOutgoing, leftDart, dartFromGeometricList_head] using hhead.symm
+  · have hhead :=
+      congrArg (fun d : OutgoingUnitDistanceDart C center => d.1.head)
+        hget_right
+    simpa [rightOutgoing, rightDart, dartFromGeometricList_head] using hhead.symm
+
+/-- Choice form of
+`exists_graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows`. -/
+noncomputable def graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (hleft_adj : GraphBridge.UnitDistanceAdj C center left)
+    (hright_adj : GraphBridge.UnitDistanceAdj C center right)
+    (rows : GraphVertexAngularNoBetweenRows C center left right) :
+    GraphVertexGeometricAngularNeighborSelectionRow C center left right :=
+  Classical.choice
+    (exists_graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows
+      hleft_adj hright_adj rows)
+
+set_option linter.style.longLine false in
+/-- A genuine sorted outgoing-list no-between row identifies the selected
+heads as adjacent nonwrap entries of the real geometric outgoing-dart list.
+
+The only membership input needed beyond the list row is that the two selected
+heads are actual unit-distance neighbours of `center`, so they occur in
+`geometricOutgoingDartList`. -/
+theorem
+    exists_graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (hleft_adj : GraphBridge.UnitDistanceAdj C center left)
+    (hright_adj : GraphBridge.UnitDistanceAdj C center right)
+    (rows : GraphVertexGeometricOutgoingListNoBetweenRows C center left right) :
+    Nonempty
+      (GraphVertexGeometricAngularNeighborSelectionRow C center left right) :=
+  exists_graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows
+    hleft_adj hright_adj rows.toGraphVertexAngularNoBetweenRows
+
+set_option linter.style.longLine false in
+/-- Choice form of
+`exists_graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows`.
+
+This is the geometry-level eraser from the real outgoing-list no-between
+source to the exact selected sorted-list/index row used by S2 wrappers. -/
+noncomputable def graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (hleft_adj : GraphBridge.UnitDistanceAdj C center left)
+    (hright_adj : GraphBridge.UnitDistanceAdj C center right)
+    (rows : GraphVertexGeometricOutgoingListNoBetweenRows C center left right) :
+    GraphVertexGeometricAngularNeighborSelectionRow C center left right :=
+  Classical.choice
+    (exists_graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows
+      hleft_adj hright_adj rows)
+
+namespace GraphVertexGeometricOutgoingListNoBetweenRows
+
+variable {C : _root_.UDConfig n}
+variable {center left right : Fin n}
+
+set_option linter.style.longLine false in
+/-- Namespace form: a genuine outgoing-list no-between row, together with
+adjacency of the two selected heads, gives the exact geometric neighbour
+selection row in `geometricOutgoingDartList`. -/
+theorem exists_geometricAngularNeighborSelectionRow
+    (rows : GraphVertexGeometricOutgoingListNoBetweenRows C center left right)
+    (hleft_adj : GraphBridge.UnitDistanceAdj C center left)
+    (hright_adj : GraphBridge.UnitDistanceAdj C center right) :
+    Nonempty
+      (GraphVertexGeometricAngularNeighborSelectionRow C center left right) :=
+  exists_graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows
+    hleft_adj hright_adj rows
+
+set_option linter.style.longLine false in
+/-- Namespace choice form of
+`GraphVertexGeometricOutgoingListNoBetweenRows.exists_geometricAngularNeighborSelectionRow`. -/
+noncomputable def toGeometricAngularNeighborSelectionRow
+    (rows : GraphVertexGeometricOutgoingListNoBetweenRows C center left right)
+    (hleft_adj : GraphBridge.UnitDistanceAdj C center left)
+    (hright_adj : GraphBridge.UnitDistanceAdj C center right) :
+    GraphVertexGeometricAngularNeighborSelectionRow C center left right :=
+  graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows
+    hleft_adj hright_adj rows
+
+end GraphVertexGeometricOutgoingListNoBetweenRows
+
+set_option linter.style.longLine false in
+/-- Honest angular no-between rows for actual incident selected heads are
+equivalent to the existence of the matching nonwrap adjacent index row in the
+real sorted `geometricOutgoingDartList`.
+
+The forward implication is the sorted-list extraction theorem using
+`graphDartArg` order and no-between exclusion; the reverse implication reads
+the row back from consecutive entries of the same list. -/
+theorem graphVertexAngularNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (hleft_adj : GraphBridge.UnitDistanceAdj C center left)
+    (hright_adj : GraphBridge.UnitDistanceAdj C center right) :
+    GraphVertexAngularNoBetweenRows C center left right <->
+      Nonempty
+        (GraphVertexGeometricAngularNeighborSelectionRow C center left right) := by
+  constructor
+  · intro rows
+    exact
+      exists_graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows
+        hleft_adj hright_adj rows
+  · rintro ⟨row⟩
+    exact graphVertexAngularNoBetweenRows_of_geometricAngularNeighborSelectionRow
+      row
+
+set_option linter.style.longLine false in
+/-- Genuine outgoing-list no-between rows for actual incident selected heads
+are equivalent to the existence of the matching nonwrap adjacent index row in
+the real sorted `geometricOutgoingDartList`.
+
+This is the outgoing-list face of the selected-head reduction: the remaining
+source may be stated as pointwise `GraphVertexGeometricOutgoingListNoBetweenRows`
+or as pointwise sorted-list neighbour-selection rows, with no identity angular
+order or synthetic carrier cycle. -/
+theorem graphVertexGeometricOutgoingListNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow
+    {C : _root_.UDConfig n}
+    {center left right : Fin n}
+    (hleft_adj : GraphBridge.UnitDistanceAdj C center left)
+    (hright_adj : GraphBridge.UnitDistanceAdj C center right) :
+    GraphVertexGeometricOutgoingListNoBetweenRows C center left right <->
+      Nonempty
+        (GraphVertexGeometricAngularNeighborSelectionRow C center left right) := by
+  constructor
+  · intro rows
+    exact
+      exists_graphVertexGeometricAngularNeighborSelectionRow_of_geometricOutgoingListNoBetweenRows
+        hleft_adj hright_adj rows
+  · rintro ⟨row⟩
+    exact graphVertexGeometricOutgoingListNoBetweenRows_of_geometricAngularNeighborSelectionRow
+      row
+
+set_option linter.style.longLine false in
+/-- Family-level selected-head reduction over the genuine sorted outgoing list.
+
+For any pointwise selected-head family, angular no-between rows and
+outgoing-list no-between rows are both exactly reduced to the same residual:
+nonempty geometric neighbour-selection rows in the real
+`geometricOutgoingDartList`, with the selected heads required to be actual
+unit-distance neighbours of their centers. -/
+theorem S2_codex_current_20260520_selected_head_angular_order_final_source
+    {ι : Type*}
+    {C : _root_.UDConfig n}
+    (center left right : ι -> Fin n)
+    (hleft_adj :
+      forall a : ι, GraphBridge.UnitDistanceAdj C (center a) (left a))
+    (hright_adj :
+      forall a : ι, GraphBridge.UnitDistanceAdj C (center a) (right a)) :
+    ((forall a : ι,
+        GraphVertexAngularNoBetweenRows C (center a) (left a) (right a)) <->
+      (forall a : ι,
+        Nonempty
+          (GraphVertexGeometricAngularNeighborSelectionRow C
+            (center a) (left a) (right a)))) /\
+    ((forall a : ι,
+        GraphVertexGeometricOutgoingListNoBetweenRows C
+          (center a) (left a) (right a)) <->
+      (forall a : ι,
+        Nonempty
+          (GraphVertexGeometricAngularNeighborSelectionRow C
+            (center a) (left a) (right a)))) := by
+  constructor
+  · constructor
+    · intro angularRows a
+      exact
+        (graphVertexAngularNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow
+          (C := C) (center := center a) (left := left a) (right := right a)
+          (hleft_adj a) (hright_adj a)).1
+          (angularRows a)
+    · intro indexRows a
+      exact
+        (graphVertexAngularNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow
+          (C := C) (center := center a) (left := left a) (right := right a)
+          (hleft_adj a) (hright_adj a)).2
+          (indexRows a)
+  · constructor
+    · intro listRows a
+      exact
+        (graphVertexGeometricOutgoingListNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow
+          (C := C) (center := center a) (left := left a) (right := right a)
+          (hleft_adj a) (hright_adj a)).1
+          (listRows a)
+    · intro indexRows a
+      exact
+        (graphVertexGeometricOutgoingListNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow
+          (C := C) (center := center a) (left := left a) (right := right a)
+          (hleft_adj a) (hright_adj a)).2
+          (indexRows a)
+
+set_option linter.style.longLine false in
+/-- An honest angular no-between row at a graph vertex identifies two concrete
+incident darts as adjacent nonwrap entries of the real sorted outgoing-dart
+list.
+
+This is the generic raw-orbit-facing reducer: the adjacency hypotheses come
+from the actual darts, and the order step is routed through the
+`GraphVertexAngularNoBetweenRows` to geometric-neighbour selector. -/
+theorem geometricOutgoingDartList_nonwrap_of_graphVertexAngularNoBetweenRows
+    (C : _root_.UDConfig n) (center : Fin n)
+    (first second : UnitDistanceDart C)
+    (hfirst_tail : first.tail = center)
+    (hsecond_tail : second.tail = center)
+    (rows : GraphVertexAngularNoBetweenRows C center first.head second.head) :
+    Exists fun i : Nat =>
+      Exists fun hi : i + 1 < (geometricOutgoingDartList C center).length =>
+        first =
+          dartFromGeometricList C center i
+            (Nat.lt_trans (Nat.lt_succ_self i) hi) /\
+        second = dartFromGeometricList C center (i + 1) hi := by
+  have hfirst_adj :
+      GraphBridge.UnitDistanceAdj C center first.head := by
+    exact (GraphBridge.unitDistanceSimpleGraph_adj C center first.head).1
+      (by simpa [hfirst_tail] using first.adj)
+  have hsecond_adj :
+      GraphBridge.UnitDistanceAdj C center second.head := by
+    exact (GraphBridge.unitDistanceSimpleGraph_adj C center second.head).1
+      (by simpa [hsecond_tail] using second.adj)
+  let row :=
+    graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows
+      hfirst_adj hsecond_adj rows
+  rcases row with ⟨i, hi, hfirst_head, hsecond_head⟩
+  refine ⟨i, hi, ?_, ?_⟩
+  · apply UnitDistanceDart.endpointPair_injective
+    simp [UnitDistanceDart.endpointPair, dartFromGeometricList,
+      hfirst_tail, hfirst_head]
+  · apply UnitDistanceDart.endpointPair_injective
+    simp [UnitDistanceDart.endpointPair, dartFromGeometricList,
+      hsecond_tail, hsecond_head]
+
+set_option linter.style.longLine false in
+/-- Face-successor specialization of
+`geometricOutgoingDartList_nonwrap_of_graphVertexAngularNoBetweenRows`.
+
+If a geometric face-successor row gives the concrete successor dart, then an
+honest angular no-between row for the reverse incoming dart and successor
+dart selects the nonwrap branch of that same sorted outgoing list. -/
+theorem geometricUnitDistanceRotationSystem_faceSucc_nonwrap_of_graphVertexAngularNoBetweenRows
+    (C : _root_.UDConfig n) (d e : UnitDistanceDart C)
+    (hface : (geometricUnitDistanceRotationSystem C).faceSucc d = e)
+    (rows : GraphVertexAngularNoBetweenRows C d.head d.reverse.head e.head) :
+    Exists fun i : Nat =>
+      Exists fun hi : i + 1 < (geometricOutgoingDartList C d.head).length =>
+        d.reverse =
+          dartFromGeometricList C d.head i
+            (Nat.lt_trans (Nat.lt_succ_self i) hi) /\
+        e = dartFromGeometricList C d.head (i + 1) hi := by
+  have he_tail : e.tail = d.head := by
+    rw [← hface]
+    exact (geometricUnitDistanceRotationSystem C).faceSucc_tail_eq_head d
+  exact
+    geometricOutgoingDartList_nonwrap_of_graphVertexAngularNoBetweenRows
+      C d.head d.reverse e (by simp) he_tail rows
+
+set_option linter.style.longLine false in
+/-- Raw-face-successor-orbit orientation rows from honest angular no-between
+rows at the same raw tails.
+
+This is the geometry-level shape of the selected raw-orbit orientation
+residual: every row is read from a genuine no-between sector, not from an
+identity cyclic-order shortcut. -/
+theorem rawFaceSuccOrbit_orientationRows_of_graphVertexAngularNoBetweenRows
+    {C : _root_.UDConfig n} {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C) start)
+    (angularRows :
+      forall k : Fin O.period,
+        GraphVertexAngularNoBetweenRows C (O.dart k).tail
+          (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    forall k : Fin O.period,
+      graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail := by
+  intro k
+  exact (angularRows k).angle
+
+set_option linter.style.longLine false in
+/-- Raw-face-successor-orbit nonwrap successor rows from honest angular
+no-between rows and the orbit's actual geometric `faceSucc` steps.
+
+At each selected raw tail, the previous raw dart's reverse and the current raw
+dart are recovered as adjacent nonwrap entries of the concrete
+`geometricOutgoingDartList`. -/
+theorem rawFaceSuccOrbit_geometricSuccessorNonwrapRows_of_graphVertexAngularNoBetweenRows
+    {C : _root_.UDConfig n} {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C) start)
+    (angularRows :
+      forall k : Fin O.period,
+        GraphVertexAngularNoBetweenRows C (O.dart k).tail
+          (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    forall k : Fin O.period,
+      Exists fun i : Nat =>
+        Exists fun hi :
+            i + 1 < (geometricOutgoingDartList C (O.dart k).tail).length =>
+          (O.dart (PlanarInterface.cyclicPred O.period_pos k)).reverse =
+            dartFromGeometricList C (O.dart k).tail i
+              (Nat.lt_trans (Nat.lt_succ_self i) hi) /\
+          O.dart k = dartFromGeometricList C (O.dart k).tail (i + 1) hi := by
+  intro k
+  let pred : Fin O.period := PlanarInterface.cyclicPred O.period_pos k
+  let succ : Fin O.period := PlanarInterface.cyclicSucc O.period_pos k
+  have hsucc_pred : PlanarInterface.cyclicSucc O.period_pos pred = k := by
+    simp [pred, PlanarInterface.cyclicSucc_cyclicPred O.period_pos k]
+  have hface_pred :
+      (geometricUnitDistanceRotationSystem C).faceSucc (O.dart pred) =
+        O.dart k := by
+    simp [pred, hsucc_pred]
+  have hpred_head : (O.dart pred).head = (O.dart k).tail :=
+    (geometricUnitDistanceRotationSystem C).endpoint_chaining_of_faceSucc_eq_next
+      hface_pred
+  have hface_k :
+      (geometricUnitDistanceRotationSystem C).faceSucc (O.dart k) =
+        O.dart succ := by
+    simp [succ]
+  have hcurrent_head : (O.dart k).head = (O.dart succ).tail :=
+    (geometricUnitDistanceRotationSystem C).endpoint_chaining_of_faceSucc_eq_next
+      hface_k
+  have hreverse_tail :
+      ((O.dart pred).reverse).tail = (O.dart k).tail := by
+    simpa [UnitDistanceDart.reverse_tail] using hpred_head
+  have hrows :
+      GraphVertexAngularNoBetweenRows C (O.dart k).tail
+        ((O.dart pred).reverse).head (O.dart k).head := by
+    simpa [pred, succ, UnitDistanceDart.reverse_head, hcurrent_head]
+      using angularRows k
+  exact
+    geometricOutgoingDartList_nonwrap_of_graphVertexAngularNoBetweenRows
+      C (O.dart k).tail (O.dart pred).reverse (O.dart k)
+      hreverse_tail rfl hrows
+
 /-! ## Boundary face-successor rows from geometric list adjacency -/
 
 /-- If the reverse of a dart and the target dart occupy consecutive positions
@@ -1387,6 +2222,147 @@ theorem geometricUnitDistanceRotationSystem_faceSucc_eq_of_reverse_getElem_succ
   rw [UnitDistanceRotationSystem.faceSucc, hreverse, htarget]
   exact geometricUnitDistanceRotationSystem_nextAround_getElem_succ
     C d.head i hi
+
+set_option linter.style.longLine false in
+/-- Adjacent entries in the genuine sorted outgoing-dart list have the
+corresponding strict principal graph-dart argument order. -/
+theorem graphDartArg_lt_of_dartFromGeometricList_getElem_succ
+    (C : _root_.UDConfig n) (center : Fin n)
+    (first second : UnitDistanceDart C)
+    (i : Nat)
+    (hi : i + 1 < (geometricOutgoingDartList C center).length)
+    (hfirst :
+      first =
+        dartFromGeometricList C center i
+          (Nat.lt_trans (Nat.lt_succ_self i) hi))
+    (hsecond :
+      second = dartFromGeometricList C center (i + 1) hi) :
+    graphDartArg (canonicalGeometricGraph C) center first.head <
+      graphDartArg (canonicalGeometricGraph C) center second.head := by
+  have hlt :=
+    graphDartArg_lt_of_dartFromGeometricList_index_lt
+      C center
+      (Nat.lt_trans (Nat.lt_succ_self i) hi) hi
+      (Nat.lt_succ_self i)
+  simpa [hfirst, hsecond] using hlt
+
+set_option linter.style.longLine false in
+/-- Non-wrap adjacent sorted-list entries identify both the genuine geometric
+face successor and the corresponding strict `graphDartArg` order.
+
+The optional `center` parameter lets callers keep the list source stated at a
+known shared tail while the face-successor equality is still checked at
+`d.head`. -/
+theorem geometricUnitDistanceRotationSystem_faceSucc_eq_and_graphDartArg_lt_of_reverse_getElem_succ_at
+    (C : _root_.UDConfig n) (center : Fin n)
+    (d e : UnitDistanceDart C)
+    (hcenter : d.head = center)
+    (i : Nat)
+    (hi : i + 1 < (geometricOutgoingDartList C center).length)
+    (hreverse :
+      d.reverse =
+        dartFromGeometricList C center i
+          (Nat.lt_trans (Nat.lt_succ_self i) hi))
+    (htarget :
+      e = dartFromGeometricList C center (i + 1) hi) :
+    (geometricUnitDistanceRotationSystem C).faceSucc d = e ∧
+      graphDartArg (canonicalGeometricGraph C) center d.reverse.head <
+        graphDartArg (canonicalGeometricGraph C) center e.head := by
+  subst center
+  exact
+    ⟨geometricUnitDistanceRotationSystem_faceSucc_eq_of_reverse_getElem_succ
+        C d e i hi hreverse htarget,
+      graphDartArg_lt_of_dartFromGeometricList_getElem_succ
+        C d.head d.reverse e i hi hreverse htarget⟩
+
+set_option linter.style.longLine false in
+/-- A non-wrap geometric neighbour-selection row identifies the actual
+geometric face-successor dart.
+
+This is the list-row face of `faceSucc`: if the reverse incoming dart and a
+target outgoing dart are consecutive entries of the genuine
+`geometricOutgoingDartList` at the shared tail, then the geometric rotation
+system sends the incoming dart to that target. -/
+theorem geometricUnitDistanceRotationSystem_faceSucc_eq_of_geometricAngularNeighborSelectionRow
+    (C : _root_.UDConfig n) (d e : UnitDistanceDart C)
+    (he_tail : e.tail = d.head)
+    (row :
+      GraphVertexGeometricAngularNeighborSelectionRow C d.head
+        d.reverse.head e.head) :
+    (geometricUnitDistanceRotationSystem C).faceSucc d = e := by
+  rcases row with ⟨i, hi, hleft, hright⟩
+  exact
+    geometricUnitDistanceRotationSystem_faceSucc_eq_of_reverse_getElem_succ
+      C d e i hi
+      (by
+        apply UnitDistanceDart.endpointPair_injective
+        change (d.reverse.tail, d.reverse.head) =
+          ((dartFromGeometricList C d.head i
+            (Nat.lt_trans (Nat.lt_succ_self i) hi)).tail,
+            (dartFromGeometricList C d.head i
+              (Nat.lt_trans (Nat.lt_succ_self i) hi)).head)
+        exact Prod.ext (by simp) hleft)
+      (by
+        apply UnitDistanceDart.endpointPair_injective
+        change (e.tail, e.head) =
+          ((dartFromGeometricList C d.head (i + 1) hi).tail,
+            (dartFromGeometricList C d.head (i + 1) hi).head)
+        exact Prod.ext (by simpa using he_tail) hright)
+
+set_option linter.style.longLine false in
+/-- A geometric neighbour-selection row is already the corresponding non-wrap
+row for the two concrete darts with those tails and heads.
+
+This is the direct sorted-list eraser: the row supplies the actual
+`geometricOutgoingDartList` indices, while endpoint injectivity reattaches the
+stored heads to the concrete darts. -/
+theorem geometricOutgoingDartList_nonwrap_of_geometricAngularNeighborSelectionRow
+    (C : _root_.UDConfig n) (center : Fin n)
+    (first second : UnitDistanceDart C)
+    (hfirst_tail : first.tail = center)
+    (hsecond_tail : second.tail = center)
+    (row :
+      GraphVertexGeometricAngularNeighborSelectionRow C center
+        first.head second.head) :
+    Exists fun i : Nat =>
+      Exists fun hi : i + 1 < (geometricOutgoingDartList C center).length =>
+        first =
+          dartFromGeometricList C center i
+            (Nat.lt_trans (Nat.lt_succ_self i) hi) /\
+        second = dartFromGeometricList C center (i + 1) hi := by
+  rcases row with ⟨i, hi, hfirst_head, hsecond_head⟩
+  refine ⟨i, hi, ?_, ?_⟩
+  · apply UnitDistanceDart.endpointPair_injective
+    simp [UnitDistanceDart.endpointPair, dartFromGeometricList,
+      hfirst_tail, hfirst_head]
+  · apply UnitDistanceDart.endpointPair_injective
+    simp [UnitDistanceDart.endpointPair, dartFromGeometricList,
+      hsecond_tail, hsecond_head]
+
+set_option linter.style.longLine false in
+/-- Face-successor specialization of the direct sorted-list eraser.
+
+If the actual geometric `faceSucc` step sends `d` to `e`, and the reverse of
+`d` and `e` are selected as adjacent non-wrap entries in the genuine sorted
+outgoing list at `d.head`, then the non-wrap row is available directly. -/
+theorem geometricUnitDistanceRotationSystem_faceSucc_nonwrap_of_geometricAngularNeighborSelectionRow
+    (C : _root_.UDConfig n) (d e : UnitDistanceDart C)
+    (hface : (geometricUnitDistanceRotationSystem C).faceSucc d = e)
+    (row :
+      GraphVertexGeometricAngularNeighborSelectionRow C d.head
+        d.reverse.head e.head) :
+    Exists fun i : Nat =>
+      Exists fun hi : i + 1 < (geometricOutgoingDartList C d.head).length =>
+        d.reverse =
+          dartFromGeometricList C d.head i
+            (Nat.lt_trans (Nat.lt_succ_self i) hi) /\
+        e = dartFromGeometricList C d.head (i + 1) hi := by
+  have he_tail : e.tail = d.head := by
+    rw [← hface]
+    exact (geometricUnitDistanceRotationSystem C).faceSucc_tail_eq_head d
+  exact
+    geometricOutgoingDartList_nonwrap_of_geometricAngularNeighborSelectionRow
+      C d.head d.reverse e (by simp) he_tail row
 
 /-- Wrap-around version of
 `geometricUnitDistanceRotationSystem_faceSucc_eq_of_reverse_getElem_succ`. -/
@@ -1501,6 +2477,28 @@ theorem geometricOutgoingDartListConsecutive_of_geometricUnitDistanceRotationSys
         simpa [L, hget_second] using
           dartFromGeometricList_outgoing C d.head 0 hpos
       exact (congrArg Subtype.val hout).symm
+
+set_option linter.style.longLine false in
+/-- Every dart step in a geometric raw face-successor orbit is a genuine
+consecutive pair of entries in the concrete sorted outgoing-dart list.
+
+This keeps the wrap branch explicit through
+`geometricOutgoingDartListConsecutive`; no identity rotation order or synthetic
+cycle is introduced. -/
+theorem rawFaceSuccOrbit_geometricOutgoingDartListConsecutive_of_faceSucc
+    {C : _root_.UDConfig n} {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C) start) :
+    forall k : Fin O.period,
+      geometricOutgoingDartListConsecutive C (O.dart k).head
+        (O.dart k).reverse
+        (O.dart (PlanarInterface.cyclicSucc O.period_pos k)) := by
+  intro k
+  exact
+    geometricOutgoingDartListConsecutive_of_geometricUnitDistanceRotationSystem_faceSucc_eq
+      C (O.dart k) (O.dart (PlanarInterface.cyclicSucc O.period_pos k))
+      (by simp)
 
 /-- Local geometric evidence at one boundary step: at the shared boundary
 vertex, the reverse incoming dart is immediately followed by the outgoing
@@ -1745,6 +2743,177 @@ def BoundaryVertexGeometricRotationOrderRow
           (Nat.lt_trans (Nat.lt_succ_self i) hi) ∧
       UnitDistanceDart.ofBoundary B k =
         dartFromGeometricList C (B.vertex k) (i + 1) hi
+
+/-- A genuine non-wrap neighbour-selection row in the sorted outgoing-dart
+list at the boundary vertex is exactly the boundary geometric rotation-order
+row consumed by the S2 actual-boundary orientation source. -/
+theorem boundaryVertexGeometricRotationOrderRow_of_graphVertexGeometricAngularNeighborSelectionRow
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (k : Fin B.length)
+    (row :
+      GraphVertexGeometricAngularNeighborSelectionRow C (B.vertex k)
+        (B.vertex (PlanarInterface.cyclicPred B.length_pos k))
+        (B.vertex (PlanarInterface.cyclicSucc B.length_pos k))) :
+    BoundaryVertexGeometricRotationOrderRow C B k := by
+  let pred := PlanarInterface.cyclicPred B.length_pos k
+  have hsucc_pred : PlanarInterface.cyclicSucc B.length_pos pred = k := by
+    dsimp [pred]
+    exact PlanarInterface.cyclicSucc_cyclicPred B.length_pos k
+  rcases row with ⟨i, hi, hpred_head, hsucc_head⟩
+  refine ⟨i, hi, ?_, ?_⟩
+  · apply UnitDistanceDart.endpointPair_injective
+    simp [UnitDistanceDart.endpointPair, dartFromGeometricList,
+      pred, hsucc_pred, hpred_head]
+  · apply UnitDistanceDart.endpointPair_injective
+    simp [UnitDistanceDart.endpointPair, dartFromGeometricList, hsucc_head]
+
+/-- Family form of
+`boundaryVertexGeometricRotationOrderRow_of_graphVertexGeometricAngularNeighborSelectionRow`.
+This is the strict reducer from pointwise sorted outgoing-dart neighbour rows
+to the `BoundaryVertexGeometricRotationOrderRow` family required by the S2
+actual-boundary face-successor/orientation source. -/
+theorem boundaryVertexGeometricRotationOrderRows_of_graphVertexGeometricAngularNeighborSelectionRows
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows :
+      forall k : Fin B.length,
+        GraphVertexGeometricAngularNeighborSelectionRow C (B.vertex k)
+          (B.vertex (PlanarInterface.cyclicPred B.length_pos k))
+          (B.vertex (PlanarInterface.cyclicSucc B.length_pos k))) :
+    forall k : Fin B.length,
+      BoundaryVertexGeometricRotationOrderRow C B k := by
+  intro k
+  exact
+    boundaryVertexGeometricRotationOrderRow_of_graphVertexGeometricAngularNeighborSelectionRow
+      C B k (rows k)
+
+set_option linter.style.longLine false in
+/-- An honest boundary-vertex angular no-between row already forces the
+predecessor/successor darts to be consecutive in the actual sorted geometric
+outgoing list.
+
+This is the direct source reducer for the ordinary boundary geometric order
+row: it uses the real incident boundary darts and the concrete
+`geometricOutgoingDartList`, with no identity cyclic order or synthetic row. -/
+theorem boundaryVertexGeometricRotationOrderRow_of_boundaryVertexAngularNoBetweenRows
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (k : Fin B.length)
+    (rows : BoundaryVertexAngularNoBetweenRows C B k) :
+    BoundaryVertexGeometricRotationOrderRow C B k := by
+  let pred := PlanarInterface.cyclicPred B.length_pos k
+  let succ := PlanarInterface.cyclicSucc B.length_pos k
+  have hsucc_pred : PlanarInterface.cyclicSucc B.length_pos pred = k := by
+    dsimp [pred]
+    exact PlanarInterface.cyclicSucc_cyclicPred B.length_pos k
+  have hleft_adj :
+      GraphBridge.UnitDistanceAdj C (B.vertex k) (B.vertex pred) := by
+    have hsimple :
+        (GraphBridge.unitDistanceSimpleGraph C).Adj
+          (B.vertex k) (B.vertex pred) := by
+      simpa [pred, hsucc_pred] using
+        ((UnitDistanceDart.ofBoundary B pred).reverse).adj
+    exact (GraphBridge.unitDistanceSimpleGraph_adj C _ _).1 hsimple
+  have hright_adj :
+      GraphBridge.UnitDistanceAdj C (B.vertex k) (B.vertex succ) := by
+    have hsimple :
+        (GraphBridge.unitDistanceSimpleGraph C).Adj
+          (B.vertex k) (B.vertex succ) := by
+      simpa [succ] using (UnitDistanceDart.ofBoundary B k).adj
+    exact (GraphBridge.unitDistanceSimpleGraph_adj C _ _).1 hsimple
+  let graphRows :
+      GraphVertexAngularNoBetweenRows C (B.vertex k)
+        (B.vertex pred) (B.vertex succ) :=
+    { angle := by
+        simpa [pred, succ] using rows.angle
+      no_between := by
+        intro other hAdj hother_pred hother_succ hbetween
+        exact
+          rows.no_between other hAdj
+            (by simpa [pred] using hother_pred)
+            (by simpa [succ] using hother_succ)
+            (by
+              simpa [BoundaryPredSuccAngularBetween,
+                GraphVertexAngularBetween, pred, succ] using hbetween) }
+  have hrow_nonempty :
+      Nonempty
+        (GraphVertexGeometricAngularNeighborSelectionRow C (B.vertex k)
+          (B.vertex pred) (B.vertex succ)) :=
+    exists_graphVertexGeometricAngularNeighborSelectionRow_of_graphVertexAngularNoBetweenRows
+      hleft_adj hright_adj graphRows
+  exact
+    boundaryVertexGeometricRotationOrderRow_of_graphVertexGeometricAngularNeighborSelectionRow
+      C B k (Classical.choice hrow_nonempty)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryVertexGeometricRotationOrderRow_of_boundaryVertexAngularNoBetweenRows`. -/
+theorem boundaryVertexGeometricRotationOrderRows_of_boundaryVertexAngularNoBetweenRows
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (rows :
+      forall k : Fin B.length, BoundaryVertexAngularNoBetweenRows C B k) :
+    forall k : Fin B.length,
+      BoundaryVertexGeometricRotationOrderRow C B k := by
+  intro k
+  exact
+    boundaryVertexGeometricRotationOrderRow_of_boundaryVertexAngularNoBetweenRows
+      C B k (rows k)
+
+set_option linter.style.longLine false in
+/-- Raw predicate form of
+`boundaryVertexGeometricRotationOrderRows_of_boundaryVertexAngularNoBetweenRows`.
+
+For the exterior-boundary route, the only geometric source needed at each
+boundary vertex is the ordinary predecessor-before-successor argument
+inequality plus the honest no-between exclusion against actual incident
+unit-distance neighbours.  The conclusion is still the concrete consecutive
+row in `geometricOutgoingDartList`. -/
+theorem boundaryVertexGeometricRotationOrderRows_of_pred_succ_no_between
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (hangle :
+      forall k : Fin B.length,
+        graphDartArg (canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) <
+          graphDartArg (canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicSucc B.length_pos k)))
+    (hno_between :
+      forall (k : Fin B.length) (other : Fin n),
+        GraphBridge.UnitDistanceAdj C (B.vertex k) other ->
+        other ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+        other ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+          Not (BoundaryPredSuccAngularBetween C B k other)) :
+    forall k : Fin B.length,
+      BoundaryVertexGeometricRotationOrderRow C B k := by
+  refine
+    boundaryVertexGeometricRotationOrderRows_of_boundaryVertexAngularNoBetweenRows
+      C B ?_
+  intro k
+  exact
+    { angle := hangle k
+      no_between := hno_between k }
+
+/-- Claim `S2-codex-current-20260520-boundary-geometric-order-source`.
+
+Once an actual exterior boundary route has supplied the honest angular
+no-between rows at the boundary vertices, the desired geometric boundary-order
+rows follow directly from the real sorted outgoing-dart lists.  This wrapper
+does not require a pre-existing geometric face-successor row: the selected
+predecessor/successor darts are recovered as consecutive entries of
+`geometricOutgoingDartList`. -/
+theorem S2_codex_current_20260520_boundary_geometric_order_source
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (angularRows :
+      forall k : Fin B.length, BoundaryVertexAngularNoBetweenRows C B k) :
+    forall k : Fin B.length,
+      BoundaryVertexGeometricRotationOrderRow C B k :=
+  boundaryVertexGeometricRotationOrderRows_of_boundaryVertexAngularNoBetweenRows
+    C B angularRows
 
 /-- The wrap-around alternative to
 `BoundaryVertexGeometricRotationOrderRow`: the reverse incoming predecessor
@@ -2042,6 +3211,88 @@ theorem boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRows
   intro k
   exact boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRow
     C B k (hrows k)
+
+set_option linter.style.longLine false in
+/-- At a fixed boundary vertex, the honest angular no-between row is equivalent
+to the ordinary non-wrap geometric rotation-order row for the same concrete
+boundary cycle.
+
+Both directions are routed through the genuine sorted
+`geometricOutgoingDartList`: angular rows force adjacent list entries, while
+an adjacent list row recovers the strict `graphDartArg` no-between sector. -/
+theorem boundaryVertexAngularNoBetweenRows_iff_boundaryVertexGeometricRotationOrderRow
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (k : Fin B.length) :
+    BoundaryVertexAngularNoBetweenRows C B k ↔
+      BoundaryVertexGeometricRotationOrderRow C B k := by
+  constructor
+  · intro rows
+    exact boundaryVertexGeometricRotationOrderRow_of_boundaryVertexAngularNoBetweenRows
+      C B k rows
+  · intro hrow
+    exact boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRow
+      C B k hrow
+
+set_option linter.style.longLine false in
+/-- Same-boundary family equivalence between the angular no-between source and
+the concrete geometric rotation-order source.
+
+The forward direction is exactly
+`S2_codex_current_20260520_boundary_geometric_order_source`; the reverse
+direction reads the angular sector back from adjacent entries of the real
+`geometricOutgoingDartList`. -/
+theorem S2_codex_current_20260520_same_boundary_angular_geometric_order_source_iff
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C) :
+    (forall k : Fin B.length, BoundaryVertexAngularNoBetweenRows C B k) ↔
+      (forall k : Fin B.length,
+        BoundaryVertexGeometricRotationOrderRow C B k) := by
+  constructor
+  · intro angularRows
+    exact
+      S2_codex_current_20260520_boundary_geometric_order_source
+        C B angularRows
+  · intro geometricOrderRows
+    exact
+      boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRows
+        C B geometricOrderRows
+
+set_option linter.style.longLine false in
+/-- Reverse source eraser for the same concrete boundary cycle: non-wrap
+geometric rotation-order rows source the angular no-between rows consumed by
+the exterior-sector package builders. -/
+theorem S2_codex_current_20260520_same_boundary_angular_no_between_source
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (geometricOrderRows :
+      forall k : Fin B.length,
+        BoundaryVertexGeometricRotationOrderRow C B k) :
+    forall k : Fin B.length, BoundaryVertexAngularNoBetweenRows C B k :=
+  boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRows
+    C B geometricOrderRows
+
+/-- Geometric face-successor rows plus the ordinary nonwrap
+predecessor/successor orientation supply the reusable angular no-between rows
+at every boundary vertex. -/
+theorem boundaryVertexAngularNoBetweenRows_of_faceSuccRows_pred_arg_lt_succ_arg
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (faceSuccRows :
+      UnitDistanceCycleFaceSuccRows C (geometricUnitDistanceRotationSystem C) B)
+    (hangle :
+      forall k : Fin B.length,
+        graphDartArg (canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) <
+          graphDartArg (canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicSucc B.length_pos k))) :
+    forall k : Fin B.length, BoundaryVertexAngularNoBetweenRows C B k :=
+  boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRows
+    C B
+    (S2_agent_geometric_boundary_order_source_of_pred_arg_lt_succ_arg
+      C B faceSuccRows hangle)
 
 /-- Boundary-index form of the geometric successor obligation: local angular
 no-between data stated at the boundary vertex `B.vertex k` supplies the row
@@ -2397,6 +3648,80 @@ def unitDistanceCycleFaceSuccRows_of_geometric_boundary_list_successors
           (UnitDistanceDart.ofBoundary B
             (PlanarInterface.cyclicSucc B.length_pos k))
           hpos hreverse htarget
+
+/-- Boundary-vertex geometric rotation-order rows give the corresponding
+shared-vertex successor rows for the same concrete boundary cycle. -/
+theorem geometricBoundarySuccessorRows_of_boundaryVertexGeometricRotationOrderRows
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (hrows :
+      forall k : Fin B.length,
+        BoundaryVertexGeometricRotationOrderRow C B k) :
+    GeometricBoundarySuccessorRows C B := by
+  intro k
+  let j := PlanarInterface.cyclicSucc B.length_pos k
+  have hpred : PlanarInterface.cyclicPred B.length_pos j = k := by
+    simp [j, PlanarInterface.cyclicPred_cyclicSucc]
+  left
+  rcases hrows j with ⟨i, hi, hreverse, htarget⟩
+  refine ⟨i, by simpa [j] using hi, ?_, ?_⟩
+  · simpa [j, hpred] using hreverse
+  · simpa [j] using htarget
+
+/-- Honest adjacent rows in the actual sorted geometric outgoing lists supply
+`UnitDistanceCycleFaceSuccRows` for the genuine geometric rotation system. -/
+theorem unitDistanceCycleFaceSuccRows_of_boundaryVertexGeometricRotationOrderRows
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (hrows :
+      forall k : Fin B.length,
+        BoundaryVertexGeometricRotationOrderRow C B k) :
+    UnitDistanceCycleFaceSuccRows C (geometricUnitDistanceRotationSystem C) B :=
+  unitDistanceCycleFaceSuccRows_of_geometric_boundary_list_successors
+    C B
+    (geometricBoundarySuccessorRows_of_boundaryVertexGeometricRotationOrderRows
+      C B hrows)
+
+/-- The same honest geometric rotation-order rows also orient the boundary:
+at each boundary vertex, the predecessor dart is before the successor dart in
+the sorted principal-argument order. -/
+theorem boundary_orientation_of_boundaryVertexGeometricRotationOrderRows
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (hrows :
+      forall k : Fin B.length,
+        BoundaryVertexGeometricRotationOrderRow C B k) :
+    forall k : Fin B.length,
+      graphDartArg (canonicalGeometricGraph C)
+          (B.vertex k)
+          (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) <
+        graphDartArg (canonicalGeometricGraph C)
+          (B.vertex k)
+          (B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) :=
+  fun k =>
+    (boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRow
+      C B k (hrows k)).angle
+
+/-- Combined row package from genuine geometric boundary rotation-order rows:
+the rows give both the geometric face-successor cycle equation and the
+ordinary boundary orientation inequalities. -/
+theorem faceSuccRows_and_boundary_orientation_of_boundaryVertexGeometricRotationOrderRows
+    (C : _root_.UDConfig n)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (hrows :
+      forall k : Fin B.length,
+        BoundaryVertexGeometricRotationOrderRow C B k) :
+    UnitDistanceCycleFaceSuccRows C (geometricUnitDistanceRotationSystem C) B ∧
+      (forall k : Fin B.length,
+        graphDartArg (canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) <
+          graphDartArg (canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicSucc B.length_pos k))) :=
+  ⟨unitDistanceCycleFaceSuccRows_of_boundaryVertexGeometricRotationOrderRows
+      C B hrows,
+    boundary_orientation_of_boundaryVertexGeometricRotationOrderRows C B hrows⟩
 
 end GeometricRotationSystem
 end Swanepoel

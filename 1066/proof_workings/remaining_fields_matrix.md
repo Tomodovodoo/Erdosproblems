@@ -34,6 +34,35 @@ NoCutMinimalityClosureW34.ExactRemainingPremiseForNoCutMinimalityClosure
 | `SelectedFrameBadAdjacencyCommonNeighborRowsSourceTheorem` | Bad adjacency/common-neighbor exclusions | `K23RouteCoverageSourceW34` | Removes the selected bad-adjacency branch. |
 | `S5AngleRowsForFinitePQSpineGeneratedOrderSource` | Compact label-certificate angle rows for the finite p/q spine and generated order | `ExactFigureWitnessSourceW34` | Supplies the final S5 angle package to W34 route premises. |
 
+S2 exact-topology source note: the current live same-boundary theorem should
+construct an actual unbounded frontier carrier/cycle `B` from
+`FinitePlanarOuterComponentInputs`, prove graph vertices on the exterior
+frontier iff they are vertices of `B`, prove consecutive boundary edge
+membership in `unboundedFrontierEdgeSet`, prove the angular/no-between rows,
+and prove `BoundaryFrontierIncidentEdgeExteriorAngularSector`.  The compact
+handoff is then
+`S2_agent_cm_actual_sector_source_20260520cm` ->
+`BoundaryVertexExteriorSectorRowsAt` ->
+`FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows`,
+with the existing `UnboundedExteriorFrontierCycleRows`/W32 erasers downstream.
+Do not add new bookkeeping layers or W facades for this route.  Do not count a
+new theorem that merely hands actual rows, sector rows, carrier rows, or
+selected successor-edge rows to a later worker while erasing them to
+`UnboundedExteriorFrontierCycleRows`.  Such premises must be proved in the same
+claim, or the claim must be rewritten as the missing-premise source task.  The
+live S2 work is proving, from `FinitePlanarOuterComponentInputs C`, the local
+two-germ/no-third source, the unbounded exterior frontier component/carrier
+connectedness source, and the selected geometric `faceSucc`
+frontier-propagation source.
+
+Endpoint closure note: the all-adjacent frontier-endpoint source
+`AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource C inputs` is not a
+valid unconditional target from `FinitePlanarOuterComponentInputs C`; boundary
+chords can join exterior-frontier vertices without lying on the exterior
+boundary.  Endpoint closure is only a checked selected-edge support theorem via
+`closedSegmentEndpointClosureSource_of_incidentUnboundedFrontierEdgeSource`,
+after membership in `unboundedFrontierEdgeSet C inputs` has been produced.
+
 Completion gate:
 
 ```text

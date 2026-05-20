@@ -57,6 +57,15 @@ Open positive inputs:
    `SelectedTopologyRowsInhabitationW33.MinimalFailureExactActualTopologyFieldsTarget`
    or
    `FaceBoundaryTopologySourceW32.MinimalFailureExactActualTopologyFieldsTarget`.
+   Current S2 source task: construct an input-only actual exterior boundary
+   cycle `B`, prove graph vertices on the unbounded exterior frontier iff they
+   are vertices of `B`, and provide `forall k,
+   BoundaryVertexExteriorSectorRowsAt inputs B k`; this feeds
+   `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows`.
+   Prove this orbit-first internally: choose an exterior-oriented geometric raw
+   face-successor orbit, prove frontier-tail coverage and repeated-tail cut
+   rows, then turn no-cut tail injectivity into the boundary cycle and sector
+   rows.
 2. Nondegenerate outer-face sector order:
    `OuterBoundaryAngleSourceW34.SelectedNondegenerateTopologyOuterFaceSectorOrderTheorem`.
 3. Exact topology closure/missing-field package:

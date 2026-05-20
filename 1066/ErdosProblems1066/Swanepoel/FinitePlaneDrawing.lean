@@ -580,6 +580,14 @@ theorem isPreconnected_inOpenSegment
   exact isPreconnected_Ioo.image _
     (continuous_segmentPoint a b).continuousOn
 
+/-- The project-local closed straight segment is preconnected. -/
+theorem isPreconnected_closedSegment
+    (a b : PlanarInterface.Point) :
+    IsPreconnected (closedSegment a b) := by
+  rw [closedSegment_eq_image_Icc]
+  exact isPreconnected_Icc.image _
+    (continuous_segmentPoint a b).continuousOn
+
 /-- The affine midpoint lies in the project-local open segment. -/
 theorem midpoint_inOpenSegment
     (a b : PlanarInterface.Point) :
@@ -1359,6 +1367,130 @@ theorem embeddedEdgeSet_nonempty_of_inputs
   obtain ⟨v⟩ := inputs.vertex_nonempty
   exact ⟨(canonicalGraph C).point v, vertex_mem_embeddedEdgeSet_of_inputs inputs v⟩
 
+/-- An adjacent canonical edge puts its head vertex in the embedded-drawing
+component of its tail vertex. -/
+theorem right_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_adj
+    {C : _root_.UDConfig n} {i j : Fin n}
+    (hAdj : (canonicalGraph C).Adj i j) :
+    (canonicalGraph C).point j ∈
+      connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point i) :=
+  (isPreconnected_closedSegment
+      ((canonicalGraph C).point i)
+      ((canonicalGraph C).point j)).subset_connectedComponentIn
+    (left_mem_closedSegment _ _)
+    (closedSegment_subset_embeddedEdgeSet_of_adj hAdj)
+    (right_mem_closedSegment _ _)
+
+/-- Graph reachability lifts to membership in the same component of the
+embedded straight-line drawing. -/
+theorem graph_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_reachable
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hreach : (GraphBridge.unitDistanceSimpleGraph C).Reachable u v) :
+    (canonicalGraph C).point v ∈
+      connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point u) := by
+  rcases hreach with ⟨walk⟩
+  induction walk with
+  | nil =>
+      exact
+        mem_connectedComponentIn
+          (vertex_mem_embeddedEdgeSet_of_inputs inputs _)
+  | cons hAdj walk ih =>
+      have hcanonAdj :
+          (canonicalGraph C).Adj _ _ :=
+        ((canonicalGraph C).adj_iff_unitDistanceAdj _ _).2
+          ((GraphBridge.unitDistanceSimpleGraph_adj C _ _).1 hAdj)
+      have hstep :
+          (canonicalGraph C).point _ ∈
+            connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point _) :=
+        right_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_adj hcanonAdj
+      have hcomp :
+          connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point _) =
+            connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point _) :=
+        connectedComponentIn_eq hstep
+      exact hcomp.symm ▸ ih
+
+/-- Under the graph-side S2 inputs, every graph vertex lies in the same
+embedded-drawing component as any chosen base vertex. -/
+theorem graph_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_inputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (u v : Fin n) :
+    (canonicalGraph C).point v ∈
+      connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point u) :=
+  graph_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_reachable
+    inputs (inputs.connected u v)
+
+/-- Under the graph-side S2 inputs, the whole embedded drawing is contained in
+the embedded-drawing component of any graph vertex. -/
+theorem embeddedEdgeSet_subset_connectedComponentIn_of_inputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (u : Fin n) :
+    embeddedEdgeSet C ⊆
+      connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point u) := by
+  intro p hp
+  rcases mem_embeddedEdgeSet_iff_exists_edge_mem_closedSegment.1 hp with
+    ⟨e, he, hpseg⟩
+  have hseg_component :
+      p ∈ connectedComponentIn (embeddedEdgeSet C)
+        ((canonicalGraph C).point e.1) :=
+    (isPreconnected_closedSegment
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)).subset_connectedComponentIn
+      (left_mem_closedSegment _ _)
+      (closedSegment_subset_embeddedEdgeSet_of_adj (Or.inl he))
+      hpseg
+  have hvertex_component :
+      (canonicalGraph C).point e.1 ∈
+        connectedComponentIn (embeddedEdgeSet C)
+          ((canonicalGraph C).point u) :=
+    graph_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_inputs
+      inputs u e.1
+  have hcomp :
+      connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point u) =
+        connectedComponentIn (embeddedEdgeSet C)
+          ((canonicalGraph C).point e.1) :=
+    connectedComponentIn_eq hvertex_component
+  exact hcomp.symm ▸ hseg_component
+
+/-- Under the graph-side S2 inputs, the chosen component of the embedded
+drawing is the whole embedded drawing. -/
+theorem connectedComponentIn_embeddedEdgeSet_eq_of_inputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (u : Fin n) :
+    connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point u) =
+      embeddedEdgeSet C :=
+  (connectedComponentIn_subset (embeddedEdgeSet C)
+    ((canonicalGraph C).point u)).antisymm
+    (embeddedEdgeSet_subset_connectedComponentIn_of_inputs inputs u)
+
+/-- The finite union of embedded unit-edge segments is preconnected whenever
+the S2 graph-side inputs hold. -/
+theorem embeddedEdgeSet_preconnected_of_inputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    IsPreconnected (embeddedEdgeSet C) := by
+  classical
+  obtain ⟨u⟩ := inputs.vertex_nonempty
+  have hcomponent :
+      connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point u) =
+        embeddedEdgeSet C :=
+    connectedComponentIn_embeddedEdgeSet_eq_of_inputs inputs u
+  exact hcomponent ▸
+    (isPreconnected_connectedComponentIn
+      (x := (canonicalGraph C).point u) (F := embeddedEdgeSet C))
+
+/-- The finite union of embedded unit-edge segments is connected whenever the
+S2 graph-side inputs hold. -/
+theorem embeddedEdgeSet_connected_of_inputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    IsConnected (embeddedEdgeSet C) :=
+  ⟨embeddedEdgeSet_nonempty_of_inputs inputs,
+    embeddedEdgeSet_preconnected_of_inputs inputs⟩
+
 theorem adjacent_segments_not_cross_of_edgeVertexDisjoint
     {C : _root_.UDConfig n} {i j k l : Fin n}
     (hij : (canonicalGraph C).Adj i j)
@@ -1675,6 +1807,35 @@ theorem inOpenSegment_not_mem_embeddedEdgeSetExceptEdge
   exact hne
     (common_inOpenSegment_closedSegment_ordered_edges_eq
       (C := C) (p := p) (e := e) (f := f) he hf hpe hpf).symm
+
+/-- Metric separation of an interior point of an ordered canonical edge from
+the finite union of all other ordered canonical edge segments. -/
+theorem exists_ball_disjoint_embeddedEdgeSetExceptEdge_of_inOpenSegment
+    {C : _root_.UDConfig n} {p : PlanarInterface.Point}
+    {e : PlanarInterface.Edge n}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpe :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball p ε ∩ embeddedEdgeSetExceptEdge C e = ∅ := by
+  have hclosed : IsClosed (embeddedEdgeSetExceptEdge C e) :=
+    embeddedEdgeSetExceptEdge_closed C e
+  have hpnot : p ∉ embeddedEdgeSetExceptEdge C e :=
+    inOpenSegment_not_mem_embeddedEdgeSetExceptEdge he hpe
+  have hnhds :
+      (embeddedEdgeSetExceptEdge C e)ᶜ ∈ nhds p :=
+    hclosed.isOpen_compl.mem_nhds hpnot
+  rcases Metric.mem_nhds_iff.1 hnhds with ⟨ε, hεpos, hsubset⟩
+  refine ⟨ε, hεpos, ?_⟩
+  ext y
+  constructor
+  · intro hy
+    exact False.elim (hsubset hy.1 hy.2)
+  · intro hy
+    exact False.elim hy
 
 /-- Local edge isolation at an interior point of a canonical unit edge: inside
 some ball around the point, every embedded-drawing point is carried by that
@@ -2397,6 +2558,141 @@ theorem edgePositiveSideBall_swap_subset_drawingComplement_of_local_closedSegmen
         intro q hq
         rw [closedSegment_symm]
         exact hlocal hq)
+
+/-- Local half-ball patch produced by an isolated edge.  If the drawing meets
+the larger ball only on the selected closed edge segment, then the strict
+positive side of any smaller ball is a preconnected subset of the drawing
+complement, stays in that smaller ball, and accumulates at any line point of
+the edge lying in the smaller ball. -/
+theorem edgePositiveSideBall_local_patch_of_local_closedSegment
+    {C : _root_.UDConfig n}
+    {a b c z : PlanarInterface.Point} {r ε : Real}
+    (hr : r ≤ ε)
+    (hlocal :
+      Metric.ball c ε ∩ embeddedEdgeSet C ⊆ closedSegment a b)
+    (hzline : edgeNormalCoord a b z = 0)
+    (hab : a ≠ b)
+    (hzball : z ∈ Metric.ball c r) :
+    IsPreconnected (edgePositiveSideBall a b c r) ∧
+      edgePositiveSideBall a b c r ⊆ drawingComplement C ∧
+        edgePositiveSideBall a b c r ⊆ Metric.ball c r ∧
+          z ∈ closure (edgePositiveSideBall a b c r) := by
+  exact
+    ⟨isPreconnected_edgePositiveSideBall a b c r,
+      edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment
+        (C := C) (a := a) (b := b) (z := c) (r := r) (ε := ε)
+        hr hlocal,
+      fun q hq => hq.2,
+      mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero_of_mem_ball
+        (a := a) (b := b) (c := c) (z := z) (r := r)
+        hzline hab hzball⟩
+
+/-- Swapped-orientation half-ball patch produced by an isolated edge.  This is
+the same local drawing-complement patch as
+`edgePositiveSideBall_local_patch_of_local_closedSegment`, with the strict
+side taken using the reversed directed edge. -/
+theorem edgePositiveSideBall_swap_local_patch_of_local_closedSegment
+    {C : _root_.UDConfig n}
+    {a b c z : PlanarInterface.Point} {r ε : Real}
+    (hr : r ≤ ε)
+    (hlocal :
+      Metric.ball c ε ∩ embeddedEdgeSet C ⊆ closedSegment a b)
+    (hzline : edgeNormalCoord b a z = 0)
+    (hab : a ≠ b)
+    (hzball : z ∈ Metric.ball c r) :
+    IsPreconnected (edgePositiveSideBall b a c r) ∧
+      edgePositiveSideBall b a c r ⊆ drawingComplement C ∧
+        edgePositiveSideBall b a c r ⊆ Metric.ball c r ∧
+          z ∈ closure (edgePositiveSideBall b a c r) := by
+  exact
+    edgePositiveSideBall_local_patch_of_local_closedSegment
+      (C := C) (a := b) (b := a) (c := c) (z := z) (r := r) (ε := ε)
+      hr
+      (by
+        intro q hq
+        rw [closedSegment_symm]
+        exact hlocal hq)
+      hzline hab.symm hzball
+
+/-- Canonical-edge half-ball patches from one local isolation radius.  Around
+an interior point of a canonical edge, every nearby point of the same open
+edge is accumulated by both oriented strict side-balls; each side-ball is
+preconnected, stays in the local metric ball, and is contained in the drawing
+complement. -/
+theorem exists_edgePositiveSideBall_local_patches_of_edge_inOpenSegment
+    {C : _root_.UDConfig n} {e : PlanarInterface.Edge n}
+    {q : PlanarInterface.Point}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hq :
+      PlanarInterface.InOpenSegment q
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall z : PlanarInterface.Point,
+          z ∈ Metric.ball q ε ->
+            PlanarInterface.InOpenSegment z
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2) ->
+            (IsPreconnected
+                (edgePositiveSideBall
+                  ((canonicalGraph C).point e.1)
+                  ((canonicalGraph C).point e.2) q ε) ∧
+              edgePositiveSideBall
+                  ((canonicalGraph C).point e.1)
+                  ((canonicalGraph C).point e.2) q ε ⊆
+                drawingComplement C ∧
+              edgePositiveSideBall
+                  ((canonicalGraph C).point e.1)
+                  ((canonicalGraph C).point e.2) q ε ⊆
+                Metric.ball q ε ∧
+              z ∈ closure
+                (edgePositiveSideBall
+                  ((canonicalGraph C).point e.1)
+                  ((canonicalGraph C).point e.2) q ε)) ∧
+            (IsPreconnected
+                (edgePositiveSideBall
+                  ((canonicalGraph C).point e.2)
+                  ((canonicalGraph C).point e.1) q ε) ∧
+              edgePositiveSideBall
+                  ((canonicalGraph C).point e.2)
+                  ((canonicalGraph C).point e.1) q ε ⊆
+                drawingComplement C ∧
+              edgePositiveSideBall
+                  ((canonicalGraph C).point e.2)
+                  ((canonicalGraph C).point e.1) q ε ⊆
+                Metric.ball q ε ∧
+              z ∈ closure
+                (edgePositiveSideBall
+                  ((canonicalGraph C).point e.2)
+                  ((canonicalGraph C).point e.1) q ε)) := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_closedSegment_of_inOpenSegment
+        (C := C) (p := q) (e := e) he hq with
+    ⟨ε, hεpos, hlocal⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro z hzball hzEdge
+  let a : PlanarInterface.Point := (canonicalGraph C).point e.1
+  let b : PlanarInterface.Point := (canonicalGraph C).point e.2
+  have hab : a ≠ b := by
+    simpa [a, b] using canonical_edge_point_ne_of_mem_edgeSet he
+  have hzline : edgeNormalCoord a b z = 0 := by
+    exact
+      edgeNormalCoord_eq_zero_of_mem_closedSegment
+        (by simpa [a, b] using inOpenSegment_mem_closedSegment hzEdge)
+  have hzlineRev : edgeNormalCoord b a z = 0 := by
+    exact
+      edgeNormalCoord_eq_zero_of_mem_closedSegment
+        (by
+          rw [closedSegment_symm]
+          simpa [a, b] using inOpenSegment_mem_closedSegment hzEdge)
+  exact
+    ⟨edgePositiveSideBall_local_patch_of_local_closedSegment
+        (C := C) (a := a) (b := b) (c := q) (z := z) (r := ε) (ε := ε)
+        (le_refl ε) (by simpa [a, b] using hlocal) hzline hab hzball,
+      edgePositiveSideBall_swap_local_patch_of_local_closedSegment
+        (C := C) (a := a) (b := b) (c := q) (z := z) (r := ε) (ε := ε)
+        (le_refl ε) (by simpa [a, b] using hlocal) hzlineRev hab hzball⟩
 
 /-- The complement of the embedded drawing is open. -/
 theorem drawingComplement_open

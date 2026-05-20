@@ -7,6 +7,10 @@ import ErdosProblems1066.Swanepoel.CutVertexFinal
 import ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete
 import ErdosProblems1066.Swanepoel.JordanTopologyExteriorEnclosure
 import ErdosProblems1066.Swanepoel.ExteriorComponentTopology
+import ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource
+import ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly
+import ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource
+import ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource
 import ErdosProblems1066.Swanepoel.EnclosureAndFaceBoundaryW31
 import ErdosProblems1066.Swanepoel.OuterBoundaryCoreConstructionW28
 import ErdosProblems1066.Swanepoel.BoundaryWalkBridge
@@ -39,6 +43,8 @@ namespace Swanepoel
 namespace FaceBoundaryTopologySourceW32
 
 open BoundaryCounting
+open _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology
+open _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly
 open _root_.ErdosProblems1066.Swanepoel.JordanTopologyExteriorEnclosure
 
 noncomputable section
@@ -2126,10 +2132,10 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_exterior_frontier_not_m
                 (forall v : Fin n,
                   (¬ Exists fun k : Fin O.boundary.length =>
                     O.boundary.vertex k = v) ->
-                    (JordanTopologyFactsConcrete.canonicalGraph C).point v ∉
+                    (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∉
                       exterior) /\
                 (forall v : Fin n,
-                  (JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+                  (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
                       frontier exterior <->
                     Exists fun k : Fin O.boundary.length =>
                       O.boundary.vertex k = v))
@@ -2164,6 +2170,475 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFronti
         rows)
     noCutRows
 
+set_option linter.style.longLine false in
+/-- W32 consumer for the current S2 actual-sector source surface.
+
+The source proof must still construct the actual exterior boundary cycle,
+prove exact graph-vertex frontier coverage for that cycle, and provide the
+same-boundary actual exterior-sector rows.  This theorem only records the
+short checked route from that source package to the existing W32 target. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_actualExteriorSectorInputSourceRows
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+                  frontier
+                    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                      C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            _root_.Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ActualExteriorSectorInputSourceRows
+                inputs B))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_unboundedExteriorFrontierCycleRows_family_of_actualExteriorSectorInputSourceRows
+      source)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the CT selected raw-orbit endgame route.
+
+The remaining S2 source obligations are displayed as the connected raw-orbit
+package, selected repeated-tail cut partitions on the internally selected
+raw orbit, and selected raw predecessor/successor orientation rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows_selectedCutPartitions_rawOrientation_20260520
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeConnectedRawOrbitSourceRows
+            inputs)
+    (cut_partitions :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitRepeatedTailCutPartitions
+            selectedRows)
+    (raw_orientation :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitOrientationRows
+            selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedCutPartitions_rawOrientation_20260520
+      rows cut_partitions raw_orientation)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current selected raw-orbit endgame with the
+orientation row reduced to genuine geometric angular-neighbour selection.
+
+The remaining S2 source obligations are the connected raw-orbit package,
+selected repeated-tail exterior cut witnesses for the internally selected raw
+orbit, and the concrete nonwrap neighbour-selection rows in the sorted
+`geometricOutgoingDartList`. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_geometricAngularNeighborSelection_20260520
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeConnectedRawOrbitSourceRows
+            inputs)
+    (deleted_tail_witnesses :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          forall {i j : Fin selectedRows.O.period},
+            i ≠ j ->
+            (selectedRows.O.dart i).tail = (selectedRows.O.dart j).tail ->
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2RepeatedTailExteriorCutWitnessSource
+                (inputs := inputs) selectedRows.O i j)
+    (selectionRows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitGeometricAngularNeighborSelectionRows
+            selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_geometricAngularNeighborSelection_20260520
+      rows deleted_tail_witnesses selectionRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for claim
+`S2-agent-20260520-unconditional-cycle-composer`.
+
+This is the direct boundary-sector version of the connected raw-orbit route:
+the internally selected raw orbit is consumed with repeated-tail separation
+rows and selected raw predecessor/successor orientation rows to produce
+`UnboundedExteriorFrontierCycleRows`, then the existing W32 handoff consumes
+those rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows_selectedRepeatedTailRows_rawOrientation_20260520
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeConnectedRawOrbitSourceRows
+            inputs)
+    (repeated_tail_rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          forall {i j : Fin selectedRows.O.period},
+            i ≠ j ->
+            (selectedRows.O.dart i).tail = (selectedRows.O.dart j).tail ->
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RepeatedExteriorBoundarySeparationRows
+                C
+                (fun k : Fin selectedRows.O.period =>
+                  (selectedRows.O.dart k).tail) i j)
+    (raw_orientation :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitOrientationRows
+            selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedRepeatedTailRows_rawOrientation_20260520
+      rows repeated_tail_rows raw_orientation)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the deleted-tail-witness version of the current raw-orbit
+boundary-sector route.
+
+This keeps the same direct `UnboundedExteriorFrontierCycleRows` handoff as
+`minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows_selectedRepeatedTailRows_rawOrientation_20260520`,
+but exposes the repeated-tail source in the primitive
+`S2RepeatedTailExteriorCutWitnessSource` form. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_rawOrientation_20260520
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeConnectedRawOrbitSourceRows
+            inputs)
+    (deleted_tail_witnesses :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          forall {i j : Fin selectedRows.O.period},
+            i ≠ j ->
+            (selectedRows.O.dart i).tail = (selectedRows.O.dart j).tail ->
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2RepeatedTailExteriorCutWitnessSource
+                (inputs := inputs) selectedRows.O i j)
+    (raw_orientation :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitOrientationRows
+            selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_rawOrientation_20260520
+      rows deleted_tail_witnesses raw_orientation)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the deleted-tail-witness route with orientation reduced
+to concrete nonwrap successor rows in the selected raw orbit's geometric
+outgoing-dart lists. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_geometricSuccessorNonwrap_20260520
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeConnectedRawOrbitSourceRows
+            inputs)
+    (deleted_tail_witnesses :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          forall {i j : Fin selectedRows.O.period},
+            i ≠ j ->
+            (selectedRows.O.dart i).tail = (selectedRows.O.dart j).tail ->
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2RepeatedTailExteriorCutWitnessSource
+                (inputs := inputs) selectedRows.O i j)
+    (successorRows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let selectedRows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_cw_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520cw
+              (C := C) (inputs := inputs) (rows C inputs)
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitGeometricSuccessorNonwrapRows
+            selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows_selectedRepeatedTailWitnesses_geometricSuccessorNonwrap_20260520
+      rows deleted_tail_witnesses successorRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the preferred incident-edge primitive route.
+
+This keeps endpoint closure selected-edge gated: the adjacent endpoint source
+must first identify the edge as an actual `unboundedFrontierEdgeSet` edge, and
+the closed-segment endpoint closure is derived inside the S2 route. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_incidentEdgePrimitiveSources_20260520af
+    (localAngularSource :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a :
+              {v : Fin n //
+                v ∈ unboundedFrontierVertexSet C inputs},
+            Exists fun left : Fin n =>
+              Exists fun right : Fin n =>
+                ((a.1, left) ∈ unboundedFrontierEdgeSet C inputs ∨
+                  (left, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+                ((a.1, right) ∈ unboundedFrontierEdgeSet C inputs ∨
+                  (right, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+                left ≠ right ∧
+                BoundaryFreeGraphVertexAngularNoBetweenRows
+                  C a.1 left right ∧
+                forall (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+                  q ∈ Metric.ball
+                      ((JordanTopologyFactsConcrete.canonicalGraph C).point
+                        a.1)
+                      ε ->
+                    q ∈
+                        frontier
+                          (unboundedExteriorComponentRows C inputs).exterior ->
+                      (JordanTopologyFactsConcrete.canonicalGraph C).Adj
+                          a.1 x ->
+                        q ∈
+                            _root_.ErdosProblems1066.Swanepoel.FinitePlaneDrawing.vertexIncidentGermW3
+                              C a.1 x ε ->
+                          q ≠
+                              ((JordanTopologyFactsConcrete.canonicalGraph C).point
+                                a.1) ->
+                            x ≠ left ->
+                              x ≠ right ->
+                                BoundaryFreeGraphVertexAngularBetween
+                                  C a.1 left right x)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (componentTopologyRows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs)
+    (successorSource :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_incidentEdgePrimitiveSources_20260520af
+      localAngularSource incident_edge componentTopologyRows successorSource)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for claim `S2-dyn-20260520-input-premise-composer`.
+
+This is only the downstream eraser from the checked S2 cycle-row composer:
+boundary-free input reduction, planar-continuum frontier preconnectedness,
+and local-angular head-between rows produce
+`UnboundedExteriorFrontierCycleRows`; the existing W32 theorem then consumes
+those rows together with the explicit minimal-failure no-cut family. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_inputPremiseComposer_20260520
+    (boundaryFree :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeInputSourceReduction
+            inputs)
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (localAngularSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.BoundaryFreeLocalSectorGeometricAngularSource
+            inputs)
+    (headBetween :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource
+            inputs (localAngularSource C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_inputPremiseComposer_20260520
+      boundaryFree frontier_preconnected localAngularSource headBetween)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current shortest CO S2 source surface.
+
+The S2 side first builds `UnboundedExteriorFrontierCycleRows` from raw
+face-successor orbit source rows, pointwise local two-germ rows, adjacent
+endpoint selected-edge incidence, and selected successor-edge propagation.
+W32 then consumes those cycle rows through the existing finite outer-component
+theorem bridge, with the minimal-failure no-cut rows still explicit. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_rawFaceSuccOrbitSourceRows_localTwoGerm_incident_selectedSuccessorEdge_20260520co
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Exists fun R :
+            JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem
+              C =>
+            Exists fun start :
+              JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceDart
+                C =>
+              Exists fun O :
+                JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  R start =>
+                Nonempty
+                  (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawFaceSuccOrbitSourceRows
+                    (inputs := inputs) O))
+    (localTwoGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalTwoGermRowsAt
+              inputs a)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (selectedSuccessorEdge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_rawFaceSuccOrbitSourceRows_localTwoGerm_incident_selectedSuccessorEdge_20260520co
+      source localTwoGermRows incident_edge selectedSuccessorEdge)
+    noCutRows
+
 /-- W32 S2 target from actual unbounded-exterior boundary-cycle rows.
 
 This is the shortest current eraser for the source theorem: it still requires
@@ -2185,6 +2660,1835 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_actualBoundaryCycleFron
   minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
     (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_actualBoundaryCycleFrontierEquivalenceRows
       rows)
+    noCutRows
+
+/-- W32 S2 target from the current edge-chain plus boundary-free local
+two-germ source surface.
+
+This is the compact consumer for the non-circular carrier route: the source
+rows prove connectedness of the actual unbounded-frontier edge carrier and
+degree two of the actual frontier carrier graph, then the checked S2 eraser
+produces the exact outer-boundary topology target. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_boundaryFree_noThirdGerm_fixedSide
+    (edge_segment_chain :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierEdgeCarrierSegmentChainConnected
+            inputs)
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            Exists fun left : Fin n =>
+              Exists fun right : Fin n =>
+                ((a.1, left) ∈
+                    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                      C inputs ∨
+                  (left, a.1) ∈
+                    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                      C inputs) ∧
+                ((a.1, right) ∈
+                    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                      C inputs ∨
+                  (right, a.1) ∈
+                    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                      C inputs) ∧
+                left ≠ right ∧
+                forall (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+                  q ∈ Metric.ball
+                      ((_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1)
+                      ε ->
+                    q ∈ frontier
+                        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                          C inputs).exterior ->
+                      (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+                        q ∈
+                            _root_.ErdosProblems1066.Swanepoel.FinitePlaneDrawing.vertexIncidentGermW3
+                              C a.1 x ε ->
+                          q ≠
+                              (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point
+                                a.1 ->
+                            x ≠ left ->
+                              x ≠ right ->
+                                False)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_unboundedExteriorFrontierCycleRows_of_edgeChain_boundaryFree_noThirdGerm_fixedSide
+          inputs (edge_segment_chain C inputs) (source C inputs))
+    noCutRows
+
+/-- W32 S2 target from concrete carrier connectedness plus the boundary-free
+local two-germ/no-third-germ source.
+
+This is the compact workboard endpoint for the current carrier route: the
+selected-edge chain is derived from graph connectedness of the actual
+unbounded-frontier carrier, and the local source supplies degree two through
+the checked local-sector eraser. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_carrierGraphConnected_boundaryFreeSource
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+              C inputs).Connected ∧
+            Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeNoThirdGermSource
+                inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_carrierGraphConnected_boundaryFreeSource
+      rows)
+    noCutRows
+
+/-- W32 S2 target from frontier preconnectedness of the actual unbounded
+exterior component plus the boundary-free local two-germ/no-third-germ source.
+-/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_frontierPreconnected_boundaryFreeSource
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          IsPreconnected
+              (frontier
+                (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                  C inputs).exterior) ∧
+            Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeNoThirdGermSource
+                inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_frontierPreconnected_boundaryFreeSource
+      rows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the actual exterior-sector package plus the remaining
+closed-segment residual rows.
+
+This is the displayed consumer for the current actual-sector route: the
+actual-sector package supplies pointwise local sectors, closed-segment
+relative openness supplies endpoint incidence, frontier preconnectedness gives
+the selected edge chain, and the raw iterated-successor row supplies the
+geometric orbit propagation. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_actualSector_closedSegmentSources_20260520bq
+    (actualSector :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            _root_.Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ActualExteriorSectorInputSourceRows
+                inputs B))
+    (closure_locus_relative_open :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.AdjacentFrontierEndpointsClosedSegmentClosureLocusRelativeOpenSource
+            C inputs)
+    (frontier_preconnected :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          IsPreconnected
+            (frontier
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                C inputs).exterior))
+    (successorSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_actualSector_closedSegmentSources_20260520bq
+      actualSector closure_locus_relative_open frontier_preconnected
+      successorSource)
+    noCutRows
+
+/-- W32 S2 target from honest exterior-frontier carrier rows alone.
+
+The carrier package already includes connectedness, two-regularity, exact
+frontier-vertex coverage, and actual edge-frontier rows, so no separate
+boundary-free local source is needed on this route. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_exteriorFrontierCarrierRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+            (ExteriorFrontierCarrierRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (finitePlanarStraightLineOuterComponentTheorem_of_exteriorFrontierCarrierRows
+      rows)
+    noCutRows
+
+/-- W32 S2 target from the current non-circular concrete-carrier route:
+actual exterior-frontier preconnectedness plus pointwise local-sector rows
+first build the honest exterior-frontier carrier, then erase it through the
+checked finite planar outer-component theorem. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_frontierPreconnected_localSectorRows
+    (frontier_preconnected :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          IsPreconnected
+              (frontier
+                (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                  C inputs).exterior))
+    (localSectorRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+            (forall a :
+              {v : Fin n // v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+                  inputs a))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_exteriorFrontierCarrierRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_exterior_carrier_source_20260520t
+        inputs (frontier_preconnected C inputs) (localSectorRows C inputs))
+    noCutRows
+
+/-- W32 S2 target from the planar-continuum no-closed-separation theorem plus
+the honest local-radius no-third-germ source.
+
+This is the non-circular decomposition currently below S2: the global
+topology row gives preconnectedness of the actual unbounded exterior frontier,
+while the local source gives the two selected carrier edges and local
+no-third-germ row at each frontier vertex. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_planarContinuumNoClosedSeparation_localNoThirdGermSource
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierNoClosedSeparation)
+    (localSourceRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeLocalNoThirdGermSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_frontierPreconnected_localSectorRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_planar_continuum_frontier_no_closed_separation
+        (C := C) inputs frontier_noClosedSeparation)
+    (fun C inputs =>
+      (localSourceRows C inputs).toLocalSectorRows)
+    noCutRows
+
+/-- W32 S2 target from the seeded raw-orbit one-step source package.
+
+This is the current narrowest displayed route: boundary-free local two-germ
+rows, actual-frontier preconnectedness, and the exterior-oriented
+start/successor `faceSucc` row select the geometric raw face-successor orbit
+and erase it through the checked S2 reducers. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_frontierPreconnectedStepSourceRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeFrontierPreconnectedStepSourceRows
+              inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_frontierPreconnectedStepSourceRows
+      rows)
+    noCutRows
+
+/-- W32 S2 target from the orientation-aware seeded raw-orbit source package.
+
+This is the corrected selected-orbit variant of the one-step route: it follows
+only iterates of the exterior-oriented start dart instead of demanding a
+global orientation-free `faceSucc` preservation theorem. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_frontierPreconnectedIteratedStepSourceRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+            (BoundaryFreeFrontierPreconnectedIteratedStepSourceRows
+              inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (finitePlanarStraightLineOuterComponentTheorem_of_frontierPreconnectedIteratedStepSourceRows
+      rows)
+    noCutRows
+
+/-- W32 S2 target from a genuine exterior carrier plus boundary-free local
+no-third-germ rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_exteriorCarrier_boundaryFreeSource
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ExteriorFrontierCarrierRows.{0}
+                C inputs) ∧
+            Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeNoThirdGermSource
+                inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_exteriorCarrier_boundaryFreeSource
+      rows)
+    noCutRows
+
+/-- W32 S2 target from a genuine exterior carrier plus incident-only local
+source rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_exteriorCarrier_incidentOnlySource
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ExteriorFrontierCarrierRows.{0}
+                C inputs) ∧
+            Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeIncidentOnlySourceRows
+                inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_exteriorCarrier_incidentOnlySource
+      rows)
+    noCutRows
+
+/-- W32 S2 target from a genuine exterior carrier plus endpoint-incident local
+source rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_exteriorCarrier_endpointIncidentSource
+    (carrierRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ExteriorFrontierCarrierRows.{0}
+              C inputs))
+    (endpointRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeEndpointIncidentSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_exteriorCarrier_endpointIncidentSource
+      carrierRows endpointRows)
+    noCutRows
+
+/-- W32 S2 target from the strongest checked input-facing edge-chain route.
+
+The exact residual source rows are selected-edge chain connectedness, the
+pointwise local-sector rows, and endpoint-frontier incident-edge closure.  The
+open-segment incident case is discharged inside the S2 reducer by the
+definition of the actual unbounded-frontier edge set. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_localSector_endpointIncidentRows
+    (edgeChainRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierEdgeCarrierSegmentChainConnected
+            inputs)
+    (localSectorRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+              inputs a)
+    (endpointRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall (a :
+              {v : Fin n //
+                v ∈
+                  _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                    C inputs})
+            (x : Fin n),
+            (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+              (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point x ∈
+                  frontier
+                    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                      C inputs).exterior ->
+                (a.1, x) ∈
+                    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                      C inputs ∨
+                  (x, a.1) ∈
+                    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                      C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_localSector_endpointIncidentRows
+      edgeChainRows localSectorRows endpointRows)
+    noCutRows
+
+/-- W32 S2 target from selected-edge chain connectedness plus endpoint-incident
+local source rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_endpointIncidentSource
+    (edgeChainRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierEdgeCarrierSegmentChainConnected
+            inputs)
+    (endpointRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeEndpointIncidentSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_localSector_endpointIncidentRows
+    edgeChainRows
+    (fun C inputs => (endpointRows C inputs).localSectorRows)
+    (fun C inputs => (endpointRows C inputs).endpoint_frontier_edge)
+    noCutRows
+
+/-- W32 S2 target from raw-orbit coverage plus endpoint-incident local source
+rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_rawCoverage_endpointIncidentRows
+    (rawRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Exists fun R :
+              JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem
+                C =>
+            Exists fun start :
+                JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceDart
+                  C =>
+              Exists fun O :
+                JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  R start =>
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawOrbitCoverageSourceRows
+                  (inputs := inputs) O)
+    (endpointRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeEndpointIncidentSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_rawCoverage_endpointIncidentRows
+      rawRows endpointRows)
+    noCutRows
+
+/-- W32 S2 target from the current non-circular raw-coverage/deleted-neighbour
+source split.
+
+The raw rows supply the selected exterior raw face-orbit coverage, and the
+deleted-neighbour source supplies the no-cut local two-neighbour data for the
+actual unbounded-frontier carrier.  This route avoids the invalid universal
+adjacent-frontier-endpoint incident-edge premise. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_rawCoverage_unreachableAfterDeleteInputSource
+    (rawRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Exists fun R :
+              JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem
+                C =>
+            Exists fun start :
+                JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceDart
+                  C =>
+              Exists fun O :
+                JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  R start =>
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawOrbitCoverageSourceRows
+                  (inputs := inputs) O)
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_rawCoverage_unreachableAfterDeleteInputSource
+      rawRows source)
+    noCutRows
+
+/-- W32 S2 target from the compact boundary-free connected raw-orbit package.
+
+This is the direct no-orientation handoff: the package already contains the
+boundary-free local source, connectedness of the actual unbounded-frontier
+carrier, and selected raw-orbit dart-edge frontier coverage. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeConnectedRawOrbitSourceRows
+              inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedRawOrbitSourceRows
+      rows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the current compact selected-neighbour strict-order
+leaf split.
+
+The connected raw-orbit package is assembled in the S2 owner file from:
+boundary-free local rows, planar-continuum frontier preconnectedness, selected
+neighbour/cut/geometric-order input rows, and the strict selected raw
+`faceSucc` angular-order row.  This theorem is only the W32 handoff through
+the existing connected raw-orbit consumer. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_boundaryFreeInput_preconnected_selectedNeighborInput_strictOrder_20260520
+    (boundaryFree :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeInputSourceReduction
+            inputs)
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (strictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_dependentSource
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.selectedNeighborCutPartitionGeometricOrderSource_of_inputSource
+              (C := C) (inputs := inputs) (selectedInput C inputs))
+        _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+          inputs
+          (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_connectedRawOrbitSourceRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.boundaryFreeConnectedRawOrbitSourceRows_family_of_boundaryFreeInput_preconnected_selectedNeighborInput_strictOrder_20260520
+      boundaryFree frontier_preconnected selectedInput strictOrder)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the current no-orientation raw-orbit source split.
+
+This is the direct consumer for the three owner-file source obligations:
+boundary-free no-third-germ local rows, component-topology rows for the actual
+unbounded exterior frontier, and selected successor local two-germ rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_componentTopology_boundaryFree_selectedSuccessorLocalTwoGerm
+    (localSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          BoundaryFreeNoThirdGermSource inputs)
+    (componentTopology :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs)
+    (selectedSuccessorLocalTwoGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_family_of_componentTopology_boundaryFree_selectedSuccessorLocalTwoGerm_20260520bp
+      localSource componentTopology selectedSuccessorLocalTwoGermRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the direct selected-edge no-orientation raw-orbit
+source split.
+
+This is the selected-edge version of
+`minimalFailureExactActualTopologyFieldsTarget_of_componentTopology_boundaryFree_selectedSuccessorLocalTwoGerm`:
+when the Nat-indexed geometric `faceSucc` edge row is already available, the
+local-two-germ successor source is not kept as a separate W32 premise. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_componentTopology_boundaryFree_selectedSuccessorEdge
+    (localSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          BoundaryFreeNoThirdGermSource inputs)
+    (componentTopology :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs)
+    (selectedSuccessorEdge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_family_of_componentTopology_boundaryFree_selectedSuccessorEdge_20260520bv
+      localSource componentTopology selectedSuccessorEdge)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the direct selected-edge chain route.
+
+This is the current compact displayed route: boundary-free local rows and the
+selected edge-chain source build the component-topology package internally,
+while the selected Nat-indexed geometric `faceSucc` edge row supplies raw
+orbit propagation. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_boundaryFree_selectedSuccessorEdge_20260520ce
+    (localSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          BoundaryFreeNoThirdGermSource inputs)
+    (edge_segment_chain :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierEdgeCarrierSegmentChainConnected inputs)
+    (selectedSuccessorEdge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_boundaryFree_selectedSuccessorEdge_20260520ce
+      localSource edge_segment_chain selectedSuccessorEdge)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the current CH-composed source surface.
+
+This is the shortest displayed route after the recent CH reducers: endpoint-only
+neighbor rows build the boundary-free no-third-germ source, component-topology
+rows build the selected edge-carrier chain, and local-angular/head-between rows
+build the selected `faceSucc` frontier-edge source. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_ch_endpointOnly_componentTopology_faceSuccEdge_20260520ci
+    (neighborRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierNeighborPairAt inputs a)
+    (endpoint_only :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C)
+        (a :
+          {v : Fin n //
+            v ∈ unboundedFrontierVertexSet C inputs})
+        (x : Fin n),
+          (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+            (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point x ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ->
+              x = ((neighborRows C inputs) a).left.1 ∨
+                x = ((neighborRows C inputs) a).right.1)
+    (componentTopology :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs)
+    (localAngularSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.BoundaryFreeLocalSectorGeometricAngularSource
+            inputs)
+    (headBetween :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource
+            inputs (localAngularSource C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_boundaryFree_selectedSuccessorEdge_20260520ce
+    (fun C inputs =>
+      boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointOnly
+        (C := C) (inputs := inputs)
+        (neighborRows C inputs) (endpoint_only C inputs))
+    (S2_agent_ch_carrier_connectedness_source_family componentTopology)
+    (S2_agent_ch_selected_faceSucc_edge_source_family_20260520ch
+      localAngularSource headBetween)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the current four concrete source families.
+
+The boundary-free and component-topology packages are constructed internally
+from local-sector rows, adjacent endpoint incidence, and selected edge-chain
+connectivity; the selected-successor package is constructed from pointwise
+local two-germ rows plus the selected no-orbit geometric `faceSucc` edge row.
+-/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_localTwoGerm_edgeChain_incident_selectedSuccessorEdge
+    (localTwoGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (edge_segment_chain :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierEdgeCarrierSegmentChainConnected inputs)
+    (selectedSuccessorEdge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (finitePlanarStraightLineOuterComponentTheorem_of_localTwoGerm_edgeChain_incident_selectedSuccessorEdge_20260520bv
+      localTwoGermRows incident_edge edge_segment_chain selectedSuccessorEdge)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the direct raw-coverage cycle reducer.
+
+The raw coverage rows are erased internally to selected edge-chain
+connectedness by the checked raw-coverage consumer, while the local two-germ,
+incident-edge, and selected successor-edge rows remain the explicit source
+families. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_rawCoverage_localTwoGerm_incident_selectedSuccessorEdge
+    (rawRows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          Exists fun R =>
+            Exists fun start :
+              JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceDart C =>
+              Exists fun O :
+                JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  R start =>
+                RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localTwoGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (selectedSuccessorEdge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (finitePlanarStraightLineOuterComponentTheorem_of_rawCoverage_localTwoGerm_incident_selectedSuccessorEdge_20260520co
+      rawRows localTwoGermRows incident_edge selectedSuccessorEdge)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the current strict residual source packages.
+
+This composes the local geometric-angular source and the frontier-topology
+selected-edge source into the four concrete rows consumed by
+`minimalFailureExactActualTopologyFieldsTarget_of_localTwoGerm_edgeChain_incident_selectedSuccessorEdge`.
+-/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_geometricAngular_frontierTopology_selectedSuccessorEdge
+    (localAngular :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.BoundaryFreeLocalSectorGeometricAngularSource
+            inputs)
+    (frontierTopology :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          EdgeChainIncidentFrontierTopologySourceRows inputs)
+    (selectedSuccessorEdge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (finitePlanarStraightLineOuterComponentTheorem_of_localSector_edgeChain_incident_selectedSuccessorLocalTwoGerm_20260520bn
+      (fun C inputs =>
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.localSectorRows_of_boundaryFree_geometricAngularSource
+          (C := C) (inputs := inputs) (localAngular C inputs))
+      (fun C inputs =>
+        (frontierTopology C inputs).adjacentEndpointIncidentSource)
+      (fun C inputs =>
+        (frontierTopology C inputs).edgeCarrierSegmentChainConnected)
+      (fun C inputs =>
+        let localSectorRows :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.localSectorRows_of_boundaryFree_geometricAngularSource
+            (C := C) (inputs := inputs) (localAngular C inputs)
+        let localSource : BoundaryFreeNoThirdGermSource inputs :=
+          S2_agent_boundary_free_no_third_input_source_20260520bu
+            (C := C) (inputs := inputs)
+            localSectorRows
+            (frontierTopology C inputs).adjacentEndpointIncidentSource
+        S2_agent_selected_successor_local_two_germ_source_20260520bu
+          (C := C) (inputs := inputs)
+          localSource.toLocalTwoGermRows
+          (selectedSuccessorEdge C inputs))
+    )
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the strict local/frontier topology source families and
+the orbit-free selected successor point row.
+
+The selected successor point row is promoted internally to selected
+`unboundedFrontierEdgeSet` membership by
+`S2_agent_selected_edge_noorbit_source_20260520av`, then the existing
+selected-edge W32 consumer takes over. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_geometricAngular_frontierTopology_successorPoint
+    (localAngular :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.BoundaryFreeLocalSectorGeometricAngularSource
+            inputs)
+    (frontierTopology :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          EdgeChainIncidentFrontierTopologySourceRows inputs)
+    (successorSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_geometricAngular_frontierTopology_selectedSuccessorEdge
+    localAngular
+    frontierTopology
+    (fun C inputs =>
+      S2_agent_selected_edge_noorbit_source_20260520av
+        (C := C) (inputs := inputs) (successorSource C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the current strict BX residual source tracks.
+
+This is the composition handoff for the active workboard claims: component
+frontier topology, adjacent endpoint local component-interval closure,
+pointwise local angular/third-germ rows, and the selected raw `faceSucc`
+local-sector transition row. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_bx_residualSources
+    (neighborRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierNeighborPairAt inputs a)
+    (selectionRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 ((neighborRows C inputs) a).left.1
+                ((neighborRows C inputs) a).right.1))
+    (thirdGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall (a :
+              {v : Fin n //
+                v ∈ unboundedFrontierVertexSet C inputs})
+              (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+            q ∈ Metric.ball
+                ((_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1) ε ->
+              q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+                (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+                  q ∈
+                    _root_.ErdosProblems1066.Swanepoel.FinitePlaneDrawing.vertexIncidentGermW3
+                      C a.1 x ε ->
+                    q ≠ (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1 ->
+                      x ≠ ((neighborRows C inputs) a).left.1 ->
+                        x ≠ ((neighborRows C inputs) a).right.1 ->
+                          BoundaryFreeGraphVertexAngularBetween C a.1
+                            ((neighborRows C inputs) a).left.1
+                            ((neighborRows C inputs) a).right.1 x)
+    (component_topology :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs)
+    (local_component_interval :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsLocalComponentIntervalClosureSource
+            C inputs)
+    (transitionRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_geometricAngular_frontierTopology_selectedSuccessorEdge
+    (S2_agent_local_angular_source_of_neighborPair_selection_thirdGerm_20260520bw
+      neighborRows selectionRows thirdGermRows)
+    (S2_agent_frontier_topology_source_20260520bw
+      component_topology local_component_interval)
+    (S2_agent_selected_faceSucc_edge_source_family_20260520bw
+      transitionRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target after the component-topology and endpoint-interval BX
+reducers have been erased to their input-facing source rows. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_bx_inputSourceRows
+    (componentRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (neighborRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierNeighborPairAt inputs a)
+    (selectionRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 ((neighborRows C inputs) a).left.1
+                ((neighborRows C inputs) a).right.1))
+    (thirdGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall (a :
+              {v : Fin n //
+                v ∈ unboundedFrontierVertexSet C inputs})
+              (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+            q ∈ Metric.ball
+                ((_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1) ε ->
+              q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+                (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+                  q ∈
+                    _root_.ErdosProblems1066.Swanepoel.FinitePlaneDrawing.vertexIncidentGermW3
+                      C a.1 x ε ->
+                    q ≠ (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1 ->
+                      x ≠ ((neighborRows C inputs) a).left.1 ->
+                        x ≠ ((neighborRows C inputs) a).right.1 ->
+                          BoundaryFreeGraphVertexAngularBetween C a.1
+                            ((neighborRows C inputs) a).left.1
+                            ((neighborRows C inputs) a).right.1 x)
+    (transitionRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_bx_residualSources
+    neighborRows
+    selectionRows
+    thirdGermRows
+    (S2_agent_component_topology_input_source_20260520bx componentRows)
+    (S2_agent_local_component_interval_source_20260520bx incident_edge)
+    transitionRows
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the compressed BY source surface.
+
+The geometric-selection input source supplies both the concrete carrier
+neighbour-pair rows and the genuine sorted outgoing-dart selection rows.  With
+the adjacent-endpoint incident-edge source, it also gives the point-ray
+third-germ row, so the live W32 route only carries component topology,
+incident edges, geometric selection, and the selected local-transition row. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_by_geometricSelection_localTransition_20260520bz
+    (componentRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (geometricSelection :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (transitionRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_geometricAngular_frontierTopology_selectedSuccessorEdge
+    (S2_main_local_angular_source_of_geometricSelection_incidentEdge_20260520bz
+      incident_edge geometricSelection)
+    (S2_agent_frontier_topology_source_20260520bw
+      (S2_agent_component_topology_input_source_20260520bx componentRows)
+      (S2_agent_local_component_interval_source_20260520bx incident_edge))
+      (S2_agent_selected_faceSucc_edge_source_family_20260520bw transitionRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target using the non-circular selected-successor local two-germ
+source.
+
+The local-two-germ source is erased to the strict local transition row in
+`S2SeededRawOrbitSource`; this avoids routing the transition through the
+successor-point source that is itself a consequence of the transition. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_ca_geometricSelection_successorLocalTwoGerm_20260520ca
+    (componentRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (geometricSelection :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (successorLocalTwoGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_by_geometricSelection_localTransition_20260520bz
+    componentRows
+    incident_edge
+    geometricSelection
+    (S2_agent_local_transition_source_from_successor_localTwoGerm_20260520ca
+      successorLocalTwoGermRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target after erasing the component-topology input row through the
+checked CI finite-drawing reducer.
+
+The residual source surface is now the selected edge-chain row, adjacent
+endpoint selected-edge incidence, geometric neighbour selection, and selected
+successor local two-germ rows.  The component-topology input package is built
+internally from the selected edge chain and the local-sector rows obtained from
+the geometric-selection source. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_ci_edgeChain_geometricSelection_successorLocalTwoGerm_20260520cj
+    (edge_segment_chain :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierEdgeCarrierSegmentChainConnected inputs)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (geometricSelection :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (successorLocalTwoGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_ca_geometricSelection_successorLocalTwoGerm_20260520ca
+    (fun C inputs =>
+      let localAngular :
+          BoundaryFreeLocalSectorGeometricAngularSource inputs :=
+        S2_main_local_angular_source_of_geometricSelection_incidentEdge_20260520bz
+          incident_edge geometricSelection C inputs
+      S2_agent_ci_frontier_component_topology_source_args_20260520ci
+        inputs
+        (edge_segment_chain C inputs)
+        (localSectorRows_of_boundaryFree_geometricAngularSource
+          (C := C) (inputs := inputs) localAngular))
+    incident_edge
+    geometricSelection
+    successorLocalTwoGermRows
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target after composing the CI local-angular and face-successor
+reducers.
+
+The remaining source surface is the selected edge-chain row, adjacent endpoint
+selected-edge incidence, geometric neighbour selection, the selected successor
+interior-frontier point row, and the non-local-carrier row for the geometric
+`faceSucc` head.  The local angular source, boundary-free local source, and
+selected successor edge source are all constructed internally by checked S2
+reducers. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_cj_edgeChain_incident_geometricSelection_successorPoint_notLocalCarrier
+    (edge_segment_chain :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierEdgeCarrierSegmentChainConnected inputs)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (geometricSelection :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (successorPoint :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs)
+    (notLocalCarrier :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource
+            inputs
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_ci_local_angular_neighbor_source_family
+              incident_edge geometricSelection C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget := by
+  intro n C hmin
+  let localAngularSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.BoundaryFreeLocalSectorGeometricAngularSource
+            inputs :=
+    _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_ci_local_angular_neighbor_source_family
+      incident_edge geometricSelection
+  exact
+    (minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_boundaryFree_selectedSuccessorEdge_20260520ce
+      (fun C inputs =>
+        let localAngular := localAngularSource C inputs
+        let localSectorRows :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.localSectorRows_of_boundaryFree_geometricAngularSource
+            (C := C) (inputs := inputs) localAngular
+        S2_agent_boundary_free_no_third_input_source_20260520bu
+          (C := C) (inputs := inputs)
+          localSectorRows (incident_edge C inputs))
+      edge_segment_chain
+      (fun C inputs =>
+        S2_agent_ci_selected_faceSucc_edge_source_20260520ci
+          (C := C) (inputs := inputs)
+          (localAngularSource C inputs)
+          (successorPoint C inputs)
+          (notLocalCarrier C inputs))
+      noCutRows) C hmin
+
+set_option linter.style.longLine false in
+/-- W32 S2 target with the local-angular route using only the endpoint-only
+no-chord row.
+
+Compared with
+`minimalFailureExactActualTopologyFieldsTarget_of_cj_edgeChain_incident_geometricSelection_successorPoint_notLocalCarrier`,
+this removes the too-strong adjacent-frontier-endpoint incident-edge source
+from the local-angular construction.  The boundary-free source and the
+local-angular source are both rebuilt from the same selected carrier-neighbour
+geometric-selection package and the endpoint-only row, so the residual says
+only that an adjacent frontier endpoint is one of the two selected carrier
+neighbours. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_ck_edgeChain_endpointOnly_geometricSelection_successorPoint_notLocalCarrier
+    (edge_segment_chain :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierEdgeCarrierSegmentChainConnected inputs)
+    (geometricSelection :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (endpoint_only :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C)
+        (a :
+          {v : Fin n //
+            v ∈ unboundedFrontierVertexSet C inputs})
+        (x : Fin n),
+          (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+            (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point x ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ->
+              x =
+                  (unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+                    (geometricSelection C inputs) a).left.1 ∨
+                x =
+                  (unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+                    (geometricSelection C inputs) a).right.1)
+    (successorPoint :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs)
+    (notLocalCarrier :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccHeadNotLocalAngularCarrierNoOrbitSource
+            inputs
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_cj_local_angular_neighbor_source_endpointOnly
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (endpoint_only C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget := by
+  intro n C hmin
+  let localAngularSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.BoundaryFreeLocalSectorGeometricAngularSource
+            inputs :=
+    fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_cj_local_angular_neighbor_source_endpointOnly
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (endpoint_only C inputs)
+  exact
+    (minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_boundaryFree_selectedSuccessorEdge_20260520ce
+      (fun C inputs =>
+        let neighborRows :=
+          unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+            (geometricSelection C inputs)
+        boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointOnly
+          (C := C) (inputs := inputs) neighborRows
+          (by
+            intro a x hadj hxfrontier
+            simpa [neighborRows] using endpoint_only C inputs a x hadj hxfrontier))
+      edge_segment_chain
+      (fun C inputs =>
+        S2_agent_ci_selected_faceSucc_edge_source_20260520ci
+          (C := C) (inputs := inputs)
+          (localAngularSource C inputs)
+          (successorPoint C inputs)
+          (notLocalCarrier C inputs))
+      noCutRows) C hmin
+
+set_option linter.style.longLine false in
+/-- W32 S2 target after replacing the selected local-transition source by the
+successor interior-frontier point source. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_bx_inputSourceRows_successorPoint
+    (componentRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (neighborRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierNeighborPairAt inputs a)
+    (selectionRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 ((neighborRows C inputs) a).left.1
+                ((neighborRows C inputs) a).right.1))
+    (thirdGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall (a :
+              {v : Fin n //
+                v ∈ unboundedFrontierVertexSet C inputs})
+              (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+            q ∈ Metric.ball
+                ((_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1) ε ->
+              q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+                (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+                  q ∈
+                    _root_.ErdosProblems1066.Swanepoel.FinitePlaneDrawing.vertexIncidentGermW3
+                      C a.1 x ε ->
+                    q ≠ (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1 ->
+                      x ≠ ((neighborRows C inputs) a).left.1 ->
+                        x ≠ ((neighborRows C inputs) a).right.1 ->
+                          BoundaryFreeGraphVertexAngularBetween C a.1
+                            ((neighborRows C inputs) a).left.1
+                            ((neighborRows C inputs) a).right.1 x)
+    (successorPoint :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_bx_inputSourceRows
+    componentRows
+    incident_edge
+    neighborRows
+    selectionRows
+    thirdGermRows
+    (S2_agent_faceSucc_local_transition_source_family_20260520bx
+      (fun C inputs =>
+        S2_agent_local_angular_source_of_neighborPair_selection_thirdGerm_20260520bw
+          neighborRows selectionRows thirdGermRows C inputs)
+      successorPoint)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- Same successor-point W32 handoff with third-germ geometry supplied in the
+point-ray sector form before converting to graph-dart angles. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_bx_pointThirdGerm_successorPoint
+    (componentRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (incident_edge :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource
+            C inputs)
+    (neighborRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierNeighborPairAt inputs a)
+    (selectionRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall a :
+            {v : Fin n //
+              v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 ((neighborRows C inputs) a).left.1
+                ((neighborRows C inputs) a).right.1))
+    (pointThirdGermRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          forall (a :
+              {v : Fin n //
+                v ∈ unboundedFrontierVertexSet C inputs})
+              (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+            q ∈ Metric.ball
+                ((_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1) ε ->
+              q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+                (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+                  q ∈
+                    _root_.ErdosProblems1066.Swanepoel.FinitePlaneDrawing.vertexIncidentGermW3
+                      C a.1 x ε ->
+                    q ≠ (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1 ->
+                      x ≠ ((neighborRows C inputs) a).left.1 ->
+                        x ≠ ((neighborRows C inputs) a).right.1 ->
+                          BoundaryFreeGraphVertexPointAngularBetween C a.1
+                            ((neighborRows C inputs) a).left.1
+                            ((neighborRows C inputs) a).right.1 q)
+    (successorPoint :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+    minimalFailureExactActualTopologyFieldsTarget_of_bx_inputSourceRows_successorPoint
+      componentRows
+      incident_edge
+      neighborRows
+      selectionRows
+      (fun C inputs =>
+        boundaryFreeThirdGermAngularRows_of_pointAngularRows
+          (C := C) (inputs := inputs)
+          (left := fun a => ((neighborRows C inputs) a).left.1)
+          (right := fun a => ((neighborRows C inputs) a).right.1)
+          (pointThirdGermRows C inputs))
+      successorPoint
+      noCutRows
+
+/-- W32 S2 target from connected carrier rows plus the seeded raw-orbit
+one-step source package. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedStepSourceRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeConnectedStepSourceRows
+              inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_connectedStepSourceRows
+      rows)
+    noCutRows
+
+/-- W32 S2 target from connected carrier rows plus the orientation-aware
+seeded raw-orbit source package. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedIteratedStepSourceRows
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+            (BoundaryFreeConnectedIteratedStepSourceRows
+              inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (finitePlanarStraightLineOuterComponentTheorem_of_connectedIteratedStepSourceRows
+      rows)
+    noCutRows
+
+/-- W32 S2 target from direct boundary-free local rows, connected carrier rows,
+and the selected raw-orbit iterated successor source. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_connectedIteratedSuccessorSource
+    (localSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          BoundaryFreeNoThirdGermSource inputs)
+    (carrier_connected :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          (unboundedFrontierCarrierGraph C inputs).Connected)
+    (start_and_iterated_successor_frontier :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitStartAndIteratedSuccessorFrontierSource inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (finitePlanarStraightLineOuterComponentTheorem_of_connectedIteratedSuccessorSource
+      localSource carrier_connected start_and_iterated_successor_frontier)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from boundary-free local rows, connected carrier rows, the
+raw dart-edge frontier source, and repeated-tail actual exterior-arc rows.
+
+This is the selected actual-arc route after the selected-edge membership row
+has been erased from `RawOrbitDartEdgeFrontierSource`; the only orbit-specific
+residual is the repeated-tail actual-arc callback. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_selectedActualArcRows_dartFrontier_boundaryFree_connected
+    (localSource :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          BoundaryFreeNoThirdGermSource inputs)
+    (carrier_connected :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          (unboundedFrontierCarrierGraph C inputs).Connected)
+    (dart_edge_frontier_source :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          RawOrbitDartEdgeFrontierSource inputs)
+    (repeated_tail_arcRows_source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C)
+        {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+        {start :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceDart C},
+          UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+          start.tail = e.1 ->
+          start.head = e.2 ->
+          forall O :
+            JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceRotationSystem.RawFaceSuccOrbit
+              (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem C) start,
+            forall {i j : Fin O.period},
+              i ≠ j ->
+              (O.dart i).tail = (O.dart j).tail ->
+                RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+                  (inputs := inputs) O i j)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_selectedActualArcRows_dartFrontier_boundaryFree_connected
+      localSource carrier_connected dart_edge_frontier_source
+      repeated_tail_arcRows_source)
+    noCutRows
+
+/-- W32 S2 target from endpoint rows, carrier connectedness, and the
+orientation-aware iterated `faceSucc` selected-edge source. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_endpointIncident_iteratedFaceSuccEdgeSource
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Nonempty
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeEndpointIncidentSourceRows
+              inputs) ∧
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+              C inputs).Connected ∧
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawOrbitIteratedFaceSuccFrontierEdgeSource
+                inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_endpointIncident_iteratedFaceSuccEdgeSource
+      (fun C inputs => (rows C inputs).1)
+      (fun C inputs => (rows C inputs).2.1)
+      (fun C inputs => (rows C inputs).2.2))
     noCutRows
 
 /-- W32 S2 target from the direct same-`B` raw face-successor boundary handoff.
@@ -2211,7 +4515,7 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_rawFaceSuccOrbitBoundar
                     (forall k : Fin B.length,
                       (O.dart (Fin.cast hperiod k)).tail = B.vertex k) ∧
                     (forall v : Fin n,
-                      (JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+                      (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
                           frontier
                             (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
                               C inputs).exterior ↔
@@ -2241,7 +4545,7 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_exists_boundaryCycle_co
             C) ->
           Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
             (forall v : Fin n,
-              (JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+              (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
                   frontier
                     (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
                       C inputs).exterior ↔
@@ -2281,7 +4585,7 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorS
             C) ->
           Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
             (forall v : Fin n,
-              (JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+              (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
                   frontier
                     (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
                       C inputs).exterior ↔
@@ -2296,6 +4600,46 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorS
     MinimalFailureExactActualTopologyFieldsTarget :=
   minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
     (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_boundaryVertexExteriorSectorRows
+      rows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 S2 target from the compact boundary-cycle edge-membership, angular,
+and incident-completeness handoff. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_boundaryCycleEdgeMem_angular_complete
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C) ->
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+                  frontier
+                    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows
+                      C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            (forall k : Fin B.length,
+              (B.vertex k,
+                  B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+                  _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                    C inputs ∨
+                (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+                  B.vertex k) ∈
+                  _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierEdgeSet
+                    C inputs) ∧
+            (forall k : Fin B.length,
+              _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+                C B k) ∧
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryCycleIncidentFrontierEdgeCompleteness
+              inputs B)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_boundaryCycleEdgeMem_angular_complete
       rows)
     noCutRows
 
@@ -2475,6 +4819,102 @@ theorem minimalFailureExactActualTopologyFieldsTarget_of_cyclicCoverageLocalSect
       rows)
     noCutRows
 
+/-- S2 endpoint handoff from the current concrete-carrier source split:
+selected frontier-edge chain connectivity plus the pointwise neighbour-pair
+rows for the actual unbounded-frontier carrier.
+
+This wrapper does not add another target surface; it only displays the
+smallest remaining carrier obligations that erase to the existing finite
+planar outer-component theorem. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_neighborPairRows
+    (edgeChainRows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierEdgeCarrierSegmentChainConnected
+            inputs)
+    (neighborRows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a :
+            {v : Fin n //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairAt
+                inputs a)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_neighborPairRows
+      edgeChainRows neighborRows)
+    noCutRows
+
+/-- S2 endpoint handoff from selected frontier-edge chain connectivity plus
+the honest local-radius no-third-germ source.
+
+This is the current compact route after the neighbour-pair reduction: the
+local source names the two selected `unboundedFrontierEdgeSet` carrier edges
+at each actual frontier vertex and proves the local no-third-germ row.  It
+does not use the false all-adjacent endpoint source or the global closed-germ
+source as a bare input. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_localNoThirdGermSource
+    (rows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierEdgeCarrierSegmentChainConnected
+              inputs ∧
+            Nonempty
+              (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeLocalNoThirdGermSourceRows
+                inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finitePlanarOuterComponentTheorem
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finitePlanarStraightLineOuterComponentTheorem_of_edgeChain_localNoThirdGermSource
+      rows)
+    noCutRows
+
+/-- Split-family version of
+`minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_localNoThirdGermSource`.
+
+This is the workboard-facing form: S2 now decomposes into selected carrier
+edge-chain connectivity and the pointwise selected local no-third-germ source,
+plus the separate S1 no-cut family. -/
+theorem minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_localNoThirdGermSourceRows
+    (edgeChainRows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierEdgeCarrierSegmentChainConnected
+            inputs)
+    (localSourceRows :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeLocalNoThirdGermSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_edgeChain_localNoThirdGermSource
+    (fun C inputs => ⟨edgeChainRows C inputs, ⟨localSourceRows C inputs⟩⟩)
+    noCutRows
+
 /-- S2 endpoint handoff from the orbit-first exterior face-dart carrier
 package.  The package erases to cyclic coverage and local dart-pair rows inside
 `ExteriorComponentTopology`; the compact displayed route is
@@ -2507,10 +4947,10 @@ structure ExteriorCycleFrontierNotMemRow (C : _root_.UDConfig n) where
   off_cycle_vertices_not_mem_exterior :
     forall v : Fin n,
       (¬ Exists fun k : Fin boundary.length => boundary.vertex k = v) ->
-        (JordanTopologyFactsConcrete.canonicalGraph C).point v ∉ exterior
+        (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∉ exterior
   frontier_iff_cycle_vertex :
     forall v : Fin n,
-      (JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
+      (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v ∈
           frontier exterior <->
         Exists fun k : Fin boundary.length => boundary.vertex k = v
 
@@ -3379,6 +5819,3003 @@ theorem boundaryCountingSource_missing_if_no_planarBoundary
       Not (Nonempty (BoundaryCountingSourceFields C)) := by
   intro hNoJordan hBoundary
   exact hNoJordan (boundaryCountingSource_implies_jordanSource hBoundary)
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the compact strict-angular selected-neighbour S2 route.
+
+The S2 cycle rows are supplied by the checked composer in
+`S2SeededRawOrbitSource`: aligned K-split topology, selected carrier-neighbour
+geometric rows, endpoint-only no-chord rows, and the local strict angular-order
+row.  This theorem adds no new source premise beyond those rows and the
+minimal-failure no-cut family. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_alignedK_geometricSelection_endpointOnly_strictOrder_20260520
+    (aligned_K_split :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (endpoint_only :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall (a :
+              {v : Fin m //
+                v ∈
+                  _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                    C inputs})
+            (x : Fin m),
+            (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+              (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point x ∈
+                  frontier (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows C inputs).exterior ->
+                x =
+                    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+                      (geometricSelection C inputs) a).left.1 ∨
+                  x =
+                    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+                      (geometricSelection C inputs) a).right.1)
+    (strictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.localAngularCarrierLeft
+              (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_local_angular_source_of_inputs
+                (C := C) (inputs := inputs)
+                (geometricSelection C inputs) (endpoint_only C inputs)))
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.localAngularCarrierRight
+              (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_local_angular_source_of_inputs
+                (C := C) (inputs := inputs)
+                (geometricSelection C inputs) (endpoint_only C inputs))))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_alignedK_geometricSelection_endpointOnly_strictOrder_20260520
+      aligned_K_split geometricSelection endpoint_only strictOrder)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the endpoint-free finite-drawing aligned K-split route.
+
+This is the compact source-facing surface after pruning the all-adjacent
+endpoint shortcut: finite-drawing aligned K-split, selected carrier-neighbour
+geometric rows, and the local point-third-germ row produce S2 cycle rows via
+fixed-side local-sector rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingAlignedK_geometricSelection_pointThirdGerm_20260520
+    (aligned_K_split :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (pointThirdGermRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall (a :
+              {v : Fin m //
+                v ∈
+                  _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                    C inputs})
+            (ε : Real) (q : PlanarInterface.Point) (x : Fin m),
+            q ∈ Metric.ball
+                ((_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1) ε ->
+              q ∈ frontier
+                  (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorComponentRows C inputs).exterior ->
+                (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).Adj a.1 x ->
+                  q ∈
+                    _root_.ErdosProblems1066.Swanepoel.FinitePlaneDrawing.vertexIncidentGermW3
+                      C a.1 x ε ->
+                    q ≠
+                        (_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point a.1 ->
+                      x ≠
+                          (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+                            (geometricSelection C inputs) a).left.1 ->
+                        x ≠
+                            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+                              (geometricSelection C inputs) a).right.1 ->
+                          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.BoundaryFreeGraphVertexPointAngularBetween C a.1
+                            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+                              (geometricSelection C inputs) a).left.1
+                            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.unboundedFrontierCarrierNeighborPairRows_of_geometricSelectionInputSource
+                              (geometricSelection C inputs) a).right.1 q)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_geometricSelection_pointThirdGerm_20260520
+      aligned_K_split geometricSelection pointThirdGermRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the trace-free finite-drawing aligned K-split plus
+pointwise selected-neighbour input route.
+
+The topology branch supplies a whole-frontier aligned K-split row, and the
+local branch supplies the dependent selected-neighbour/cut/geometric row for
+each actual exterior frontier vertex.  This avoids the compatibility-only
+arbitrary trace-connected surfaces. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingAlignedK_selectedNeighborInput_localIncident_20260520
+    (aligned_K_split :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_finiteDrawingAlignedK_selectedNeighborInput_localIncident_20260520
+      aligned_K_split selectedInput)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the currently shortest finite-drawing selected-neighbour
+source surface.
+
+The topology residual is the finite-drawing nontrivial relative-clopen side
+source, which strictly reduces to aligned K-split.  The local source residual is
+the selected-neighbour exterior point-sector row, which strictly reduces to the
+point-third-germ row consumed by the checked endpoint-free cycle-row composer.
+This theorem adds no final boundary-cycle premise, endpoint-only/no-chord row,
+induced frontier graph, arbitrary carrier/cycle, convex hull shortcut, or
+synthetic enclosure. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNontrivialRelativeClopen_geometricSelection_localPointSector_20260520
+    (nontrivial_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (pointSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborLocalExteriorPointSectorRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingAlignedK_geometricSelection_pointThirdGerm_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finiteDrawingUnboundedComplementFrontierAlignedKSplit_of_finiteDrawing_nontrivialRelativeClopenKSide
+      nontrivial_side)
+    geometricSelection
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_pointThirdGerm_source_of_selectedNeighbor_localPointSector
+      (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (pointSectorRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer using the current named S2 source leaves.
+
+This theorem composes only checked strict reductions: the finite-drawing
+topology source is supplied from the Janiszewski/boundary-bumping leaf, and the
+geometric-selection input source is supplied from selected carrier-neighbour
+geometric-order rows.  The remaining local source is the selected-neighbour
+point-sector row. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_selectedNeighborOrder_localPointSector_20260520
+    (janiszewski :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (selectedOrderRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (pointSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborLocalExteriorPointSectorRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_selected_neighbor_geometric_source_replacement
+              (C := C) (inputs := inputs) (selectedOrderRows C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNontrivialRelativeClopen_geometricSelection_localPointSector_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_20260520_finite_nontrivial_relative_clopen_side_source
+      janiszewski)
+    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_selected_neighbor_geometric_source_replacement_family
+      selectedOrderRows)
+    pointSectorRows
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the safe selected-neighbour dependent source route.
+
+This is the current non-chord S2 surface after the selected-neighbour source is
+kept as one dependent package: selected carrier-neighbour rows and their
+genuine sorted outgoing-dart order are produced together, and the local-radius
+incident-germ theorem supplies the local sector rows internally. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_selectedNeighborDependent_safeLocalIncident_20260520
+    (janiszewski :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (selectedSource :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderSource
+            (C := C) inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_finiteDrawingNontrivialRelativeClopen_selectedNeighborGeometricOrder_localIncident_20260520
+      (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_20260520_finite_nontrivial_relative_clopen_side_source
+        janiszewski)
+      (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_family_of_dependentSource
+        selectedSource))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the pointwise selected-neighbour input source form.
+
+This exposes the current smallest local S2 source surface to W32: for each
+frontier carrier vertex, the proof must select the two actual frontier-carrier
+edges, the third-neighbour cut residual, and their adjacent genuine geometric
+outgoing-list positions in one pointwise row. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_selectedNeighborInput_safeLocalIncident_20260520
+    (janiszewski :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_finiteDrawingNontrivialRelativeClopen_selectedNeighborInput_localIncident_20260520
+      (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_20260520_finite_nontrivial_relative_clopen_side_source
+        janiszewski)
+      selectedInput)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the relative-clopen planar-continuum form of the
+pointwise selected-neighbour input source.
+
+This is the current compact S2 work surface: the topology branch supplies the
+one-sided relative-clopen source, and the local branch supplies one dependent
+row per unbounded-frontier vertex containing the selected frontier incidences,
+third-neighbour cut residual, and genuine sorted outgoing-list adjacent index
+row for the same selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedNeighborInput_localIncident_20260520
+    (relative_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_relativeClopenKSide_selectedNeighborInput_localIncident_20260520
+      relative_side selectedInput)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the boundary-free geometric-angular local source form.
+
+This is the local-source version of the current support route: the S2 side
+provides actual selected frontier germs, their genuine sorted outgoing-list
+consecutive row, and the local third-germ exclusion; the selected-neighbour
+input rows are then obtained by the checked eraser in
+`S2LocalTwoGermAssembly`. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_boundaryFreeGeometricAngular_safeLocalIncident_20260520
+    (janiszewski :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (boundaryFree :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.BoundaryFreeLocalSectorGeometricAngularSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_finiteDrawingNontrivialRelativeClopen_boundaryFreeGeometricAngular_localIncident_20260520
+      (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_20260520_finite_nontrivial_relative_clopen_side_source
+        janiszewski)
+      boundaryFree)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer with the selected-neighbour geometric source split into its
+two current leaves: selected cut-partition rows and genuine sorted outgoing-dart
+geometric order rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_selectedNeighborSplit_localPointSector_20260520
+    (janiszewski :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderRows
+            (selectedRows C inputs))
+    (pointSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborLocalExteriorPointSectorRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_selected_neighbor_geometric_source_replacement
+              (C := C) (inputs := inputs)
+              (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_codex_20260520_selected_neighbor_geometric_order_source_split
+                (C := C) (inputs := inputs)
+                (selectedRows C inputs) (geometricRows C inputs))))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_selectedNeighborOrder_localPointSector_20260520
+    janiszewski
+    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_codex_20260520_selected_neighbor_geometric_order_source_split_family
+      selectedRows geometricRows)
+    pointSectorRows
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer using the safe local-radius selected-neighbour S2 route.
+
+This is the current preferred consumer over the older `localPointSector`
+surface: the S2 side gets its local sectors from
+`SelectedNeighborThirdGermLocalExteriorPointSectorRows`, internally supplied by
+the checked local-radius selected incident-germ theorem.  No arbitrary-radius
+point-sector premise, all-adjacent endpoint/no-chord row, final boundary-cycle
+row, induced frontier graph, arbitrary carrier/cycle, or synthetic enclosure is
+introduced. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNontrivialRelativeClopen_selectedNeighborOrder_safeLocalThirdGerm_20260520
+    (nontrivial_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (selectedOrderRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_finiteDrawingNontrivialRelativeClopen_selectedNeighborOrder_safeLocalThirdGerm_20260520
+      nontrivial_side selectedOrderRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the planar-continuum preconnected frontier form of the
+safe selected-neighbour route.
+
+The topology side is the direct standard theorem that the unbounded complement
+frontier of a compact connected planar drawing is preconnected; the checked
+finite-drawing adapter turns that into the aligned-split source consumed by
+the selected-neighbour S2 composer. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_preconnected_selectedNeighborOrder_safeLocalThirdGerm_20260520
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedOrderRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_preconnected_selectedNeighborOrder_safeLocalThirdGerm_20260520
+      frontier_preconnected selectedOrderRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the actual boundary-sector selected-neighbour route.
+
+The source rows stay tied to the same endpoint-free actual boundary cycle:
+frontier equivalence, genuine boundary geometric rotation order, and actual
+exterior-sector rows are erased by Carson's selected-geometric source-row
+adapter, then consumed by the checked preconnected selected-neighbour
+safe-local-third-germ route. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_preconnected_actualBoundarySector_selectedOrder_safeLocalThirdGerm_20260520
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (actualRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ActualBoundaryCycleFrontierEquivalenceRows
+            C inputs)
+    (geometric_order :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall k : Fin (actualRows C inputs).boundary.length,
+            _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+              C (actualRows C inputs).boundary k)
+    (sectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall k : Fin (actualRows C inputs).boundary.length,
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryVertexExteriorSectorRowsAt
+              inputs (actualRows C inputs).boundary k)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_preconnected_selectedNeighborOrder_safeLocalThirdGerm_20260520
+    frontier_preconnected
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_boundary_geometric_to_selected_geometric_source_rows
+        (C := C) (inputs := inputs) (actualRows C inputs)
+        (geometric_order C inputs) (sectorRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the compact valid S2 handoff below the selected-neighbour
+route.
+
+The two remaining source branches are explicit: planar-continuum
+preconnectedness of the unbounded complement frontier, and actual carrier
+neighbour/geometric-selection rows for the same selected frontier edges. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_preconnected_geometricNeighborSelection_20260520
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_preconnected_geometricNeighborSelection_20260520
+      frontier_preconnected geometricRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the direct preconnected topology leaf and the bundled
+actual carrier/geometric-selection input source.
+
+This is the compact two-leaf S2 handoff after the preconnected reducer: the
+topology branch supplies preconnectedness of the actual unbounded exterior
+frontier, and the local branch supplies selected carrier neighbour pairs plus
+their genuine geometric selection rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_preconnected_geometricSelectionInputSource_20260520
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_planarContinuumPreconnected_geometricSelectionInputSource_20260520
+        (C := C) inputs frontier_preconnected
+        (geometricSelection C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer with the selected-neighbour geometric source split into selected
+cut-partition rows and genuine sorted outgoing-dart geometric order, routed
+through the safe local-radius third-germ S2 composer. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_selectedNeighborSplit_safeLocalThirdGerm_20260520
+    (janiszewski :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderRows
+            (selectedRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNontrivialRelativeClopen_selectedNeighborOrder_safeLocalThirdGerm_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_20260520_finite_nontrivial_relative_clopen_side_source
+      janiszewski)
+    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_codex_20260520_selected_neighbor_geometric_order_source_split_family
+      selectedRows geometricRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current strict split of both live S2 leaves.
+
+The topology branch is the bounded-subcontinuum form below Janiszewski, and
+the local branch is selected exterior-neighbour cut-partition rows together
+with genuine sorted outgoing-dart index rows for the same selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumForcesBounded_selectedNeighborCutPartitionIndex_localIncident_20260520
+    (subcontinuum_forces_bounded :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs)
+    (indexRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+            (selectedRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_subcontinuumForcesBounded_selectedNeighborCutPartitionIndex_localIncident_20260520
+      subcontinuum_forces_bounded selectedRows indexRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the relative-clopen planar-continuum form of the current
+strict S2 split.
+
+This is the post-boundedness topology surface: the planar branch supplies the
+one-sided relative-clopen `K`-side theorem, and the local branch supplies
+selected cut-partition rows plus genuine sorted outgoing-list index rows for
+the same selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedNeighborCutPartitionIndex_localIncident_20260520
+    (relative_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs)
+    (indexRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+            (selectedRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_relativeClopenKSide_selectedNeighborCutPartitionIndex_localIncident_20260520
+      relative_side selectedRows indexRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer exposing the selected-edge-pair local source over the live
+relative-clopen topology branch.
+
+This avoids the compatibility-only frontier-trace surface: the topology branch
+is the one-sided relative-clopen planar-continuum theorem, while the local
+branch is the selected incident-edge pair source plus genuine sorted-list
+index rows for the selected heads derived from that same source. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520
+    (relative_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (indexRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let cutSource :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+          selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520
+      relative_side selectedEdgeRows indexRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the selected-edge/index route from actual carrier
+neighbour-pair rows.
+
+The local branch starts with the concrete unbounded-frontier carrier
+neighbour-pair row at each frontier vertex.  These rows determine the selected
+incident-edge pair source, and the matching input is the genuine selected
+geometric-order/index row for the selected heads produced by that same route. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_neighborPairRows_indexRows_20260520
+    (relative_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide)
+    (neighborRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a :
+            {v : Fin m //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairAt
+              inputs a)
+    (indexRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let selectedEdgeRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_selected_edge_pair_source_of_neighborPairRows
+            (C := C) inputs (neighborRows C inputs)
+        let cutSource :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) selectedEdgeRows
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+          selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520
+    relative_side
+    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_local_selected_edge_pair_source_family_of_neighborPairRows
+      neighborRows)
+    (fun C inputs => by
+      simpa using indexRows C inputs)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current sharp residual split.
+
+The topology branch is the Janiszewski/boundary-bumping relative-clopen source.
+The local branch is the actual selected-edge/no-third-germ source, which
+erases to selected incident edge-pair rows.  The geometric branch is the
+pointwise genuine selected-head geometric-order source for the exact selected
+heads produced by that local branch. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_localSelectedNoThird_graphVertexGeometricOrder_20260520
+    (janiszewski :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (localSource :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSelectedNoThirdGermSource
+            C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_graph_vertex_geometric_order_row_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_edge_pair_source
+              (C := C) (inputs := inputs) (localSource C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_relative_clopen_topology_source
+      janiszewski)
+    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_edge_pair_source_family
+      localSource)
+    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_index_geometric_source
+      (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_edge_pair_source_family
+        localSource)
+      (fun C inputs => by
+        simpa [
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_edge_pair_source_family]
+          using geometricRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current reduced S2 source split.
+
+The topology source is the Janiszewski/boundary-bumping relative-clopen side.
+The local source is the actual selected-edge/no-third-germ row, which erases to
+neighbour-pair rows and then selected incident-edge pairs.  The angular source
+is genuine selected geometric-order rows for those same selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_localSelectedNoThird_geometricOrderRows_20260520
+    (janiszewski :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (localSource :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSelectedNoThirdGermSource
+            C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let neighborRows :
+            forall {k : Nat} (D : _root_.UDConfig k)
+              (inputsD :
+                JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+                  D),
+                forall a :
+                  {v : Fin k //
+                    v ∈
+                      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                        D inputsD},
+                    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairAt
+                      inputsD a :=
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_carrier_neighbor_pair_source_family
+            localSource
+        let selectedEdgeRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_selected_edge_pair_source_of_neighborPairRows
+            (C := C) inputs (neighborRows C inputs)
+        let cutSource :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) selectedEdgeRows
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderRows
+          selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget := by
+  intro n C hmin
+  let relativeSide :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierRelativeClopenKSide_of_nontrivialRelativeClopenKSide
+      (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_nontrivial_relative_clopen_source
+        janiszewski)
+  let neighborRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a :
+            {v : Fin m //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairAt
+                inputs a :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_carrier_neighbor_pair_source_family
+      localSource
+  let selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs :=
+    _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_local_selected_edge_pair_source_family_of_neighborPairRows
+      neighborRows
+  exact
+    (minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520
+      relativeSide selectedEdgeRows
+      (fun {m} D inputs =>
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_index_rows_of_selectedEdgePairRoute_geometricOrderRows
+          (C := D) (inputs := inputs) (selectedEdgeRows D inputs)
+          (by
+            simpa [neighborRows, selectedEdgeRows] using
+              geometricRows D inputs))
+      noCutRows) C hmin
+
+set_option linter.style.longLine false in
+/-- W32 reducer for the currently lowered S2 leaves.
+
+This wrapper composes the live Janiszewski relative-clopen source, the local
+selected/no-third source, and the selected-head geometric-order source into
+the existing W32 handoff.  The S1 no-cut rows remain the only graph-minimality
+input at this layer. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiRelativeClopen_localSelectedNoThird_selectedHeadGeometricOrder_20260520
+    (no_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction)
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a : {v : Fin m //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+              inputs a)
+    (angularRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_angular_no_between_source_for_localSelectedNoThirdGermRoute
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_local_selected_no_third_source
+              (C := C) (inputs := inputs) (localSectorRows C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_janiszewski_localSelectedNoThird_graphVertexGeometricOrder_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_janiszewski_relative_clopen_source
+      no_subcontinuum)
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_local_selected_no_third_source
+        (C := C) (inputs := inputs) (localSectorRows C inputs))
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_order_source
+        (C := C) (inputs := inputs)
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_local_selected_no_third_source
+          (C := C) (inputs := inputs) (localSectorRows C inputs))
+        (angularRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the lower selected-head geometric-order residual on the
+local selected/no-third route.
+
+The local-sector rows produce the selected/no-third source, and the geometric
+rows are already stated for the exact selected heads of that route. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiRelativeClopen_localSector_selectedHeadGeometricRows_20260520
+    (no_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction)
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a : {v : Fin m //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+              inputs a)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_order_row_source_for_localSelectedNoThirdGermRoute
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_local_selected_no_third_source
+              (C := C) (inputs := inputs) (localSectorRows C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiRelativeClopen_localSelectedNoThird_selectedHeadGeometricOrder_20260520
+    no_subcontinuum localSectorRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_angular_no_between_source_for_localSelectedNoThirdGermRoute_of_graph_vertex_geometric_order_rows
+        (C := C) (inputs := inputs)
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_local_selected_no_third_source
+          (C := C) (inputs := inputs) (localSectorRows C inputs))
+        (geometricRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the route-specific selected-head angular residual.
+
+The local selected-edge pair rows determine the selected cut rows; the
+route-specific angular no-between source then produces the genuine sorted-list
+index rows for those exact selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_angularNoBetween_20260520
+    (relative_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (angularRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520
+    relative_side selectedEdgeRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_index_rows_of_selectedEdgePairRoute
+      (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+      (angularRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the smallest current selected-edge angular residual.
+
+The local branch supplies selected incident-edge pairs and proves that no
+outgoing unit-distance dart lies strictly between the exact selected heads in
+the genuine geometric order.  That residual is erased internally to the
+selected-head angular rows and then to the sorted-list index rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_noInterveningOutgoing_20260520
+    (relative_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (outgoingRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_no_intervening_outgoing_dart_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_indexRows_20260520
+    relative_side selectedEdgeRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_index_rows_of_selectedEdgePairRoute_no_intervening_outgoing_dart
+        (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+        (outgoingRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the selected-edge route with the topology leaf already
+lowered to the whole-frontier no-subcontinuum obstruction.
+
+The local source names the selected exterior-edge pair at each unbounded
+frontier vertex, and the angular source is the genuine outgoing-list
+no-between row for exactly those selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_noSubcontinuum_selectedEdgePair_geometricOutgoingListNoBetween_20260520
+    (no_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (listRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_noInterveningOutgoing_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_whole_frontier_relative_clopen_source
+      no_subcontinuum)
+    selectedEdgeRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_no_intervening_outgoing_dart_source_of_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute
+        (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+        (listRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current live S2 split.
+
+The topology branch is the whole-frontier crossing-subcontinuum boundedness
+source.  The local carrier branch is the ambient deleted-graph unreachable
+selected-neighbour source.  The angular branch is the no-intervening
+outgoing-dart source for the exact heads selected by that local branch. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_crossingBounded_unreachable_noIntervening_20260520
+    (crossing_forces_bounded :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded)
+    (unreachableRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+            C inputs)
+    (outgoingRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_no_intervening_outgoing_dart_source_for_selectedEdgePairRoute
+          (C := C) (inputs := inputs)
+          (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_selected_edge_pair_source_of_neighborPairRows
+            (C := C) inputs
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierNeighborPairRows_of_unreachableAfterDeleteInputSource
+              (C := C) (inputs := inputs) (unreachableRows C inputs))))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedEdgePair_noInterveningOutgoing_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_whole_frontier_relative_clopen_source
+      (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_whole_frontier_no_subcontinuum_worker
+        crossing_forces_bounded))
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_selected_edge_pair_source_of_neighborPairRows
+        (C := C) inputs
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierNeighborPairRows_of_unreachableAfterDeleteInputSource
+          (C := C) (inputs := inputs) (unreachableRows C inputs)))
+    outgoingRows
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current post-reduction S2 leaves.
+
+This composes Nash's crossing relative-clopen reduction, Dirac's
+local-sector-to-unreachable reduction, and Kierkegaard's genuine outgoing-list
+no-between reduction into the existing W32 handoff.  The selected heads remain
+those produced by the local-sector rows through the deleted-neighbour route. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_crossingRelativeClopen_localSector_geometricOutgoingListNoBetween_20260520
+    (relative_crossing_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumRelativeClopenKSide)
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        forall a : {v : Fin m //
+            v ∈
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                C inputs},
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+            inputs a)
+    (listRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_unreachableAfterDeleteRoute
+          (C := C) (inputs := inputs)
+          (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_unreachable_neighbor_source_worker
+            (C := C) (inputs := inputs) (localSectorRows C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_crossingBounded_unreachable_noIntervening_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_crossing_bounded_source_worker
+      relative_crossing_side)
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_unreachable_neighbor_source_worker
+        (C := C) (inputs := inputs) (localSectorRows C inputs))
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_no_intervening_outgoing_dart_source_for_unreachableAfterDeleteRoute_of_geometric_outgoing_list_no_between_source
+        (C := C) (inputs := inputs)
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_unreachable_neighbor_source_worker
+          (C := C) (inputs := inputs) (localSectorRows C inputs))
+        (listRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current sharpest checked S2 leaf split.
+
+The topology branch is the Janiszewski/boundary-bumping boundedness theorem.
+The local branch is the selected incident exterior-edge pair source, and the
+angular branch is the genuine sorted outgoing-list consecutive-index row for
+the same selected heads.  The proof only composes the checked reducers above;
+it introduces no new facade, final-cycle row, induced-frontier graph, or
+endpoint shortcut. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumForcesBounded_selectedEdgePair_indexRows_20260520
+    (subcontinuum_forces_bounded :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (indexRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let selectedEdgeRowsHere :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+              inputs :=
+          selectedEdgeRows C inputs
+        let cutSource :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) selectedEdgeRowsHere
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+          selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_crossingRelativeClopen_localSector_geometricOutgoingListNoBetween_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_crossing_relative_clopen_worker
+      subcontinuum_forces_bounded)
+    (fun C inputs =>
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_boundaryFreeLocalNoThirdGermSource_of_selectedIncidentEdgePairRows
+        (C := C) (inputs := inputs) (selectedEdgeRows C inputs)).toLocalSectorRows)
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_unreachableAfterDeleteRoute_of_selected_index_rows
+        (C := C) (inputs := inputs)
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_unreachable_neighbor_source_worker
+          (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_boundaryFreeLocalNoThirdGermSource_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs)).toLocalSectorRows)
+        (by
+          simpa using indexRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the frontier-trace-connected topology reduction and the
+strict selected-neighbour cut/index local split.
+
+The topology branch is the smaller trace-connected source now feeding the
+relative-clopen K-side theorem; the local branch keeps selected carrier
+cut-partition rows separate from genuine sorted outgoing-list index rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedNeighborCutPartitionIndex_localIncident_20260520
+    (frontier_trace_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceConnected)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs)
+    (indexRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+            (selectedRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_selectedNeighborCutPartitionIndex_localIncident_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_agent_20260520_planar_continuum_boundary_relativeClopenKSide
+      frontier_trace_connected)
+    selectedRows indexRows noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the frontier-trace-connected topology reduction and the
+pointwise selected-neighbour/cut/geometric local input source.
+
+This is the compact current source surface after the latest reductions:
+frontier trace connectedness for the planar topology branch, and one
+dependent selected-neighbour row per unbounded-frontier vertex carrying both
+the selected cut data and the genuine sorted-list index data. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedNeighborInput_localIncident_20260520
+    (frontier_trace_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceConnected)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedNeighborCutPartitionIndex_localIncident_20260520
+    frontier_trace_connected
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.selectedNeighborCutPartitionSourceRows_of_geometricOrderInputSource
+        (C := C) (inputs := inputs) (selectedInput C inputs))
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_indexrows_from_selected_neighbor_inputSource
+        (C := C) (inputs := inputs) (selectedInput C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer exposing the current selected-edge-pair local source.
+
+The local selected incident-edge pair row supplies the carrier cut-partition
+input source through the checked local-radius reducer.  The only separate
+angular input is the genuine sorted outgoing-list index row for the selected
+heads produced from that same source. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedEdgePair_indexRows_20260520
+    (frontier_trace_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierTraceConnected)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (indexRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let cutSource :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+          selectedRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget := by
+  refine
+    minimalFailureExactActualTopologyFieldsTarget_of_frontierTraceConnected_selectedNeighborCutPartitionIndex_localIncident_20260520
+      frontier_trace_connected ?_ ?_ noCutRows
+  · intro m C inputs
+    let cutSource :
+        _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs :=
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+        (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+    exact
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+        (C := C) (inputs := inputs)
+        (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+          (C := C) (inputs := inputs) cutSource)
+  · intro m C inputs
+    let cutSource :
+        _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs :=
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+        (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+    let selectedRows :
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+          inputs :=
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+        (C := C) (inputs := inputs)
+        (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+          (C := C) (inputs := inputs) cutSource)
+    change
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+        selectedRows
+    simpa [cutSource, selectedRows] using indexRows C inputs
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current input-facing S2 split.
+
+The topology branch is the one-sided relative-clopen planar-continuum source.
+The local branch is the actual carrier cut-partition input source plus honest
+selected-head angular no-between rows, erased internally to the checked
+selected-neighbour cycle-row route. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_neighborPairCutPartition_angularNoBetween_20260520
+    (relative_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide)
+    (cutSource :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs)
+    (angularRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) (cutSource C inputs))
+        forall a : {v : Fin m //
+            v ∈
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                C inputs},
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.GraphVertexAngularNoBetweenRows
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_relativeClopenKSide_neighborPairCutPartition_angularNoBetween_20260520
+      relative_side cutSource angularRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the bundled selected-carrier/geometric-selection local
+source.
+
+The topology branch is the one-sided relative-clopen planar-continuum source.
+The local branch gives, at each actual unbounded-frontier carrier vertex, the
+two selected frontier incidences and their genuine consecutive positions in
+the geometric outgoing-dart list. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_relativeClopenKSide_geometricSelectionInputSource_20260520
+    (relative_side :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesRelativeClopenKSide)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_relativeClopenKSide_geometricSelectionInputSource_20260520
+      relative_side geometricSelection)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current two-leaf S2 source split.
+
+The topology leaf is the component-indexed Janiszewski no-subcontinuum
+obstruction.  The local/geometric leaf is the bundled actual carrier
+geometric-selection input source, which supplies the selected carrier
+neighbour pairs and genuine geometric order rows together. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_geometricSelectionInputSource_20260520
+    (janiszewski_no_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRowsFamily_of_janiszewskiNoSubcontinuum_geometricSelectionInputSource_20260520
+      janiszewski_no_subcontinuum geometricSelection)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current shortest safe S2 route with the local leaf
+strictly reduced to compact actual carrier/geometric-neighbour rows.
+
+The compact row carries the selected `unboundedFrontierEdgeSet` heads and the
+genuine consecutive sorted outgoing-dart indices together; the existing eraser
+then supplies the bundled geometric-selection input source without introducing a
+second selected-head family. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_geometricNeighborSelectionRows_20260520
+    (janiszewski_no_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_geometricSelectionInputSource_20260520
+    janiszewski_no_subcontinuum
+    (fun C inputs =>
+      (geometricRows C inputs).toGeometricSelectionInputSource)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current boundary/sector S2 source split.
+
+The topology branch is reduced to the component-avoidance Janiszewski row.
+The local branch keeps the honest actual boundary rows, geometric `faceSucc`
+rows, boundary orientation, and independent local-sector rows; incident
+frontier-edge completeness is supplied by the checked local-sector bridge
+before erasing to the compact geometric-selection input source. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_actualBoundary_faceSucc_localSectorRows_20260520
+    (component_avoidance :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance)
+    (actualRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ActualBoundaryCycleFrontierEquivalenceRows
+            C inputs)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceCycleFaceSuccRows C
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+              C)
+            (actualRows C inputs).boundary)
+    (boundary_orientation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        forall k : Fin (actualRows C inputs).boundary.length,
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+              (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph
+                C)
+              ((actualRows C inputs).boundary.vertex k)
+              ((actualRows C inputs).boundary.vertex
+                (_root_.ErdosProblems1066.Swanepoel.PlanarInterface.cyclicPred
+                  (actualRows C inputs).boundary.length_pos k)) <
+            _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+              (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph
+                C)
+              ((actualRows C inputs).boundary.vertex k)
+              ((actualRows C inputs).boundary.vertex
+                (_root_.ErdosProblems1066.Swanepoel.PlanarInterface.cyclicSucc
+                  (actualRows C inputs).boundary.length_pos k)))
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a : {v : Fin m //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+              inputs a)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_geometricSelectionInputSource_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_dyn_20260520_topology_janiszewski_leaf
+      component_avoidance)
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_geometricSelectionInputSource_of_actualBoundaryRows_faceSucc_localSectorRows_20260520
+        (C := C) (inputs := inputs) (actualRows C inputs)
+        (faceSuccRows C inputs) (boundary_orientation C inputs)
+        (localSectorRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the actual-boundary/local-sector route with the standard
+planar-continuum connected-frontier topology source.
+
+This is the sharper finite-topology handoff: connectedness of unbounded
+complement frontiers supplies the preconnected topology branch, while the
+same actual boundary, genuine `faceSucc` rows, boundary orientation, and
+pointwise local-sector rows supply the compact geometric-selection source. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_actualBoundary_faceSucc_localSectorRows_20260520
+    (frontier_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierConnected)
+    (actualRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ActualBoundaryCycleFrontierEquivalenceRows
+            C inputs)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.MinimalFailureTopology.UnitDistanceCycleFaceSuccRows C
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+              C)
+            (actualRows C inputs).boundary)
+    (boundary_orientation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        forall k : Fin (actualRows C inputs).boundary.length,
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+              (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph
+                C)
+              ((actualRows C inputs).boundary.vertex k)
+              ((actualRows C inputs).boundary.vertex
+                (_root_.ErdosProblems1066.Swanepoel.PlanarInterface.cyclicPred
+                  (actualRows C inputs).boundary.length_pos k)) <
+            _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+              (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph
+                C)
+              ((actualRows C inputs).boundary.vertex k)
+              ((actualRows C inputs).boundary.vertex
+                (_root_.ErdosProblems1066.Swanepoel.PlanarInterface.cyclicSucc
+                  (actualRows C inputs).boundary.length_pos k)))
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a : {v : Fin m //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+              inputs a)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_preconnected_geometricSelectionInputSource_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierPreconnected_of_connected
+      frontier_connected)
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_geometricSelectionInputSource_of_actualBoundaryRows_faceSucc_localSectorRows_20260520
+        (C := C) (inputs := inputs) (actualRows C inputs)
+        (faceSuccRows C inputs) (boundary_orientation C inputs)
+        (localSectorRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- Package-form W32 consumer for the current actual-boundary S2 source.
+
+The local S2 work now packages the actual boundary rows, genuine geometric
+`faceSucc` rows, boundary orientation, and pointwise local-sector rows in
+`ActualBoundaryFaceSuccLocalSectorRows`.  This wrapper exposes the true
+remaining leaves without duplicating those four dependent arguments at every
+call site. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_actualBoundaryPackage_20260520
+    (frontier_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierConnected)
+    (actualPackageRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ActualBoundaryFaceSuccLocalSectorRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_actualBoundary_faceSucc_localSectorRows_20260520
+    frontier_connected
+    (fun C inputs => (actualPackageRows C inputs).actualRows)
+    (fun C inputs => (actualPackageRows C inputs).faceSuccRows)
+    (fun C inputs => (actualPackageRows C inputs).boundary_orientation)
+    (fun C inputs => (actualPackageRows C inputs).localSectorRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the connected-frontier plus pointwise local-sector route.
+
+The concrete carrier route in `S2ExteriorBoundarySource` constructs the actual
+boundary cycle from the connected frontier and the local two-sector rows, so
+this wrapper exposes those two proof-owning leaves directly to W32. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_localSectorRows_20260520
+    (frontier_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierConnected)
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          forall a : {v : Fin m //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierLocalSectorRowsAt
+              inputs a)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (fun C inputs =>
+      S2_codex_20260520_unboundedExteriorFrontierCycleRows_of_connectedFrontier_localSectorRows
+        (C := C) inputs frontier_connected (localSectorRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- Package-form W32 consumer with the topology leaf reduced to the current
+Janiszewski no-subcontinuum source.
+
+This is the live compact S2 handoff after the connected-frontier theorem was
+strictly reduced to `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction`. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_actualBoundaryPackage_20260520
+    (no_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (actualPackageRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.ActualBoundaryFaceSuccLocalSectorRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_actualBoundaryPackage_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierConnected_of_janiszewskiNoSubcontinuumObstruction
+      no_subcontinuum)
+    actualPackageRows noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the selected raw-tail route through the
+`ActualBoundaryFaceSuccLocalSectorRows` package.
+
+This is the shortest package-form handoff from the selected/raw-orbit source
+lane to the current connected-frontier W32 route.  The residuals stay honest:
+connected frontier, selected raw-tail coverage, primitive repeated-tail cut
+witnesses for that same selected orbit, nonwrap geometric successor rows, and
+the standard no-cut rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520
+    (frontier_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierConnected)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+            inputs)
+    (deleted_tail_witnesses :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let rows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            selectedRows C inputs
+          forall {i j : Fin rows.O.period},
+            i ≠ j ->
+            (rows.O.dart i).tail = (rows.O.dart j).tail ->
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2RepeatedTailExteriorCutWitnessSource
+                (inputs := inputs) rows.O i j)
+    (successorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let rows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            selectedRows C inputs
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitGeometricSuccessorNonwrapRows
+            rows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_actualBoundaryPackage_20260520
+    frontier_connected
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.actualBoundaryFaceSuccLocalSectorRows_family_of_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520
+      selectedRows deleted_tail_witnesses successorRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- Selected raw-tail package route with the topology leaf reduced to the
+Janiszewski no-subcontinuum source.
+
+The residuals are now exactly: the Janiszewski no-subcontinuum topology row,
+selected raw-tail coverage, primitive repeated-tail witnesses for that same
+selected orbit, nonwrap geometric successor rows, and S1 no-cut rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520
+    (no_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+            inputs)
+    (deleted_tail_witnesses :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let rows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            selectedRows C inputs
+          forall {i j : Fin rows.O.period},
+            i ≠ j ->
+            (rows.O.dart i).tail = (rows.O.dart j).tail ->
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2RepeatedTailExteriorCutWitnessSource
+                (inputs := inputs) rows.O i j)
+    (successorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let rows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            selectedRows C inputs
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitGeometricSuccessorNonwrapRows
+            rows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierConnected_of_janiszewskiNoSubcontinuumObstruction
+      no_subcontinuum)
+    selectedRows deleted_tail_witnesses successorRows noCutRows
+
+set_option linter.style.longLine false in
+/-- Selected raw-tail package route with the topology leaf exposed as the
+crossing-subcontinuum boundedness source.
+
+This is the current shortest honest S2 composer: the topology source is lowered
+through the checked Janiszewski component-avoidance/connected-frontier reducers,
+and the boundary source is the selected raw-tail package with repeated-tail
+deleted-tail witnesses and genuine nonwrap successor rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_crossingSubcontinuumForcesBounded_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520
+    (crossing_forces_bounded :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+            inputs)
+    (deleted_tail_witnesses :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let rows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            selectedRows C inputs
+          forall {i j : Fin rows.O.period},
+            i ≠ j ->
+            (rows.O.dart i).tail = (rows.O.dart j).tail ->
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2RepeatedTailExteriorCutWitnessSource
+                (inputs := inputs) rows.O i j)
+    (successorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          let rows :
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+                inputs :=
+            selectedRows C inputs
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitGeometricSuccessorNonwrapRows
+            rows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_selectedRawTailCoverage_repeatedTailWitnesses_geometricSuccessorNonwrap_20260520
+    ((_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_main_20260520_connected_frontier_source_leaf
+      (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_janiszewski_component_avoidance_leaf
+        crossing_forces_bounded)).1)
+    selectedRows deleted_tail_witnesses successorRows noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the preconnected topology source and the selected-edge
+outgoing-list local route.
+
+This is the direct reduced form of the no-closed-separation handoff below:
+the topology branch is the standard planar-continuum frontier preconnectedness
+surface, and the local branch is the selected incident-edge pair route. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_preconnected_selectedEdgePair_geometricOutgoingListNoBetween_20260520
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (listRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_planarContinuumPreconnected_localSectorRows
+        (C := C) inputs frontier_preconnected
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.localSectorRows_of_selectedEdgePairRoute_geometricOutgoingListNoBetween_localIncident_20260520
+          (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+          (listRows C inputs)))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the direct no-closed-separation topology leaf and the
+selected-edge/outgoing-list local route.
+
+This compatibility handoff first lowers the topology branch to the
+preconnectedness surface above; the local branch then produces pointwise
+local-sector rows from the selected incident frontier edges and genuine
+outgoing-list no-between data for those same selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_planarNoClosedSeparation_selectedEdgePair_geometricOutgoingListNoBetween_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierNoClosedSeparation)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (listRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_preconnected_selectedEdgePair_geometricOutgoingListNoBetween_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierPreconnected_of_noClosedSeparation
+      frontier_noClosedSeparation)
+    selectedEdgeRows listRows
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the finite no-closed-separation topology leaf and the
+selected-edge/outgoing-list local route.
+
+This is the finite-drawing version of the selected-edge handoff above: the
+topology branch stays on the actual embedded unit-edge drawing, while the
+local branch is the selected `unboundedFrontierEdgeSet` carrier plus genuine
+outgoing-list no-between data for those selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedEdgePair_geometricOutgoingListNoBetween_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (listRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRows_of_finiteDrawingNoClosedSeparation_localSectorRows
+        (C := C) inputs frontier_noClosedSeparation
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.localSectorRows_of_selectedEdgePairRoute_geometricOutgoingListNoBetween_localIncident_20260520
+          (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+          (listRows C inputs)))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the finite no-closed-separation topology leaf and the
+honest face-dart exterior carrier package.
+
+This is the selected-carrier specialization of the previous theorem:
+`FaceDartOrbitExteriorCarrierRows` supplies the actual selected
+`unboundedFrontierEdgeSet` neighbour pair rows, while the list premise only
+asserts genuine outgoing-list no-between rows for those selected heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_faceDartOrbitCarrier_geometricOutgoingListNoBetween_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (faceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FaceDartOrbitExteriorCarrierRows
+            C inputs)
+    (listRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_selected_carrier_source
+              (C := C) (inputs := inputs) (faceRows C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedEdgePair_geometricOutgoingListNoBetween_20260520
+    frontier_noClosedSeparation
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_selected_carrier_source
+        (C := C) (inputs := inputs) (faceRows C inputs))
+    listRows noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the finite frontier-preconnectedness topology leaf and
+the honest face-dart exterior carrier package.
+
+This is the current reduced topology surface: preconnectedness of the actual
+finite drawing unbounded-component frontier is first erased to the closed-piece
+no-separation row, then the existing selected face-dart carrier route supplies
+the S2 topology target. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingPreconnected_faceDartOrbitCarrier_geometricOutgoingListNoBetween_20260520
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierPreconnected)
+    (faceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FaceDartOrbitExteriorCarrierRows
+            C inputs)
+    (listRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_geometric_outgoing_list_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_selected_carrier_source
+              (C := C) (inputs := inputs) (faceRows C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_faceDartOrbitCarrier_geometricOutgoingListNoBetween_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_frontierPreconnected
+      frontier_preconnected)
+    faceRows listRows noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the finite no-closed-separation topology leaf and the
+face-dart carrier package with selected-head angular no-between rows.
+
+This is parallel to the outgoing-list handoff, but accepts the lower geometric
+source in angular no-between form.  The local assembly then packages those
+same selected carrier heads as compact geometric-neighbour rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_faceDartOrbitCarrier_angularNoBetween_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (faceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FaceDartOrbitExteriorCarrierRows
+            C inputs)
+    (angularRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_selected_carrier_source
+              (C := C) (inputs := inputs) (faceRows C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRowsFamily_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520
+      frontier_noClosedSeparation
+      (fun C inputs =>
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_codex_current_20260520_local_geometric_assembly_of_selectedEdgePairRoute_angularNoBetween
+          (C := C) (inputs := inputs)
+          (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_selected_carrier_source
+            (C := C) (inputs := inputs) (faceRows C inputs))
+          (angularRows C inputs)))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the finite frontier-preconnectedness topology leaf and the
+face-dart carrier package with selected-head angular no-between rows.
+
+This is the angular no-between analogue of the outgoing-list preconnected
+handoff: preconnectedness is first lowered to finite drawing
+no-closed-separation, then the selected face-dart carrier angular route
+supplies the S2 topology target. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingPreconnected_faceDartOrbitCarrier_angularNoBetween_20260520
+    (frontier_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierPreconnected)
+    (faceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FaceDartOrbitExteriorCarrierRows
+            C inputs)
+    (angularRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_selected_head_angular_no_between_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_selected_carrier_source
+              (C := C) (inputs := inputs) (faceRows C inputs)))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_faceDartOrbitCarrier_angularNoBetween_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_frontierPreconnected
+      frontier_preconnected)
+    faceRows angularRows noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the direct no-closed-separation topology leaf and the
+bundled actual carrier/geometric-selection local source. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_planarNoClosedSeparation_geometricSelectionInputSource_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierNoClosedSeparation)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRowsFamily_of_planarContinuumNoClosedSeparation_geometricSelectionInputSource_20260520
+      frontier_noClosedSeparation geometricSelection)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the direct no-closed-separation topology leaf and compact
+selected-carrier geometric-neighbour source rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_planarNoClosedSeparation_geometricNeighborSelectionRows_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierNoClosedSeparation)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRowsFamily_of_planarContinuumNoClosedSeparation_geometricNeighborSelectionRows_20260520
+      frontier_noClosedSeparation geometricRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the finite no-closed-separation topology leaf and compact
+selected-carrier geometric-neighbour source rows.
+
+This is the narrow finite-topology S2 route: the topology branch is the actual
+finite drawing no-closed-separation source, and the local branch is the compact
+geometric-neighbour row family for the same `FinitePlanarOuterComponentInputs`.
+-/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_unboundedExteriorFrontierCycleRows
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedExteriorFrontierCycleRowsFamily_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520
+      frontier_noClosedSeparation geometricRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for claim
+`S2-codex-current-20260520-w32-selected-cut-angular-integration`.
+
+The finite topology branch is the actual no-closed-separation source.  The
+local branch keeps the selected cut-partition rows and pointwise genuine
+selected-head angular no-between rows, then uses the compact geometric-neighbour
+leaf to enter the existing short W32 route. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedCutPartition_angularNoBetween_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs)
+    (angularRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let selectedRowsHere :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          selectedRows C inputs
+        forall a : {v : Fin m //
+            v ∈
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                C inputs},
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.GraphVertexAngularNoBetweenRows
+            C a.1 (selectedRowsHere.selectedNeighborRows a).left
+              (selectedRowsHere.selectedNeighborRows a).right)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_geometricNeighborSelectionRows_20260520
+    frontier_noClosedSeparation
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_codex_current_20260520_compact_geometric_neighbor_source_leaf
+        (C := C) (inputs := inputs) (selectedRows C inputs)
+        (angularRows C inputs))
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer after the selected-head angular-order final reducer.
+
+The local source keeps the selected cut-partition rows and asks only for the
+genuine nonwrap adjacent selected-head rows in the real
+`geometricOutgoingDartList`.  These rows are erased to graph-vertex angular
+no-between rows, then the existing selected cut/angular W32 route applies. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedCutPartition_geometricAngularSelection_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let selectedRowsHere :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          selectedRows C inputs
+        forall a : {v : Fin m //
+            v ∈
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                C inputs},
+          Nonempty
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+              C a.1 (selectedRowsHere.selectedNeighborRows a).left
+                (selectedRowsHere.selectedNeighborRows a).right))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedCutPartition_angularNoBetween_20260520
+    frontier_noClosedSeparation
+    selectedRows
+    (fun C inputs =>
+      let selectedRowsHere :
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        selectedRows C inputs
+      fun a =>
+        let row :
+            _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+              C a.1 (selectedRowsHere.selectedNeighborRows a).left
+                (selectedRowsHere.selectedNeighborRows a).right :=
+          Classical.choice (geometricRows C inputs a)
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphVertexAngularNoBetweenRows_of_geometricAngularNeighborSelectionRow
+          row)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current topology hard case and the sharp selected
+geometric-angular local source.
+
+The topology residual is the aligned hard-case source for a nontrivial closed
+separation of the unbounded-component frontier.  It feeds the checked
+connected-frontier reducer and then the finite no-closed-separation route.
+The local residual stays at actual selected cut-partition rows plus genuine
+nonwrap geometric neighbour-selection rows in `geometricOutgoingDartList`. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_alignedKSplit_selectedCutPartition_geometricAngularSelection_20260520
+    (alignedKSplit :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let selectedRowsHere :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          selectedRows C inputs
+        forall a : {v : Fin m //
+            v ∈
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                C inputs},
+          Nonempty
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+              C a.1 (selectedRowsHere.selectedNeighborRows a).left
+                (selectedRowsHere.selectedNeighborRows a).right))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget := by
+  let frontier_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierConnected :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_main_20260520_planar_connected_frontier_of_janiszewski_closed_split_source
+      alignedKSplit
+  let finite_noClosed :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_finite_no_closed_separation_source
+      frontier_connected
+  intro m C hmin
+  exact
+    (minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedCutPartition_geometricAngularSelection_20260520
+      finite_noClosed selectedRows geometricRows noCutRows) (C := C) hmin
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the finite no-closed-separation topology leaf and the
+bundled selected-neighbour/cut/geometric input source.
+
+This is the same finite S2 route as
+`minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedCutPartition_angularNoBetween_20260520`,
+but it consumes the smaller same-input local source: each frontier vertex row
+carries the two selected `unboundedFrontierEdgeSet` incidences, the
+third-neighbour cut residual, and the genuine adjacent
+`geometricOutgoingDartList` indices for those same heads. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedNeighborInput_20260520
+    (frontier_noClosedSeparation :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedCutPartition_angularNoBetween_20260520
+    frontier_noClosedSeparation
+    (fun C inputs =>
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.selectedNeighborCutPartitionSourceRows_of_geometricOrderInputSource
+        (C := C) (inputs := inputs) (selectedInput C inputs))
+    (fun C inputs =>
+      let source :
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs :=
+        selectedInput C inputs
+      let selectedRows :
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.selectedNeighborCutPartitionSourceRows_of_geometricOrderInputSource
+          (C := C) (inputs := inputs) source
+      let indexRows :
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderIndexRows
+            selectedRows :=
+        by
+          simpa [selectedRows] using
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_indexrows_from_selected_neighbor_inputSource
+              (C := C) (inputs := inputs) source
+      _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_head_angular_no_between_of_indexRows
+        (C := C) (inputs := inputs) indexRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current two-source S2 split.
+
+The topology source is the planar crossing-subcontinuum boundedness theorem;
+the local source is the bundled selected-neighbour cut/geometric-order input.
+The theorem composes both through the checked finite no-closed-separation and
+selected-neighbour W32 route. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_crossingBounded_selectedNeighborInput_20260520
+    (crossing_forces_bounded :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget := by
+  let planar_nontrivial :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_nontrivial_relative_clopen_side_leaf
+      crossing_forces_bounded
+  let finite_nontrivial :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finiteDrawingUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_planarContinuum
+      planar_nontrivial
+  let finite_noClosed :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_finiteDrawing_nontrivialRelativeClopenKSide
+      finite_nontrivial
+  intro m C hmin
+  exact
+    (minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedNeighborInput_20260520
+      (frontier_noClosedSeparation := finite_noClosed)
+      (selectedInput := selectedInput)
+      (noCutRows := noCutRows)) (C := C) hmin
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current non-circular finite-topology residual and the
+bundled selected-neighbour/cut/geometric input source.
+
+The topology branch is the pairwise subcontinuum-between theorem for the
+frontier of each unbounded complement component.  It feeds the finite
+frontier-preconnected source, then the finite no-closed-separation route, and
+finally the bundled selected-neighbour W32 consumer above. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumBetween_selectedNeighborInput_20260520
+    (subcontinuum_between :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget := by
+  let finite_preconnected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierPreconnected :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_finite_frontier_preconnected_acyclic_source
+      subcontinuum_between
+  let finite_noClosed :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_frontierPreconnected
+      finite_preconnected
+  intro m C hmin
+  exact
+    (minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedNeighborInput_20260520
+      (frontier_noClosedSeparation := finite_noClosed)
+      (selectedInput := selectedInput)
+      (noCutRows := noCutRows)) (C := C) hmin
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the standard connected-frontier planar-continuum residual
+and the bundled selected-neighbour/cut/geometric input source.
+
+The topology branch first gives the pairwise subcontinuum-between residual by
+taking the whole unbounded-complement frontier as the connecting subcontinuum,
+then uses the checked `SubcontinuumBetween` handoff above. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_connectedFrontier_selectedNeighborInput_20260520
+    (frontier_connected :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierConnected)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumBetween_selectedNeighborInput_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_current_20260520_subcontinuum_between_source
+      frontier_connected)
+    selectedInput
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the shortest current S2 split.
+
+The topology branch is the Janiszewski/boundary-bumping component-avoidance
+source specialized by the finite-drawing no-closed-separation reducer.  The
+local branch is the bundled selected-neighbour/cut/geometric input source.
+The S1 no-cut family remains an explicit input here, avoiding any downstream
+W34 circularity. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedNeighborInput_20260520
+    (component_avoidance :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedNeighborInput_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_codex_cont_20260520_finite_no_closed_separation_source
+      component_avoidance)
+    selectedInput
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the no-subcontinuum Janiszewski topology leaf plus the
+selected-neighbour input source.
+
+This is the same finite S2 spine as the component-avoidance consumer, but it
+uses the direct no-subcontinuum-to-no-closed-separation topology reducer. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_selectedNeighborInput_20260520
+    (no_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedNeighborInput_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiNoSubcontinuumObstruction
+      no_subcontinuum)
+    selectedInput
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current no-subcontinuum topology reduction.
+
+The topology source is the exact remaining crossing-subcontinuum frontier
+witness theorem.  It feeds the checked no-subcontinuum reducer, then the
+finite no-closed-separation S2 spine. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_crossingSubcontinuum_selectedNeighborInput_20260520
+    (frontier_subcontinuum :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum)
+    (selectedInput :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.SelectedNeighborCutPartitionGeometricOrderInputSource
+            inputs)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_janiszewskiNoSubcontinuum_selectedNeighborInput_20260520
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_no_subcontinuum_source_20260520b
+      frontier_subcontinuum)
+    selectedInput
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for component avoidance plus the selected-edge/geometric-order
+local source family.
+
+The local source is reduced to actual selected `unboundedFrontierEdgeSet`
+incidences and genuine selected-head order in
+`GeometricRotationSystem.geometricOutgoingDartList`. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedIncidentEdgeRows_geometricOrderRows_20260520
+    (component_avoidance :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_dyn_20260520_graph_vertex_geometric_order_row_source_for_selectedEdgePairRoute
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedNeighborInput_20260520
+    component_avoidance
+    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_current_selected_neighbor_input_source_20260520a_family_of_selectedIncidentEdgeRows_geometricOrderRows
+      selectedEdgeRows geometricRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the actual-carrier degree-two specialization of the current
+selected-neighbour route.
+
+This leaves the geometric local order as the genuine
+`GraphVertexGeometricOutgoingListNoBetweenRows` family for the selected heads
+coming from actual carrier degree two. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_actualCarrierDegreeTwo_geometricOutgoingListNoBetweenRows_20260520
+    (component_avoidance :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance)
+    (hdegree :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          letI : DecidableRel
+            (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+              C inputs).Adj :=
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph_decidableAdj
+              C inputs
+          forall a : {v : Fin m //
+              v ∈
+                _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                  C inputs},
+            ((_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierCarrierGraph
+                C inputs).neighborFinset a).card =
+              2)
+    (listRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let selectedEdgeRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_codex_current_20260520_actual_carrier_degree_two_source
+            (C := C) (inputs := inputs) (hdegree C inputs)
+        let cutSource :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) selectedEdgeRows
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        forall a : {v : Fin m //
+            v ∈
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.unboundedFrontierVertexSet
+                C inputs},
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.GraphVertexGeometricOutgoingListNoBetweenRows
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedNeighborInput_20260520
+    component_avoidance
+    (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_current_selected_neighbor_input_source_20260520a_family_of_actualCarrierDegreeTwo_geometricOutgoingListNoBetweenRows
+      hdegree listRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the raw-orbit selected-order route.
+
+This is a route composer only.  The source rows remain explicit: actual
+selected frontier-edge incidences, selected raw-tail coverage, the selected
+head/raw-orbit match, raw orientation, component avoidance, and no-cut rows. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedIncidentEdgeRows_rawOrbitHeadMatch_rawOrientation_20260520
+    (component_avoidance :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (rawRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+            inputs)
+    (headRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let cutSource :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+        let selectedRows :
+            _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (_root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitHeadMatchSource
+          selectedRows (rawRows C inputs))
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitOrientationRows
+            (rawRows C inputs))
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget :=
+  minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedNeighborInput_20260520
+    component_avoidance
+    (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_raw_orbit_selected_order_source_family_20260520a
+      selectedEdgeRows rawRows headRows orientationRows)
+    noCutRows
+
+set_option linter.style.longLine false in
+/-- W32 consumer for the current selected raw-orbit source split.
+
+The raw-tail package is built from connected raw-orbit rows by the 20260520b
+selected raw-tail reducer; the selected-head match is reduced to the one-sided
+left-predecessor leaf; and raw orientation is reduced to genuine nonwrap rows
+in the selected raw orbit's sorted outgoing geometric lists. -/
+theorem
+    minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedIncidentEdgeRows_connectedRawOrbit_leftPred_geometricSuccessorNonwrap_20260520b
+    (component_avoidance :
+      _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance)
+    (selectedEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs)
+    (connectedRawRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.BoundaryFreeConnectedRawOrbitSourceRows
+            inputs)
+    (leftPredRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let rawRows :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520b
+            (C := C) (inputs := inputs) (connectedRawRows C inputs)
+        _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_selected_raw_left_pred_head_match_source_20260520b
+          (C := C) (inputs := inputs) (selectedEdgeRows C inputs) rawRows)
+    (successorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+        let rawRows :
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+              inputs :=
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_selectedRawTailCoverageSourceRows_of_connectedRawOrbitSourceRows_20260520b
+            (C := C) (inputs := inputs) (connectedRawRows C inputs)
+        _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitGeometricSuccessorNonwrapRows
+          rawRows)
+    (noCutRows :
+      forall {n : Nat} (C : _root_.UDConfig n),
+        MinimalGraphFacts.IsMinimalClearedFailure C ->
+          CutVertexInterface.NoCutVertex C) :
+    MinimalFailureExactActualTopologyFieldsTarget := by
+  intro n C hmin
+  let rawRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs :
+          JordanTopologyFactsConcrete.MinimalFailureTopology.FinitePlanarOuterComponentInputs
+            C),
+          _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawTailCoverageSourceRows
+            inputs :=
+    _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_selectedRawTailCoverageSourceRows_family_of_connectedRawOrbitSourceRows_20260520b
+      connectedRawRows
+  exact
+    minimalFailureExactActualTopologyFieldsTarget_of_componentAvoidance_selectedNeighborInput_20260520
+      component_avoidance
+      (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_raw_orbit_selected_order_source_family_20260520b
+        selectedEdgeRows rawRows
+        (by
+          intro m C inputs
+          change
+            _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_selected_raw_left_pred_head_match_source_20260520b
+              (C := C) (inputs := inputs) (selectedEdgeRows C inputs)
+              (rawRows C inputs)
+          exact leftPredRows C inputs)
+        (_root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.S2_current_raw_orbit_orientation_source_family_20260520b
+          rawRows
+          (by
+            intro m C inputs
+            change
+              _root_.ErdosProblems1066.Swanepoel.ExteriorComponentTopology.SelectedRawOrbitGeometricSuccessorNonwrapRows
+                (rawRows C inputs)
+            exact successorRows C inputs)))
+      noCutRows C hmin
 
 /-! ## Subpolygon count fields -/
 

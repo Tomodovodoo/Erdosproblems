@@ -121,6 +121,30 @@ The current positive route has seven compact obligations.
    `SelectedTopologyRowsInhabitationW33.MinimalFailureExactActualTopologyFieldsTarget`
    or
    `FaceBoundaryTopologySourceW32.MinimalFailureExactActualTopologyFieldsTarget`.
+   Current S2 source task: build an input-only actual exterior boundary cycle
+   `B`, prove exterior-frontier graph vertices are exactly the vertices of
+   `B`, and supply `forall k, BoundaryVertexExteriorSectorRowsAt inputs B k`.
+   This is the live handoff to
+   `FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows`.
+   The proof should be orbit-first internally: selected exterior raw
+   face-successor orbit, frontier-tail coverage, repeated-tail cut rows,
+   no-cut injectivity, then the actual boundary cycle and sector rows.
+   Reducer-only work is not a live S2 task: do not add or claim another theorem
+   that hands actual rows, sector rows, carrier rows, or selected successor-edge
+   rows to a later worker while only erasing them to
+   `UnboundedExteriorFrontierCycleRows`.  A task that needs one of those
+   premises must prove it first, in the same claim, or be rewritten as that
+   missing-premise source task.  The live smaller subtasks are input-level
+   local two-germ/no-third rows, input-level exterior frontier
+   component/carrier connectedness, and input-level selected geometric
+   `faceSucc` frontier propagation.
+   Do not use all-adjacent frontier-endpoint closure as an input-level source:
+   boundary chords make `AdjacentFrontierEndpointsClosedSegmentEndpointClosureSource`
+   and `AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource` false as
+   unconditional statements over arbitrary adjacent exterior-frontier vertices.
+   Endpoint closure is checked only after selected `unboundedFrontierEdgeSet`
+   membership is known; the remaining source work is constructing that selected
+   carrier/orbit.
 2. Prove the selected nondegenerate outer-face sector order:
    `OuterBoundaryAngleSourceW34.SelectedNondegenerateTopologyOuterFaceSectorOrderTheorem`.
 3. Inhabit the exact topology closure/missing-field package:
