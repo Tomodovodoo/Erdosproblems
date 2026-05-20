@@ -12216,19 +12216,21 @@ S2 dynamic assignments:
       `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/FaceBoundaryTopologySourceW32.lean`;
       forbidden-token scan clean on the touched Lean owner file.
     - Claim: `S2-agent-selected-incident-edge-source-20260520c`.
-      Owner: pending subagent.  Role: theorem prover.  Scope:
+      Owner: Ampere the 3rd (`019e4781-f507-73e1-af0b-7af0236ae2c5`,
+      worker).  Role: theorem prover.  Scope:
       `Swanepoel/S2LocalTwoGermAssembly.lean` and route notes only after a
-      checked proof or strict reduction.  Status: claimed/pending spawn.
+      checked proof or strict reduction.  Status: active in fork.
       Handoff: prove or strictly reduce `LocalSelectedIncidentEdgePairSourceRows
       inputs` from actual local-sector/neighbor-pair rows, preserving selected
       `unboundedFrontierEdgeSet` incidences and avoiding all-adjacent endpoint
       sources.  Next gate: pinned owner-file build for
       `S2LocalTwoGermAssembly`.
     - Claim: `S2-agent-final-topology-handoff-from-crossing-20260520c`.
-      Owner: pending subagent.  Role: reducer integrator.  Scope:
+      Owner: Descartes the 3rd (`019e4781-f565-78d2-9aa2-b1ba7f353a9c`,
+      worker).  Role: reducer integrator.  Scope:
       `Swanepoel/FaceBoundaryTopologySourceW32.lean` and route notes only after
       a checked proof or strict reduction; topology source files are read-only.
-      Status: claimed/pending spawn.  Handoff: compose the new final selected
+      Status: active in fork.  Handoff: compose the new final selected
       raw-orbit W32 consumer with the existing crossing-subcontinuum topology
       reducers, leaving only the crossing-subcontinuum theorem and local/raw
       source leaves explicit.  Next gate: pinned owner-file build for
