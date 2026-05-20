@@ -48,8 +48,8 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 
-\title{A Proof Package for the Bound\\ $\boldsymbol{g(n)\ge \lceil 7n/27\rceil}$}
-\author{Prepared as a standalone proof document}
+\title{Extending from Swanepoel, proving $m=7$ and pushing the bound to\\ $\boldsymbol{g(n)\ge \lceil 7n/27\rceil}$}
+\author{Tom de Groot, GPT 5.5 Pro \& Codex}
 \date{May 2026}
 
 \begin{document}
@@ -64,7 +64,7 @@ Equivalently,
 \[
   g(n)\ge \left\lceil\frac{7n}{27}\right\rceil.
 \]
-The proof specializes Swanepoel's broken-lattice input to $m=7$, isolates the unique possible equality break, proves the required boundary-side orientation, and eliminates every remaining local configuration by explicit independent-set certificates.
+The proof specializes Swanepoel's broken-lattice input to $m=7$, isolates the unique equality break, proves the required boundary-side orientation, and eliminates every remaining local configuration by explicit independent-set certificates.
 \end{abstract}
 
 \tableofcontents
@@ -178,7 +178,7 @@ Let $G$ be a smallest counterexample to
 \[
  \alpha(G)\ge \frac{7}{27}|V(G)|.
 \]
-If $S\subseteq V(G)$ is independent and
+If $\varnothing\ne S\subseteq V(G)$ is independent and
 \[
  |N(S)|\le \left\lfloor\frac{20|S|}{7}\right\rfloor,
 \]
@@ -194,7 +194,7 @@ Set
 \[
  G'=G-(S\cup N(S)).
 \]
-By minimality of $G$,
+Since $S\ne\varnothing$, the graph $G'$ has fewer vertices than $G$. By minimality of $G$,
 \[
  \alpha(G')\ge \frac{7}{27}|V(G')|.
 \]
@@ -221,7 +221,7 @@ If $|N(S)|\le 20|S|/7$, then the last numerator is nonnegative. Thus
 contradicting that $G$ is a counterexample.
 \end{proof}
 
-\section{The $m=7$ broken-lattice setup}
+\section{The \texorpdfstring{$m=7$}{m=7} broken-lattice setup}
 
 Assume, for contradiction, that $G$ is a smallest counterexample to
 \[
@@ -241,11 +241,11 @@ Thus the boundary arc is
 \]
 
 \begin{lemma}[The unique $m=7$ break]\label{lem:unique-break}
-In this $m=7$ broken lattice, the only possible failed equality among
+Exactly one equality among
 \[
  s_i=r_{i+1}\qquad(1\le i\le 8)
 \]
-is
+fails, namely
 \[
  s_3\ne r_4.
 \]
@@ -265,7 +265,7 @@ Therefore true triples beginning at $a=1,2,3$ are impossible. These forbidden tr
 \[
  (1,2,3),\qquad (2,3,4),\qquad (3,4,5).
 \]
-A single failed equality must meet all three triples. Their only common index is $3$. Hence the sole possible break is
+Since the triple $(1,2,3)$ cannot be true, at least one equality fails. Since at most one equality fails, exactly one equality fails. To make all three forbidden triples false, the single failure must meet all three triples. Their only common index is $3$. Hence
 \[
  s_3\ne r_4.
 \]
@@ -686,7 +686,7 @@ Let
 \[
  t_b=p_b+\omega(e_b+e_{b+1}).
 \]
-If $p_a$ is not one of the explicitly displayed local neighbours of $t_b$, then
+For every boundary vertex $p_a$,
 \[
  |p_a-t_b|>1.
 \]
@@ -821,7 +821,7 @@ are occupied by vertices of the point set.
 \end{definition}
 
 \begin{lemma}[Fully flat port cap]\label{lem:port}
-In the fully flat branch, every extra neighbour of $t_i$, $i=5,6,7$, outside the strip-neighbour set lies in the $t_i$-port. If the port is not saturated, it contributes at most one extra neighbour. If one endpoint is already present and the port is not saturated, it contributes no further extra neighbour. Consecutive saturated ports share one endpoint.
+In the fully flat branch, every extra neighbour of $t_i$, $i=5,6,7$, outside the strip-neighbour set lies in the $t_i$-port. If the port is saturated, its only port-neighbours are the two endpoints. If the port is not saturated, it contributes at most one extra neighbour. If one endpoint is already present and the port is not saturated, it contributes no further extra neighbour. Consecutive saturated ports share one endpoint.
 \end{lemma}
 
 \begin{proof}
@@ -956,7 +956,7 @@ Thus
 If $x\in N(S)$, then $x\notin S$ and $x\in N(v)$ for some $v\in S$. By the assumed containment, $x\in A\cup C_1\cup\cdots\cup C_r\cup S$. Since $x\notin S$, $x\in A\cup C_1\cup\cdots\cup C_r$.
 \end{proof}
 
-\section{The $t_4t_5$-absent branch}
+\section{The \texorpdfstring{$t_4t_5$}{t4t5}-absent branch}
 
 \begin{lemma}\label{lem:S0}
 If $t_4t_5\notin E(G)$, then
@@ -999,7 +999,7 @@ Therefore
 \]
 \end{proof}
 
-\section{The $t_4t_5$-present branch before full flatness}
+\section{The \texorpdfstring{$t_4t_5$}{t4t5}-present branch before full flatness}
 
 Assume throughout this section that $t_4t_5\in E(G)$. By Corollary~\ref{cor:t4t5},
 \[
@@ -1602,6 +1602,7 @@ In the fully flat branch, if the ports at $t_5,t_6,t_7$ are not all saturated, t
 By Lemma~\ref{lem:flat-patterns}, the non-all-saturated patterns are exactly the six patterns in Lemmas~\ref{lem:row0}--\ref{lem:row67}. Each lemma supplies the required set.
 \end{proof}
 
+\clearpage
 \section{All-saturated branch}
 
 Assume the ports at $t_5,t_6,t_7$ are all saturated. Let
@@ -1777,11 +1778,11 @@ Consequently,
 \section{Final proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:main}]
-Assume that $G$ is a smallest counterexample. By Lemma~\ref{lem:deletion}, every independent set $S$ in $G$ must satisfy
+Assume that $G$ is a smallest counterexample. By Lemma~\ref{lem:deletion}, every nonempty independent set $S$ in $G$ must satisfy
 \[
  |N(S)|>\left\lfloor\frac{20|S|}{7}\right\rfloor.
 \]
-By Lemma~\ref{lem:unique-break}, the only possible equality break is $s_3\ne r_4$, and $t_i$ is defined for $i=1,2,4,5,6,7,8$.
+By Lemma~\ref{lem:unique-break}, the unique equality break is $s_3\ne r_4$, and $t_i$ is defined for $i=1,2,4,5,6,7,8$.
 
 If $t_4t_5\notin E(G)$, Lemma~\ref{lem:S0} gives an independent set $S_0$ with $|S_0|=7$ and
 \[
@@ -1835,7 +1836,7 @@ Discrete \& Computational Geometry 28 (2002), 649--670.
 DOI: 10.1007/s00454-002-2897-y.
 
 \bibitem{PachToth1996}
-J. Pach and G. Toth,
+J. Pach and G. T\'oth,
 \textit{On the independence number of coin graphs},
 Geombinatorics 6 (1996), 30--33.
 

@@ -213,42 +213,369 @@ S2 dynamic assignments:
     names.  If a claim is abandoned or replaced, mark that explicitly instead
     of leaving a stale owner slot.
     - Claim: `S2-exterior-boundary-cycle-source`.  Owner: Codex-main.
-      Role: implementation integrator for the input-only exterior boundary-cycle
-      source theorem.  Scope:
+      Role: theorem prover.  Scope:
       `Swanepoel/ExteriorComponentTopology.lean` and `TASK.md`, with read-only
       use of `Swanepoel/FinitePlaneDrawing.lean`,
       `Swanepoel/GeometricRotationSystem.lean`, and
       `Swanepoel/JordanTopologyFactsConcrete.lean`.  Status: active.  Current
-      deliverable: keep the S2 owner file green, integrate completed source
-      rows, and continue the input-only exterior boundary-cycle source theorem
-      without claiming any other agent's live subtask.  Current residual source
-      rows: `InteriorEdgeLocalExteriorSideComponentSource C inputs`, raw
-      face-successor selected-edge coverage of
-      `unboundedFrontierEdgeSet C inputs`, actual-boundary/local-sector rows,
-      and repeated-tail separation rows for no-cut injectivity.  Handoff:
+      deliverable: construct the input-only unbounded exterior frontier cycle
+      source from the actual exterior face route, keeping existing owner files
+      green and avoiding duplicate packages/facades.  Handoff:
       `UnboundedExteriorFrontierCycleRows C inputs` for every
       `FinitePlanarOuterComponentInputs C`, then
       `FinitePlanarStraightLineOuterComponentTheorem` and the W32 exact
-      topology target.  Current local focus: the open-edge local exterior-side
-      patch feeding `InteriorEdgeOpenSegmentLocalExteriorSideComponentSource`;
-      attempted fresh worker delegation is currently blocked by the global
-      agent thread limit after stale recorded agents were pruned/not found.
+      topology target.  Current focus: prove the actual raw face-orbit source
+      rows: raw dart-edge frontier, raw-tail coverage of the unbounded frontier
+      carrier, pointwise actual local-sector rows, and repeated-tail separation
+      rows for no-cut injectivity.
+      New checked support rows integrated by Codex-main:
+      `FinitePlaneDrawing.segmentPoint_eq_affineLineMap`,
+      `FinitePlaneDrawing.closedSegment_subset_affineSpan_pair`,
+      `FinitePlaneDrawing.edgeNormalCoord_segmentPoint_eq_zero`,
+      `FinitePlaneDrawing.edgeNormalCoord_swap`,
+      `FinitePlaneDrawing.edgeNormalCoord_normalOffsetPoint`,
+      `FinitePlaneDrawing.edge_direction_sq_sum_pos`,
+      `FinitePlaneDrawing.edgeNormalCoord_normalOffsetPoint_pos_of_zero_of_pos_of_ne`,
+      `FinitePlaneDrawing.mem_affineSpan_pair_of_edgeNormalCoord_eq_zero_of_ne`,
+      `FinitePlaneDrawing.exists_ball_inter_edgeNormalCoord_zero_subset_closedSegment_of_inOpenSegment_of_ne`,
+      `FinitePlaneDrawing.convex_edgePositiveSideBall`,
+      `FinitePlaneDrawing.isPreconnected_edgePositiveSideBall`,
+      `FinitePlaneDrawing.mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero`,
+      `FinitePlaneDrawing.mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero_of_mem_ball`,
+      `FinitePlaneDrawing.sSameSide_ball_subset_drawingComplement_of_local_closedSegment`,
+      `FinitePlaneDrawing.edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment`,
+      `FinitePlaneDrawing.edgePositiveSideBall_swap_subset_drawingComplement_of_local_closedSegment`,
+      `ExteriorComponentTopology.preconnected_subset_unboundedExterior_of_subset_drawingComplement_of_mem`,
+      `ExteriorComponentTopology.exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_point`,
+      `ExteriorComponentTopology.exists_exterior_point_in_positive_or_swapped_sideBall_of_frontier_edge_point`,
+      `ExteriorComponentTopology.fixed_side_exterior_points_of_positive_or_swapped_sideBall`,
+      `ExteriorComponentTopology.fixed_side_exterior_points_of_frontier_edge_point`,
+      `ExteriorComponentTopology.relative_ball_closure_of_frontier_edge_point`,
+      `ExteriorComponentTopology.interiorRelativeBallClosureRow_of_frontier_edge_point`,
+      `ExteriorComponentTopology.interiorEdgeNearbyExteriorPointSource_of_frontier_edge_point`,
+      `ExteriorComponentTopology.interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point`,
+      `ExteriorComponentTopology.interiorClosureLocusRelativeOpenSource_of_frontier_edge_point`,
+      `ExteriorComponentTopology.S2_agent_frontier_preconnected_source_route_rawFaceSuccOrbit_of_frontier_edge_point`,
+      `ExteriorComponentTopology.S2_agent_frontier_cover_to_connected_carrier_integration_of_frontier_edge_point`,
+      `ExteriorComponentTopology.rawFaceSuccOrbitActualExteriorArcSeparationRows_of_dart_edge_frontier_pairRows`,
+      `ExteriorComponentTopology.S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source`,
+      `ExteriorComponentTopology.S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source_no_edgeRows`,
+      `ExteriorComponentTopology.S2_agent_selected_seed_dart_edge_frontier_of_actualBoundaryRows`,
+      `ExteriorComponentTopology.S2_agent_selected_seed_raw_edge_openSegment_frontier_of_actualBoundaryRows`,
+      `ExteriorComponentTopology.S2_agent_selected_seed_tail_coverage_of_actualBoundaryRows_sectorRows`,
+      `ExteriorComponentTopology.S2_agent_rawExteriorFaceWalk_tail_injective_of_actualArcRows`,
+      `ExteriorComponentTopology.S2_agent_rawExteriorFaceWalk_unitDistanceCycleBoundary_of_noCut`,
+      `ExteriorComponentTopology.S2_agent_actualBoundaryCycleRows_of_rawExteriorFaceWalk`,
+      `ExteriorComponentTopology.actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbitSourceRows`,
+      `ExteriorComponentTopology.actualBoundaryCycleFrontierEquivalenceRows_of_exists_rawFaceSuccOrbit_sourceRows`,
+      `ExteriorComponentTopology.actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbit_inputRows`,
+      `ExteriorComponentTopology.RawFaceSuccOrbitRepeatedTailExteriorCutRows`,
+      `ExteriorComponentTopology.rawFaceSuccOrbit_tail_injective_of_repeatedTailExteriorCutRows`,
+      `ExteriorComponentTopology.localSectorRows_of_boundary_frontier_incident_edge_exterior_angular_sector`,
+      `ExteriorComponentTopology.interiorRelativeBallClosureRow_of_fixed_side_halfballs`,
+      `ExteriorComponentTopology.interior_frontier_edge_carrier_membership_source_of_fixed_side_halfballs`,
+      `ExteriorComponentTopology.boundary_frontier_openSegment_relativeClosurePropagation_of_fixed_side_halfballs`,
+      `ExteriorComponentTopology.boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular`,
+      `ExteriorComponentTopology.S2_agent_local_exterior_point_sector_source_of_incident_edge_angular`,
+      `ExteriorComponentTopology.boundary_frontier_openSegment_local_exterior_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness`,
+      `ExteriorComponentTopology.boundary_frontier_openSegment_local_exterior_sector_of_boundaryVertexExteriorSectorRows`,
+      `ExteriorComponentTopology.S2_agent_local_exterior_point_sector_source_of_boundaryCycleIncidentFrontierEdgeCompleteness`,
+      `ExteriorComponentTopology.exists_local_frontier_germ_two_of_vertex_star_isolation_openSegment_local_exterior_sector`,
+      `ExteriorComponentTopology.boundaryVertexExteriorSectorRowsAt_of_boundaryVertexAngularNoBetweenRows_openSegment_local_exterior_sector`,
+      `ExteriorComponentTopology.boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_openSegment_local_exterior_sector`,
+      `ExteriorComponentTopology.boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_incident_edge_angular`,
+      `ExteriorComponentTopology.boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_boundaryCycleIncidentFrontierEdgeCompleteness`,
+      `ExteriorComponentTopology.S2_agent_actual_exterior_sector_input_source_2_from_openSegment_local_exterior_sector`,
+      `ExteriorComponentTopology.S2_agent_actual_exterior_sector_input_source_2_from_incident_edge_angular`,
+      `ExteriorComponentTopology.S2_agent_actual_exterior_sector_input_source_2_from_boundaryCycleIncidentFrontierEdgeCompleteness`,
+      `ExteriorComponentTopology.S2_agent_actual_exterior_sector_input_source_2_from_faceSuccRows_orientation_boundary_cycle_edge_mem_boundaryCycleIncidentFrontierEdgeCompleteness`,
+      `ExteriorComponentTopology.interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_preconnected_drawingComplement_patch`,
+      and
+      `ExteriorComponentTopology.exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_points_of_edge`,
+      plus the source reducer
+      `ExteriorComponentTopology.interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_positiveSideBall_exterior_points`.
+      Current local-side result: the relative closure row and exact interior
+      frontier-edge carrier membership source are now checked from the
+      fixed-side half-ball argument.  Remaining S2 obligations are no longer
+      the local edge half-ball source; the local open-segment sector route is
+      now reduced to `BoundaryFrontierIncidentEdgeExteriorAngularSector`.
+      The W3 point-sector path no longer needs callers to carry
+      `BoundaryFrontierOpenSegmentRelativeClosurePropagation`; fixed-side
+      half-balls discharge that internally, leaving the selected incident-edge
+      angular row plus the explicit endpoint incident-only row.
+      For the primitive boundary-sector route, the endpoint row is no longer
+      needed: the new open-segment vertex-star theorem shrinks locally around
+      the boundary vertex and converts `BoundaryFrontierOpenSegmentLocalExteriorSector`
+      directly into the local two-germ row used by
+      `BoundaryVertexExteriorSectorRowsAt`, and the bundled
+      `ActualExteriorSectorInputSourceRows` now has a direct open-segment /
+      incident-edge-angular source route.
+      Codex-main added and checked
+      `ExteriorComponentTopology.S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_frontier_edge_point`,
+      which sources frontier preconnectedness from selected raw-orbit carrier
+      edge coverage and sources raw nonbacktracking from local sectors.  This
+      was sharpened with
+      `ExteriorComponentTopology.rawFaceSuccOrbit_edge_coverage_of_tail_coverage_localSectorRows`
+      and
+      `ExteriorComponentTopology.S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_tailCoverage`,
+      so carrier edge coverage is now derived from raw-tail coverage plus
+      local sectors.  A further checked reducer,
+      `ExteriorComponentTopology.S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_carrierConnected`,
+      derives raw-tail coverage from connectedness of the actual
+      unbounded-frontier carrier.  Codex-main then checked
+      `ExteriorComponentTopology.rawFaceSuccOrbit_dart_edge_openSegment_frontier_of_actualExteriorArcSeparationRows`
+      and
+      `ExteriorComponentTopology.S2_agent_input_s2_assembly_gap_reducer_actualArcRows_of_carrierConnected`,
+      so the actual exterior-arc package now supplies the selected dart-edge
+      frontier row itself.  This actual-arc route is reduced to local sectors,
+      honest carrier connectedness, and the orbit-level actual exterior arc
+      package; the minimal repeated-tail exterior cut row remains the preferred
+      replacement target if the stronger actual-arc cover row is later
+      weakened.
+      Continue with raw face-successor selected-edge coverage of
+      `unboundedFrontierEdgeSet C inputs`, actual-boundary/local-sector rows,
+      and repeated-tail separation rows for no-cut injectivity.  Latest
+      targeted builds passed for
+      `Swanepoel/FinitePlaneDrawing.lean` and
+      `Swanepoel/ExteriorComponentTopology.lean`; latest targeted
+      `Swanepoel/FaceBoundaryTopologySourceW32.lean` build also passed; latest module build
+      `lake build ErdosProblems1066.Swanepoel.ExteriorComponentTopology`
+      also passed.  The modified Lean forbidden scan for axioms/constants/
+      sorries/admits/unsafe/opaque/debug commands is clean for the current
+      S2 owner files.  Latest S2
+      subagent dispatches for selected dart-edge frontier, incident angular
+      rows, and repeated-tail arcs completed and were pruned; their routes are
+      recorded below and incorporated where checked.  A fresh dynamic
+      explorer dispatch for raw face-successor coverage was attempted by
+      Codex-main and rejected by the global agent-thread cap, so no new
+      subagent claim is live from that attempt.  New subagents may be
+      dispatched only for one residual source row above, with a separate
+      workboard claim before dispatch once capacity reopens.
       Next gate: targeted
       `ExteriorComponentTopology.lean` and
       `FaceBoundaryTopologySourceW32.lean` builds before root import/root
       build work.
-    - Claim: `S2-agent-local-patch-construction-now`.  Owner:
-      `019e429c-904c-75b1-8081-c765b50e8fa7` / Darwin the 2nd.
-      Role: theorem prover.  Scope: read-only
+    - Claim: `S2-agent-dart-edge-frontier-source`.  Owner:
+      `019e42e0-4268-74f1-8da4-314aea78a146` / Averroes the 3rd.  Role:
+      route mapper.  Scope: read-only
       `Swanepoel/ExteriorComponentTopology.lean`,
-      `Swanepoel/FinitePlaneDrawing.lean`, and Mathlib side/path/component APIs.
-      Status: active.  Handoff: a Lean-proofable construction route for the
-      preconnected local exterior-side patch `S` consumed by
-      `interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_preconnected_patch`.
-      Next gate: exact theorem skeleton integrated or claim moved to superseded
-      history.
+      `Swanepoel/FinitePlaneDrawing.lean`, and
+      `Swanepoel/GeometricRotationSystem.lean`.  Status: active.  Handoff:
+      a non-circular proof route for the selected raw face-successor orbit
+      per-dart theorem that every dart open segment is on the unbounded
+      exterior frontier.  Next gate: integrate exact theorem skeleton or move
+      to superseded history.
+    - Claim: `S2-agent-carrier-connected-source`.  Owner:
+      `019e42e0-42b3-7db0-a1eb-720db41cbd29` / Avicenna the 3rd.  Role:
+      source-row verifier.  Scope: read-only
+      `Swanepoel/ExteriorComponentTopology.lean` and
+      `Swanepoel/FinitePlaneDrawing.lean`.  Status: active.  Handoff: verify
+      the shortest route from existing frontier preconnectedness/local-sector
+      rows to connectedness of `unboundedFrontierCarrierGraph C inputs`, and
+      identify any remaining theorem that must be proved rather than assumed.
+      Next gate: route incorporated or claim moved to superseded history.
+    - Claim: `S2-agent-repeated-tail-cut-source`.  Owner:
+      `019e42e0-4301-7072-b1c3-6b912c86ccfa` / Kierkegaard the 3rd.  Role:
+      theorem prover.  Scope: read-only
+      `Swanepoel/ExteriorComponentTopology.lean` and graph reachability APIs.
+      Status: active.  Handoff: exact proof obligation for
+      `RawFaceSuccOrbitRepeatedTailExteriorCutRows` from a repeated selected
+      exterior raw face orbit tail, avoiding the obsolete actual-arc cover row.
+      Next gate: exact theorem skeleton integrated or claim moved to
+      superseded history.
   - Superseded active-claim history (closed/pruned or stale; not live):
     Retained for audit trail until the next full workboard cleanup.
+    Closed completed/pruned claim:
+    `S2-agent-raw-face-orbit-source`
+    (`019e42d9-4e45-7da1-828d-8aecb0e814c0`).  Result: non-circular raw route
+    starts from `unboundedExteriorFrontierSeed_nonempty` and
+    `exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localSectorRows`;
+    the smallest missing theorem is the per-dart source
+    `S2_agent_raw_face_orbit_dart_edge_frontier_source`, which says every
+    open segment of every dart in the selected geometric raw face-successor
+    orbit is on the unbounded exterior frontier.  The checked converter
+    `rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier`
+    then gives consecutive-tail open-segment frontier rows.  Verification:
+    route checked read-only; no file edit needed.
+    Closed completed/pruned claim:
+    `S2-agent-input-only-source-reducer`
+    (`019e42d9-4df1-77a2-98d3-9f090b22079d`).  Result: smallest non-circular
+    input-only source remains
+    `ActualBoundaryCycleFrontierEquivalenceRows.BoundaryCycleEdgeMemSource C inputs`,
+    equivalently a concrete `UnitDistanceCycleBoundary` whose vertices are
+    exactly graph vertices on the unbounded exterior frontier and whose
+    consecutive sides are in `unboundedFrontierEdgeSet`; cyclic rows derived
+    from downstream `ActualBoundaryCycleFrontierEquivalenceRows` or
+    `UnboundedExteriorFrontierCycleRows` are circular as source.  Codex-main
+    added raw-source erasers to display the same actual boundary-cycle row
+    from non-circular raw face-orbit source rows.  Verification: targeted
+    `ExteriorComponentTopology.lean` build passed.
+    Closed completed/pruned claim:
+    `S2-agent-repeated-tail-source-check`
+    (`019e42d9-4e92-7733-86e8-627222cb5b4f`).  Result:
+    `RawFaceSuccOrbitActualExteriorArcSeparationRows` is too strong as a live
+    source because its pair row covers all non-cut graph vertices by raw arc
+    images; interior vertices break that.  Codex-main added the replacement
+    `RawFaceSuccOrbitRepeatedTailExteriorCutRows` and
+    `rawFaceSuccOrbit_tail_injective_of_repeatedTailExteriorCutRows`, which
+    only ask for two arc-side witnesses and unreachable-after-delete, then
+    erase through `repeatedExteriorBoundarySeparationRows_of_unreachable_after_delete`.
+    Verification: targeted `ExteriorComponentTopology.lean` build passed.
+    Closed completed/pruned claim:
+    `S2-agent-actual-boundary-cycle-existence-live`
+    (`019e42d1-2fab-7c81-abd1-9e6a6f50ea7f`).  Result: the input-only final
+    theorem shape is
+    `actualBoundaryCycleFrontierEquivalenceRows_of_finitePlanarOuterComponentInputs`;
+    it should construct `ActualBoundaryCycleFrontierEquivalenceRows C inputs`
+    and feed
+    `unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows`
+    and
+    `finitePlanarStraightLineOuterComponentTheorem_of_actualBoundaryCycleFrontierEquivalenceRows`.
+    Verification: route checked against existing reducers; no file edit needed.
+    Closed completed/pruned claim:
+    `S2-agent-face-walk-simple-cycle-live`
+    (`019e42d1-3000-7871-9b53-1688e911746c`).  Result: raw exterior face walk
+    proof split recorded: selected raw orbit from a frontier seed, dart-edge
+    frontier, repeated-tail actual arc rows, no-cut tail injectivity, and
+    `ActualBoundaryCycleFrontierEquivalenceRows.ofRawFaceSuccOrbitBoundaryRows`.
+    Codex-main added the checked selected-seed tail-coverage adapter
+    `S2_agent_selected_seed_tail_coverage_of_actualBoundaryRows_sectorRows`.
+    Verification: targeted `ExteriorComponentTopology.lean` build passed after
+    integration.
+    Closed completed/pruned claim:
+    `S2-agent-selected-dart-edge-frontier-live`
+    (`019e42cb-6f4a-77a0-8b31-a77e98c19d6b`).  Result: route incorporated;
+    selected boundary-oriented raw starts from
+    `ActualBoundaryCycleFrontierEquivalenceRows` now feed checked dart-edge
+    and consecutive raw-edge frontier rows via
+    `S2_agent_selected_seed_dart_edge_frontier_of_actualBoundaryRows` and
+    `S2_agent_selected_seed_raw_edge_openSegment_frontier_of_actualBoundaryRows`.
+    Verification: targeted `ExteriorComponentTopology.lean` build passed.
+    Closed completed/pruned claim:
+    `S2-agent-boundary-incident-angular-live`
+    (`019e42cb-6f9b-7231-a37a-0e1033e0cb56`).  Result: no new source package
+    needed; the minimal live source remains
+    `BoundaryCycleIncidentFrontierEdgeCompleteness inputs B` or equivalently,
+    under angular no-between rows,
+    `BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B`.
+    Verification: route checked against existing reducers; no file edit needed.
+    Closed completed/pruned claim:
+    `S2-agent-repeated-tail-arc-live`
+    (`019e42cb-6fea-7e51-b675-a3eb8ed88376`).  Result: pair-level repeated
+    tail source isolated as
+    `RawFaceSuccOrbitRepeatedTailActualExteriorArcRows (inputs := inputs) O i j`;
+    existing reducers then feed `RawFaceSuccOrbitActualExteriorArcSeparationRows`
+    and no-cut tail injectivity.  Verification: route checked against existing
+    reducers; no file edit needed beyond the already checked eraser.
+    Closed completed/pruned claim:
+    `S2-agent-raw-orbit-frontier-source-now`
+    (`019e42c3-92c2-73d3-bb83-bedf650df81a`).  Result: route incorporated;
+    raw-tail coverage is checked once the selected raw dart-edge frontier row
+    exists, via
+    `S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source`.
+    Verification: targeted `ExteriorComponentTopology.lean` build passed.
+    Closed completed/pruned claim:
+    `S2-agent-local-sector-source-now`
+    (`019e42c3-9315-7351-92ac-c38252414fac`).  Result: route incorporated;
+    local-sector rows now reduce through
+    `localSectorRows_of_boundary_frontier_incident_edge_exterior_angular_sector`;
+    the genuine remaining local-sector source is
+    `BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B`.  Verification:
+    targeted `ExteriorComponentTopology.lean` build passed.
+    Closed completed/pruned claim:
+    `S2-agent-repeat-tail-source-now`
+    (`019e42c3-9365-7a23-88f0-663b7d44e533`).  Result: route incorporated;
+    no-cut injection uses
+    `RawFaceSuccOrbitActualExteriorArcSeparationRows` through
+    `S2_agent_no_cut_repeated_tail_source_from_actualExteriorArcRows`, and the
+    new eraser
+    `rawFaceSuccOrbitActualExteriorArcSeparationRows_of_dart_edge_frontier_pairRows`
+    leaves only pair-level repeated-tail arc separation as source work.
+    Verification: targeted `ExteriorComponentTopology.lean` build passed.
+    Closed completed/pruned claim:
+    `S2-local-side-halfball-route`
+    (`019e42b5-2afc-75f2-a26b-df96c529d25b`).  Result: route incorporated;
+    Codex-main added the pointwise frontier-edge side/closure row and named
+    erasers to `InteriorEdgeNearbyExteriorPointSource`,
+    `InteriorFrontierEdgeCarrierMembershipSource`, and
+    `InteriorClosureLocusRelativeOpenSource`.  Verification: targeted
+    `ExteriorComponentTopology.lean` build passed.
+    Closed completed/pruned claim:
+    `S2-exterior-face-carrier-route`
+    (`019e42b5-2b4a-7233-a7c4-923c1779b857`).  Result: confirmed the largest
+    remaining same-`B` source row is
+    `BoundaryFrontierClosedSegmentLocalExteriorAngularSector inputs B`; the
+    active route records this as actual local-sector/raw-face-orbit source
+    work rather than a new facade.  Verification: reflected in the active
+    workboard and owner-file build passed.
+    Closed completed/pruned claim:
+    `S2-nocut-simple-orbit-route`
+    (`019e42b5-2b9a-7912-b4e2-7f9de41feaae`).  Result: confirmed the no-cut
+    route should pass through repeated-tail separation rows to
+    `inputs.noCutVertex`; remaining proof work is source production for those
+    repeated-tail rows, not another no-cut wrapper.  Verification: reflected in
+    the active workboard and owner-file build passed.
+    Closed completed/pruned claim:
+    `S2-agent-side-choice-at-frontier-now`
+    (`019e42ae-59ba-73d0-841c-353a8a088c51`).  Result: provided the source
+    theorem shape
+    `exists_edgePositiveSideBall_exterior_points_or_swap_of_inOpenSegment_frontier`;
+    the proof should use frontier closure, split nearby exterior witnesses by
+    signed normal coordinate, perturb any zero-normal witness inside the open
+    exterior, and use `closure_union` to select one side uniformly.  No edits by
+    agent.
+    Closed completed/pruned claim:
+    `S2-agent-side-propagation-along-edge-now`
+    (`019e42ae-5a09-7a73-a6f8-9ed7409e3428`).  Result: supplied a
+    Lean-ready clopen-locus theorem
+    `openSegment_positiveSideBall_exterior_points_of_locus_isOpen`: if the
+    positive-side exterior-point locus is relatively open in the open edge and
+    nonempty at one frontier point, connectedness of the open segment propagates
+    the same side to every open-edge point.  No edits by agent.
+    Closed completed/pruned claim:
+    `S2-agent-half-ball-api-now`
+    (`019e42a1-182f-7460-8fe0-3f3c11f2ef30`).  Result: provided the
+    Lean-ready local side-patch API around `edgeSideFunctional`,
+    `positiveSideHalfBall`, continuity, linearity, open/convex/preconnected
+    rows, and local drawing isolation references.  Codex-main used the route to
+    implement the symmetric `edgeNormalCoord`/`edgeSideBall` helper layer in
+    `FinitePlaneDrawing.lean`.  No edits by agent.
+    Closed completed/pruned claim:
+    `S2-agent-post-local-sector-route-now`
+    (`019e42a1-1ebb-7671-8a35-1c4a3eb0b974`).  Result: after the local
+    exterior-side row, the exact next source order is
+    `InteriorEdgeLocalExteriorSideComponentSource`, then
+    `InteriorEdgeNearbyExteriorPointSource`, then local-sector rows plus raw
+    face-successor selected-edge coverage to prove frontier preconnectedness,
+    then
+    `S2_agent_input_s2_assembly_gap_reducer_frontier_nearbyTailHitActualArcRows`
+    with `RawFaceSuccOrbitActualExteriorArcSeparationRows` to obtain
+    `UnboundedExteriorFrontierCycleRows C inputs`.  No edits by agent.
+    Closed completed/pruned claim:
+    `S2-agent-component-eraser-chain-now`
+    (`019e42a1-1e65-7cb2-8427-a968e52b551c`).  Result: the half-ball patch
+    should feed exactly
+    `interior_frontier_edge_carrier_membership_source_of_preconnected_patch`;
+    from there the existing chain is
+    `boundary_frontier_openSegment_relativeClosurePropagation_of_interior_edge_mem`,
+    then the local-sector wrappers
+    `boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular_and_relative_closure`
+    or `S2_agent_local_exterior_point_sector_source`, and finally
+    `localSectorRows_of_vertex_star_isolation_local_exterior_sector` once the
+    independent angular/completeness rows are available.  No edits by agent.
+    Closed completed/pruned claim:
+    `S2-agent-local-patch-construction-now`
+    (`019e429c-904c-75b1-8081-c765b50e8fa7`).  Result: the shortest
+    Lean-proofable local patch route is a same-side half-ball construction
+    along an isolated open edge.  Add/prove `edgeNormalCoord`,
+    `edgeSideBall`, its open/convex/preconnected/closure rows, a local
+    drawing-complement side-ball containment row from the existing finite
+    edge-isolation theorem, and a clopen propagation row along the connected
+    open segment.  This feeds the already checked
+    `interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_preconnected_patch`
+    and then
+    `interior_frontier_edge_carrier_membership_source_of_preconnected_patch`.
+    No edits by agent; claim closed after read-only route handoff.
     Closed completed/pruned claim:
     `S2-agent-raw-package-residual-order-now`
     (`019e429c-909c-7582-956c-209da5f89a7e`).  Result: the direct residual

@@ -1987,6 +1987,618 @@ theorem interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_preconnected_
       (hSpre.subset_connectedComponentIn hyS hSsubset)
       hzClosure
 
+/-- Package a positive normal side-ball as the preconnected
+drawing-complement patch needed by the local open-edge source.
+
+The remaining geometric/topological choice is only the exterior witness
+`yExterior`: once a point of the side-ball is known to lie in the selected
+unbounded exterior component, the rest is supplied by the finite-drawing
+side-ball lemmas. -/
+theorem exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {a b z y : PlanarInterface.Point} {r ε : Real}
+    (hzLine : edgeNormalCoord a b z = 0)
+    (hab : a ≠ b)
+    (hrpos : 0 < r)
+    (hrle : r ≤ ε)
+    (hlocal :
+      Metric.ball z ε ∩ embeddedEdgeSet C ⊆ closedSegment a b)
+    (hySide : y ∈ edgePositiveSideBall a b z r)
+    (hyExterior : y ∈ (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun S : Set PlanarInterface.Point =>
+      Exists fun y : PlanarInterface.Point =>
+        IsPreconnected S ∧
+          y ∈ S ∧
+            y ∈ (unboundedExteriorComponentRows C inputs).exterior ∧
+              S ⊆ drawingComplement C ∧
+                S ⊆ Metric.ball z r ∧
+                  z ∈ closure S := by
+  refine ⟨edgePositiveSideBall a b z r, y, ?_, hySide, hyExterior, ?_, ?_, ?_⟩
+  · exact isPreconnected_edgePositiveSideBall a b z r
+  · exact
+      edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment
+        (C := C) (a := a) (b := b) (z := z) (r := r) (ε := ε)
+        hrle hlocal
+  · intro w hw
+    exact hw.2
+  · exact
+      mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero
+        (a := a) (b := b) (z := z) (r := r)
+        hzLine hab hrpos
+
+/-- Frontier points supply an exterior witness on one of the two strict
+normal sides of a locally isolated edge-line.
+
+The residual `hline_local` is the concrete local-line fact still needed from
+the finite drawing layer: near an interior edge point, zero signed normal
+coordinate means the point lies on the selected closed segment.  With that,
+frontier closure gives a nearby exterior point; it cannot have zero normal
+coordinate because the closed segment is part of the embedded drawing. -/
+theorem exists_exterior_point_in_positive_or_swapped_sideBall_of_frontier_line_local
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {a b p : PlanarInterface.Point} {r ε : Real}
+    (hr : 0 < r)
+    (hε : 0 < ε)
+    (hpFrontier :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hline_local :
+      Metric.ball p ε ∩ {q : PlanarInterface.Point |
+        edgeNormalCoord a b q = 0} ⊆ closedSegment a b)
+    (hsegment_draw :
+      closedSegment a b ⊆ embeddedEdgeSet C) :
+    Exists fun y : PlanarInterface.Point =>
+      y ∈ (unboundedExteriorComponentRows C inputs).exterior ∧
+        (y ∈ edgePositiveSideBall a b p r ∨
+          y ∈ edgePositiveSideBall b a p r) := by
+  have hpClosure :
+      p ∈ closure (unboundedExteriorComponentRows C inputs).exterior :=
+    frontier_subset_closure hpFrontier
+  rw [Metric.mem_closure_iff] at hpClosure
+  rcases hpClosure (min ε r) (lt_min hε hr) with
+    ⟨y, hyExterior, hydist⟩
+  have hydist_eps : dist y p < ε := by
+    simpa [dist_comm] using lt_of_lt_of_le hydist (min_le_left ε r)
+  have hydist_r : dist y p < r := by
+    simpa [dist_comm] using lt_of_lt_of_le hydist (min_le_right ε r)
+  have hyball_ε : y ∈ Metric.ball p ε := by
+    simpa [Metric.mem_ball] using hydist_eps
+  have hyball_r : y ∈ Metric.ball p r := by
+    simpa [Metric.mem_ball] using hydist_r
+  have hy_not_draw : y ∉ embeddedEdgeSet C := by
+    simpa [drawingComplement] using
+      (unboundedExteriorComponentRows C inputs).exterior_subset_drawingComplement
+        hyExterior
+  have hnormal_ne : edgeNormalCoord a b y ≠ 0 := by
+    intro hzero
+    have hyseg : y ∈ closedSegment a b :=
+      hline_local ⟨hyball_ε, hzero⟩
+    exact hy_not_draw (hsegment_draw hyseg)
+  rcases lt_trichotomy (edgeNormalCoord a b y) 0 with hneg | hzero | hpos
+  · refine ⟨y, hyExterior, Or.inr ?_⟩
+    have hposba : 0 < edgeNormalCoord b a y := by
+      have hswap : edgeNormalCoord b a y = - edgeNormalCoord a b y :=
+        edgeNormalCoord_swap a b y
+      rw [hswap]
+      exact neg_pos.mpr hneg
+    exact ⟨hposba, hyball_r⟩
+  · exact False.elim (hnormal_ne hzero)
+  · exact ⟨y, hyExterior, Or.inl ⟨hpos, hyball_r⟩⟩
+
+/-- Canonical-edge version of
+`exists_exterior_point_in_positive_or_swapped_sideBall_of_frontier_line_local`.
+
+The finite drawing layer supplies the local line-to-closed-segment row around
+the chosen open edge point, and the canonical edge itself supplies the
+closed-segment-to-drawing row. -/
+theorem exists_exterior_point_in_positive_or_swapped_sideBall_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point} {r : Real}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpEdge :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hpFrontier :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hr : 0 < r) :
+    Exists fun y : PlanarInterface.Point =>
+      y ∈ (unboundedExteriorComponentRows C inputs).exterior ∧
+        (y ∈ edgePositiveSideBall
+            ((canonicalGraph C).point e.1)
+            ((canonicalGraph C).point e.2) p r ∨
+          y ∈ edgePositiveSideBall
+            ((canonicalGraph C).point e.2)
+            ((canonicalGraph C).point e.1) p r) := by
+  let a : PlanarInterface.Point := (canonicalGraph C).point e.1
+  let b : PlanarInterface.Point := (canonicalGraph C).point e.2
+  have hab : a ≠ b := by
+    simpa [a, b] using canonical_edge_point_ne_of_mem_edgeSet he
+  rcases
+      exists_ball_inter_edgeNormalCoord_zero_subset_closedSegment_of_inOpenSegment_of_ne
+        (p := p) (a := a) (b := b) hab (by simpa [a, b] using hpEdge) with
+    ⟨ε, hεpos, hline_local⟩
+  exact
+    exists_exterior_point_in_positive_or_swapped_sideBall_of_frontier_line_local
+      (C := C) (inputs := inputs) (a := a) (b := b) (p := p)
+      (r := r) (ε := ε) hr hεpos hpFrontier
+      hline_local
+      (by
+        intro q hq
+        exact
+          closedSegment_subset_embeddedEdgeSet_of_adj
+            (C := C) (i := e.1) (j := e.2) (Or.inl he) (by
+              simpa [a, b] using hq))
+
+/-- A pointwise "one of the two sides" exterior source has a fixed side
+accumulating at all scales.  This is a compact classical pigeonhole step for
+the two open half-balls. -/
+theorem fixed_side_exterior_points_of_positive_or_swapped_sideBall
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {a b p : PlanarInterface.Point}
+    (h :
+      forall r : Real,
+        0 < r ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ (unboundedExteriorComponentRows C inputs).exterior ∧
+              (y ∈ edgePositiveSideBall a b p r ∨
+                y ∈ edgePositiveSideBall b a p r)) :
+    (forall r : Real,
+      0 < r ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ edgePositiveSideBall a b p r ∧
+            y ∈ (unboundedExteriorComponentRows C inputs).exterior) ∨
+    (forall r : Real,
+      0 < r ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ edgePositiveSideBall b a p r ∧
+            y ∈ (unboundedExteriorComponentRows C inputs).exterior) := by
+  classical
+  by_cases hpos :
+      forall r : Real,
+        0 < r ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ edgePositiveSideBall a b p r ∧
+              y ∈ (unboundedExteriorComponentRows C inputs).exterior
+  · exact Or.inl hpos
+  · push_neg at hpos
+    rcases hpos with ⟨r0, hr0pos, hno_pos⟩
+    refine Or.inr ?_
+    intro r hr
+    let ρ : Real := min r r0
+    have hρpos : 0 < ρ := lt_min hr hr0pos
+    rcases h ρ hρpos with ⟨y, hyExterior, hySide⟩
+    rcases hySide with hyPos | hyNeg
+    · have hyPos_r0 : y ∈ edgePositiveSideBall a b p r0 := by
+        exact ⟨hyPos.1, Metric.ball_subset_ball (min_le_right r r0) hyPos.2⟩
+      exact False.elim (hno_pos y hyPos_r0 hyExterior)
+    · refine ⟨y, ?_, hyExterior⟩
+      exact ⟨hyNeg.1, Metric.ball_subset_ball (min_le_left r r0) hyNeg.2⟩
+
+/-- At a frontier point in the relative interior of a canonical edge, one
+fixed normal side of that edge contains exterior points at every scale. -/
+theorem fixed_side_exterior_points_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpEdge :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hpFrontier :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    (forall r : Real,
+      0 < r ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ edgePositiveSideBall
+            ((canonicalGraph C).point e.1)
+            ((canonicalGraph C).point e.2) p r ∧
+          y ∈ (unboundedExteriorComponentRows C inputs).exterior) ∨
+    (forall r : Real,
+      0 < r ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ edgePositiveSideBall
+            ((canonicalGraph C).point e.2)
+            ((canonicalGraph C).point e.1) p r ∧
+          y ∈ (unboundedExteriorComponentRows C inputs).exterior) := by
+  exact
+    fixed_side_exterior_points_of_positive_or_swapped_sideBall
+      (C := C) (inputs := inputs)
+      (a := (canonicalGraph C).point e.1)
+      (b := (canonicalGraph C).point e.2) (p := p)
+      (fun ρ hρ => by
+        exact
+          exists_exterior_point_in_positive_or_swapped_sideBall_of_frontier_edge_point
+            (C := C) (inputs := inputs) (e := e) (p := p) (r := ρ)
+            he hpEdge hpFrontier hρ)
+
+/-- A frontier point in an open canonical edge locally propagates exterior
+closure along the same open edge.
+
+The proof chooses the normal side of the edge that contains exterior points
+arbitrarily close to the frontier point.  A sufficiently small same-side ball
+around that point is preconnected, lies in the drawing complement by local edge
+isolation, and therefore lies in the selected unbounded exterior component.
+Points of the same open edge near the frontier point are accumulated by that
+same-side patch. -/
+theorem relative_ball_closure_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpEdge :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hpFrontier :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun r : Real =>
+      0 < r ∧
+        forall z : PlanarInterface.Point,
+          z ∈ Metric.ball p r ->
+          PlanarInterface.InOpenSegment z
+            ((canonicalGraph C).point e.1)
+            ((canonicalGraph C).point e.2) ->
+          z ∈ closure (unboundedExteriorComponentRows C inputs).exterior := by
+  let a : PlanarInterface.Point := (canonicalGraph C).point e.1
+  let b : PlanarInterface.Point := (canonicalGraph C).point e.2
+  have hab : a ≠ b := by
+    simpa [a, b] using canonical_edge_point_ne_of_mem_edgeSet he
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_closedSegment_of_inOpenSegment
+        (C := C) (p := p) (e := e) he hpEdge with
+    ⟨ε, hεpos, hlocal⟩
+  let r : Real := ε / 2
+  have hrpos : 0 < r := half_pos hεpos
+  rcases fixed_side_exterior_points_of_frontier_edge_point
+      (C := C) (inputs := inputs) (e := e) (p := p)
+      he hpEdge hpFrontier with hpos | hneg
+  · rcases hpos ε hεpos with ⟨y0, hy0Side, hy0Exterior⟩
+    let S : Set PlanarInterface.Point := edgePositiveSideBall a b p ε
+    have hSsubsetDraw : S ⊆ drawingComplement C :=
+      edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment
+        (C := C) (a := a) (b := b) (z := p) (r := ε) (ε := ε)
+        le_rfl
+        (by
+          intro q hq
+          exact hlocal hq)
+    have hSsubsetExterior :
+        S ⊆ (unboundedExteriorComponentRows C inputs).exterior :=
+      preconnected_subset_unboundedExterior_of_subset_drawingComplement_of_mem
+        (C := C) (inputs := inputs)
+        (S := S) (y := y0)
+        (isPreconnected_edgePositiveSideBall a b p ε)
+        hSsubsetDraw hy0Side hy0Exterior
+    refine ⟨r, hrpos, ?_⟩
+    intro z hzball hzEdge
+    rw [Metric.mem_closure_iff]
+    intro δ hδpos
+    have hzp_lt : dist z p < r := by
+      simpa [Metric.mem_ball] using hzball
+    have hpz_lt : dist p z < r := by
+      simpa [dist_comm] using hzp_lt
+    have hpz_lt_eps : dist p z < ε := by
+      calc
+        dist p z < r := hpz_lt
+        _ = ε / 2 := rfl
+        _ < ε := half_lt_self hεpos
+    have hmargin_pos : 0 < ε - dist p z := by linarith
+    have hzLine : edgeNormalCoord a b z = 0 :=
+      edgeNormalCoord_eq_zero_of_mem_closedSegment
+        (inOpenSegment_mem_closedSegment (by simpa [a, b] using hzEdge))
+    have hzClosure :
+        z ∈ closure (edgePositiveSideBall a b z δ) :=
+      mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero
+        (a := a) (b := b) (z := z) (r := δ)
+        hzLine hab hδpos
+    rw [Metric.mem_closure_iff] at hzClosure
+    rcases hzClosure (ε - dist p z) hmargin_pos with
+      ⟨y, hySideZ, hyDistZ⟩
+    have hyS : y ∈ S := by
+      refine ⟨hySideZ.1, ?_⟩
+      have htri : dist p y ≤ dist p z + dist z y := dist_triangle p z y
+      have hyzy : dist z y < ε - dist p z := hyDistZ
+      have hdist_py : dist p y < ε := by linarith
+      simpa [dist_comm, Metric.mem_ball] using hdist_py
+    exact ⟨y, hSsubsetExterior hyS, by simpa [dist_comm, Metric.mem_ball] using hySideZ.2⟩
+  · rcases hneg ε hεpos with ⟨y0, hy0Side, hy0Exterior⟩
+    let S : Set PlanarInterface.Point := edgePositiveSideBall b a p ε
+    have hSsubsetDraw : S ⊆ drawingComplement C :=
+      edgePositiveSideBall_swap_subset_drawingComplement_of_local_closedSegment
+        (C := C) (a := a) (b := b) (z := p) (r := ε) (ε := ε)
+        le_rfl
+        (by
+          intro q hq
+          exact hlocal hq)
+    have hSsubsetExterior :
+        S ⊆ (unboundedExteriorComponentRows C inputs).exterior :=
+      preconnected_subset_unboundedExterior_of_subset_drawingComplement_of_mem
+        (C := C) (inputs := inputs)
+        (S := S) (y := y0)
+        (isPreconnected_edgePositiveSideBall b a p ε)
+        hSsubsetDraw hy0Side hy0Exterior
+    refine ⟨r, hrpos, ?_⟩
+    intro z hzball hzEdge
+    rw [Metric.mem_closure_iff]
+    intro δ hδpos
+    have hzp_lt : dist z p < r := by
+      simpa [Metric.mem_ball] using hzball
+    have hpz_lt : dist p z < r := by
+      simpa [dist_comm] using hzp_lt
+    have hpz_lt_eps : dist p z < ε := by
+      calc
+        dist p z < r := hpz_lt
+        _ = ε / 2 := rfl
+        _ < ε := half_lt_self hεpos
+    have hmargin_pos : 0 < ε - dist p z := by linarith
+    have hzLine : edgeNormalCoord a b z = 0 :=
+      edgeNormalCoord_eq_zero_of_mem_closedSegment
+        (inOpenSegment_mem_closedSegment (by simpa [a, b] using hzEdge))
+    have hzLineSwap : edgeNormalCoord b a z = 0 := by
+      rw [edgeNormalCoord_swap, hzLine, neg_zero]
+    have hzClosure :
+        z ∈ closure (edgePositiveSideBall b a z δ) :=
+      mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero
+        (a := b) (b := a) (z := z) (r := δ)
+        hzLineSwap hab.symm hδpos
+    rw [Metric.mem_closure_iff] at hzClosure
+    rcases hzClosure (ε - dist p z) hmargin_pos with
+      ⟨y, hySideZ, hyDistZ⟩
+    have hyS : y ∈ S := by
+      refine ⟨hySideZ.1, ?_⟩
+      have htri : dist p y ≤ dist p z + dist z y := dist_triangle p z y
+      have hyzy : dist z y < ε - dist p z := hyDistZ
+      have hdist_py : dist p y < ε := by linarith
+      simpa [dist_comm, Metric.mem_ball] using hdist_py
+    exact ⟨y, hSsubsetExterior hyS, by simpa [dist_comm, Metric.mem_ball] using hySideZ.2⟩
+
+/-- Edge-local version of
+`exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_point`.
+
+It chooses a radius small enough for the finite drawing to meet the local ball
+only along the selected canonical edge.  The only source input left is a point
+of the selected positive side-ball already known to lie in the unbounded
+exterior component. -/
+theorem exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_points_of_edge
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n} {z : PlanarInterface.Point} {r : Real}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hzEdge :
+      PlanarInterface.InOpenSegment z
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hr : 0 < r)
+    (positiveSideExteriorPoints :
+      forall ρ : Real,
+        0 < ρ ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ edgePositiveSideBall
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2) z ρ ∧
+            y ∈ (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun S : Set PlanarInterface.Point =>
+      Exists fun y : PlanarInterface.Point =>
+        IsPreconnected S ∧
+          y ∈ S ∧
+            y ∈ (unboundedExteriorComponentRows C inputs).exterior ∧
+              S ⊆ drawingComplement C ∧
+                S ⊆ Metric.ball z r ∧
+                  z ∈ closure S := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_closedSegment_of_inOpenSegment
+        (C := C) (p := z) (e := e) he hzEdge with
+    ⟨ε, hεpos, hlocal⟩
+  let ρ : Real := min r ε / 2
+  have hρpos : 0 < ρ := half_pos (lt_min hr hεpos)
+  have hρle_r : ρ ≤ r := by
+    exact le_trans (half_le_self (le_of_lt (lt_min hr hεpos)))
+      (min_le_left r ε)
+  have hρle_ε : ρ ≤ ε := by
+    exact le_trans (half_le_self (le_of_lt (lt_min hr hεpos)))
+      (min_le_right r ε)
+  rcases positiveSideExteriorPoints ρ hρpos with
+    ⟨y, hySide, hyExterior⟩
+  have hzLine :
+      edgeNormalCoord
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2) z = 0 :=
+    edgeNormalCoord_eq_zero_of_mem_closedSegment
+      (inOpenSegment_mem_closedSegment hzEdge)
+  have hab :
+      (canonicalGraph C).point e.1 ≠ (canonicalGraph C).point e.2 :=
+    canonical_edge_point_ne_of_mem_edgeSet he
+  rcases
+      exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_point
+        (C := C) (inputs := inputs)
+        (a := (canonicalGraph C).point e.1)
+        (b := (canonicalGraph C).point e.2)
+        (z := z) (y := y) (r := ρ) (ε := ε)
+        hzLine hab hρpos hρle_ε hlocal hySide hyExterior with
+    ⟨S, y, hSpre, hyS, hyExt, hSdraw, hSballρ, hzClosure⟩
+  refine ⟨S, y, hSpre, hyS, hyExt, hSdraw, ?_, hzClosure⟩
+  intro w hwS
+  exact Metric.ball_subset_ball hρle_r (hSballρ hwS)
+
+/-- Swapped-side version of
+`exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_points_of_edge`.
+
+The selected side-ball is the positive side for the reversed oriented edge,
+which is the negative strict side for the original orientation. -/
+theorem exists_preconnected_drawingComplement_patch_of_swappedPositiveSideBall_exterior_points_of_edge
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n} {z : PlanarInterface.Point} {r : Real}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hzEdge :
+      PlanarInterface.InOpenSegment z
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hr : 0 < r)
+    (swappedSideExteriorPoints :
+      forall ρ : Real,
+        0 < ρ ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ edgePositiveSideBall
+              ((canonicalGraph C).point e.2)
+              ((canonicalGraph C).point e.1) z ρ ∧
+            y ∈ (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun S : Set PlanarInterface.Point =>
+      Exists fun y : PlanarInterface.Point =>
+        IsPreconnected S ∧
+          y ∈ S ∧
+            y ∈ (unboundedExteriorComponentRows C inputs).exterior ∧
+              S ⊆ drawingComplement C ∧
+                S ⊆ Metric.ball z r ∧
+                  z ∈ closure S := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_closedSegment_of_inOpenSegment
+        (C := C) (p := z) (e := e) he hzEdge with
+    ⟨ε, hεpos, hlocal⟩
+  let ρ : Real := min r ε / 2
+  have hρpos : 0 < ρ := half_pos (lt_min hr hεpos)
+  have hρle_r : ρ ≤ r := by
+    exact le_trans (half_le_self (le_of_lt (lt_min hr hεpos)))
+      (min_le_left r ε)
+  have hρle_ε : ρ ≤ ε := by
+    exact le_trans (half_le_self (le_of_lt (lt_min hr hεpos)))
+      (min_le_right r ε)
+  rcases swappedSideExteriorPoints ρ hρpos with
+    ⟨y, hySide, hyExterior⟩
+  have hzLine :
+      edgeNormalCoord
+        ((canonicalGraph C).point e.2)
+        ((canonicalGraph C).point e.1) z = 0 :=
+    edgeNormalCoord_eq_zero_of_mem_closedSegment
+      (by
+        rw [closedSegment_symm]
+        exact inOpenSegment_mem_closedSegment hzEdge)
+  have hab :
+      (canonicalGraph C).point e.2 ≠ (canonicalGraph C).point e.1 :=
+    (canonical_edge_point_ne_of_mem_edgeSet he).symm
+  rcases
+      exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_point
+        (C := C) (inputs := inputs)
+        (a := (canonicalGraph C).point e.2)
+        (b := (canonicalGraph C).point e.1)
+        (z := z) (y := y) (r := ρ) (ε := ε)
+        hzLine hab hρpos hρle_ε
+        (by
+          intro w hw
+          rw [closedSegment_symm]
+          exact hlocal hw)
+        hySide hyExterior with
+    ⟨S, y, hSpre, hyS, hyExt, hSdraw, hSballρ, hzClosure⟩
+  refine ⟨S, y, hSpre, hyS, hyExt, hSdraw, ?_, hzClosure⟩
+  intro w hwS
+  exact Metric.ball_subset_ball hρle_r (hSballρ hwS)
+
+/-- Positive-side exterior-point source for the local open-edge component row.
+
+This is the next S2-facing reduction after the finite drawing has supplied
+local side-balls: if every point of the selected open edge has arbitrarily close
+points of the unbounded exterior on the chosen positive normal side, then the
+open-edge local component source follows. -/
+theorem interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_positiveSideBall_exterior_points
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (positiveSideExteriorPoints :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point},
+        e ∈ (canonicalGraph C).edgeSet ->
+        PlanarInterface.InOpenSegment p
+          ((canonicalGraph C).point e.1)
+          ((canonicalGraph C).point e.2) ->
+        p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          forall z : PlanarInterface.Point,
+            PlanarInterface.InOpenSegment z
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2) ->
+            forall ρ : Real,
+              0 < ρ ->
+                Exists fun y : PlanarInterface.Point =>
+                  y ∈ edgePositiveSideBall
+                    ((canonicalGraph C).point e.1)
+                    ((canonicalGraph C).point e.2) z ρ ∧
+                  y ∈ (unboundedExteriorComponentRows C inputs).exterior) :
+    InteriorEdgeOpenSegmentLocalExteriorSideComponentSource C inputs := by
+  apply
+    interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_preconnected_patch
+  intro e p he hpEdge hpFrontier z hzEdge r hr
+  rcases
+    exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_points_of_edge
+      (C := C) (inputs := inputs) (e := e) (z := z) (r := r)
+      he hzEdge hr
+      (positiveSideExteriorPoints he hpEdge hpFrontier z hzEdge) with
+    ⟨S, y, hSpre, hyS, hyExterior, hSdraw, hSball, hzClosure⟩
+  refine ⟨S, y, hSpre, hyS, ?_, hzClosure⟩
+  exact
+    preconnected_subset_unboundedExterior_inter_ball_of_subset_drawingComplement_inter_ball_of_mem
+      (C := C) (inputs := inputs)
+      hSpre hSdraw hSball hyS hyExterior
+
+/-- Signed-side exterior-point source for the local open-edge component row.
+
+This variant lets the source proof choose either strict side of each oriented
+edge. -/
+theorem interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_signedSideBall_exterior_points
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (signedSideExteriorPoints :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point},
+        e ∈ (canonicalGraph C).edgeSet ->
+        PlanarInterface.InOpenSegment p
+          ((canonicalGraph C).point e.1)
+          ((canonicalGraph C).point e.2) ->
+        p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          forall z : PlanarInterface.Point,
+            PlanarInterface.InOpenSegment z
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2) ->
+              (forall ρ : Real,
+                0 < ρ ->
+                  Exists fun y : PlanarInterface.Point =>
+                    y ∈ edgePositiveSideBall
+                      ((canonicalGraph C).point e.1)
+                      ((canonicalGraph C).point e.2) z ρ ∧
+                    y ∈ (unboundedExteriorComponentRows C inputs).exterior) ∨
+              (forall ρ : Real,
+                0 < ρ ->
+                  Exists fun y : PlanarInterface.Point =>
+                    y ∈ edgePositiveSideBall
+                      ((canonicalGraph C).point e.2)
+                      ((canonicalGraph C).point e.1) z ρ ∧
+                    y ∈ (unboundedExteriorComponentRows C inputs).exterior)) :
+    InteriorEdgeOpenSegmentLocalExteriorSideComponentSource C inputs := by
+  apply
+    interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_preconnected_patch
+  intro e p he hpEdge hpFrontier z hzEdge r hr
+  rcases signedSideExteriorPoints he hpEdge hpFrontier z hzEdge with
+    hside | hside
+  · rcases
+      exists_preconnected_drawingComplement_patch_of_positiveSideBall_exterior_points_of_edge
+        (C := C) (inputs := inputs) (e := e) (z := z) (r := r)
+        he hzEdge hr hside with
+      ⟨S, y, hSpre, hyS, hyExterior, hSdraw, hSball, hzClosure⟩
+    refine ⟨S, y, hSpre, hyS, ?_, hzClosure⟩
+    exact
+      preconnected_subset_unboundedExterior_inter_ball_of_subset_drawingComplement_inter_ball_of_mem
+        (C := C) (inputs := inputs)
+        hSpre hSdraw hSball hyS hyExterior
+  · rcases
+      exists_preconnected_drawingComplement_patch_of_swappedPositiveSideBall_exterior_points_of_edge
+        (C := C) (inputs := inputs) (e := e) (z := z) (r := r)
+        he hzEdge hr hside with
+      ⟨S, y, hSpre, hyS, hyExterior, hSdraw, hSball, hzClosure⟩
+    refine ⟨S, y, hSpre, hyS, ?_, hzClosure⟩
+    exact
+      preconnected_subset_unboundedExterior_inter_ball_of_subset_drawingComplement_inter_ball_of_mem
+        (C := C) (inputs := inputs)
+        hSpre hSdraw hSball hyS hyExterior
+
 /-- Drawing-complement version of
 `interiorEdgeOpenSegmentLocalExteriorSideComponentSource_of_preconnected_patch`.
 
@@ -2071,6 +2683,25 @@ def InteriorRelativeBallClosureRow
                   ((canonicalGraph C).point e.2) ->
                 z ∈ closure (unboundedExteriorComponentRows C inputs).exterior
 
+/-- The local closure-propagation source for an open canonical edge is now a
+consequence of the pointwise frontier edge-side proof. -/
+theorem interiorRelativeBallClosureRow_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    InteriorRelativeBallClosureRow C inputs := by
+  intro e _p he _hpEdge _hpFrontier q hqEdge hqClosure
+  have hqFrontier :
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior := by
+    rw [(unboundedExteriorComponentRows C inputs).exterior_open.frontier_eq]
+    exact
+      ⟨hqClosure,
+        canonicalEdge_inOpenSegment_not_mem_unboundedExterior
+          inputs he hqEdge⟩
+  exact
+    relative_ball_closure_of_frontier_edge_point
+      (C := C) (inputs := inputs) (e := e) (p := q)
+      he hqEdge hqFrontier
+
 /-- Exact local residual source for the interior-edge closure row: a canonical
 edge with one relative-interior point on the unbounded exterior frontier is
 already one of the selected unbounded-frontier carrier edges. -/
@@ -2084,6 +2715,105 @@ def InteriorFrontierEdgeCarrierMembershipSource
       ((canonicalGraph C).point e.2) ->
     p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
       e ∈ unboundedFrontierEdgeSet C inputs
+
+/-- The fixed-side half-ball construction proves the relative closure row
+along any canonical edge that has one interior frontier point.
+
+At a same-edge point already in the exterior closure, the point is on the
+frontier because canonical edge interiors are outside the exterior.  The
+fixed-side theorem then supplies an exterior point in one strict half-ball at
+every scale; local edge isolation makes that half-ball a preconnected subset
+of the drawing complement, hence of the selected unbounded exterior component.
+Nearby points on the edge lie in the closure of that half-ball. -/
+theorem interiorRelativeBallClosureRow_of_fixed_side_halfballs
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    InteriorRelativeBallClosureRow C inputs := by
+  intro e p he hpEdge hpFrontier q hqEdge hqClosure
+  let a : PlanarInterface.Point := (canonicalGraph C).point e.1
+  let b : PlanarInterface.Point := (canonicalGraph C).point e.2
+  have hab : a ≠ b := by
+    simpa [a, b] using canonical_edge_point_ne_of_mem_edgeSet he
+  have hqFrontier :
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior := by
+    rw [(unboundedExteriorComponentRows C inputs).exterior_open.frontier_eq]
+    exact
+      ⟨hqClosure,
+        canonicalEdge_inOpenSegment_not_mem_unboundedExterior
+          inputs he hqEdge⟩
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_closedSegment_of_inOpenSegment
+        (C := C) (p := q) (e := e) he hqEdge with
+    ⟨ε, hεpos, hlocal⟩
+  let r : Real := ε / 2
+  have hrpos : 0 < r := half_pos hεpos
+  refine ⟨r, hrpos, ?_⟩
+  intro z hzball hzEdge
+  have hzballε : z ∈ Metric.ball q ε := by
+    exact
+      Metric.ball_subset_ball
+        (by exact half_le_self (le_of_lt hεpos)) hzball
+  have hzLine :
+      edgeNormalCoord a b z = 0 := by
+    exact
+      edgeNormalCoord_eq_zero_of_mem_closedSegment
+        (by simpa [a, b] using inOpenSegment_mem_closedSegment hzEdge)
+  rcases
+      fixed_side_exterior_points_of_frontier_edge_point
+        (C := C) (inputs := inputs) he hqEdge hqFrontier with
+    hpos | hneg
+  · rcases hpos ε hεpos with ⟨y, hySide, hyExterior⟩
+    have hSdraw :
+        edgePositiveSideBall a b q ε ⊆ drawingComplement C := by
+      exact
+        edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment
+          (C := C) (a := a) (b := b) (z := q) (r := ε) (ε := ε)
+          (le_refl ε) (by simpa [a, b] using hlocal)
+    have hSexterior :
+        edgePositiveSideBall a b q ε ⊆
+          (unboundedExteriorComponentRows C inputs).exterior :=
+      preconnected_subset_unboundedExterior_of_subset_drawingComplement_of_mem
+        (C := C) (inputs := inputs)
+        (S := edgePositiveSideBall a b q ε) (y := y)
+        (isPreconnected_edgePositiveSideBall a b q ε)
+        hSdraw hySide hyExterior
+    exact
+      closure_mono hSexterior
+        (mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero_of_mem_ball
+          (a := a) (b := b) (c := q) (z := z) (r := ε)
+          hzLine hab hzballε)
+  · rcases hneg ε hεpos with ⟨y, hySide, hyExterior⟩
+    have hzLineRev :
+        edgeNormalCoord b a z = 0 := by
+      exact
+        edgeNormalCoord_eq_zero_of_mem_closedSegment
+          (by
+            rw [closedSegment_symm]
+            simpa [a, b] using inOpenSegment_mem_closedSegment hzEdge)
+    have hlocalRev :
+        Metric.ball q ε ∩ embeddedEdgeSet C ⊆ closedSegment b a := by
+      intro w hw
+      rw [closedSegment_symm]
+      exact hlocal hw
+    have hSdraw :
+        edgePositiveSideBall b a q ε ⊆ drawingComplement C := by
+      exact
+        edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment
+          (C := C) (a := b) (b := a) (z := q) (r := ε) (ε := ε)
+          (le_refl ε) hlocalRev
+    have hSexterior :
+        edgePositiveSideBall b a q ε ⊆
+          (unboundedExteriorComponentRows C inputs).exterior :=
+      preconnected_subset_unboundedExterior_of_subset_drawingComplement_of_mem
+        (C := C) (inputs := inputs)
+        (S := edgePositiveSideBall b a q ε) (y := y)
+        (isPreconnected_edgePositiveSideBall b a q ε)
+        hSdraw hySide hyExterior
+    exact
+      closure_mono hSexterior
+        (mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero_of_mem_ball
+          (a := b) (b := a) (c := q) (z := z) (r := ε)
+          hzLineRev hab.symm hzballε)
 
 /-- Local concrete replacement for the interior carrier-membership residual:
 on any canonical edge with one relative-interior point on the unbounded
@@ -2127,6 +2857,16 @@ theorem interior_frontier_edge_carrier_membership_source_of_relative_ball_closur
       (openSegment_closure_locus_isOpen_of_forall_relative_ball_closure
         (C := C) (inputs := inputs) (e := e)
         (interior_relative_ball_closure he hpEdge hpFrontier))
+
+/-- The fixed-side half-ball construction closes the exact local carrier
+membership source for every interior frontier point of a canonical edge. -/
+theorem interior_frontier_edge_carrier_membership_source_of_fixed_side_halfballs
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    InteriorFrontierEdgeCarrierMembershipSource C inputs :=
+  interior_frontier_edge_carrier_membership_source_of_relative_ball_closure
+    (interiorRelativeBallClosureRow_of_fixed_side_halfballs
+      (C := C) (inputs := inputs))
 
 /-- The local relative-openness residual is enough for the exact interior
 carrier-membership source.  What remains is precisely proving
@@ -2364,6 +3104,33 @@ theorem interior_closure_locus_relative_open_iff_relative_ball_closure
   constructor
   · exact interior_relative_ball_closure_of_closure_locus_relative_open
   · exact interior_closure_locus_relative_open_of_relative_ball_closure
+
+/-- The pointwise frontier-edge proof supplies the nearby exterior-points row
+used by older raw-edge frontier reducers. -/
+theorem interiorEdgeNearbyExteriorPointSource_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    InteriorEdgeNearbyExteriorPointSource C inputs :=
+  (interior_edge_nearby_exterior_point_source_iff_relative_ball_closure).2
+    interiorRelativeBallClosureRow_of_frontier_edge_point
+
+/-- The pointwise frontier-edge proof supplies the exact interior edge-carrier
+membership source. -/
+theorem interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    InteriorFrontierEdgeCarrierMembershipSource C inputs :=
+  (interior_frontier_edge_carrier_membership_source_iff_relative_ball_closure).2
+    interiorRelativeBallClosureRow_of_frontier_edge_point
+
+/-- The pointwise frontier-edge proof supplies the relative-openness source for
+the closure locus along every open canonical edge. -/
+theorem interiorClosureLocusRelativeOpenSource_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    InteriorClosureLocusRelativeOpenSource C inputs :=
+  interior_closure_locus_relative_open_of_relative_ball_closure
+    interiorRelativeBallClosureRow_of_frontier_edge_point
 
 /-- Concrete S2 reducer for `InteriorClosureLocusRelativeOpenSource`.
 
@@ -3851,6 +4618,17 @@ theorem boundary_frontier_openSegment_relativeClosurePropagation_of_local_exteri
     (S2_agent_interior_edge_nearby_exterior_point_source
       local_exterior_side)
 
+/-- The fixed-side half-ball construction closes the boundary open-segment
+relative-closure propagation row. -/
+theorem boundary_frontier_openSegment_relativeClosurePropagation_of_fixed_side_halfballs
+    {C : _root_.UDConfig n} {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C} :
+    BoundaryFrontierOpenSegmentRelativeClosurePropagation inputs B :=
+  boundary_frontier_openSegment_relativeClosurePropagation_of_interior_edge_mem
+    (C := C) (inputs := inputs) (B := B)
+    (interior_frontier_edge_carrier_membership_source_of_fixed_side_halfballs
+      (C := C) (inputs := inputs))
+
 /-- Edge-level angular source for selected third incident frontier edges.
 
 This removes the moving point/radius bookkeeping from
@@ -3969,6 +4747,20 @@ theorem boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_ang
       simpa [BoundaryPredSuccPointAngularBetween, harg] using hbetween.1,
     by
       simpa [BoundaryPredSuccPointAngularBetween, harg] using hbetween.2⟩
+
+/-- Boundary open-segment local exterior-sector row with the relative-closure
+input discharged by the fixed-side half-ball construction. -/
+theorem boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular
+    {C : _root_.UDConfig n} {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (incident_edge_angular :
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B) :
+    BoundaryFrontierOpenSegmentLocalExteriorSector inputs B :=
+  boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular_and_relative_closure
+    (C := C) (inputs := inputs) (B := B)
+    incident_edge_angular
+    (boundary_frontier_openSegment_relativeClosurePropagation_of_fixed_side_halfballs
+      (C := C) (inputs := inputs) (B := B))
 
 /-- Reducer from the open-segment point-ray source to the requested
 edge-direction angular residual.
@@ -4190,6 +4982,35 @@ theorem S2_agent_local_exterior_point_sector_source
       incident_edge_angular relative_closure)
     endpoint_incident_only
 
+/-- Updated local point-sector reducer after the fixed-side half-ball source.
+
+The open-segment relative-closure row is now checked globally, so the live
+residuals for the W3 point-sector row are just the selected incident-edge
+angular row and the far-endpoint incident-only row. -/
+theorem S2_agent_local_exterior_point_sector_source_of_incident_edge_angular
+    {C : _root_.UDConfig n} {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (incident_edge_angular :
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B)
+    (endpoint_incident_only :
+      BoundaryFrontierEndpointIncidentOnlyPredSucc inputs B) :
+    forall (k : Fin B.length) (eps : Real) (q : PlanarInterface.Point)
+        (other : Fin n),
+      q ∈ Metric.ball ((canonicalGraph C).point (B.vertex k)) eps ->
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+      (canonicalGraph C).Adj (B.vertex k) other ->
+      q ∈ vertexIncidentGermW3 C (B.vertex k) other eps ->
+      q ≠ (canonicalGraph C).point (B.vertex k) ->
+      other ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+      other ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+        BoundaryPredSuccPointAngularBetween C B k q :=
+  boundary_frontier_local_exterior_sector_of_openSegment_pointSector_endpoint_incident_only
+    (C := C) (inputs := inputs) (B := B)
+    (boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular
+      (C := C) (inputs := inputs) (B := B)
+      incident_edge_angular)
+    endpoint_incident_only
+
 /-- Reducer from the edge-direction closed-segment exterior-side residual to
 the point-ray closed-segment residual.
 
@@ -4307,6 +5128,93 @@ theorem exists_local_frontier_germ_two_of_vertex_star_isolation_local_exterior_s
     (boundary_frontier_third_germ_between_of_local_exterior_sector
       (C := C) (inputs := inputs) (B := B) k local_exterior_sector)
     no_between
+
+/-- Open-segment version of the local two-germ source.
+
+For the local two-germ conclusion we may shrink around the boundary vertex
+using the existing open-segment vertex-star isolation row.  Thus a bad
+frontier point is genuinely in the relative interior of a third incident edge,
+and the endpoint branch required by the closed W3 germ reducer disappears. -/
+theorem exists_local_frontier_germ_two_of_vertex_star_isolation_openSegment_local_exterior_sector
+    {C : _root_.UDConfig n} {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (k : Fin B.length)
+    (openSegment_local_exterior_sector :
+      BoundaryFrontierOpenSegmentLocalExteriorSector inputs B)
+    (no_between :
+      forall other : Fin n,
+        GraphBridge.UnitDistanceAdj C (B.vertex k) other ->
+        other ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+        other ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+          ¬
+            _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryPredSuccAngularBetween
+              C B k other) :
+    Exists fun eps : Real =>
+      0 < eps ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball ((canonicalGraph C).point (B.vertex k)) eps ->
+            q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+              q ∈ vertexIncidentGermW3 C (B.vertex k)
+                    (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) eps ∨
+                q ∈ vertexIncidentGermW3 C (B.vertex k)
+                    (B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) eps := by
+  rcases
+      exists_ball_forall_unboundedExterior_frontier_mem_incident_inOpenSegment_of_vertex_ne
+        C inputs (B.vertex k) with
+    ⟨eps, heps_pos, hstar⟩
+  refine ⟨eps, heps_pos, ?_⟩
+  intro q hqball hqfrontier
+  by_cases hqcenter :
+      q = (canonicalGraph C).point (B.vertex k)
+  · left
+    rw [hqcenter]
+    exact
+      ⟨by
+          simpa [Metric.mem_ball] using heps_pos,
+        left_mem_closedSegment _ _⟩
+  rcases hstar q hqball hqcenter hqfrontier with
+    ⟨other, hadj, hqopen⟩
+  by_cases hother_pred :
+      other = B.vertex (PlanarInterface.cyclicPred B.length_pos k)
+  · left
+    exact
+      ⟨hqball, by
+        simpa [hother_pred] using inOpenSegment_mem_closedSegment hqopen⟩
+  by_cases hother_succ :
+      other = B.vertex (PlanarInterface.cyclicSucc B.length_pos k)
+  · right
+    exact
+      ⟨hqball, by
+        simpa [hother_succ] using inOpenSegment_mem_closedSegment hqopen⟩
+  have hpoint :
+      BoundaryPredSuccPointAngularBetween C B k q :=
+    openSegment_local_exterior_sector k eps q other
+      hqball hqfrontier hadj hqopen hother_pred hother_succ
+  have hqne_left :
+      q ≠ (canonicalGraph C).point (B.vertex k) := by
+    exact left_ne_of_inOpenSegment (canonical_adj_point_ne hadj) hqopen
+  have harg :
+      _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.dartArg
+          ((canonicalGraph C).point (B.vertex k)) q =
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+          (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+          (B.vertex k) other := by
+    simpa [_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg_def]
+      using
+        dartArg_eq_of_mem_closedSegment_ne_left
+          (inOpenSegment_mem_closedSegment hqopen) hqne_left
+  have hbetween :
+      _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryPredSuccAngularBetween
+        C B k other := by
+    exact
+      ⟨by
+          simpa [BoundaryPredSuccPointAngularBetween, harg] using hpoint.1,
+        by
+          simpa [BoundaryPredSuccPointAngularBetween, harg] using hpoint.2⟩
+  have hunit : GraphBridge.UnitDistanceAdj C (B.vertex k) other :=
+    ((canonicalGraph C).adj_iff_unitDistanceAdj (B.vertex k) other).1 hadj
+  exact False.elim
+    ((no_between other hunit hother_pred hother_succ) hbetween)
 
 /-- The carrier graph forgets to the ambient unit-distance graph. -/
 noncomputable def unboundedFrontierCarrierGraphHom
@@ -7357,6 +8265,41 @@ theorem S2_agent_frontier_preconnected_source_route_rawFaceSuccOrbit_of_nearby_e
     (S2_agent_frontier_edge_cover_source_of_nearby_edge_point_exterior_points
       inputs localSectorRows nearby_edge_point_exterior_points)
 
+/-- Frontier-preconnectedness for a selected raw face orbit with the
+pointwise frontier-edge local topology already discharged. -/
+theorem S2_agent_frontier_preconnected_source_route_rawFaceSuccOrbit_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (hedges :
+      forall k : Fin O.period,
+        ((O.dart k).tail,
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+            (O.dart k).tail) ∈ unboundedFrontierEdgeSet C inputs)
+    (edge_coverage :
+      forall e :
+          {e : PlanarInterface.Edge n //
+            e ∈ unboundedFrontierEdgeSet C inputs},
+        Exists fun k : Fin O.period =>
+          e.1 =
+              ((O.dart k).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∨
+            e.1 =
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+                (O.dart k).tail))
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    IsPreconnected
+      (frontier (unboundedExteriorComponentRows C inputs).exterior) :=
+  S2_agent_frontier_preconnected_source_route_rawFaceSuccOrbit_of_nearby_edge_point_exterior_points
+    O hedges edge_coverage localSectorRows
+    interiorEdgeNearbyExteriorPointSource_of_frontier_edge_point
+
 /-- If the concrete selected frontier-edge carrier is connected and its stars
 cover the whole unbounded exterior frontier, then that frontier is
 preconnected.  This is the frontier-preconnected row for the
@@ -8745,6 +9688,22 @@ theorem S2_agent_frontier_cover_to_connected_carrier_integration_of_interior_fro
     inputs frontier_preconnected localSectorRows
     (interiorEdgeNearbyExteriorPointSource_of_interior_frontier_edge_carrier_membership
       interior_edge_mem)
+
+/-- Connected-carrier integration with the pointwise frontier-edge local
+topology already discharged. -/
+theorem S2_agent_frontier_cover_to_connected_carrier_integration_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    (unboundedFrontierCarrierGraph C inputs).Connected :=
+  S2_agent_frontier_cover_to_connected_carrier_integration_of_nearby_edge_point_exterior_points
+    inputs frontier_preconnected localSectorRows
+    interiorEdgeNearbyExteriorPointSource_of_frontier_edge_point
 
 /-- Cyclic coverage rows for the concrete unbounded-frontier carrier.  This is
 the finite graph output expected from the exterior face-orbit proof: a cyclic
@@ -12328,6 +13287,175 @@ theorem rawFaceSuccOrbit_neighbor_tail_closed_of_localSectorRows
   · exact ⟨pred, (congrArg Subtype.val hb_pred).symm⟩
   · exact ⟨succ, (congrArg Subtype.val hb_succ).symm⟩
 
+/-- Raw-tail coverage plus the pointwise local-sector rows covers every
+concrete unbounded-frontier carrier edge.
+
+At an endpoint of a selected frontier edge, the local-sector row says every
+carrier neighbour is one of the two raw predecessor/successor neighbours.
+Thus a concrete frontier edge incident to that endpoint is exactly the raw
+successor edge at the current raw tail or at the raw predecessor, up to the
+stored orientation of `unboundedFrontierEdgeSet`. -/
+theorem rawFaceSuccOrbit_edge_coverage_of_tail_coverage_localSectorRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    forall e :
+        {e : PlanarInterface.Edge n //
+          e ∈ unboundedFrontierEdgeSet C inputs},
+      Exists fun k : Fin O.period =>
+        e.1 =
+            ((O.dart k).tail,
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∨
+          e.1 =
+            ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+              (O.dart k).tail) := by
+  classical
+  let hwhole :
+      UnboundedFrontierEdgeSetWholeOpenSegmentFrontier C inputs :=
+    unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition
+  let raw_edge_mem :
+      forall k : Fin O.period,
+        ((O.dart k).tail,
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+              (O.dart k).tail) ∈ unboundedFrontierEdgeSet C inputs :=
+    rawFaceSuccOrbit_edge_mem_unboundedFrontierEdgeSet_or_symm
+      O edge_openSegment_frontier
+  let raw_tail_mem :
+      forall k : Fin O.period,
+        (O.dart k).tail ∈ unboundedFrontierVertexSet C inputs :=
+    rawFaceSuccOrbit_tail_mem_unboundedFrontierVertexSet
+      O edge_openSegment_frontier
+  intro e
+  have hends :
+      e.1.1 ∈ unboundedFrontierVertexSet C inputs ∧
+        e.1.2 ∈ unboundedFrontierVertexSet C inputs :=
+    endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+      hwhole e.2
+  let a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+    ⟨e.1.1, hends.1⟩
+  let b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+    ⟨e.1.2, hends.2⟩
+  rcases frontier_vertex_tail_coverage a with ⟨k, hk⟩
+  let rows := localSectorRows a
+  let pred : Fin O.period := PlanarInterface.cyclicPred O.period_pos k
+  let succ : Fin O.period := PlanarInterface.cyclicSucc O.period_pos k
+  let predVertex : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+    ⟨(O.dart pred).tail, raw_tail_mem pred⟩
+  let succVertex : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+    ⟨(O.dart succ).tail, raw_tail_mem succ⟩
+  have hpred_succ : PlanarInterface.cyclicSucc O.period_pos pred = k := by
+    simpa [pred] using PlanarInterface.cyclicSucc_cyclicPred O.period_pos k
+  have hk_e : (O.dart k).tail = e.1.1 := by
+    simpa [a] using hk
+  have hpred_adj :
+      (unboundedFrontierCarrierGraph C inputs).Adj a predVertex := by
+    rcases raw_edge_mem pred with hedge | hedge
+    · exact
+        unboundedFrontierCarrierGraph_adj_of_ordered_edge_symm
+          (a := a) (b := predVertex)
+          (by
+            have hedge' :
+                ((O.dart pred).tail, e.1.1) ∈
+                    unboundedFrontierEdgeSet C inputs := by
+              simpa [pred, hpred_succ, hk_e] using hedge
+            simpa [a, predVertex, pred] using hedge')
+    · exact
+        unboundedFrontierCarrierGraph_adj_of_ordered_edge
+          (a := a) (b := predVertex)
+          (by
+            have hedge' :
+                (e.1.1, (O.dart pred).tail) ∈
+                    unboundedFrontierEdgeSet C inputs := by
+              simpa [pred, hpred_succ, hk_e] using hedge
+            simpa [a, predVertex, pred] using hedge')
+  have hsucc_adj :
+      (unboundedFrontierCarrierGraph C inputs).Adj a succVertex := by
+    rcases raw_edge_mem k with hedge | hedge
+    · exact
+        unboundedFrontierCarrierGraph_adj_of_ordered_edge
+          (a := a) (b := succVertex)
+          (by
+            have hedge' :
+                (e.1.1, (O.dart succ).tail) ∈
+                    unboundedFrontierEdgeSet C inputs := by
+              simpa [succ, hk_e] using hedge
+            simpa [a, succVertex, succ] using hedge')
+    · exact
+        unboundedFrontierCarrierGraph_adj_of_ordered_edge_symm
+          (a := a) (b := succVertex)
+          (by
+            have hedge' :
+                ((O.dart succ).tail, e.1.1) ∈
+                    unboundedFrontierEdgeSet C inputs := by
+              simpa [succ, hk_e] using hedge
+            simpa [a, succVertex, succ] using hedge')
+  have hpred_succ_ne : predVertex ≠ succVertex := by
+    intro h
+    have htail :
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail =
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail := by
+      simpa [predVertex, succVertex, pred, succ] using congrArg Subtype.val h
+    exact raw_pred_succ_tail_ne k htail
+  have hb_adj :
+      (unboundedFrontierCarrierGraph C inputs).Adj a b :=
+    unboundedFrontierCarrierGraph_adj_of_ordered_edge e.2
+  have hpred_cases := (rows.neighbor_iff predVertex).1 hpred_adj
+  have hsucc_cases := (rows.neighbor_iff succVertex).1 hsucc_adj
+  have hb_cases := (rows.neighbor_iff b).1 hb_adj
+  have hb_raw : b = predVertex ∨ b = succVertex := by
+    rcases hb_cases with hb_left | hb_right
+    · rcases hpred_cases with hpred_left | hpred_right
+      · exact Or.inl (hb_left.trans hpred_left.symm)
+      · rcases hsucc_cases with hsucc_left | hsucc_right
+        · exact Or.inr (hb_left.trans hsucc_left.symm)
+        · exact False.elim
+            (hpred_succ_ne (hpred_right.trans hsucc_right.symm))
+    · rcases hpred_cases with hpred_left | hpred_right
+      · rcases hsucc_cases with hsucc_left | hsucc_right
+        · exact False.elim
+            (hpred_succ_ne (hpred_left.trans hsucc_left.symm))
+        · exact Or.inr (hb_right.trans hsucc_right.symm)
+      · exact Or.inl (hb_right.trans hpred_right.symm)
+  rcases hb_raw with hb_pred | hb_succ
+  · refine ⟨pred, Or.inr ?_⟩
+    apply Prod.ext
+    · have htail :
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos pred)).tail =
+            e.1.1 := by
+        simpa [a, hpred_succ] using hk
+      exact htail.symm
+    · have htail : e.1.2 = (O.dart pred).tail := by
+        simpa [b, predVertex] using congrArg Subtype.val hb_pred
+      exact htail
+  · refine ⟨k, Or.inl ?_⟩
+    apply Prod.ext
+    · exact hk.symm
+    · have htail : e.1.2 = (O.dart succ).tail := by
+        simpa [b, succVertex, succ] using congrArg Subtype.val hb_succ
+      exact htail
+
 /-- Tail injectivity plus period at least three gives the raw
 predecessor/successor nonbacktracking row used by the local neighbour-closure
 argument. -/
@@ -12554,6 +13682,121 @@ theorem S2_agent_raw_tail_hit_from_exterior_frontier
     carrier_connected
     localSectorRows
     raw_pred_succ_tail_ne
+
+/-- Once the selected raw face-successor orbit is known to trace the
+unbounded exterior frontier dart-by-dart, connectedness of the actual carrier
+gives both the dart-frontier row and raw-tail coverage. -/
+theorem S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    (_edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (_htail : start.tail = e.1)
+    (_hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    (forall k : Fin O.period,
+      forall q : PlanarInterface.Point,
+        PlanarInterface.InOpenSegment q
+          ((canonicalGraph C).point (O.dart k).tail)
+          ((canonicalGraph C).point (O.dart k).head) ->
+        q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) ∧
+    (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      Exists fun k : Fin O.period => (O.dart k).tail = a.1) := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edge_openSegment_frontier localSectorRows
+  exact
+    ⟨dart_edge_openSegment_frontier,
+      S2_agent_tail_coverage_from_connected_carrier
+        (C := C) (inputs := inputs) O dart_edge_openSegment_frontier
+        carrier_connected localSectorRows raw_pred_succ_tail_ne⟩
+
+/-- Orientation-free version of
+`S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source`.
+
+This is the handoff used when the selected raw start has already been
+identified as a boundary dart, so no local `edgeRows` endpoint orientation is
+needed at this stage. -/
+theorem S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source_no_edgeRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    (forall k : Fin O.period,
+      forall q : PlanarInterface.Point,
+        PlanarInterface.InOpenSegment q
+          ((canonicalGraph C).point (O.dart k).tail)
+          ((canonicalGraph C).point (O.dart k).head) ->
+        q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) ∧
+    (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      Exists fun k : Fin O.period => (O.dart k).tail = a.1) := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edge_openSegment_frontier localSectorRows
+  exact
+    ⟨dart_edge_openSegment_frontier,
+      S2_agent_tail_coverage_from_connected_carrier
+        (C := C) (inputs := inputs) O dart_edge_openSegment_frontier
+        carrier_connected localSectorRows raw_pred_succ_tail_ne⟩
 
 /-- Topology-row variant of
 `S2_agent_raw_tail_hit_from_exterior_frontier`.
@@ -14825,6 +16068,203 @@ theorem S2_agent_selected_seed_dart_edge_frontier
         (C := C) (inputs := inputs) (B := B) O sectorRows
         (raw_start_on_boundary edgeRows htail hhead))
 
+/-- Selected-seed raw dart-edge frontier row from the actual boundary-cycle
+package.
+
+The boundary-oriented seed selector supplies a start dart on the actual
+boundary; primitive sector rows then propagate that boundary identification
+around the selected geometric raw face-successor orbit and prove every raw
+dart edge lies on the unbounded exterior frontier. -/
+theorem S2_agent_selected_seed_dart_edge_frontier_of_actualBoundaryRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (seed : UnboundedExteriorFrontierSeed inputs)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (hcomplete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary)
+    (interior_edge_mem :
+      InteriorFrontierEdgeCarrierMembershipSource C inputs)
+    (sectorRows :
+      forall j : Fin actualRows.boundary.length,
+        BoundaryVertexExteriorSectorRowsAt inputs actualRows.boundary j) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun start : UnitDistanceDart C =>
+          Exists fun j : Fin actualRows.boundary.length =>
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+              start = UnitDistanceDart.ofBoundary actualRows.boundary j ∧
+                Nonempty
+                  (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                    (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                      C)
+                    start) ∧
+                  forall O :
+                    UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                      start,
+                    forall k : Fin O.period,
+                      forall q : PlanarInterface.Point,
+                        PlanarInterface.InOpenSegment q
+                          ((canonicalGraph C).point (O.dart k).tail)
+                          ((canonicalGraph C).point (O.dart k).head) ->
+                        q ∈
+                          frontier
+                            (unboundedExteriorComponentRows C inputs).exterior := by
+  rcases
+      exists_geometricRawFaceSuccOrbitBoundarySeed_of_unboundedExteriorFrontierSeed_actualBoundaryRows
+        (C := C) (inputs := inputs) seed actualRows
+        (fun {v} hv =>
+          seed_vertex_edgeInterior_frontier_point_of_localSectorRows
+            localSectorRows seed hv)
+        hcomplete interior_edge_mem with
+    ⟨e, p, start, j, edgeRows, hstart, horbit, _hendpoints⟩
+  refine ⟨e, p, start, j, edgeRows, hstart, horbit, ?_⟩
+  intro O
+  exact
+    BoundaryVertexExteriorSectorRowsAt.S2_agent_dart_edge_frontier_from_sectorRows
+      (C := C) (inputs := inputs) (B := actualRows.boundary) O sectorRows
+      (rawFaceSuccOrbit_dart_on_boundary_of_sectorRows_start
+        (C := C) (inputs := inputs) (B := actualRows.boundary) O sectorRows
+        ⟨j, hstart⟩)
+
+/-- Consecutive raw-tail open-segment frontier row from the actual boundary
+cycle package.
+
+This is the same selected-seed source as
+`S2_agent_selected_seed_dart_edge_frontier_of_actualBoundaryRows`, with the
+checked raw face-successor endpoint adapter applied immediately. -/
+theorem S2_agent_selected_seed_raw_edge_openSegment_frontier_of_actualBoundaryRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (seed : UnboundedExteriorFrontierSeed inputs)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (hcomplete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary)
+    (interior_edge_mem :
+      InteriorFrontierEdgeCarrierMembershipSource C inputs)
+    (sectorRows :
+      forall j : Fin actualRows.boundary.length,
+        BoundaryVertexExteriorSectorRowsAt inputs actualRows.boundary j) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun start : UnitDistanceDart C =>
+          Exists fun j : Fin actualRows.boundary.length =>
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+              start = UnitDistanceDart.ofBoundary actualRows.boundary j ∧
+                Nonempty
+                  (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                    (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                      C)
+                    start) ∧
+                  forall O :
+                    UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                      start,
+                    forall k : Fin O.period,
+                      forall q : PlanarInterface.Point,
+                        PlanarInterface.InOpenSegment q
+                          ((canonicalGraph C).point (O.dart k).tail)
+                          ((canonicalGraph C).point
+                            (O.dart
+                              (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+                        q ∈
+                          frontier
+                            (unboundedExteriorComponentRows C inputs).exterior := by
+  rcases
+      S2_agent_selected_seed_dart_edge_frontier_of_actualBoundaryRows
+        (C := C) inputs seed localSectorRows actualRows hcomplete
+        interior_edge_mem sectorRows with
+    ⟨e, p, start, j, edgeRows, hstart, horbit, hdart⟩
+  refine ⟨e, p, start, j, edgeRows, hstart, horbit, ?_⟩
+  intro O
+  exact
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O (hdart O)
+
+/-- Selected-seed raw-tail coverage from actual boundary rows and primitive
+sector rows.
+
+The actual boundary rows provide carrier connectedness via their cyclic
+coverage row.  The primitive sector rows provide the local-sector family and
+the boundary incident-completeness row.  Together with the boundary-oriented
+raw start selector, this proves that every concrete unbounded-frontier carrier
+vertex occurs as a tail in the selected raw face-successor orbit. -/
+theorem S2_agent_selected_seed_tail_coverage_of_actualBoundaryRows_sectorRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (seed : UnboundedExteriorFrontierSeed inputs)
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (interior_edge_mem :
+      InteriorFrontierEdgeCarrierMembershipSource C inputs)
+    (sectorRows :
+      forall j : Fin actualRows.boundary.length,
+        BoundaryVertexExteriorSectorRowsAt inputs actualRows.boundary j) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun start : UnitDistanceDart C =>
+          Exists fun j : Fin actualRows.boundary.length =>
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+              start = UnitDistanceDart.ofBoundary actualRows.boundary j ∧
+                Nonempty
+                  (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                    (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                      C)
+                    start) ∧
+                  forall O :
+                    UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                      start,
+                    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+                      Exists fun k : Fin O.period => (O.dart k).tail = a.1 := by
+  let localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a :=
+    fun a =>
+      let hfrontier :
+          (canonicalGraph C).point a.1 ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior :=
+        mem_unboundedFrontierVertexSet_iff.1 a.2
+      let k : Fin actualRows.boundary.length :=
+        Classical.choose
+          ((actualRows.frontier_iff_cycle_vertex a.1).1 hfrontier)
+      let hk : actualRows.boundary.vertex k = a.1 :=
+        Classical.choose_spec
+          ((actualRows.frontier_iff_cycle_vertex a.1).1 hfrontier)
+      BoundaryVertexExteriorSectorRowsAt.toLocalSectorRowsAt
+        (C := C) (inputs := inputs) (B := actualRows.boundary)
+        (k := k) (sectorRows k) hk.symm
+  let carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected :=
+    unboundedFrontierCarrierGraph_connected_of_cyclicCoverageRows
+      (ActualBoundaryCycleFrontierEquivalenceRows.toCyclicCoverageRows
+        actualRows)
+  let hcomplete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs actualRows.boundary :=
+    BoundaryVertexExteriorSectorRowsAt.boundaryCycleIncidentFrontierEdgeCompleteness
+      (C := C) (inputs := inputs) (B := actualRows.boundary) sectorRows
+  rcases
+      S2_agent_selected_seed_dart_edge_frontier_of_actualBoundaryRows
+        (C := C) inputs seed localSectorRows actualRows hcomplete
+        interior_edge_mem sectorRows with
+    ⟨e, p, start, j, edgeRows, hstart, horbit, hdart⟩
+  refine ⟨e, p, start, j, edgeRows, hstart, horbit, ?_⟩
+  intro O
+  exact
+    (S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source_no_edgeRows
+      (C := C) (inputs := inputs) localSectorRows carrier_connected O
+      (hdart O)).2
+
 /-- Boundary-vertex exterior-sector rows give the two-regularity row for the
 actual unbounded-frontier carrier graph. -/
 theorem unboundedFrontierCarrierGraph_degree_two_of_boundaryVertexExteriorSectorRows
@@ -15122,6 +16562,130 @@ theorem boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_l
     boundaryVertexExteriorSectorRowsAt_of_boundaryVertexAngularNoBetweenRows_local_exterior_sector
       (C := C) (inputs := inputs) (B := B) j (angularRows j)
       cycle_edge_openSegment_frontier (local_exterior_sector j)
+
+/-- Source one primitive boundary-vertex sector row from only the
+open-segment local exterior-sector statement.
+
+This is sharper than the W3 closed-germ route: local vertex-star isolation is
+used in its open-segment form, so the far endpoint of a third incident edge is
+never part of the local two-germ proof. -/
+theorem boundaryVertexExteriorSectorRowsAt_of_boundaryVertexAngularNoBetweenRows_openSegment_local_exterior_sector
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (k : Fin B.length)
+    (angularRows :
+      _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+        C B k)
+    (cycle_edge_openSegment_frontier :
+      forall j : Fin B.length,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (B.vertex j))
+            ((canonicalGraph C).point
+              (B.vertex (PlanarInterface.cyclicSucc B.length_pos j))) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (openSegment_local_exterior_sector :
+      BoundaryFrontierOpenSegmentLocalExteriorSector inputs B) :
+    BoundaryVertexExteriorSectorRowsAt inputs B k :=
+  boundaryVertexExteriorSectorRowsAt_of_actualExteriorSector
+    k angularRows.angle angularRows.no_between cycle_edge_openSegment_frontier
+    (exists_local_frontier_germ_two_of_vertex_star_isolation_openSegment_local_exterior_sector
+      (C := C) (inputs := inputs) (B := B) k
+      openSegment_local_exterior_sector angularRows.no_between)
+
+/-- Family source for primitive actual exterior-sector rows from the
+open-segment local exterior-sector statement. -/
+theorem boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_openSegment_local_exterior_sector
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (angularRows :
+      forall j : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C B j)
+    (cycle_edge_openSegment_frontier :
+      forall j : Fin B.length,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (B.vertex j))
+            ((canonicalGraph C).point
+              (B.vertex (PlanarInterface.cyclicSucc B.length_pos j))) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (openSegment_local_exterior_sector :
+      BoundaryFrontierOpenSegmentLocalExteriorSector inputs B) :
+    forall j : Fin B.length,
+      BoundaryVertexExteriorSectorRowsAt inputs B j := by
+  intro j
+  exact
+    boundaryVertexExteriorSectorRowsAt_of_boundaryVertexAngularNoBetweenRows_openSegment_local_exterior_sector
+      (C := C) (inputs := inputs) (B := B) j (angularRows j)
+      cycle_edge_openSegment_frontier openSegment_local_exterior_sector
+
+/-- Family source for primitive actual exterior-sector rows from the selected
+incident-edge angular row.
+
+The fixed-side half-ball proof supplies the relative-closure propagation
+inside `boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular`;
+the open-segment vertex-star source above then avoids the endpoint branch
+entirely. -/
+theorem boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_incident_edge_angular
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (angularRows :
+      forall j : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C B j)
+    (cycle_edge_openSegment_frontier :
+      forall j : Fin B.length,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (B.vertex j))
+            ((canonicalGraph C).point
+              (B.vertex (PlanarInterface.cyclicSucc B.length_pos j))) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (incident_edge_angular :
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B) :
+    forall j : Fin B.length,
+      BoundaryVertexExteriorSectorRowsAt inputs B j :=
+  boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_openSegment_local_exterior_sector
+    (C := C) (inputs := inputs) (B := B)
+    angularRows cycle_edge_openSegment_frontier
+    (boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular
+      (C := C) (inputs := inputs) (B := B) incident_edge_angular)
+
+/-- Boundary-cycle incident completeness is enough to source the primitive
+boundary-sector rows once the actual angular/no-between rows and consecutive
+cycle-edge frontier rows are available. -/
+theorem boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_boundaryCycleIncidentFrontierEdgeCompleteness
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (angularRows :
+      forall j : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C B j)
+    (cycle_edge_openSegment_frontier :
+      forall j : Fin B.length,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (B.vertex j))
+            ((canonicalGraph C).point
+              (B.vertex (PlanarInterface.cyclicSucc B.length_pos j))) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hcomplete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs B) :
+    forall j : Fin B.length,
+      BoundaryVertexExteriorSectorRowsAt inputs B j := by
+  refine
+    boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_incident_edge_angular
+      (C := C) (inputs := inputs) (B := B)
+      angularRows cycle_edge_openSegment_frontier ?_
+  intro k other hedge hother_pred hother_succ
+  rcases hcomplete k other hedge with h | h
+  · exact False.elim (hother_pred h)
+  · exact False.elim (hother_succ h)
 
 /-- Family form of
 `boundaryVertexExteriorSectorRowsAt_of_actualExteriorSector` for an actual
@@ -15668,6 +17232,61 @@ theorem boundary_frontier_openSegment_local_exterior_sector_of_boundaryCycleInci
     (boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
       (C := C) (inputs := inputs) (B := B) hcomplete)
     relative_closure
+
+/-- Boundary-cycle incident completeness now gives the open-segment local
+exterior-sector row without a caller-supplied relative-closure hypothesis. -/
+theorem boundary_frontier_openSegment_local_exterior_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (hcomplete : BoundaryCycleIncidentFrontierEdgeCompleteness inputs B) :
+    BoundaryFrontierOpenSegmentLocalExteriorSector inputs B :=
+  boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular
+    (C := C) (inputs := inputs) (B := B)
+    (boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
+      (C := C) (inputs := inputs) (B := B) hcomplete)
+
+/-- Primitive boundary-vertex exterior-sector rows also give the open-segment
+local sector row directly; the fixed-side half-ball source supplies the
+relative-closure part internally. -/
+theorem boundary_frontier_openSegment_local_exterior_sector_of_boundaryVertexExteriorSectorRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (sectorRows :
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k) :
+    BoundaryFrontierOpenSegmentLocalExteriorSector inputs B :=
+  boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular
+    (C := C) (inputs := inputs) (B := B)
+    (boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryVertexExteriorSectorRows
+      (C := C) (inputs := inputs) (B := B) sectorRows)
+
+/-- Boundary-cycle incident completeness plus the endpoint incident-only row
+source the W3 point-sector row with the fixed-side closure theorem hidden
+inside the open-segment reducer. -/
+theorem S2_agent_local_exterior_point_sector_source_of_boundaryCycleIncidentFrontierEdgeCompleteness
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (hcomplete : BoundaryCycleIncidentFrontierEdgeCompleteness inputs B)
+    (endpoint_incident_only :
+      BoundaryFrontierEndpointIncidentOnlyPredSucc inputs B) :
+    forall (k : Fin B.length) (eps : Real) (q : PlanarInterface.Point)
+        (other : Fin n),
+      q ∈ Metric.ball ((canonicalGraph C).point (B.vertex k)) eps ->
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+      (canonicalGraph C).Adj (B.vertex k) other ->
+      q ∈ vertexIncidentGermW3 C (B.vertex k) other eps ->
+      q ≠ (canonicalGraph C).point (B.vertex k) ->
+      other ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+      other ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+        BoundaryPredSuccPointAngularBetween C B k q :=
+  S2_agent_local_exterior_point_sector_source_of_incident_edge_angular
+    (C := C) (inputs := inputs) (B := B)
+    (boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
+      (C := C) (inputs := inputs) (B := B) hcomplete)
+    endpoint_incident_only
 
 /-- Direct impossibility wrapper for boundary-cycle incident frontier-edge
 completeness.  If every selected unbounded-frontier edge incident to a boundary
@@ -16668,6 +18287,83 @@ theorem rawFaceSuccOrbit_tail_injective_of_noCutVertex_arcRows
   rawFaceSuccOrbit_tail_injective_of_noCutVertex (inputs := inputs) O
     (fun hne heq => (hrows hne heq).toRepeatedExteriorBoundarySeparationRows)
 
+/-- Minimal repeated-tail cut row for a selected raw exterior face walk.
+
+Unlike `RawFaceSuccOrbitRepeatedTailActualExteriorArcRows`, this row does not
+claim that every non-cut graph vertex occurs as a raw exterior-tail image.
+Interior vertices are handled by the induced-graph unreachable-side
+construction in `repeatedExteriorBoundarySeparationRows_of_unreachable_after_delete`. -/
+structure RawFaceSuccOrbitRepeatedTailExteriorCutRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (i j : Fin O.period) where
+  left_index : Fin O.period
+  left_index_mem : cyclicForwardOpenArc i j left_index
+  left_index_ne_cut : (O.dart left_index).tail ≠ (O.dart i).tail
+  right_index : Fin O.period
+  right_index_mem : cyclicForwardOpenArc j i right_index
+  right_index_ne_cut : (O.dart right_index).tail ≠ (O.dart i).tail
+  unreachable_after_delete :
+    ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+        ({(O.dart i).tail}ᶜ : Set (Fin n))).Reachable
+        ⟨(O.dart left_index).tail, by simpa using left_index_ne_cut⟩
+        ⟨(O.dart right_index).tail, by simpa using right_index_ne_cut⟩
+
+namespace RawFaceSuccOrbitRepeatedTailExteriorCutRows
+
+variable {C : _root_.UDConfig n}
+variable {inputs : FinitePlanarOuterComponentInputs C}
+variable {R : UnitDistanceRotationSystem C}
+variable {start : UnitDistanceDart C}
+variable {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+variable {i j : Fin O.period}
+
+/-- Erase the minimal repeated-tail cut row to the generic Boolean-side
+separation row consumed by the no-cut interface. -/
+noncomputable def toRepeatedExteriorBoundarySeparationRows
+    (rows :
+      RawFaceSuccOrbitRepeatedTailExteriorCutRows
+        (inputs := inputs) O i j)
+    (hij : i ≠ j)
+    (htail : (O.dart i).tail = (O.dart j).tail) :
+    RepeatedExteriorBoundarySeparationRows C
+      (fun k : Fin O.period => (O.dart k).tail) i j :=
+  repeatedExteriorBoundarySeparationRows_of_unreachable_after_delete
+    htail hij
+    (O.dart rows.left_index).tail
+    (O.dart rows.right_index).tail
+    rows.left_index_ne_cut
+    rows.right_index_ne_cut
+    rows.unreachable_after_delete
+
+end RawFaceSuccOrbitRepeatedTailExteriorCutRows
+
+/-- No-cut injectivity from the minimal repeated-tail exterior cut row.
+
+This is the preferred S2 no-cut source surface: it asks only for one vertex on
+each side of a repeated exterior face walk and a proof that those two vertices
+are disconnected after deleting the repeated tail. -/
+theorem rawFaceSuccOrbit_tail_injective_of_repeatedTailExteriorCutRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (cutRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailExteriorCutRows
+            (inputs := inputs) O i j) :
+    Function.Injective fun k : Fin O.period => (O.dart k).tail :=
+  rawFaceSuccOrbit_tail_injective_of_noCutVertex (inputs := inputs) O
+    (fun hij htail =>
+      (cutRows hij htail).toRepeatedExteriorBoundarySeparationRows
+        hij htail)
+
 /-- No-cut repeated-tail rows give the raw predecessor/successor
 nonbacktracking row as soon as the raw orbit is known to have period at least
 three. -/
@@ -16879,6 +18575,72 @@ structure RawFaceSuccOrbitActualExteriorArcSeparationRows
       (O.dart i).tail = (O.dart j).tail ->
         RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
           (inputs := inputs) O i j
+
+/-- Source the orbit-level actual-arc separation package from raw dart-edge
+frontier tracing plus the pair-level repeated-tail arc rows.
+
+The edge-membership field is fully checked from the raw dart-edge frontier
+row; the only remaining geometric content is the planar separation package
+for each hypothetical repeated raw tail. -/
+noncomputable def rawFaceSuccOrbitActualExteriorArcSeparationRows_of_dart_edge_frontier_pairRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_arcRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+            (inputs := inputs) O i j) :
+    RawFaceSuccOrbitActualExteriorArcSeparationRows
+      (inputs := inputs) O where
+  edge_mem :=
+    rawFaceSuccOrbit_edge_mem_unboundedFrontierEdgeSet_or_symm_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  repeated_tail_arcRows := repeated_tail_arcRows
+
+/-- The edge-membership field of `RawFaceSuccOrbitActualExteriorArcSeparationRows`
+already proves that every selected raw dart edge lies on the unbounded exterior
+frontier. -/
+theorem rawFaceSuccOrbit_dart_edge_openSegment_frontier_of_actualExteriorArcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (rows : RawFaceSuccOrbitActualExteriorArcSeparationRows
+      (inputs := inputs) O) :
+    forall k : Fin O.period,
+      forall q : PlanarInterface.Point,
+        PlanarInterface.InOpenSegment q
+          ((canonicalGraph C).point (O.dart k).tail)
+          ((canonicalGraph C).point (O.dart k).head) ->
+        q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_unboundedFrontierEdgeSet_edges
+      (inputs := inputs) O rows.edge_mem
+  intro k q hq
+  let next : Fin O.period := PlanarInterface.cyclicSucc O.period_pos k
+  have hsucc := rawFaceSuccOrbit_faceSucc_eq_cyclicSucc O k
+  have hhead_next : (O.dart k).head = (O.dart next).tail := by
+    simpa [next] using R.endpoint_chaining_of_faceSucc_eq_next hsucc
+  exact edge_openSegment_frontier k q (by simpa [next, hhead_next] using hq)
 
 /-- Actual exterior-frontier arc separation rows for hypothetical repeated
 tails of the selected raw face-successor orbit.
@@ -18385,6 +20147,117 @@ theorem rawFaceSuccOrbit_period_three_le_of_edge_openSegment_frontier_tail_cover
       O edge_openSegment_frontier frontier_vertex_tail_coverage)
     localSectorRows
 
+/-- No-cut injectivity of a selected raw exterior face walk, using the actual
+exterior arc-separation package. -/
+theorem S2_agent_rawExteriorFaceWalk_tail_injective_of_actualArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    Function.Injective fun k : Fin O.period => (O.dart k).tail :=
+  rawFaceSuccOrbit_tail_injective_of_noCutVertex
+    (inputs := inputs) O
+    (S2_agent_no_cut_repeated_tail_source_from_actualExteriorArcRows
+      (inputs := inputs) O actualArcRows)
+
+/-- A no-cut selected raw exterior face walk gives a concrete
+`UnitDistanceCycleBoundary` in the raw cyclic order. -/
+theorem S2_agent_rawExteriorFaceWalk_unitDistanceCycleBoundary_of_noCut
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (period_ge_three : 3 <= O.period)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      Exists fun hperiod : B.length = O.period =>
+        forall k : Fin B.length,
+          (O.dart (Fin.cast hperiod k)).tail = B.vertex k :=
+  exists_unitDistanceCycleBoundary_of_rawFaceSuccOrbit_tail_injective
+    O period_ge_three
+    (S2_agent_rawExteriorFaceWalk_tail_injective_of_actualArcRows
+      (inputs := inputs) O actualArcRows)
+
+/-- Actual boundary-cycle rows assembled from a selected raw exterior face walk.
+
+This is the raw-walk version of the final S2 boundary source: tail coverage
+gives the frontier-vertex equivalence, no-cut repeated-tail arc rows make the
+raw walk simple, and the raw dart-edge frontier row gives every consecutive
+boundary side on the unbounded exterior frontier. -/
+noncomputable def S2_agent_actualBoundaryCycleRows_of_rawExteriorFaceWalk
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let frontier_iff_tail :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin O.period => (O.dart k).tail = v :=
+    rawFaceSuccOrbit_frontier_iff_tail_of_frontier_vertex_tail_coverage
+      O edge_openSegment_frontier frontier_vertex_tail_coverage
+  let period_ge_three : 3 <= O.period :=
+    rawFaceSuccOrbit_period_three_le_of_edge_openSegment_frontier_tail_coverage_localSectorRows
+      (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage localSectorRows
+  let hB :=
+    S2_agent_rawExteriorFaceWalk_unitDistanceCycleBoundary_of_noCut
+      (inputs := inputs) O period_ge_three actualArcRows
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C := Classical.choose hB
+  let hperiod : B.length = O.period := Classical.choose (Classical.choose_spec hB)
+  let tail_eq :
+      forall k : Fin B.length,
+        (O.dart (Fin.cast hperiod k)).tail = B.vertex k :=
+    Classical.choose_spec (Classical.choose_spec hB)
+  exact
+    ActualBoundaryCycleFrontierEquivalenceRows.ofRawFaceSuccOrbitBoundaryRows
+      (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+      edge_openSegment_frontier
+
 /-- Remaining raw-orbit source rows from whole-edge frontier and positive
 raw-tail coverage, deriving `period_ge_three` internally.
 
@@ -18541,6 +20414,63 @@ noncomputable def unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbitSourceRo
     rows.connectedRows rows.period_ge_three rows.localSectorRows
     rows.repeated_tail_rows
 
+/-- Raw-orbit source rows also produce the exact actual-boundary-cycle row.
+
+This is the same non-circular source package as
+`unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbitSourceRows`, but it
+keeps the concrete `ActualBoundaryCycleFrontierEquivalenceRows` handoff
+available for the W32 route that wants to display the selected boundary cycle
+before erasing it to `UnboundedExteriorFrontierCycleRows`. -/
+noncomputable def actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbitSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (rows : RawFaceSuccOrbitSourceRows (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_inOpenSegment_frontier_and_nearby_edge_point_exterior_points
+      O rows.edge_frontier_point rows.nearby_edge_point_exterior_points
+  let frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+    rawFaceSuccOrbit_frontier_vertex_tail_coverage_of_connected_closed_carrier
+      O edge_openSegment_frontier rows.connectedRows
+      (rawFaceSuccOrbit_neighbor_tail_closed_of_localSectorRows
+        O edge_openSegment_frontier rows.localSectorRows
+        (rawFaceSuccOrbit_pred_succ_tail_ne_of_period_three_noCutVertex
+          (inputs := inputs) O rows.period_ge_three rows.repeated_tail_rows))
+  let frontier_iff_tail :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin O.period => (O.dart k).tail = v :=
+    rawFaceSuccOrbit_frontier_iff_tail_of_frontier_vertex_tail_coverage
+      O edge_openSegment_frontier frontier_vertex_tail_coverage
+  let hB :=
+    exists_unitDistanceCycleBoundary_of_rawFaceSuccOrbit_tail_injective
+      O rows.period_ge_three
+      (rawFaceSuccOrbit_tail_injective_of_noCutVertex
+        (inputs := inputs) O rows.repeated_tail_rows)
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C := Classical.choose hB
+  let hperiod : B.length = O.period := Classical.choose (Classical.choose_spec hB)
+  let tail_eq :
+      forall k : Fin B.length,
+        (O.dart (Fin.cast hperiod k)).tail = B.vertex k :=
+    Classical.choose_spec (Classical.choose_spec hB)
+  exact
+    ActualBoundaryCycleFrontierEquivalenceRows.ofRawFaceSuccOrbitBoundaryRows
+      (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+      edge_openSegment_frontier
+
 /-- Input-level raw-orbit source package from a selected unbounded exterior
 frontier seed.
 
@@ -18670,6 +20600,82 @@ noncomputable def unboundedExteriorFrontierCycleRows_of_exists_rawFaceSuccOrbit_
   unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbitSourceRows
     O (Classical.choice (Classical.choose_spec hO))
 
+/-- Existential raw-orbit source package erased to the displayed actual
+boundary-cycle row.
+
+This mirrors `unboundedExteriorFrontierCycleRows_of_exists_rawFaceSuccOrbit_sourceRows`
+but keeps the source theorem's concrete boundary-cycle output visible for the
+S2 workboard and W32 exact-topology route. -/
+noncomputable def actualBoundaryCycleFrontierEquivalenceRows_of_exists_rawFaceSuccOrbit_sourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p /\
+              start.tail = e.1 /\
+                start.head = e.2 /\
+                  Exists fun O :
+                    UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                    start =>
+                  _root_.Nonempty
+                    (RawFaceSuccOrbitSourceRows (inputs := inputs) O)) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+  let e : PlanarInterface.Edge n := Classical.choose source
+  let hp :
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun start : UnitDistanceDart C =>
+          UnboundedExteriorFrontierEdgeLocalRows C inputs e p /\
+            start.tail = e.1 /\
+              start.head = e.2 /\
+                Exists fun O :
+                  UnitDistanceRotationSystem.RawFaceSuccOrbit
+                    (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                      C)
+                    start =>
+                _root_.Nonempty
+                  (RawFaceSuccOrbitSourceRows (inputs := inputs) O) :=
+    Classical.choose_spec source
+  let p : PlanarInterface.Point := Classical.choose hp
+  let hstart :
+      Exists fun start : UnitDistanceDart C =>
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p /\
+          start.tail = e.1 /\
+            start.head = e.2 /\
+              Exists fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                    C)
+                  start =>
+              _root_.Nonempty
+                (RawFaceSuccOrbitSourceRows (inputs := inputs) O) :=
+    Classical.choose_spec hp
+  let start : UnitDistanceDart C := Classical.choose hstart
+  let hstart_spec :
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p /\
+        start.tail = e.1 /\
+          start.head = e.2 /\
+            Exists fun O :
+              UnitDistanceRotationSystem.RawFaceSuccOrbit
+                (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                  C)
+                start =>
+            _root_.Nonempty
+              (RawFaceSuccOrbitSourceRows (inputs := inputs) O) :=
+    Classical.choose_spec hstart
+  let hO := hstart_spec.2.2.2
+  let O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start :=
+    Classical.choose hO
+  actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbitSourceRows
+    O (Classical.choice (Classical.choose_spec hO))
+
 /-- Input-facing final S2 raw-orbit handoff.
 
 After the pointwise local-sector family is available, the remaining non-input
@@ -18698,6 +20704,38 @@ noncomputable def unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbit_inputRo
           RawFaceSuccOrbitRemainingSourceRows (inputs := inputs) O) :
     UnboundedExteriorFrontierCycleRows C inputs :=
   unboundedExteriorFrontierCycleRows_of_exists_rawFaceSuccOrbit_sourceRows
+    (exists_rawFaceSuccOrbit_sourceRows_of_inputs
+      inputs
+      (Classical.choice (unboundedExteriorFrontierSeed_nonempty inputs))
+      localSectorRows
+      remainingRows)
+
+/-- Input-facing raw-orbit handoff to the displayed actual boundary-cycle row.
+
+This is the same source surface as
+`unboundedExteriorFrontierCycleRows_of_rawFaceSuccOrbit_inputRows`; it exists
+only to expose the exact `ActualBoundaryCycleFrontierEquivalenceRows` object
+that the final S2 theorem must eventually construct from inputs alone. -/
+noncomputable def actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbit_inputRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (remainingRows :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+              C)
+            start,
+          RawFaceSuccOrbitRemainingSourceRows (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+  actualBoundaryCycleFrontierEquivalenceRows_of_exists_rawFaceSuccOrbit_sourceRows
     (exists_rawFaceSuccOrbit_sourceRows_of_inputs
       inputs
       (Classical.choice (unboundedExteriorFrontierSeed_nonempty inputs))
@@ -19410,6 +21448,605 @@ noncomputable def
     dart_edge_openSegment_frontier raw_pred_succ_tail_ne
     (S2_agent_no_cut_repeated_tail_source_from_actualExteriorArcRows
       (inputs := inputs) O actualArcRows)
+
+/-- Pointwise frontier-edge local topology discharges the
+nearby-exterior-points input in the frontier/raw-tail-hit S2 assembly route. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_frontier_tailHitRows_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j) :
+    UnboundedExteriorFrontierCycleRows C inputs :=
+  S2_agent_input_s2_assembly_gap_reducer_frontier_nearbyTailHitRows
+    inputs frontier_preconnected localSectorRows
+    interiorEdgeNearbyExteriorPointSource_of_frontier_edge_point
+    edgeRows htail hhead O dart_edge_openSegment_frontier
+    raw_pred_succ_tail_ne repeated_tail_rows
+
+/-- Pointwise frontier-edge local topology discharges the
+nearby-exterior-points input in the actual-arc S2 assembly route. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_frontier_tailHitActualArcRows_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    UnboundedExteriorFrontierCycleRows C inputs :=
+  S2_agent_input_s2_assembly_gap_reducer_frontier_nearbyTailHitActualArcRows
+    inputs frontier_preconnected localSectorRows
+    interiorEdgeNearbyExteriorPointSource_of_frontier_edge_point
+    edgeRows htail hhead O dart_edge_openSegment_frontier
+    raw_pred_succ_tail_ne actualArcRows
+
+/-- Minimal-cut variant of the frontier/tail-hit S2 assembly route.
+
+This is the replacement for the obsolete actual-arc cover source: repeated raw
+tails only need a pair of witnesses separated after deleting the repeated
+tail, packaged as `RawFaceSuccOrbitRepeatedTailExteriorCutRows`. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_frontier_tailHitCutRows_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (cutRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailExteriorCutRows
+            (inputs := inputs) O i j) :
+    UnboundedExteriorFrontierCycleRows C inputs :=
+  S2_agent_input_s2_assembly_gap_reducer_frontier_tailHitRows_of_frontier_edge_point
+    inputs frontier_preconnected localSectorRows edgeRows htail hhead O
+    dart_edge_openSegment_frontier raw_pred_succ_tail_ne
+    (fun hne heq =>
+      (cutRows hne heq).toRepeatedExteriorBoundarySeparationRows hne heq)
+
+/-- Raw-orbit coverage version of the minimal repeated-tail cut-row route. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitCutRows_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (edge_coverage :
+      forall e :
+          {e : PlanarInterface.Edge n //
+            e ∈ unboundedFrontierEdgeSet C inputs},
+        Exists fun k : Fin O.period =>
+          e.1 =
+              ((O.dart k).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∨
+            e.1 =
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+                (O.dart k).tail))
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (cutRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailExteriorCutRows
+            (inputs := inputs) O i j) :
+    UnboundedExteriorFrontierCycleRows C inputs := by
+  let hedges :
+      forall k : Fin O.period,
+        ((O.dart k).tail,
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+              (O.dart k).tail) ∈
+            unboundedFrontierEdgeSet C inputs :=
+    S2_agent_raw_orbit_edge_membership_source
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior) :=
+    S2_agent_frontier_preconnected_source_route_rawFaceSuccOrbit_of_frontier_edge_point
+      (inputs := inputs) O hedges edge_coverage localSectorRows
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edge_openSegment_frontier localSectorRows
+  exact
+    S2_agent_input_s2_assembly_gap_reducer_frontier_tailHitCutRows_of_frontier_edge_point
+      inputs frontier_preconnected localSectorRows edgeRows htail hhead O
+      dart_edge_openSegment_frontier raw_pred_succ_tail_ne cutRows
+
+/-- Raw-tail coverage version of the minimal repeated-tail cut-row route. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitCutRows_of_tailCoverage
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (cutRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailExteriorCutRows
+            (inputs := inputs) O i j) :
+    UnboundedExteriorFrontierCycleRows C inputs := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edge_openSegment_frontier localSectorRows
+  let edge_coverage :
+      forall e :
+          {e : PlanarInterface.Edge n //
+            e ∈ unboundedFrontierEdgeSet C inputs},
+        Exists fun k : Fin O.period =>
+          e.1 =
+              ((O.dart k).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∨
+            e.1 =
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+                (O.dart k).tail) :=
+    rawFaceSuccOrbit_edge_coverage_of_tail_coverage_localSectorRows
+      (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage localSectorRows raw_pred_succ_tail_ne
+  exact
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitCutRows_of_frontier_edge_point
+      inputs localSectorRows edgeRows htail hhead O edge_coverage
+      dart_edge_openSegment_frontier cutRows
+
+/-- Carrier-connected version of the selected raw-orbit S2 assembly using the
+minimal repeated-tail cut rows. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitCutRows_of_carrierConnected
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (cutRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailExteriorCutRows
+            (inputs := inputs) O i j) :
+    UnboundedExteriorFrontierCycleRows C inputs := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edge_openSegment_frontier localSectorRows
+  let frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+    S2_agent_raw_tail_hit_from_exterior_frontier
+      (C := C) (inputs := inputs) O dart_edge_openSegment_frontier
+      carrier_connected localSectorRows raw_pred_succ_tail_ne
+  exact
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitCutRows_of_tailCoverage
+      inputs localSectorRows edgeRows htail hhead O
+      frontier_vertex_tail_coverage dart_edge_openSegment_frontier cutRows
+
+/-- Raw-orbit coverage version of
+`S2_agent_input_s2_assembly_gap_reducer_frontier_tailHitActualArcRows_of_frontier_edge_point`.
+
+The selected raw dart-edge frontier row already supplies concrete
+`unboundedFrontierEdgeSet` membership for every raw successor edge.  If those
+raw successor edges cover the concrete frontier-edge carrier, then the
+frontier preconnectedness row is sourced internally.  The raw
+predecessor/successor nonbacktracking row is also sourced internally from the
+same dart-edge frontier row and the pointwise local-sector rows. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_frontier_edge_point
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (edge_coverage :
+      forall e :
+          {e : PlanarInterface.Edge n //
+            e ∈ unboundedFrontierEdgeSet C inputs},
+        Exists fun k : Fin O.period =>
+          e.1 =
+              ((O.dart k).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∨
+            e.1 =
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+                (O.dart k).tail))
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    UnboundedExteriorFrontierCycleRows C inputs := by
+  let hedges :
+      forall k : Fin O.period,
+        ((O.dart k).tail,
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+              (O.dart k).tail) ∈
+            unboundedFrontierEdgeSet C inputs :=
+    S2_agent_raw_orbit_edge_membership_source
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior) :=
+    S2_agent_frontier_preconnected_source_route_rawFaceSuccOrbit_of_frontier_edge_point
+      (inputs := inputs) O hedges edge_coverage localSectorRows
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edge_openSegment_frontier localSectorRows
+  exact
+    S2_agent_input_s2_assembly_gap_reducer_frontier_tailHitActualArcRows_of_frontier_edge_point
+      inputs frontier_preconnected localSectorRows edgeRows htail hhead O
+      dart_edge_openSegment_frontier raw_pred_succ_tail_ne actualArcRows
+
+/-- Raw-tail coverage version of
+`S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_frontier_edge_point`.
+
+Local sectors identify every concrete frontier edge incident to a raw-hit
+frontier vertex with one of the two raw predecessor/successor edges, so the
+selected raw-tail coverage row internally supplies the carrier edge-coverage
+input needed to source frontier preconnectedness. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_tailCoverage
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    UnboundedExteriorFrontierCycleRows C inputs := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edge_openSegment_frontier localSectorRows
+  let edge_coverage :
+      forall e :
+          {e : PlanarInterface.Edge n //
+            e ∈ unboundedFrontierEdgeSet C inputs},
+        Exists fun k : Fin O.period =>
+          e.1 =
+              ((O.dart k).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∨
+            e.1 =
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+                (O.dart k).tail) :=
+    rawFaceSuccOrbit_edge_coverage_of_tail_coverage_localSectorRows
+      (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage localSectorRows raw_pred_succ_tail_ne
+  exact
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_frontier_edge_point
+      inputs localSectorRows edgeRows htail hhead O edge_coverage
+      dart_edge_openSegment_frontier actualArcRows
+
+/-- Carrier-connected version of the selected raw-orbit S2 assembly.
+
+Connectedness of the actual unbounded-frontier carrier plus local sectors
+gives raw-tail coverage; raw-tail coverage then gives carrier edge coverage;
+the actual exterior arc rows discharge the no-cut repeated-tail input. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_carrierConnected
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    UnboundedExteriorFrontierCycleRows C inputs := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edge_openSegment_frontier localSectorRows
+  let frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+    S2_agent_raw_tail_hit_from_exterior_frontier
+      (C := C) (inputs := inputs) O dart_edge_openSegment_frontier
+      carrier_connected localSectorRows raw_pred_succ_tail_ne
+  exact
+    S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_tailCoverage
+      inputs localSectorRows edgeRows htail hhead O
+      frontier_vertex_tail_coverage dart_edge_openSegment_frontier actualArcRows
+
+/-- Carrier-connected raw assembly with the dart-edge frontier row read from
+the actual exterior-arc package itself. -/
+noncomputable def
+    S2_agent_input_s2_assembly_gap_reducer_actualArcRows_of_carrierConnected
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    UnboundedExteriorFrontierCycleRows C inputs :=
+  S2_agent_input_s2_assembly_gap_reducer_rawOrbitActualArcRows_of_carrierConnected
+    inputs localSectorRows carrier_connected edgeRows htail hhead O
+    (rawFaceSuccOrbit_dart_edge_openSegment_frontier_of_actualExteriorArcSeparationRows
+      (inputs := inputs) O actualArcRows)
+    actualArcRows
 
 /-- Claim `S2-agent-boundary-cycle-from-raw-tail-hit`.
 
@@ -20407,6 +23044,43 @@ theorem S2_agent_geometric_boundary_order_source_of_boundaryVertexExteriorSector
       BoundaryVertexExteriorSectorRowsAt.toBoundaryVertexAngularNoBetweenRows
         (sectorRows k))
 
+/-- Local-sector rows from a genuine boundary cycle once incident selected
+frontier edges have been ruled into the predecessor/successor angular sector.
+
+This is the non-W3 local-sector eraser: the fixed-side open-edge topology
+already supplies relative closure, so the remaining local-sector source is the
+incident-edge angular row. -/
+noncomputable def localSectorRows_of_boundary_frontier_incident_edge_exterior_angular_sector
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (frontier_iff_cycle_vertex :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v)
+    (cycle_edge_mem :
+      forall k : Fin B.length,
+        (B.vertex k,
+            B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+            B.vertex k) ∈ unboundedFrontierEdgeSet C inputs)
+    (angularRows :
+      forall k : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C B k)
+    (incident_edge_angular :
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      UnboundedFrontierCarrierLocalSectorRowsAt inputs a :=
+  localSectorRows_of_boundaryCycle_complete
+    B frontier_iff_cycle_vertex cycle_edge_mem
+    (boundaryCycleIncidentFrontierEdgeCompleteness_of_boundary_frontier_incident_edge_exterior_angular_sector
+      (C := C) (inputs := inputs) (B := B)
+      incident_edge_angular
+      (fun k => (angularRows k).no_between))
+
 /-- Family source for the local two-germ row from the actual point-sector
 statement and the genuine no-between row at every boundary vertex. -/
 theorem local_frontier_germ_two_of_boundary_point_sector_no_between
@@ -20880,6 +23554,224 @@ noncomputable def S2_agent_actual_exterior_sector_input_source_2
         localSectorRows_of_vertex_star_isolation_local_exterior_sector
         (C := C) (inputs := inputs) B frontier_iff_cycle_vertex
         cycle_edge_openSegment_frontier local_exterior_sector no_between }
+
+/-- Open-segment variant of
+`S2_agent_actual_exterior_sector_input_source_2`.
+
+The primitive boundary-sector rows are sourced through the open-segment
+vertex-star route, and those sector rows then provide the pointwise local
+sector family for the concrete frontier carrier.  This avoids the closed W3
+endpoint branch in the main actual-sector source. -/
+noncomputable def S2_agent_actual_exterior_sector_input_source_2_from_openSegment_local_exterior_sector
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (frontier_iff_cycle_vertex :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v)
+    (cycle_edge_openSegment_frontier :
+      forall k : Fin B.length,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (B.vertex k))
+            ((canonicalGraph C).point
+              (B.vertex (PlanarInterface.cyclicSucc B.length_pos k))) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hangle :
+      forall k : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) <
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicSucc B.length_pos k)))
+    (no_between :
+      forall (k : Fin B.length) (x : Fin n),
+        GraphBridge.UnitDistanceAdj C (B.vertex k) x ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              Not
+                (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryPredSuccAngularBetween
+                  C B k x))
+    (openSegment_local_exterior_sector :
+      BoundaryFrontierOpenSegmentLocalExteriorSector inputs B) :
+    ActualExteriorSectorInputSourceRows inputs B := by
+  let angularRows :=
+    boundaryVertexAngularNoBetweenRows_of_pred_succ_no_between
+      (C := C) (B := B) hangle no_between
+  let sectorRows :
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k :=
+    boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_openSegment_local_exterior_sector
+      (C := C) (inputs := inputs) (B := B)
+      angularRows cycle_edge_openSegment_frontier
+      openSegment_local_exterior_sector
+  exact
+    { angularRows := angularRows
+      sectorRows := sectorRows
+      localSectorRows :=
+        (Classical.choice
+          (cyclicCoverageLocalSectorRows_of_boundaryVertexExteriorSectorRows
+            (C := C) (inputs := inputs) B frontier_iff_cycle_vertex
+            sectorRows)).2 }
+
+/-- Actual-sector source from the selected incident-edge angular row.
+
+The fixed-side half-ball construction supplies the open-segment promotion to a
+selected frontier edge internally; the local two-germ proof then uses only
+open-segment vertex-star isolation. -/
+noncomputable def S2_agent_actual_exterior_sector_input_source_2_from_incident_edge_angular
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (frontier_iff_cycle_vertex :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v)
+    (cycle_edge_openSegment_frontier :
+      forall k : Fin B.length,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (B.vertex k))
+            ((canonicalGraph C).point
+              (B.vertex (PlanarInterface.cyclicSucc B.length_pos k))) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hangle :
+      forall k : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) <
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicSucc B.length_pos k)))
+    (no_between :
+      forall (k : Fin B.length) (x : Fin n),
+        GraphBridge.UnitDistanceAdj C (B.vertex k) x ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              Not
+                (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryPredSuccAngularBetween
+                  C B k x))
+    (incident_edge_angular :
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B) :
+    ActualExteriorSectorInputSourceRows inputs B :=
+  S2_agent_actual_exterior_sector_input_source_2_from_openSegment_local_exterior_sector
+    (C := C) (inputs := inputs) B frontier_iff_cycle_vertex
+    cycle_edge_openSegment_frontier hangle no_between
+    (boundary_frontier_openSegment_local_exterior_sector_of_incident_edge_angular
+      (C := C) (inputs := inputs) (B := B) incident_edge_angular)
+
+/-- Actual-sector source from boundary-cycle incident frontier-edge
+completeness.  This is the same open-segment route as the incident-edge
+angular source, with the selected-edge angular row made vacuous by
+completeness. -/
+noncomputable def
+    S2_agent_actual_exterior_sector_input_source_2_from_boundaryCycleIncidentFrontierEdgeCompleteness
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (frontier_iff_cycle_vertex :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v)
+    (cycle_edge_openSegment_frontier :
+      forall k : Fin B.length,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (B.vertex k))
+            ((canonicalGraph C).point
+              (B.vertex (PlanarInterface.cyclicSucc B.length_pos k))) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hangle :
+      forall k : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) <
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicSucc B.length_pos k)))
+    (no_between :
+      forall (k : Fin B.length) (x : Fin n),
+        GraphBridge.UnitDistanceAdj C (B.vertex k) x ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              Not
+                (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryPredSuccAngularBetween
+                  C B k x))
+    (hcomplete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs B) :
+    ActualExteriorSectorInputSourceRows inputs B :=
+  S2_agent_actual_exterior_sector_input_source_2_from_incident_edge_angular
+    (C := C) (inputs := inputs) B frontier_iff_cycle_vertex
+    cycle_edge_openSegment_frontier hangle no_between
+    (boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
+      (C := C) (inputs := inputs) (B := B) hcomplete)
+
+/-- Face-successor/orientation variant of the open-segment actual-sector
+route, using boundary-cycle incident completeness instead of the older
+closed-segment local exterior angular source. -/
+noncomputable def
+    S2_agent_actual_exterior_sector_input_source_2_from_faceSuccRows_orientation_boundary_cycle_edge_mem_boundaryCycleIncidentFrontierEdgeCompleteness
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (frontier_iff_cycle_vertex :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v)
+    (cycle_edge_mem :
+      forall k : Fin B.length,
+        (B.vertex k,
+            B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+            B.vertex k) ∈
+            unboundedFrontierEdgeSet C inputs)
+    (faceSuccRows :
+      UnitDistanceCycleFaceSuccRows C
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C) B)
+    (boundary_orientation :
+      forall k : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicPred B.length_pos k)) <
+          _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.graphDartArg
+            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.canonicalGeometricGraph C)
+            (B.vertex k)
+            (B.vertex (PlanarInterface.cyclicSucc B.length_pos k)))
+    (hcomplete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs B) :
+    ActualExteriorSectorInputSourceRows inputs B := by
+  let geometric_order :
+      forall k : Fin B.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C B k :=
+    _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.S2_agent_geometric_boundary_order_source_of_pred_arg_lt_succ_arg
+      C B faceSuccRows boundary_orientation
+  let angularRows :=
+    S2_agent_angle_order_from_geometric_rotation
+      (C := C) (B := B) geometric_order
+  exact
+    S2_agent_actual_exterior_sector_input_source_2_from_boundaryCycleIncidentFrontierEdgeCompleteness
+      (C := C) (inputs := inputs) B frontier_iff_cycle_vertex
+      (cycle_edge_openSegment_frontier_of_unboundedFrontierEdgeSet_or_symm
+        cycle_edge_mem)
+      (fun k => (angularRows k).angle)
+      (fun k => (angularRows k).no_between)
+      hcomplete
 
 /-- Actual-carrier version of
 `S2_agent_actual_exterior_sector_input_source_2`.

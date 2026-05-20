@@ -1,4 +1,7 @@
 import Mathlib.Tactic
+import Mathlib.Analysis.Convex.Side
+import Mathlib.Analysis.Convex.PathConnected
+import Mathlib.Analysis.Normed.Affine.AddTorsor
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Topology.Compactness.Compact
 import ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete
@@ -72,6 +75,393 @@ theorem continuous_segmentPoint (a b : PlanarInterface.Point) :
     Continuous fun t : Real => PlanarInterface.segmentPoint a b t := by
   unfold PlanarInterface.segmentPoint
   continuity
+
+/-- The project-local segment parametrization is Mathlib's affine `lineMap`
+on the Euclidean plane.  This bridge lets the local drawing lemmas use
+Mathlib's affine-line and side-of-line API without changing the project-facing
+`PlanarInterface.segmentPoint` statements. -/
+theorem segmentPoint_eq_affineLineMap
+    (a b : PlanarInterface.Point) (t : Real) :
+    PlanarInterface.segmentPoint a b t = AffineMap.lineMap a b t := by
+  ext <;> simp [PlanarInterface.segmentPoint, AffineMap.lineMap_apply_module]
+
+/-- Every project-local segment point lies on the Mathlib affine line through
+the two segment endpoints. -/
+theorem segmentPoint_mem_affineSpan_pair
+    (a b : PlanarInterface.Point) (t : Real) :
+    PlanarInterface.segmentPoint a b t ∈
+      (line[ℝ, a, b] : AffineSubspace ℝ PlanarInterface.Point) := by
+  rw [segmentPoint_eq_affineLineMap]
+  exact AffineMap.lineMap_mem_affineSpan_pair t a b
+
+/-- The project-local closed segment is contained in the Mathlib affine line
+through its endpoints. -/
+theorem closedSegment_subset_affineSpan_pair
+    (a b : PlanarInterface.Point) :
+    closedSegment a b ⊆
+      (line[ℝ, a, b] : AffineSubspace ℝ PlanarInterface.Point) := by
+  intro p hp
+  rcases hp with ⟨t, _ht0, _ht1, hpt⟩
+  rw [hpt]
+  exact segmentPoint_mem_affineSpan_pair a b t
+
+/-- The project-local open segment is contained in the Mathlib affine line
+through its endpoints. -/
+theorem inOpenSegment_mem_affineSpan_pair
+    {p a b : PlanarInterface.Point}
+    (hp : PlanarInterface.InOpenSegment p a b) :
+    p ∈ (line[ℝ, a, b] : AffineSubspace ℝ PlanarInterface.Point) := by
+  rcases hp with ⟨t, _ht0, _ht1, hpt⟩
+  rw [hpt]
+  exact segmentPoint_mem_affineSpan_pair a b t
+
+/-- The linear signed-area functional normal to the directed line from `a` to
+`b`.  Subtracting its value at `a` gives the usual signed distance surrogate
+from the affine line through `a` and `b`. -/
+def edgeNormalLinearMap
+    (a b : PlanarInterface.Point) : PlanarInterface.Point →ₗ[ℝ] Real where
+  toFun p := - (b.2 - a.2) * p.1 + (b.1 - a.1) * p.2
+  map_add' := by
+    intro p q
+    simp
+    ring
+  map_smul' := by
+    intro c p
+    simp
+    ring
+
+/-- Signed affine normal coordinate for the directed line through `a` and
+`b`.  It vanishes on the whole affine line. -/
+def edgeNormalCoord
+    (a b p : PlanarInterface.Point) : Real :=
+  edgeNormalLinearMap a b p - edgeNormalLinearMap a b a
+
+/-- Segment points have zero signed affine normal coordinate. -/
+theorem edgeNormalCoord_segmentPoint_eq_zero
+    (a b : PlanarInterface.Point) (t : Real) :
+    edgeNormalCoord a b (PlanarInterface.segmentPoint a b t) = 0 := by
+  unfold edgeNormalCoord edgeNormalLinearMap PlanarInterface.segmentPoint
+  simp
+  ring
+
+/-- Reversing the directed edge reverses the signed normal coordinate. -/
+theorem edgeNormalCoord_swap
+    (a b p : PlanarInterface.Point) :
+    edgeNormalCoord b a p = - edgeNormalCoord a b p := by
+  unfold edgeNormalCoord edgeNormalLinearMap
+  simp
+  ring
+
+/-- Move from `z` in the positive normal direction to the directed line
+through `a` and `b`. -/
+def normalOffsetPoint
+    (a b z : PlanarInterface.Point) (δ : Real) :
+    PlanarInterface.Point :=
+  (z.1 - δ * (b.2 - a.2), z.2 + δ * (b.1 - a.1))
+
+/-- The normal offset changes the signed normal coordinate by a positive
+multiple of the squared edge length. -/
+theorem edgeNormalCoord_normalOffsetPoint
+    (a b z : PlanarInterface.Point) (δ : Real) :
+    edgeNormalCoord a b (normalOffsetPoint a b z δ) =
+      edgeNormalCoord a b z +
+        δ * ((b.2 - a.2) ^ 2 + (b.1 - a.1) ^ 2) := by
+  unfold edgeNormalCoord edgeNormalLinearMap normalOffsetPoint
+  simp
+  ring
+
+/-- A nondegenerate edge has positive squared direction length. -/
+theorem edge_direction_sq_sum_pos
+    {a b : PlanarInterface.Point} (hab : a ≠ b) :
+    0 < (b.2 - a.2) ^ 2 + (b.1 - a.1) ^ 2 := by
+  have hnonneg :
+      0 <= (b.2 - a.2) ^ 2 + (b.1 - a.1) ^ 2 :=
+    add_nonneg (sq_nonneg _) (sq_nonneg _)
+  have hne :
+      (b.2 - a.2) ^ 2 + (b.1 - a.1) ^ 2 ≠ 0 := by
+    intro hzero
+    have hdy_sq : (b.2 - a.2) ^ 2 = 0 := by nlinarith [sq_nonneg (b.1 - a.1)]
+    have hdx_sq : (b.1 - a.1) ^ 2 = 0 := by nlinarith [sq_nonneg (b.2 - a.2)]
+    have hdy : b.2 - a.2 = 0 := sq_eq_zero_iff.mp hdy_sq
+    have hdx : b.1 - a.1 = 0 := sq_eq_zero_iff.mp hdx_sq
+    exact hab (Prod.ext (by linarith) (by linarith))
+  exact lt_of_le_of_ne' hnonneg hne
+
+/-- Positive normal offsets from a point on the affine edge-line lie in the
+positive strict side. -/
+theorem edgeNormalCoord_normalOffsetPoint_pos_of_zero_of_pos_of_ne
+    {a b z : PlanarInterface.Point} {δ : Real}
+    (hz : edgeNormalCoord a b z = 0)
+    (hδ : 0 < δ)
+    (hab : a ≠ b) :
+    0 < edgeNormalCoord a b (normalOffsetPoint a b z δ) := by
+  rw [edgeNormalCoord_normalOffsetPoint, hz, zero_add]
+  exact mul_pos hδ (edge_direction_sq_sum_pos hab)
+
+/-- The normal offset map is continuous. -/
+theorem continuous_normalOffsetPoint
+    (a b z : PlanarInterface.Point) :
+    Continuous fun δ : Real => normalOffsetPoint a b z δ := by
+  unfold normalOffsetPoint
+  continuity
+
+/-- Zero normal offset is the original point. -/
+theorem normalOffsetPoint_zero
+    (a b z : PlanarInterface.Point) :
+    normalOffsetPoint a b z 0 = z := by
+  ext <;> simp [normalOffsetPoint]
+
+/-- Closed-segment points have zero signed affine normal coordinate. -/
+theorem edgeNormalCoord_eq_zero_of_mem_closedSegment
+    {p a b : PlanarInterface.Point}
+    (hp : p ∈ closedSegment a b) :
+    edgeNormalCoord a b p = 0 := by
+  rcases hp with ⟨t, _ht0, _ht1, hpt⟩
+  rw [hpt]
+  exact edgeNormalCoord_segmentPoint_eq_zero a b t
+
+/-- Zero signed normal coordinate means membership in the affine line through
+the directed edge endpoints. -/
+theorem mem_affineSpan_pair_of_edgeNormalCoord_eq_zero_of_ne
+    {p a b : PlanarInterface.Point}
+    (hab : a ≠ b)
+    (hp : edgeNormalCoord a b p = 0) :
+    p ∈ (line[ℝ, a, b] : AffineSubspace ℝ PlanarInterface.Point) := by
+  have hcross :
+      (b.1 - a.1) * (p.2 - a.2) =
+        (b.2 - a.2) * (p.1 - a.1) := by
+    unfold edgeNormalCoord edgeNormalLinearMap at hp
+    simp at hp
+    nlinarith
+  rw [mem_affineSpan_pair_iff_exists_lineMap_eq]
+  by_cases hdx : b.1 - a.1 = 0
+  · have hdy : b.2 - a.2 ≠ 0 := by
+      intro hdy
+      exact hab (Prod.ext (by linarith) (by linarith))
+    refine ⟨(p.2 - a.2) / (b.2 - a.2), ?_⟩
+    ext <;> simp [AffineMap.lineMap_apply_module]
+    · have hb1 : b.1 = a.1 := sub_eq_zero.mp hdx
+      have hp1 : p.1 = a.1 := by
+        have hmul : (b.2 - a.2) * (p.1 - a.1) = 0 := by
+          rw [← hcross, hdx, zero_mul]
+        have hp1zero : p.1 - a.1 = 0 := (mul_eq_zero.mp hmul).resolve_left hdy
+        linarith
+      rw [hb1, hp1]
+      ring
+    · field_simp [hdy]
+      ring
+  · refine ⟨(p.1 - a.1) / (b.1 - a.1), ?_⟩
+    ext <;> simp [AffineMap.lineMap_apply_module]
+    · field_simp [hdx]
+      ring
+    · field_simp [hdx]
+      nlinarith
+
+/-- Near an open-segment point of a nondegenerate edge, the local residual of
+the affine edge-line is contained in the closed segment.  This is the
+finite-drawing input needed to turn frontier closure into a strict same-side
+exterior patch. -/
+theorem exists_ball_inter_edgeNormalCoord_zero_subset_closedSegment_of_inOpenSegment_of_ne
+    {p a b : PlanarInterface.Point}
+    (hab : a ≠ b)
+    (hp : PlanarInterface.InOpenSegment p a b) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball p ε ∩
+            {q : PlanarInterface.Point | edgeNormalCoord a b q = 0} ⊆
+          closedSegment a b := by
+  rcases hp with ⟨t, ht0, ht1, hpt⟩
+  let D : Real := dist a b
+  have hDpos : 0 < D := by
+    simpa [D] using dist_pos.2 hab
+  have ht1pos : 0 < 1 - t := by linarith
+  let ε : Real := min (t * D) ((1 - t) * D)
+  have hεpos : 0 < ε := by
+    exact lt_min (mul_pos ht0 hDpos) (mul_pos ht1pos hDpos)
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hq
+  rcases
+      (mem_affineSpan_pair_iff_exists_lineMap_eq.1
+        (mem_affineSpan_pair_of_edgeNormalCoord_eq_zero_of_ne
+          (p := q) (a := a) (b := b) hab hq.2)) with
+    ⟨s, hsq⟩
+  have hp_line : AffineMap.lineMap a b t = p := by
+    rw [← segmentPoint_eq_affineLineMap, hpt]
+  have hdist_eq : dist p q = dist t s * D := by
+    rw [← hp_line, ← hsq]
+    simpa [D] using dist_lineMap_lineMap a b t s
+  have hdist_pq_lt : dist p q < ε := by
+    simpa [dist_comm, Metric.mem_ball] using hq.1
+  have hdist_lt : dist t s * D < ε := by
+    simpa [hdist_eq] using hdist_pq_lt
+  have hdist_lt_left : dist t s * D < t * D :=
+    lt_of_lt_of_le hdist_lt (min_le_left _ _)
+  have hdist_lt_right : dist t s * D < (1 - t) * D :=
+    lt_of_lt_of_le hdist_lt (min_le_right _ _)
+  have hparam_left : dist t s < t := by
+    exact lt_of_mul_lt_mul_right hdist_lt_left hDpos.le
+  have hparam_right : dist t s < 1 - t := by
+    exact lt_of_mul_lt_mul_right hdist_lt_right hDpos.le
+  have hs0 : 0 ≤ s := by
+    by_contra hsneg
+    have hslt : s < 0 := lt_of_not_ge hsneg
+    have hge : t ≤ dist t s := by
+      rw [Real.dist_eq, abs_of_nonneg (by linarith)]
+      linarith
+    linarith
+  have hs1 : s ≤ 1 := by
+    by_contra hsgt_not
+    have hsgt : 1 < s := lt_of_not_ge hsgt_not
+    have hge : 1 - t ≤ dist t s := by
+      rw [Real.dist_eq, abs_of_nonpos (by linarith)]
+      linarith
+    linarith
+  exact
+    ⟨s, hs0, hs1,
+      calc
+        q = AffineMap.lineMap a b s := hsq.symm
+        _ = PlanarInterface.segmentPoint a b s :=
+          (segmentPoint_eq_affineLineMap a b s).symm⟩
+
+/-- The positive strict side of the directed edge, restricted to a metric
+ball. -/
+def edgePositiveSideBall
+    (a b z : PlanarInterface.Point) (r : Real) :
+    Set PlanarInterface.Point :=
+  {p | 0 < edgeNormalCoord a b p} ∩ Metric.ball z r
+
+/-- The positive side-ball is convex. -/
+theorem convex_edgePositiveSideBall
+    (a b z : PlanarInterface.Point) (r : Real) :
+    Convex ℝ (edgePositiveSideBall a b z r) := by
+  have hhalf :
+      Convex ℝ
+        {p : PlanarInterface.Point |
+          edgeNormalLinearMap a b a < edgeNormalLinearMap a b p} :=
+    convex_halfSpace_gt (edgeNormalLinearMap a b).isLinear
+      (edgeNormalLinearMap a b a)
+  simpa [edgePositiveSideBall, edgeNormalCoord, sub_pos] using
+    hhalf.inter (convex_ball z r)
+
+/-- The positive side-ball is preconnected. -/
+theorem isPreconnected_edgePositiveSideBall
+    (a b z : PlanarInterface.Point) (r : Real) :
+    IsPreconnected (edgePositiveSideBall a b z r) :=
+  (convex_edgePositiveSideBall a b z r).isPreconnected
+
+/-- A point on a nondegenerate edge-line is accumulated by the positive
+side-ball at every positive radius. -/
+theorem mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero
+    {a b z : PlanarInterface.Point} {r : Real}
+    (hz : edgeNormalCoord a b z = 0)
+    (hab : a ≠ b)
+    (hr : 0 < r) :
+    z ∈ closure (edgePositiveSideBall a b z r) := by
+  rw [Metric.mem_closure_iff]
+  intro eps heps
+  have hmin_pos : 0 < min r eps := lt_min hr heps
+  have hcont :
+      Filter.Tendsto (fun δ : Real => normalOffsetPoint a b z δ)
+        (nhds 0) (nhds z) := by
+    have hcontinuous := continuous_normalOffsetPoint a b z
+    have ht := hcontinuous.continuousAt (x := (0 : Real))
+    change
+      Filter.Tendsto (fun δ : Real => normalOffsetPoint a b z δ)
+        (nhds 0) (nhds (normalOffsetPoint a b z 0)) at ht
+    simpa [normalOffsetPoint_zero a b z] using ht
+  have hpreimage :
+      {δ : Real | normalOffsetPoint a b z δ ∈ Metric.ball z (min r eps)}
+        ∈ nhds (0 : Real) :=
+    hcont (Metric.ball_mem_nhds z hmin_pos)
+  rcases Metric.mem_nhds_iff.1 hpreimage with
+    ⟨η, hηpos, hηsubset⟩
+  let δ : Real := min (η / 2) 1
+  have hδpos : 0 < δ := lt_min (half_pos hηpos) (by norm_num)
+  have hδball : δ ∈ Metric.ball (0 : Real) η := by
+    rw [Metric.mem_ball, Real.dist_eq]
+    have hδnonneg : 0 <= δ := le_of_lt hδpos
+    rw [sub_zero, abs_of_nonneg hδnonneg]
+    exact lt_of_le_of_lt (min_le_left (η / 2) 1) (half_lt_self hηpos)
+  let y : PlanarInterface.Point := normalOffsetPoint a b z δ
+  have hyball_min : y ∈ Metric.ball z (min r eps) := hηsubset hδball
+  have hyball_r : y ∈ Metric.ball z r :=
+    Metric.ball_subset_ball (min_le_left r eps) hyball_min
+  have hydist_yz : dist y z < eps :=
+    (Metric.ball_subset_ball (min_le_right r eps) hyball_min)
+  have hydist : dist z y < eps := by
+    simpa [dist_comm] using hydist_yz
+  refine ⟨y, ?_, hydist⟩
+  exact
+    ⟨edgeNormalCoord_normalOffsetPoint_pos_of_zero_of_pos_of_ne
+        hz hδpos hab,
+      hyball_r⟩
+
+/-- Any point on the affine edge-line inside the metric part of a side-ball is
+accumulated by that side-ball.  This is the translated-center version used to
+propagate exterior closure along a locally isolated open edge. -/
+theorem mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero_of_mem_ball
+    {a b c z : PlanarInterface.Point} {r : Real}
+    (hz : edgeNormalCoord a b z = 0)
+    (hab : a ≠ b)
+    (hzball : z ∈ Metric.ball c r) :
+    z ∈ closure (edgePositiveSideBall a b c r) := by
+  rw [Metric.mem_closure_iff]
+  intro eps heps
+  have hcont :
+      Filter.Tendsto (fun δ : Real => normalOffsetPoint a b z δ)
+        (nhds 0) (nhds z) := by
+    have hcontinuous := continuous_normalOffsetPoint a b z
+    have ht := hcontinuous.continuousAt (x := (0 : Real))
+    change
+      Filter.Tendsto (fun δ : Real => normalOffsetPoint a b z δ)
+        (nhds 0) (nhds (normalOffsetPoint a b z 0)) at ht
+    simpa [normalOffsetPoint_zero a b z] using ht
+  have hpreimage_c :
+      {δ : Real | normalOffsetPoint a b z δ ∈ Metric.ball c r}
+        ∈ nhds (0 : Real) :=
+    hcont (Metric.isOpen_ball.mem_nhds hzball)
+  have hpreimage_eps :
+      {δ : Real | normalOffsetPoint a b z δ ∈ Metric.ball z eps}
+        ∈ nhds (0 : Real) :=
+    hcont (Metric.ball_mem_nhds z heps)
+  have hpreimage :
+      {δ : Real |
+        normalOffsetPoint a b z δ ∈ Metric.ball c r ∧
+          normalOffsetPoint a b z δ ∈ Metric.ball z eps}
+        ∈ nhds (0 : Real) := by
+    simpa [Set.inter_def] using Filter.inter_mem hpreimage_c hpreimage_eps
+  rcases Metric.mem_nhds_iff.1 hpreimage with
+    ⟨η, hηpos, hηsubset⟩
+  let δ : Real := min (η / 2) 1
+  have hδpos : 0 < δ := lt_min (half_pos hηpos) (by norm_num)
+  have hδball : δ ∈ Metric.ball (0 : Real) η := by
+    rw [Metric.mem_ball, Real.dist_eq]
+    have hδnonneg : 0 <= δ := le_of_lt hδpos
+    rw [sub_zero, abs_of_nonneg hδnonneg]
+    exact lt_of_le_of_lt (min_le_left (η / 2) 1) (half_lt_self hηpos)
+  let y : PlanarInterface.Point := normalOffsetPoint a b z δ
+  have hydata := hηsubset hδball
+  have hydist_yz : dist y z < eps := by
+    simpa [y, Metric.mem_ball] using hydata.2
+  have hydist : dist z y < eps := by
+    simpa [dist_comm] using hydist_yz
+  refine ⟨y, ?_, hydist⟩
+  exact
+    ⟨edgeNormalCoord_normalOffsetPoint_pos_of_zero_of_pos_of_ne
+        hz hδpos hab,
+      by simpa [y] using hydata.1⟩
+
+/-- A point strictly on one side of the affine line through a closed segment
+cannot lie on that closed segment. -/
+theorem sSameSide_line_not_mem_closedSegment
+    {q y a b : PlanarInterface.Point}
+    (hqside :
+      (line[ℝ, a, b] : AffineSubspace ℝ PlanarInterface.Point).SSameSide
+        y q) :
+    q ∉ closedSegment a b := by
+  intro hqseg
+  exact hqside.right_notMem
+    (closedSegment_subset_affineSpan_pair a b hqseg)
 
 /-- Closed straight segments are compact. -/
 theorem isCompact_closedSegment (a b : PlanarInterface.Point) :
@@ -1949,6 +2339,64 @@ theorem mem_drawingComplement_iff
     {C : _root_.UDConfig n} {p : PlanarInterface.Point} :
     p ∈ drawingComplement C <-> p ∉ embeddedEdgeSet C :=
   Iff.rfl
+
+/-- If a ball meets the embedded drawing only along a selected closed segment,
+then the strict same-side part of that ball is contained in the drawing
+complement.  This is the containment half of the local same-side exterior patch
+needed for S2. -/
+theorem sSameSide_ball_subset_drawingComplement_of_local_closedSegment
+    {C : _root_.UDConfig n}
+    {a b y z : PlanarInterface.Point} {ε : Real}
+    (hlocal :
+      Metric.ball z ε ∩ embeddedEdgeSet C ⊆ closedSegment a b) :
+    ({q : PlanarInterface.Point |
+        (line[ℝ, a, b] : AffineSubspace ℝ PlanarInterface.Point).SSameSide
+          y q} ∩ Metric.ball z ε) ⊆ drawingComplement C := by
+  intro q hq
+  rw [drawingComplement]
+  intro hqdraw
+  have hqseg : q ∈ closedSegment a b := hlocal ⟨hq.2, hqdraw⟩
+  exact sSameSide_line_not_mem_closedSegment hq.1 hqseg
+
+/-- Normal-coordinate side-ball containment version of
+`sSameSide_ball_subset_drawingComplement_of_local_closedSegment`.
+If a ball meets the embedded drawing only along a selected closed segment, then
+any smaller positive side-ball is contained in the drawing complement. -/
+theorem edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment
+    {C : _root_.UDConfig n}
+    {a b z : PlanarInterface.Point} {r ε : Real}
+    (hr : r ≤ ε)
+    (hlocal :
+      Metric.ball z ε ∩ embeddedEdgeSet C ⊆ closedSegment a b) :
+    edgePositiveSideBall a b z r ⊆ drawingComplement C := by
+  intro q hq
+  rw [drawingComplement]
+  intro hqdraw
+  have hqball_eps : q ∈ Metric.ball z ε :=
+    Metric.ball_subset_ball hr hq.2
+  have hqseg : q ∈ closedSegment a b := hlocal ⟨hqball_eps, hqdraw⟩
+  have hzero : edgeNormalCoord a b q = 0 :=
+    edgeNormalCoord_eq_zero_of_mem_closedSegment hqseg
+  have hpos : 0 < edgeNormalCoord a b q := hq.1
+  linarith
+
+/-- Swapped-orientation version of
+`edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment`.  It
+lets the local side proof choose either strict side of the isolated edge. -/
+theorem edgePositiveSideBall_swap_subset_drawingComplement_of_local_closedSegment
+    {C : _root_.UDConfig n}
+    {a b z : PlanarInterface.Point} {r ε : Real}
+    (hr : r ≤ ε)
+    (hlocal :
+      Metric.ball z ε ∩ embeddedEdgeSet C ⊆ closedSegment a b) :
+    edgePositiveSideBall b a z r ⊆ drawingComplement C := by
+  exact
+    edgePositiveSideBall_subset_drawingComplement_of_local_closedSegment
+      (C := C) (a := b) (b := a) (z := z) (r := r) (ε := ε) hr
+      (by
+        intro q hq
+        rw [closedSegment_symm]
+        exact hlocal hq)
 
 /-- The complement of the embedded drawing is open. -/
 theorem drawingComplement_open
