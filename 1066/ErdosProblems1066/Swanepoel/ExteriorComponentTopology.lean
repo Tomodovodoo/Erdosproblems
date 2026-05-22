@@ -18780,6 +18780,55 @@ def FrontierVertexIncidentOpenSegmentClosureSource
                 ((canonicalGraph C).point e.2) ->
               p ∈ closure (unboundedExteriorComponentRows C inputs).exterior
 
+/-- One-point incident frontier source at graph-frontier vertices.
+
+This is the finite-drawing local-isolation shape: for each graph vertex on the
+actual unbounded exterior frontier, choose a concrete incident canonical edge
+and one relative-interior point of that edge on the same actual frontier.  It
+does not say that every adjacent chord at the vertex is a frontier edge. -/
+def FrontierVertexIncidentOpenSegmentFrontierPointSource
+    (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
+  forall {v : Fin n},
+    (canonicalGraph C).point v ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior ->
+      Exists fun e : PlanarInterface.Edge n =>
+        e ∈ (canonicalGraph C).edgeSet ∧
+          (e.1 = v ∨ e.2 = v) ∧
+            Exists fun p : PlanarInterface.Point =>
+              p ∈ frontier
+                (unboundedExteriorComponentRows C inputs).exterior ∧
+                PlanarInterface.InOpenSegment p
+                  ((canonicalGraph C).point e.1)
+                  ((canonicalGraph C).point e.2)
+
+/-- A single incident open-edge frontier point selects the actual
+`unboundedFrontierEdgeSet` edge incident to the vertex.
+
+The selected edge is the same canonical edge supplied by the local
+finite-drawing source.  The only propagation used is the fixed-side
+interior-edge carrier theorem, which turns one interior frontier point into
+membership of that concrete edge in `unboundedFrontierEdgeSet`. -/
+theorem frontierVertexIncidentSource_of_incident_openSegment_frontier_point
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hsource :
+      FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs := by
+  intro v hvfrontier
+  rcases hsource hvfrontier with
+    ⟨e, he, hincident, p, hpfrontier, hpopen⟩
+  have hselected : e ∈ unboundedFrontierEdgeSet C inputs :=
+    interior_frontier_edge_carrier_membership_source_of_fixed_side_halfballs
+      (C := C) (inputs := inputs) he hpopen hpfrontier
+  rcases e with ⟨i, j⟩
+  dsimp at he hincident hselected hpopen
+  rcases hincident with hleft | hright
+  · subst v
+    exact ⟨j, Or.inl hselected⟩
+  · subst v
+    exact ⟨i, Or.inr hselected⟩
+
 /-- If a frontier vertex has an incident canonical edge whose whole relative
 interior is in the closure of the unbounded exterior component, then that edge
 is a selected unbounded-frontier carrier edge incident to the vertex. -/
@@ -19982,6 +20031,96 @@ theorem incident_openSegment_closure_of_punctured_vertex_and_relative_ball_closu
         he hpopen hpfrontier
         (interior_relative_ball_closure he hpopen hpfrontier)
         q hqopen)
+
+/-- Punctured actual-frontier accumulation plus finite vertex-star isolation
+chooses a concrete incident edge with one interior point on the actual
+unbounded exterior frontier.
+
+This is the one-point local source below the whole-open-segment closure row:
+the local isolation step picks an incident canonical edge from a nearby
+non-vertex frontier point, and no all-adjacent endpoint claim is made. -/
+theorem frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hpunctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs) :
+    FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs := by
+  intro v hvfrontier
+  let seed : UnboundedExteriorFrontierSeed inputs :=
+    { point := (canonicalGraph C).point v
+      point_mem_frontier := hvfrontier
+      vertex_or_edgeInterior := Or.inl ⟨v, rfl⟩ }
+  rcases
+      vertex_seed_side_of_punctured_vertex_unboundedExterior_frontier
+        (C := C) (inputs := inputs) seed rfl (hpunctured hvfrontier) with
+    ⟨e, p, he, hincident, hpfrontier, hpopen⟩
+  exact ⟨e, he, hincident, p, hpfrontier, hpopen⟩
+
+/-- The graph-frontier incident-edge source lowered through the one-point
+finite-drawing local-isolation row.
+
+Compared with `frontierVertexIncidentSource_of_punctured_vertex`, this records
+the sharper intermediate: first select an actual incident edge carrying an
+interior frontier point, then promote that same edge to
+`unboundedFrontierEdgeSet`. -/
+theorem frontierVertexIncidentSource_of_punctured_vertex_localIsolation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hpunctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_incident_openSegment_frontier_point
+    (C := C) (inputs := inputs)
+    (frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+      (C := C) (inputs := inputs) hpunctured)
+
+/-- Claim `S2-active-frontier-incident-source`, one-point local source form.
+
+The active frontier-vertex incident selected-edge source is reduced to the
+finite-drawing local-isolation output: one concrete incident canonical edge
+carrying one actual frontier point in its relative interior.  The selected edge
+is then promoted by the existing unbounded-frontier edge API. -/
+theorem S2_active_frontier_incident_source_of_openSegmentFrontierPoint_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (local_frontier_point :
+      FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_incident_openSegment_frontier_point
+    (C := C) (inputs := inputs) local_frontier_point
+
+/-- Claim `S2-active-frontier-incident-source`, punctured local-isolation form.
+
+Thus, for every `FinitePlanarOuterComponentInputs C`, the remaining local
+source below `FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs` is
+only punctured accumulation of the actual unbounded exterior frontier at graph
+frontier vertices.  The checked handoff uses the existing finite vertex-star
+isolation and unbounded-frontier edge membership lemmas. -/
+theorem S2_active_frontier_incident_source_of_puncturedAccumulation_localIsolation_20260522
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (punctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  S2_active_frontier_incident_source_of_openSegmentFrontierPoint_20260522
+    (C := C) (inputs := inputs)
+    (frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+      (C := C) (inputs := inputs) punctured)
+
+/-- Family form of
+`S2_active_frontier_incident_source_of_puncturedAccumulation_localIsolation_20260522`. -/
+theorem S2_active_frontier_incident_source_family_of_puncturedAccumulation_localIsolation_20260522
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  fun C inputs =>
+    S2_active_frontier_incident_source_of_puncturedAccumulation_localIsolation_20260522
+      (C := C) inputs (punctured C inputs)
 
 /-- Claim `S2-r7j-frontier-vertex-incident-edge-source`.
 
@@ -24721,6 +24860,21 @@ structure UnboundedExteriorFrontierComponentTopologyInputSourceRows
   frontier_vertex_incident :
     FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs
 
+/-- Component-topology source rows also fill the input-facing topology rows.
+
+The only extra projection needed is endpoint incidence at graph-frontier
+vertices, obtained from the selected frontier-edge cover already stored in the
+source rows. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_componentTopologySourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs where
+  frontier_preconnected := rows.frontier_preconnected
+  frontier_vertex_incident :=
+    frontierVertexIncidentSource_of_frontier_edge_cover
+      (C := C) (inputs := inputs) rows.frontier_edge_cover
+
 /-- Actual-frontier preconnectedness plus selected incident edges at
 graph-frontier vertices is exactly the input-facing component-topology source.
 
@@ -25133,6 +25287,26 @@ theorem
     simpa [hfrontier] using hqActual
   exact hqne (by simpa using hqSingleton)
 
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-frontier-incident-outside-source`, boundary-bumping form.
+
+The pointwise singleton outside-accumulation source is strictly lowered to the
+singleton boundary-bumping obstruction.  If the displayed singleton
+configuration existed, the obstruction would rule it out, so the requested
+actual-frontier membership follows by contradiction. -/
+theorem
+    S2_q46_outsideAccumulationForcesActualFrontier_of_boundaryBumpingObstruction_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+      C inputs := by
+  intro q v hqAmbient hqne hfrontier hnear
+  exfalso
+  exact no_singleton_bumping
+    ⟨q, hqAmbient, ⟨v, hqne, hfrontier⟩, hnear⟩
+
 /-- The singleton boundary-bumping obstruction rules out a singleton actual
 unbounded exterior frontier. -/
 theorem unboundedExterior_frontier_not_singleton_of_boundaryBumpingObstruction
@@ -25218,6 +25392,43 @@ theorem unboundedExteriorSingletonFrontierBoundaryBumpingObstruction_of_frontier
   exact
     unboundedExterior_frontier_not_singleton_of_frontierVertexIncidentSource
       (C := C) (inputs := inputs) incident ⟨v, hfrontier⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-frontier-incident-outside-source`, selected-incidence form.
+
+Selected component-frontier vertex incidence rules out the singleton actual
+frontier, so the singleton outside-accumulation source follows through the
+boundary-bumping obstruction adapter. -/
+theorem S2_q46_outsideAccumulationSource_of_frontierVertexIncident_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+      C inputs :=
+  S2_q46_outsideAccumulationForcesActualFrontier_of_boundaryBumpingObstruction_20260522
+    (C := C) (inputs := inputs)
+    (unboundedExteriorSingletonFrontierBoundaryBumpingObstruction_of_frontierVertexIncidentSource
+      (C := C) (inputs := inputs) incident)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-frontier-incident-outside-source`, local-isolation form.
+
+Punctured actual-frontier accumulation is first lowered by finite vertex-star
+isolation to a concrete incident open-edge frontier point.  The same selected
+edge then supplies the incident source, which rules out the singleton outside
+accumulation configuration. -/
+theorem S2_q46_outsideAccumulationSource_of_puncturedAccumulation_localIsolation_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (punctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs) :
+    UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+      C inputs :=
+  S2_q46_outsideAccumulationSource_of_frontierVertexIncident_20260522
+    (C := C) (inputs := inputs)
+    (frontierVertexIncidentSource_of_punctured_vertex_localIsolation
+      (C := C) (inputs := inputs) punctured)
 
 /-- A non-singleton actual exterior frontier gives the pointwise
 nontriviality row at graph-frontier vertices.
@@ -25320,6 +25531,120 @@ theorem S2_q30_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpi
     (S2_q30_frontier_nontrivialAt_of_boundaryBumpingObstruction_20260522
       (C := C) (inputs := inputs) no_singleton_bumping)
 
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-frontier-incident-outside-source`, punctured source form.
+
+The punctured-accumulation source is lowered to actual-frontier
+preconnectedness plus the singleton boundary-bumping obstruction.  This is the
+point-set input needed before the local finite-drawing isolation step. -/
+theorem
+    S2_q46_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  S2_q30_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_20260522
+    (C := C) (inputs := inputs)
+    frontier_preconnected no_singleton_bumping
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-frontier-incident-outside-source`, incident source form.
+
+Actual-frontier preconnectedness and singleton boundary-bumping give punctured
+accumulation, then the one-point finite-drawing local-isolation row promotes
+that to the selected incident-edge source. -/
+theorem
+    S2_q46_frontierVertexIncidentSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_punctured_vertex_localIsolation
+    (C := C) (inputs := inputs)
+    (S2_q46_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_20260522
+      (C := C) (inputs := inputs)
+      frontier_preconnected no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-frontier-incident-outside-source`, full local handoff.
+
+The singleton outside-accumulation source is reduced to the same two local
+topology primitives: actual-frontier preconnectedness and singleton
+boundary-bumping.  The middle step is the punctured-accumulation local
+isolation route; no all-adjacent endpoint, actual-sector, boundary-cycle, or
+W32 row is used. -/
+theorem
+    S2_q46_outsideAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+      C inputs :=
+  S2_q46_outsideAccumulationSource_of_frontierVertexIncident_20260522
+    (C := C) (inputs := inputs)
+    (S2_q46_frontierVertexIncidentSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522
+      (C := C) (inputs := inputs)
+      frontier_preconnected no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q48-topology-trace-source-worker`, pointwise
+outside-accumulation source.
+
+The q47 pointwise outside-accumulation premise is reduced to the existing
+Janiszewski relative-clopen boundary-bumping source and the singleton
+boundary-bumping obstruction.  Janiszewski supplies actual-frontier
+preconnectedness; the q46 local-isolation handoff then gives the required
+outside-accumulation row. -/
+theorem
+    S2_q48_outsideAccumulationSource_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+      C inputs :=
+  S2_q46_outsideAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522
+    (C := C) (inputs := inputs)
+    (by
+      simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+        actualFrontierPreconnected_of_janiszewskiBoundaryBumping
+          (C := C) inputs boundary_bumping)
+    no_singleton_bumping
+
+set_option linter.style.longLine false in
+/-- Family form of the q48 pointwise outside-accumulation source. -/
+theorem
+    S2_q48_outsideAccumulationSource_family_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+          C inputs :=
+  fun C inputs =>
+    S2_q48_outsideAccumulationSource_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48
+      (C := C) (inputs := inputs)
+      boundary_bumping (no_singleton_bumping C inputs)
+
 /-- Claim `S2-r7j-punctured-accumulation-source`.
 
 The graph-vertex punctured accumulation source is reduced to two earlier
@@ -25341,6 +25666,74 @@ theorem S2_r7j_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpi
     frontier_preconnected
     (unboundedExterior_frontier_not_singleton_of_boundaryBumpingObstruction
       (C := C) (inputs := inputs) no_singleton_bumping)
+
+/-- Actual-frontier preconnectedness plus pointwise nontriviality supplies the
+q44 one-point local-isolation source.
+
+This records the sharper intermediate used by the selected-edge endpoint
+handoff: a punctured frontier point first chooses one incident canonical edge
+with one open-segment frontier point, before that edge is promoted to
+`unboundedFrontierEdgeSet`. -/
+theorem frontierVertexIncidentOpenSegmentFrontierPointSource_of_frontierPreconnected_nontrivialAt
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (frontier_nontrivialAt :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v) :
+    FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+    (C := C) (inputs := inputs)
+    (unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_nontrivialAt
+      (C := C) (inputs := inputs)
+      frontier_preconnected frontier_nontrivialAt)
+
+/-- Boundary-bumping version of the q44 one-point local-isolation source.
+
+The singleton obstruction supplies the pointwise nontriviality row, while
+actual-frontier preconnectedness upgrades it to punctured accumulation; q44's
+finite vertex-star isolation then chooses the incident open-segment frontier
+point. -/
+theorem frontierVertexIncidentOpenSegmentFrontierPointSource_of_frontierPreconnected_boundaryBumpingObstruction
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  frontierVertexIncidentOpenSegmentFrontierPointSource_of_frontierPreconnected_nontrivialAt
+    (C := C) (inputs := inputs)
+    frontier_preconnected
+    (S2_q30_frontier_nontrivialAt_of_boundaryBumpingObstruction_20260522
+      (C := C) (inputs := inputs) no_singleton_bumping)
+
+/-- Local-isolation proof of selected frontier-vertex incidence from
+actual-frontier preconnectedness and singleton boundary-bumping.
+
+Compared with the older closure-row route, this exposes the q44 one-point
+frontier source as the immediate residual before selected-edge promotion. -/
+theorem frontierVertexIncidentSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_incident_openSegment_frontier_point
+    (C := C) (inputs := inputs)
+    (frontierVertexIncidentOpenSegmentFrontierPointSource_of_frontierPreconnected_boundaryBumpingObstruction
+      (C := C) (inputs := inputs)
+      frontier_preconnected no_singleton_bumping)
 
 /-- Actual-frontier preconnectedness plus selected component-frontier vertex
 incidence proves punctured accumulation at graph-frontier vertices.
@@ -26536,6 +26929,296 @@ theorem S2_agent_ci_frontier_component_topology_source_args_20260520ci
     { edge_segment_chain := edge_segment_chain
       localSectorRows := localSectorRows }
 
+/-! q80 finite component-topology source surface. -/
+
+/-- q80 local finite-drawing source rows for component topology.
+
+This package sits strictly below
+`UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows`: the
+selected carrier connectedness is endpoint-chain connectedness of actual
+`unboundedFrontierEdgeSet` edges, and the pointwise local topology is the
+boundary-free two-germ row. -/
+structure UnboundedExteriorFrontierComponentTopologyFiniteLocalSourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) where
+  edge_endpoint_chain :
+    UnboundedFrontierEdgeEndpointChainConnected inputs
+  localTwoGermRows :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a
+
+/-- The q80 finite/local source rows fill the requested finite drawing source
+rows by the existing endpoint-chain and local two-germ erasers. -/
+noncomputable def
+    UnboundedExteriorFrontierComponentTopologyFiniteLocalSourceRows.toFiniteDrawingSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows :
+      UnboundedExteriorFrontierComponentTopologyFiniteLocalSourceRows inputs) :
+    UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+      inputs where
+  edge_segment_chain :=
+    unboundedFrontierEdgeCarrierSegmentChainConnected_of_edgeEndpointChain
+      (C := C) (inputs := inputs) rows.edge_endpoint_chain
+  localSectorRows :=
+    localSectorRows_of_localTwoGermRows
+      (C := C) (inputs := inputs) rows.localTwoGermRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-finite-component-topology-source`, finite/local source rows.
+
+This strictly lowers the requested
+`UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows` to
+endpoint-chain connectedness plus boundary-free local two-germ topology rows
+for the actual unbounded-frontier carrier. -/
+noncomputable def
+    S2_q80_finiteComponentTopologySourceRows_of_finiteLocalSourceRows_20260522q80
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows :
+      UnboundedExteriorFrontierComponentTopologyFiniteLocalSourceRows inputs) :
+    UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+      inputs :=
+  rows.toFiniteDrawingSourceRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-finite-component-topology-source`, local two-germ form.
+
+The two fields of the finite component-topology source are produced from:
+endpoint-chain connectedness for selected frontier edges, and pointwise
+boundary-free local two-germ rows at each actual frontier carrier vertex. -/
+noncomputable def
+    S2_q80_finiteComponentTopologySourceRows_of_edgeEndpointChain_localTwoGermRows_20260522q80
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (edge_endpoint_chain :
+      UnboundedFrontierEdgeEndpointChainConnected inputs)
+    (localTwoGermRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+      inputs :=
+  S2_q80_finiteComponentTopologySourceRows_of_finiteLocalSourceRows_20260522q80
+    (C := C) (inputs := inputs)
+    { edge_endpoint_chain := edge_endpoint_chain
+      localTwoGermRows := localTwoGermRows }
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-finite-component-topology-source`, selected no-third-germ
+form.
+
+This is the same q80 lowering with the local sector field sourced from the
+existing actual selected-edge/no-third-germ local topology row. -/
+noncomputable def
+    S2_q80_finiteComponentTopologySourceRows_of_edgeEndpointChain_localSelectedNoThirdGermSource_20260522q80
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (edge_endpoint_chain :
+      UnboundedFrontierEdgeEndpointChainConnected inputs)
+    (local_source :
+      UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+      inputs where
+  edge_segment_chain :=
+    unboundedFrontierEdgeCarrierSegmentChainConnected_of_edgeEndpointChain
+      (C := C) (inputs := inputs) edge_endpoint_chain
+  localSectorRows :=
+    unboundedFrontierCarrierLocalSectorRows_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) local_source
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q80_finiteComponentTopologySourceRows_of_edgeEndpointChain_localTwoGermRows_20260522q80`. -/
+noncomputable def
+    S2_q80_finiteComponentTopologySourceRows_family_of_edgeEndpointChain_localTwoGermRows_20260522q80
+    (edge_endpoint_chain :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierEdgeEndpointChainConnected inputs)
+    (localTwoGermRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+          inputs :=
+  fun C inputs =>
+    S2_q80_finiteComponentTopologySourceRows_of_edgeEndpointChain_localTwoGermRows_20260522q80
+      (C := C) (inputs := inputs)
+      (edge_endpoint_chain C inputs) (localTwoGermRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q80_finiteComponentTopologySourceRows_of_edgeEndpointChain_localSelectedNoThirdGermSource_20260522q80`. -/
+noncomputable def
+    S2_q80_finiteComponentTopologySourceRows_family_of_edgeEndpointChain_localSelectedNoThirdGermSource_20260522q80
+    (edge_endpoint_chain :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierEdgeEndpointChainConnected inputs)
+    (local_source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+          inputs :=
+  fun C inputs =>
+    S2_q80_finiteComponentTopologySourceRows_of_edgeEndpointChain_localSelectedNoThirdGermSource_20260522q80
+      (C := C) (inputs := inputs)
+      (edge_endpoint_chain C inputs) (local_source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-punctured-frontier-accumulation-source`,
+component-topology source form.
+
+The component-topology rows already contain the two point-set facts needed for
+punctured accumulation: actual-frontier preconnectedness and an honest
+selected incident frontier edge at graph-frontier vertices.  The latter is
+projected from the stored selected frontier-edge cover, without using
+actual-sector rows, W32, induced frontier graphs, arbitrary cycles, or
+all-adjacent endpoint data. -/
+theorem
+    S2_q74_puncturedAccumulationSource_of_componentTopologySourceRows_20260522q74
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_frontierVertexIncidentSource
+    (C := C) (inputs := inputs)
+    rows.frontier_preconnected
+    (frontierVertexIncidentSource_of_componentTopologySourceRows
+      (C := C) (inputs := inputs) rows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-punctured-frontier-accumulation-source`,
+input-facing component-topology form.
+
+This is the narrow handoff from the current component-local topology package
+to the punctured accumulation source consumed by the active finite
+local-isolation theorem. -/
+theorem
+    S2_q74_puncturedAccumulationSource_of_componentTopologyInputSourceRows_20260522q74
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_frontierVertexIncidentSource
+    (C := C) (inputs := inputs)
+    rows.frontier_preconnected rows.frontier_vertex_incident
+
+set_option linter.style.longLine false in
+/-- One-point local-isolation source obtained from input-facing
+component-topology rows.
+
+The proof first lowers those rows to punctured accumulation, then uses the
+checked finite vertex-star isolation theorem to choose one incident canonical
+edge carrying one actual frontier point in its relative interior. -/
+theorem
+    S2_q74_frontierIncidentOpenSegmentFrontierPointSource_of_componentTopologyInputSourceRows_20260522q74
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+    (C := C) (inputs := inputs)
+    (S2_q74_puncturedAccumulationSource_of_componentTopologyInputSourceRows_20260522q74
+      (C := C) (inputs := inputs) rows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-punctured-frontier-accumulation-source`,
+finite-drawing/component-local source form.
+
+The finite-drawing residual rows supply the input-facing component topology
+package: a selected-edge segment chain gives actual-frontier preconnectedness,
+and local-sector rows give selected endpoint incidence.  This strictly lowers
+the punctured accumulation source to those local rows. -/
+theorem
+    S2_q74_puncturedAccumulationSource_of_finiteDrawingSourceRows_20260522q74
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (rows :
+      UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  S2_q74_puncturedAccumulationSource_of_componentTopologyInputSourceRows_20260522q74
+    (C := C) (inputs := inputs) rows.toInputSourceRows
+
+set_option linter.style.longLine false in
+/-- Family form of the finite-drawing/component-local q74 punctured
+accumulation source. -/
+theorem
+    S2_q74_puncturedAccumulationSource_family_of_finiteDrawingSourceRows_20260522q74
+    (rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+            inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  fun C inputs =>
+    S2_q74_puncturedAccumulationSource_of_finiteDrawingSourceRows_20260522q74
+      (C := C) inputs (rows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-punctured-frontier-accumulation-source`, active incident
+handoff.
+
+The finite-drawing/component-local q74 source is passed through the checked
+punctured-accumulation local-isolation family, producing the active selected
+frontier incident source without adding sector, W32, induced-frontier, or
+cycle premises. -/
+theorem
+    S2_q74_active_frontier_incident_source_family_of_finiteDrawingSourceRows_puncturedAccumulation_localIsolation_20260522q74
+    (rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+            inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  S2_active_frontier_incident_source_family_of_puncturedAccumulation_localIsolation_20260522
+    (S2_q74_puncturedAccumulationSource_family_of_finiteDrawingSourceRows_20260522q74
+      rows)
+
+set_option linter.style.longLine false in
+/-- Selected seed plus endpoint incidence from the finite-drawing source rows.
+
+The finite rows already name the local sector data at each actual
+unbounded-frontier carrier vertex.  The r58 extremal seed constructor uses
+those rows to choose a concrete selected frontier edge and raw geometric
+`faceSucc` orbit, while the endpoint branch is the direct selected-left-edge
+projection from the same local sector rows.  This source stays before any
+boundary-cycle, actual-sector, induced-frontier-graph, or W32 row. -/
+theorem S2_q9_selectedSeed_and_frontierVertexIncidentSource_of_finiteDrawingSourceRows_20260522q9
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (rows :
+      UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows inputs) :
+    (Exists fun seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            e ∈ unboundedFrontierEdgeSet C inputs ∧
+              UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                start.tail = e.1 ∧
+                  start.head = e.2 ∧
+                    Nonempty
+                      (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                          C)
+                        start)) ∧
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs := by
+  exact
+    ⟨S2_r58_selected_geometricRawFaceSuccOrbitSeed_of_inputs_localSectorRows_20260521r58
+        (C := C) inputs rows.localSectorRows,
+      frontierVertexIncidentSource_of_localSectorRows
+        (C := C) (inputs := inputs) rows.localSectorRows⟩
+
 /-- Component-topology source rows imply connectedness of the concrete
 unbounded-frontier carrier graph. -/
 theorem unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
@@ -26545,6 +27228,25 @@ theorem unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
     (unboundedFrontierCarrierGraph C inputs).Connected :=
   unboundedFrontierCarrierGraph_connected_of_frontier_preconnected_and_frontier_edge_cover
     inputs rows.frontier_preconnected rows.frontier_edge_cover
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q54-frontier-incident-worker`, component-topology surface.
+
+The component-topology rows already contain the selected actual-frontier edge
+cover.  That cover gives graph-frontier endpoint incidence, while the same
+rows feed the checked carrier-connectedness reducer. -/
+theorem
+    S2_q54_frontierVertexIncident_and_carrierConnected_of_componentTopologySourceRows_20260522q54
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (rows : UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs /\
+      (unboundedFrontierCarrierGraph C inputs).Connected :=
+  And.intro
+    (frontierVertexIncidentSource_of_frontier_edge_cover
+      (C := C) (inputs := inputs) rows.frontier_edge_cover)
+    (unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
+      inputs rows)
 
 /-- Input-facing component-topology rows imply connectedness of the concrete
 unbounded-frontier carrier graph.
@@ -26575,6 +27277,28 @@ theorem unboundedFrontierCarrierGraph_connected_family_of_componentTopologyInput
   fun C inputs =>
     unboundedFrontierCarrierGraph_connected_of_componentTopologyInputSourceRows
       inputs (rows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q54-frontier-incident-worker`, finite-drawing source rows.
+
+The finite drawing/component-topology residual rows reduce both live outputs:
+local-sector rows project to selected endpoint incidence, and the finite
+edge-segment chain plus the same local-sector rows give carrier connectedness
+through the input-facing component-topology package. -/
+theorem
+    S2_q54_frontierVertexIncident_and_carrierConnected_of_finiteDrawingSourceRows_20260522q54
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (rows :
+      UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+        inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs /\
+      (unboundedFrontierCarrierGraph C inputs).Connected := by
+  let inputRows := rows.toInputSourceRows
+  exact
+    And.intro inputRows.frontier_vertex_incident
+      (unboundedFrontierCarrierGraph_connected_of_componentTopologyInputSourceRows
+        inputs inputRows)
 
 /-- Carrier-connectedness consequence of
 `S2_agent_frontier_preconnected_source_20260520bm`. -/
@@ -29003,6 +29727,62 @@ theorem raw_start_eq_orbit_zero_of_edgeLocalRows_orbit_zero_succ
     edgeRows htail hhead ⟨0, rows.orbit.boundary.length_pos⟩ hedge
 
 end FaceDartOrbitExteriorCarrierRows
+
+/-- Honest exterior face-orbit carrier rows fill the finite/component-local
+topology source rows.
+
+The selected edge-chain is the face-orbit carrier chain, and the local-sector
+family is the pointwise predecessor/successor projection from the same
+exterior carrier rows. -/
+noncomputable def
+    unboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows_of_faceDartOrbitExteriorCarrierRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : FaceDartOrbitExteriorCarrierRows C inputs) :
+    UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+      inputs where
+  edge_segment_chain := rows.edgeCarrierSegmentChainConnected
+  localSectorRows := rows.toLocalSectorRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q79-finite-component-topology-source`, exterior face-orbit
+row form.
+
+The finite component-topology source is strictly lowered to the honest
+exterior face-dart carrier rows: no actual-sector rows, W32/final facade,
+completed boundary cycle, induced frontier graph, arbitrary cycle,
+all-adjacent endpoint closure, convex-hull shortcut, or global outgoing
+no-between row is used. -/
+noncomputable def
+    S2_q79_finiteComponentTopologySourceRows_of_faceDartOrbitExteriorCarrierRows_20260522q79
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : FaceDartOrbitExteriorCarrierRows C inputs) :
+    UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+      inputs :=
+  unboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows_of_faceDartOrbitExteriorCarrierRows
+    (C := C) (inputs := inputs) rows
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q79_finiteComponentTopologySourceRows_of_faceDartOrbitExteriorCarrierRows_20260522q79`.
+
+This is the exact `forall C inputs` finite component-topology source target,
+with the remaining source surface lowered to the existing exterior
+face-orbit carrier row family. -/
+noncomputable def
+    S2_q79_finiteComponentTopologySourceRows_family_of_faceDartOrbitExteriorCarrierRows_20260522q79
+    (rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FaceDartOrbitExteriorCarrierRows C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+          inputs :=
+  fun C inputs =>
+    S2_q79_finiteComponentTopologySourceRows_of_faceDartOrbitExteriorCarrierRows_20260522q79
+      (C := C) (inputs := inputs) (rows C inputs)
 
 /-- Actual exterior face-dart carrier rows plus fixed-side local-sector rows
 fill the component-topology source package.
@@ -38135,6 +38915,56 @@ theorem unboundedFrontierCarrierGraph_neighborFinset_card_two_of_unreachableAfte
   exact
     unboundedFrontierCarrierGraph_degree_two_of_unreachableAfterDeleteInputSource
       inputs source a
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q44-carrier-degree-two-source-worker`, pointwise form.
+
+The input-facing actual carrier degree-two source is strictly reduced to the
+ambient deleted-neighbour source.  The residual source names two genuine
+selected `unboundedFrontierEdgeSet` incident heads at each actual carrier
+vertex and proves every proposed third carrier neighbour is unreachable after
+deleting that vertex. -/
+theorem S2_q44_carrier_degree_two_source_of_unreachableAfterDeleteInputSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+        C inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    unboundedFrontierCarrierGraph_neighborFinset_card_two_of_unreachableAfterDeleteInputSource
+      (C := C) inputs source
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q44-carrier-degree-two-source-worker`, family form.
+
+Thus the bare family theorem
+`forall C inputs, unboundedFrontierCarrierGraph_neighborFinset_card_two` is
+lowered to the non-circular deleted-neighbour input source family
+`UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource`. -/
+theorem S2_q44_carrier_degree_two_source_family_of_unreachableAfterDeleteInputSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2 := by
+  intro m C inputs
+  exact
+    S2_q44_carrier_degree_two_source_of_unreachableAfterDeleteInputSource
+      (C := C) inputs (source C inputs)
 
 /-- Local side-separation form of the exact carrier degree-two leaf.
 

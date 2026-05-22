@@ -2882,6 +2882,107 @@ def FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween : Prop :=
                         z ∈ S
 
 set_option linter.style.longLine false in
+/-- Finite-drawing point-pair preconnected frontier source.
+
+This is the direct pairwise topology source below
+`FiniteDrawingUnboundedComplementFrontierPreconnected`: every pair of points
+on the selected unbounded drawing frontier is contained in a preconnected
+subset of that same frontier. -/
+def FiniteDrawingUnboundedComplementFrontierPairPreconnected : Prop :=
+  forall {n : Nat} (C : _root_.UDConfig n)
+      (_inputs : FinitePlanarOuterComponentInputs C)
+      (x y z : PlanarInterface.Point),
+    x ∈ (embeddedEdgeSet C)ᶜ ->
+      ¬ Bornology.IsBounded
+        (connectedComponentIn (embeddedEdgeSet C)ᶜ x) ->
+        y ∈ frontier (connectedComponentIn (embeddedEdgeSet C)ᶜ x) ->
+          z ∈ frontier (connectedComponentIn (embeddedEdgeSet C)ᶜ x) ->
+            Exists fun S : Set PlanarInterface.Point =>
+              IsPreconnected S /\
+                S ⊆ frontier (connectedComponentIn (embeddedEdgeSet C)ᶜ x) /\
+                  y ∈ S /\
+                    z ∈ S
+
+set_option linter.style.longLine false in
+/-- The finite point-pair source proves finite drawing frontier
+preconnectedness by Mathlib's pairwise preconnected-subset criterion. -/
+theorem finiteDrawingUnboundedComplementFrontierPreconnected_of_pairPreconnected
+    (pair_preconnected :
+      FiniteDrawingUnboundedComplementFrontierPairPreconnected) :
+    FiniteDrawingUnboundedComplementFrontierPreconnected := by
+  intro n C inputs x hx hunbounded
+  exact
+    isPreconnected_of_forall_pair
+      (by
+        intro y hy z hz
+        rcases pair_preconnected C inputs x y z hx hunbounded hy hz with
+          ⟨S, hSpreconnected, hSsubset, hyS, hzS⟩
+        exact ⟨S, hSsubset, hyS, hzS, hSpreconnected⟩)
+
+set_option linter.style.longLine false in
+/-- The finite same-`K` point-between source supplies the finite point-pair
+preconnected frontier source.
+
+Connectedness of the embedded drawing puts any two frontier points in the
+same relative component of `embeddedEdgeSet C`; the point-between row then
+returns a compact connected frontier witness, whose preconnectedness is all
+the pair source needs. -/
+theorem finiteDrawingUnboundedComplementFrontierPairPreconnected_of_kComponentPointsBetween
+    (points_between :
+      FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierPairPreconnected := by
+  intro n C inputs x y z hx hunbounded hy hz
+  let K : Set PlanarInterface.Point := embeddedEdgeSet C
+  let U : Set PlanarInterface.Point := connectedComponentIn Kᶜ x
+  have hfrontier_subset_K : frontier U ⊆ K := by
+    simpa [K, U] using
+      finiteDrawingUnboundedComplement_frontier_subset_embeddedEdgeSet C x
+  have hyK : y ∈ K := hfrontier_subset_K (by simpa [U] using hy)
+  have hzK : z ∈ K := hfrontier_subset_K (by simpa [U] using hz)
+  have hz_component : z ∈ connectedComponentIn K y :=
+    (embeddedEdgeSet_connected_of_inputs inputs).isPreconnected
+      |>.subset_connectedComponentIn hyK subset_rfl hzK
+  rcases
+      points_between C inputs x y z
+        (by simpa [K] using hx)
+        (by simpa [K, U] using hunbounded)
+        (by simpa [U] using hy)
+        (by simpa [U] using hz)
+        (by simpa [K] using hz_component) with
+    ⟨S, _hScompact, hSconnected, hSsubset, hyS, hzS⟩
+  exact ⟨S, hSconnected.isPreconnected, hSsubset, hyS, hzS⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q67-finite-frontier-preconnected-worker`, direct pair-source
+form.
+
+The finite drawing frontier-preconnectedness source is strictly lowered to the
+point-pair preconnected frontier witness source.  This reducer uses only the
+generic pairwise preconnectedness criterion and no boundary-cycle, W32,
+actual-sector, carrier, induced-frontier-graph, arbitrary-cycle,
+convex-hull/order, endpoint-shortcut, or final S2 row. -/
+theorem S2_q67_finiteDrawing_frontierPreconnected_of_pairPreconnected_20260522q67
+    (pair_preconnected :
+      FiniteDrawingUnboundedComplementFrontierPairPreconnected) :
+    FiniteDrawingUnboundedComplementFrontierPreconnected :=
+  finiteDrawingUnboundedComplementFrontierPreconnected_of_pairPreconnected
+    pair_preconnected
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q67-finite-frontier-preconnected-worker`, finite same-`K`
+point-between form.
+
+The q67 finite frontier-preconnectedness leaf is lowered through the direct
+finite point-pair source to the finite same-`K` point-between theorem. -/
+theorem S2_q67_finiteDrawing_frontierPreconnected_of_kComponentPointsBetween_20260522q67
+    (points_between :
+      FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierPreconnected :=
+  S2_q67_finiteDrawing_frontierPreconnected_of_pairPreconnected_20260522q67
+    (finiteDrawingUnboundedComplementFrontierPairPreconnected_of_kComponentPointsBetween
+      points_between)
+
+set_option linter.style.longLine false in
 /-- The finite point-between source proves finite trace preconnectedness.
 
 The only bookkeeping is that a compact connected frontier witness stays in the
@@ -2953,6 +3054,106 @@ theorem finiteDrawingUnboundedComplementFrontierKComponentPointsBetween_of_globa
       hzComponent
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q68-topology-points-between-source-worker`.
+
+The finite same-`K` point-between leaf feeding q67 frontier
+preconnectedness is strictly lowered to the planar no-compact-connected
+`K`-crossing source, via the already checked nontrivial-relative-clopen
+topology bridge. -/
+theorem S2_q68_finiteDrawing_kComponentPointsBetween_of_noCompactConnectedKCrossing_20260522q68
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing) :
+    FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween :=
+  finiteDrawingUnboundedComplementFrontierKComponentPointsBetween_of_globalKComponentPointsBetween
+    (S2_r6z_topology_kcomponent_points_between_source_20260521r6z
+      (S2_r7b_relative_clopen_k_side_topology_source_20260521r7b
+        no_crossing))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q68-topology-points-between-source-worker`, no-subcontinuum
+source form.
+
+The q68 no-compact-connected `K`-crossing residual is lowered to the existing
+U-indexed Janiszewski no-subcontinuum obstruction.  This is the narrow
+boundary-bumping primitive already isolated for the compact/frontier crossing
+source: the adapter only specializes `U` to `connectedComponentIn Kᶜ x` and
+does not use actual-sector rows, W32 consumers, completed boundary cycles, or
+finite frontier-cycle packages. -/
+theorem
+    S2_q68_noCompactConnectedKCrossing_source_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing :=
+  S2_subagent_no_compact_crossing_primitive_20260521_current2
+    no_subcontinuum
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q68-topology-points-between-source-worker`, crossing-bounded
+source form.
+
+The immediate crossing-bounded topology source below q68 is fed by the same
+U-indexed Janiszewski no-subcontinuum obstruction.  This only composes the
+checked no-subcontinuum-to-no-crossing bridge with the boundedness wrapper; it
+does not introduce actual-sector rows, W32 consumers, completed boundary
+cycles, or finite frontier-cycle packages. -/
+theorem
+    S2_q68_crossingSubcontinuumForcesBounded_source_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded := by
+  intro K x A B T hcompact hx hAclosed hBclosed hABdisjoint hcover
+    hTcompact hTconnected hTsubset hTA hTB
+  by_cases hbounded :
+      Bornology.IsBounded (connectedComponentIn (Set.compl K) x)
+  · exact hbounded
+  · exfalso
+    exact
+      S2_q68_noCompactConnectedKCrossing_source_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+        no_subcontinuum K x A B hcompact hx hbounded hAclosed hBclosed
+        hABdisjoint hcover T hTcompact hTconnected hTsubset hTA hTB
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q68-topology-points-between-source-worker`, crossing-bounded
+finite same-`K` form.
+
+The finite same-`K` point-between leaf can also be fed from the
+crossing-subcontinuum boundedness surface by first recovering the
+no-compact-connected `K`-crossing theorem.  This records the alternative
+immediate q68 source name without using actual-sector, W32, boundary-cycle, or
+arbitrary-cycle shortcuts. -/
+theorem
+    S2_q68_finiteDrawing_kComponentPointsBetween_of_crossingSubcontinuumForcesBounded_20260522q68
+    (crossing_forces_bounded :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded) :
+    FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween :=
+  S2_q68_finiteDrawing_kComponentPointsBetween_of_noCompactConnectedKCrossing_20260522q68
+    (by
+      intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint
+        hcover T hTcompact hTconnected hTsubset hTA hTB
+      exact
+        hunbounded
+          (crossing_forces_bounded K x A B T hcompact hx hAclosed hBclosed
+            hABdisjoint hcover hTcompact hTconnected hTsubset hTA hTB))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q68-topology-points-between-source-worker`, finite same-`K`
+point-between source form.
+
+This composes the no-subcontinuum boundary-bumping primitive with the checked
+q68 no-crossing-to-finite-point-between reducer, so q67 frontier
+preconnectedness no longer has to expose
+`PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing`
+as its smallest topology leaf. -/
+theorem
+    S2_q68_finiteDrawing_kComponentPointsBetween_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween :=
+  S2_q68_finiteDrawing_kComponentPointsBetween_of_noCompactConnectedKCrossing_20260522q68
+    (S2_q68_noCompactConnectedKCrossing_source_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+      no_subcontinuum)
+
+set_option linter.style.longLine false in
 /-- Claim `S2-agent-q11-topology-trace-accumulation`.
 
 The finite trace-preconnectedness leaf is strictly lowered to the finite
@@ -3011,6 +3212,18 @@ theorem S2_agent_q10_finiteDrawing_noClosed_noOpen_of_globalTracePreconnected_20
   S2_agent_q10_finiteDrawing_noClosed_noOpen_of_kTracePreconnected_20260522
     (finiteDrawingUnboundedComplementFrontierKTracePreconnected_of_globalTracePreconnected
       trace_preconnected)
+
+set_option linter.style.longLine false in
+/-- q10 finite no-closed projection from the same-`K` trace source.
+
+This names the exact finite topology leaf used by the current S2 local-sector
+routes without forcing consumers to carry the no-open companion row. -/
+theorem S2_q10_finiteDrawing_noClosedSeparation_of_globalTracePreconnected_20260522
+    (trace_preconnected :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTracePreconnected) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  (S2_agent_q10_finiteDrawing_noClosed_noOpen_of_globalTracePreconnected_20260522
+    trace_preconnected).1
 
 set_option linter.style.longLine false in
 /-- q29 finite topology handoff from the stronger compatibility trace source.
@@ -6154,6 +6367,20 @@ theorem S2_q22_kComponentPointsBetween_of_janiszewskiBoundaryBumping_20260522
       boundary_bumping)
 
 set_option linter.style.longLine false in
+/-- q60 same-`K` trace source from the Janiszewski boundary-bumping source.
+
+This factors the source-level composition used by the q60 component-topology
+wrapper: boundary bumping supplies the same-`K` point-between row, and q43
+turns that row into trace preconnectedness. -/
+theorem S2_q60_kComponentTracePreconnected_of_janiszewskiBoundaryBumping_20260522
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTracePreconnected :=
+  S2_q43_kComponentTracePreconnected_of_kComponentPointsBetween_20260522q43
+    (S2_q22_kComponentPointsBetween_of_janiszewskiBoundaryBumping_20260522
+      boundary_bumping)
+
+set_option linter.style.longLine false in
 /-- Claim `S2-q24-topology-point-between`.
 
 The live same-`K` Janiszewski point-between theorem is lowered to the sharp
@@ -6559,6 +6786,463 @@ theorem S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
       trace_noClosed)
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q44-topology-points-between-worker`.
+
+The same-`K` point-between leaf is proved directly from the local
+component/frontier trace no-closed-separation row.  The compact connected
+witness is the image of the connected component of `y` inside the closed trace
+`frontier U ∩ connectedComponentIn K y`, so this avoids the older detour
+through a whole-frontier component source. -/
+theorem S2_q44_kComponentPointsBetween_of_traceNoClosedSeparation_direct_20260522q44
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween := by
+  intro K U y z hcompact hcomponent hunbounded hyFrontier hzFrontier
+    hz_componentInK
+  rcases hcomponent with ⟨x, hx, rfl⟩
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  have hyK : y ∈ K := hfrontier_subset_K hyFrontier
+  have hcomponentClosed : IsClosed (connectedComponentIn K y) := by
+    have hKclosed : IsClosed K := hcompact.isClosed
+    rw [connectedComponentIn_eq_image hyK]
+    exact
+      hKclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+        isClosed_connectedComponent
+  have htraceClosed :
+      IsClosed
+        (frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y) :=
+    isClosed_frontier.inter hcomponentClosed
+  have hfrontierCompact :
+      IsCompact (frontier (connectedComponentIn Kᶜ x)) :=
+    planarContinuumUnboundedComplement_frontier_compact
+      (K := K) (x := x) hcompact
+  have htraceCompact :
+      IsCompact
+        (frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y) :=
+    hfrontierCompact.of_isClosed_subset htraceClosed (by
+      intro p hp
+      exact hp.1)
+  haveI :
+      CompactSpace
+        ↥(frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y) :=
+    isCompact_iff_compactSpace.mp htraceCompact
+  have htraceNoClosed :
+      NoClosedSeparation
+        (frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y) :=
+    trace_noClosed K (connectedComponentIn Kᶜ x) y hcompact
+      ⟨x, hx, rfl⟩ hunbounded hyFrontier
+  have htracePreconnected :
+      IsPreconnected
+        (frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y) :=
+    isPreconnected_of_noClosedSeparation htraceClosed htraceNoClosed
+  have hyTrace :
+      y ∈ frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y :=
+    ⟨hyFrontier, mem_connectedComponentIn hyK⟩
+  have hzTrace :
+      z ∈ frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y :=
+    ⟨hzFrontier, hz_componentInK⟩
+  have hz_traceComponent :
+      z ∈
+        connectedComponentIn
+          (frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y)
+          y :=
+    htracePreconnected.subset_connectedComponentIn hyTrace
+      (by
+        intro p hp
+        exact hp)
+      hzTrace
+  let yT :
+      ↥(frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y) :=
+    ⟨y, hyTrace⟩
+  let zT :
+      ↥(frontier (connectedComponentIn Kᶜ x) ∩ connectedComponentIn K y) :=
+    ⟨z, hzTrace⟩
+  have hz_componentT : zT ∈ connectedComponent yT := by
+    have hz_image :
+        z ∈
+          (Subtype.val '' connectedComponent yT : Set PlanarInterface.Point) := by
+      rw [connectedComponentIn_eq_image hyTrace] at hz_traceComponent
+      simpa [yT] using hz_traceComponent
+    rcases hz_image with ⟨w, hw_component, hw_eq⟩
+    have hw_eq_zT : w = zT := Subtype.ext hw_eq
+    simpa [yT, zT, hw_eq_zT] using hw_component
+  let S : Set PlanarInterface.Point := Subtype.val '' connectedComponent yT
+  refine ⟨S, ?_, ?_, ?_, ?_, ?_⟩
+  · exact isClosed_connectedComponent.isCompact.image continuous_subtype_val
+  · exact
+      isConnected_connectedComponent.image Subtype.val
+        continuous_subtype_val.continuousOn
+  · intro p hpS
+    rcases hpS with ⟨pT, _hp_component, rfl⟩
+    exact pT.property.1
+  · exact ⟨yT, mem_connectedComponent, rfl⟩
+  · exact ⟨zT, hz_componentT, rfl⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q45-trace-noClosed-source-worker`.
+
+The same-`K` component trace no-closed-separation source is lowered to the
+existing Janiszewski boundary-bumping point-between primitive.  This remains a
+source theorem: it only composes the q22 topology source with the q37 trace
+closed-separation reducer, adding no W32, actual-sector, or boundary-cycle
+premise. -/
+theorem S2_q45_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q45
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation :=
+  S2_q37_kComponentTraceNoClosedSeparation_of_kComponentPointsBetween_20260522q37
+    (S2_q22_kComponentPointsBetween_of_janiszewskiBoundaryBumping_20260522
+      boundary_bumping)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-topology-trace-noClosed-source`.
+
+The local component/frontier trace no-closed-separation source is strictly
+lowered to the existing Janiszewski relative-clopen boundary-bumping primitive.
+The proof is deliberately only the q22 same-`K` point-between source followed
+by the q37 point-between-to-trace reducer; it adds no W32, actual-sector,
+finite-drawing, carrier, or boundary-cycle facade. -/
+theorem S2_q46_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q46
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation :=
+  S2_q37_kComponentTraceNoClosedSeparation_of_kComponentPointsBetween_20260522q37
+    (S2_q22_kComponentPointsBetween_of_janiszewskiBoundaryBumping_20260522
+      boundary_bumping)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q57-topology-trace-source-worker`.
+
+The same-`K` component/frontier trace no-closed-separation source is reduced to
+the existing Janiszewski relative-clopen boundary-bumping primitive.  This is
+the q46 source path exposed under the q57 claim name: relative-clopen
+boundary-bumping gives same-`K` point-between, and q37 converts point-between
+to trace no-closed separation, with no actual-sector, final boundary-cycle,
+W32/facade, induced-frontier-graph, arbitrary-cycle, convex-hull, endpoint
+shortcut, or identity-angular-order premise. -/
+theorem S2_q57_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q57
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation :=
+  S2_q46_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q46
+    boundary_bumping
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-frontier-topology-source-lowering`.
+
+Package the two topology premises consumed by the current actual-sector source
+surface from the smallest checked q46 primitives: the same-`K`
+Janiszewski relative-clopen boundary-bumping row for `trace_noClosed`, and
+actual-frontier preconnectedness plus the singleton boundary-bumping
+obstruction for the pointwise outside-accumulation row.  This handoff is
+source-facing only; it uses no actual-sector row, boundary-cycle package, W32
+consumer, carrier-cycle premise, or all-adjacent endpoint branch. -/
+theorem
+    S2_q47_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_frontierPreconnected_boundaryBumpingObstruction_20260522q47
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (frontier_preconnected :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          IsPreconnected
+            (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :=
+  And.intro
+    (S2_q46_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q46
+      boundary_bumping)
+    (fun C inputs =>
+      S2_q46_outsideAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522
+        (C := C) (inputs := inputs)
+        (frontier_preconnected C inputs)
+        (no_singleton_bumping C inputs))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q48-topology-trace-source-worker`.
+
+This is the source surface needed by the q47 actual-sector composer: the
+same-`K` trace no-closed topology row and the pointwise singleton
+outside-accumulation row.  Both are now reduced to existing
+Janiszewski/boundary-bumping primitives: the relative-clopen `K`-side theorem
+for the trace and actual-frontier preconnectedness, plus the singleton
+boundary-bumping obstruction for the outside-accumulation side. -/
+theorem
+    S2_q48_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :=
+  And.intro
+    (S2_q46_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q46
+      boundary_bumping)
+    (fun C inputs =>
+      S2_q46_outsideAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522
+        (C := C) (inputs := inputs)
+        (by
+          simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+            actualFrontierPreconnected_of_janiszewskiBoundaryBumping
+              (C := C) inputs boundary_bumping)
+        (no_singleton_bumping C inputs))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-frontier-topology-source-lowering`, nontrivial-side form.
+
+The q47/q48 topology pair is sourced from the x-indexed nontrivial
+relative-clopen `K`-side primitive plus the singleton boundary-bumping
+obstruction family.  This lowers the remaining Janiszewski boundary-bumping
+premise through the already checked component-witness adapter, while reusing
+the q48 erasure of the separate actual-frontier preconnectedness family. -/
+theorem
+    S2_q47_traceNoClosed_outsideAccumulation_sources_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q47
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :=
+  S2_q48_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48
+    (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+      nontrivial_side)
+    no_singleton_bumping
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-topology-boundary-source-worker`, pointwise singleton side.
+
+The q48 singleton boundary-bumping obstruction is reduced to the one-point
+finite vertex-star source: at each graph-frontier vertex, it is enough to
+choose one incident canonical edge with one relative-interior point on the
+actual unbounded exterior frontier.  The selected-edge promotion is exactly
+the existing local-isolation handoff, and no all-adjacent endpoint, carrier,
+actual-sector, boundary-cycle, W32, or induced frontier-graph premise is used. -/
+theorem
+    S2_q49_boundaryBumpingObstruction_of_incidentOpenSegmentFrontierPoint_20260522q49
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident_point :
+      FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs :=
+  S2_singleton_boundaryBumpingObstruction_of_frontierVertexIncident_20260522
+    (C := C) (inputs := inputs)
+    (frontierVertexIncidentSource_of_incident_openSegment_frontier_point
+      (C := C) (inputs := inputs) incident_point)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-topology-boundary-source-worker`, punctured-local form.
+
+The same singleton obstruction is lowered one step further to the existing
+punctured actual-frontier accumulation source.  Finite vertex-star isolation
+chooses the incident open-segment frontier point, after which q49's pointwise
+obstruction reducer applies. -/
+theorem
+    S2_q49_boundaryBumpingObstruction_of_puncturedAccumulation_localIsolation_20260522q49
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (punctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs) :
+    UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs :=
+  S2_q49_boundaryBumpingObstruction_of_incidentOpenSegmentFrontierPoint_20260522q49
+    (C := C) (inputs := inputs)
+    (frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+      (C := C) (inputs := inputs) punctured)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-topology-boundary-source-worker`, q48 package form.
+
+This strictly reduces q48's remaining singleton boundary-bumping family to the
+one-point incident open-segment frontier source family.  The trace side is
+unchanged and still comes from the Janiszewski relative-clopen boundary-bumping
+row; the outside-accumulation side reuses the checked q48 composer after
+building its singleton obstruction input from the lower finite-drawing local
+source. -/
+theorem
+    S2_q49_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_incidentOpenSegmentFrontierPoint_20260522q49
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (incident_point :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :=
+  S2_q48_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48
+    boundary_bumping
+    (fun C inputs =>
+      S2_q49_boundaryBumpingObstruction_of_incidentOpenSegmentFrontierPoint_20260522q49
+        (C := C) (inputs := inputs) (incident_point C inputs))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-topology-boundary-source-worker`, punctured q48 package.
+
+Variant of the q49 package whose finite-drawing boundary source is the already
+formalized punctured actual-frontier accumulation family.  It first applies
+the local vertex-star isolation reducer to get the one incident open-segment
+frontier point demanded by the sharper q49 package. -/
+theorem
+    S2_q49_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_puncturedAccumulation_20260522q49
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :=
+  S2_q49_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_incidentOpenSegmentFrontierPoint_20260522q49
+    boundary_bumping
+    (fun C inputs =>
+      frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+        (C := C) (inputs := inputs) (punctured C inputs))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q50-frontier-incident-point-source-worker`, pointwise local form.
+
+The q50 frontier incident point source is exactly the checked finite
+vertex-star local-isolation consequence of punctured actual-frontier
+accumulation.  This exposes the one-point open-segment frontier source before
+any selected-edge promotion or boundary-bumping obstruction is applied. -/
+theorem
+    S2_q50_frontierIncidentOpenSegmentFrontierPointSource_of_puncturedAccumulation_20260522q50
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (punctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs) :
+    FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+    (C := C) (inputs := inputs) punctured
+
+set_option linter.style.longLine false in
+/-- Family form of the q50 point-source local-isolation reducer. -/
+theorem
+    S2_q50_frontierIncidentOpenSegmentFrontierPointSource_family_of_puncturedAccumulation_20260522q50
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  fun C inputs =>
+    S2_q50_frontierIncidentOpenSegmentFrontierPointSource_of_puncturedAccumulation_20260522q50
+      (C := C) (inputs := inputs) (punctured C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q51-frontier-incident-point-source-worker`, finite topology form.
+
+Finite no-closed separation and the singleton boundary-bumping obstruction
+already supply the punctured actual-frontier accumulation row; finite
+vertex-star local isolation then selects one incident canonical edge with one
+open-segment point on the actual frontier.  This exposes the sharper local
+source directly, before selected-edge promotion and without all-adjacent
+endpoint, actual-sector, boundary-cycle, induced-graph, or W32 assumptions. -/
+theorem
+    S2_q51_frontierIncidentOpenSegmentFrontierPointSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q51
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  S2_q50_frontierIncidentOpenSegmentFrontierPointSource_of_puncturedAccumulation_20260522q50
+    (C := C) (inputs := inputs)
+    (S2_r7j_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260521r7j
+      (C := C) inputs frontier_noClosedSeparation no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- Family form of the q51 finite-topology local incident point source. -/
+theorem
+    S2_q51_frontierIncidentOpenSegmentFrontierPointSource_family_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q51
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  fun C inputs =>
+    S2_q51_frontierIncidentOpenSegmentFrontierPointSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q51
+      (C := C) inputs frontier_noClosedSeparation
+      (no_singleton_bumping C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q50-frontier-incident-point-source-worker`, singleton family.
+
+The clean local finite-drawing source needed for singleton boundary bumping is
+the one-point incident open-segment frontier source.  This theorem records the
+direct family handoff through the checked q49 obstruction bridge, with no
+actual-sector, boundary-cycle, W32, carrier-cycle, induced frontier graph,
+all-adjacent endpoint, convex-hull, or identity angular-order premise. -/
+theorem
+    S2_q50_boundaryBumpingObstruction_family_of_incidentOpenSegmentFrontierPoint_20260522q50
+    (incident_point :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  fun C inputs =>
+    S2_q49_boundaryBumpingObstruction_of_incidentOpenSegmentFrontierPoint_20260522q49
+      (C := C) (inputs := inputs) (incident_point C inputs)
+
+set_option linter.style.longLine false in
+/-- Punctured-accumulation specialization of the q50 singleton family handoff.
+
+This is the fully local finite-drawing source chain used by q50:
+punctured accumulation gives the one incident open-segment frontier point, and
+q49 turns that point source into the singleton boundary-bumping obstruction. -/
+theorem
+    S2_q50_boundaryBumpingObstruction_family_of_puncturedAccumulation_localIsolation_20260522q50
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  S2_q50_boundaryBumpingObstruction_family_of_incidentOpenSegmentFrontierPoint_20260522q50
+    (S2_q50_frontierIncidentOpenSegmentFrontierPointSource_family_of_puncturedAccumulation_20260522q50
+      punctured)
+
+set_option linter.style.longLine false in
 /-- Claim `S2-q26-topology-source`, no-compact-connected-crossing side.
 
 The current planar topology leaf
@@ -6687,6 +7371,308 @@ theorem
       component_rows⟩
 
 set_option linter.style.longLine false in
+/-- Exact topology premise package consumed by the current q46 face-dart
+producer.
+
+The face-dart producer only needs finite no-open separation plus selected
+frontier-vertex incident-edge rows.  This q49 package sources those two rows
+from the q48 trace/outside-accumulation pair, itself lowered to the
+nontrivial relative-clopen `K`-side primitive and the singleton
+boundary-bumping obstruction family. -/
+abbrev S2_q49FaceDartTopologyPremises : Prop :=
+  FiniteDrawingUnboundedComplementFrontierNoOpenSeparation /\
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q56-component-topology-input-worker`.
+
+Finite no-closed separation plus already-erased component-topology source rows
+provide the three topology surfaces needed by the current face-dart route:
+input-facing component-topology rows, the q49/q54 face-dart topology premises,
+and the q54 frontier-incident/carrier-connected handoff.  The source rows are
+used only through their actual frontier preconnectedness and selected
+frontier-edge cover, so this bridge introduces no actual-sector, final
+boundary-cycle, W32, induced frontier graph, all-adjacent endpoint, or
+boundary-cycle row. -/
+theorem
+    S2_q56_componentTopologyInput_faceDartTopologyPremises_frontierIncident_carrierConnected_of_finiteDrawingNoClosedSeparation_componentTopologySourceRows_20260522q56
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (component_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) /\
+      S2_q49FaceDartTopologyPremises /\
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs /\
+              (unboundedFrontierCarrierGraph C inputs).Connected) := by
+  let frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+    S2_r14_finiteDrawing_noOpenSeparation_of_finiteDrawingNoClosedSeparation_20260521r14
+      frontier_noClosedSeparation
+  let input_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+    fun C inputs =>
+      unboundedExteriorFrontierComponentTopologyInputSourceRows_of_componentTopologySourceRows
+        (C := C) (inputs := inputs) (component_rows C inputs)
+  let frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+    fun C inputs => (input_rows C inputs).frontier_vertex_incident
+  exact
+    ⟨input_rows, ⟨frontier_noOpen, frontier_vertex_incident⟩,
+      fun C inputs =>
+        S2_q54_frontierVertexIncident_and_carrierConnected_of_componentTopologySourceRows_20260522q54
+          (C := C) inputs (component_rows C inputs)⟩
+
+set_option linter.style.longLine false in
+/-- q56 projection to the q49/q54 face-dart topology premises. -/
+theorem
+    S2_q56_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_componentTopologySourceRows_20260522q56
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (component_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    S2_q49FaceDartTopologyPremises :=
+  (S2_q56_componentTopologyInput_faceDartTopologyPremises_frontierIncident_carrierConnected_of_finiteDrawingNoClosedSeparation_componentTopologySourceRows_20260522q56
+    frontier_noClosedSeparation component_rows).2.1
+
+set_option linter.style.longLine false in
+/-- q56 projection to input-facing component-topology rows. -/
+theorem
+    S2_q56_componentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_componentTopologySourceRows_20260522q56
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (component_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  (S2_q56_componentTopologyInput_faceDartTopologyPremises_frontierIncident_carrierConnected_of_finiteDrawingNoClosedSeparation_componentTopologySourceRows_20260522q56
+    frontier_noClosedSeparation component_rows).1
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q51-topology-package-worker`, direct face-dart topology form.
+
+The exact topology pair consumed by the selected raw-orbit face-dart source is
+finite no-open separation plus selected frontier-vertex incident edges.  Finite
+no-closed separation supplies the no-open row, and q51 supplies the sharper
+incident open-segment frontier point from the same no-closed row plus the
+singleton boundary-bumping obstruction; the standard open-segment promotion
+then gives the selected incident-edge row. -/
+theorem
+    S2_q51_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q51
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    S2_q49FaceDartTopologyPremises :=
+  And.intro
+    (S2_r14_finiteDrawing_noOpenSeparation_of_finiteDrawingNoClosedSeparation_20260521r14
+      frontier_noClosedSeparation)
+    (fun C inputs =>
+      frontierVertexIncidentSource_of_incident_openSegment_frontier_point
+        (C := C) (inputs := inputs)
+        (S2_q51_frontierIncidentOpenSegmentFrontierPointSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q51
+          (C := C) inputs frontier_noClosedSeparation
+          (no_singleton_bumping C inputs)))
+
+set_option linter.style.longLine false in
+/-- Continuation form of the direct q51 face-dart topology package. -/
+theorem
+    S2_q51_faceDartTopologyComposer_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q51
+    {Target : Prop}
+    (faceDart_route :
+      S2_q49FaceDartTopologyPremises -> Target)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    Target :=
+  faceDart_route
+    (S2_q51_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q51
+      frontier_noClosedSeparation no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q54-topology-source-worker`, finite open-segment form.
+
+The face-dart topology package can be fed directly from finite no-closed
+separation and the finite local open-segment frontier-point row.  This removes
+the singleton boundary-bumping obstruction premise from this source surface:
+finite no-closed supplies finite no-open, and the open-segment point row
+promotes to the selected frontier-vertex incident-edge row. -/
+theorem
+    S2_q54_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_incidentOpenSegmentFrontierPoint_20260522q54
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (incident_point :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    S2_q49FaceDartTopologyPremises :=
+  And.intro
+    (S2_r14_finiteDrawing_noOpenSeparation_of_finiteDrawingNoClosedSeparation_20260521r14
+      frontier_noClosedSeparation)
+    (fun C inputs =>
+      frontierVertexIncidentSource_of_incident_openSegment_frontier_point
+        (C := C) (inputs := inputs) (incident_point C inputs))
+
+set_option linter.style.longLine false in
+/-- Punctured-accumulation specialization of the q54 finite topology source.
+
+Punctured accumulation is lowered by the checked finite vertex-star
+local-isolation reducer to the open-segment point row used by the sharper q54
+package above. -/
+theorem
+    S2_q54_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_puncturedAccumulation_20260522q54
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    S2_q49FaceDartTopologyPremises :=
+  S2_q54_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_incidentOpenSegmentFrontierPoint_20260522q54
+    frontier_noClosedSeparation
+    (S2_q50_frontierIncidentOpenSegmentFrontierPointSource_family_of_puncturedAccumulation_20260522q50
+      punctured)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-face-dart-topology-package`.
+
+Direct q49 topology handoff for
+`S2_q46_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions`.
+It returns exactly the finite no-open and frontier-incident premises consumed
+by that producer, with no actual-sector, carrier, boundary-cycle, W32, induced
+graph, or endpoint-shortcut premise. -/
+theorem
+    S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    S2_q49FaceDartTopologyPremises := by
+  let q48_sources :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+              C inputs) :=
+    S2_q47_traceNoClosed_outsideAccumulation_sources_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q47
+      nontrivial_side no_singleton_bumping
+  let topology_package :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation /\
+        FiniteDrawingUnboundedComplementFrontierNoOpenSeparation /\
+          (forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+                C inputs) /\
+            (forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) /\
+              (forall {m : Nat} (C : _root_.UDConfig m)
+                (inputs : FinitePlanarOuterComponentInputs C),
+                  UnboundedExteriorFrontierComponentTopologyInputSourceRows
+                      inputs /\
+                    UnboundedExteriorFrontierComponentTopologySourceRows
+                      inputs) :=
+    S2_q38_finiteDrawing_topology_accumulation_sources_of_traceNoClosedSeparation_outsideAccumulation_20260522
+      q48_sources.1 q48_sources.2
+  exact ⟨topology_package.2.1, topology_package.2.2.2.1⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q50-topology-premise-composer-worker`.
+
+Source-facing q50 composer for the current face-dart/actual-sector route.  Any
+downstream producer that consumes exactly the q49 face-dart topology package can
+now be fed directly from the nontrivial relative-clopen `K`-side primitive and
+the singleton boundary-bumping obstruction family.  This stays in the topology
+source layer: the downstream route is an explicit continuation, so no
+actual-sector, boundary-cycle, W32, carrier, induced graph, or endpoint
+shortcut premise is introduced here. -/
+theorem
+    S2_q50_faceDartActualSectorTopologyComposer_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q50
+    {Target : Prop}
+    (faceDart_actualSector_route :
+      S2_q49FaceDartTopologyPremises -> Target)
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    Target :=
+  faceDart_actualSector_route
+    (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+      nontrivial_side no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- q51 topology source compression.
+
+The q49 face-dart topology premise package now needs only the nontrivial
+relative-clopen side of the planar continuum theorem plus punctured
+accumulation at exterior frontier vertices.  The punctured source is lowered
+through the q50 local-isolation endpoint to the singleton boundary-bumping
+obstruction family. -/
+theorem
+    S2_q51_faceDartTopologyPremises_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q51
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    S2_q49FaceDartTopologyPremises :=
+  S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+    nontrivial_side
+    (S2_q50_boundaryBumpingObstruction_family_of_puncturedAccumulation_localIsolation_20260522q50
+      punctured)
+
+set_option linter.style.longLine false in
+/-- Continuation form of the q51 topology source compression. -/
+theorem
+    S2_q51_faceDartActualSectorTopologyComposer_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q51
+    {Target : Prop}
+    (faceDart_actualSector_route :
+      S2_q49FaceDartTopologyPremises -> Target)
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    Target :=
+  faceDart_actualSector_route
+    (S2_q51_faceDartTopologyPremises_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q51
+      nontrivial_side punctured)
+
+set_option linter.style.longLine false in
 /-- The exact finite topology rows consumed by the q39 reachable
 closed-separation route.
 
@@ -6800,6 +7786,1699 @@ theorem S2_q42_finiteDrawing_preconnected_noClosed_source_of_kComponentTracePrec
       trace_preconnected)
     (S2_q42_finiteDrawing_noClosedSeparation_source_of_kComponentTracePreconnected_20260522q42
       trace_preconnected)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q60-component-topology-source-worker`, next source leaf.
+
+The current trace/source package needed by the q54/q57 topology route is
+strictly lowered to the local same-`K` trace-preconnected theorem plus the
+pointwise outside-accumulation source over `FinitePlanarOuterComponentInputs`.
+Trace-preconnectedness gives the Janiszewski trace no-closed row and finite
+no-open separation; the q23 reducer then fills the input-facing
+component-topology rows.  No carrier rows, actual-sector rows, W32 consumers,
+induced frontier graph, arbitrary cycle, or endpoint shortcut is introduced. -/
+theorem
+    S2_q60_traceNoClosed_componentTopologyInputSourceRows_family_of_kComponentTracePreconnected_outsideAccumulation_20260522q60
+    (trace_preconnected :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTracePreconnected)
+    (outside_accumulation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) := by
+  let trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation :=
+    S2_q37_kComponentTraceNoClosedSeparation_of_kComponentTracePreconnected_20260522q37
+      trace_preconnected
+  let topology_rows :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation /\
+        FiniteDrawingUnboundedComplementFrontierNoOpenSeparation /\
+          (forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+                C inputs) :=
+    S2_agent_q10_topology_sources_of_globalTracePreconnected_outsideAccumulation_20260522
+      trace_preconnected outside_accumulation
+  exact
+    ⟨trace_noClosed,
+      S2_q23_component_topology_input_source_family_of_finiteDrawingNoOpenSeparation_outsideAccumulation_20260522
+        topology_rows.2.1 outside_accumulation⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q60-component-topology-source-worker`, Janiszewski wrapper.
+
+This composes the q57 Janiszewski trace source with the q60 component-topology
+input package above.  The exposed source surface is the existing
+relative-clopen Janiszewski boundary-bumping theorem plus the pointwise
+outside-accumulation family over finite inputs. -/
+theorem
+    S2_q60_traceNoClosed_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_outsideAccumulation_20260522q60
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (outside_accumulation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :
+  PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :=
+  S2_q60_traceNoClosed_componentTopologyInputSourceRows_family_of_kComponentTracePreconnected_outsideAccumulation_20260522q60
+    (S2_q60_kComponentTracePreconnected_of_janiszewskiBoundaryBumping_20260522
+      boundary_bumping)
+    outside_accumulation
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q62-topology-source-worker`, boundary-bumping obstruction form.
+
+This lowers the q60 component-topology source surface below both exposed
+leaves: the Janiszewski relative-clopen boundary-bumping row is sourced from
+the x-indexed nontrivial relative-clopen `K`-side primitive, and the
+outside-accumulation family is sourced from the singleton boundary-bumping
+obstruction family.  No carrier, actual-sector, W32, boundary-cycle, induced
+frontier graph, or arbitrary-cycle hypothesis is introduced. -/
+theorem
+    S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q62
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :=
+  S2_q60_traceNoClosed_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_outsideAccumulation_20260522q60
+    (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+      nontrivial_side)
+    (S2_q48_outsideAccumulationSource_family_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48
+      (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+        nontrivial_side)
+      no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q62-topology-source-worker`, incident open-segment form.
+
+The same q62 component-topology package can be sourced from the sharper local
+finite-drawing singleton input: at each actual frontier graph vertex, one
+incident canonical edge has an open-segment point on the selected exterior
+frontier.  This feeds the singleton obstruction through q49 and then the q62
+boundary-bumping obstruction wrapper above. -/
+theorem
+    S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_incidentOpenSegmentFrontierPoint_20260522q62
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (incident_point :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :=
+  S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q62
+    nontrivial_side
+    (fun C inputs =>
+      S2_q49_boundaryBumpingObstruction_of_incidentOpenSegmentFrontierPoint_20260522q49
+        (C := C) (inputs := inputs) (incident_point C inputs))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q62-topology-source-worker`, punctured-accumulation form.
+
+This is the fully local q62 topology handoff through the existing finite
+vertex-star isolation row: punctured actual-frontier accumulation gives the
+one-point incident open-segment source, which gives the singleton
+boundary-bumping obstruction, while the Janiszewski side remains lowered to
+the nontrivial relative-clopen `K`-side primitive. -/
+theorem
+    S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q62
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :=
+  S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_incidentOpenSegmentFrontierPoint_20260522q62
+    nontrivial_side
+    (S2_q50_frontierIncidentOpenSegmentFrontierPointSource_family_of_puncturedAccumulation_20260522q50
+      punctured)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q65-topology-source-worker`, full finite topology package.
+
+This packages the q62/q49 local source surface into the q38 finite-drawing
+topology accumulation bundle: finite no-closed/no-open separation, punctured
+actual-frontier accumulation, selected frontier incidence, and both erased
+component-topology row families.  The only exposed sources are the
+nontrivial relative-clopen `K`-side primitive and the pointwise punctured
+accumulation family over `FinitePlanarOuterComponentInputs`. -/
+theorem
+    S2_q65_finiteDrawing_topology_accumulation_sources_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q65
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation /\
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation /\
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+              C inputs) /\
+          (forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) /\
+            (forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                UnboundedExteriorFrontierComponentTopologyInputSourceRows
+                    inputs /\
+                  UnboundedExteriorFrontierComponentTopologySourceRows
+                    inputs) := by
+  let q49_sources :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation /\
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+              C inputs) :=
+    S2_q49_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_puncturedAccumulation_20260522q49
+      (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+        nontrivial_side)
+      punctured
+  exact
+    S2_q38_finiteDrawing_topology_accumulation_sources_of_traceNoClosedSeparation_outsideAccumulation_20260522
+      q49_sources.1 q49_sources.2
+
+set_option linter.style.longLine false in
+/-- q65 projection to the direct finite no-closed-separation source. -/
+theorem
+    S2_q65_finiteDrawing_noClosedSeparation_source_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q65
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  (S2_q65_finiteDrawing_topology_accumulation_sources_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q65
+    nontrivial_side punctured).1
+
+set_option linter.style.longLine false in
+/-- q65 projection to the reachable closed-separation topology premises. -/
+theorem
+    S2_q65_reachableClosedSeparationTopologyPremises_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q65
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (punctured :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+            C inputs) :
+    S2_q39ReachableClosedSeparationTopologyPremises :=
+  S2_q39_reachableClosedSeparationTopologyPremises_of_q38_finiteDrawing_topology_accumulation_package_20260522
+    (S2_q65_finiteDrawing_topology_accumulation_sources_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q65
+      nontrivial_side punctured)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q66-punctured-accumulation-source-worker`, finite row form.
+
+The punctured actual-frontier accumulation family is lowered to the finite
+no-closed-separation row plus selected frontier-vertex incidence.  This is the
+point-set finite-drawing projection: no actual-sector row, W32 consumer,
+completed boundary cycle, induced frontier graph, arbitrary cycle, convex hull,
+identity angular order, or endpoint shortcut is introduced. -/
+theorem
+    S2_q66_puncturedAccumulationSource_family_of_finiteDrawingNoClosedSeparation_frontierVertexIncident_20260522q66
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+          C inputs :=
+  fun C inputs =>
+    S2_frontier_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_vertexIncident_20260522
+      (C := C) inputs frontier_noClosedSeparation
+      (frontier_vertex_incident C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q66-punctured-accumulation-source-worker`, trace/outside form.
+
+Project q66's punctured-accumulation family from the checked q38 finite
+topology/local-isolation package.  The remaining source surface is exactly the
+same-`K` trace no-closed-separation theorem plus the pointwise singleton
+outside-accumulation row. -/
+theorem
+    S2_q66_puncturedAccumulationSource_family_of_traceNoClosedSeparation_outsideAccumulation_20260522q66
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation)
+    (outside_accumulation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+          C inputs :=
+  (S2_q38_finiteDrawing_topology_accumulation_sources_of_traceNoClosedSeparation_outsideAccumulation_20260522
+    trace_noClosed outside_accumulation).2.2.1
+
+set_option linter.style.longLine false in
+/-- Janiszewski wrapper for the q66 punctured-accumulation source. -/
+theorem
+    S2_q66_puncturedAccumulationSource_family_of_janiszewskiBoundaryBumping_outsideAccumulation_20260522q66
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (outside_accumulation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+          C inputs :=
+  S2_q66_puncturedAccumulationSource_family_of_traceNoClosedSeparation_outsideAccumulation_20260522q66
+    (S2_q45_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q45
+      boundary_bumping)
+    outside_accumulation
+
+set_option linter.style.longLine false in
+/-- Nontrivial-relative-clopen wrapper for the q66 punctured-accumulation source. -/
+theorem
+    S2_q66_puncturedAccumulationSource_family_of_nontrivialRelativeClopen_outsideAccumulation_20260522q66
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (outside_accumulation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+          C inputs :=
+  S2_q66_puncturedAccumulationSource_family_of_janiszewskiBoundaryBumping_outsideAccumulation_20260522q66
+    (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+      nontrivial_side)
+    outside_accumulation
+
+set_option linter.style.longLine false in
+/-- Boundary-bumping-obstruction wrapper for the q66 punctured-accumulation source. -/
+theorem
+    S2_q66_puncturedAccumulationSource_family_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q66
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+          C inputs :=
+  S2_q66_puncturedAccumulationSource_family_of_nontrivialRelativeClopen_outsideAccumulation_20260522q66
+    nontrivial_side
+    (S2_q48_outsideAccumulationSource_family_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48
+      (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+        nontrivial_side)
+      no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q70-component-topology-source-worker`, finite point-between
+form.
+
+The input-facing component-topology rows reduce to the finite same-`K`
+point-between topology row plus the singleton boundary-bumping obstruction.
+The q67 checked row supplies finite frontier preconnectedness; the existing
+finite local-isolation/boundary-bumping route supplies selected
+frontier-vertex incidence. -/
+theorem
+    S2_q70_componentTopologyInputSourceRows_of_finiteDrawingKComponentPointsBetween_boundaryBumping_20260522q70
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (points_between :
+      FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_dynamic_component_topology_input_source_of_finiteDrawing_frontierPreconnected_boundaryBumping_20260522
+    (C := C) inputs
+    (S2_q67_finiteDrawing_frontierPreconnected_of_kComponentPointsBetween_20260522q67
+      points_between)
+    no_singleton_bumping
+
+set_option linter.style.longLine false in
+/-- q70 global Janiszewski point-between wrapper. -/
+theorem
+    S2_q70_componentTopologyInputSourceRows_of_janiszewskiKComponentPointsBetween_boundaryBumping_20260522q70
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q70_componentTopologyInputSourceRows_of_finiteDrawingKComponentPointsBetween_boundaryBumping_20260522q70
+    (C := C) inputs
+    (finiteDrawingUnboundedComplementFrontierKComponentPointsBetween_of_globalKComponentPointsBetween
+      points_between)
+    no_singleton_bumping
+
+set_option linter.style.longLine false in
+/-- q70 no-compact-connected crossing wrapper using the checked q68 finite
+same-`K` point-between reducer. -/
+theorem
+    S2_q70_componentTopologyInputSourceRows_of_noCompactConnectedKCrossing_boundaryBumping_20260522q70
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q70_componentTopologyInputSourceRows_of_finiteDrawingKComponentPointsBetween_boundaryBumping_20260522q70
+    (C := C) inputs
+    (S2_q68_finiteDrawing_kComponentPointsBetween_of_noCompactConnectedKCrossing_20260522q68
+      no_crossing)
+    no_singleton_bumping
+
+set_option linter.style.longLine false in
+/-- q70 Janiszewski no-subcontinuum wrapper, routed through q68's checked
+point-between source. -/
+theorem
+    S2_q70_componentTopologyInputSourceRows_of_janiszewskiNoSubcontinuum_boundaryBumping_20260522q70
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q70_componentTopologyInputSourceRows_of_finiteDrawingKComponentPointsBetween_boundaryBumping_20260522q70
+    (C := C) inputs
+    (S2_q68_finiteDrawing_kComponentPointsBetween_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+      no_subcontinuum)
+    no_singleton_bumping
+
+set_option linter.style.longLine false in
+/-- Family form of the q70 no-compact-connected crossing reducer. -/
+theorem
+    S2_q70_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_20260522q70
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  fun C inputs =>
+    S2_q70_componentTopologyInputSourceRows_of_noCompactConnectedKCrossing_boundaryBumping_20260522q70
+      (C := C) inputs no_crossing (no_singleton_bumping C inputs)
+
+set_option linter.style.longLine false in
+/-- Family form of the q70 Janiszewski no-subcontinuum reducer. -/
+theorem
+    S2_q70_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_boundaryBumping_20260522q70
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  fun C inputs =>
+    S2_q70_componentTopologyInputSourceRows_of_janiszewskiNoSubcontinuum_boundaryBumping_20260522q70
+      (C := C) inputs no_subcontinuum (no_singleton_bumping C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-topology-source-worker`, trace-no-closed form.
+
+The q70 no-compact-connected `K`-crossing residual is sourced directly from
+the same-`K` Janiszewski component trace no-closed-separation row.  This is a
+topology-only reduction through the q36 crossing-witness trace argument; it
+does not use actual-sector rows, completed boundary cycles, W32 consumers,
+induced frontier graphs, endpoint shortcuts, or identity angular order. -/
+theorem
+    S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTraceNoClosedSeparation_20260522q72
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing :=
+  S2_q36_noCompactConnectedKCrossing_source_of_janiszewskiKComponentTraceNoClosedSeparation_20260522q36
+    trace_noClosed
+
+set_option linter.style.longLine false in
+/-- Trace-preconnected source form for the q72 no-compact-connected
+`K`-crossing residual. -/
+theorem
+    S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTracePreconnected_20260522q72
+    (trace_preconnected :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTracePreconnected) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing :=
+  S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTraceNoClosedSeparation_20260522q72
+    (S2_q37_kComponentTraceNoClosedSeparation_of_kComponentTracePreconnected_20260522q37
+      trace_preconnected)
+
+set_option linter.style.longLine false in
+/-- Relative-clopen boundary-bumping source form for the q72 no-compact
+residual. -/
+theorem
+    S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing :=
+  S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTracePreconnected_20260522q72
+    (S2_q60_kComponentTracePreconnected_of_janiszewskiBoundaryBumping_20260522
+      boundary_bumping)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-topology-singleton-source-worker`, singleton side.
+
+The q70 singleton boundary-bumping residual is strictly lowered to the
+selected graph-frontier incident-edge source.  A selected incident frontier
+edge already supplies two distinct actual frontier points, so the singleton
+actual-frontier configuration is impossible. -/
+theorem
+    S2_q72_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q72
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  fun C inputs =>
+    S2_singleton_boundaryBumpingObstruction_of_frontierVertexIncident_20260522
+      (C := C) (inputs := inputs) (frontier_vertex_incident C inputs)
+
+set_option linter.style.longLine false in
+/-- Local-sector form of the q72 singleton source.
+
+This is only a convenience eraser: local-sector rows are used through the
+existing selected incident-edge projection, then through the pointwise
+singleton obstruction above. -/
+theorem
+    S2_q72_singletonBoundaryBumpingObstruction_family_of_localSectorRows_20260522q72
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  fun C inputs =>
+    S2_singleton_boundaryBumpingObstruction_of_localSectorRows_20260522
+      (C := C) (inputs := inputs) (localSectorRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-topology-singleton-source-worker`, no-crossing form.
+
+The q70 component-topology input family is fed by the no-compact-connected
+`K`-crossing theorem plus the lower selected graph-frontier incident-edge
+source.  The adapter only supplies q70's singleton obstruction argument. -/
+theorem
+    S2_q72_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_frontierVertexIncident_20260522q72
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q70_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_20260522q70
+    no_crossing
+    (S2_q72_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q72
+      frontier_vertex_incident)
+
+set_option linter.style.longLine false in
+/-- Janiszewski boundary-bumping form of the q72 component-topology source.
+
+This composer feeds q72 through the already checked no-compact-connected
+crossing reducer and the selected graph-frontier incident-edge source.  It
+only combines the existing lower topology/frontier leaves; it introduces no
+actual-sector rows, boundary cycles, W32 consumers, induced frontier graphs,
+all-adjacent endpoint shortcuts, convex hulls, or identity angular order. -/
+theorem
+    S2_q72_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_frontierVertexIncident_20260522q72
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q72_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_frontierVertexIncident_20260522q72
+    (S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72
+      boundary_bumping)
+    frontier_vertex_incident
+
+set_option linter.style.longLine false in
+/-- Local-sector form of the q72 no-crossing component-topology source. -/
+theorem
+    S2_q72_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_localSectorRows_20260522q72
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing)
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q70_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_20260522q70
+    no_crossing
+    (S2_q72_singletonBoundaryBumpingObstruction_family_of_localSectorRows_20260522q72
+      localSectorRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-topology-singleton-source-worker`, no-subcontinuum form.
+
+The q70 Janiszewski no-subcontinuum component-topology input family is fed by
+the lower selected graph-frontier incident-edge source for its singleton
+boundary-bumping residual. -/
+theorem
+    S2_q72_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_frontierVertexIncident_20260522q72
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q70_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_boundaryBumping_20260522q70
+    no_subcontinuum
+    (S2_q72_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q72
+      frontier_vertex_incident)
+
+set_option linter.style.longLine false in
+/-- Local-sector form of the q72 no-subcontinuum component-topology source. -/
+theorem
+    S2_q72_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_localSectorRows_20260522q72
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q70_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_boundaryBumping_20260522q70
+    no_subcontinuum
+    (S2_q72_singletonBoundaryBumpingObstruction_family_of_localSectorRows_20260522q72
+      localSectorRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q73-frontier-incident-edge-source-worker`, pointwise form.
+
+The selected graph-frontier incident-edge source is strictly lowered to the
+finite-drawing one-point local source: at each graph vertex on the actual
+unbounded exterior frontier, choose an incident canonical edge with one
+relative-interior point on that same actual frontier.  The existing
+fixed-side finite-drawing carrier theorem then promotes that concrete edge to
+`unboundedFrontierEdgeSet`. -/
+theorem
+    S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_of_incidentOpenSegmentFrontierPoint_20260522q73
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident_openSegment :
+      FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_incident_openSegment_frontier_point
+    (C := C) (inputs := inputs) incident_openSegment
+
+set_option linter.style.longLine false in
+/-- Family form of the q73 frontier-incident source lowering. -/
+theorem
+    S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_family_of_incidentOpenSegmentFrontierPoint_20260522q73
+    (incident_openSegment :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  fun C inputs =>
+    S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_of_incidentOpenSegmentFrontierPoint_20260522q73
+      (C := C) (inputs := inputs) (incident_openSegment C inputs)
+
+set_option linter.style.longLine false in
+/-- q73 feeds the q72 singleton obstruction route through the lower
+one-point finite-drawing incident-open-segment source. -/
+theorem
+    S2_q73_singletonBoundaryBumpingObstruction_family_of_incidentOpenSegmentFrontierPoint_20260522q73
+    (incident_openSegment :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  S2_q72_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q72
+    (S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_family_of_incidentOpenSegmentFrontierPoint_20260522q73
+      incident_openSegment)
+
+set_option linter.style.longLine false in
+/-- q73 feeds the q72 no-compact-crossing component-topology route with the
+lower finite-drawing incident-open-segment source. -/
+theorem
+    S2_q73_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_incidentOpenSegmentFrontierPoint_20260522q73
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing)
+    (incident_openSegment :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q72_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_frontierVertexIncident_20260522q72
+    no_crossing
+    (S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_family_of_incidentOpenSegmentFrontierPoint_20260522q73
+      incident_openSegment)
+
+set_option linter.style.longLine false in
+/-- q73 feeds the Janiszewski boundary-bumping component-topology route with
+the lower finite-drawing incident-open-segment source. -/
+theorem
+    S2_q73_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_incidentOpenSegmentFrontierPoint_20260522q73
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (incident_openSegment :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q72_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_frontierVertexIncident_20260522q72
+    boundary_bumping
+    (S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_family_of_incidentOpenSegmentFrontierPoint_20260522q73
+      incident_openSegment)
+
+set_option linter.style.longLine false in
+/-- q73 local-sector form of the Janiszewski boundary-bumping
+component-topology route. -/
+theorem
+    S2_q73_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_localSectorRows_20260522q73
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide)
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q72_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_localSectorRows_20260522q72
+    (S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72
+      boundary_bumping)
+    localSectorRows
+
+set_option linter.style.longLine false in
+/-- q73 feeds the q72 Janiszewski no-subcontinuum component-topology route
+with the lower finite-drawing incident-open-segment source. -/
+theorem
+    S2_q73_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_incidentOpenSegmentFrontierPoint_20260522q73
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (incident_openSegment :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q72_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_frontierVertexIncident_20260522q72
+    no_subcontinuum
+    (S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_family_of_incidentOpenSegmentFrontierPoint_20260522q73
+      incident_openSegment)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-janiszewski-topology-source`, no-compact form.
+
+The q72 no-compact-connected topology residual is lowered below the
+Janiszewski relative-clopen boundary-bumping surface to the x-indexed
+nontrivial relative-clopen `K`-side primitive. -/
+theorem
+    S2_q74_noCompactConnectedKCrossing_of_nontrivialRelativeClopen_20260522q74
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing :=
+  S2_q16_noCompactConnectedKCrossing_source_of_nontrivialRelativeClopenKSide_20260522
+    nontrivial_side
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-janiszewski-topology-source`, frontier-incident form.
+
+This feeds the q72 component-topology rows from the lower nontrivial
+relative-clopen `K`-side primitive plus the existing selected graph-frontier
+incident-edge family, with no Janiszewski boundary-bumping premise exposed. -/
+theorem
+    S2_q74_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_frontierVertexIncident_20260522q74
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q72_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_frontierVertexIncident_20260522q72
+    (S2_q74_noCompactConnectedKCrossing_of_nontrivialRelativeClopen_20260522q74
+      nontrivial_side)
+    frontier_vertex_incident
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-janiszewski-topology-source`, incident-open-segment form.
+
+This is the q73 component-topology handoff with the topology premise lowered
+from Janiszewski boundary-bumping to the nontrivial relative-clopen `K`-side
+source; the finite local source remains the one-point incident open segment. -/
+theorem
+    S2_q74_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_incidentOpenSegmentFrontierPoint_20260522q74
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (incident_openSegment :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q74_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_frontierVertexIncident_20260522q74
+    nontrivial_side
+    (S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_family_of_incidentOpenSegmentFrontierPoint_20260522q73
+      incident_openSegment)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-janiszewski-topology-source`, local-sector form.
+
+This is the local-sector q73 component-topology route with the topology side
+lowered below the Janiszewski boundary-bumping theorem. -/
+theorem
+    S2_q74_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_localSectorRows_20260522q74
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_q72_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_localSectorRows_20260522q72
+    (S2_q74_noCompactConnectedKCrossing_of_nontrivialRelativeClopen_20260522q74
+      nontrivial_side)
+    localSectorRows
+
+set_option linter.style.longLine false in
+/-- Finite-drawing closed-separation trace source.
+
+This is the input-facing analogue of
+`PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation`:
+for the concrete embedded drawing and any selected unbounded complement
+component, the trace of that frontier on the `embeddedEdgeSet C` component of
+a frontier point has no closed two-piece separation. -/
+def FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation : Prop :=
+  forall {m : Nat} (C : _root_.UDConfig m)
+      (_inputs : FinitePlanarOuterComponentInputs C)
+      (x y : PlanarInterface.Point),
+    x ∈ (embeddedEdgeSet C)ᶜ ->
+      ¬ Bornology.IsBounded
+        (connectedComponentIn (embeddedEdgeSet C)ᶜ x) ->
+        y ∈ frontier (connectedComponentIn (embeddedEdgeSet C)ᶜ x) ->
+          NoClosedSeparation
+            (frontier (connectedComponentIn (embeddedEdgeSet C)ᶜ x) ∩
+              connectedComponentIn (embeddedEdgeSet C) y)
+
+set_option linter.style.longLine false in
+/-- Closed-separation finite trace rows give the existing finite trace
+preconnected source. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierKTracePreconnected_of_kTraceNoClosedSeparation
+    (trace_noClosed :
+      FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation) :
+    FiniteDrawingUnboundedComplementFrontierKTracePreconnected := by
+  intro m C inputs x y hx hunbounded hyFrontier
+  let K : Set PlanarInterface.Point := embeddedEdgeSet C
+  let U : Set PlanarInterface.Point := connectedComponentIn Kᶜ x
+  have hfrontier_subset_K : frontier U ⊆ K := by
+    simpa [K, U] using
+      finiteDrawingUnboundedComplement_frontier_subset_embeddedEdgeSet C x
+  have hyK : y ∈ K := hfrontier_subset_K (by simpa [U] using hyFrontier)
+  have hKclosed : IsClosed K := by
+    simpa [K] using (embeddedEdgeSet_compact C).isClosed
+  have hcomponentClosed : IsClosed (connectedComponentIn K y) := by
+    rw [connectedComponentIn_eq_image hyK]
+    exact
+      hKclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+        isClosed_connectedComponent
+  have htraceClosed :
+      IsClosed (frontier U ∩ connectedComponentIn K y) :=
+    isClosed_frontier.inter hcomponentClosed
+  exact
+    isPreconnected_of_noClosedSeparation htraceClosed
+      (by
+        simpa [K, U] using
+          trace_noClosed C inputs x y hx hunbounded hyFrontier)
+
+set_option linter.style.longLine false in
+/-- The global same-`K` trace no-closed theorem specializes to the finite
+embedded drawing source. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation_of_globalKComponentTraceNoClosedSeparation
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation) :
+    FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation := by
+  intro m C _inputs x y hx hunbounded hyFrontier
+  exact
+    trace_noClosed (embeddedEdgeSet C)
+      (connectedComponentIn (embeddedEdgeSet C)ᶜ x) y
+      (embeddedEdgeSet_compact C) ⟨x, hx, rfl⟩ hunbounded hyFrontier
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q73-janiszewski-trace-source-worker`, finite trace form.
+
+The finite input-facing trace-preconnected source is strictly lowered to the
+finite closed-separation trace source.  This is the local topology surface
+under the q72 Janiszewski trace branch, with no actual-sector rows, completed
+boundary cycle, W32, induced frontier graph, synthetic enclosure, or endpoint
+shortcut. -/
+theorem
+    S2_q73_finiteDrawing_kTracePreconnected_of_kTraceNoClosedSeparation_20260522q73
+    (trace_noClosed :
+      FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation) :
+    FiniteDrawingUnboundedComplementFrontierKTracePreconnected :=
+  finiteDrawingUnboundedComplementFrontierKTracePreconnected_of_kTraceNoClosedSeparation
+    trace_noClosed
+
+set_option linter.style.longLine false in
+/-- q73 finite no-closed/no-open package from the finite trace no-closed
+source. -/
+theorem
+    S2_q73_finiteDrawing_noClosed_noOpen_of_kTraceNoClosedSeparation_20260522q73
+    (trace_noClosed :
+      FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation ∧
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+  S2_agent_q10_finiteDrawing_noClosed_noOpen_of_kTracePreconnected_20260522
+    (S2_q73_finiteDrawing_kTracePreconnected_of_kTraceNoClosedSeparation_20260522q73
+      trace_noClosed)
+
+set_option linter.style.longLine false in
+/-- q73 specialization of the q72 Janiszewski trace source to the finite
+embedded drawing. -/
+theorem
+    S2_q73_finiteDrawing_kTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q73
+    (boundary_bumping :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation_of_globalKComponentTraceNoClosedSeparation
+    (S2_q57_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q57
+      boundary_bumping)
+
+set_option linter.style.longLine false in
+/-- q73 direct lowerer for the q72 no-compact-connected `K`-crossing source.
+
+This feeds `S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72`
+from the x-indexed nontrivial relative-clopen `K`-side primitive by the
+standard Janiszewski boundary-bumping adapter. -/
+theorem
+    S2_q73_noCompactConnectedKCrossing_of_nontrivialRelativeClopen_20260522q73
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing :=
+  S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72
+    (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+      nontrivial_side)
+
+set_option linter.style.longLine false in
+/-- Finite same-`K` point-between rows give finite trace no-closed-separation.
+
+For two points in the trace
+`frontier (connectedComponentIn (embeddedEdgeSet C)ᶜ x) ∩
+connectedComponentIn (embeddedEdgeSet C) y`, the point-between row supplies a
+compact connected frontier subset joining them.  Since the subset is connected
+and starts in the same relative `embeddedEdgeSet C` component, it stays inside
+that trace; the generic compact-connected criterion then rules out a closed
+two-piece trace separation. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation_of_kComponentPointsBetween
+    (points_between :
+      FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation := by
+  intro n C inputs x y hx hunbounded hyFrontier
+  let K : Set PlanarInterface.Point := embeddedEdgeSet C
+  let U : Set PlanarInterface.Point := connectedComponentIn Kᶜ x
+  have hfrontier_subset_K : frontier U ⊆ K := by
+    simpa [K, U] using
+      finiteDrawingUnboundedComplement_frontier_subset_embeddedEdgeSet C x
+  exact
+    noClosedSeparation_of_forall_pair_compact_connected_subset
+      (s := frontier U ∩ connectedComponentIn K y)
+      (by
+        intro p hp q hq
+        have hpFrontier : p ∈ frontier U := hp.1
+        have hqFrontier : q ∈ frontier U := hq.1
+        have hpComponentY : p ∈ connectedComponentIn K y := hp.2
+        have hqComponentY : q ∈ connectedComponentIn K y := hq.2
+        have hcomponent_eq :
+            connectedComponentIn K y = connectedComponentIn K p :=
+          connectedComponentIn_eq hpComponentY
+        have hqComponentP : q ∈ connectedComponentIn K p := by
+          simpa [hcomponent_eq] using hqComponentY
+        rcases
+            points_between C inputs x p q
+              (by simpa [K] using hx)
+              (by simpa [K, U] using hunbounded)
+              (by simpa [U] using hpFrontier)
+              (by simpa [U] using hqFrontier)
+              (by simpa [K] using hqComponentP) with
+          ⟨S, hScompact, hSconnected, hSsubsetFrontier, hpS, hqS⟩
+        have hSsubsetK : S ⊆ K := by
+          intro r hrS
+          exact hfrontier_subset_K (hSsubsetFrontier hrS)
+        have hSsubsetTrace :
+            S ⊆ frontier U ∩ connectedComponentIn K y := by
+          intro r hrS
+          have hrFrontier : r ∈ frontier U := hSsubsetFrontier hrS
+          have hrComponentP : r ∈ connectedComponentIn K p :=
+            hSconnected.isPreconnected.subset_connectedComponentIn
+              hpS hSsubsetK hrS
+          have hcomponent_eq' :
+              connectedComponentIn K p = connectedComponentIn K y :=
+            hcomponent_eq.symm
+          have hrComponentY : r ∈ connectedComponentIn K y := by
+            simpa [hcomponent_eq'] using hrComponentP
+          exact ⟨hrFrontier, hrComponentY⟩
+        exact ⟨S, hScompact, hSconnected, hSsubsetTrace, hpS, hqS⟩)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-topology-ktrace-source-worker`, finite point-between form.
+
+This is the strict q74 lowering of
+`FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation` to the
+finite same-`K` point-between input surface.  It avoids actual-sector rows,
+W32 rows, completed boundary cycles, induced frontier graphs, arbitrary
+cycles, endpoint shortcuts, convex hull shortcuts, and identity angular
+order. -/
+theorem
+    S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_kComponentPointsBetween_20260522q74
+    (points_between :
+      FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation_of_kComponentPointsBetween
+    points_between
+
+set_option linter.style.longLine false in
+/-- q74 no-compact-connected crossing form of the finite trace no-closed
+source. -/
+theorem
+    S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_noCompactConnectedKCrossing_20260522q74
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing) :
+    FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation :=
+  S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_kComponentPointsBetween_20260522q74
+    (S2_q68_finiteDrawing_kComponentPointsBetween_of_noCompactConnectedKCrossing_20260522q68
+      no_crossing)
+
+set_option linter.style.longLine false in
+/-- q74 Janiszewski no-subcontinuum form of the finite trace no-closed
+source. -/
+theorem
+    S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_janiszewskiNoSubcontinuumObstruction_20260522q74
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation :=
+  S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_kComponentPointsBetween_20260522q74
+    (S2_q68_finiteDrawing_kComponentPointsBetween_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+      no_subcontinuum)
+
+set_option linter.style.longLine false in
+/-- q74 finite no-closed/no-open package from the finite point-between source,
+through the new finite trace no-closed lowerer. -/
+theorem
+    S2_q74_finiteDrawing_noClosed_noOpen_of_kComponentPointsBetween_20260522q74
+    (points_between :
+      FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation ∧
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+  S2_q73_finiteDrawing_noClosed_noOpen_of_kTraceNoClosedSeparation_20260522q73
+    (S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_kComponentPointsBetween_20260522q74
+      points_between)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-punctured-frontier-incidence-source-worker`, punctured form.
+
+The graph-vertex punctured accumulation source is lowered to finite
+no-closed separation plus the direct unbounded-exterior non-singleton frontier
+row.  The finite topology input is used only for actual-frontier
+preconnectedness of the concrete unbounded component; the residual
+non-singleton row mentions only that same actual frontier. -/
+theorem
+    S2_q74_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_not_singleton :
+      Not (Exists fun v : Fin n =>
+        frontier (unboundedExteriorComponentRows C inputs).exterior =
+          {(_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v})) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_not_singleton
+    (C := C) (inputs := inputs)
+    (actualFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      (C := C) inputs frontier_noClosedSeparation)
+    frontier_not_singleton
+
+set_option linter.style.longLine false in
+/-- Family form of the q74 punctured-accumulation lowering. -/
+theorem
+    S2_q74_puncturedAccumulationSource_family_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_not_singleton :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Not (Exists fun v : Fin m =>
+            frontier (unboundedExteriorComponentRows C inputs).exterior =
+              {(_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v})) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  fun C inputs =>
+    S2_q74_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+      (C := C) inputs frontier_noClosedSeparation
+      (frontier_not_singleton C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-punctured-frontier-incidence-source-worker`, one-point
+incident-open-segment form.
+
+After q74 supplies punctured accumulation, the existing finite vertex-star
+local-isolation theorem selects one incident canonical edge carrying one
+relative-interior point of the actual unbounded exterior frontier. -/
+theorem
+    S2_q74_frontierIncidentOpenSegmentFrontierPointSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_not_singleton :
+      Not (Exists fun v : Fin n =>
+        frontier (unboundedExteriorComponentRows C inputs).exterior =
+          {(_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v})) :
+    FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex
+    (C := C) (inputs := inputs)
+    (S2_q74_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+      (C := C) inputs frontier_noClosedSeparation frontier_not_singleton)
+
+set_option linter.style.longLine false in
+/-- Family form of the q74 incident-open-segment lowering. -/
+theorem
+    S2_q74_frontierIncidentOpenSegmentFrontierPointSource_family_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_not_singleton :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Not (Exists fun v : Fin m =>
+            frontier (unboundedExteriorComponentRows C inputs).exterior =
+              {(_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v})) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs :=
+  fun C inputs =>
+    S2_q74_frontierIncidentOpenSegmentFrontierPointSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+      (C := C) inputs frontier_noClosedSeparation
+      (frontier_not_singleton C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q75-topology-nontrivial-frontier-source-worker`,
+actual-frontier non-singleton form.
+
+The direct non-singleton frontier row exposed by q74 is exactly the
+singleton-frontier boundary-bumping obstruction already isolated in the
+topology source stack. -/
+theorem S2_q75_frontier_not_singleton_of_singletonBoundaryBumping_20260522q75
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    Not (Exists fun v : Fin n =>
+      frontier (unboundedExteriorComponentRows C inputs).exterior =
+        {(_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v}) := by
+  simpa using
+    (unboundedExterior_frontier_not_singleton_of_boundaryBumpingObstruction
+      (C := C) (inputs := inputs) no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- Family form of the q75 actual-frontier non-singleton lowerer. -/
+theorem
+    S2_q75_frontier_not_singleton_family_of_singletonBoundaryBumping_20260522q75
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Not (Exists fun v : Fin m =>
+          frontier (unboundedExteriorComponentRows C inputs).exterior =
+            {(_root_.ErdosProblems1066.Swanepoel.JordanTopologyFactsConcrete.canonicalGraph C).point v}) :=
+  fun C inputs =>
+    S2_q75_frontier_not_singleton_of_singletonBoundaryBumping_20260522q75
+      (C := C) (inputs := inputs) (no_singleton_bumping C inputs)
+
+set_option linter.style.longLine false in
+/-- q75 punctured-accumulation source form.
+
+This composes the q74 finite no-closed/non-singleton reducer with the q75
+singleton-boundary-bumping source for the non-singleton row. -/
+theorem
+    S2_q75_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  S2_q74_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+    (C := C) inputs frontier_noClosedSeparation
+    (S2_q75_frontier_not_singleton_of_singletonBoundaryBumping_20260522q75
+      (C := C) (inputs := inputs) no_singleton_bumping)
+
+set_option linter.style.longLine false in
+/-- Family form of the q75 punctured-accumulation source lowerer. -/
+theorem
+    S2_q75_puncturedAccumulationSource_family_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  fun C inputs =>
+    S2_q75_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75
+      (C := C) inputs frontier_noClosedSeparation
+      (no_singleton_bumping C inputs)
+
+set_option linter.style.longLine false in
+/-- q75 component-topology source form.
+
+For the component-topology rows, finite no-closed separation supplies actual
+frontier preconnectedness and the singleton-boundary-bumping row supplies the
+selected incident-edge source through the checked local-isolation handoff. -/
+theorem
+    S2_q75_componentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_dynamic_component_topology_input_source_of_finiteDrawing_frontierPreconnected_boundaryBumping_20260522
+    (C := C) inputs
+    (finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      frontier_noClosedSeparation)
+    no_singleton_bumping
+
+set_option linter.style.longLine false in
+/-- Family form of the q75 component-topology source lowerer. -/
+theorem
+    S2_q75_componentTopologyInputSourceRows_family_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  fun C inputs =>
+    S2_q75_componentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75
+      (C := C) inputs frontier_noClosedSeparation
+      (no_singleton_bumping C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q75-topology-nontrivial-side-source`, nontrivial side form.
+
+The global nontrivial relative-clopen `K`-side source is lowered through the
+q68 no-compact-connected crossing bridge to the U-indexed Janiszewski
+no-subcontinuum obstruction.  This keeps the q75 topology residual on the
+planar boundary-bumping spine and does not use actual-sector rows, W32 rows,
+final boundary-cycle rows, or endpoint shortcut premises. -/
+theorem
+    S2_q75_nontrivialRelativeClopenKSide_of_janiszewskiNoSubcontinuum_20260522q75
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide :=
+  S2_r7b_relative_clopen_k_side_topology_source_20260521r7b
+    (S2_q68_noCompactConnectedKCrossing_source_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+      no_subcontinuum)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q75-topology-nontrivial-side-source`, finite same-`K`
+point-between form.
+
+The finite embedded-drawing same-`K` point-between source feeding the q74
+component-topology route is lowered to the same U-indexed Janiszewski
+no-subcontinuum obstruction.  The proof is the checked q68 finite
+point-between bridge, exposed under the q75 source claim name. -/
+theorem
+    S2_q75_finiteDrawing_kComponentPointsBetween_of_janiszewskiNoSubcontinuum_20260522q75
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween :=
+  S2_q68_finiteDrawing_kComponentPointsBetween_of_janiszewskiNoSubcontinuumObstruction_20260522q68
+    no_subcontinuum
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q76-singleton-boundary-bumping-source-worker`, selected
+frontier-vertex incidence form.
+
+The singleton actual-frontier obstruction is strictly lowered to the selected
+incident-edge row at graph-frontier vertices.  The proof is the existing
+finite unbounded-component argument: a selected incident frontier edge gives
+two distinct actual-frontier points, contradicting a singleton frontier. -/
+theorem
+    S2_q76_singletonBoundaryBumpingObstruction_of_frontierVertexIncident_20260522q76
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_vertex_incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs :=
+  S2_singleton_boundaryBumpingObstruction_of_frontierVertexIncident_20260522
+    (C := C) (inputs := inputs) frontier_vertex_incident
+
+set_option linter.style.longLine false in
+/-- Family form of the q76 selected-incidence singleton obstruction
+lowering. -/
+theorem
+    S2_q76_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q76
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  fun C inputs =>
+    S2_q76_singletonBoundaryBumpingObstruction_of_frontierVertexIncident_20260522q76
+      (C := C) (inputs := inputs) (frontier_vertex_incident C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q76-singleton-boundary-bumping-source-worker`, one-point
+finite local-isolation form.
+
+The remaining singleton obstruction family can be fed by the finite
+open-segment frontier-point source.  That source promotes to selected
+frontier-vertex incidence by the fixed-side open-edge carrier theorem, and
+then the q76 selected-incidence adapter closes the obstruction. -/
+theorem
+    S2_q76_singletonBoundaryBumpingObstruction_family_of_incidentOpenSegmentFrontierPoint_20260522q76
+    (incident_openSegment :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  S2_q76_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q76
+    (S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_family_of_incidentOpenSegmentFrontierPoint_20260522q73
+      incident_openSegment)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q76-singleton-boundary-bumping-source-worker`,
+component-topology source-row form.
+
+Component-topology source rows contain the selected frontier-edge cover of the
+actual unbounded exterior frontier.  Projecting that cover to graph-frontier
+vertex incidence strictly lowers the q75 singleton boundary-bumping family to
+the component-topology source rows, without using actual-sector rows, W32,
+induced frontier graphs, arbitrary cycles, all-adjacent endpoint shortcuts, or
+synthetic enclosures. -/
+theorem
+    S2_q76_singletonBoundaryBumpingObstruction_family_of_componentTopologySourceRows_20260522q76
+    (component_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  S2_q76_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q76
+    (fun C inputs =>
+      frontierVertexIncidentSource_of_componentTopologySourceRows
+        (C := C) (inputs := inputs) (component_rows C inputs))
+
+set_option linter.style.longLine false in
+/-- Input-facing component-topology source-row form of the q76 singleton
+obstruction lowering. -/
+theorem
+    S2_q76_singletonBoundaryBumpingObstruction_family_of_componentTopologyInputSourceRows_20260522q76
+    (input_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+          C inputs :=
+  S2_q76_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q76
+    (fun C inputs => (input_rows C inputs).frontier_vertex_incident)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q77-topology-finite-no-closed-source-worker`.
+
+The q75 topology pair used by the actual-sector route is strictly lowered to
+finite/component topology rows: finite same-`K` point-between supplies the
+finite no-closed-separation row, while input-facing component-topology rows
+supply the selected graph-frontier incidence needed for the singleton
+boundary-bumping obstruction.  This theorem does not use actual-sector rows,
+W32, induced frontier graphs, arbitrary cycles, all-adjacent endpoint closure,
+identity angular order, synthetic enclosures, or convex-hull data. -/
+theorem
+    S2_q77_topology_sources_of_kComponentPointsBetween_componentTopologyInputRows_20260522q77
+    (points_between :
+      FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween)
+    (input_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation ∧
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :=
+  ⟨(S2_q74_finiteDrawing_noClosed_noOpen_of_kComponentPointsBetween_20260522q74
+      points_between).1,
+    S2_q76_singletonBoundaryBumpingObstruction_family_of_componentTopologyInputSourceRows_20260522q76
+      input_rows⟩
+
+set_option linter.style.longLine false in
+/-- q77 trace-no-closed form of the same topology pair.
+
+This is the narrower trace-facing source package: the finite trace
+no-closed-separation row supplies the q75 finite topology leaf, and
+input-facing component-topology rows supply the singleton
+boundary-bumping family. -/
+theorem
+    S2_q77_topology_sources_of_kTraceNoClosedSeparation_componentTopologyInputRows_20260522q77
+    (trace_noClosed :
+      FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation)
+    (input_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation ∧
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :=
+  ⟨(S2_q73_finiteDrawing_noClosed_noOpen_of_kTraceNoClosedSeparation_20260522q73
+      trace_noClosed).1,
+    S2_q76_singletonBoundaryBumpingObstruction_family_of_componentTopologyInputSourceRows_20260522q76
+      input_rows⟩
+
+set_option linter.style.longLine false in
+/-- q77 Janiszewski no-subcontinuum form of the topology pair.
+
+The broad topology side is lowered through the checked q75 finite
+same-`K` point-between bridge; the singleton side remains purely
+component-topology input data. -/
+theorem
+    S2_q77_topology_sources_of_janiszewskiNoSubcontinuum_componentTopologyInputRows_20260522q77
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (input_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation ∧
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :=
+  S2_q77_topology_sources_of_kComponentPointsBetween_componentTopologyInputRows_20260522q77
+    (S2_q75_finiteDrawing_kComponentPointsBetween_of_janiszewskiNoSubcontinuum_20260522q75
+      no_subcontinuum)
+    input_rows
+
+set_option linter.style.longLine false in
+/-- q77 finite/component-local row form.
+
+If the component-topology input rows are themselves produced from the finite
+selected-edge chain and local-sector source rows, this theorem exposes the
+same q75 topology pair without asking downstream actual-sector work to unpack
+that component-topology construction. -/
+theorem
+    S2_q77_topology_sources_of_kComponentPointsBetween_finiteDrawingSourceRows_20260522q77
+    (points_between :
+      FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween)
+    (finite_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+            inputs) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation ∧
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :=
+  S2_q77_topology_sources_of_kComponentPointsBetween_componentTopologyInputRows_20260522q77
+    points_between
+    (fun C inputs => (finite_rows C inputs).toInputSourceRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q78-topology-finite-no-closed-source`.
+
+The q77 finite/component-local topology pair is lowered on its finite
+no-closed side to the U-indexed Janiszewski no-subcontinuum obstruction.  The
+singleton-boundary-bumping side is still supplied only by the component-topology
+finite source rows, via their input-facing incident-edge projection.  This
+composition adds no actual-sector, W32, boundary-cycle, arbitrary-cycle,
+all-adjacent endpoint, or induced-frontier shortcut. -/
+theorem
+    S2_q78_topology_sources_of_janiszewskiNoSubcontinuum_finiteDrawingSourceRows_20260522q78
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction)
+    (finite_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+            inputs) :
+    And FiniteDrawingUnboundedComplementFrontierNoClosedSeparation
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :=
+  S2_q77_topology_sources_of_kComponentPointsBetween_finiteDrawingSourceRows_20260522q77
+    (S2_q75_finiteDrawing_kComponentPointsBetween_of_janiszewskiNoSubcontinuum_20260522q75
+      no_subcontinuum)
+    finite_rows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-topology-trace-source`, same-`K` point-between form.
+
+The point-between source feeding the component trace row is lowered to the
+Janiszewski no-subcontinuum obstruction.  This exposes the checked r11
+topology source under the q80 claim name and does not use W32, actual-sector,
+arbitrary-cycle, induced-frontier, endpoint, or identity-angular shortcuts. -/
+theorem
+    S2_q80_kComponentPointsBetween_of_janiszewskiNoSubcontinuum_20260522q80
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween :=
+  S2_r11_topology_points_between_source_20260521r11 no_subcontinuum
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-topology-trace-source`, trace-preconnected form.
+
+The local same-`K` trace-preconnected source is lowered through the q80
+point-between source above. -/
+theorem
+    S2_q80_kComponentTracePreconnected_of_janiszewskiNoSubcontinuum_20260522q80
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTracePreconnected :=
+  S2_q43_kComponentTracePreconnected_of_kComponentPointsBetween_20260522q43
+    (S2_q80_kComponentPointsBetween_of_janiszewskiNoSubcontinuum_20260522q80
+      no_subcontinuum)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-topology-trace-source`, target trace source.
+
+The same-`K` component trace no-closed-separation source is strictly lowered
+to the Janiszewski no-subcontinuum obstruction by composing the q80
+point-between lowerer with the generic q37 trace conversion. -/
+theorem
+    S2_q80_kComponentTraceNoClosedSeparation_of_janiszewskiNoSubcontinuum_20260522q80
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation :=
+  S2_q37_kComponentTraceNoClosedSeparation_of_kComponentTracePreconnected_20260522q37
+    (S2_q80_kComponentTracePreconnected_of_janiszewskiNoSubcontinuum_20260522q80
+      no_subcontinuum)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-janiszewski-topology-source`, no-subcontinuum side.
+
+The same-`K` component trace no-closed-separation row directly rules out a
+compact connected `K`-subcontinuum crossing a nontrivial closed split of the
+selected unbounded-component frontier.  The proof restricts the frontier split
+to the closed trace `frontier U ∩ connectedComponentIn K y`; it uses only the
+generic connected-component closedness supplied by compactness of `K`. -/
+theorem
+    S2_q80_janiszewskiNoSubcontinuum_of_kComponentTraceNoClosedSeparation_20260522q80
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction := by
+  intro K U A B hcompact hcomponent hunbounded hAclosed hBclosed
+    hABdisjoint hcover _hAnonempty _hBnonempty T _hTcompact hTconnected
+    hTsubset hTA hTB
+  rcases hTA with ⟨y, hyT, hyA⟩
+  rcases hTB with ⟨z, hzT, hzB⟩
+  have hyFrontier : y ∈ frontier U := by
+    rw [hcover]
+    exact Or.inl hyA
+  have hzFrontier : z ∈ frontier U := by
+    rw [hcover]
+    exact Or.inr hzB
+  have hyK : y ∈ K := hTsubset hyT
+  have hz_componentInK : z ∈ connectedComponentIn K y :=
+    hTconnected.isPreconnected.subset_connectedComponentIn hyT hTsubset hzT
+  have hcomponentClosed : IsClosed (connectedComponentIn K y) := by
+    have hKclosed : IsClosed K := hcompact.isClosed
+    rw [connectedComponentIn_eq_image hyK]
+    exact
+      hKclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+        isClosed_connectedComponent
+  have htraceNoClosed :
+      NoClosedSeparation (frontier U ∩ connectedComponentIn K y) :=
+    trace_noClosed K U y hcompact hcomponent hunbounded hyFrontier
+  let L : Set PlanarInterface.Point :=
+    (frontier U ∩ connectedComponentIn K y) ∩ A
+  let R : Set PlanarInterface.Point :=
+    (frontier U ∩ connectedComponentIn K y) ∩ B
+  have htraceClosed :
+      IsClosed (frontier U ∩ connectedComponentIn K y) :=
+    isClosed_frontier.inter hcomponentClosed
+  have hLclosed : IsClosed L := by
+    simpa [L] using htraceClosed.inter hAclosed
+  have hRclosed : IsClosed R := by
+    simpa [R] using htraceClosed.inter hBclosed
+  have hLRdisjoint : Disjoint L R := by
+    rw [Set.disjoint_left]
+    intro p hpL hpR
+    exact (Set.disjoint_left.mp hABdisjoint) hpL.2 hpR.2
+  have htraceCover : frontier U ∩ connectedComponentIn K y = L ∪ R := by
+    ext p
+    constructor
+    · intro hp
+      have hpAB : p ∈ A ∪ B := by
+        simpa [hcover] using hp.1
+      rcases hpAB with hpA | hpB
+      · exact Or.inl ⟨hp, hpA⟩
+      · exact Or.inr ⟨hp, hpB⟩
+    · intro hp
+      rcases hp with hpL | hpR
+      · exact hpL.1
+      · exact hpR.1
+  have hLnonempty : L.Nonempty :=
+    ⟨y, ⟨hyFrontier, mem_connectedComponentIn hyK⟩, hyA⟩
+  have hRnonempty : R.Nonempty :=
+    ⟨z, ⟨hzFrontier, hz_componentInK⟩, hzB⟩
+  exact
+    htraceNoClosed L R hLclosed hRclosed hLRdisjoint htraceCover
+      hLnonempty hRnonempty
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q79-topology-janiszewski-source`.
+
+The q78 topology source surface is lowered below the Janiszewski
+no-subcontinuum obstruction: the same-`K` component trace no-closed row rules
+out any compact connected subcontinuum crossing a nontrivial closed frontier
+split, and its finite specialization feeds the existing finite
+no-closed/component-topology q77 package. -/
+theorem
+    S2_q79_janiszewskiNoSubcontinuum_topologySources_of_kComponentTraceNoClosedSeparation_finiteDrawingSourceRows_20260522q79
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation)
+    (finite_rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows
+            inputs) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction ∧
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation ∧
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+              C inputs) := by
+  refine ⟨?_, ?_⟩
+  · exact
+      S2_q80_janiszewskiNoSubcontinuum_of_kComponentTraceNoClosedSeparation_20260522q80
+        trace_noClosed
+  · exact
+      S2_q77_topology_sources_of_kTraceNoClosedSeparation_componentTopologyInputRows_20260522q77
+        (finiteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation_of_globalKComponentTraceNoClosedSeparation
+          trace_noClosed)
+        (fun C inputs => (finite_rows C inputs).toInputSourceRows)
 
 end
 

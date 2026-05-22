@@ -1126,7 +1126,11 @@ theorem graphVertexGeometricAngularNeighborSelectionRow_index_succ_eq_of_shared_
   have hsame :
       (dartFromGeometricList C center i hi).head =
         (dartFromGeometricList C center j hj).head := by
-    rw [← leftMiddle.right_eq, ← middleRight.left_eq]
+    calc
+      (dartFromGeometricList C center i hi).head = middle :=
+        leftMiddle.right_eq.symm
+      _ = (dartFromGeometricList C center j hj).head :=
+        middleRight.left_eq
   rcases Nat.lt_trichotomy i j with hij | hij | hij
   · have hlt :
         graphDartArg (canonicalGeometricGraph C) center
@@ -2372,7 +2376,7 @@ theorem
     have hright_lt :
         leftHeadRow.index + 1 + 1 <
           (geometricOutgoingDartList C succ.tail).length := by
-      simpa [← hchain] using headRightRow.index_succ_lt
+      simpa [hchain] using headRightRow.index_succ_lt
     simpa [i, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
       using hright_lt
   refine ⟨i, hi_two, ?_, ?_, ?_⟩
@@ -8699,9 +8703,7 @@ theorem rawOrbitDartEdgeFrontierSource_of_startAndIteratedSuccessor
           change
             R.faceSuccPerm ((R.faceSuccPerm ^ m) start) =
               (R.faceSuccPerm ^ (m + 1)) start
-          rw [← Equiv.Perm.mul_apply]
-          rw [Commute.self_pow]
-          rw [pow_succ]
+          simp [pow_succ']
         have hsucc_eq :
             rawIterDart start (Nat.succ m) =
               (geometricUnitDistanceRotationSystem C).faceSucc
@@ -12282,6 +12284,26 @@ noncomputable def
       (C := C) (inputs := inputs) rows repeatedTailRows)
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q61-cyclic-cut-lowering-worker`, minimal deleted-tail form.
+
+The selected minimal deleted-tail separation row first gives the existing
+repeated-tail cut-partition callback on the same selected raw orbit.  The
+checked no-cut eraser then lowers that callback to the canonical
+cyclic-successor deleted-tail cut-partition source. -/
+noncomputable def
+    selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_minimalDeletedTailSeparation_noCut_20260522q61
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (minimalSeparation :
+      SelectedRawOrbitMinimalDeletedTailSeparation rows) :
+    SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource rows :=
+  selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_repeatedTailCutPartitions_noCut_20260521r15
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailCutPartitions_of_minimalDeletedTailSeparation_20260521k5
+      (C := C) (inputs := inputs) rows minimalSeparation)
+
+set_option linter.style.longLine false in
 /-- Claim `S2-r15-cyclic-successor-cut-partition-source`, repeated exterior
 face-walk cut-row form.
 
@@ -13378,6 +13400,26 @@ noncomputable def
     (C := C) (inputs := inputs) rows
     (selectedRawOrbitCyclicSuccDeletedTailBoolSideSeparationSource_of_boundaryArcRows_20260521r8h
       (C := C) (inputs := inputs) rows boundaryArcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-cyclicSucc-cut-source`, selected actual exterior-arc form.
+
+Pairwise repeated-tail actual exterior-arc rows on a selected raw orbit strictly
+lower to the cyclic-successor deleted-tail cut-partition source by first
+forgetting to finite boundary-arc rows and then applying the existing boundary
+arc cut-partition eraser. -/
+noncomputable def
+    selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_actualExteriorArcRows_20260522q46
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (actualArcRows :
+      SelectedRawOrbitRepeatedTailActualExteriorArcRows rows) :
+    SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource rows :=
+  selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_boundaryArcRows_20260521pool7
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailBoundaryArcRows_of_actualExteriorArcRows_20260520q4
+      (C := C) (inputs := inputs) rows actualArcRows)
 
 set_option linter.style.longLine false in
 /-- Claim `S2-r7a-deleted-tail-bool-side-source`, selected actual exterior-arc
@@ -14780,6 +14822,27 @@ noncomputable def
   rcases cyclicSuccCutPartitions (i := i) (j := j) hij htail with
     ⟨P, _hcut, _hopposite⟩
   exact ⟨P⟩
+
+set_option linter.style.longLine false in
+/-- Canonical cyclic-successor deleted-tail nonreachability also feeds the
+older selected repeated-tail cut-partition callback.
+
+This is just the checked nonreachability-to-cyclic-cut eraser followed by the
+existing cyclic-cut-to-repeated-tail-cut forgetful map; it adds no no-cut,
+actual-sector, final-boundary, W32, induced-graph, arbitrary-cycle, or
+endpoint-shortcut premise. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailCutPartitions_of_cyclicSuccDeletedTailNonreachability_20260522q49
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (nonreachability :
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource rows) :
+    SelectedRawOrbitRepeatedTailCutPartitions rows :=
+  selectedRawOrbitRepeatedTailCutPartitions_of_cyclicSuccCutPartitionSource_20260521pool7
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_cyclicSuccDeletedTailNonreachability_20260521r15
+      (C := C) (inputs := inputs) rows nonreachability)
 
 set_option linter.style.longLine false in
 /-- Claim `S2-r13-repeated-tail-minimal-deleted-separation`, selected
@@ -17084,8 +17147,7 @@ theorem selectedRawOrbitOrientationRows_of_geometricSuccessorNonwrapRows_faceSuc
       graphDartArg_lt_of_dartFromGeometricList_index_lt
         C (rows.O.dart k).tail
         (Nat.lt_trans (Nat.lt_succ_self i) hi) hi (Nat.lt_succ_self i)
-    rw [← hreverse', ← htarget] at hlt
-    exact hlt
+    simpa [hreverse'.symm, htarget.symm] using hlt
   have hangle' := hangle
   rw [UnitDistanceDart.reverse_head, hhead_succ] at hangle'
   simpa [pred, succ] using hangle'
@@ -17122,8 +17184,7 @@ theorem selectedRawOrbitGeometricFaceSuccTurnRows_of_geometricSuccessorNonwrapRo
       graphDartArg_lt_of_dartFromGeometricList_index_lt
         C (rows.O.dart k).tail
         (Nat.lt_trans (Nat.lt_succ_self i) hi) hi (Nat.lt_succ_self i)
-    rw [← hreverse', ← htarget] at hlt
-    exact hlt
+    simpa [hreverse'.symm, htarget.symm] using hlt
   simpa [SelectedRawOrbitGeometricFaceSuccTurnRows, pred] using hangle
 
 set_option linter.style.longLine false in
@@ -30368,6 +30429,155 @@ theorem
       (localStrictOrder C inputs)
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q72-selected-face-turn-angle-worker`.
+
+The selected actual-carrier face-turn angle row used by q63/q70 is lowered to
+the selected orientation equalities and the strict local angular order at the
+same actual exterior carrier.  This q72-facing name exposes the checked local
+reducer without introducing global outgoing-list no-between rows, actual-sector
+rows, W32 rows, boundary-cycle rows, convex-hull rows, or identity angular
+order. -/
+theorem S2_q72_selected_face_turn_angle_worker
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (orientationRows :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows)
+    (localStrictOrder :
+      RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)) :
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+      inputs selectedRows :=
+  rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource_of_orientationRows_localStrictOrder_20260521current6
+    (C := C) (inputs := inputs)
+    selectedRows orientationRows localStrictOrder
+
+set_option linter.style.longLine false in
+/-- Family form of `S2_q72_selected_face_turn_angle_worker`. -/
+theorem S2_q72_selected_face_turn_angle_worker_family
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs (selectedRows C inputs))
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              (selectedRows C inputs).toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              (selectedRows C inputs).toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+          inputs (selectedRows C inputs) := by
+  intro m C inputs
+  exact
+    S2_q72_selected_face_turn_angle_worker
+      (C := C) (inputs := inputs)
+      (selectedRows C inputs) (orientationRows C inputs)
+      (localStrictOrder C inputs)
+
+set_option linter.style.longLine false in
+/-- Geometric-selection family form of `S2_q72_selected_face_turn_angle_worker`.
+
+This is the shape needed to instantiate the q63/q70 angle-row leaf when the
+selected exterior carrier comes from the active geometric-selection source. -/
+theorem
+    S2_q72_selected_face_turn_angle_worker_family_of_geometricSelection_orientation_localStrict
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+          inputs selectedRows := by
+  intro m C inputs
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) (geometricSelection C inputs)
+  have horientation :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows := by
+    intro e p start edgeRows htail hhead k current_frontier hsucc_tail
+    simpa [selectedRows] using
+      (orientationRows C inputs (e := e) (p := p) (start := start)
+        edgeRows htail hhead k current_frontier hsucc_tail)
+  have hstrict :
+      RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) := by
+    intro e p start edgeRows htail hhead k current_frontier hsucc_tail
+    simpa [selectedRows] using
+      (localStrictOrder C inputs (e := e) (p := p) (start := start)
+        edgeRows htail hhead k current_frontier hsucc_tail)
+  change
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+      inputs selectedRows
+  exact
+    S2_q72_selected_face_turn_angle_worker
+      (C := C) (inputs := inputs)
+      selectedRows horientation hstrict
+
+set_option linter.style.longLine false in
 /-- Claim `S2-r14-selected-actual-carrier-faceSucc-angle-source`, orientation
 from the concrete face-successor rotation rows.
 
@@ -32110,6 +32320,50 @@ theorem
         (C := C) (inputs := inputs) geometricSelection selectedCarrierRows)
 
 set_option linter.style.longLine false in
+/-- Family form of the q7 orientation lowering from selected-carrier rows.
+
+This keeps the selected rows tied to the geometric-selection input while
+projecting only the two actual selected-carrier `faceSucc` equalities needed by
+the orientation source. -/
+theorem
+    S2_agent_q7_selected_actual_carrier_orientation_source_family_of_geometricSelection_selectedCarrierRows_20260522q7
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+          inputs selectedRows := by
+  intro m C inputs
+  exact
+    S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs) (selectedCarrierRows C inputs)
+
+set_option linter.style.longLine false in
 /-- Family form of
 `S2_agent_q7_selected_actual_carrier_faceSucc_angle_source_of_geometricSelection_selectedCarrierRows_20260522q7`. -/
 theorem
@@ -32149,6 +32403,1106 @@ theorem
     S2_agent_q7_selected_actual_carrier_faceSucc_angle_source_of_geometricSelection_selectedCarrierRows_20260522q7
       (C := C) (inputs := inputs)
       (geometricSelection C inputs) (selectedCarrierRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q73-selected-face-turn-source-worker`, pointwise row pair.
+
+The q72 orientation and local-strict leaves are both projections of the same
+selected-carrier successor-tail row.  That source row is stated in terms of
+the genuine geometric neighbour selections around the actual `faceSucc` turn,
+so this does not introduce global outgoing-list no-between data, identity
+angular order, actual-sector rows, W32 rows, or completed boundary cycles. -/
+theorem
+    S2_q73_selected_face_turn_orientation_localStrict_worker_of_geometricSelection_selectedCarrierRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs)
+    (selectedCarrierRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)) :
+    (let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+      inputs selectedRows) ∧
+    (let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)) := by
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  have hcarrier :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) := by
+    change
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) at selectedCarrierRows
+    exact selectedCarrierRows
+  change
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows ∧
+      RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+  constructor
+  · exact
+      S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+        (C := C) (inputs := inputs) geometricSelection hcarrier
+  · exact
+      S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+        (C := C) (inputs := inputs) geometricSelection hcarrier
+
+set_option linter.style.longLine false in
+/-- Family form of the q73 orientation/local-strict selected-carrier lowering. -/
+theorem
+    S2_q73_selected_face_turn_orientation_localStrict_worker_family_of_geometricSelection_selectedCarrierRows
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+          inputs selectedRows) ∧
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)) := by
+  constructor
+  · intro m C inputs
+    exact
+      (S2_q73_selected_face_turn_orientation_localStrict_worker_of_geometricSelection_selectedCarrierRows
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (selectedCarrierRows C inputs)).1
+  · intro m C inputs
+    exact
+      (S2_q73_selected_face_turn_orientation_localStrict_worker_of_geometricSelection_selectedCarrierRows
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (selectedCarrierRows C inputs)).2
+
+set_option linter.style.longLine false in
+/-- q73 direct feed into the q72 selected face-turn angle family.
+
+This closes the q72 orientation/local-strict premises from the selected
+straight-line geometric carrier successor row. -/
+theorem
+    S2_q73_selected_face_turn_angle_worker_family_of_geometricSelection_selectedCarrierRows
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+          inputs selectedRows := by
+  let sourceRows :=
+    S2_q73_selected_face_turn_orientation_localStrict_worker_family_of_geometricSelection_selectedCarrierRows
+      geometricSelection selectedCarrierRows
+  intro m C inputs
+  exact
+    (S2_q72_selected_face_turn_angle_worker_family_of_geometricSelection_orientation_localStrict
+      geometricSelection sourceRows.1 sourceRows.2) (C := C) inputs
+
+set_option linter.style.longLine false in
+/-- Claim `S2-active-selected-face-turn-source`, pointwise form.
+
+The active selected face-turn source lowers the actual-carrier `faceSucc`
+angle row and its two q72 leaves to one selected-carrier successor-tail
+geometric-turn source.  The strict-order component is obtained through the
+genuine successor-tail geometric rows, not through a global all-outgoing
+no-between source, identity angular order, W32 route, actual-sector rows, or
+boundary/arbitrary cycles. -/
+theorem
+    S2_active_selected_face_turn_source_of_geometricSelection_selectedCarrierRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs)
+    (selectedCarrierRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)) :
+    (let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+      inputs selectedRows) ∧
+    (let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+      inputs selectedRows) ∧
+    (let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)) := by
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  have hpair :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+          inputs selectedRows ∧
+        RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) := by
+    change
+      (let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows) ∧
+      (let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    exact
+      S2_q73_selected_face_turn_orientation_localStrict_worker_of_geometricSelection_selectedCarrierRows
+        (C := C) (inputs := inputs) geometricSelection selectedCarrierRows
+  have hangle :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows :=
+    S2_q72_selected_face_turn_angle_worker
+      (C := C) (inputs := inputs) selectedRows hpair.1 hpair.2
+  change
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows ∧
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows ∧
+      RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+  exact ⟨hangle, hpair⟩
+
+set_option linter.style.longLine false in
+/-- Family form of `S2_active_selected_face_turn_source_of_geometricSelection_selectedCarrierRows`. -/
+theorem
+    S2_active_selected_face_turn_source_family_of_geometricSelection_selectedCarrierRows
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+          inputs selectedRows) ∧
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+          inputs selectedRows) ∧
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)) := by
+  constructor
+  · intro m C inputs
+    exact
+      (S2_active_selected_face_turn_source_of_geometricSelection_selectedCarrierRows
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (selectedCarrierRows C inputs)).1
+  · constructor
+    · intro m C inputs
+      exact
+        (S2_active_selected_face_turn_source_of_geometricSelection_selectedCarrierRows
+          (C := C) (inputs := inputs)
+          (geometricSelection C inputs) (selectedCarrierRows C inputs)).2.1
+    · intro m C inputs
+      exact
+        (S2_active_selected_face_turn_source_of_geometricSelection_selectedCarrierRows
+          (C := C) (inputs := inputs)
+          (geometricSelection C inputs) (selectedCarrierRows C inputs)).2.2
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-selected-successor-tail-source-worker`, pointwise form.
+
+The selected successor-tail carrier row is lowered to the two honest local
+pieces below actual-sector rows: the actual selected-carrier orientation
+equalities and the two chain-free geometric neighbour-selection rows around
+the selected `faceSucc` head.  No global outgoing-list no-between source is
+introduced. -/
+theorem
+    S2_q74_selected_successor_tail_source_of_geometricSelection_orientationRows_geometricNeighborRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs)
+    (orientationRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows)
+    (neighborRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)) :
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) := by
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  change
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+  intro e p start edgeRows htail hhead k current_frontier hsucc_tail
+  let d : UnitDistanceDart C := rawIterDart start k
+  let succ := (geometricUnitDistanceRotationSystem C).faceSucc d
+  have hsucc_tail' :
+      succ.tail ∈ unboundedFrontierVertexSet C inputs := by
+    simpa [succ, d] using hsucc_tail
+  have horientation :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows := by
+    change
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows at orientationRows
+    exact orientationRows
+  have hneighbors :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) := by
+    change
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) at neighborRows
+    exact neighborRows
+  rcases
+      horientation (e := e) (p := p) (start := start)
+        edgeRows htail hhead k current_frontier hsucc_tail' with
+    ⟨hleft, hright⟩
+  rcases
+      hneighbors (e := e) (p := p) (start := start)
+        edgeRows htail hhead k current_frontier hsucc_tail' with
+    ⟨leftHeadRow, headRightRow, _⟩
+  exact ⟨hleft, hright, ⟨leftHeadRow⟩, ⟨headRightRow⟩⟩
+
+set_option linter.style.longLine false in
+/-- Family form of the q74 selected successor-tail source lowering. -/
+theorem
+    S2_q74_selected_successor_tail_source_family_of_geometricSelection_orientationRows_geometricNeighborRows
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (neighborRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) := by
+  intro m C inputs
+  exact
+    S2_q74_selected_successor_tail_source_of_geometricSelection_orientationRows_geometricNeighborRows
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs) (neighborRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q75-selected-geometric-face-turn-source-worker`, pointwise
+row bundle.
+
+The q74 successor-tail orientation/geometric-neighbour leaves and the q72
+selected actual-carrier `faceSucc` angle leaf are all projections of the same
+concrete selected `faceSucc` nonwrap rows.  This keeps the live source at the
+genuine geometric rotation system rather than a global all-outgoing
+no-between row. -/
+theorem
+    S2_q75_selected_actual_carrier_face_turn_sources_of_geometricSelection_faceSuccRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs)
+    (faceSuccRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)) :
+    And
+      (let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows)
+      (And
+        (let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) geometricSelection
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource))
+        (let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) geometricSelection
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+          inputs selectedRows)) := by
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  have hface :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) := by
+    change
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) at faceSuccRows
+    exact faceSuccRows
+  have horientation :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows :=
+    rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource_of_faceSuccRows_20260521r14
+      (C := C) (inputs := inputs) selectedRows hface
+  have hcarrier :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) :=
+    rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource_of_faceSuccRows
+      (C := C) (inputs := inputs) hface
+  have hneighbor :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) :=
+    rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource_of_selectedCarrierRows
+      (C := C) (inputs := inputs) hcarrier
+  have hangle :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows :=
+    S2_r14_selected_actual_carrier_faceSucc_angle_source_of_faceSuccRows
+      (C := C) (inputs := inputs) selectedRows hface
+  change
+    And
+      (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows)
+      (And
+        (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource))
+        (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+          inputs selectedRows))
+  exact And.intro horientation (And.intro hneighbor hangle)
+
+set_option linter.style.longLine false in
+/-- Family form of the q75 selected face-turn source bundle. -/
+theorem
+    S2_q75_selected_actual_carrier_face_turn_sources_family_of_geometricSelection_faceSuccRows
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    And
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+      (And
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            let selectedRows :
+                UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                  inputs :=
+              selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                (C := C) (inputs := inputs) (geometricSelection C inputs)
+            RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+              inputs
+              (selectedNeighborGeometricCarrierLeft
+                (C := C) (inputs := inputs)
+                selectedRows.toGeometricSelectionInputSource)
+              (selectedNeighborGeometricCarrierRight
+                (C := C) (inputs := inputs)
+                selectedRows.toGeometricSelectionInputSource))
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            let selectedRows :
+                UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                  inputs :=
+              selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                (C := C) (inputs := inputs) (geometricSelection C inputs)
+            RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+              inputs selectedRows)) := by
+  exact
+    And.intro
+      (by
+        intro m C inputs
+        exact
+          (S2_q75_selected_actual_carrier_face_turn_sources_of_geometricSelection_faceSuccRows
+            (C := C) (inputs := inputs)
+            (geometricSelection C inputs) (faceSuccRows C inputs)).1)
+      (And.intro
+        (by
+          intro m C inputs
+          exact
+            (S2_q75_selected_actual_carrier_face_turn_sources_of_geometricSelection_faceSuccRows
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (faceSuccRows C inputs)).2.1)
+        (by
+          intro m C inputs
+          exact
+            (S2_q75_selected_actual_carrier_face_turn_sources_of_geometricSelection_faceSuccRows
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (faceSuccRows C inputs)).2.2))
+
+set_option linter.style.longLine false in
+/-- q75 direct feed into the q74 selected successor-tail source.
+
+The q74 orientation and geometric-neighbour premises are now both sourced from
+the selected concrete `faceSucc` nonwrap row. -/
+theorem
+    S2_q75_selected_successor_tail_source_of_geometricSelection_faceSuccRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs)
+    (faceSuccRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)) :
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) := by
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  let sourceRows :=
+    S2_q75_selected_actual_carrier_face_turn_sources_of_geometricSelection_faceSuccRows
+      (C := C) (inputs := inputs) geometricSelection faceSuccRows
+  have hsource :
+      And
+        (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+          inputs selectedRows)
+        (And
+          (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+          (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)) := by
+    change
+      And
+        (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+          inputs selectedRows)
+        (And
+          (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricNeighborRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+          (RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)) at sourceRows
+    exact sourceRows
+  change
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+  exact
+    S2_q74_selected_successor_tail_source_of_geometricSelection_orientationRows_geometricNeighborRows
+      (C := C) (inputs := inputs)
+      geometricSelection hsource.1 hsource.2.1
+
+set_option linter.style.longLine false in
+/-- Family form of the q75 direct q74 successor-tail feed. -/
+theorem
+    S2_q75_selected_successor_tail_source_family_of_geometricSelection_faceSuccRows
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) := by
+  intro m C inputs
+  exact
+    S2_q75_selected_successor_tail_source_of_geometricSelection_faceSuccRows
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs) (faceSuccRows C inputs)
+
+set_option linter.style.longLine false in
+/-- q75 head-match source for the selected q60 cut heads against the same
+selected raw exterior `faceSucc` orbit.
+
+For each actual frontier carrier vertex, the heads selected by the q60 cut
+source are required to be the predecessor and successor raw tails at one
+occurrence of that vertex in the selected raw orbit.  This is an explicit
+selected-orbit source row, not a boundary-sector, W32, or global outgoing
+no-between shortcut. -/
+abbrev
+    S2_q75_selectedCutPartitionHeadsMatchSelectedRawOrbit
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (rawRows : SelectedRawTailCoverageSourceRows inputs) : Prop :=
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+        inputs :=
+    S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+      (C := C) (inputs := inputs) cutRows
+  forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+    Exists fun k : Fin rawRows.O.period =>
+      (rawRows.O.dart k).tail = a.1 ∧
+        (selectedRows.selectedNeighborRows a).left =
+          (rawRows.O.dart
+            (PlanarInterface.cyclicPred rawRows.O.period_pos k)).tail ∧
+        (selectedRows.selectedNeighborRows a).right =
+          (rawRows.O.dart
+            (PlanarInterface.cyclicSucc rawRows.O.period_pos k)).tail
+
+set_option linter.style.longLine false in
+/-- q75 selected angular no-between source from the actual selected raw orbit.
+
+The q66 angular family is transported from genuine angular no-between rows on
+the selected raw exterior orbit, using only the explicit head-match row above.
+No actual-sector rows, completed boundary-cycle rows, W32 consumer, arbitrary
+cycle, or global all-outgoing no-between source is used. -/
+theorem
+    S2_q75_selectedAngularNoBetweenRows_of_cutPartitionInputSource_selectedRawOrbitAngularRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (rawRows : SelectedRawTailCoverageSourceRows inputs)
+    (angularRows : SelectedRawOrbitAngularNoBetweenRows rawRows)
+    (headRows :
+      S2_q75_selectedCutPartitionHeadsMatchSelectedRawOrbit
+        (C := C) (inputs := inputs) cutRows rawRows) :
+    S2_q68_selectedAngularNoBetweenRows_of_cutPartitionInputSource
+      (C := C) (inputs := inputs) cutRows := by
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+        inputs :=
+    S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+      (C := C) (inputs := inputs) cutRows
+  change forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+    GeometricRotationSystem.GraphVertexAngularNoBetweenRows
+      C a.1 (selectedRows.selectedNeighborRows a).left
+        (selectedRows.selectedNeighborRows a).right
+  intro a
+  rcases headRows a with ⟨k, hcenter, hleft, hright⟩
+  have hleft' :
+      (selectedRows.selectedNeighborRows a).left =
+        (rawRows.O.dart
+          (PlanarInterface.cyclicPred rawRows.O.period_pos k)).tail := by
+    simpa [selectedRows] using hleft
+  have hright' :
+      (selectedRows.selectedNeighborRows a).right =
+        (rawRows.O.dart
+          (PlanarInterface.cyclicSucc rawRows.O.period_pos k)).tail := by
+    simpa [selectedRows] using hright
+  let rawRow :
+      GeometricRotationSystem.GraphVertexAngularNoBetweenRows C
+        (rawRows.O.dart k).tail
+        (rawRows.O.dart
+          (PlanarInterface.cyclicPred rawRows.O.period_pos k)).tail
+        (rawRows.O.dart
+          (PlanarInterface.cyclicSucc rawRows.O.period_pos k)).tail :=
+    angularRows k
+  refine
+    { angle := by
+        simpa [selectedRows, hcenter, hleft', hright'] using rawRow.angle
+      no_between := ?_ }
+  intro other hAdj hother_left hother_right hbetween
+  exact
+    rawRow.no_between other
+      (by simpa [hcenter] using hAdj)
+      (by
+        intro h
+        exact hother_left (h.trans hleft'.symm))
+      (by
+        intro h
+        exact hother_right (h.trans hright'.symm))
+      (by
+        exact
+          ⟨by
+              simpa [selectedRows, hcenter, hleft'] using hbetween.1,
+            by
+              simpa [selectedRows, hcenter, hright'] using hbetween.2⟩)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q75_selectedAngularNoBetweenRows_of_cutPartitionInputSource_selectedRawOrbitAngularRows`. -/
+theorem
+    S2_q75_selectedAngularNoBetweenRows_family_of_cutPartitionInputSource_selectedRawOrbitAngularRows
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (rawRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawTailCoverageSourceRows inputs)
+    (angularRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitAngularNoBetweenRows (rawRows C inputs))
+    (headRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_q75_selectedCutPartitionHeadsMatchSelectedRawOrbit
+            (C := C) (inputs := inputs) (cutRows C inputs)
+            (rawRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_q68_selectedAngularNoBetweenRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) (cutRows C inputs) := by
+  intro m C inputs
+  exact
+    S2_q75_selectedAngularNoBetweenRows_of_cutPartitionInputSource_selectedRawOrbitAngularRows
+      (C := C) (inputs := inputs)
+      (cutRows C inputs) (rawRows C inputs)
+      (angularRows C inputs) (headRows C inputs)
+
+set_option linter.style.longLine false in
+/-- q75 turn-row form of the selected angular source.
+
+The actual selected raw `faceSucc` turn rows first give the raw-orbit angular
+no-between rows, then the selected head-match row transports them to the q66
+selected cut heads. -/
+theorem
+    S2_q75_selectedAngularNoBetweenRows_of_cutPartitionInputSource_selectedRawOrbitTurnRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (rawRows : SelectedRawTailCoverageSourceRows inputs)
+    (turnRows : SelectedRawOrbitGeometricFaceSuccTurnRows rawRows)
+    (headRows :
+      S2_q75_selectedCutPartitionHeadsMatchSelectedRawOrbit
+        (C := C) (inputs := inputs) cutRows rawRows) :
+    S2_q68_selectedAngularNoBetweenRows_of_cutPartitionInputSource
+      (C := C) (inputs := inputs) cutRows :=
+  S2_q75_selectedAngularNoBetweenRows_of_cutPartitionInputSource_selectedRawOrbitAngularRows
+    (C := C) (inputs := inputs) cutRows rawRows
+    (selectedRawOrbitAngularNoBetweenRows_of_geometricFaceSuccTurnRows_20260522
+      (C := C) (inputs := inputs) rawRows turnRows)
+    headRows
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q75_selectedAngularNoBetweenRows_of_cutPartitionInputSource_selectedRawOrbitTurnRows`. -/
+theorem
+    S2_q75_selectedAngularNoBetweenRows_family_of_cutPartitionInputSource_selectedRawOrbitTurnRows
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (rawRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawTailCoverageSourceRows inputs)
+    (turnRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitGeometricFaceSuccTurnRows (rawRows C inputs))
+    (headRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_q75_selectedCutPartitionHeadsMatchSelectedRawOrbit
+            (C := C) (inputs := inputs) (cutRows C inputs)
+            (rawRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_q68_selectedAngularNoBetweenRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) (cutRows C inputs) := by
+  intro m C inputs
+  exact
+    S2_q75_selectedAngularNoBetweenRows_of_cutPartitionInputSource_selectedRawOrbitTurnRows
+      (C := C) (inputs := inputs)
+      (cutRows C inputs) (rawRows C inputs)
+      (turnRows C inputs) (headRows C inputs)
 
 set_option linter.style.longLine false in
 /-- Claim `S2-agent-q8-successor-and-cut`, selected-carrier angle handoff.
@@ -34596,8 +35950,8 @@ theorem S2_selected_carrier_faceSucc_source_family_of_orientationRows_localStric
             (selectedRows C inputs).toGeometricSelectionInputSource) := by
   intro m C inputs
   exact
-    S2_selected_carrier_faceSucc_source_of_orientationRows_localStrictOrder
-      (C := C) (inputs := inputs)
+    @S2_selected_carrier_faceSucc_source_of_orientationRows_localStrictOrder
+      m C inputs
       (selectedRows C inputs) (orientationRows C inputs)
       (localStrictOrder C inputs)
 
@@ -41869,6 +43223,5329 @@ noncomputable def
       (incidentGermFrontierEdgeRows C inputs)
       (angleRows C inputs)
       (cyclicSuccCutPartitions C inputs)
+
+set_option linter.style.longLine false in
+/-- q61 seed-visible actual-sector eraser.
+
+This is the r14 source-facing route with the selected seeded raw orbit kept
+visible all the way to the face-dart/angular producer.  It avoids the older q32
+start-edge projection leaf and erases the resulting face-dart carrier directly
+to the actual exterior-sector source. -/
+noncomputable def
+    S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_cyclicSuccCutPartitions
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          let successorTailRows :
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+            S2_agent_raw_successor_tail_source_20260521k14
+              (C := C) (inputs := inputs) selectedRows
+              (S2_agent_raw_orbit_selectedCarrier_successorTail_source_20260521k15
+                (C := C) (inputs := inputs) selectedRows
+                (S2_k6k_faceSucc_tail_faceSucc_rows_source_of_selectedActualCarrierFaceSuccAngleRows
+                  (C := C) (inputs := inputs) selectedRows (angleRows C inputs)))
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            selectedRawTailCoverageSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_20260521r13
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (geometricSelection C inputs)
+              (incidentGermFrontierEdgeRows C inputs)
+              (rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_eta
+                successorTailRows);
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  intro m C inputs
+  let source :
+      PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+        forall k : Fin rows.orbit.boundary.length,
+          GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+            C rows.orbit.boundary k :=
+    S2_r14_faceDartOrbitExteriorCarrierRows_and_angularRows_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_cyclicSuccCutPartitions
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs)
+      (geometricSelection C inputs)
+      (incidentGermFrontierEdgeRows C inputs)
+      (angleRows C inputs)
+      (cyclicSuccCutPartitions C inputs)
+  exact
+    actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows
+      (C := C) (inputs := inputs) source.1 source.2
+
+set_option linter.style.longLine false in
+/-- q61 seed-visible actual-sector route with the cyclic cut source lowered to
+minimal deleted-tail separation on the same selected raw orbit. -/
+noncomputable def
+    S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (minimalSeparation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          let successorTailRows :
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+            S2_agent_raw_successor_tail_source_20260521k14
+              (C := C) (inputs := inputs) selectedRows
+              (S2_agent_raw_orbit_selectedCarrier_successorTail_source_20260521k15
+                (C := C) (inputs := inputs) selectedRows
+                (S2_k6k_faceSucc_tail_faceSucc_rows_source_of_selectedActualCarrierFaceSuccAngleRows
+                  (C := C) (inputs := inputs) selectedRows (angleRows C inputs)))
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            selectedRawTailCoverageSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_20260521r13
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (geometricSelection C inputs)
+              (incidentGermFrontierEdgeRows C inputs)
+              (rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_eta
+                successorTailRows);
+          SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  let cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          let successorTailRows :
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+            S2_agent_raw_successor_tail_source_20260521k14
+              (C := C) (inputs := inputs) selectedRows
+              (S2_agent_raw_orbit_selectedCarrier_successorTail_source_20260521k15
+                (C := C) (inputs := inputs) selectedRows
+                (S2_k6k_faceSucc_tail_faceSucc_rows_source_of_selectedActualCarrierFaceSuccAngleRows
+                  (C := C) (inputs := inputs) selectedRows (angleRows C inputs)))
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            selectedRawTailCoverageSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_20260521r13
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (geometricSelection C inputs)
+              (incidentGermFrontierEdgeRows C inputs)
+              (rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_eta
+                successorTailRows);
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource selectedRawRows := by
+    intro m C inputs
+    let selectedRows :
+        S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) (geometricSelection C inputs)
+    let successorTailRows :
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) :=
+      S2_agent_raw_successor_tail_source_20260521k14
+        (C := C) (inputs := inputs) selectedRows
+        (S2_agent_raw_orbit_selectedCarrier_successorTail_source_20260521k15
+          (C := C) (inputs := inputs) selectedRows
+          (S2_k6k_faceSucc_tail_faceSucc_rows_source_of_selectedActualCarrierFaceSuccAngleRows
+            (C := C) (inputs := inputs) selectedRows (angleRows C inputs)))
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      selectedRawTailCoverageSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_20260521r13
+        (C := C) (inputs := inputs)
+        (componentTopology C inputs) (geometricSelection C inputs)
+        (incidentGermFrontierEdgeRows C inputs)
+        (rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_eta
+          successorTailRows)
+    change SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource selectedRawRows
+    exact
+      selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_minimalDeletedTailSeparation_noCut_20260522q61
+        (C := C) (inputs := inputs) selectedRawRows
+        (minimalSeparation (C := C) (inputs := inputs))
+  exact fun {m} C inputs =>
+    S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_cyclicSuccCutPartitions
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows cyclicSuccCutPartitions (m := m) C inputs
+
+set_option linter.style.longLine false in
+/-- The exact selected raw-tail package used by the q61 selected-actual-carrier
+angle route, exposed as a reusable family for source-level repeated-tail
+workers. -/
+noncomputable def
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawTailCoverageSourceRows inputs := by
+  intro m C inputs
+  let selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) (geometricSelection C inputs)
+  let successorTailRows :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) :=
+    S2_agent_raw_successor_tail_source_20260521k14
+      (C := C) (inputs := inputs) selectedRows
+      (S2_agent_raw_orbit_selectedCarrier_successorTail_source_20260521k15
+        (C := C) (inputs := inputs) selectedRows
+        (S2_k6k_faceSucc_tail_faceSucc_rows_source_of_selectedActualCarrierFaceSuccAngleRows
+          (C := C) (inputs := inputs) selectedRows (angleRows C inputs)))
+  exact
+    selectedRawTailCoverageSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_20260521r13
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (geometricSelection C inputs)
+      (incidentGermFrontierEdgeRows C inputs)
+      (rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_eta
+        successorTailRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q62-minimal-separation-worker`, q61 selected raw orbit,
+cyclic-successor nonreachability form.
+
+This specializes the existing selected raw-orbit minimal-deleted-tail eraser to
+the exact q61/r13 raw orbit, avoiding repetition of the long selected-raw-row
+construction in downstream source statements. -/
+noncomputable def
+    S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (cyclicSuccNonreachability :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitMinimalDeletedTailSeparation
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  change SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows
+  intro i j hij htail
+  exact
+    (selectedRawOrbitMinimalDeletedTailSeparation_of_cyclicSuccDeletedTailNonreachability_20260521r8c
+      (C := C) (inputs := inputs) selectedRawRows
+      (cyclicSuccNonreachability C inputs)) hij htail
+
+set_option linter.style.longLine false in
+/-- q62 actual-sector source route with the q61 repeated-tail leaf lowered to
+cyclic-successor nonreachability on the same selected raw orbit. -/
+noncomputable def
+    S2_q62_actualExteriorSectorInputSourceRows_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (cyclicSuccNonreachability :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation
+    componentTopology geometricSelection incidentGermFrontierEdgeRows angleRows
+    (S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows cyclicSuccNonreachability)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q62-minimal-separation-worker`, q61 selected raw orbit,
+repeated-tail separation form.
+
+The q61 selected raw orbit needs no actual-sector, W-facing, arbitrary-cycle,
+induced-frontier, or completed-boundary-cycle premise to obtain the minimal
+deleted-tail source once ordinary repeated-tail separation rows are available:
+the existing selected repeated-tail exterior-cut reducer supplies the two
+deleted-tail witnesses and nonreachability. -/
+noncomputable def
+    S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_repeatedTailSeparationRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (repeatedTailRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailSeparationRows
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitMinimalDeletedTailSeparation
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  change SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows
+  have hRepeatedTailRows :
+      SelectedRawOrbitRepeatedTailSeparationRows selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailSeparationRows selectedRawRows
+    exact repeatedTailRows C inputs
+  exact
+    fun {i} {j} hij htail =>
+      selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailSeparationRows_20260521k6f
+        (C := C) (inputs := inputs) selectedRawRows
+        hRepeatedTailRows (i := i) (j := j) hij htail
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q62-minimal-separation-worker`, q61 selected raw orbit,
+no-closed reachable-frontier-closed form.
+
+For the q61 selected raw orbit, finite no-closed-separation contradicts the
+existing reachable-frontier-closed separation source, yielding canonical
+cyclic-successor deleted-tail nonreachability and hence the minimal deleted-tail
+source. -/
+noncomputable def
+    S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_finiteNoClosed_reachableFrontierClosedSeparation
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (reachableFrontierClosedSeparation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitCyclicSuccDeletedTailReachableFrontierClosedSeparationSource
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitMinimalDeletedTailSeparation
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  let cyclicSuccDeletedTail :
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+        selectedRawRows :=
+    selectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_of_reachableFrontierClosedSeparation_finiteDrawingNoClosedSeparation_20260521r8c
+      (C := C) (inputs := inputs) selectedRawRows
+      frontier_noClosedSeparation
+      (reachableFrontierClosedSeparation C inputs)
+  change SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows
+  exact
+    selectedRawOrbitMinimalDeletedTailSeparation_of_cyclicSuccDeletedTailNonreachability_20260521r8c
+      (C := C) (inputs := inputs) selectedRawRows cyclicSuccDeletedTail
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q62-minimal-separation-worker`, q61 selected raw orbit,
+endpoint-closed form.
+
+Endpoint-closed separation rows are first lowered by the existing q39 bridge to
+the reachable-frontier-closed source, then finite no-closed-separation supplies
+the selected minimal deleted-tail separation row for the same q61 raw orbit. -/
+noncomputable def
+    S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_finiteNoClosed_endpointClosedSeparation
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (endpointClosedSeparation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitMinimalDeletedTailSeparation
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  refine
+    S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_finiteNoClosed_reachableFrontierClosedSeparation
+      frontier_noClosedSeparation componentTopology geometricSelection
+      incidentGermFrontierEdgeRows angleRows ?_
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  change
+    SelectedRawOrbitCyclicSuccDeletedTailReachableFrontierClosedSeparationSource
+      selectedRawRows
+  have hEndpointClosedSeparation :
+      SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+        selectedRawRows := by
+    change
+      SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+        selectedRawRows
+    exact endpointClosedSeparation C inputs
+  exact
+    fun {i} {j} hij htail hreachable =>
+      S2_q39_selectedRawOrbitReachableFrontierClosedSeparationSource_of_endpointClosedSeparation
+        (C := C) (inputs := inputs) selectedRawRows
+        hEndpointClosedSeparation (i := i) (j := j) hij htail
+        hreachable
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q64-actual-exterior-walk-primitive-worker`, selected raw orbit.
+
+This is the q64 bundle's selected raw face-walk: the actual exterior
+component topology, actual carrier cut rows, selected-head geometric rows,
+endpoint/head rows, and selected-carrier successor rows are composed before
+any actual-sector or boundary-cycle eraser is used.  The resulting raw orbit is
+the same seed-visible q61/q62 orbit used by the current actual-sector route. -/
+noncomputable def
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)) :
+    SelectedRawTailCoverageSourceRows inputs := by
+  let geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs :=
+    S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+      (C := C) (inputs := inputs) cutRows geometricRows
+  let incidentGermFrontierEdgeRows :
+      SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs) geometricSelection :=
+    S2_q61_incidentGermFrontierEdgeMembershipRows_of_cutPartitionInputSource_geometricRows_selectedHeadAt
+      (C := C) (inputs := inputs) cutRows geometricRows selectedHeadAt
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  let angleRows :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows :=
+    S2_agent_q7_selected_actual_carrier_faceSucc_angle_source_of_geometricSelection_selectedCarrierRows_20260522q7
+      (C := C) (inputs := inputs) geometricSelection selectedCarrierRows
+  let successorTailRows :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) :=
+    S2_agent_raw_successor_tail_source_20260521k14
+      (C := C) (inputs := inputs) selectedRows
+      (S2_agent_raw_orbit_selectedCarrier_successorTail_source_20260521k15
+        (C := C) (inputs := inputs) selectedRows
+        (S2_k6k_faceSucc_tail_faceSucc_rows_source_of_selectedActualCarrierFaceSuccAngleRows
+          (C := C) (inputs := inputs) selectedRows angleRows))
+  exact
+    selectedRawTailCoverageSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_20260521r13
+      (C := C) (inputs := inputs)
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      (rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_eta
+        successorTailRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q64-actual-exterior-walk-primitive-worker`.
+
+One primitive source row owns the local actual exterior face-walk data needed
+by q62.  It deliberately stays below the actual-sector eraser: the fields are
+component topology, actual carrier cut rows, selected-head geometric rows,
+selected-head endpoint rows, selected-carrier successor rows, and the
+minimal deleted-tail separation row for the selected raw orbit assembled from
+those same fields. -/
+structure S2_q64ActualExteriorWalkPrimitiveSourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) where
+  componentTopology :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs
+  cutRows :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs
+  geometricRows :
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+          inputs :=
+      S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+        (C := C) (inputs := inputs) cutRows
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      Nonempty
+        (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+          C a.1 (selectedRows.selectedNeighborRows a).left
+            (selectedRows.selectedNeighborRows a).right)
+  selectedHeadAt :
+    let geometricSelection :
+        UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+          C inputs :=
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) cutRows geometricRows
+    let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+      S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      IncidentGermEndpointSelectedHeadAt
+        (C := C) (inputs := inputs) selectedRows a
+  selectedCarrierRows :
+    let geometricSelection :
+        UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+          C inputs :=
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) cutRows geometricRows
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+  minimalSeparation :
+    SelectedRawOrbitMinimalDeletedTailSeparation
+      (S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows)
+
+namespace S2_q64ActualExteriorWalkPrimitiveSourceRows
+
+variable {C : _root_.UDConfig n}
+variable {inputs : FinitePlanarOuterComponentInputs C}
+
+/-- Erase the q64 primitive bundle to the selected raw orbit it owns. -/
+noncomputable def toSelectedRawTailCoverageSourceRows
+    (rows : S2_q64ActualExteriorWalkPrimitiveSourceRows inputs) :
+    SelectedRawTailCoverageSourceRows inputs :=
+  S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+    (C := C) (inputs := inputs)
+    rows.componentTopology rows.cutRows rows.geometricRows
+    rows.selectedHeadAt rows.selectedCarrierRows
+
+/-- Erase the q64 primitive bundle to the minimal deleted-tail row on its own
+selected raw orbit. -/
+def toSelectedRawOrbitMinimalDeletedTailSeparation
+    (rows : S2_q64ActualExteriorWalkPrimitiveSourceRows inputs) :
+    SelectedRawOrbitMinimalDeletedTailSeparation
+      rows.toSelectedRawTailCoverageSourceRows :=
+  rows.minimalSeparation
+
+end S2_q64ActualExteriorWalkPrimitiveSourceRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q67-actual-face-walk-source-bundle-worker`, selected raw orbit.
+
+This is the selected raw orbit owned by the q67 face-walk bundle.  The
+component-topology, cut, selected-head geometric, selected-head endpoint, and
+selected actual-carrier `faceSucc` angle rows are composed before any
+actual-sector eraser or completed boundary-cycle consumer is used. -/
+noncomputable def
+    S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (angleRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows) :
+    SelectedRawTailCoverageSourceRows inputs := by
+  let geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs :=
+    S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+      (C := C) (inputs := inputs) cutRows geometricRows
+  let incidentGermFrontierEdgeRows :
+      SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs) geometricSelection :=
+    S2_q61_incidentGermFrontierEdgeMembershipRows_of_cutPartitionInputSource_geometricRows_selectedHeadAt
+      (C := C) (inputs := inputs) cutRows geometricRows selectedHeadAt
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  have hangle :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows := by
+    change
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows at angleRows
+    exact angleRows
+  let successorTailRows :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) :=
+    S2_agent_raw_successor_tail_source_20260521k14
+      (C := C) (inputs := inputs) selectedRows
+      (S2_agent_raw_orbit_selectedCarrier_successorTail_source_20260521k15
+        (C := C) (inputs := inputs) selectedRows
+        (S2_k6k_faceSucc_tail_faceSucc_rows_source_of_selectedActualCarrierFaceSuccAngleRows
+          (C := C) (inputs := inputs) selectedRows hangle))
+  exact
+    selectedRawTailCoverageSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_20260521r13
+      (C := C) (inputs := inputs)
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      (rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_eta
+        successorTailRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q67-actual-face-walk-source-bundle-worker`.
+
+This source bundle matches the actual exterior face-walk input surface: component
+topology, actual carrier cut rows, selected-head geometric rows, selected-head
+endpoint rows, selected actual-carrier `faceSucc` angle rows, and primitive
+repeated-tail rows for the same selected raw orbit. -/
+structure S2_q67ActualFaceWalkSourceBundleRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) where
+  componentTopology :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs
+  cutRows :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs
+  geometricRows :
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+          inputs :=
+      S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+        (C := C) (inputs := inputs) cutRows
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      Nonempty
+        (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+          C a.1 (selectedRows.selectedNeighborRows a).left
+            (selectedRows.selectedNeighborRows a).right)
+  selectedHeadAt :
+    let geometricSelection :
+        UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+          C inputs :=
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) cutRows geometricRows
+    let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+      S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      IncidentGermEndpointSelectedHeadAt
+        (C := C) (inputs := inputs) selectedRows a
+  angleRows :
+    let geometricSelection :
+        UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+          C inputs :=
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) cutRows geometricRows
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+      inputs selectedRows
+  primitiveRepeatedTailRows :
+    SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+      (S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt angleRows)
+
+namespace S2_q67ActualFaceWalkSourceBundleRows
+
+variable {C : _root_.UDConfig n}
+variable {inputs : FinitePlanarOuterComponentInputs C}
+
+/-- Erase the q67 source bundle to the selected raw orbit it owns. -/
+noncomputable def toSelectedRawTailCoverageSourceRows
+    (rows : S2_q67ActualFaceWalkSourceBundleRows inputs) :
+    SelectedRawTailCoverageSourceRows inputs :=
+  S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+    (C := C) (inputs := inputs)
+    rows.componentTopology rows.cutRows rows.geometricRows
+    rows.selectedHeadAt rows.angleRows
+
+/-- Erase the q67 source bundle to primitive repeated-tail rows on its own
+selected raw orbit. -/
+def toSelectedRawOrbitRepeatedTailPrimitiveSourceRows
+    (rows : S2_q67ActualFaceWalkSourceBundleRows inputs) :
+    SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+      rows.toSelectedRawTailCoverageSourceRows :=
+  rows.primitiveRepeatedTailRows
+
+end S2_q67ActualFaceWalkSourceBundleRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q70-selected-carrier-successor-source-worker`.
+
+For the q64/q67 selected exterior raw orbit, the selected-carrier successor
+row is strictly sourced from the selected actual-carrier `faceSucc` angle row:
+the left and right selected carriers are the predecessor and successor heads of
+the genuine exterior face turn, and the two neighbour-selection witnesses are
+reified from those actual `faceSucc` turns.  This uses no actual-sector rows,
+W32 route, completed boundary cycle, or global outgoing-list no-between row. -/
+theorem
+    S2_q70_selectedCarrierRows_of_cutPartitionInputSource_geometricRows_selectedActualCarrierFaceSuccAngles
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (angleRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows) :
+    let geometricSelection :
+        UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+          C inputs :=
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) cutRows geometricRows
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) := by
+  let geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs :=
+    S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+      (C := C) (inputs := inputs) cutRows geometricRows
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  change
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+  exact
+    rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource_of_selectedActualCarrierFaceSuccAngleRows_20260522q5
+      (C := C) (inputs := inputs) selectedRows angleRows
+
+set_option linter.style.longLine false in
+/-- q70 q67-bundle form of the selected-carrier successor source. -/
+theorem
+    S2_q70_selectedCarrierRows_of_q67ActualFaceWalkSourceBundleRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : S2_q67ActualFaceWalkSourceBundleRows inputs) :
+    let geometricSelection :
+        UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+          C inputs :=
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) rows.cutRows rows.geometricRows
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) :=
+  S2_q70_selectedCarrierRows_of_cutPartitionInputSource_geometricRows_selectedActualCarrierFaceSuccAngles
+    (C := C) (inputs := inputs)
+    rows.cutRows rows.geometricRows rows.angleRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q67-actual-face-walk-source-bundle-worker`.
+
+The q67 bundle produces the actual exterior face-walk carrier package and its
+same-boundary angular rows directly from the source leaves.  The primitive
+repeated-tail row is first lowered to the selected raw orbit's cyclic-successor
+deleted-tail cut partitions; the final actual-sector interface is not used. -/
+noncomputable def
+    S2_q67_actual_face_walk_source_bundle_worker
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : S2_q67ActualFaceWalkSourceBundleRows inputs) :
+    PSigma fun faceRows : FaceDartOrbitExteriorCarrierRows C inputs =>
+      forall k : Fin faceRows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C faceRows.orbit.boundary k := by
+  let geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs :=
+    S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+      (C := C) (inputs := inputs) rows.cutRows rows.geometricRows
+  let incidentGermFrontierEdgeRows :
+      SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs) geometricSelection :=
+    S2_q61_incidentGermFrontierEdgeMembershipRows_of_cutPartitionInputSource_geometricRows_selectedHeadAt
+      (C := C) (inputs := inputs)
+      rows.cutRows rows.geometricRows rows.selectedHeadAt
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  have hangle :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows := by
+    exact rows.angleRows
+  let successorTailRows :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) :=
+    S2_agent_raw_successor_tail_source_20260521k14
+      (C := C) (inputs := inputs) selectedRows
+      (S2_agent_raw_orbit_selectedCarrier_successorTail_source_20260521k15
+        (C := C) (inputs := inputs) selectedRows
+        (S2_k6k_faceSucc_tail_faceSucc_rows_source_of_selectedActualCarrierFaceSuccAngleRows
+          (C := C) (inputs := inputs) selectedRows hangle))
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    selectedRawTailCoverageSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_20260521r13
+      (C := C) (inputs := inputs)
+      rows.componentTopology geometricSelection incidentGermFrontierEdgeRows
+      (rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailGeometricRowsNoOrbitSource_eta
+        successorTailRows)
+  have hprimitive :
+      SelectedRawOrbitRepeatedTailPrimitiveSourceRows selectedRawRows := by
+    exact rows.primitiveRepeatedTailRows
+  have hcut :
+      SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource selectedRawRows :=
+    selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_primitiveSourceRows_20260521pool7
+      (C := C) (inputs := inputs) selectedRawRows hprimitive
+  exact
+    S2_r14_faceDartOrbitExteriorCarrierRows_and_angularRows_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_cyclicSuccCutPartitions
+      (C := C) (inputs := inputs)
+      rows.componentTopology geometricSelection incidentGermFrontierEdgeRows
+      hangle hcut
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q68-q64-face-walk-source-bundle-worker`.
+
+The q64 primitive already contains the same selected raw exterior walk as the
+q67 face-walk bundle, except that it stores selected-carrier successor rows and
+minimal deleted-tail separation.  This erases those two fields to the q67
+angle-row and primitive repeated-tail fields on the same selected orbit, still
+below actual-sector, W32, or completed boundary-cycle rows. -/
+noncomputable def
+    S2_q68_q67ActualFaceWalkSourceBundleRows_of_q64ActualExteriorWalkPrimitiveSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : S2_q64ActualExteriorWalkPrimitiveSourceRows inputs) :
+    S2_q67ActualFaceWalkSourceBundleRows inputs := by
+  let geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs :=
+    S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+      (C := C) (inputs := inputs) rows.cutRows rows.geometricRows
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  let angleRows :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows :=
+    S2_agent_q7_selected_actual_carrier_faceSucc_angle_source_of_geometricSelection_selectedCarrierRows_20260522q7
+      (C := C) (inputs := inputs) geometricSelection rows.selectedCarrierRows
+  refine
+    { componentTopology := rows.componentTopology
+      cutRows := rows.cutRows
+      geometricRows := rows.geometricRows
+      selectedHeadAt := rows.selectedHeadAt
+      angleRows := by
+        change
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows
+        exact angleRows
+      primitiveRepeatedTailRows := ?_ }
+  change SelectedRawOrbitRepeatedTailPrimitiveSourceRows rows.toSelectedRawTailCoverageSourceRows
+  exact
+    selectedRawOrbitRepeatedTailPrimitiveSourceRows_of_minimalDeletedTailSeparation_20260521r55
+      (C := C) (inputs := inputs) rows.toSelectedRawTailCoverageSourceRows
+      rows.toSelectedRawOrbitMinimalDeletedTailSeparation
+
+set_option linter.style.longLine false in
+/-- q68 face-dart/angular producer from the q64 primitive source bundle.
+
+This is the source-facing handoff the workboard asks for: the result is
+`FaceDartOrbitExteriorCarrierRows` plus same-boundary angular rows, not an
+actual-sector or W-facing closure. -/
+noncomputable def
+    S2_q68_faceDartOrbitExteriorCarrierRows_and_angularRows_of_q64ActualExteriorWalkPrimitiveSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : S2_q64ActualExteriorWalkPrimitiveSourceRows inputs) :
+    PSigma fun faceRows : FaceDartOrbitExteriorCarrierRows C inputs =>
+      forall k : Fin faceRows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C faceRows.orbit.boundary k :=
+  S2_q67_actual_face_walk_source_bundle_worker
+    (C := C) (inputs := inputs)
+    (S2_q68_q67ActualFaceWalkSourceBundleRows_of_q64ActualExteriorWalkPrimitiveSourceRows
+      (C := C) (inputs := inputs) rows)
+
+set_option linter.style.longLine false in
+/-- Family form of the q68 q64-primitive-to-face-dart/angular handoff. -/
+noncomputable def
+    S2_q68_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_q64ActualExteriorWalkPrimitiveSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_q64ActualExteriorWalkPrimitiveSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun faceRows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin faceRows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C faceRows.orbit.boundary k := by
+  intro m C inputs
+  exact
+    S2_q68_faceDartOrbitExteriorCarrierRows_and_angularRows_of_q64ActualExteriorWalkPrimitiveSourceRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q70-repeated-tail-separation-source-worker`, selected raw-orbit
+no-cut exterior-arc form.
+
+The finite exterior-frontier arc source turns each hypothetical repeated raw
+tail into a concrete cut partition; `inputs.noCutVertex` then makes the
+ordinary repeated-tail separation row available on that same selected raw
+orbit. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailSeparationRows_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (arcRows :
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) rows.O) :
+    SelectedRawOrbitRepeatedTailSeparationRows rows :=
+  S2_agent_no_cut_repeated_tail_source_from_actualExteriorArcSeparation
+    (C := C) (inputs := inputs) rows.O arcRows
+
+set_option linter.style.longLine false in
+/-- q70 selected raw-orbit minimal deleted-tail separation from no-cut plus
+finite exterior-frontier arc separation on the same selected raw orbit. -/
+noncomputable def
+    selectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (arcRows :
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) rows.O) :
+    SelectedRawOrbitMinimalDeletedTailSeparation rows :=
+  selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailSeparationRows_20260521k6f
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailSeparationRows_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+      (C := C) (inputs := inputs) rows arcRows)
+
+set_option linter.style.longLine false in
+/-- q70 q38 pairwise package from no-cut plus finite exterior-frontier arc
+separation on the same selected raw orbit. -/
+noncomputable def
+    S2_q70_pairwiseMinimalDeletedTailSeparationSource_of_exteriorFrontierArcSeparationRows_noCut
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (arcRows :
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) rows.O) :
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      rows.O where
+  rows := by
+    intro i j hij htail
+    exact
+      selectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+        (C := C) (inputs := inputs) rows arcRows
+        (i := i) (j := j) hij htail
+
+set_option linter.style.longLine false in
+/-- q70 minimal deleted-tail separation for the exact q67 selected raw orbit
+from no-cut plus finite exterior-frontier arc separation. -/
+noncomputable def
+    S2_q70_q67SelectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (angleRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows)
+    (arcRows :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt angleRows
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) selectedRawRows.O) :
+    SelectedRawOrbitMinimalDeletedTailSeparation
+      (S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt angleRows) := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt angleRows
+  change SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows
+  exact
+    selectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+      (C := C) (inputs := inputs) selectedRawRows arcRows
+
+set_option linter.style.longLine false in
+/-- q70 q38 pairwise minimal deleted-tail package for the exact q67 selected
+raw orbit from no-cut plus finite exterior-frontier arc separation. -/
+noncomputable def
+    S2_q70_q67PairwiseMinimalDeletedTailSeparationSource_of_exteriorFrontierArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (angleRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows)
+    (arcRows :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt angleRows
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) selectedRawRows.O) :
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      (S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt angleRows).O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt angleRows
+  change
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      selectedRawRows.O
+  exact
+    S2_q70_pairwiseMinimalDeletedTailSeparationSource_of_exteriorFrontierArcSeparationRows_noCut
+      (C := C) (inputs := inputs) selectedRawRows arcRows
+
+set_option linter.style.longLine false in
+/-- Family form of the q70 q67 minimal deleted-tail source. -/
+noncomputable def
+    S2_q70_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q67SelectedRawOrbit_exteriorFrontierArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (arcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (angleRows C inputs)
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs) selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitMinimalDeletedTailSeparation
+          (S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (angleRows C inputs)) := by
+  intro m C inputs
+  exact
+    S2_q70_q67SelectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcRows
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (angleRows C inputs) (arcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Family form of the q70 q67 q38 pairwise minimal deleted-tail source. -/
+noncomputable def
+    S2_q70_pairwiseMinimalDeletedTailSeparationSource_family_of_q67SelectedRawOrbit_exteriorFrontierArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (arcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (angleRows C inputs)
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs) selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+          (S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (angleRows C inputs)).O := by
+  intro m C inputs
+  exact
+    S2_q70_q67PairwiseMinimalDeletedTailSeparationSource_of_exteriorFrontierArcRows
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (angleRows C inputs) (arcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- q70 q64 primitive bundle from the q64 source leaves plus finite
+exterior-frontier arc separation on the same selected raw orbit.  The
+minimal-deleted-tail field is assembled internally through the no-cut q70
+reducer above. -/
+noncomputable def
+    S2_q70_q64ActualExteriorWalkPrimitiveSourceRows_of_exteriorFrontierArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    (arcRows :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt
+          selectedCarrierRows
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) selectedRawRows.O) :
+    S2_q64ActualExteriorWalkPrimitiveSourceRows inputs := by
+  refine
+    { componentTopology := componentTopology
+      cutRows := cutRows
+      geometricRows := geometricRows
+      selectedHeadAt := selectedHeadAt
+      selectedCarrierRows := selectedCarrierRows
+      minimalSeparation := ?_ }
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt
+      selectedCarrierRows
+  change SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows
+  exact
+    selectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+      (C := C) (inputs := inputs) selectedRawRows arcRows
+
+set_option linter.style.longLine false in
+/-- Family form of the q70 q64 primitive bundle source. -/
+noncomputable def
+    S2_q70_q64ActualExteriorWalkPrimitiveSourceRows_family_of_exteriorFrontierArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (arcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs) selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_q64ActualExteriorWalkPrimitiveSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_q70_q64ActualExteriorWalkPrimitiveSourceRows_of_exteriorFrontierArcRows
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (selectedCarrierRows C inputs) (arcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-exterior-arc-source-worker`, q64 boundary-arc form.
+
+For the q64 selected exterior raw orbit, selected repeated-tail boundary-arc
+rows fill the exterior-frontier arc-separation source consumed by the q70
+no-cut erasers.  The selected raw orbit is exactly the one assembled by
+`S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows`. -/
+def
+    S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    (boundaryArcRows :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt
+          selectedCarrierRows
+      SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) selectedRawRows.O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt
+      selectedCarrierRows
+  have hboundary : SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows at boundaryArcRows
+    exact boundaryArcRows
+  change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+    (inputs := inputs) selectedRawRows.O
+  exact
+    selectedRawOrbitExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows_20260521k6i
+      (C := C) (inputs := inputs) selectedRawRows hboundary
+
+set_option linter.style.longLine false in
+/-- q72 q64 actual exterior-arc form. -/
+def
+    S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_actualExteriorArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    (actualArcRows :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt
+          selectedCarrierRows
+      SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) selectedRawRows.O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt
+      selectedCarrierRows
+  have hactual :
+      SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows at actualArcRows
+    exact actualArcRows
+  change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+    (inputs := inputs) selectedRawRows.O
+  exact
+    selectedRawOrbitExteriorFrontierArcSeparationSourceRows_of_actualExteriorArcRows_20260521k6i
+      (C := C) (inputs := inputs) selectedRawRows hactual
+
+set_option linter.style.longLine false in
+/-- q72 q64 cut-partition form. -/
+def
+    S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_cutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    (cutPartitions :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt
+          selectedCarrierRows
+      SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) selectedRawRows.O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt
+      selectedCarrierRows
+  have hcut : SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows at cutPartitions
+    exact cutPartitions
+  change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+    (inputs := inputs) selectedRawRows.O
+  exact
+    selectedRawOrbitExteriorFrontierArcSeparationSourceRows_of_cutPartitions_direct_20260521r55
+      (C := C) (inputs := inputs) selectedRawRows hcut
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-exterior-arc-source-worker`, q67 boundary-arc form. -/
+def
+    S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (angleRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows)
+    (boundaryArcRows :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt angleRows
+      SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt angleRows
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) selectedRawRows.O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt angleRows
+  have hboundary : SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows at boundaryArcRows
+    exact boundaryArcRows
+  change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+    (inputs := inputs) selectedRawRows.O
+  exact
+    selectedRawOrbitExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows_20260521k6i
+      (C := C) (inputs := inputs) selectedRawRows hboundary
+
+set_option linter.style.longLine false in
+/-- q72 q67 actual exterior-arc form. -/
+def
+    S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_actualExteriorArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (angleRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows)
+    (actualArcRows :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt angleRows
+      SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt angleRows
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) selectedRawRows.O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt angleRows
+  have hactual :
+      SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows at actualArcRows
+    exact actualArcRows
+  change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+    (inputs := inputs) selectedRawRows.O
+  exact
+    selectedRawOrbitExteriorFrontierArcSeparationSourceRows_of_actualExteriorArcRows_20260521k6i
+      (C := C) (inputs := inputs) selectedRawRows hactual
+
+set_option linter.style.longLine false in
+/-- q72 q67 cut-partition form. -/
+def
+    S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_cutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (angleRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows)
+    (cutPartitions :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt angleRows
+      SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt angleRows
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) selectedRawRows.O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q67_actualFaceWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt angleRows
+  have hcut : SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows at cutPartitions
+    exact cutPartitions
+  change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+    (inputs := inputs) selectedRawRows.O
+  exact
+    selectedRawOrbitExteriorFrontierArcSeparationSourceRows_of_cutPartitions_direct_20260521r55
+      (C := C) (inputs := inputs) selectedRawRows hcut
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-exterior-frontier-arc-separation-worker`, selected raw-orbit
+cut-partition form.
+
+The selected raw orbit already supplies the consecutive-edge frontier row.
+Thus repeated-tail cut partitions for that orbit are enough to construct the
+raw exterior-frontier arc source; the repeated-tail arc branch is discharged by
+`inputs.noCutVertex`. -/
+def
+    S2_q72_exteriorFrontierArcSeparationSourceRows_of_selectedRawOrbit_repeatedTailCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (cutPartitions : SelectedRawOrbitRepeatedTailCutPartitions rows) :
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) rows.O :=
+  selectedRawOrbitExteriorFrontierArcSeparationSourceRows_of_cutPartitions_direct_20260521r55
+    (C := C) (inputs := inputs) rows cutPartitions
+
+set_option linter.style.longLine false in
+/-- q72 canonical cyclic-successor cut-partition form. -/
+noncomputable def
+    S2_q72_exteriorFrontierArcSeparationSourceRows_of_selectedRawOrbit_cyclicSuccCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (cutPartitions :
+      SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource rows) :
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) rows.O :=
+  S2_q72_exteriorFrontierArcSeparationSourceRows_of_selectedRawOrbit_repeatedTailCutPartitions
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailCutPartitions_of_cyclicSuccCutPartitionSource_20260521pool7
+      (C := C) (inputs := inputs) rows cutPartitions)
+
+set_option linter.style.longLine false in
+/-- q72 feeds q70's selected raw-orbit minimal deleted-tail eraser. -/
+noncomputable def
+    S2_q72_selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (cutPartitions : SelectedRawOrbitRepeatedTailCutPartitions rows) :
+    SelectedRawOrbitMinimalDeletedTailSeparation rows :=
+  selectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+    (C := C) (inputs := inputs) rows
+    (S2_q72_exteriorFrontierArcSeparationSourceRows_of_selectedRawOrbit_repeatedTailCutPartitions
+      (C := C) (inputs := inputs) rows cutPartitions)
+
+set_option linter.style.longLine false in
+/-- q72 feeds q70's pairwise minimal deleted-tail source eraser. -/
+noncomputable def
+    S2_q72_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (cutPartitions : SelectedRawOrbitRepeatedTailCutPartitions rows) :
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      rows.O :=
+  S2_q70_pairwiseMinimalDeletedTailSeparationSource_of_exteriorFrontierArcSeparationRows_noCut
+    (C := C) (inputs := inputs) rows
+    (S2_q72_exteriorFrontierArcSeparationSourceRows_of_selectedRawOrbit_repeatedTailCutPartitions
+      (C := C) (inputs := inputs) rows cutPartitions)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-repeated-tail-cut-source`, selected raw-orbit q38 form.
+
+The packaged q38 deleted-tail separation source rebuilds pointwise exterior
+cut rows, and those rows erase to the concrete repeated-tail cut partition
+callback for the same selected raw orbit.  This stays entirely on the raw
+orbit/source side: no actual-sector row, W32 facade, completed boundary cycle,
+or arbitrary carrier cycle is used. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailCutPartitions_of_pairwiseMinimalDeletedTailSeparationSource_20260522q74
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (pairwiseSeparation :
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        rows.O) :
+    SelectedRawOrbitRepeatedTailCutPartitions rows :=
+  selectedRawOrbitRepeatedTailCutPartitions_of_repeatedTailExteriorCutRows_20260520
+    (C := C) (inputs := inputs) rows
+    (S2CarrierCutSource.S2_q38_repeatedTailExteriorCutRows_of_pairwiseMinimalDeletedTailSeparationSource
+      (C := C) (inputs := inputs) pairwiseSeparation)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-repeated-tail-cut-source`, q64 selected raw-orbit cut form.
+
+For the concrete q64 selected exterior raw orbit, the repeated-tail
+cut-partition residual lowers to the q38 pairwise minimal deleted-tail
+separation source on that same raw walk. -/
+noncomputable def
+    S2_q74_q64RepeatedTailCutPartitions_of_pairwiseMinimalDeletedTailSeparationSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    (pairwiseSeparation :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt
+          selectedCarrierRows
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows
+    SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt
+      selectedCarrierRows
+  have hpairwise :
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O := by
+    change
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O at pairwiseSeparation
+    exact pairwiseSeparation
+  change SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows
+  exact
+    selectedRawOrbitRepeatedTailCutPartitions_of_pairwiseMinimalDeletedTailSeparationSource_20260522q74
+      (C := C) (inputs := inputs) selectedRawRows hpairwise
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-repeated-tail-cut-source`, q64 exterior-frontier arc form.
+
+The q64 repeated-tail cut callback produced from q38 deleted-tail separation
+feeds the existing q72 q64 exterior-frontier arc row. -/
+noncomputable def
+    S2_q74_q64ExteriorFrontierArcSeparationSourceRows_of_pairwiseMinimalDeletedTailSeparationSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    (pairwiseSeparation :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt
+          selectedCarrierRows
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) selectedRawRows.O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt
+      selectedCarrierRows
+  have hcut : SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows
+    exact
+      S2_q74_q64RepeatedTailCutPartitions_of_pairwiseMinimalDeletedTailSeparationSource
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows pairwiseSeparation
+  change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+    (inputs := inputs) selectedRawRows.O
+  exact
+    S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_cutPartitions
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt selectedCarrierRows
+      hcut
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q74_q64ExteriorFrontierArcSeparationSourceRows_of_pairwiseMinimalDeletedTailSeparationSource`. -/
+noncomputable def
+    S2_q74_q64ExteriorFrontierArcSeparationSourceRows_family_of_pairwiseMinimalDeletedTailSeparationSource
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (pairwiseSeparation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+            selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+          S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (selectedCarrierRows C inputs)
+        RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+          (inputs := inputs) selectedRawRows.O := by
+  intro m C inputs
+  exact
+    S2_q74_q64ExteriorFrontierArcSeparationSourceRows_of_pairwiseMinimalDeletedTailSeparationSource
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (selectedCarrierRows C inputs) (pairwiseSeparation C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q75-pairwise-minimal-deleted-tail-source`, selected raw-orbit
+deleted-tail nonreachability form.
+
+The selected cyclic-successor deleted-tail nonreachability row directly
+supplies the q38 pairwise minimal deleted-tail source on the same selected raw
+orbit by using the two canonical successors as the open-side witnesses. -/
+noncomputable def
+    S2_q75_pairwiseMinimalDeletedTailSeparationSource_of_cyclicSuccDeletedTailNonreachability
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (nonreachability :
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource rows) :
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      rows.O :=
+  S2CarrierCutSource.S2_q75_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_cyclicSuccDeletedTailNonreachability
+    (C := C) (O := rows.O)
+    (by
+      intro i j hij htail
+      simpa using nonreachability (i := i) (j := j) hij htail)
+
+set_option linter.style.longLine false in
+/-- q75 pairwise minimal deleted-tail source for the concrete q64 selected raw
+orbit, lowered to canonical cyclic-successor deleted-tail nonreachability. -/
+noncomputable def
+    S2_q75_q64PairwiseMinimalDeletedTailSeparationSource_of_cyclicSuccDeletedTailNonreachability
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    (nonreachability :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt
+          selectedCarrierRows
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+        selectedRawRows) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      selectedRawRows.O := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt
+      selectedCarrierRows
+  have hnonreach :
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+        selectedRawRows := by
+    change
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+        selectedRawRows at nonreachability
+    exact nonreachability
+  change
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      selectedRawRows.O
+  exact
+    S2_q75_pairwiseMinimalDeletedTailSeparationSource_of_cyclicSuccDeletedTailNonreachability
+      (C := C) (inputs := inputs) selectedRawRows hnonreach
+
+set_option linter.style.longLine false in
+/-- q75 direct source feeding the q74 q64 repeated-tail cut-partition row from
+canonical cyclic-successor deleted-tail nonreachability. -/
+noncomputable def
+    S2_q75_q64RepeatedTailCutPartitions_of_cyclicSuccDeletedTailNonreachability
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (componentTopology :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+            inputs :=
+        S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) cutRows
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Nonempty
+          (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+        S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        IncidentGermEndpointSelectedHeadAt
+          (C := C) (inputs := inputs) selectedRows a)
+    (selectedCarrierRows :
+      let geometricSelection :
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+        S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+          (C := C) (inputs := inputs) cutRows geometricRows
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource))
+    (nonreachability :
+      let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+        S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+          (C := C) (inputs := inputs)
+          componentTopology cutRows geometricRows selectedHeadAt
+          selectedCarrierRows
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+        selectedRawRows) :
+    let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+      S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        componentTopology cutRows geometricRows selectedHeadAt
+        selectedCarrierRows
+    SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows := by
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      componentTopology cutRows geometricRows selectedHeadAt
+      selectedCarrierRows
+  have hpairwise :
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O := by
+    change
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+        selectedRawRows at nonreachability
+    exact
+      S2_q75_pairwiseMinimalDeletedTailSeparationSource_of_cyclicSuccDeletedTailNonreachability
+        (C := C) (inputs := inputs) selectedRawRows nonreachability
+  change SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows
+  exact
+    selectedRawOrbitRepeatedTailCutPartitions_of_pairwiseMinimalDeletedTailSeparationSource_20260522q74
+      (C := C) (inputs := inputs) selectedRawRows hpairwise
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q79-selected-faceSucc-source`, selected-angle row form.
+
+For the selected heads coming from a geometric-selection source, the concrete
+successor-tail `faceSucc` rows are reconstructed from the actual selected
+carrier `faceSucc` angle row.  The reducer uses the genuine geometric
+`faceSucc` consecutive-list facts and the selected strict turn inequalities;
+it does not use actual-sector rows, W32 rows, completed boundary cycles,
+induced frontier graphs, arbitrary cycles, all-adjacent endpoint shortcuts, or
+global all-outgoing no-between rows. -/
+theorem
+    S2_q79_selected_faceSucc_source_of_geometricSelection_selectedActualCarrierFaceSuccAngles
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs)
+    (angleRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows) :
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) := by
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  have hangle :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows := by
+    change
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows at angleRows
+    exact angleRows
+  change
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+  exact
+    S2_r22_faceSuccRows_source_of_selectedActualCarrierFaceSuccAngleRows_20260521r22
+      (C := C) (inputs := inputs) selectedRows hangle
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q79_selected_faceSucc_source_of_geometricSelection_selectedActualCarrierFaceSuccAngles`. -/
+theorem
+    S2_q79_selected_faceSucc_source_family_of_geometricSelection_selectedActualCarrierFaceSuccAngles
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) := by
+  intro m C inputs
+  exact
+    S2_q79_selected_faceSucc_source_of_geometricSelection_selectedActualCarrierFaceSuccAngles
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs) (angleRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q79-selected-faceSucc-source`, orientation/local-strict form.
+
+This exposes the smaller live source behind the selected `faceSucc` row:
+selected actual-carrier orientation equalities together with the genuine local
+strict turn at the selected successor tail. -/
+theorem
+    S2_q79_selected_faceSucc_source_of_geometricSelection_orientationRows_localStrictOrder
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (geometricSelection :
+      UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs)
+    (orientationRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows)
+    (localStrictOrder :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) geometricSelection
+      RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)) :
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) geometricSelection
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) := by
+  let selectedRows :
+      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  have hangle :
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+        inputs selectedRows := by
+    exact
+      S2_selected_faceSucc_angle_source_of_geometricSelection_orientationRows_localStrictOrder
+        (C := C) (inputs := inputs)
+        geometricSelection orientationRows localStrictOrder
+  change
+    RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+      inputs
+      (selectedNeighborGeometricCarrierLeft
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+      (selectedNeighborGeometricCarrierRight
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+  exact
+    S2_q79_selected_faceSucc_source_of_geometricSelection_selectedActualCarrierFaceSuccAngles
+      (C := C) (inputs := inputs) geometricSelection hangle
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q79_selected_faceSucc_source_of_geometricSelection_orientationRows_localStrictOrder`. -/
+theorem
+    S2_q79_selected_faceSucc_source_family_of_geometricSelection_orientationRows_localStrictOrder
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) := by
+  intro m C inputs
+  exact
+    S2_q79_selected_faceSucc_source_of_geometricSelection_orientationRows_localStrictOrder
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs) (localStrictOrder C inputs)
+
+set_option linter.style.longLine false in
+/-- q79 source for the exact q60 geometric-selection heads used by q78,
+selected-angle row form. -/
+theorem
+    S2_q79_q60_selected_faceSucc_source_family_of_cutPartitionInputSource_geometricRows_selectedActualCarrierFaceSuccAngles
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let geometricSelection :
+            UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+              C inputs :=
+          S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+            (C := C) (inputs := inputs) (cutRows C inputs)
+            (geometricRows C inputs)
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) geometricSelection
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) := by
+  let geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+    fun {m} C inputs =>
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) (cutRows C inputs)
+        (geometricRows C inputs)
+  intro m C inputs
+  exact
+    S2_q79_selected_faceSucc_source_of_geometricSelection_selectedActualCarrierFaceSuccAngles
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs) (angleRows C inputs)
+
+set_option linter.style.longLine false in
+/-- q79 source for the exact q60 geometric-selection heads used by q78,
+orientation/local-strict form. -/
+theorem
+    S2_q79_q60_selected_faceSucc_source_family_of_cutPartitionInputSource_geometricRows_orientationRows_localStrictOrder
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let geometricSelection :
+            UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+              C inputs :=
+          S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+            (C := C) (inputs := inputs) (cutRows C inputs)
+            (geometricRows C inputs)
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) geometricSelection
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) := by
+  let geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+    fun {m} C inputs =>
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) (cutRows C inputs)
+        (geometricRows C inputs)
+  intro m C inputs
+  exact
+    S2_q79_selected_faceSucc_source_of_geometricSelection_orientationRows_localStrictOrder
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs) (localStrictOrder C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q77-raw-orbit-faceSucc-minimal-separation-worker`.
+
+The concrete selected `faceSucc` row is enough to build the selected-carrier
+successor rows for the q64/q62 seed-visible raw exterior orbit.  This is the
+same local selected `faceSucc` route used by q75, kept below any global
+all-outgoing no-between shortcut. -/
+noncomputable def
+    S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let geometricSelection :
+            UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+              C inputs :=
+          S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+            (C := C) (inputs := inputs) (cutRows C inputs)
+            (geometricRows C inputs)
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) geometricSelection
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) := by
+  let geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+    fun {m} C inputs =>
+      S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+        (C := C) (inputs := inputs) (cutRows C inputs)
+        (geometricRows C inputs)
+  intro m C inputs
+  exact
+    S2_q75_selected_successor_tail_source_family_of_geometricSelection_faceSuccRows
+      geometricSelection faceSuccRows C inputs
+
+set_option linter.style.longLine false in
+/-- q77 minimal deleted-tail separation for the exact q64/q62 seed-visible raw
+orbit.
+
+The live q75 minimal-separation premise is reduced to canonical cyclic
+successor deleted-tail nonreachability after the selected-carrier successor
+rows have been built from the concrete selected `faceSucc` rows. -/
+noncomputable def
+    S2_q77_q64SelectedRawOrbitMinimalDeletedTailSeparation_family_of_faceSuccRows_cyclicSuccDeletedTailNonreachability
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (nonreachability :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+            selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedCarrierRows :
+            forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                let geometricSelection :
+                    UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                      C inputs :=
+                  S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                    (C := C) (inputs := inputs) (cutRows C inputs)
+                    (geometricRows C inputs)
+                let selectedRows :
+                    UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                      inputs :=
+                  selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                    (C := C) (inputs := inputs) geometricSelection
+                RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                  inputs
+                  (selectedNeighborGeometricCarrierLeft
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource)
+                  (selectedNeighborGeometricCarrierRight
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource) :=
+          S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+            cutRows geometricRows faceSuccRows
+        SelectedRawOrbitMinimalDeletedTailSeparation
+          (S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (selectedCarrierRows C inputs)) := by
+  intro m C inputs
+  let selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource) :=
+    S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+      cutRows geometricRows faceSuccRows
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (selectedCarrierRows C inputs)
+  have hnonreach :
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+        selectedRawRows := by
+    change
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+        selectedRawRows
+    exact nonreachability C inputs
+  change SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows
+  exact
+    selectedRawOrbitMinimalDeletedTailSeparation_of_cyclicSuccDeletedTailNonreachability_20260521r8c
+      (C := C) (inputs := inputs) selectedRawRows hnonreach
+
+set_option linter.style.longLine false in
+/-- q77 primitive-source package for the exact q64/q62 seed-visible raw orbit.
+
+This simultaneously discharges the selected-carrier successor rows from the
+local selected `faceSucc` source and discharges the minimal deleted-tail field
+from canonical cyclic-successor deleted-tail nonreachability on that same raw
+orbit. -/
+noncomputable def
+    S2_q77_q64ActualExteriorWalkPrimitiveSourceRows_family_of_faceSuccRows_cyclicSuccDeletedTailNonreachability
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (nonreachability :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+            selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_q64ActualExteriorWalkPrimitiveSourceRows inputs := by
+  let selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource) :=
+    S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+      cutRows geometricRows faceSuccRows
+  let minimalSeparation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitMinimalDeletedTailSeparation
+            (S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)) :=
+    S2_q77_q64SelectedRawOrbitMinimalDeletedTailSeparation_family_of_faceSuccRows_cyclicSuccDeletedTailNonreachability
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+      nonreachability
+  intro m C inputs
+  refine
+    { componentTopology := componentTopology C inputs
+      cutRows := cutRows C inputs
+      geometricRows := geometricRows C inputs
+      selectedHeadAt := selectedHeadAt C inputs
+      selectedCarrierRows := selectedCarrierRows C inputs
+      minimalSeparation := ?_ }
+  change
+    SelectedRawOrbitMinimalDeletedTailSeparation
+      (S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+        (C := C) (inputs := inputs)
+        (componentTopology C inputs) (cutRows C inputs)
+        (geometricRows C inputs) (selectedHeadAt C inputs)
+        (selectedCarrierRows C inputs))
+  exact minimalSeparation C inputs
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q78-selected-raw-orbit-cyclic-nonreachability`.
+
+Actual exterior-frontier arc separation rows give canonical cyclic-successor
+deleted-tail nonreachability on the same selected raw orbit.  This is the
+strict source-side handoff used below: the only intermediate is the selected
+finite boundary-arc row extracted from the exterior-frontier arc package. -/
+noncomputable def
+    selectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_of_exteriorFrontierArcSeparationRows_20260522q78
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (arcRows :
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) rows.O) :
+    SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource rows :=
+  selectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_of_boundaryArcRows_20260521r8h
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailBoundaryArcRows_of_exteriorFrontierArcSeparationRows_20260520q4
+      (C := C) (inputs := inputs) rows arcRows)
+
+set_option linter.style.longLine false in
+/-- q78 cyclic-successor nonreachability for the exact q64/q62 selected raw
+orbit, with selected-carrier successor rows produced from genuine local
+`faceSucc` rows and the repeated-tail separation supplied by the selected
+exterior-frontier arc source. -/
+noncomputable def
+    S2_q78_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_exteriorFrontierArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (arcRows :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs) selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedCarrierRows :
+            forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                let geometricSelection :
+                    UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                      C inputs :=
+                  S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                    (C := C) (inputs := inputs) (cutRows C inputs)
+                    (geometricRows C inputs)
+                let selectedRows :
+                    UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                      inputs :=
+                  selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                    (C := C) (inputs := inputs) geometricSelection
+                RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                  inputs
+                  (selectedNeighborGeometricCarrierLeft
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource)
+                  (selectedNeighborGeometricCarrierRight
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource) :=
+          S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+            cutRows geometricRows faceSuccRows
+        let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+          S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (selectedCarrierRows C inputs)
+        SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+          selectedRawRows := by
+  intro m C inputs
+  let selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource) :=
+    S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+      cutRows geometricRows faceSuccRows
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (selectedCarrierRows C inputs)
+  change SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource selectedRawRows
+  exact
+    selectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_of_exteriorFrontierArcSeparationRows_20260522q78
+      (C := C) (inputs := inputs) selectedRawRows
+      (arcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- q78 lowers the q77 selected raw-orbit minimal-separation leaf to local
+`faceSucc` rows plus the selected exterior-frontier arc source on the exact
+q64/q62 selected raw orbit. -/
+noncomputable def
+    S2_q78_q64SelectedRawOrbitMinimalDeletedTailSeparation_family_of_faceSuccRows_exteriorFrontierArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (arcRows :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs) selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedCarrierRows :
+            forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                let geometricSelection :
+                    UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                      C inputs :=
+                  S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                    (C := C) (inputs := inputs) (cutRows C inputs)
+                    (geometricRows C inputs)
+                let selectedRows :
+                    UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                      inputs :=
+                  selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                    (C := C) (inputs := inputs) geometricSelection
+                RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                  inputs
+                  (selectedNeighborGeometricCarrierLeft
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource)
+                  (selectedNeighborGeometricCarrierRight
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource) :=
+          S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+            cutRows geometricRows faceSuccRows
+        SelectedRawOrbitMinimalDeletedTailSeparation
+          (S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (selectedCarrierRows C inputs)) :=
+  S2_q77_q64SelectedRawOrbitMinimalDeletedTailSeparation_family_of_faceSuccRows_cyclicSuccDeletedTailNonreachability
+    componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+    (S2_q78_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_exteriorFrontierArcRows
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows arcRows)
+
+set_option linter.style.longLine false in
+/-- q78 primitive-source package for the exact q64/q62 selected raw orbit.
+
+This closes the former q77 nonreachability/minimal-separation leaf using only
+the selected local `faceSucc` source and selected exterior-frontier arc rows
+for the q64 raw orbit. -/
+noncomputable def
+    S2_q78_q64ActualExteriorWalkPrimitiveSourceRows_family_of_faceSuccRows_exteriorFrontierArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (arcRows :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs) selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_q64ActualExteriorWalkPrimitiveSourceRows inputs :=
+  S2_q77_q64ActualExteriorWalkPrimitiveSourceRows_family_of_faceSuccRows_cyclicSuccDeletedTailNonreachability
+    componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+    (S2_q78_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_exteriorFrontierArcRows
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows arcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q79-exterior-frontier-arc-source`, exact q64/q62 selected raw orbit,
+finite boundary-arc form.
+
+The q79 exterior-frontier arc leaf for the q78 route is strictly lowered to the
+selected finite repeated-tail boundary-arc rows on the same q64 raw orbit.  The
+selected-carrier rows are the q77 rows derived from the supplied local
+`faceSucc` source, so the produced arc rows are definitionally aligned with the
+q78 consumer. -/
+noncomputable def
+    S2_q79_q64ExteriorFrontierArcSeparationSourceRows_family_of_faceSuccRows_boundaryArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (boundaryArcRows :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedCarrierRows :
+            forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                let geometricSelection :
+                    UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                      C inputs :=
+                  S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                    (C := C) (inputs := inputs) (cutRows C inputs)
+                    (geometricRows C inputs)
+                let selectedRows :
+                    UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                      inputs :=
+                  selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                    (C := C) (inputs := inputs) geometricSelection
+                RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                  inputs
+                  (selectedNeighborGeometricCarrierLeft
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource)
+                  (selectedNeighborGeometricCarrierRight
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource) :=
+          S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+            cutRows geometricRows faceSuccRows
+        let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+          S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (selectedCarrierRows C inputs)
+        RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+          (inputs := inputs) selectedRawRows.O := by
+  intro m C inputs
+  let selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource) :=
+    S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+      cutRows geometricRows faceSuccRows
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (selectedCarrierRows C inputs)
+  have hboundary :
+      SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows
+    exact boundaryArcRows C inputs
+  change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+    (inputs := inputs) selectedRawRows.O
+  exact
+    S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (selectedCarrierRows C inputs) hboundary
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q79-exterior-frontier-arc-source`, q78 feed.
+
+This composes the q79 boundary-arc lowering above with the q78
+exterior-frontier arc consumer, yielding canonical cyclic-successor
+deleted-tail nonreachability for the exact q64/q62 selected raw orbit. -/
+noncomputable def
+    S2_q79_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_boundaryArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (boundaryArcRows :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedCarrierRows :
+            forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                let geometricSelection :
+                    UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                      C inputs :=
+                  S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                    (C := C) (inputs := inputs) (cutRows C inputs)
+                    (geometricRows C inputs)
+                let selectedRows :
+                    UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                      inputs :=
+                  selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                    (C := C) (inputs := inputs) geometricSelection
+                RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                  inputs
+                  (selectedNeighborGeometricCarrierLeft
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource)
+                  (selectedNeighborGeometricCarrierRight
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource) :=
+          S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+            cutRows geometricRows faceSuccRows
+        let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+          S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (selectedCarrierRows C inputs)
+        SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+          selectedRawRows :=
+  S2_q78_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_exteriorFrontierArcRows
+    componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+    (S2_q79_q64ExteriorFrontierArcSeparationSourceRows_family_of_faceSuccRows_boundaryArcRows
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+      boundaryArcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-boundary-arc-source-for-q64`, generic selected raw-orbit
+minimal deleted-tail form.
+
+Minimal deleted-tail separation on the selected raw orbit gives the finite
+repeated-tail boundary-arc source through the existing repeated-tail exterior
+cut row and no-cut eraser. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailBoundaryArcRows_of_minimalDeletedTailSeparation_20260522q80
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (minimalSeparation :
+      SelectedRawOrbitMinimalDeletedTailSeparation rows) :
+    SelectedRawOrbitRepeatedTailBoundaryArcRows rows :=
+  selectedRawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorCutRows_20260520q4
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailExteriorCutRows_of_minimalDeletedTailSeparation_20260521k5
+      (C := C) (inputs := inputs) rows minimalSeparation)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-boundary-arc-source-for-q64`, q64 primitive bundle form. -/
+noncomputable def
+    S2_q80_q64SelectedRawOrbitRepeatedTailBoundaryArcRows_of_q64ActualExteriorWalkPrimitiveSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : S2_q64ActualExteriorWalkPrimitiveSourceRows inputs) :
+    SelectedRawOrbitRepeatedTailBoundaryArcRows
+      rows.toSelectedRawTailCoverageSourceRows :=
+  selectedRawOrbitRepeatedTailBoundaryArcRows_of_minimalDeletedTailSeparation_20260522q80
+    (C := C) (inputs := inputs) rows.toSelectedRawTailCoverageSourceRows
+    rows.toSelectedRawOrbitMinimalDeletedTailSeparation
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-boundary-arc-source-for-q64`, exact q64/q62 selected raw
+orbit used by the q79 `faceSuccRows` route.
+
+The boundary-arc source consumed by q79 is lowered to the minimal deleted-tail
+source on the same q64 selected raw orbit.  The selected carrier rows are the
+q77 rows derived from the supplied local `faceSucc` source, so the target is
+definitionally the q79/q64 orbit. -/
+noncomputable def
+    S2_q80_q64SelectedRawOrbitRepeatedTailBoundaryArcRows_family_of_faceSuccRows_minimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (minimalSeparation :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedCarrierRows :
+            forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                let geometricSelection :
+                    UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                      C inputs :=
+                  S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                    (C := C) (inputs := inputs) (cutRows C inputs)
+                    (geometricRows C inputs)
+                let selectedRows :
+                    UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                      inputs :=
+                  selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                    (C := C) (inputs := inputs) geometricSelection
+                RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                  inputs
+                  (selectedNeighborGeometricCarrierLeft
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource)
+                  (selectedNeighborGeometricCarrierRight
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource) :=
+          S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+            cutRows geometricRows faceSuccRows
+        let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+          S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (selectedCarrierRows C inputs)
+        SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows := by
+  intro m C inputs
+  let selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource) :=
+    S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+      cutRows geometricRows faceSuccRows
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+      (C := C) (inputs := inputs)
+      (componentTopology C inputs) (cutRows C inputs)
+      (geometricRows C inputs) (selectedHeadAt C inputs)
+      (selectedCarrierRows C inputs)
+  have hminimal :
+      SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows := by
+    change SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows
+    exact minimalSeparation C inputs
+  change SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows
+  exact
+    selectedRawOrbitRepeatedTailBoundaryArcRows_of_minimalDeletedTailSeparation_20260522q80
+      (C := C) (inputs := inputs) selectedRawRows hminimal
+
+set_option linter.style.longLine false in
+/-- q80 handoff: q79 cyclic-successor nonreachability with its boundary-arc
+leaf lowered to minimal deleted-tail separation on the exact q64/q62 selected
+raw orbit. -/
+noncomputable def
+    S2_q80_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_minimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (minimalSeparation :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedCarrierRows :
+            forall {m : Nat} (C : _root_.UDConfig m)
+              (inputs : FinitePlanarOuterComponentInputs C),
+                let geometricSelection :
+                    UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                      C inputs :=
+                  S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                    (C := C) (inputs := inputs) (cutRows C inputs)
+                    (geometricRows C inputs)
+                let selectedRows :
+                    UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                      inputs :=
+                  selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                    (C := C) (inputs := inputs) geometricSelection
+                RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                  inputs
+                  (selectedNeighborGeometricCarrierLeft
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource)
+                  (selectedNeighborGeometricCarrierRight
+                    (C := C) (inputs := inputs)
+                    selectedRows.toGeometricSelectionInputSource) :=
+          S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+            cutRows geometricRows faceSuccRows
+        let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+          S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+            (C := C) (inputs := inputs)
+            (componentTopology C inputs) (cutRows C inputs)
+            (geometricRows C inputs) (selectedHeadAt C inputs)
+            (selectedCarrierRows C inputs)
+        SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+          selectedRawRows :=
+  S2_q79_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_boundaryArcRows
+    componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+    (S2_q80_q64SelectedRawOrbitRepeatedTailBoundaryArcRows_family_of_faceSuccRows_minimalDeletedTailSeparation
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+      minimalSeparation)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q79-faceSucc-selected-carrier-source`, q78 face-dart/angular form.
+
+The q78 q64 primitive source already owns the exact selected exterior raw orbit
+built from the selected `faceSucc` rows and exterior-frontier arc rows.  Erasing
+that primitive through the q68 source-facing producer gives the actual
+face-dart carrier plus same-boundary angular rows, still below actual-sector
+and W32 consumers. -/
+noncomputable def
+    S2_q79_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_exteriorFrontierArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (arcRows :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs) selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k :=
+  S2_q68_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_q64ActualExteriorWalkPrimitiveSourceRows
+    (S2_q78_q64ActualExteriorWalkPrimitiveSourceRows_family_of_faceSuccRows_exteriorFrontierArcRows
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+      arcRows)
+
+set_option linter.style.longLine false in
+/-- Boundary-arc q79 form of the same q78 face-dart/angular handoff. -/
+noncomputable def
+    S2_q79_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_boundaryArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (boundaryArcRows :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitRepeatedTailBoundaryArcRows selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k :=
+  S2_q79_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_exteriorFrontierArcRows
+    componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+    (S2_q79_q64ExteriorFrontierArcSeparationSourceRows_family_of_faceSuccRows_boundaryArcRows
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+      boundaryArcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q80-exterior-arc-source`, direct q79 face-dart/angular handoff.
+
+The boundary-arc leaf in the q79 face-dart/angular route is lowered to the
+minimal deleted-tail separation source on the exact q64/q62 selected raw orbit.
+This keeps the q79 selected raw orbit definitionally aligned and does not use
+actual-sector rows, completed boundary cycles, W32, arbitrary cycles, induced
+frontier graphs, or endpoint shortcuts. -/
+noncomputable def
+    S2_q80_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_minimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (minimalSeparation :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k :=
+  S2_q79_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_boundaryArcRows
+    componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+    (S2_q80_q64SelectedRawOrbitRepeatedTailBoundaryArcRows_family_of_faceSuccRows_minimalDeletedTailSeparation
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+      minimalSeparation)
+
+set_option linter.style.longLine false in
+/-- q80 actual-sector erasure of the face-dart/angular source with the
+boundary-arc leaf lowered to minimal deleted-tail separation.
+
+This is still source-facing: the only construction step is the honest
+face-dart exterior carrier producer above, followed by the checked
+actual-sector eraser. -/
+noncomputable def
+    S2_q80_actualExteriorSectorInputSourceRows_family_of_faceSuccRows_minimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (minimalSeparation :
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  actualExteriorSectorInputSourceRows_of_inputs
+    (S2_q80_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_minimalDeletedTailSeparation
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+      minimalSeparation)
+
+set_option linter.style.longLine false in
+/-- q80 integrator form with the selected `faceSucc` rows lowered to
+orientation equalities plus the local strict angular order on the same
+selected actual-carrier heads.
+
+The minimal deleted-tail premise is still stated on the exact q64 selected raw
+orbit obtained after this lowering, so the handoff remains non-circular and
+below the actual exterior-sector eraser. -/
+noncomputable def
+    S2_q80_actualExteriorSectorInputSourceRows_family_of_orientationRows_localStrictOrder_minimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (cutRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+                inputs :=
+            S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (cutRows C inputs)
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            Nonempty
+              (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+                C a.1 (selectedRows.selectedNeighborRows a).left
+                  (selectedRows.selectedNeighborRows a).right))
+    (selectedHeadAt :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+            S2_agent_20260520_selected_edge_pair_source_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            IncidentGermEndpointSelectedHeadAt
+              (C := C) (inputs := inputs) selectedRows a)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (minimalSeparation :
+      let faceSuccRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q79_q60_selected_faceSucc_source_family_of_cutPartitionInputSource_geometricRows_orientationRows_localStrictOrder
+          cutRows geometricRows orientationRows localStrictOrder
+      let selectedCarrierRows :
+          forall {m : Nat} (C : _root_.UDConfig m)
+            (inputs : FinitePlanarOuterComponentInputs C),
+              let geometricSelection :
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    C inputs :=
+                S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+                  (C := C) (inputs := inputs) (cutRows C inputs)
+                  (geometricRows C inputs)
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) geometricSelection
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+        S2_q77_q64SelectedCarrierRows_family_of_cutPartitionInputSource_geometricRows_faceSuccRows
+          cutRows geometricRows faceSuccRows
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+              (C := C) (inputs := inputs)
+              (componentTopology C inputs) (cutRows C inputs)
+              (geometricRows C inputs) (selectedHeadAt C inputs)
+              (selectedCarrierRows C inputs)
+          SelectedRawOrbitMinimalDeletedTailSeparation selectedRawRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  let faceSuccRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                C inputs :=
+            S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows
+              (C := C) (inputs := inputs) (cutRows C inputs)
+              (geometricRows C inputs)
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) geometricSelection
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource) :=
+    S2_q79_q60_selected_faceSucc_source_family_of_cutPartitionInputSource_geometricRows_orientationRows_localStrictOrder
+      cutRows geometricRows orientationRows localStrictOrder
+  intro m C inputs
+  exact
+    S2_q80_actualExteriorSectorInputSourceRows_family_of_faceSuccRows_minimalDeletedTailSeparation
+      componentTopology cutRows geometricRows selectedHeadAt faceSuccRows
+      minimalSeparation C inputs
+
 /-- Actual-sector erasure of the r12 source-facing face-dart/angular producer. -/
 noncomputable def
     S2_r12_actualExteriorSectorInputSourceRows_of_componentInput_geometricSelection_incidentGerm_successorTailRows_cyclicSuccCutPartitions_faceSuccTurn
@@ -49902,7 +56579,7 @@ noncomputable def
             PlanarInterface.InOpenSegment q
               ((canonicalGraph C).point (O.dart k).tail)
               ((canonicalGraph C).point (O.dart k).head) ->
-            q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) =>
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) =>
         RawOrbitCoverageSourceRows (inputs := inputs) O :=
   S2_q31_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_localIncident_strictSuccessor
     componentTopology geometricSelection
@@ -49976,13 +56653,30 @@ noncomputable def
             (canonicalGraph C).point v ∈
                 frontier (unboundedExteriorComponentRows C inputs).exterior ↔
               Exists fun k : Fin B.length => B.vertex k = v) ∧
-          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
-  S2_q31_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_localIncident_strictSuccessor_rawLeaves
-    componentTopology geometricSelection
-    (fun C inputs =>
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  let localIncidentRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs) :=
+    fun C inputs =>
       S2LocalTwoGermAssembly.selectedNeighborIncidentGermLocalFrontierEdgeMembershipRows_of_geometricSelectionInputSource
-        (C := C) (inputs := inputs) (geometricSelection C inputs))
-    strictSuccessorOrder repeatedTailRows rawOrientation
+        (C := C) (inputs := inputs) (geometricSelection C inputs)
+  intro m C inputs
+  exact
+    S2_q31_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_localIncident_strictSuccessor_rawLeaves
+      componentTopology geometricSelection localIncidentRows
+      strictSuccessorOrder
+      (fun {m} C inputs => by
+        dsimp
+        intro i j hij htail
+        exact repeatedTailRows (C := C) (inputs := inputs)
+          (i := i) (j := j) hij htail)
+      (fun {m} C inputs => by
+        dsimp
+        intro k
+        exact rawOrientation (C := C) (inputs := inputs) k)
+      C inputs
 
 set_option linter.style.longLine false in
 /-- q32 actual exterior-sector source with local incident-germ rows filled and
@@ -50067,13 +56761,30 @@ noncomputable def
             (canonicalGraph C).point v ∈
                 frontier (unboundedExteriorComponentRows C inputs).exterior ↔
               Exists fun k : Fin B.length => B.vertex k = v) ∧
-          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
-  S2_q31_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_localIncident_strictSuccessor_minimalSeparation_nonwrap
-    componentTopology geometricSelection
-    (fun C inputs =>
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  let localIncidentRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs) :=
+    fun C inputs =>
       S2LocalTwoGermAssembly.selectedNeighborIncidentGermLocalFrontierEdgeMembershipRows_of_geometricSelectionInputSource
-        (C := C) (inputs := inputs) (geometricSelection C inputs))
-    strictSuccessorOrder minimalSeparation successorNonwrapRows
+        (C := C) (inputs := inputs) (geometricSelection C inputs)
+  intro m C inputs
+  exact
+    S2_q31_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_localIncident_strictSuccessor_minimalSeparation_nonwrap
+      componentTopology geometricSelection localIncidentRows
+      strictSuccessorOrder
+      (fun {m} C inputs => by
+        dsimp
+        intro i j hij htail
+        exact minimalSeparation (C := C) (inputs := inputs)
+          (i := i) (j := j) hij htail)
+      (fun {m} C inputs => by
+        dsimp
+        intro k
+        exact successorNonwrapRows (C := C) (inputs := inputs) k)
+      C inputs
 
 set_option linter.style.longLine false in
 /-- Genuine local `faceSucc` turn rows on the exact q32 exposed raw orbit.
@@ -50251,6 +56962,78 @@ theorem
     simpa [hdart, hsucc, hsucc_pred, UnitDistanceDart.reverse_head]
       using hangle_left
   simpa [S2_q32RawGeometricOrbitPackageFaceSuccTurnRows, pred] using hangle
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q56-q32-faceSucc-turn-worker`.
+
+Sharper source-facing family for the q32 raw face-successor turn row.  The
+strict-successor order used to expose the q32 package is derived internally
+from the selected actual-carrier `faceSucc` angle rows, so the only remaining
+orbit-specific premise is the local row for the packaged start edge. -/
+theorem
+    S2_q56_q32RawGeometricOrbitPackageFaceSuccTurnRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows) :
+    let strictSuccessorOrder :
+        forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            let selectedRows :
+                S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                  inputs :=
+              S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                (C := C) (inputs := inputs) (geometricSelection C inputs)
+            RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+              inputs
+              (selectedNeighborGeometricCarrierLeft
+                (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+              (selectedNeighborGeometricCarrierRight
+                (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource) :=
+      fun C inputs =>
+        S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles
+          (C := C) (inputs := inputs) (geometricSelection C inputs)
+          (angleRows C inputs)
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        PSigma fun p : PlanarInterface.Point =>
+          UnboundedExteriorFrontierEdgeLocalRows C inputs
+            ((pkg.2.2.1.tail, pkg.2.2.1.head) : PlanarInterface.Edge m) p) ->
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        S2_q32RawGeometricOrbitPackageFaceSuccTurnRows
+          (inputs := inputs) pkg.2.2.2.1 := by
+  dsimp
+  intro startEdgeRows
+  exact
+    S2_q36_q32RawGeometricOrbitPackageFaceSuccTurnRows_family_of_componentTopology_geometricSelection_strictSuccessor_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows
+      componentTopology geometricSelection
+      (fun C inputs =>
+        S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles
+          (C := C) (inputs := inputs) (geometricSelection C inputs)
+          (angleRows C inputs))
+      angleRows startEdgeRows
 
 set_option linter.style.longLine false in
 /-- q32 raw successor-nonwrap/orientation leaf from genuine face-successor
@@ -50507,6 +57290,112 @@ noncomputable def
   exact minimalSeparation C inputs
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q56-minimal-deleted-tail-worker`, q32 actual exterior-arc form.
+
+Repeated-tail actual exterior-arc rows on the exact q32 raw geometric orbit
+strictly lower to the raw minimal deleted-tail separation callback expected by
+the q55 carrier-degree handoff.  The proof uses the q49 raw exterior-arc
+source and only projects its pairwise q38 payload; it does not use
+actual-sector rows, a completed boundary cycle, W32 rows, induced frontier
+graphs, arbitrary cycles, all-adjacent endpoint rows, convex hull data,
+identity angular order, global all-outgoing no-between, or endpoint
+frontier-component separation. -/
+noncomputable def
+    S2_q56_minimalDeletedTailSeparation_family_of_componentTopology_geometricSelection_strictSuccessor_repeatedTailActualExteriorArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (strictSuccessorOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource))
+    (arcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pkg :=
+            S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+              componentTopology geometricSelection strictSuccessorOrder C inputs
+          forall {i j : Fin pkg.2.2.2.1.period},
+            i ≠ j ->
+            (pkg.2.2.2.1.dart i).tail =
+              (pkg.2.2.2.1.dart j).tail ->
+              RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+                (inputs := inputs) pkg.2.2.2.1 i j) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        forall {i j : Fin pkg.2.2.2.1.period},
+          i ≠ j ->
+          (pkg.2.2.2.1.dart i).tail =
+            (pkg.2.2.2.1.dart j).tail ->
+          PSigma fun left :
+              {k : Fin pkg.2.2.2.1.period //
+                cyclicForwardOpenArc i j k ∧
+                  (pkg.2.2.2.1.dart k).tail ≠
+                    (pkg.2.2.2.1.dart i).tail} =>
+            PSigma fun right :
+                {k : Fin pkg.2.2.2.1.period //
+                  cyclicForwardOpenArc j i k ∧
+                    (pkg.2.2.2.1.dart k).tail ≠
+                      (pkg.2.2.2.1.dart i).tail} =>
+              ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                  ({(pkg.2.2.2.1.dart i).tail}ᶜ : Set (Fin m))).Reachable
+                  ⟨(pkg.2.2.2.1.dart left.1).tail, by
+                    simpa using left.2.2⟩
+                  ⟨(pkg.2.2.2.1.dart right.1).tail, by
+                    simpa using right.2.2⟩ := by
+  intro m C inputs
+  let pkg :=
+    S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+      componentTopology geometricSelection strictSuccessorOrder C inputs
+  change
+    forall {i j : Fin pkg.2.2.2.1.period},
+      i ≠ j ->
+      (pkg.2.2.2.1.dart i).tail =
+        (pkg.2.2.2.1.dart j).tail ->
+      PSigma fun left :
+          {k : Fin pkg.2.2.2.1.period //
+            cyclicForwardOpenArc i j k ∧
+              (pkg.2.2.2.1.dart k).tail ≠
+                (pkg.2.2.2.1.dart i).tail} =>
+        PSigma fun right :
+            {k : Fin pkg.2.2.2.1.period //
+              cyclicForwardOpenArc j i k ∧
+                (pkg.2.2.2.1.dart k).tail ≠
+                  (pkg.2.2.2.1.dart i).tail} =>
+          ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+              ({(pkg.2.2.2.1.dart i).tail}ᶜ : Set (Fin m))).Reachable
+              ⟨(pkg.2.2.2.1.dart left.1).tail, by
+                simpa using left.2.2⟩
+              ⟨(pkg.2.2.2.1.dart right.1).tail, by
+                simpa using right.2.2⟩
+  intro i j hij htail
+  rcases
+    (S2CarrierCutSource.S2_q49_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+      (C := C) (inputs := inputs) (O := pkg.2.2.2.1)
+      (arcRows C inputs)).rows (i := i) (j := j) hij htail with
+    ⟨left, right, hnonreach⟩
+  exact ⟨left, ⟨right, hnonreach⟩⟩
+
+set_option linter.style.longLine false in
 /-- q33 actual exterior-sector source with the q32 raw orientation/nonwrap leaf
 reduced to a genuine local face-successor turn row on the exposed q32 orbit. -/
 noncomputable def
@@ -50590,6 +57479,569 @@ noncomputable def
       (C := C) (inputs := inputs)
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q58-primitive-to-q57-arcRows`.
+
+Primitive repeated-tail source rows on the exact q32 raw geometric orbit fill
+the `arcRows` callback expected by q57.  This is only the existing primitive
+source eraser, specialized to the q32 package exposed from component topology,
+geometric selection, and selected strict successor order. -/
+noncomputable def
+    S2_q58_q57RepeatedTailActualExteriorArcRows_family_of_componentTopology_geometricSelection_strictSuccessor_primitiveSourceRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (strictSuccessorOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource))
+    (primitiveSourceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pkg :=
+            S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+              componentTopology geometricSelection strictSuccessorOrder C inputs
+          forall {i j : Fin pkg.2.2.2.1.period},
+            i ≠ j ->
+            (pkg.2.2.2.1.dart i).tail =
+              (pkg.2.2.2.1.dart j).tail ->
+              S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+                (inputs := inputs) pkg.2.2.2.1 i j) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        forall {i j : Fin pkg.2.2.2.1.period},
+          i ≠ j ->
+          (pkg.2.2.2.1.dart i).tail =
+            (pkg.2.2.2.1.dart j).tail ->
+            RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+              (inputs := inputs) pkg.2.2.2.1 i j := by
+  intro m C inputs
+  let pkg :=
+    S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+      componentTopology geometricSelection strictSuccessorOrder C inputs
+  change
+    forall {i j : Fin pkg.2.2.2.1.period},
+      i ≠ j ->
+      (pkg.2.2.2.1.dart i).tail =
+        (pkg.2.2.2.1.dart j).tail ->
+      RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+        (inputs := inputs) pkg.2.2.2.1 i j
+  intro i j hij htail
+  exact
+    ((primitiveSourceRows (C := C) (inputs := inputs)
+        (i := i) (j := j) hij htail).toPrimitiveRows)
+      |>.toRepeatedTailActualExteriorArcRows hij htail
+
+set_option linter.style.longLine false in
+/-- q57 actual exterior-sector source with the q32 minimal-separation leaf
+filled from repeated-tail actual exterior-arc rows on the same exposed raw
+orbit.  The remaining source rows are the component topology package, selected
+geometric carrier neighbours, selected strict successor order, repeated-tail
+actual exterior arcs, and the genuine q32 face-successor turn row. -/
+noncomputable def
+    S2_q57_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_repeatedTailActualExteriorArcRows_faceSuccTurn
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (strictSuccessorOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource))
+    (arcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pkg :=
+            S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+              componentTopology geometricSelection strictSuccessorOrder C inputs
+          forall {i j : Fin pkg.2.2.2.1.period},
+            i ≠ j ->
+            (pkg.2.2.2.1.dart i).tail =
+              (pkg.2.2.2.1.dart j).tail ->
+              RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+                (inputs := inputs) pkg.2.2.2.1 i j)
+    (faceSuccTurnRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pkg :=
+            S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+              componentTopology geometricSelection strictSuccessorOrder C inputs
+          S2_q32RawGeometricOrbitPackageFaceSuccTurnRows
+            (inputs := inputs) pkg.2.2.2.1) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  S2_q33_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_minimalSeparation_faceSuccTurn
+    componentTopology geometricSelection strictSuccessorOrder
+    (fun {m} C inputs =>
+      let pkg :=
+        S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+          componentTopology geometricSelection strictSuccessorOrder C inputs
+      (S2CarrierCutSource.S2_q49_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+        (C := C) (inputs := inputs) (O := pkg.2.2.2.1)
+        (arcRows C inputs)).rows)
+    faceSuccTurnRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q57-direct-actual-sector-composer-main`, selected-angle form.
+
+This is the q57 direct raw-orbit actual-sector handoff with the
+strict-successor and face-successor turn rows both sourced from selected
+actual-carrier `faceSucc` angle rows.  The remaining orbit-specific leaves are
+the packaged start-edge local row and repeated-tail actual exterior-arc rows
+on the exact q32 raw geometric orbit. -/
+noncomputable def
+    S2_q57_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_repeatedTailActualExteriorArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows) :
+    let strictSuccessorOrder :
+        forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            let selectedRows :
+                S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                  inputs :=
+              S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                (C := C) (inputs := inputs) (geometricSelection C inputs)
+            RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+              inputs
+              (selectedNeighborGeometricCarrierLeft
+                (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+              (selectedNeighborGeometricCarrierRight
+                (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource) :=
+      fun C inputs =>
+        S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles
+          (C := C) (inputs := inputs) (geometricSelection C inputs)
+          (angleRows C inputs)
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        PSigma fun p : PlanarInterface.Point =>
+          UnboundedExteriorFrontierEdgeLocalRows C inputs
+            ((pkg.2.2.1.tail, pkg.2.2.1.head) : PlanarInterface.Edge m) p) ->
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        forall {i j : Fin pkg.2.2.2.1.period},
+          i ≠ j ->
+          (pkg.2.2.2.1.dart i).tail =
+            (pkg.2.2.2.1.dart j).tail ->
+            RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+              (inputs := inputs) pkg.2.2.2.1 i j) ->
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  dsimp
+  intro startEdgeRows arcRows
+  let strictSuccessorOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource) :=
+    fun C inputs =>
+      S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles
+        (C := C) (inputs := inputs) (geometricSelection C inputs)
+        (angleRows C inputs)
+  intro m C inputs
+  exact
+    S2_q57_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_repeatedTailActualExteriorArcRows_faceSuccTurn
+      componentTopology geometricSelection strictSuccessorOrder
+      arcRows
+      (S2_q56_q32RawGeometricOrbitPackageFaceSuccTurnRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows
+        componentTopology geometricSelection angleRows startEdgeRows)
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q58-primitive-to-q57-actual-sector`.
+
+Primitive repeated-tail source rows on the exact q32 raw geometric orbit fill
+the repeated-tail actual exterior-arc callback in the q57 direct actual-sector
+composer.  This exposes the true remaining repeated-tail source leaf in its
+smallest raw-index form while preserving the same selected q32 orbit. -/
+noncomputable def
+    S2_q58_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_primitiveSourceRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows) :
+    let strictSuccessorOrder :
+        forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            let selectedRows :
+                S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                  inputs :=
+              S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                (C := C) (inputs := inputs) (geometricSelection C inputs)
+            RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+              inputs
+              (selectedNeighborGeometricCarrierLeft
+                (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+              (selectedNeighborGeometricCarrierRight
+                (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource) :=
+      fun C inputs =>
+        S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles
+          (C := C) (inputs := inputs) (geometricSelection C inputs)
+          (angleRows C inputs)
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        PSigma fun p : PlanarInterface.Point =>
+          UnboundedExteriorFrontierEdgeLocalRows C inputs
+            ((pkg.2.2.1.tail, pkg.2.2.1.head) : PlanarInterface.Edge m) p) ->
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        forall {i j : Fin pkg.2.2.2.1.period},
+          i ≠ j ->
+          (pkg.2.2.2.1.dart i).tail =
+            (pkg.2.2.2.1.dart j).tail ->
+            S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+              (inputs := inputs) pkg.2.2.2.1 i j) ->
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  dsimp
+  intro startEdgeRows primitiveSourceRows
+  let strictSuccessorOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource) :=
+    fun C inputs =>
+      S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles
+        (C := C) (inputs := inputs) (geometricSelection C inputs)
+        (angleRows C inputs)
+  intro m C inputs
+  exact
+    S2_q57_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_repeatedTailActualExteriorArcRows
+      componentTopology geometricSelection angleRows
+      startEdgeRows
+      (S2_q58_q57RepeatedTailActualExteriorArcRows_family_of_componentTopology_geometricSelection_strictSuccessor_primitiveSourceRows
+        componentTopology geometricSelection strictSuccessorOrder
+        primitiveSourceRows)
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q60-exact-q32-primitive-repeated-tail-worker`.
+
+The exact q32-indexed primitive repeated-tail source consumed by q58 strictly
+lowers to the minimal deleted-tail finite-graph separation callback on the same
+exposed q32 raw orbit.  The proof stays on `pkg.2.2.2.1`: minimal separation
+first gives the pointwise repeated-tail exterior cut row, and the checked
+no-cut eraser then makes the primitive raw-index witness row available. -/
+noncomputable def
+    S2_q60_q32PrimitiveRepeatedTailSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_minimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (strictSuccessorOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource))
+    (minimalSeparation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pkg :=
+            S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+              componentTopology geometricSelection strictSuccessorOrder C inputs
+          forall {i j : Fin pkg.2.2.2.1.period},
+            i ≠ j ->
+            (pkg.2.2.2.1.dart i).tail =
+              (pkg.2.2.2.1.dart j).tail ->
+            PSigma fun left :
+                {k : Fin pkg.2.2.2.1.period //
+                  cyclicForwardOpenArc i j k ∧
+                    (pkg.2.2.2.1.dart k).tail ≠
+                      (pkg.2.2.2.1.dart i).tail} =>
+              PSigma fun right :
+                  {k : Fin pkg.2.2.2.1.period //
+                    cyclicForwardOpenArc j i k ∧
+                      (pkg.2.2.2.1.dart k).tail ≠
+                        (pkg.2.2.2.1.dart i).tail} =>
+                ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                    ({(pkg.2.2.2.1.dart i).tail}ᶜ : Set (Fin m))).Reachable
+                    ⟨(pkg.2.2.2.1.dart left.1).tail, by
+                      simpa using left.2.2⟩
+                    ⟨(pkg.2.2.2.1.dart right.1).tail, by
+                      simpa using right.2.2⟩) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        forall {i j : Fin pkg.2.2.2.1.period},
+          i ≠ j ->
+          (pkg.2.2.2.1.dart i).tail =
+            (pkg.2.2.2.1.dart j).tail ->
+            S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+              (inputs := inputs) pkg.2.2.2.1 i j := by
+  intro m C inputs
+  let pkg :=
+    S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+      componentTopology geometricSelection strictSuccessorOrder C inputs
+  change
+    forall {i j : Fin pkg.2.2.2.1.period},
+      i ≠ j ->
+      (pkg.2.2.2.1.dart i).tail =
+        (pkg.2.2.2.1.dart j).tail ->
+        S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+          (inputs := inputs) pkg.2.2.2.1 i j
+  intro i j hij htail
+  let cutRows : RawFaceSuccOrbitRepeatedTailExteriorCutRows
+      (inputs := inputs) pkg.2.2.2.1 i j :=
+    S2_dynamic_repeated_tail_cut_k4_of_minimalDeletedTailSeparation
+      (C := C) (inputs := inputs) pkg.2.2.2.1
+      (minimalSeparation (C := C) (inputs := inputs)) hij htail
+  exact
+    S2_repeatedBoundaryPrimitiveSourceRows_of_repeatedTailExteriorCutRows_20260522q8
+      (inputs := inputs) cutRows
+
+set_option linter.style.longLine false in
+/-- q60 actual exterior-sector source with the q58 primitive repeated-tail leaf
+strictly lowered to minimal deleted-tail separation on the exact q32 raw orbit. -/
+noncomputable def
+    S2_q60_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_minimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows) :
+    let strictSuccessorOrder :
+        forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            let selectedRows :
+                S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                  inputs :=
+              S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                (C := C) (inputs := inputs) (geometricSelection C inputs)
+            RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+              inputs
+              (selectedNeighborGeometricCarrierLeft
+                (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+              (selectedNeighborGeometricCarrierRight
+                (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource) :=
+      fun C inputs =>
+        S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles
+          (C := C) (inputs := inputs) (geometricSelection C inputs)
+          (angleRows C inputs)
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        PSigma fun p : PlanarInterface.Point =>
+          UnboundedExteriorFrontierEdgeLocalRows C inputs
+            ((pkg.2.2.1.tail, pkg.2.2.1.head) : PlanarInterface.Edge m) p) ->
+    (forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        forall {i j : Fin pkg.2.2.2.1.period},
+          i ≠ j ->
+          (pkg.2.2.2.1.dart i).tail =
+            (pkg.2.2.2.1.dart j).tail ->
+          PSigma fun left :
+              {k : Fin pkg.2.2.2.1.period //
+                cyclicForwardOpenArc i j k ∧
+                  (pkg.2.2.2.1.dart k).tail ≠
+                    (pkg.2.2.2.1.dart i).tail} =>
+            PSigma fun right :
+                {k : Fin pkg.2.2.2.1.period //
+                  cyclicForwardOpenArc j i k ∧
+                    (pkg.2.2.2.1.dart k).tail ≠
+                      (pkg.2.2.2.1.dart i).tail} =>
+              ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                  ({(pkg.2.2.2.1.dart i).tail}ᶜ : Set (Fin m))).Reachable
+                  ⟨(pkg.2.2.2.1.dart left.1).tail, by
+                    simpa using left.2.2⟩
+                  ⟨(pkg.2.2.2.1.dart right.1).tail, by
+                    simpa using right.2.2⟩) ->
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  dsimp
+  intro startEdgeRows minimalSeparation
+  let strictSuccessorOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource) :=
+    fun C inputs =>
+      S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles
+        (C := C) (inputs := inputs) (geometricSelection C inputs)
+        (angleRows C inputs)
+  let primitiveRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pkg :=
+            S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+              componentTopology geometricSelection strictSuccessorOrder C inputs
+          forall {i j : Fin pkg.2.2.2.1.period},
+            i ≠ j ->
+            (pkg.2.2.2.1.dart i).tail =
+              (pkg.2.2.2.1.dart j).tail ->
+              S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+                (inputs := inputs) pkg.2.2.2.1 i j :=
+    S2_q60_q32PrimitiveRepeatedTailSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_minimalDeletedTailSeparation
+      componentTopology geometricSelection strictSuccessorOrder
+      minimalSeparation
+  intro m C inputs
+  exact
+    (S2_q58_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_primitiveSourceRows
+      componentTopology geometricSelection angleRows startEdgeRows primitiveRows)
+      C inputs
+
+set_option linter.style.longLine false in
 /-- Raw coverage plus local-sector rows hit every actual frontier carrier
 vertex as a raw-orbit tail.
 
@@ -50641,6 +58093,56 @@ def rawOrbitCoverage_frontierVertexTailCoverageFromLocalSectorRows
     · refine ⟨k, ?_⟩
       have hsnd : e.1.2 = (O.dart k).tail := congrArg Prod.snd hk
       simpa [e] using hsnd.symm
+
+set_option linter.style.longLine false in
+/-- q56 third-neighbour repeated-tail index source on the exact q32 raw orbit.
+
+The q32 package already stores raw edge coverage for every actual
+unbounded-frontier carrier edge.  The general q56 eraser turns that coverage
+into the q36 third-neighbour repeated-tail index row, so this bridge leaves no
+extra third-neighbour index source outside the q32 package. -/
+theorem
+    S2_q56_thirdNeighborRepeatedTailIndex_family_of_componentTopology_geometricSelection_strictSuccessor_q32RawEdgeCoverage
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (strictSuccessorOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs) selectedRows.toGeometricSelectionInputSource)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pkg :=
+          S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+            componentTopology geometricSelection strictSuccessorOrder C inputs
+        S2CarrierCutSource.S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+          (inputs := inputs) pkg.2.2.2.1 := by
+  intro m C inputs
+  let pkg :=
+    S2_q32_rawGeometricOrbitPackage_family_of_componentTopology_geometricSelection_strictSuccessor
+      componentTopology geometricSelection strictSuccessorOrder C inputs
+  let coverage : RawOrbitCoverageSourceRows (inputs := inputs) pkg.2.2.2.1 :=
+    pkg.2.2.2.2.2
+  exact
+    S2CarrierCutSource.S2_q56_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource_of_rawOrbitEdgeCoverage
+      (C := C) (inputs := inputs) (O := pkg.2.2.2.1)
+      coverage.edge_coverage
 
 set_option linter.style.longLine false in
 /-- q34 carrier-cut source on the q32 exposed raw orbit.
@@ -62353,6 +69855,316 @@ noncomputable def
       (pairwiseMinimal C inputs)
 
 set_option linter.style.longLine false in
+/-- q63 endpoint closed-side source for the q61 selected raw orbit,
+cyclic-successor nonreachability form.
+
+The endpoint-side implication is discharged before any actual-sector, W32, or
+completed-boundary-cycle row is introduced: a reachable deleted-tail pair
+contradicts the already supplied nonreachability row on the same q61 selected
+raw orbit. -/
+noncomputable def
+    S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (cyclicSuccNonreachability :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  change
+    SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+      selectedRawRows
+  exact
+    selectedRawOrbitReachableEndpointClosedSeparationSource_of_cyclicSuccDeletedTailNonreachability_20260522q40
+      (C := C) (inputs := inputs) selectedRawRows
+      (cyclicSuccNonreachability C inputs)
+
+set_option linter.style.longLine false in
+/-- q63 endpoint closed-side source for the q61 selected raw orbit,
+cyclic-successor cut-partition form.
+
+The cut partition first erases to deleted-tail nonreachability on the same
+q61 selected raw orbit, and the endpoint-closed source is then the vacuous
+reachable-case adapter above. -/
+noncomputable def
+    S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_cyclicSuccCutPartitionSource
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  refine
+    S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows ?_
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  change SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource selectedRawRows
+  exact
+    selectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_of_cyclicSuccCutPartitionSource_20260521current6
+      (C := C) (inputs := inputs) selectedRawRows
+      (cutPartitions C inputs)
+
+set_option linter.style.longLine false in
+/-- q63 endpoint closed-side source for the q61 selected raw orbit,
+boundary-arc form.
+
+Finite repeated-tail boundary-arc rows lower to deleted-tail nonreachability,
+so no whole-frontier component split, actual-sector row, W32 row, or completed
+boundary cycle is used. -/
+noncomputable def
+    S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_boundaryArcRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (boundaryArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailBoundaryArcRows
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  change
+    SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+      selectedRawRows
+  exact
+    selectedRawOrbitReachableEndpointClosedSeparationSource_of_boundaryArcRows_20260522q40
+      (C := C) (inputs := inputs) selectedRawRows
+      (boundaryArcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- q63 endpoint closed-side source for the q61 selected raw orbit,
+primitive repeated-tail form.
+
+This is the requested source-level lowering of the q61/q62 endpoint-closed
+leaf: primitive raw-index repeated-tail rows on the exact q61 selected raw
+orbit reduce through the checked q40 primitive adapter, with no actual-sector,
+W32, completed-boundary-cycle, induced-frontier, arbitrary-cycle, convex-hull,
+identity-order, or all-adjacent endpoint premise. -/
+noncomputable def
+    S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_primitiveSourceRows
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (primitiveSourceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  change
+    SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource
+      selectedRawRows
+  exact
+    selectedRawOrbitReachableEndpointClosedSeparationSource_of_primitiveSourceRows_20260522q40
+      (C := C) (inputs := inputs) selectedRawRows
+      (primitiveSourceRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q66-repeated-tail-primitive-source-worker`.
+
+For the exact q63/q61 selected raw orbit, the primitive repeated-tail source
+rows are lowered to the non-circular pairwise minimal deleted-tail separation
+source on the same exterior raw face walk.  The proof only erases that
+finite-graph separation to repeated-tail exterior cut rows and then uses the
+existing selected no-cut primitive-source eraser; it introduces no actual-sector
+rows, completed boundary cycle, W32 route, induced frontier graph, arbitrary
+cycle, convex-hull row, identity angular order, global no-between row, or
+all-adjacent endpoint shortcut. -/
+noncomputable def
+    S2_q66_repeatedTailPrimitiveSourceRows_family_of_q63SelectedRawOrbit_pairwiseMinimalDeletedTailSeparation
+    (componentTopology :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (angleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows)
+    (pairwiseMinimal :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+            (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+              componentTopology geometricSelection incidentGermFrontierEdgeRows
+              angleRows C inputs).O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+          (S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+            componentTopology geometricSelection incidentGermFrontierEdgeRows
+            angleRows C inputs) := by
+  intro m C inputs
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+      componentTopology geometricSelection incidentGermFrontierEdgeRows
+      angleRows C inputs
+  have hpairwise :
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O := by
+    change
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O
+    exact pairwiseMinimal (C := C) (inputs := inputs)
+  change SelectedRawOrbitRepeatedTailPrimitiveSourceRows selectedRawRows
+  exact
+    selectedRawOrbitRepeatedTailPrimitiveSourceRows_of_repeatedTailExteriorCutRows_20260521r55
+      (C := C) (inputs := inputs) selectedRawRows
+      (S2CarrierCutSource.S2_q38_repeatedTailExteriorCutRows_of_pairwiseMinimalDeletedTailSeparationSource
+        (C := C) (inputs := inputs) hpairwise)
+
+set_option linter.style.longLine false in
 /-- q38 repeated-tail source in its smallest current pairwise
 minimal-deleted-tail form for the selected seeded raw orbit. -/
 noncomputable def
@@ -63143,6 +70955,74 @@ noncomputable def
       (C := C) (inputs := inputs)
 
 set_option linter.style.longLine false in
+/-- Local q52 bypass pair for seed-visible source routes.
+
+The same selected actual-carrier face-successor angle row gives the selected
+carrier successor source consumed by q30/q31, while the incident-germ row is
+passed through unchanged.  This copy lives in the seeded raw-orbit owner file
+to avoid an import cycle through `S2CarrierLocalSource`. -/
+theorem
+    S2_q52_selectedCarrierRows_and_incidentGermRows_family_of_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (selectedActualCarrierFaceSuccAngleRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+            inputs selectedRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        (let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)) ∧
+        SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+          (C := C) (inputs := inputs) (geometricSelection C inputs) := by
+  intro m C inputs
+  constructor
+  · let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+          inputs :=
+      selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+        (C := C) (inputs := inputs) (geometricSelection C inputs)
+    change
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+    exact
+      rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource_of_selectedActualCarrierFaceSuccAngleRows_20260522q5
+        (C := C) (inputs := inputs) selectedRows
+        (selectedActualCarrierFaceSuccAngleRows (m := m) C inputs)
+  · exact incidentGermFrontierEdgeRows C inputs
+
+set_option linter.style.longLine false in
 /-- q30-to-q31 source reduction with the selected-angle leaf discharged.
 
 Starting from the q30 seed-orbit inputs, this constructs the seed-visible raw
@@ -63662,6 +71542,3538 @@ noncomputable def
             cyclicSuccCutPartitions (C := C) (inputs := inputs)
               (i := i) (j := j) hij htail)
       (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q42-selected-carrier-geometric-source`.
+
+For the q42 selected raw exterior orbit producer, the exposed orientation and
+local strict-order leaves can be strictly lowered to the genuine selected
+carrier successor rows.  The proof only projects the two selected-carrier
+equalities and the two real geometric neighbour rows already present in that
+source, then feeds the existing q42 worker; the repeated-tail cut row remains
+on the same selected raw orbit. -/
+noncomputable def
+    S2_q42_rawFaceSuccOrbitSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_selectedCarrierRows_localAngular_cyclicSuccCutPartitions_20260522s2
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let orientationRows :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+                inputs selectedRows :=
+            S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let localStrictOrder :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+            S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              orientationRows localStrictOrder (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun start : UnitDistanceDart C =>
+        PSigma fun O :
+            UnitDistanceRotationSystem.RawFaceSuccOrbit
+              (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+              start =>
+        PSigma fun _rows : RawFaceSuccOrbitSourceRows (inputs := inputs) O =>
+          forall k : Fin O.period,
+            GeometricRotationSystem.graphDartArg
+                (GeometricRotationSystem.canonicalGeometricGraph C)
+                (O.dart k).tail
+                (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+              GeometricRotationSystem.graphDartArg
+                (GeometricRotationSystem.canonicalGeometricGraph C)
+                (O.dart k).tail
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail := by
+  let orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows :=
+    fun C inputs =>
+      S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (selectedCarrierRows C inputs)
+  let localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource) :=
+    fun C inputs =>
+      S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (selectedCarrierRows C inputs)
+  exact
+    fun {m} C inputs =>
+      S2_q42_rawFaceSuccOrbitSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular
+        (by
+          intro m C inputs
+          exact cyclicSuccCutPartitions (C := C) (inputs := inputs))
+        (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-face-dart-producer-composition`.
+
+Source-facing face-dart producer from the q42 selected raw exterior `faceSucc`
+package.  This lands on the actual producer surface consumed by
+`actualExteriorSectorInputSourceRows_of_inputs`, rather than on a W32 or
+actual-sector consumer facade. -/
+noncomputable def
+    S2_q46_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k := by
+  intro m C inputs
+  exact
+    S2_q24_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_rawFaceSuccOrbitSourceRows
+      (S2_q42_rawFaceSuccOrbitSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular cyclicSuccCutPartitions)
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-face-dart-producer-selected-carrier-composition`.
+
+Source-facing face-dart producer with the q42 selected-carrier lowering
+inlined.  The separate orientation and local strict-order families are not
+source leaves here; they are reconstructed from the selected-carrier rows by
+`S2_q42_rawFaceSuccOrbitSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_selectedCarrierRows_localAngular_cyclicSuccCutPartitions_20260522s2`.
+The incident-germ row remains an explicit local source leaf for downstream
+composers that also name the r17 selected raw-tail package directly. -/
+noncomputable def
+    S2_q46_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows_localAngular_cyclicSuccCutPartitions_20260522s2
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (_incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let orientationRows :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+                inputs selectedRows :=
+            S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let localStrictOrder :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+            S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              orientationRows localStrictOrder (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k := by
+  intro m C inputs
+  exact
+    S2_q24_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_rawFaceSuccOrbitSourceRows
+      (S2_q42_rawFaceSuccOrbitSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_selectedCarrierRows_localAngular_cyclicSuccCutPartitions_20260522s2
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        selectedCarrierRows localAngular cyclicSuccCutPartitions)
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Actual-sector erasure of the selected-carrier q46 face-dart producer.
+
+This keeps the same source surface as the selected-carrier q46 producer and
+only applies the standard face-dart-to-actual-sector eraser. -/
+noncomputable def
+    S2_q44_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows_localAngular_cyclicSuccCutPartitions_20260522s2
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs))
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let orientationRows :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+                inputs selectedRows :=
+            S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let localStrictOrder :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+            S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              orientationRows localStrictOrder (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  intro m C inputs
+  let faceDartRows :=
+    S2_q46_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows_localAngular_cyclicSuccCutPartitions_20260522s2
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      incidentGermFrontierEdgeRows selectedCarrierRows localAngular
+      cyclicSuccCutPartitions (C := C) (inputs := inputs)
+  exact
+    actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows
+      (C := C) (inputs := inputs)
+      faceDartRows.1 faceDartRows.2
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q52-selected-carrier-actual-sector-source`.
+
+Same selected-carrier q44 source surface, but with the incident-germ membership
+rows reconstructed from the selected carrier rows and the local angular source.
+This keeps the residuals at the selected exterior carrier source level:
+finite no-open topology, frontier-vertex incident edges, geometric neighbour
+selection, selected carrier successor rows, local angular rows, and repeated
+tail cyclic-successor cut partitions. -/
+noncomputable def
+    S2_q52_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_selectedCarrierRows_localAngular_cyclicSuccCutPartitions
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let orientationRows :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+                inputs selectedRows :=
+            S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let localStrictOrder :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+            S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              orientationRows localStrictOrder (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  let incidentGermFrontierEdgeRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs) (geometricSelection C inputs) := by
+    intro m C inputs
+    let orientationRows :
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+          inputs selectedRows :=
+      S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (selectedCarrierRows C inputs)
+    let localStrictOrder :
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+              inputs :=
+          selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+            (C := C) (inputs := inputs) (geometricSelection C inputs)
+        RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+          inputs
+          (selectedNeighborGeometricCarrierLeft
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource)
+          (selectedNeighborGeometricCarrierRight
+            (C := C) (inputs := inputs)
+            selectedRows.toGeometricSelectionInputSource) :=
+      S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs) (selectedCarrierRows C inputs)
+    exact
+      (S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+        (C := C) (inputs := inputs)
+        (geometricSelection C inputs)
+        orientationRows localStrictOrder (localAngular C inputs)).2
+  intro m C inputs
+  exact
+    S2_q44_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows_localAngular_cyclicSuccCutPartitions_20260522s2
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      incidentGermFrontierEdgeRows selectedCarrierRows localAngular
+      cyclicSuccCutPartitions (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q52-selected-carrier-actual-sector-source`, deleted-tail
+nonreachability form.
+
+The repeated-tail premise is now the cyclic-successor deleted-tail
+nonreachability row for the selected raw orbit.  The theorem immediately
+rebuilds the cyclic-successor cut partitions and then uses the selected-carrier
+actual-sector source above. -/
+noncomputable def
+    S2_q52_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_selectedCarrierRows_localAngular_cyclicSuccDeletedTailNonreachability
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (selectedCarrierRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (nonreachability :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let orientationRows :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+                inputs selectedRows :=
+            S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let localStrictOrder :
+              let selectedRows :
+                  UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                    inputs :=
+                selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                  (C := C) (inputs := inputs) (geometricSelection C inputs)
+              RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+                inputs
+                (selectedNeighborGeometricCarrierLeft
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource)
+                (selectedNeighborGeometricCarrierRight
+                  (C := C) (inputs := inputs)
+                  selectedRows.toGeometricSelectionInputSource) :=
+            S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs) (selectedCarrierRows C inputs)
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              orientationRows localStrictOrder (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  refine
+    S2_q52_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_selectedCarrierRows_localAngular_cyclicSuccCutPartitions
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      selectedCarrierRows localAngular ?_
+  intro m C inputs
+  let orientationRows :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) (geometricSelection C inputs)
+      RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+        inputs selectedRows :=
+    S2_agent_q7_selected_actual_carrier_orientation_source_of_geometricSelection_selectedCarrierRows_20260522q7
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs) (selectedCarrierRows C inputs)
+  let localStrictOrder :
+      let selectedRows :
+          UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs :=
+        selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+          (C := C) (inputs := inputs) (geometricSelection C inputs)
+      RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+        inputs
+        (selectedNeighborGeometricCarrierLeft
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource)
+        (selectedNeighborGeometricCarrierRight
+          (C := C) (inputs := inputs)
+          selectedRows.toGeometricSelectionInputSource) :=
+    S2_agent_q7_localStrictOrder_source_of_geometricSelection_selectedCarrierRows_20260522q7
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs) (selectedCarrierRows C inputs)
+  let pair :=
+    S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      orientationRows localStrictOrder (localAngular C inputs)
+  let rows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+      (C := C) (inputs := inputs)
+      frontier_noOpen (frontier_vertex_incident C inputs)
+      (geometricSelection C inputs)
+      pair.2 pair.1
+  have hnonreach :
+      SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource rows := by
+    intro i j hij htail
+    simpa [rows, orientationRows, localStrictOrder, pair] using
+      (nonreachability (C := C) (inputs := inputs)
+        (i := i) (j := j) hij htail)
+  change SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource rows
+  exact
+    selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_cyclicSuccDeletedTailNonreachability_20260521r15
+      (C := C) (inputs := inputs) rows hnonreach
+
+set_option linter.style.longLine false in
+/-- q46 face-dart producer with finite no-open read from trace no-closed
+topology.  Frontier-vertex incident rows remain an explicit source premise. -/
+noncomputable def
+    S2_q46_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_traceNoClosed_frontierVertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let frontier_noOpen : FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+            (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+              (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+                trace_noClosed)).1
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k := by
+  intro m C inputs
+  let frontier_noOpen : FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+    (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+      (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+        trace_noClosed)).1
+  exact
+    S2_q46_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      orientationRows localStrictOrder localAngular
+      (by
+        intro m' C' inputs'
+        let pair :=
+          S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+            (C := C') (inputs := inputs')
+            (geometricSelection C' inputs')
+            (orientationRows C' inputs')
+            (localStrictOrder C' inputs')
+            (localAngular C' inputs')
+        change
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C') (inputs := inputs')
+              frontier_noOpen (frontier_vertex_incident C' inputs')
+              (geometricSelection C' inputs')
+              pair.2 pair.1)
+        exact cyclicSuccCutPartitions (C := C') (inputs := inputs'))
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q44-raw-orbit-source-composer`.
+
+Direct actual-sector eraser for the q42 selected raw exterior `faceSucc`
+source.  This is not a new W-facing facade: it composes the checked q42 raw
+orbit producer with the existing q13 raw-orbit boundary-sector eraser, keeping
+the remaining proof obligations source-facing and on the same selected raw
+orbit. -/
+noncomputable def
+    S2_q44_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  S2_q13_boundary_sector_erasure_source_of_rawFaceSuccOrbitSourceRows
+    (S2_q42_rawFaceSuccOrbitSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      orientationRows localStrictOrder localAngular cyclicSuccCutPartitions)
+
+set_option linter.style.longLine false in
+/-- q44 source-facing topology lowering.
+
+This is the current shortest q42/q44 actual-sector eraser with the finite
+no-open topology row read from the same-`K` trace no-closed-separation theorem.
+The frontier-vertex incident row remains explicit, because selected
+`unboundedFrontierEdgeSet` membership is a genuine local source and not a
+consequence of no-open alone. -/
+noncomputable def
+    S2_q44_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_frontierVertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let frontier_noOpen : FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+            (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+              (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+                trace_noClosed)).1
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          And
+            (forall v : Fin m,
+              Iff
+                ((frontier (unboundedExteriorComponentRows C inputs).exterior)
+                  ((canonicalGraph C).point v))
+                (Exists fun k : Fin B.length => B.vertex k = v))
+            (_root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) := by
+  intro m C inputs
+  let frontier_noOpen : FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+    (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+      (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+        trace_noClosed)).1
+  exact
+    S2_q44_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      orientationRows localStrictOrder localAngular
+      (by
+        intro m' C' inputs'
+        let pair :=
+          S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+            (C := C') (inputs := inputs')
+            (geometricSelection C' inputs')
+            (orientationRows C' inputs')
+            (localStrictOrder C' inputs')
+            (localAngular C' inputs')
+        change
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C') (inputs := inputs')
+              frontier_noOpen (frontier_vertex_incident C' inputs')
+              (geometricSelection C' inputs')
+              pair.2 pair.1)
+        exact cyclicSuccCutPartitions (C := C') (inputs := inputs'))
+      C inputs
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q45-source-composition-main`.
+
+Same q44 actual-sector source surface with frontier-vertex incident edges read
+from finite-frontier preconnectedness plus the pointwise outside-accumulation
+boundary-bumping row.  This removes the standalone frontier-incident premise
+without changing the selected raw exterior `faceSucc` orbit used by the
+cyclic-successor cut-partition source. -/
+noncomputable def
+    S2_q45_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation)
+    (outside_accumulation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let frontier_noOpen : FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+            (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+              (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+                trace_noClosed)).1
+          let frontier_noClosed : FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+            (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+              (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+                trace_noClosed)).2
+          let frontier_vertex_incident :
+              forall {r : Nat} (D : _root_.UDConfig r)
+                (Dinputs : FinitePlanarOuterComponentInputs D),
+                  FrontierVertexIncidentUnboundedFrontierEdgeSource D Dinputs :=
+            S2_q37_selected_frontier_incidence_worker_of_finiteDrawingPreconnected_outsideAccumulation_20260522
+              (finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+                frontier_noClosed)
+              outside_accumulation
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          And
+            (forall v : Fin m,
+              Iff
+                ((frontier (unboundedExteriorComponentRows C inputs).exterior)
+                  ((canonicalGraph C).point v))
+                (Exists fun k : Fin B.length => B.vertex k = v))
+            (_root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) := by
+  let frontier_noClosed : FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+    (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+      (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+        trace_noClosed)).2
+  let frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+    S2_q37_selected_frontier_incidence_worker_of_finiteDrawingPreconnected_outsideAccumulation_20260522
+      (finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+        frontier_noClosed)
+      outside_accumulation
+  intro m C inputs
+  exact
+    S2_q44_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_frontierVertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+      trace_noClosed frontier_vertex_incident geometricSelection
+      orientationRows localStrictOrder localAngular
+      (fun {m'} C' inputs' => by
+        let frontier_noOpen : FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+          (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+            (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+              trace_noClosed)).1
+        let pair :=
+          S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+            (C := C') (inputs := inputs')
+            (geometricSelection C' inputs')
+            (orientationRows C' inputs')
+            (localStrictOrder C' inputs')
+            (localAngular C' inputs')
+        change
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C') (inputs := inputs')
+              frontier_noOpen (frontier_vertex_incident C' inputs')
+              (geometricSelection C' inputs')
+              pair.2 pair.1)
+        exact cyclicSuccCutPartitions (C := C') (inputs := inputs'))
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q46-cyclicSucc-cut-source`.
+
+For the same selected raw orbit used by q42/q44/q45, it is enough to prove the
+pairwise repeated-tail actual exterior-arc rows.  Those rows erase to finite
+boundary-arc rows and then to the canonical cyclic-successor deleted-tail
+cut-partition source, with no actual-sector, boundary-cycle, W32, or q42 raw
+source premise. -/
+noncomputable def
+    S2_q46_cyclicSuccCutPartitionSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_repeatedTailActualExteriorArcRows
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (actualArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitRepeatedTailActualExteriorArcRows
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pair :=
+          S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+            (C := C) (inputs := inputs)
+            (geometricSelection C inputs)
+            (orientationRows C inputs)
+            (localStrictOrder C inputs)
+            (localAngular C inputs)
+        SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+          (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+            (C := C) (inputs := inputs)
+            frontier_noOpen (frontier_vertex_incident C inputs)
+            (geometricSelection C inputs)
+            pair.2 pair.1) := by
+  intro m C inputs
+  let pair :=
+    S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs)
+      (localStrictOrder C inputs)
+      (localAngular C inputs)
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+      (C := C) (inputs := inputs)
+      frontier_noOpen (frontier_vertex_incident C inputs)
+      (geometricSelection C inputs)
+      pair.2 pair.1
+  have harc : SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows
+    exact actualArcRows (C := C) (inputs := inputs)
+  change SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource selectedRawRows
+  exact
+    selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_actualExteriorArcRows_20260522q46
+      (C := C) (inputs := inputs) selectedRawRows harc
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, exterior-frontier arc form.
+
+The selected raw exterior-frontier arc source already contains the finite
+repeated-tail boundary-arc callback.  Forgetting to that callback fills
+`SelectedRawOrbitRepeatedTailActualExteriorArcRows` on the same selected raw
+orbit, with no actual-sector, completed boundary-cycle, or W32 premise. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_exteriorFrontierArcSeparationRows_20260522q47
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (arcRows :
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) rows.O) :
+    SelectedRawOrbitRepeatedTailActualExteriorArcRows rows :=
+  selectedRawOrbitRepeatedTailActualExteriorArcRows_of_boundaryArcRows_20260520
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailBoundaryArcRows_of_exteriorFrontierArcSeparationRows_20260520q4
+      (C := C) (inputs := inputs) rows arcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, selected exterior-cut form.
+
+Pointwise repeated-tail exterior cut rows strictly lower the selected actual
+exterior-arc residual through the existing selected cut-partition/no-cut
+eraser.  This is useful when the repeated-tail source is obtained as deleted
+tail separation rather than as explicit actual arc rows. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_repeatedTailExteriorCutRows_20260522q47
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (cutRows :
+      forall {i j : Fin rows.O.period},
+        i ≠ j →
+        (rows.O.dart i).tail = (rows.O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailExteriorCutRows
+            (inputs := inputs) rows.O i j) :
+    SelectedRawOrbitRepeatedTailActualExteriorArcRows rows :=
+  selectedRawOrbitRepeatedTailActualExteriorArcRows_of_cutPartitions_20260521k19
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailCutPartitions_of_repeatedTailExteriorCutRows_20260520
+      (C := C) (inputs := inputs) rows cutRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, minimal deleted-tail form.
+
+The q46 selected actual exterior-arc premise lowers to the finite graph
+minimal deleted-tail separation source on the same selected raw orbit. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_minimalDeletedTailSeparation_20260522q47
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (minimalSeparation :
+      SelectedRawOrbitMinimalDeletedTailSeparation rows) :
+    SelectedRawOrbitRepeatedTailActualExteriorArcRows rows :=
+  selectedRawOrbitRepeatedTailActualExteriorArcRows_of_repeatedTailExteriorCutRows_20260522q47
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitRepeatedTailExteriorCutRows_of_minimalDeletedTailSeparation_20260521k5
+      (C := C) (inputs := inputs) rows minimalSeparation)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, q38 pairwise source form.
+
+The packaged q38 pairwise minimal deleted-tail source is enough to discharge
+the q46 selected actual exterior-arc premise for the same selected raw orbit. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_pairwiseMinimalDeletedTailSeparation_20260522q47
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (source :
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        rows.O) :
+    SelectedRawOrbitRepeatedTailActualExteriorArcRows rows :=
+  selectedRawOrbitRepeatedTailActualExteriorArcRows_of_repeatedTailExteriorCutRows_20260522q47
+    (C := C) (inputs := inputs) rows
+    (S2CarrierCutSource.S2_q38_repeatedTailExteriorCutRows_of_pairwiseMinimalDeletedTailSeparationSource
+      (C := C) (inputs := inputs) source)
+
+/- q47 family repeated-tail wrappers are being moved to the correct owner
+surface after the pointwise erasers above; keep the checked q46 build green
+while the import-direction-safe composer is prepared.
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, q42/q46 primitive family.
+
+For the exact selected raw rows used by the q42/q46 source surface, the
+pairwise actual exterior-arc premise lowers to the primitive raw-index
+repeated-tail rows already present in this file.  The construction only selects
+the same q42 raw orbit and applies the checked primitive-to-actual-arc eraser;
+it does not use actual-sector rows, boundary-cycle rows, or W32 consumers. -/
+noncomputable def
+    S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_primitiveSourceRows
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (primitiveSourceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pair :=
+          S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+            (C := C) (inputs := inputs)
+            (geometricSelection C inputs)
+            (orientationRows C inputs)
+            (localStrictOrder C inputs)
+            (localAngular C inputs)
+        SelectedRawOrbitRepeatedTailActualExteriorArcRows
+          (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+      (C := C) (inputs := inputs)
+      frontier_noOpen (frontier_vertex_incident C inputs)
+      (geometricSelection C inputs)
+      pair.2 pair.1) := by
+  intro m C inputs
+  let pair :=
+    S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs)
+      (localStrictOrder C inputs)
+      (localAngular C inputs)
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+      (C := C) (inputs := inputs)
+      frontier_noOpen (frontier_vertex_incident C inputs)
+      (geometricSelection C inputs)
+      pair.2 pair.1
+  have hprimitive :
+      SelectedRawOrbitRepeatedTailPrimitiveSourceRows selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailPrimitiveSourceRows selectedRawRows
+    exact primitiveSourceRows (C := C) (inputs := inputs)
+  change SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_primitiveSourceRows_20260521k19
+      (C := C) (inputs := inputs) selectedRawRows hprimitive
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, q42/q46 cut-family form.
+
+Concrete repeated-tail cut partitions for the exact q42 selected raw rows make
+the actual exterior-arc residual available by the existing no-cut eraser. -/
+noncomputable def
+    S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cutPartitions
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitRepeatedTailCutPartitions
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pair :=
+          S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+            (C := C) (inputs := inputs)
+            (geometricSelection C inputs)
+            (orientationRows C inputs)
+            (localStrictOrder C inputs)
+            (localAngular C inputs)
+        SelectedRawOrbitRepeatedTailActualExteriorArcRows
+          (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+            (C := C) (inputs := inputs)
+            frontier_noOpen (frontier_vertex_incident C inputs)
+            (geometricSelection C inputs)
+            pair.2 pair.1) := by
+  intro m C inputs
+  let pair :=
+    S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs)
+      (localStrictOrder C inputs)
+      (localAngular C inputs)
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+      (C := C) (inputs := inputs)
+      frontier_noOpen (frontier_vertex_incident C inputs)
+      (geometricSelection C inputs)
+      pair.2 pair.1
+  have hcut : SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows := by
+    change SelectedRawOrbitRepeatedTailCutPartitions selectedRawRows
+    exact cutPartitions (C := C) (inputs := inputs)
+  change SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_cutPartitions_20260521k19
+      (C := C) (inputs := inputs) selectedRawRows hcut
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, q42/q46 q38 family.
+
+For the exact selected raw rows used by q42/q44/q45/q46, the q46 actual
+exterior-arc premise lowers to the packaged pairwise minimal deleted-tail
+separation source.  This stays before any actual-sector or boundary-cycle
+consumer and uses only the selected no-cut cut-partition eraser. -/
+noncomputable def
+    S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_pairwiseMinimalDeletedTailSeparation
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (pairwiseMinimal :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1).O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pair :=
+          S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+            (C := C) (inputs := inputs)
+            (geometricSelection C inputs)
+            (orientationRows C inputs)
+            (localStrictOrder C inputs)
+            (localAngular C inputs)
+        SelectedRawOrbitRepeatedTailActualExteriorArcRows
+          (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+            (C := C) (inputs := inputs)
+            frontier_noOpen (frontier_vertex_incident C inputs)
+            (geometricSelection C inputs)
+            pair.2 pair.1) := by
+  intro m C inputs
+  let pair :=
+    S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs)
+      (localStrictOrder C inputs)
+      (localAngular C inputs)
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+      (C := C) (inputs := inputs)
+      frontier_noOpen (frontier_vertex_incident C inputs)
+      (geometricSelection C inputs)
+      pair.2 pair.1
+  have hpairwise :
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O := by
+    change
+      S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+        selectedRawRows.O
+    exact pairwiseMinimal (C := C) (inputs := inputs)
+  change SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_pairwiseMinimalDeletedTailSeparation_20260522q47
+      (C := C) (inputs := inputs) selectedRawRows hpairwise
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, q42/q46 exterior-frontier
+arc-family form.
+
+The selected exterior-frontier arc source is another already existing lower
+source for the actual exterior-arc callback on the q42 selected raw rows. -/
+noncomputable def
+    S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_exteriorFrontierArcRows
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (arcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+            S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs) selectedRawRows.O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let pair :=
+          S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+            (C := C) (inputs := inputs)
+            (geometricSelection C inputs)
+            (orientationRows C inputs)
+            (localStrictOrder C inputs)
+            (localAngular C inputs)
+        SelectedRawOrbitRepeatedTailActualExteriorArcRows
+          (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+            (C := C) (inputs := inputs)
+            frontier_noOpen (frontier_vertex_incident C inputs)
+            (geometricSelection C inputs)
+            pair.2 pair.1) := by
+  intro m C inputs
+  let pair :=
+    S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs)
+      (localStrictOrder C inputs)
+      (localAngular C inputs)
+  let selectedRawRows : SelectedRawTailCoverageSourceRows inputs :=
+    S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+      (C := C) (inputs := inputs)
+      frontier_noOpen (frontier_vertex_incident C inputs)
+      (geometricSelection C inputs)
+      pair.2 pair.1
+  have harc :
+      RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+        (inputs := inputs) selectedRawRows.O := by
+    change RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) selectedRawRows.O
+    exact arcRows (C := C) (inputs := inputs)
+  change SelectedRawOrbitRepeatedTailActualExteriorArcRows selectedRawRows
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_exteriorFrontierArcSeparationRows_20260522q47
+      (C := C) (inputs := inputs) selectedRawRows harc
+-/
+
+set_option linter.style.longLine false in
+/-- The q42/q46 selected raw-tail package as a reusable family.
+
+This names the exact selected raw orbit used by the q42 source surface, so q47
+repeated-tail reducers can state their remaining source rows without copying
+the long `pair` expression into every theorem. -/
+noncomputable def
+    S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawTailCoverageSourceRows inputs := by
+  intro m C inputs
+  let pair :=
+    S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+      (C := C) (inputs := inputs)
+      (geometricSelection C inputs)
+      (orientationRows C inputs)
+      (localStrictOrder C inputs)
+      (localAngular C inputs)
+  exact
+    S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+      (C := C) (inputs := inputs)
+      frontier_noOpen (frontier_vertex_incident C inputs)
+      (geometricSelection C inputs)
+      pair.2 pair.1
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, active q42/q46 primitive
+family.
+
+For the selected raw rows used by q42/q46, the q46 actual exterior-arc premise
+is supplied by the existing primitive raw-index repeated-tail rows. -/
+noncomputable def
+    S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_primitiveSourceRows
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (primitiveSourceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailActualExteriorArcRows
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular C inputs) := by
+  intro m C inputs
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_primitiveSourceRows_20260521k19
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular C inputs)
+      (primitiveSourceRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, active q42/q46
+cut-partition family. -/
+noncomputable def
+    S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cutPartitions
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailCutPartitions
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailActualExteriorArcRows
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular C inputs) := by
+  intro m C inputs
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_cutPartitions_20260521k19
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular C inputs)
+      (cutPartitions C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-q38-source`, active q42/q46 cut-partition
+form.
+
+For the exact selected raw orbit named for q47, concrete repeated-tail cut
+partitions strictly lower to the packaged q38 pairwise minimal deleted-tail
+separation source.  This stays on the repeated-tail/cut side: it first erases
+the selected cut partitions to pointwise exterior cut rows and then forgets
+the cut-row wrapper into q38. -/
+noncomputable def
+    S2_q47_pairwiseMinimalDeletedTailSeparation_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cutPartitions
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailCutPartitions
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular C inputs).O := by
+  intro m C inputs
+  exact
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_repeatedTailExteriorCutRows
+      (C := C) (inputs := inputs)
+      (selectedRawOrbitRepeatedTailExteriorCutRows_of_cutPartitions_20260521k6b
+        (C := C) (inputs := inputs)
+        (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+          frontier_noOpen frontier_vertex_incident geometricSelection
+          orientationRows localStrictOrder localAngular C inputs)
+        (cutPartitions C inputs))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, active q42/q46 q38
+pairwise-minimal-deleted-tail family. -/
+noncomputable def
+    S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_pairwiseMinimalDeletedTailSeparation
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (pairwiseMinimal :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs).O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailActualExteriorArcRows
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular C inputs) := by
+  intro m C inputs
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_pairwiseMinimalDeletedTailSeparation_20260522q47
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular C inputs)
+      (pairwiseMinimal C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q48-repeated-tail-pairwise-source-worker`, selected raw-orbit
+minimal-deleted-tail form.
+
+The selected raw minimal deleted-tail separation row is exactly the q38
+pairwise source payload for the same raw orbit. -/
+noncomputable def
+    S2_q48_pairwiseMinimalDeletedTailSeparationSource_of_minimalDeletedTailSeparation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (minimalSeparation :
+      SelectedRawOrbitMinimalDeletedTailSeparation rows) :
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      rows.O where
+  rows := by
+    intro i j hij htail
+    exact minimalSeparation (i := i) (j := j) hij htail
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q48-repeated-tail-pairwise-source-worker`, no-cut repeated-tail
+cut-partition form.
+
+Repeated-tail cut partitions on the selected raw orbit contradict the input
+no-cut row, giving the minimal deleted-tail row and hence the q38 pairwise
+source. -/
+noncomputable def
+    S2_q48_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailCutPartitions_noCut
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (cutPartitions : SelectedRawOrbitRepeatedTailCutPartitions rows) :
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      rows.O :=
+  S2_q48_pairwiseMinimalDeletedTailSeparationSource_of_minimalDeletedTailSeparation
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailCutPartitions_noCut_20260521r13
+      (C := C) (inputs := inputs) rows cutPartitions)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q48-repeated-tail-pairwise-source-worker`, active q47 selected
+raw-row family.
+
+For the exact q47 selected raw rows named in this owner file, repeated-tail cut
+partitions strictly reduce to the q38 pairwise minimal deleted-tail source by
+the existing no-cut/minimal-deleted-tail eraser. -/
+noncomputable def
+    S2_q48_pairwiseMinimalDeletedTailSeparationSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions_noCut
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailCutPartitions
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular C inputs).O := by
+  intro m C inputs
+  exact
+    S2_q48_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailCutPartitions_noCut
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular C inputs)
+      (cutPartitions C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-repeated-tail-cut-source-worker`, selected actual
+exterior-arc form.
+
+For one selected raw orbit, actual exterior-arc rows already provide the q38
+pairwise minimal deleted-tail source.  This is the selected wrapper around the
+raw q49 exterior-arc theorem and does not pass through the no-cut contradiction
+eraser. -/
+noncomputable def
+    S2_q49_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (arcRows : SelectedRawOrbitRepeatedTailActualExteriorArcRows rows) :
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      rows.O :=
+  S2CarrierCutSource.S2_q49_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+    (C := C) (inputs := inputs) (O := rows.O) arcRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-repeated-tail-cut-source-worker`, selected minimal
+deleted-tail form.
+
+The same actual exterior-arc rows give the older selected
+`SelectedRawOrbitMinimalDeletedTailSeparation` callback by exposing the q38
+payload directly. -/
+noncomputable def
+    selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailActualExteriorArcRows_20260522q49
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (arcRows : SelectedRawOrbitRepeatedTailActualExteriorArcRows rows) :
+    SelectedRawOrbitMinimalDeletedTailSeparation rows := by
+  intro i j hij htail
+  exact
+    (S2_q49_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+      (C := C) (inputs := inputs) rows arcRows).rows hij htail
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q53-repeated-tail-arc-worker`, selected orbit-level actual
+exterior-arc form.
+
+For a selected raw face walk, the stronger orbit-level actual exterior-arc
+package projects to the repeated-tail actual-arc callback and therefore feeds
+the q38 pairwise minimal deleted-tail source on the same selected orbit. -/
+noncomputable def
+    S2_q53_pairwiseMinimalDeletedTailSeparationSource_of_actualExteriorArcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (actualArcRows : SelectedRawOrbitActualExteriorArcSeparationRows rows) :
+    S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+      rows.O :=
+  S2CarrierCutSource.S2_q53_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_actualExteriorArcSeparationRows
+    (C := C) (inputs := inputs) (O := rows.O) actualArcRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q53-repeated-tail-arc-worker`, selected cyclic-successor cut
+source form.
+
+This is the direct selected wrapper around the raw q53 cut composer: an
+orbit-level actual exterior-arc package supplies the canonical deleted-tail cut
+partitions for every repeated selected raw tail. -/
+noncomputable def
+    selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_actualExteriorArcSeparationRows_20260522q53
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (actualArcRows : SelectedRawOrbitActualExteriorArcSeparationRows rows) :
+    SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource rows := by
+  intro i j hij htail
+  exact
+    Classical.choice
+      (S2CarrierCutSource.S2_q53_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource_of_actualExteriorArcSeparationRows
+        (C := C) (inputs := inputs) rows.O actualArcRows
+        (i := i) (j := j) hij htail)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q53-repeated-tail-arc-worker`, selected repeated-tail cut
+partition form.
+
+The q53 actual exterior-arc cut source is also exposed in the older selected
+repeated-tail cut-partition shape used by the face-dart route. -/
+noncomputable def
+    selectedRawOrbitRepeatedTailCutPartitions_of_actualExteriorArcSeparationRows_20260522q53
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : SelectedRawTailCoverageSourceRows inputs)
+    (actualArcRows : SelectedRawOrbitActualExteriorArcSeparationRows rows) :
+    SelectedRawOrbitRepeatedTailCutPartitions rows :=
+  selectedRawOrbitRepeatedTailCutPartitions_of_cyclicSuccCutPartitionSource_20260521pool7
+    (C := C) (inputs := inputs) rows
+    (selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_actualExteriorArcSeparationRows_20260522q53
+      (C := C) (inputs := inputs) rows actualArcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-repeated-tail-cut-source-worker`, exact q47 selected raw
+orbit, actual exterior-arc family form.
+
+For the exact selected raw rows named by q47/q48, repeated-tail actual
+exterior-arc rows strictly lower to the q38 pairwise minimal deleted-tail
+source. -/
+noncomputable def
+    S2_q49_pairwiseMinimalDeletedTailSeparationSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (actualArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailActualExteriorArcRows
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular C inputs).O := by
+  intro m C inputs
+  exact
+    S2_q49_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular C inputs)
+      (actualArcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-repeated-tail-cut-source-worker`, exact q47 selected raw
+orbit, exterior-frontier arc family form.
+
+The exterior-frontier arc rows used in q47 first erase to repeated-tail actual
+exterior-arc rows, and those rows directly give the q38 pairwise minimal
+deleted-tail source for the same selected q47/q48 raw orbit. -/
+noncomputable def
+    S2_q49_pairwiseMinimalDeletedTailSeparationSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_exteriorFrontierArcRows
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (exteriorFrontierArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs)
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs).O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular C inputs).O := by
+  refine
+    S2_q49_pairwiseMinimalDeletedTailSeparationSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      orientationRows localStrictOrder localAngular ?_
+  intro m C inputs
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_exteriorFrontierArcSeparationRows_20260522q47
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular C inputs)
+      (exteriorFrontierArcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-cut-source-q48-face-dart`.
+
+This strengthens the q48 face-dart producer surface by taking concrete
+repeated-tail cut partitions on the q47 selected raw orbit.  The q38
+pairwise-minimal package is assembled internally by the q47 cut-partition
+lowering and is then erased to the cyclic-successor cut-partition source used
+by the checked q46 face-dart producer. -/
+noncomputable def
+    S2_q48_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailCutPartitions
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k := by
+  let pairwiseMinimal :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs).O :=
+    S2_q47_pairwiseMinimalDeletedTailSeparation_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cutPartitions
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      orientationRows localStrictOrder localAngular cutPartitions
+  intro m C inputs
+  exact
+    S2_q46_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+      frontier_noOpen frontier_vertex_incident geometricSelection
+      orientationRows localStrictOrder localAngular
+      (S2_q46_cyclicSuccCutPartitionSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_repeatedTailActualExteriorArcRows
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular
+        (S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_pairwiseMinimalDeletedTailSeparation
+          frontier_noOpen frontier_vertex_incident geometricSelection
+          orientationRows localStrictOrder localAngular pairwiseMinimal))
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-face-dart-source-from-sharp-topology-cut`.
+
+This is the current source-facing face-dart route with both q49 sharpenings
+applied: topology is reduced to finite no-open plus frontier-incident rows, and
+repeated tails are handled by concrete cut partitions on the selected raw
+orbit.  The theorem still exposes the genuine geometric-selection,
+orientation, local strict-order, local angular, and repeated-tail cut source
+leaves; it does not use actual-sector rows, W32 rows, induced frontier graphs,
+arbitrary cycles, or endpoint shortcuts. -/
+noncomputable def
+    S2_q49_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailCutPartitions
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k := by
+  intro m C inputs
+  exact
+    S2_q48_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions
+      (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+        nontrivial_side no_singleton_bumping).1
+      (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+        nontrivial_side no_singleton_bumping).2
+      geometricSelection orientationRows localStrictOrder localAngular
+      cutPartitions
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- q49 selected repeated-tail cut source, cyclic-successor cut form.
+
+For the exact q47 raw orbit selected by the q49 topology premises, canonical
+cyclic-successor cut rows already supply the older repeated-tail
+cut-partition premise consumed by the q49 face-dart route. -/
+noncomputable def
+    S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cyclicSuccCutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailCutPartitions
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+              nontrivial_side no_singleton_bumping).1
+            (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+              nontrivial_side no_singleton_bumping).2
+            geometricSelection orientationRows localStrictOrder localAngular
+            C inputs) := by
+  intro m C inputs
+  exact
+    selectedRawOrbitRepeatedTailCutPartitions_of_cyclicSuccCutPartitionSource_20260521pool7
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+          nontrivial_side no_singleton_bumping).1
+        (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+          nontrivial_side no_singleton_bumping).2
+        geometricSelection orientationRows localStrictOrder localAngular
+        C inputs)
+      (cyclicSuccCutPartitions C inputs)
+
+set_option linter.style.longLine false in
+/-- q49 selected repeated-tail cut source, cyclic-successor nonreachability
+form.
+
+The deleted-tail nonreachability rows first rebuild the canonical
+cyclic-successor cut source, then the q49-selected repeated-tail cut premise is
+obtained by forgetting to the older cut-partition shape. -/
+noncomputable def
+    S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_cyclicSuccDeletedTailNonreachability
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (nonreachability :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailCutPartitions
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+              nontrivial_side no_singleton_bumping).1
+            (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+              nontrivial_side no_singleton_bumping).2
+            geometricSelection orientationRows localStrictOrder localAngular
+            C inputs) := by
+  refine
+    S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+      nontrivial_side no_singleton_bumping geometricSelection
+      orientationRows localStrictOrder localAngular ?_
+  intro m C inputs
+  exact
+    selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_cyclicSuccDeletedTailNonreachability_20260521r15
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+          nontrivial_side no_singleton_bumping).1
+        (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+          nontrivial_side no_singleton_bumping).2
+        geometricSelection orientationRows localStrictOrder localAngular
+        C inputs)
+      (nonreachability C inputs)
+
+set_option linter.style.longLine false in
+/-- q49 selected repeated-tail cut source, actual exterior-arc form.
+
+For the exact q47 raw orbit selected by the q49 topology premises, selected
+actual exterior-arc rows strictly lower to the concrete repeated-tail
+cut-partition premise consumed by the q49 face-dart route.  This is only the
+selected raw-orbit cut handoff; it introduces no actual-sector row, completed
+boundary cycle, W32 consumer, induced frontier graph, arbitrary cycle,
+all-adjacent endpoint shortcut, convex-hull data, or identity angular order. -/
+noncomputable def
+    S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (actualArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailActualExteriorArcRows
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailCutPartitions
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+              nontrivial_side no_singleton_bumping).1
+            (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+              nontrivial_side no_singleton_bumping).2
+            geometricSelection orientationRows localStrictOrder localAngular
+            C inputs) := by
+  refine
+    S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+      nontrivial_side no_singleton_bumping geometricSelection
+      orientationRows localStrictOrder localAngular ?_
+  intro m C inputs
+  exact
+    selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_actualExteriorArcRows_20260522q46
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+          nontrivial_side no_singleton_bumping).1
+        (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+          nontrivial_side no_singleton_bumping).2
+        geometricSelection orientationRows localStrictOrder localAngular
+        C inputs)
+      (actualArcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q53-actual-arc-main`, face-dart/angular actual-arc form.
+
+This is the direct q49 selected raw-orbit handoff requested by the route
+workbook: selected actual exterior-arc rows on the q47 raw face walk first
+give the concrete repeated-tail cut source, and the existing q49 face-dart
+producer then constructs `FaceDartOrbitExteriorCarrierRows` plus the
+same-boundary angular rows.  It introduces no endpoint-radius, all-adjacent,
+induced-frontier, arbitrary-cycle, W32, or actual-sector premise. -/
+noncomputable def
+    S2_q53_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (actualArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailActualExteriorArcRows
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k :=
+  S2_q49_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions
+    nontrivial_side no_singleton_bumping geometricSelection orientationRows
+    localStrictOrder localAngular
+    (S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+      nontrivial_side no_singleton_bumping geometricSelection orientationRows
+      localStrictOrder localAngular actualArcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q53-actual-arc-main`, actual-sector actual-arc form.
+
+The q53 face-dart/angular actual-arc handoff immediately erases through the
+existing actual exterior-sector source constructor.  This keeps the displayed
+source leaf on the selected exterior face-walk actual-arc theorem rather than
+on repeated-tail cut partitions. -/
+noncomputable def
+    S2_q53_actualExteriorSectorInputSourceRows_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (actualArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailActualExteriorArcRows
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          ((forall v : Fin m,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) :=
+  actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_family
+    (S2_q53_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+      nontrivial_side no_singleton_bumping geometricSelection orientationRows
+      localStrictOrder localAngular actualArcRows)
+
+set_option linter.style.longLine false in
+/-- q49 selected repeated-tail cut source, exterior-frontier arc form.
+
+For the q49-selected q47 raw orbit, exterior-frontier arc separation rows first
+erase to selected actual exterior-arc rows and then to the concrete
+repeated-tail cut-partition premise of the q49 face-dart route. -/
+noncomputable def
+    S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_exteriorFrontierArcRows
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (exteriorFrontierArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs)
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs).O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailCutPartitions
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+              nontrivial_side no_singleton_bumping).1
+            (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+              nontrivial_side no_singleton_bumping).2
+            geometricSelection orientationRows localStrictOrder localAngular
+            C inputs) := by
+  refine
+    S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+      nontrivial_side no_singleton_bumping geometricSelection
+      orientationRows localStrictOrder localAngular ?_
+  intro m C inputs
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_exteriorFrontierArcSeparationRows_20260522q47
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+          nontrivial_side no_singleton_bumping).1
+        (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+          nontrivial_side no_singleton_bumping).2
+        geometricSelection orientationRows localStrictOrder localAngular
+        C inputs)
+      (exteriorFrontierArcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Actual exterior-sector source family obtained from the q49 face-dart route.
+
+This is an erasure to the current live source target, not a W32/final-bound
+consumer.  The remaining premises are the still-honest topology, geometric,
+angular, and repeated-tail cut leaves. -/
+noncomputable def
+    S2_q49_actualExteriorSectorInputSourceRows_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailCutPartitions
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_family
+    (S2_q49_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions
+      nontrivial_side no_singleton_bumping geometricSelection orientationRows
+      localStrictOrder localAngular cutPartitions)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-main-exterior-face-source`, live input-source wrapper.
+
+Same q49 cut-partition composer as above, stated through the current live
+`actualExteriorSectorInputSourceRows_of_inputs` source wrapper.  The
+face-dart/angular producer is still built from the selected raw rows and
+concrete `SelectedRawOrbitRepeatedTailCutPartitions`; no pairwise-minimal
+premise is exposed. -/
+theorem
+    S2_q49_actualExteriorSectorInputSourceRows_of_inputs_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (cutPartitions :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedRawOrbitRepeatedTailCutPartitions
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).1
+              (S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49
+                nontrivial_side no_singleton_bumping).2
+              geometricSelection orientationRows localStrictOrder localAngular
+              C inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  intro m C inputs
+  exact
+    actualExteriorSectorInputSourceRows_of_inputs
+      (S2_q49_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions
+        nontrivial_side no_singleton_bumping geometricSelection orientationRows
+        localStrictOrder localAngular cutPartitions)
+      C inputs
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-repeated-tail-actual-arc-source`, active q42/q46
+exterior-frontier arc-family form. -/
+noncomputable def
+    S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_exteriorFrontierArcRows
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs)
+    (orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows)
+    (localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource))
+    (localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs)
+    (arcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+            (inputs := inputs)
+            (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+              frontier_noOpen frontier_vertex_incident geometricSelection
+              orientationRows localStrictOrder localAngular C inputs).O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedRawOrbitRepeatedTailActualExteriorArcRows
+          (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular C inputs) := by
+  intro m C inputs
+  exact
+    selectedRawOrbitRepeatedTailActualExteriorArcRows_of_exteriorFrontierArcSeparationRows_20260522q47
+      (C := C) (inputs := inputs)
+      (S2_q47_selectedRawTailCoverageRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular
+        frontier_noOpen frontier_vertex_incident geometricSelection
+        orientationRows localStrictOrder localAngular C inputs)
+      (arcRows C inputs)
+
+/- q47 local-geometric composer moved to `S2CarrierLocalSource.lean`; this
+draft lived in the wrong import direction for this owner file.
+set_option linter.style.longLine false in
+/-- Claim `S2-q47-actual-sector-composer-main`.
+
+This is the current shortest non-circular source-facing actual-sector composer:
+trace no-closed topology plus outside-accumulation gives finite no-open and
+frontier incidence; q46 local-geometric rows give geometric selection,
+orientation, local strict order, and boundary-free local angular rows; q46
+actual exterior-arc rows give the selected cyclic-successor cut source.  The
+remaining premise is still source-facing: prove those actual exterior-arc rows
+for the selected raw orbit, not an already finished boundary cycle or W32 row. -/
+noncomputable def
+    S2_q47_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_localGeometric_actualExteriorArcRows
+    (trace_noClosed :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation)
+    (outside_accumulation :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+            C inputs)
+    (localGeometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_q46_localGeometricSourceRows inputs)
+    (actualArcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let geometricSelection :
+              forall {r : Nat} (D : _root_.UDConfig r)
+                (Dinputs : FinitePlanarOuterComponentInputs D),
+                  UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+                    D Dinputs :=
+            S2_q46_geometricSelectionInputSource_family_of_localGeometricSourceRows
+              localGeometricRows
+          let orientationRows :
+              forall {r : Nat} (D : _root_.UDConfig r)
+                (Dinputs : FinitePlanarOuterComponentInputs D),
+                  let selectedRows :
+                      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                        Dinputs :=
+                    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                      (C := D) (inputs := Dinputs) (geometricSelection D Dinputs)
+                  RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+                    Dinputs selectedRows :=
+            S2_q46_orientationRows_family_of_localGeometricSourceRows
+              localGeometricRows
+          let localStrictOrder :
+              forall {r : Nat} (D : _root_.UDConfig r)
+                (Dinputs : FinitePlanarOuterComponentInputs D),
+                  let selectedRows :
+                      UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                        Dinputs :=
+                    selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+                      (C := D) (inputs := Dinputs) (geometricSelection D Dinputs)
+                  RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+                    Dinputs
+                    (selectedNeighborGeometricCarrierLeft
+                      (C := D) (inputs := Dinputs)
+                      selectedRows.toGeometricSelectionInputSource)
+                    (selectedNeighborGeometricCarrierRight
+                      (C := D) (inputs := Dinputs)
+                      selectedRows.toGeometricSelectionInputSource) :=
+            S2_q46_localStrictOrder_family_of_localGeometricSourceRows
+              localGeometricRows
+          let localAngular :
+              forall {r : Nat} (D : _root_.UDConfig r)
+                (Dinputs : FinitePlanarOuterComponentInputs D),
+                  BoundaryFreeLocalSectorGeometricAngularSource Dinputs :=
+            S2_q46_boundaryFreeLocalSectorGeometricAngularSource_family_of_localGeometricSourceRows
+              localGeometricRows
+          let frontier_noOpen : FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+            (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+              (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+                trace_noClosed)).1
+          let frontier_noClosed : FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+            (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+              (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+                trace_noClosed)).2
+          let frontier_vertex_incident :
+              forall {r : Nat} (D : _root_.UDConfig r)
+                (Dinputs : FinitePlanarOuterComponentInputs D),
+                  FrontierVertexIncidentUnboundedFrontierEdgeSource D Dinputs :=
+            S2_q37_selected_frontier_incidence_worker_of_finiteDrawingPreconnected_outsideAccumulation_20260522
+              (finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+                frontier_noClosed)
+              outside_accumulation
+          let pair :=
+            S2_q31_selectedCarrierRows_and_incidentGermRows_of_geometricSelection_orientation_localStrict_localAngular
+              (C := C) (inputs := inputs)
+              (geometricSelection C inputs)
+              (orientationRows C inputs)
+              (localStrictOrder C inputs)
+              (localAngular C inputs)
+          SelectedRawOrbitRepeatedTailActualExteriorArcRows
+            (S2_r17_selectedRawTailCoverageSourceRows_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows
+              (C := C) (inputs := inputs)
+              frontier_noOpen (frontier_vertex_incident C inputs)
+              (geometricSelection C inputs)
+              pair.2 pair.1)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  let geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs :=
+    S2_q46_geometricSelectionInputSource_family_of_localGeometricSourceRows
+      localGeometricRows
+  let orientationRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccOrientationRowsNoOrbitSource
+            inputs selectedRows :=
+    S2_q46_orientationRows_family_of_localGeometricSourceRows
+      localGeometricRows
+  let localStrictOrder :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+                inputs :=
+            selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+              (C := C) (inputs := inputs) (geometricSelection C inputs)
+          RawOrbitIteratedFaceSuccHeadLocalAngularStrictOrderNoOrbitSource
+            inputs
+            (selectedNeighborGeometricCarrierLeft
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource)
+            (selectedNeighborGeometricCarrierRight
+              (C := C) (inputs := inputs)
+              selectedRows.toGeometricSelectionInputSource) :=
+    S2_q46_localStrictOrder_family_of_localGeometricSourceRows
+      localGeometricRows
+  let localAngular :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalSectorGeometricAngularSource inputs :=
+    S2_q46_boundaryFreeLocalSectorGeometricAngularSource_family_of_localGeometricSourceRows
+      localGeometricRows
+  exact
+    S2_q45_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+      trace_noClosed outside_accumulation geometricSelection
+      orientationRows localStrictOrder localAngular
+      (by
+        intro C inputs
+        let frontier_noOpen : FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+          (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+            (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+              trace_noClosed)).1
+        let frontier_noClosed : FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+          (S2_r19_finiteDrawing_noOpen_noClosed_of_kComponentPointsBetween_20260522
+            (S2_q26_kComponentPointsBetween_of_traceNoClosedSeparation_20260522
+              trace_noClosed)).2
+        let frontier_vertex_incident :
+            forall {r : Nat} (D : _root_.UDConfig r)
+              (Dinputs : FinitePlanarOuterComponentInputs D),
+                FrontierVertexIncidentUnboundedFrontierEdgeSource D Dinputs :=
+          S2_q37_selected_frontier_incidence_worker_of_finiteDrawingPreconnected_outsideAccumulation_20260522
+            (finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+              frontier_noClosed)
+            outside_accumulation
+        exact
+          S2_q46_cyclicSuccCutPartitionSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_repeatedTailActualExteriorArcRows
+            frontier_noOpen frontier_vertex_incident geometricSelection
+            orientationRows localStrictOrder localAngular
+            (by
+              intro C' inputs'
+              exact actualArcRows (C := C') (inputs := inputs'))
+            (C := C) (inputs := inputs))
+-/
 
 end ExteriorComponentTopology
 end Swanepoel

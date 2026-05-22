@@ -2647,6 +2647,67 @@ theorem exists_ball_forall_mem_incident_closedSegment_of_vertex
     ⟨ε, hεpos, hsubset⟩
   exact ⟨ε, hεpos, fun q hqball hqdraw => hsubset ⟨hqball, hqdraw⟩⟩
 
+/-- Local vertex-star isolation with endpoints separated: after shrinking
+around `v`, every embedded-drawing point is either the vertex itself or lies
+in the open segment of a canonical edge incident to `v`. -/
+theorem exists_ball_inter_embeddedEdgeSet_subset_vertex_or_incident_inOpenSegment
+    {C : _root_.UDConfig n} (v : Fin n) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball ((canonicalGraph C).point v) ε ∩ embeddedEdgeSet C ⊆
+          {p | p = (canonicalGraph C).point v ∨
+            Exists fun w : Fin n =>
+              (canonicalGraph C).Adj v w ∧
+                PlanarInterface.InOpenSegment p
+                  ((canonicalGraph C).point v)
+                  ((canonicalGraph C).point w)} := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_incident_closedSegment
+        (C := C) v with
+    ⟨εstar, hεstar_pos, hstar⟩
+  rcases exists_ball_forall_graph_vertex_eq_of_mem_ball (C := C) v with
+    ⟨εvertex, hεvertex_pos, hvertex⟩
+  let ε : Real := min εstar εvertex
+  have hεpos : 0 < ε := lt_min hεstar_pos hεvertex_pos
+  refine ⟨ε, hεpos, ?_⟩
+  intro p hp
+  have hpstar :
+      p ∈ Metric.ball ((canonicalGraph C).point v) εstar ∩
+          embeddedEdgeSet C :=
+    ⟨Metric.ball_subset_ball (min_le_left εstar εvertex) hp.1, hp.2⟩
+  rcases hstar hpstar with ⟨w, hvw, hpseg⟩
+  rcases mem_closedSegment_eq_left_or_eq_right_or_inOpenSegment hpseg with
+    hpv | hpw | hpopen
+  · exact Or.inl hpv
+  · have hwball :
+        (canonicalGraph C).point w ∈
+          Metric.ball ((canonicalGraph C).point v) εvertex := by
+      simpa [hpw] using
+        Metric.ball_subset_ball (min_le_right εstar εvertex) hp.1
+    have hw : w = v := hvertex w hwball
+    exact Or.inl (by simpa [hw] using hpw)
+  · exact Or.inr ⟨w, hvw, hpopen⟩
+
+/-- Pointwise endpoint-separated form of local vertex-star isolation. -/
+theorem exists_ball_forall_mem_vertex_or_incident_inOpenSegment_of_vertex
+    {C : _root_.UDConfig n} (v : Fin n) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball ((canonicalGraph C).point v) ε ->
+            q ∈ embeddedEdgeSet C ->
+              q = (canonicalGraph C).point v ∨
+                Exists fun w : Fin n =>
+                  (canonicalGraph C).Adj v w ∧
+                    PlanarInterface.InOpenSegment q
+                      ((canonicalGraph C).point v)
+                      ((canonicalGraph C).point w) := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_vertex_or_incident_inOpenSegment
+        (C := C) v with
+    ⟨ε, hεpos, hsubset⟩
+  exact ⟨ε, hεpos, fun q hqball hqdraw => hsubset ⟨hqball, hqdraw⟩⟩
+
 /-- The `ε`-germ of the directed edge from `v` to `w`: the part of its closed
 straight segment that remains inside the ball centered at `v`. -/
 def vertexIncidentGermW3
@@ -4282,6 +4343,76 @@ theorem frontier_connectedComponentIn_drawingComplement_subset_embeddedEdgeSet
       (frontier_connectedComponentIn_subset_frontier
         (drawingComplement_open C) hp)
 
+/-- The frontier of a selected drawing-complement component is outside the
+ambient open drawing complement. -/
+theorem frontier_connectedComponentIn_drawingComplement_subset_drawingComplement_compl
+    (C : _root_.UDConfig n) (base : PlanarInterface.Point) :
+    frontier (connectedComponentIn (drawingComplement C) base) ⊆
+      (drawingComplement C)ᶜ := by
+  intro p hp
+  exact
+    not_mem_open_of_mem_frontier_connectedComponentIn
+      (drawingComplement_open C) hp
+
+/-- Pointwise drawing/complement carrier for a selected component frontier. -/
+theorem mem_embeddedEdgeSet_and_not_mem_drawingComplement_of_mem_frontier_connectedComponentIn_drawingComplement
+    {C : _root_.UDConfig n} {base p : PlanarInterface.Point}
+    (hp : p ∈ frontier (connectedComponentIn (drawingComplement C) base)) :
+    p ∈ embeddedEdgeSet C ∧ p ∉ drawingComplement C := by
+  exact
+    ⟨frontier_connectedComponentIn_drawingComplement_subset_embeddedEdgeSet
+        C base hp,
+      frontier_connectedComponentIn_drawingComplement_subset_drawingComplement_compl
+        C base hp⟩
+
+/-- Component-frontier vertex-star isolation with endpoints separated: near a
+graph vertex, each component-frontier point is either the vertex itself or lies
+in the open segment of an incident canonical edge. -/
+theorem exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_vertex_or_incident_inOpenSegment
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point) (v : Fin n) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball ((canonicalGraph C).point v) ε ∩
+            frontier (connectedComponentIn (drawingComplement C) base) ⊆
+          {p | p = (canonicalGraph C).point v ∨
+            Exists fun w : Fin n =>
+              (canonicalGraph C).Adj v w ∧
+                PlanarInterface.InOpenSegment p
+                  ((canonicalGraph C).point v)
+                  ((canonicalGraph C).point w)} := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_vertex_or_incident_inOpenSegment
+        (C := C) v with
+    ⟨ε, hεpos, hlocal⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro p hp
+  exact hlocal
+    ⟨hp.1,
+      frontier_connectedComponentIn_drawingComplement_subset_embeddedEdgeSet
+        C base hp.2⟩
+
+/-- Pointwise component-frontier vertex-star isolation with endpoints
+separated. -/
+theorem exists_ball_forall_frontier_connectedComponentIn_drawingComplement_mem_vertex_or_incident_inOpenSegment
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point) (v : Fin n) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball ((canonicalGraph C).point v) ε ->
+            q ∈ frontier (connectedComponentIn (drawingComplement C) base) ->
+              q = (canonicalGraph C).point v ∨
+                Exists fun w : Fin n =>
+                  (canonicalGraph C).Adj v w ∧
+                    PlanarInterface.InOpenSegment q
+                      ((canonicalGraph C).point v)
+                      ((canonicalGraph C).point w) := by
+  rcases
+      exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_vertex_or_incident_inOpenSegment
+        (C := C) base v with
+    ⟨ε, hεpos, hsubset⟩
+  exact ⟨ε, hεpos, fun q hqball hqfrontier =>
+    hsubset ⟨hqball, hqfrontier⟩⟩
+
 /-- A point on the frontier of a selected drawing-complement component lies on
 a concrete canonical unit-edge segment. -/
 theorem exists_edge_segment_of_mem_frontier_connectedComponentIn_drawingComplement
@@ -4320,6 +4451,18 @@ theorem exists_edgeSet_incident_of_adj
   rcases hvw with he | he
   · exact ⟨(v, w), he, Or.inl rfl⟩
   · exact ⟨(w, v), he, Or.inr rfl⟩
+
+/-- Under the S2 graph-side inputs, every graph vertex has a stored ordered
+canonical edge incident to it. -/
+theorem graph_vertex_incident_edgeSet_of_inputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    forall v : Fin n,
+      Exists fun e : PlanarInterface.Edge n =>
+        e ∈ (canonicalGraph C).edgeSet ∧ (e.1 = v ∨ e.2 = v) := by
+  intro v
+  rcases graph_vertex_incident_of_inputs inputs v with ⟨w, hvw⟩
+  exact exists_edgeSet_incident_of_adj hvw
 
 /-- A graph vertex on the frontier of the whole drawing complement has a
 stored ordered canonical edge incident to it. -/

@@ -26,6 +26,12 @@ tactics live in `proof_workings/s2_route_workbook.md`.
   results near the existing owner module.
 - Do not add another numbered facade/audit layer unless it directly shortens or
   closes a real obligation.
+- Do not add deferred-premise or ghost-result work under any phrasing.  A
+  declaration that merely transports actual rows, sector rows, carrier rows,
+  selected successor data, boundary-cycle rows, or exterior-frontier rows to a
+  downstream consumer is not progress unless it proves those rows from the live
+  input source in the same claim.  Otherwise rewrite the claim as the missing
+  source subtask and attack that subtask first.
 - Mark a task done only after the relevant declaration is imported by
   `E:/Personal/Erdosproblems/1066/ErdosProblems1066.lean`, builds with the
   pinned toolchain, and the forbidden-token scan is clean.
@@ -41,10 +47,12 @@ still says "active" is historical unless repeated here.
 
 Current checked baseline: `S2SeededRawOrbitSource` builds, the q37
 primitive-to-cut lowering is checked, and q38/q39 support is route
-infrastructure only.  q39/q40 endpoint-side support is audit-sensitive; do not
-open or preserve q37/q38/q39/q40 implementation claims as live unless the
-claim proves a real source row and avoids the over-strong frontier-component
-separation branch.
+infrastructure only.  The q41 trace-no-closed topology lowering into the r18
+actual-sector eraser is checked support, and the q44/q45 source-facing
+actual-sector composers are checked support.  q39/q40 endpoint-side support is
+audit-sensitive; do not open or preserve q37/q38/q39/q40 implementation claims
+as live unless the claim proves a real source row and avoids the over-strong
+frontier-component separation branch.
 
 True live source route:
 
@@ -63,7 +71,942 @@ Closed/pruned support: q37 primitive-to-cut agents, q38 carrier/local/topology
 agents, q39 seed/topology agents, and q40 endpoint-side agents.  Their theorem
 names remain useful, but they are not live workboard claims.
 
-Live claims:
+Current q79 decomposition and claims, 2026-05-22:
+
+- `S2-q79-topology-janiszewski-source` - owner: Zeno the 5th
+  (`019e4fde-59a3-7683-8f8f-ef22bec117b1`).  Status:
+  completed/checked/pruned.  Result:
+  `S2_q79_janiszewskiNoSubcontinuum_topologySources_of_kComponentTraceNoClosedSeparation_finiteDrawingSourceRows_20260522q79`.
+
+- `S2-q79-selected-local-isolation-source` - owner: Maxwell the 5th
+  (`019e4fde-5d1f-7402-9323-f29d2a444892`).  Status:
+  completed/checked/pruned.  Result:
+  `S2_q79_selectedLocalIsolationSource_family_of_neighborPairRows`.
+
+- `S2-q79-faceSucc-selected-carrier-source` - owner: Erdos the 5th
+  (`019e4fde-62fe-7702-b797-766b45495195`).  Status:
+  completed/checked/pruned.  Result:
+  `S2_q79_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_exteriorFrontierArcRows`
+  and
+  `S2_q79_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_boundaryArcRows`.
+
+- `S2-q79-carrier-cut-cyclic-nonreachability-source` - owner: Godel the 5th
+  (`019e4fde-671f-7183-9d5b-f9d96112aff2`).  Status:
+  completed/checked/pruned.  Result: q79 cyclic-successor
+  nonreachability/cut-source lowerings in
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q79-current-route-explorer` - owner: Kant the 5th
+  (`019e4fde-6bfa-7b03-91da-14fca5ef3b4d`).  Status:
+  completed/pruned.  Result: shortest non-circular route map recorded in
+  `proof_workings/s2_route_workbook.md`.
+
+- `S2-q79-route-integrator` - owner: Codex main thread.  Status:
+  completed/checked.  Gate passed:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`
+  plus the touched owner-file checks for q79 worker outputs.
+
+Current q80 decomposition and claims, 2026-05-22:
+
+- `S2-q80-topology-trace-source` - owner: Lorentz the 5th
+  (`019e4feb-80b9-77b2-a61e-b53d1f12e7a7`).  Role: prove or
+  strictly lower
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation`
+  or the same-`K` trace/points-between source that feeds it, without W32,
+  actual-sector, arbitrary-cycle, or induced-frontier premises.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean` and workbook notes.
+  Status: completed/checked/pruned.  Result:
+  `S2_q80_kComponentTraceNoClosedSeparation_of_janiszewskiNoSubcontinuum_20260522q80`.
+  Gate passed:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q80-finite-component-topology-source` - owner: Curie the 5th
+  (`019e4feb-85e8-79f0-8d30-ab931611a45d`).  Role:
+  prove or strictly lower
+  `forall C inputs, UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows inputs`,
+  including its finite segment-chain connectedness and local sector rows, from
+  finite drawing/local topology source facts only.  Write scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.  Status:
+  completed/checked/pruned.  Result:
+  `S2_q80_finiteComponentTopologySourceRows_family_of_edgeEndpointChain_localSelectedNoThirdGermSource_20260522q80`.
+  Gate passed:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+
+- `S2-q80-selected-neighbor-local-source` - owner: Cicero the 5th
+  (`019e4feb-8d04-7f92-a389-03bf356a9783`).  Role:
+  prove or strictly lower the actual unbounded-frontier carrier neighbour-pair
+  and selected local-isolation rows from source-level local geometry, with no
+  all-adjacent endpoint or induced frontier graph shortcut.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`,
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.  Status:
+  completed/checked/pruned.  Result:
+  `S2_q80_neighborPairRows_and_selectedLocalIsolationSourceRows_family_of_cutPartitionInputSource`.
+  Gate passed:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+- `S2-q80-angular-faceSucc-source` - owner: Laplace the 5th
+  (`019e4feb-93d5-72f0-9e07-fcd643dcd56a`).  Role: prove or
+  strictly lower selected-head geometric/angular rows and selected-carrier
+  `faceSucc` rows for the same selected exterior raw orbit, avoiding identity
+  angular order and global all-outgoing no-between shortcuts.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/checked/pruned.  Result:
+  `rawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource_family_of_orientationRows_localStrictOrder_20260521current6`.
+  Gate passed: targeted builds on both owner files.
+
+- `S2-q80-exterior-arc-source` - owner: Wegener the 5th
+  (`019e4feb-9abc-7c93-a0c1-ee9d60e3abce`).  Role: prove or
+  strictly lower `RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows` or
+  selected boundary-arc rows for the exact q64/q79 selected raw orbit, feeding
+  the q79 face-dart/angular route.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.  Status:
+  completed/checked/pruned.  Result:
+  `S2_q80_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_faceSuccRows_minimalDeletedTailSeparation`.
+  Gate passed: targeted builds on both owner files.
+
+- `S2-q80-route-integrator` - owner: Codex main thread.  Role: compose only
+  strict source-lowering results into the existing actual-sector route, keep
+  this workboard and `proof_workings/s2_route_workbook.md` current, and run
+  targeted owner-file builds.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, `TASK.md`,
+  `proof_workings/s2_route_workbook.md`.  Status: completed/checked.  Result:
+  `S2_q80_actualExteriorSectorInputSourceRows_family_of_orientationRows_localStrictOrder_minimalDeletedTailSeparation`.
+  Gate passed:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+Current q81 decomposition and claims, 2026-05-22:
+
+- `S2-q81-route-integrator` - owner: Codex main thread.  Role: fuse q80
+  component-topology, local-neighbour, selected-faceSucc, and actual-sector
+  lowerings into one source-facing route with the fewest visible leaves, then
+  select the next source theorem rather than adding another W32 consumer.
+  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, `TASK.md`,
+  `proof_workings/s2_route_workbook.md`.  Status: claimed/in-progress.  Gate:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+Current q82 decomposition and claims, 2026-05-22:
+
+- `S2-q82-source-leaf-map-explorer` - owner: Boyle the 5th
+  (`019e4ffb-1805-7c81-b7b0-45a651753b84`).  Role: map
+  the shortest non-circular route from `FinitePlanarOuterComponentInputs C`
+  to `actualExteriorSectorInputSourceRows_of_inputs`, identify any already
+  unconditional `of_inputs` theorems that close q81 leaves, and return only
+  theorem names plus exact remaining source gaps.  Write scope: none.  Status:
+  claimed/running.  Gate: no file changes.
+
+- `S2-q82-finite-component-source` - owner: Kepler the 5th
+  (`019e4ffb-194b-74d3-992a-a988d27104e6`).  Role: prove or
+  strictly lower `UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows`
+  from existing finite-drawing/component source rows, using the selected
+  unbounded-frontier edge chain/local-sector route and avoiding W32,
+  actual-sector, arbitrary-cycle, induced-frontier, or endpoint shortcuts.
+  Write scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  and `ErdosProblems1066/Swanepoel/S2TopologySource.lean`.  Status:
+  claimed/running.  Gate:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+
+- `S2-q82-repeated-tail-separation-source` - owner: Galileo the 5th
+  (`019e4ffb-1d80-7133-9651-b1932a246e1d`).  Role:
+  prove or strictly lower the minimal deleted-tail separation row for the exact
+  q64/q81 selected raw orbit from the existing no-cut/cut-partition machinery,
+  without assuming actual-sector rows or a finished boundary cycle.  Write
+  scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.  Status:
+  claimed/running.  Gate:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q82-angular-orientation-source` - owner: Heisenberg the 5th
+  (`019e4ffb-1f69-7e03-92cb-2c1d823113df`).  Role: prove
+  or strictly lower the geometric orientation/local-strict/order rows for the
+  same selected exterior carrier heads, using actual exterior-sector
+  orientation rather than identity order or global all-outgoing shortcuts.
+  Write scope: `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  claimed/running.  Gate:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.
+
+- `S2-q82-endpoint-leaf` - owner: Codex GPT-5
+  (`019e4f3a-1b85-7c6a-bb3d-q82endpoint`).  Role: reduce q81 endpoint
+  leaves by proving source-facing family theorems in
+  `S2LocalTwoGermAssembly.lean` from selected local-isolation and endpoint
+  source rows only, avoiding axioms, sorry/admit, W32/final facades,
+  all-adjacent endpoint shortcuts, and edits to other Lean files.  Write
+  scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and this
+  workboard claim.  Status: claimed/in-progress.  Gate:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+Current q56 decomposition and claims:
+
+- `S2-q56-source-leaf-map-explorer` - owner: Epicurus the 5th
+  (`019e4f0d-9fa2-7311-b771-b9c976d65ccf`).  Write scope: none.  Status:
+  pruned/not-found 2026-05-22.  Role: map the shortest non-circular path from
+  `FinitePlanarOuterComponentInputs C` to the actual exterior-sector source.
+  Result: no live agent status was available for this id at cleanup time; the
+  checked q56 reports below and the open source leaves now carry the route map.
+
+- `S2-q56-q32-faceSucc-turn-worker` - owner: Singer the 5th
+  (`019e4f0d-ddac-7082-bd42-61a380f4805f`).  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Role: prove or strictly reduce the q32
+  raw face-successor turn source without actual-sector, boundary-cycle, W32,
+  induced-frontier, arbitrary-cycle, endpoint, identity-order, or all-outgoing
+  no-between shortcuts.  Result: added
+  `S2_q56_q32RawGeometricOrbitPackageFaceSuccTurnRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows`,
+  deriving the q32 package strict-successor family internally from selected
+  actual-carrier face-successor angle rows and leaving only the packaged
+  start-edge local row as the orbit-specific premise.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q56-carrier-degree-integration-worker` - owner: Beauvoir the 5th
+  (`019e4f0e-1628-7942-b354-ee92a4e6a11a`).  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.
+  Role: integrate q54/q55 actual-carrier degree-two support into the shortest
+  actual exterior-sector source route, exposing only source leaves below
+  actual-sector rows.  Result: added
+  `S2_q56_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_componentTopology_geometricSelection_strictSuccessor_thirdRepeatedTail_minimalDeletedTailSeparation_angularNoBetween_endpointRadius_selectedActualCarrierFaceSuccAngles_pairwiseMinimalDeletedTailSeparation`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- `S2-q56-topology-component-source-explorer` - owner: Hypatia the 5th
+  (`019e4f0e-4e53-76e3-801a-2c757df748df`).  Write scope: none.  Status:
+  completed/pruned 2026-05-22.  Role: audit whether
+  `UnboundedExteriorFrontierComponentTopologyInputSourceRows`,
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource`, and finite drawing
+  no-closed-separation are already sourced from `FinitePlanarOuterComponentInputs C`.
+  Result: component-topology input rows and frontier-vertex incident rows are
+  already downstream of existing finite-drawing/source rows; finite drawing
+  no-closed separation is not yet sourced from inputs on this path.  The next
+  topology source leaf remains
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation`.
+
+- `S2-q53-repeated-tail-arc-worker` - owner: Pasteur the 5th
+  (`019e4ef8-5eea-7bb1-b370-5d1f233a2612`).  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Role: lower actual exterior-arc
+  separation rows to pairwise minimal/repeated-tail cut rows for the selected
+  raw exterior walk.  Result: added q53 direct composers in those owner files;
+  pinned file checks passed.
+
+Current q57 decomposition and claims:
+
+- `S2-q57-direct-actual-sector-composer-main` - owner: main Codex GPT-5
+  worker.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, then this
+  workboard/workbook after a checked theorem.  Status: completed/checked
+  2026-05-22.  Role: compose
+  the q56 face-successor turn reduction and the q56 repeated-tail
+  actual-exterior-arc minimal-separation reduction into the shortest
+  source-facing actual exterior-sector family.  The theorem must expose only
+  component topology, selected carrier geometry, selected actual-carrier
+  faceSucc angle rows, the packaged start-edge local row, and repeated-tail
+  actual exterior-arc rows on the exact q32 raw orbit.  Result: added
+  `S2_q57_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_repeatedTailActualExteriorArcRows_faceSuccTurn`
+  and
+  `S2_q57_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_repeatedTailActualExteriorArcRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q57-source-leaf-realizer-explorer` - owner: Meitner the 5th
+  (`019e4f19-c817-73d0-9c37-f8564f0d301b`).  Write scope: none.  Status:
+  stale/pruned 2026-05-22.  Role: map whether the q57 composer leaves are
+  already produced from `FinitePlanarOuterComponentInputs C`.  Result:
+  superseded by the q58 primitive repeated-tail bridge and the current q59
+  source-leaf audits below.
+
+- `S2-q57-topology-trace-source-worker` - owner: Feynman the 5th
+  (`019e4f19-cdf6-7381-8d7a-fb30e3875e4c`).
+  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean` and only
+  supporting owner-file docs.  Status: completed/checked/pruned 2026-05-22.
+  Role: prove or strictly reduce
+  the same-`K` Janiszewski trace no-closed-separation source, without actual
+  exterior-sector rows, completed boundary cycles, W32, induced frontier
+  graphs, arbitrary cycles, convex hull data, endpoint shortcuts, or identity
+  angular order.  Result: added
+  `S2_q57_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q57`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q57-local-geometric-source-worker` - owner: Averroes the 5th
+  (`019e4f19-d494-7fb1-8e7c-55a62e5697e4`).
+  Write scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` only if needed.
+  Status: stale/pruned 2026-05-22.  Role: realize selected carrier geometric
+  source leaves below q57.  Result: superseded by the current q59 geometric
+  source audit and any new checked source-level lemmas claimed there.
+
+Current q58/q59 decomposition and claims:
+
+- `S2-q58-primitive-to-q57-actual-sector` - owner: Aquinas the 7th
+  (`019e4f1f-5954-7320-bcac-fd093976103c`) plus main integration.
+  Write scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Role: use exact q32
+  repeated-tail `S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows` to fill
+  the q57 repeated-tail actual exterior-arc callback, and compose it into the
+  q57 actual-sector source route without using W32, actual-sector, or boundary
+  cycle premises.  Result: added
+  `S2_q58_q57RepeatedTailActualExteriorArcRows_family_of_componentTopology_geometricSelection_strictSuccessor_primitiveSourceRows`
+  and
+  `S2_q58_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_primitiveSourceRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q59-component-topology-source-audit` - owner: McClintock the 7th
+  (`019e4f22-040a-7542-8082-52263e1b23a1`).  Write scope: none.  Status:
+  stale/pruned 2026-05-22; handle returned `not_found`.  Role: map the lowest
+  non-circular source for
+  `UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs`, including
+  whether it is already sourced from `FinitePlanarOuterComponentInputs C` or
+  still rests on a Janiszewski/boundary-bumping primitive.
+
+- `S2-q59-geometric-selection-source-audit` - owner: Feynman the 7th
+  (`019e4f22-07cd-7021-9454-337644f9e0a7`).  Write scope: none.  Status:
+  completed/pruned 2026-05-22.  Role: map source-level producers for
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource C inputs`
+  and identify the lowest honest selected-carrier geometric leaf.  Result:
+  no bare-input producer is checked; the lowest safe rows are selected
+  neighbor-pair plus genuine selected-head geometric order/no-between rows, or
+  deleted-neighbor local separation plus primitive selected-head geometric
+  rows.  Actual-boundary/sector producers are erasers only.
+
+- `S2-q59-faceSucc-start-edge-source-audit` - owner: Chandrasekhar the 7th
+  (`019e4f22-0e59-75b3-9073-ae8a5698846d`).  Write scope: none.  Status:
+  stale/pruned 2026-05-22; handle returned `not_found`.  Role: map
+  source-level producers for selected actual-carrier `faceSucc` angle rows and
+  the q32 packaged start-edge local row.
+
+- `S2-q59-primitive-repeated-tail-source-audit` - owner: Boole the 7th
+  (`019e4f22-157f-7e82-85ad-c36eb2222c06`).  Write scope: none.  Status:
+  stale/pruned 2026-05-22; handle returned `not_found`.  Role: map exact q32
+  primitive repeated-tail source producers and flag which routes are circular
+  versus genuinely below the q58 source route.
+
+Current q60 decomposition and claims:
+
+- `S2-q60-q32-start-edge-local-row-projection` - owner: main Codex GPT-5.
+  Write scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  this workboard, and `proof_workings/s2_route_workbook.md`.  Status:
+  superseded/failed route 2026-05-22.  Role: attempted to expose the q32
+  raw-orbit package's seed edge local row from the existing q17/q31
+  construction.  Result: not a live route.  The q31/q32 package projection
+  hides the selected seed/local row behind `Classical.choice`; the current
+  q61 route keeps the selected seeded raw orbit visible instead.
+
+- `S2-q60-exact-q32-primitive-repeated-tail-worker` - owner: subagent worker
+  Avicenna the 5th (`019e4f26-9ade-7252-a6a7-b47cb797ef66`).  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only if a
+  primitive eraser naturally belongs there,
+  `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Role: prove or strictly lower the exact q32-indexed
+  `S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows` source from existing
+  repeated-tail/cut rows, without actual-sector, W32, arbitrary cycles, or
+  completed boundary-cycle premises.  Result: added
+  `S2_q60_q32PrimitiveRepeatedTailSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_minimalDeletedTailSeparation`
+  in `S2SeededRawOrbitSource.lean`.
+
+- `S2-q60-component-topology-source-worker` - owner: Mencius the 5th
+  (`019e4f26-b839-7021-8a4f-1f5124375909`).  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean`
+  and `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only if the
+  theorem belongs there.  Status: completed/checked/pruned 2026-05-22.  Role: prove or strictly lower
+  `UnboundedExteriorFrontierComponentTopologyInputSourceRows` and the current
+  Janiszewski trace source from finite-input rows, without carrier or
+  actual-sector assumptions.  Result: added
+  `S2_q60_traceNoClosed_componentTopologyInputSourceRows_family_of_kComponentTracePreconnected_outsideAccumulation_20260522q60`
+  and
+  `S2_q60_traceNoClosed_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_outsideAccumulation_20260522q60`.
+
+- `S2-q60-selected-geometric-source-worker` - owner: Dirac the 5th
+  (`019e4f27-0e40-7ff2-b325-5b115ba0404f`).  Write scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.
+  Role: prove or strictly lower the selected carrier geometric-selection
+  source from actual carrier neighbor-pair/cut rows and selected-head
+  geometric rows, keeping interior chords allowed outside the selected
+  exterior sector.  Result: added
+  `S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource`,
+  `S2_q60_geometricSelectionInputSource_of_cutPartitionInputSource_geometricRows`,
+  and `S2_q60_geometricSelectionInputSource_family_of_cutPartitionInputSource_geometricRows`.
+
+- `S2-q60-minimal-separation-to-actual-sector-main` - owner: main Codex GPT-5.
+  Write scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  this workboard, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/checked 2026-05-22.  Role: compose q58 actual-sector production
+  with the q60 exact primitive repeated-tail bridge, replacing the q58
+  primitive-source leaf by minimal deleted-tail separation on the exact q32
+  raw orbit.  Result: added
+  `S2_q60_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_minimalDeletedTailSeparation`.
+  Gate passed:
+  `lake env lean -DmaxErrors=10 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+Current q61 decomposition and claims:
+
+- `S2-q60-q32-start-edge-local-row-projection` - owner: main Codex GPT-5.
+  Status: superseded 2026-05-22 by the q61 seed-visible route.  Result: the
+  q32 package hides the seed edge local row behind the q31/q32
+  `Classical.choice` package; the honest route should keep the selected seeded
+  raw orbit visible instead of projecting this row out of the lossy q32
+  package.
+
+- `S2-q61-seed-visible-actual-sector-main` - owner: main Codex GPT-5.  Role:
+  source-route integrator.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, this workboard,
+  and `proof_workings/s2_route_workbook.md`.  Status: completed/checked
+  2026-05-22.  Deliverable: compose the existing r14 seed-visible
+  face-dart/angular producer into an actual exterior-sector source family,
+  keeping the selected raw orbit seed visible and exposing only source leaves
+  below actual-sector/W32 rows.  Result: added
+  `S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_cyclicSuccCutPartitions`
+  and
+  `S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation`.
+  Gate passed:
+  `lake env lean -DmaxErrors=20 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q61-seed-visible-route-explorer` - owner: Newton the 5th
+  (`019e4f40-2a1c-70b3-8d24-e3325053bec6`).  Role:
+  read-only route mapper.  Write scope: none.  Status:
+  completed/pruned 2026-05-22.  Result: verified the shortest seed-visible
+  chain through r14/r12 into the actual exterior-sector source, with remaining
+  leaves exactly component topology, geometric selection, incident-germ rows,
+  selected actual-carrier faceSucc angle rows, and minimal deleted-tail
+  separation on the same selected raw orbit.
+
+- `S2-q61-cyclic-cut-lowering-worker` - owner: Noether the 5th
+  (`019e4f40-2e10-7822-b7f5-52f42cd7a23b`).  Role:
+  source-row prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: lower the seed-visible r14
+  `SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource` premise from
+  repeated-tail/minimal deleted-tail separation rows on the same selected raw
+  orbit.  Result: added
+  `selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_minimalDeletedTailSeparation_noCut_20260522q61`.
+
+- `S2-q61-incident-geometric-source-worker` - owner: Mill the 5th
+  (`019e4f40-379e-7792-acbc-975c652c26a3`).  Role:
+  local source-row prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: lower the r14 incident-germ and selected geometric
+  premises from actual carrier neighbour-pair/cut rows plus genuine selected
+  head geometric rows, preserving the rule that interior chords are allowed
+  outside the selected exterior sector.  Result: q62 uses the checked
+  lowerings
+  `S2_q61_r14_geometricSelectionInputSource_family_of_cutPartitionInputSource_geometricRows`
+  and
+  `S2_q61_r14_incidentGermFrontierEdgeMembershipRows_family_of_cutPartitionInputSource_geometricRows_selectedHeadAt`.
+
+Current q62 decomposition and claims:
+
+- `S2-q62-source-facing-compression-main` - owner: main Codex GPT-5.  Role:
+  source-route integrator.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/checked
+  2026-05-22.  Deliverable:
+  compose the q61 seed-visible actual-sector route with the checked q60
+  component-topology and selected-geometric lowerings, exposing only genuine
+  source leaves below those packages.  Result: added
+  `S2_q62_selectedRawTailCoverageSourceRows_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows`
+  `S2_q62_actualExteriorSectorInputSourceRows_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_minimalDeletedTailSeparation`,
+  `S2_q62_actualExteriorSectorInputSourceRows_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability`,
+  `S2_q62_actualExteriorSectorInputSourceRows_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_cyclicSuccDeletedTailNonreachability`,
+  and
+  `S2_q62_cyclicSuccDeletedTailNonreachability_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_finiteNoClosed_endpointClosedSeparation`.
+  Gate passed:
+  `lake env lean -DmaxErrors=20 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- `S2-q62-angle-source-worker` - owner: Peirce the 5th
+  (`019e4f4d-69e7-76e3-9dce-691e062c0d2b`).  Role: source-row
+  prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: lower selected
+  actual-carrier faceSucc angle rows from selected carrier successor rows /
+  cut-partition source rows without using actual-sector, W32, or completed
+  boundary-cycle rows.  Result: added
+  `S2_q62_r14_selectedActualCarrierFaceSuccAngleRows_of_cutPartitionInputSource_geometricRows_selectedCarrierRows`
+  and
+  `S2_q62_r14_selectedActualCarrierFaceSuccAngleRows_family_of_cutPartitionInputSource_geometricRows_selectedCarrierRows`.
+  Gates passed:
+  `lake env lean ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` and
+  `lake env lean ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q62-minimal-separation-worker` - owner: Dalton the 5th
+  (`019e4f4d-6d26-71c2-abf3-f17aab5a1fda`).  Role:
+  source-row prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.
+  Deliverable: source `SelectedRawOrbitMinimalDeletedTailSeparation` for the
+  q61 selected raw orbit from the existing no-closed-separation /
+  endpoint-closed-separation / repeated-tail separation machinery.  Result:
+  added
+  `S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles`,
+  `S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability`,
+  `S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_repeatedTailSeparationRows`,
+  `S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_finiteNoClosed_reachableFrontierClosedSeparation`, and
+  `S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_finiteNoClosed_endpointClosedSeparation`.
+  The cyclic-successor nonreachability variant now composes directly to
+  actual-sector rows; endpoint-closed separation remains only an optional
+  source route to the same deleted-tail nonreachability/minimal-separation
+  row, restricted to the selected raw orbit.
+  Gates passed:
+  `lake env lean ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `lake env lean ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q62-topology-source-worker` - owner: Ptolemy the 5th
+  (`019e4f4d-71a3-7ab2-b5a3-6e568f791127`).  Role:
+  topology-source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: lower the current
+  component-topology inputs below q60 by proving or reducing the
+  Janiszewski/boundary-bumping and outside accumulation leaves.  Result: added
+  `S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q62`,
+  `S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_incidentOpenSegmentFrontierPoint_20260522q62`, and
+  `S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q62`.
+  Gates passed:
+  `lake env lean ErdosProblems1066/Swanepoel/S2TopologySource.lean` and
+  `lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+
+Current q63 decomposition and claims:
+
+- `S2-q63-endpoint-closed-source-worker` - owner: Hubble the 5th
+  (`019e4f58-42a3-7553-9dd4-5096cc57d50b`).  Role:
+  source-row prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only if an
+  already-owned helper naturally belongs there,
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.
+  Deliverable: lower the q61/q62
+  `SelectedRawOrbitCyclicSuccDeletedTailReachableEndpointClosedSeparationSource`
+  leaf below actual-sector, W32, and completed boundary-cycle rows.
+  Result: added q63 selected-raw-orbit endpoint-closed source wrappers from
+  cyclic-successor nonreachability, cyclic-successor cut partitions,
+  boundary-arc rows, and primitive repeated-tail source rows.  Gate passed:
+  `lake env lean -DmaxErrors=20 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q63-source-leaf-map-explorer` - owner: Mendel the 5th
+  (`019e4f58-6be3-7d22-a47a-4ddd3e9b571a`).  Role: read-only route mapper.
+  Write scope: none.  Status: completed/pruned 2026-05-22.  Deliverable: map
+  the lowest existing producers and circularity risks for the q62 residual
+  source leaves:
+  actual carrier cut rows, selected-head geometric rows, selected-head
+  endpoint rows, selected-carrier successor rows, and q61 endpoint/minimal
+  separation rows.  Result: confirmed no residual is currently produced from
+  bare `FinitePlanarOuterComponentInputs C`; lowest checked producers are
+  local-sector/two-germ/deleted-neighbor rows for cut input, angular
+  no-between/outgoing-list rows for selected geometry, endpoint membership or
+  cut input for selected heads, orientation/local-strict rows for selected
+  carrier successor, and q61 endpoint/minimal-separation adapters.
+
+- `S2-q63-carrier-cut-geometric-source-worker` - owner: Pascal the 5th
+  (`019e4f5b-715c-7732-aee2-61f4b30529de`).  Role:
+  source-row prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: strictly lower one of the q62 local residual leaves:
+  actual carrier cut rows, selected-head geometric rows, selected-head
+  endpoint rows, or selected-carrier successor rows, without actual-sector,
+  W32, completed boundary-cycle, induced frontier graph, all-adjacent endpoint,
+  convex-hull, identity angular-order, or global all-outgoing no-between
+  shortcuts.
+  Result: added q63 selected raw-tail coverage and actual-sector source
+  reducers that replace the q62 selected-carrier successor leaf by selected
+  actual-carrier `faceSucc` angle rows.  Gates passed:
+  `lake env lean ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` and
+  `lake env lean ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+Current q64 decomposition and claims:
+
+- `S2-q64-actual-exterior-walk-primitive-worker` - owner: Huygens the 5th
+  (`019e4f5c-c938-7d80-837d-47aeb0705b26`).  Role:
+  proof-owning primitive designer/prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only if the
+  eraser naturally belongs there,
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.
+  Deliverable: introduce and consume one actual exterior face-walk primitive
+  that jointly supplies the q62 residual local/source leaves for the same
+  selected raw orbit, without adding a W32/actual-sector consumer or using a
+  completed boundary cycle.  Result: added
+  `S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows`,
+  `S2_q64ActualExteriorWalkPrimitiveSourceRows`,
+  `S2_q64ActualExteriorWalkPrimitiveSourceRows.toSelectedRawTailCoverageSourceRows`,
+  `S2_q64ActualExteriorWalkPrimitiveSourceRows.toSelectedRawOrbitMinimalDeletedTailSeparation`,
+  and the support eraser
+  `S2_q64_actualExteriorSectorInputSourceRows_family_of_actualExteriorWalkPrimitiveSourceRows`.
+
+Current q65 decomposition and claims:
+
+- `S2-q65-topology-source-worker` - owner: Ampere the 5th
+  (`019e4f5f-93e0-78e2-9562-92847def1315`).  Role: topology-source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean` and only
+  naturally-owned helpers in
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: lower a Janiszewski/boundary-bumping or
+  finite-drawing no-closed-separation topology leaf below actual-sector,
+  W32, completed boundary-cycle rows, induced-frontier shortcuts, endpoint
+  shortcuts, and identity angular order.
+  Result: added q65 finite topology packages from nontrivial relative-clopen
+  `K`-side plus punctured accumulation.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q65-finite-drawing-local-isolation-worker` - owner: Locke the 5th
+  (`019e4f5f-b1ad-7541-9071-cbb1fe0ee362`).  Role: finite-drawing geometry
+  prover.  Write scope: `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Deliverable: prove concrete local drawing/isolation,
+  incident-edge, or frontier-carrier helpers that sit strictly below the
+  exterior face-walk source.
+  Result: added local ball/isolation, frontier-connected-component, and
+  graph-vertex incident-edge helpers.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.
+
+- `S2-q65-source-shape-map-explorer` - owner: Ohm the 5th
+  (`019e4f5f-d066-7e92-985a-f5c49a40711d`).  Role: read-only source-shape
+  mapper.  Write scope: none.  Status: completed/pruned 2026-05-22.  Deliverable: map exact field
+  shapes and lowest non-circular producers for the actual exterior-sector
+  source through `FaceDartOrbitExteriorCarrierRows` plus same-boundary angular
+  rows.
+  Result: mapped `FaceDartOrbitExteriorCarrierRows`,
+  `BoundaryVertexExteriorSectorRowsAt`, `ActualExteriorSectorInputSourceRows`,
+  their erasers, and recommended the next producer theorem at the PSigma
+  face-dart-carrier plus angular-row surface.
+
+- `S2-q65-carrier-field-source-worker` - owner: Sagan the 5th
+  (`019e4f5f-ee11-7802-9b28-d76b71118091`).  Role: carrier-cut source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: lower a carrier-cut, repeated-tail, deleted-neighbor,
+  or endpoint-free carrier separation field used by the actual exterior
+  face-walk source.
+  Result: added q65 nonempty selected-cut/cut-partition equivalence/projection
+  from finite-plane local separation primitives.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q65-main-composer` - owner: main Codex GPT-5 worker.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/checked
+  2026-05-22.  Deliverable: compose q63 selected-actual-carrier angle route,
+  q63 selected-raw endpoint eraser, q65 finite topology package, and primitive
+  repeated-tail rows into a source-facing actual exterior-sector family.
+  Result: added
+  `S2_q65_actualExteriorSectorInputSourceRows_family_of_nontrivialRelativeClopen_puncturedAccumulation_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedActualCarrierFaceSuccAngles_primitiveSourceRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+Current q66 decomposition and claims:
+
+- `S2-q66-punctured-accumulation-source-worker` - owner: Pauli the 5th
+  (`019e4f68-0f71-71d0-8b87-5915ecac03cb`).  Role: topology/local-accumulation
+  prover.  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean`
+  and, only for natural helpers, `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly
+  lower the pointwise `UnboundedExteriorFrontierVertexPuncturedAccumulationSource`
+  family from finite-drawing/local-isolation facts.  Result: added q66
+  punctured-accumulation family erasers from finite no-closed separation plus
+  frontier-vertex incidence, trace no-closed plus outside accumulation,
+  Janiszewski boundary-bumping plus outside accumulation, and nontrivial
+  relative-clopen plus singleton boundary-bumping obstruction.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q66-local-cut-source-worker` - owner: Gibbs the 5th
+  (`019e4f68-2f5c-7060-9875-00ec13fcb623`).  Role: carrier cut-source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` and, only
+  if needed, `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly lower
+  the actual carrier neighbour cut-partition source from finite-plane local
+  separation/local two-germ primitives.  Result: added q66 family erasers from
+  deleted-neighbour local separation, r30 finite-plane local separation, and
+  pointwise local two-germ rows, plus the family equivalence with the r30
+  primitive.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q66-selected-head-geometric-source-worker` - owner: Aristotle the 5th
+  (`019e4f68-5417-7530-b29e-ac7f498a0135`).  Role: local geometric source
+  prover.  Write scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`
+  and, only for an eraser, `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Deliverable: lower selected-head geometric rows,
+  selected-head endpoint rows, or selected actual-carrier faceSucc angle rows
+  from source-level selected-carrier/local geometry primitives.  Result: added
+  `S2_q60_geometricRows_of_cutPartitionInputSource_angularNoBetweenRows`,
+  the pointwise bridge from q60 selected carrier cut rows plus honest selected
+  head angular no-between rows to the geometric rows consumed by q60/q62.
+  Gate passed:
+  `lake env lean -DmaxErrors=20 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+- `S2-q66-repeated-tail-primitive-source-worker` - owner: Bernoulli the 5th
+  (`019e4f68-7321-7670-9ab9-f5451f80fb21`).  Role: repeated-tail source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and,
+  only for a natural cut helper,
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly lower
+  primitive repeated-tail rows for the q63 selected raw orbit or an equivalent
+  exterior-arc primitive feeding q65.  Result: added
+  `S2_q66_repeatedTailPrimitiveSourceRows_family_of_q63SelectedRawOrbit_pairwiseMinimalDeletedTailSeparation`,
+  lowering the q63/q61 primitive repeated-tail rows to the pairwise minimal
+  deleted-tail separation source on the same selected raw orbit.  Gate passed:
+  `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+
+- `S2-q66-nontrivial-relative-clopen-source-explorer` - owner: Lagrange the
+  5th (`019e4f68-8ee8-7723-8d9e-e00972d9f453`).  Role: read-only topology
+  source mapper.  Write scope: none.  Status: completed/pruned 2026-05-22.  Deliverable: map
+  non-circular producers for the nontrivial relative-clopen `K`-side topology
+  primitive and name the smallest theorem still needing proof.
+  Result: mapped the finite nontrivial relative-clopen side to the existing
+  `FiniteDrawingUnboundedComplementFrontierPreconnected` source and the
+  planar side to no-subcontinuum/crossing-bounded sources.
+
+- `S2-q67-finite-frontier-preconnected-worker` - owner: Jason the 5th
+  (`019e4f6b-3758-7963-83c1-3da261ed4acc`).  Role: topology-source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean` and, only
+  if natural, `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly
+  lower `FiniteDrawingUnboundedComplementFrontierPreconnected`.  Result: added
+  `S2_q67_finiteDrawing_frontierPreconnected_of_pairPreconnected_20260522q67`
+  and
+  `S2_q67_finiteDrawing_frontierPreconnected_of_kComponentPointsBetween_20260522q67`,
+  lowering the finite frontier-preconnectedness leaf to pair-preconnectedness
+  and then to the same-`K` component points-between source.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q67-actual-face-walk-source-bundle-worker` - owner: Plato the 5th
+  (`019e4f6b-5f0c-7180-99b4-59118a310a54`).  Role: exterior face-walk source
+  prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  stale/pruned 2026-05-22; no open handle in the current worker pool.
+  Deliverable superseded by the q68 Mencius the 7th q64/q67 source-bundle
+  worker below.
+
+Current q68 decomposition and claims:
+
+- `S2-q68-topology-points-between-source-worker` - owner: Dewey the 7th
+  (`019e4f72-d9b3-71e0-bb43-b535b41edfd7`).
+  Role: topology-source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly lower
+  `FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween`, the current
+  q67 topology leaf feeding finite frontier-preconnectedness, without actual
+  sector rows, completed boundary cycles, W32, induced-frontier graphs,
+  arbitrary cycles, convex hulls, endpoint shortcuts, or identity angular
+  order.  Result: added
+  `S2_q68_finiteDrawing_kComponentPointsBetween_of_noCompactConnectedKCrossing_20260522q68`,
+  lowering the finite same-`K` point-between leaf to
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing`
+  through the checked nontrivial-relative-clopen topology bridge.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q68-local-separation-primitive-worker` - owner: Harvey the 7th
+  (`019e4f72-dd64-7361-8bdf-d5d2715d6c16`).  Role:
+  carrier local-separation prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly lower
+  `S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive` from local
+  finite-plane separation data, keeping the route on the actual
+  `unboundedFrontierCarrierGraph` and not using actual-sector, boundary-cycle,
+  W32, induced-graph, arbitrary-cycle, or all-adjacent endpoint premises.
+  Result: added q68-facing local finite-plane isolation reducers
+  `S2_q68_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows`,
+  `S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows`,
+  `S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows`,
+  and
+  `S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q68-selected-angular-source-worker` - owner: Dalton the 7th
+  (`019e4f72-f534-7bf0-a693-e7e89df532b8`) + main Codex GPT-5.  Role:
+  selected-head angular source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only.  Status:
+  completed/checked 2026-05-22.  Deliverable: prove or strictly lower the
+  selected-head `GeometricRotationSystem.GraphVertexAngularNoBetweenRows` source
+  used by the q66 geometric-row eraser from real selected exterior-sector local
+  geometry, not from global outgoing-list shortcuts unless the interval is the
+  selected exterior sector.  Result: added
+  `S2_q68_selectedAngularNoBetweenRows_of_cutPartitionInputSource`,
+  `S2_q68_selectedCutPartitionHeadsMatchBoundaryExteriorSector`,
+  `S2_q68_selectedAngularNoBetweenRows_of_cutPartitionInputSource_boundaryVertexExteriorSectorRows_selectedHeads`,
+  and
+  `S2_q68_selectedAngularNoBetweenRows_family_of_cutPartitionInputSource_boundaryVertexExteriorSectorRows_selectedHeads`,
+  lowering the q66 angular leaf to same-boundary
+  `BoundaryVertexExteriorSectorRowsAt` plus an exact selected-head match for
+  the q60 cut heads.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+- `S2-q68-actual-sector-shape-map-explorer` - owner: Aristotle the 7th
+  (`019e4f72-fcf6-71a2-b9a1-1522337ffb01`).  Role: read-only actual-sector
+  shape mapper.  Write scope: none.  Status: dispatched/running 2026-05-22.
+  Deliverable: map the exact `FaceDartOrbitExteriorCarrierRows`,
+  `ActualExteriorSectorInputSourceRows`, and
+  `BoundaryVertexExteriorSectorRowsAt` erasers and identify the smallest
+  non-circular producer theorem.
+
+- `S2-q68-frontier-incident-from-local-sector-explorer` - owner: Archimedes
+  the 7th (`019e4f73-0674-70a2-8d1a-8e0d51c13e77`).  Role: read-only
+  finite-drawing/local-sector mapper.  Write scope: none.  Status:
+  dispatched/running 2026-05-22.  Deliverable: decide whether
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource` can be sourced from a
+  real exterior face-walk/local-sector primitive and name the exact next
+  theorem.
+
+- `S2-q68-q64-face-walk-source-bundle-worker` - owner: Mencius the 7th
+  (`019e4f73-0cda-7203-8441-f7058793ad37`).  Role: exterior face-walk source
+  prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only.  Status:
+  dispatched/running 2026-05-22.  Deliverable: strengthen or consume
+  `S2_q64ActualExteriorWalkPrimitiveSourceRows` toward
+  `FaceDartOrbitExteriorCarrierRows` plus angular rows without actual-sector,
+  W32, or completed boundary-cycle premises.
+
+Current q69 decomposition and claims:
+
+- `S2-q69-actual-face-walk-bundle-eraser-worker` - owner: Carver the 5th
+  (`019e4f73-f1ca-7831-a083-695ba42b5d15`).  Role: source-bundle eraser
+  prover.  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`
+  only.  Status: completed/checked/pruned 2026-05-22.  Deliverable: erase a
+  family of `ExteriorComponentTopology.S2_q67ActualFaceWalkSourceBundleRows`
+  to the actual exterior-sector source family through
+  `S2_q67_actual_face_walk_source_bundle_worker`, with no W32, boundary-cycle
+  premise, synthetic row, or facade.  Result: added
+  `S2_q69_actualExteriorSectorInputSourceRows_family_of_actualFaceWalkSourceBundleRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- `S2-q69-q67-bundle-source-compression-worker` - owner: Lovelace the 5th
+  (`019e4f73-f9af-7490-9b40-d093c1dd909f`).  Role: source-bundle composer.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` only.
+  Status: completed/checked/pruned 2026-05-22.  Deliverable: construct the q64
+  / q67 face-walk source bundle from the current q66 source leaves where
+  possible, keeping all assumptions below actual-sector/W32 rows and on the
+  actual exterior carrier.  Result: the checked active surface is the q64
+  primitive bundle compression plus the q68 q64-to-face-orbit eraser:
+  `S2_q69_actualExteriorWalkPrimitiveSourceRows_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_minimalSeparation`,
+  `S2_q69_actualExteriorWalkPrimitiveSourceRows_family_of_componentTopology_cutPartitionInputSource_selectedAngularNoBetween_endpointSelectedHeadRows_selectedCarrierRows_minimalSeparation`,
+  and the family face-orbit eraser already recorded in
+  `S2SeededRawOrbitSource.lean`.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- `S2-q69-source-leaf-trimmer-worker` - owner: Confucius the 5th
+  (`019e4f74-0015-7943-89d8-618992a5b05f`).  Role: read-only route trimmer.
+  Write scope: none unless a checked route update is produced.  Status:
+  completed/pruned 2026-05-22.  Deliverable: map the exact lowest remaining
+  source leaves after the q66/q67 bundle route, naming declarations consumed
+  and avoiding new W32/facade/package proposals.
+
+- `S2-q69-local-isolation-leaf-trimmer-main` - owner: main Codex GPT-5.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`,
+  this workboard, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/checked 2026-05-22.  Role: lower the q68 selected local-isolation
+  and r30 deleted-neighbour primitive leaves further to existing local selected
+  no-third / selected incident finite-drawing isolation rows, without
+  actual-sector, boundary-cycle, W32, induced graph, arbitrary-cycle, or
+  all-adjacent endpoint premises.  Result: added q69 selected local-isolation
+  and r30 lowerings from `LocalSelectedIncidentEdgePairSourceRows` and
+  `UnboundedFrontierCarrierLocalSelectedNoThirdGermSource`, plus exact
+  nonempty residual equivalences.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+Live claim and checked support summary:
+
+- `S2-q54-actual-carrier-degree-worker` - owner: subagent worker
+  (dynamic).  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`
+  and, only if needed for an already-owned cut eraser,
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.
+  Role: prove a source-level lowering from raw-orbit third-neighbour/repeated
+  tail deletion data to `ActualCarrierDegreeTwoSource`, without actual-sector
+  rows, boundary cycles, W32 rows, induced frontier graphs, or endpoint
+  shortcuts.  Result: added
+  `S2_q54_actualCarrierDegreeTwoSource_of_rawOrbit_thirdNeighborRepeatedTailIndex_minimalDeletedTailSeparation`
+  and
+  `S2_q54_actualCarrierDegreeTwoSource_family_of_rawOrbit_thirdNeighborRepeatedTailIndex_minimalDeletedTailSeparation`.
+  Gate passed: pinned lean check of `S2CarrierLocalSource`.
+
+- `S2-q54-face-orbit-source-worker` - owner: subagent worker (dynamic).
+  Write scope: `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`
+  only.  Status: completed/checked/pruned 2026-05-22.  Role: strictly lower
+  `faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs` by composing the
+  existing r19 raw-orbit package route, exposing only source leaves such as
+  local-sector rows, carrier connectedness, raw edge-frontier rows,
+  repeated-tail/no-cut rows, and genuine raw orientation rows.  Result: added
+  `S2_q54_actualExteriorSectorInputSourceRows_source_of_rawFaceSuccOrbitSourceRows_via_r19`.
+  Gate passed: pinned lean check of `S2ExteriorBoundarySource`.
+
+- `S2-q54-topology-source-worker` - owner: subagent worker (dynamic).
+  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Role: reduce the singleton
+  boundary-bumping/topology source
+  toward finite-input rows such as punctured accumulation or incident
+  open-segment frontier points, without carrier, actual-sector, boundary-cycle,
+  W32, or all-adjacent endpoint premises.  Result: added
+  `S2_q54_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_incidentOpenSegmentFrontierPoint_20260522q54`
+  and
+  `S2_q54_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_puncturedAccumulation_20260522q54`.
+  Gate passed: pinned lean check of `S2TopologySource`.
+
+- `S2-q54-frontier-incident-worker` - owner: subagent worker (dynamic).
+  Write scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  only.  Status: completed/checked/pruned 2026-05-22.  Role: prove or strictly reduce
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource` and carrier connectedness
+  from finite drawing/component-topology source rows, without assuming a final
+  boundary cycle or actual-sector package.  Result: added
+  `S2_q54_frontierVertexIncident_and_carrierConnected_of_componentTopologySourceRows_20260522q54`
+  and
+  `S2_q54_frontierVertexIncident_and_carrierConnected_of_finiteDrawingSourceRows_20260522q54`.
+  Gate passed: pinned lean check of `ExteriorComponentTopology`.
+
+- `S2-q54-source-route-explorer` - owner: subagent explorer (dynamic).
+  Write scope: none.  Status: completed/pruned 2026-05-22.  Role: audit the current shortest
+  non-circular source chain from `FinitePlanarOuterComponentInputs C` to
+  `actualExteriorSectorInputSourceRows_of_inputs`, naming exact declarations
+  and identifying one genuinely closeable missing source leaf.  Result:
+  identified the next source leaf as producing the q54 raw-orbit
+  third-neighbour/minimal-deleted-tail package from inputs, then feeding
+  `S2_q54_actualCarrierDegreeTwoSource_family_of_rawOrbit_thirdNeighborRepeatedTailIndex_minimalDeletedTailSeparation`.
+
+- `S2-q55-q32-degree-source-main` - owner: main Codex GPT-5 worker.  Write
+  scope: `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.  Status:
+  completed/checked 2026-05-22.  Role: expose the q54 carrier-degree handoff on
+  the q32 raw geometric orbit, so the live source leaves are exactly the
+  third-neighbour repeated-tail index row and minimal deleted-tail separation
+  on that same orbit.  Result: added
+  `S2_q55_actualCarrierDegreeTwoSource_family_of_componentTopology_geometricSelection_strictSuccessor_thirdRepeatedTail_minimalDeletedTailSeparation`.
+  Gate passed: pinned lean check of `S2CarrierLocalSource`.
+
+- `S2-q56-third-neighbor-index-source` - owner: unassigned source leaf.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` and only
+  for a direct q32-family bridge `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+  Status: open source leaf, no live subagent.  Role: prove or strictly reduce the third-neighbour
+  repeated-tail index row on the q32 raw orbit, without actual-sector rows,
+  final boundary cycles, W32, induced frontier graphs, arbitrary cycles,
+  all-adjacent endpoint claims, convex hull data, or identity angular order.
+  Gate: pinned lean check of the touched owner module.
+
+- `S2-q56-minimal-deleted-tail-source` - owner: unassigned source leaf.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` and only
+  for a direct q32-family bridge `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+  Status: open source leaf, no live subagent.  Role: prove or strictly reduce the minimal deleted-tail
+  separation row for repeated tails on the q32 raw orbit, preferably from
+  existing repeated-tail actual exterior arc / pairwise minimal separation /
+  no-cut rows, without endpoint frontier-component separation as a live source.
+  Gate: pinned lean check of the touched owner module.
+
+- `S2-q56-component-topology-input-source` - owner: unassigned source leaf.
+  Write scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  and `ErdosProblems1066/Swanepoel/S2TopologySource.lean`.  Status: open source
+  leaf, no live subagent.
+  Role: reduce `UnboundedExteriorFrontierComponentTopologyInputSourceRows` and
+  q49/q54 face-dart topology premises from finite-input topology rows already
+  available in `FinitePlanarOuterComponentInputs C`, avoiding actual-sector and
+  W32 assumptions.  Gate: pinned lean check of touched module.
 
 - `S2-q41-exterior-face-orbit-source-main` - owner: main Codex GPT-5
   worker.  Write scope: `S2SeededRawOrbitSource.lean`,
@@ -78,7 +1021,31 @@ Live claims:
   rows, finished boundary-cycle rows, W32 consumers, induced frontier graphs,
   arbitrary cycles, all-adjacent endpoint claims, convex hull data, identity
   angular order, or endpoint frontier-component separation as a source.  Gate:
-  `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+  `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.  Checked
+  support added:
+  `S2_q41_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_frontierVertexIncident_geometricSelection_incidentGerm_selectedCarrierRows_cyclicSuccCutPartitions_faceSuccTurn`,
+  which replaces finite no-open in the r18 source surface by the same-`K`
+  trace no-closed topology row plus independent frontier-vertex incident rows.
+
+  Accepted next proof progress is source-level only: prove or strictly reduce
+  `faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs`; prove the
+  deleted-neighbour/cut-partition rows that yield actual carrier degree two
+  from `FinitePlanarOuterComponentInputs C`; prove
+  `FrontierVertexIncidentUnboundedFrontierEdgeSource` from inputs; or prove
+  the Janiszewski/K-component points-between topology source.  Everything below
+  this bullet is checked or pruned support, not a live claim.
+
+- `S2-q48-local-geometric-producer-lowering` - owner: Codex GPT-5
+  worker.  Status: checked support 2026-05-22.  Result: added the q48
+  pointwise and family lowerings from selected-edge local isolation,
+  pointwise geometric angular rows, endpoint local-radius covers, and selected
+  actual-carrier `faceSucc` angle rows into
+  `S2_q47_localGeometricProducerRows`.  Follow-up checked support names the
+  selected local-isolation rows from actual carrier degree two and
+  deleted-neighbour unreachable rows, then composes q48 producer families with
+  the remaining geometric/endpoint/`faceSucc` rows explicit.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2CarrierLocalSource`.
+
 - `S2-q40-endpoint-source-explorer` - owner: subagent explorer
   (`Hume the 4th`, `019e4e6e-dc05-75e2-b6de-94fae94dc00d`).
   Write scope: none.  Status: completed/pruned 2026-05-22.  Result: confirmed
@@ -135,6 +1102,172 @@ Live claims:
   `S2_q41_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource_of_repeatedTailActualExteriorArcRows`.
   Gate passed:
   `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+Current q70 decomposition and claims:
+
+- `S2-q70-component-topology-source-worker` - owner: Hilbert the 5th
+  (`019e4f86-61a7-7442-b6df-f550ca9faa87`).
+  Role: topology producer.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean` and, only for a natural
+  owner lemma, `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly reduce
+  `UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs` from the
+  finite drawing / Janiszewski point-between branch, without actual-sector
+  rows, W32, completed boundary cycles, induced frontier graphs, arbitrary
+  cycles, convex-hull data, all-adjacent endpoint claims, or identity angular
+  order.  Result: added q70 component-topology reducers
+  `S2_q70_componentTopologyInputSourceRows_of_finiteDrawingKComponentPointsBetween_boundaryBumping_20260522q70`,
+  `S2_q70_componentTopologyInputSourceRows_of_noCompactConnectedKCrossing_boundaryBumping_20260522q70`,
+  `S2_q70_componentTopologyInputSourceRows_of_janiszewskiNoSubcontinuum_boundaryBumping_20260522q70`,
+  and family forms.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q70-local-selected-pair-source-worker` - owner: Chandrasekhar the 5th
+  (`019e4f86-8237-7be1-9032-4d79ed92114c`).
+  Role: actual carrier local source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly reduce
+  `LocalSelectedIncidentEdgePairSourceRows inputs` or
+  `UnboundedFrontierCarrierLocalSelectedNoThirdGermSource inputs` from
+  `FinitePlanarOuterComponentInputs C`, using the actual
+  `unboundedFrontierEdgeSet` / `unboundedFrontierCarrierGraph`, not the induced
+  frontier graph or arbitrary adjacent frontier endpoints.  Result: added
+  q70 reductions from exact two-neighbour cardinality for
+  `unboundedFrontierCarrierGraph` to the local selected-pair source,
+  local selected no-third rows, selected-edge local isolation rows, and the
+  deleted-neighbour finite-plane local-separation primitive.  Gate passed:
+  `lake env lean ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q70-selected-carrier-successor-source-worker` - owner: Planck the 5th
+  (`019e4f86-ae03-7d40-9b8d-157756b238c3`).
+  Role: selected face-successor source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only if a
+  local geometric helper already belongs there,
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly reduce
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource`
+  on the q64/q67 selected raw orbit from genuine selected exterior face-turn
+  geometry, avoiding global all-outgoing no-between shortcuts.  Gate: targeted
+  build of the touched owner file.  Result: added
+  `S2_q70_selectedCarrierRows_of_cutPartitionInputSource_geometricRows_selectedActualCarrierFaceSuccAngles`
+  and `S2_q70_selectedCarrierRows_of_q67ActualFaceWalkSourceBundleRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q70-repeated-tail-separation-source-worker` - owner: James the 5th
+  (`019e4f86-c99c-7880-b4c3-4cff6f64c835`).
+  Role: repeated-tail/no-cut producer.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only for cut
+  packaging, `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Deliverable: prove or strictly reduce
+  `SelectedRawOrbitMinimalDeletedTailSeparation` / pairwise minimal deleted
+  tail separation for the same q64/q67 selected raw orbit from no-cut and
+  finite-plane exterior-arc separation, not from endpoint-component shortcuts.
+  Result: added q70 no-cut erasers from
+  `ExteriorFrontierArcSeparationRows` to selected raw-orbit minimal deleted
+  tail separation, pairwise minimal deleted-tail source rows, and q64 actual
+  exterior-walk primitive rows on the same selected raw orbit.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q70-route-integrator-main` - owner: main Codex GPT-5.  Write scope:
+  `TASK.md`, `proof_workings/s2_route_workbook.md`, and whichever owner file is
+  needed to compose checked source reductions.  Status: completed/checked
+  2026-05-22.
+  Role: keep the q70 leaves on the actual exterior face-orbit source route,
+  integrate completed source reductions, prune completed agents, and run only
+  targeted owner-file builds until the final S2 gate.  Result: added the q71
+  route integrator
+  `S2_q71_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation`,
+  composing the checked q70 component-topology reducer into the q63
+  actual-sector source route.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+Current q72 decomposition and claims:
+
+- `S2-q72-arc-source-composer-worker` - owner: subagent worker
+  (`Zeno the 8th`, `019e4f97-c438-7ba1-976d-53b74fe0df84`).
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` and
+  docs after a checked theorem.  Status: completed/checked 2026-05-22.  Role: replace
+  the q71 minimal-deleted-tail leaf by the finite-plane exterior-frontier arc
+  separation source on the same q64 selected raw orbit, using the checked q70
+  selected-carrier projection and q70 q64 primitive bundle before erasing to
+  actual exterior-sector rows.  Forbidden: W32 facades, completed boundary
+  cycles, induced frontier graphs, arbitrary cycles, convex-hull shortcuts,
+  all-adjacent endpoint claims, and identity angular order.  Result: added
+  `S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_exteriorFrontierArcRows`,
+  with selected-head/faceSucc wrapper
+  `S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_selectedAngularNoBetween_endpointSelectedHeadRows_selectedActualCarrierFaceSuccAngles_exteriorFrontierArcRows`,
+  composing the q70 component-topology reducer, q70 exterior-arc-to-minimal
+  repeated-tail handoff on the same q64 selected raw orbit, and the checked q64
+  actual-sector eraser.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- `S2-q72-cutrows-from-card-worker` - owner: subagent worker
+  (`Ohm the 8th`, `019e4f98-540a-7b60-929f-679d883fd875`).
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+  Status: completed/checked 2026-05-22.  Role: lower the q71/q72 actual carrier
+  cut-partition source family from the actual
+  `unboundedFrontierCarrierGraph.neighborFinset.card = 2` row through q70
+  selected-pair rows and the e65 selected-incident cut constructor.  Result:
+  added
+  `S2_q72_cutrows_from_card_worker_of_frontierCarrierGraph_neighborFinset_card_two`
+  and
+  `S2_q72_cutrows_from_card_worker_family_of_frontierCarrierGraph_neighborFinset_card_two`.
+  Refresh 2026-05-22: strictly lowered the same cut-row leaf below r30
+  finite-plane local separation via
+  `S2_q72_cutrows_from_card_worker_of_deletedNeighborLocalSeparationInputSource`,
+  `S2_q72_cutrows_from_card_worker_of_finitePlaneLocalSeparationPrimitive`,
+  `S2_q72_cutrows_from_card_worker_family_of_finitePlaneLocalSeparationPrimitive`,
+  `S2_q72_cutrows_from_card_worker_nonempty_of_finitePlaneLocalSeparationPrimitive`,
+  and
+  `S2_q72_cutrows_from_card_worker_family_nonempty_of_finitePlaneLocalSeparationPrimitive`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q72-selected-head-geometric-worker` - owner: subagent worker
+  (`Cicero the 8th`, `019e4f98-5808-7b91-b15d-7c547674218e`).
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean` or
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, whichever owns the
+  non-overlapping lemma.  Status: completed/checked 2026-05-22.  Role: expose a clean
+  family lowering of the q71/q72 selected-head geometric and endpoint rows from
+  selected angular no-between plus endpoint-selected-head rows for the exact
+  heads chosen by the actual carrier cut source.  Result: added
+  `S2_q72_q71_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_selectedAngularNoBetween_endpointSelectedHeadRows_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation`
+  and
+  `S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_selectedAngularNoBetween_endpointSelectedHeadRows_selectedActualCarrierFaceSuccAngles_exteriorFrontierArcRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- `S2-q72-exterior-arc-source-worker` - owner: subagent worker
+  (`Locke the 8th`, `019e4f98-5f5e-76d2-b178-95c4beb8ee06`).
+  Write scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+  Status: completed/checked 2026-05-22.  Role: lower
+  `RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows` for the same
+  q64/q67 selected raw orbit from existing actual exterior arc / boundary arc /
+  cut-partition source rows, below actual-sector and W32.  Result: added
+  q64 and q67 same-selected-raw-orbit reducers
+  `S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows`,
+  `S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_actualExteriorArcRows`,
+  `S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_cutPartitions`,
+  `S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows`,
+  `S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_actualExteriorArcRows`,
+  and `S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_cutPartitions`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q72-topology-source-worker` - owner: subagent worker
+  (`Franklin the 8th`, `019e4f98-6603-7570-b14e-e6ad15d83e19`).
+  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+  Status: completed/checked 2026-05-22.  Role: topology-only lowering of either
+  no-compact-connected K crossing or singleton boundary-bumping obstruction
+  from lower Janiszewski/boundary-bumping topology rows.  Result: added
+  `S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTraceNoClosedSeparation_20260522q72`,
+  `S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTracePreconnected_20260522q72`,
+  and
+  `S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72`,
+  strictly reducing the no-compact-connected K-crossing residual through the
+  checked q36/q37/q60 Janiszewski trace route.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
 - `S2-q42-seed-raw-orbit-producer-worker` - owner: subagent worker
   (`Boyle the 4th`, `019e4e7a-7fb6-7742-8d6c-a37a75fe2f05`).
   Write scope: `S2SeededRawOrbitSource.lean` only.  Status:
@@ -210,6 +1343,1255 @@ Live claims:
   `unboundedFrontierCarrierGraph_neighborFinset_card_two_of_inputs`; the
   no-third-germ/radius construction already follows from
   `localRadiusSelectedEdgeSourceRows_of_selectedIncidentEdgePairRows`.
+- `S2-q44-carrier-degree-two-source-worker` - owner: subagent worker.
+  Write scope: `ExteriorComponentTopology.lean` and, only for a natural
+  eraser, `S2CarrierLocalSource.lean`.  Status: completed/checked
+  2026-05-22.  Result: added
+  `S2_q44_carrier_degree_two_source_of_unreachableAfterDeleteInputSource`,
+  `S2_q44_carrier_degree_two_source_family_of_unreachableAfterDeleteInputSource`,
+  `S2_q44_localSelectedIncidentEdgePairSourceRows_of_unreachableAfterDeleteInputSource`,
+  and
+  `S2_q44_localSelectedIncidentEdgePairSourceRows_family_of_unreachableAfterDeleteInputSource`,
+  lowering actual carrier degree two / selected incident-edge pairs to the
+  existing unreachable-after-delete input source.  Gate passed:
+  `lake build ErdosProblems1066`.
+- `S2-q44-topology-points-between-worker` - owner: subagent worker.  Write
+  scope: `S2TopologySource.lean` only.  Status: completed/checked
+  2026-05-22.  Result: added
+  `S2_q44_kComponentPointsBetween_of_traceNoClosedSeparation_direct_20260522q44`,
+  giving the current direct topology lowering from trace no-closed separation to
+  the `K` component points-between theorem.  Gate passed:
+  `lake build ErdosProblems1066`.
+- `S2-q44-frontier-incident-edge-worker` - owner: subagent worker.  Write
+  scope: `FinitePlaneDrawing.lean` and `ExteriorComponentTopology.lean`.
+  Status: completed/checked 2026-05-22.  Result: added
+  `FrontierVertexIncidentOpenSegmentFrontierPointSource`,
+  `frontierVertexIncidentSource_of_incident_openSegment_frontier_point`,
+  `frontierVertexIncidentOpenSegmentFrontierPointSource_of_punctured_vertex`,
+  and `frontierVertexIncidentSource_of_punctured_vertex_localIsolation`,
+  lowering frontier-vertex incident edge selection to a punctured local-isolation
+  frontier point source without all-adjacent endpoint chords.  Gate passed:
+  `lake build ErdosProblems1066`.
+- `S2-q44-raw-orbit-cut-source-explorer` - owner: subagent explorer.  Write
+  scope: none.  Status: completed/checked 2026-05-22.  Result: added the
+  source-facing actual-sector composer
+  `S2_q44_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions`
+  and the trace-no-closed topology variant
+  `S2_q44_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_frontierVertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions`.
+  These are support erasers from q42 raw `faceSucc` source rows plus cyclic cut
+  partitions, not a replacement for the live exterior face-orbit producer.
+- `S2-q45-r12-third-neighbor-source-worker` - owner: subagent worker.  Write
+  scope: `S2CarrierCutSource.lean` and, only for the exact selected raw-orbit
+  handoff, `S2SeededRawOrbitSource.lean`.  Status: completed/pruned
+  2026-05-22.  Result: added
+  `S2_q45_rawFaceWalkThirdCarrierNeighborRepeatedTailCutPartitionSource_of_repeatedTailIndex_cyclicSuccCutPartitions`,
+  `S2_q45_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource_of_repeatedTailIndex_cyclicSuccCutPartitions_noCut`,
+  and
+  `S2_q45_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource_of_repeatedTailIndex_pairwiseMinimalDeletedTailSeparation`.
+  Gate passed: `lake env lean -DmaxErrors=30
+  ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+- `S2-q45-trace-noClosed-source-worker` - owner: subagent worker.  Write
+  scope: `S2TopologySource.lean` only.  Status: completed/pruned
+  2026-05-22.  Result: added
+  `S2_q45_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q45`
+  and
+  `S2_q44_kComponentPointsBetween_of_traceNoClosedSeparation_direct_20260522q44`.
+  Gate passed: `lake env lean -DmaxErrors=30
+  ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+- `S2-q45-local-geometric-source-worker` - owner: subagent worker.  Write
+  scope: `S2CarrierLocalSource.lean`, `S2LocalTwoGermAssembly.lean`, and
+  `GeometricRotationSystem.lean` only if the theorem naturally belongs there.
+  Status: completed/pruned 2026-05-22.  Result: added q45 local-geometric
+  erasers including
+  `S2_q45_geometricSelectionInputSource_family_of_unreachableAfterDelete_boundaryVertexExteriorSectorRows_selectedHeads`,
+  `S2_q45_boundaryFreeLocalSectorGeometricAngularSource_family_of_unreachableAfterDelete_boundaryVertexExteriorSectorRows_selectedHeads`,
+  `S2_q45_orientationRows_family_of_geometricSelection_selectedCarrierRows`,
+  and
+  `S2_q45_localStrictOrder_family_of_geometricSelection_selectedCarrierRows`.
+  Gate passed: `lake build ErdosProblems1066.Swanepoel.S2CarrierLocalSource`.
+- `S2-q45-punctured-frontier-source-worker` - owner: subagent worker.  Write
+  scope: `ExteriorComponentTopology.lean`, with `S2TopologySource.lean` only
+  for a natural topology primitive.  Status: completed/pruned
+  2026-05-22.  Result: added
+  `frontierVertexIncidentOpenSegmentFrontierPointSource_of_frontierPreconnected_nontrivialAt`,
+  `frontierVertexIncidentOpenSegmentFrontierPointSource_of_frontierPreconnected_boundaryBumpingObstruction`,
+  and
+  `frontierVertexIncidentSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation`.
+  Gate passed: `lake env lean -DmaxErrors=30
+  ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+- `S2-q45-source-composition-main` - owner: main Codex GPT-5 worker.  Write
+  scope: `S2SeededRawOrbitSource.lean`, `TASK.md`,
+  `proof_workings/s2_route_workbook.md`, and
+  `proof_workings/theorem_dependency_map.md` after checked Lean progress.
+  Status: completed/checked 2026-05-22.  Result: added
+  `S2_q45_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions`,
+  which composes the q44 trace-no-closed actual-sector route with the q37
+  punctured/outside-accumulation frontier-incident source.  This is support
+  only; the live producer obligation remains the actual exterior face-orbit
+  source.  Gate passed:
+  `lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`.
+- `S2-q46-topology-trace-noClosed-source` - owner: subagent worker
+  `Kant the 7th` (`019e4ea3-af81-7b22-a7e4-499d54fdbe5c`).  Write scope:
+  `S2TopologySource.lean`.  Status: completed/checked 2026-05-22.  Result:
+  added
+  `S2_q46_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q46`,
+  which strictly lowers
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation`
+  to the existing Janiszewski relative-clopen boundary-bumping primitive via
+  q22 same-`K` point-between and q37 trace conversion, without W32 or
+  actual-sector facades.  Gate passed: `lake env lean
+  ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+- `S2-q46-frontier-incident-outside-source` - owner: subagent worker
+  `Herschel the 7th` (`019e4ea3-b64d-7442-aa99-a0a5868dc005`).  Write scope:
+  `ExteriorComponentTopology.lean` and `FinitePlaneDrawing.lean` only if
+  needed.  Status: completed/pruned 2026-05-22.  Result: added
+  `S2_q46_outsideAccumulationForcesActualFrontier_of_boundaryBumpingObstruction_20260522`,
+  `S2_q46_outsideAccumulationSource_of_frontierVertexIncident_20260522`,
+  `S2_q46_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_20260522`,
+  `S2_q46_frontierVertexIncidentSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522`,
+  and
+  `S2_q46_outsideAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522`.
+  Gate passed: `lake env lean
+  ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+- `S2-q46-local-geometric-source` - owner: subagent worker
+  `Wegener the 7th` (`019e4ea3-bdf9-73f3-aaac-c9a8628f9761`).  Write scope:
+  `S2CarrierLocalSource.lean`, `S2LocalTwoGermAssembly.lean`, and
+  `GeometricRotationSystem.lean` only for natural owner lemmas.  Status:
+  completed/checked 2026-05-22.  Result: added
+  `S2_q46_localGeometricSourceRows` and family lowerings to q44/q45
+  geometric-selection, local orientation, local strict-order, and
+  boundary-free local-angular source rows from honest carrier
+  neighbour/local-isolation rows.  Gate passed: root build.
+- `S2-q46-cyclicSucc-cut-source` - owner: subagent worker
+  `Popper the 7th` (`019e4ea3-c464-7a52-99bc-c91b2c437eac`).  Write scope:
+  `S2CarrierCutSource.lean` and only narrow handoffs in
+  `S2SeededRawOrbitSource.lean`.  Status: completed/checked 2026-05-22.
+  Result: added
+  `selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_actualExteriorArcRows_20260522q46`
+  and
+  `S2_q46_cyclicSuccCutPartitionSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_repeatedTailActualExteriorArcRows`,
+  lowering the selected raw-orbit cyclic-successor cut-partition source without
+  actual-sector/boundary-cycle/W32 premises.  Gate passed: focused
+  `S2SeededRawOrbitSource` build and root build.
+- `S2-q46-minimal-producer-audit` - owner: subagent explorer
+  `Mendel the 7th` (`019e4ea3-caf2-76c0-81de-e1d941d7b607`).  Write scope:
+  none.  Status: completed/pruned 2026-05-22.  Result: shortest
+  non-circular route remains the face-dart/angular producer
+  `faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs`, then the
+  actual exterior-sector eraser.  No W32 composer, endpoint branch, induced
+  frontier graph, or global no-between branch is promoted.
+- `S2-q47-actual-sector-composer-main` - owner: main Codex GPT-5 worker.
+  Write scope: `S2CarrierLocalSource.lean`, `TASK.md`, and route notebooks
+  only after checked Lean progress.  Status: completed/checked 2026-05-22.
+  Result: added
+  `S2_q47_selectedRawRows_of_traceNoClosed_outsideAccumulation_localGeometricProducer`
+  and
+  `S2_q47_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_localGeometricProducer_pairwiseMinimalDeletedTailSeparation`.
+  This is the shortest current non-circular actual-sector composer: trace
+  no-closed topology plus outside accumulation plus q47 local-geometric
+  producer rows plus q38 pairwise minimal deleted-tail separation for the
+  exact selected raw orbit produce the actual exterior-sector source family.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+Current q72 decomposition and claims:
+
+- `S2-q72-carrier-two-neighbour-source-worker` - owner: Boole the 5th
+  (`019e4f95-ebc6-7b33-bad3-e04cf131cf3e`).  Role: actual carrier
+  two-neighbour source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`, with
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for natural
+  carrier-graph helpers.  Status: completed/checked/pruned 2026-05-22.
+  Result: lowered the carrier two-neighbour source to the deleted-neighbour
+  local-separation and finite-plane local-separation primitives via
+  `S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource`,
+  `S2_q72_carrier_two_neighbour_source_worker_of_finitePlaneLocalSeparationPrimitive`,
+  `S2_q72_local_selected_pair_source_worker_of_deletedNeighborLocalSeparationInputSource`,
+  and
+  `S2_q72_local_selected_pair_source_worker_of_finitePlaneLocalSeparationPrimitive`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q72-selected-face-turn-angle-worker` - owner: Turing the 5th
+  (`019e4f95-f110-7942-bc90-3cec200e0566`).  Role: selected exterior face-turn
+  angular source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and, only for
+  genuine angular helper lemmas,
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`.  Status:
+  completed/checked/pruned 2026-05-22.  Result: added
+  `S2_q72_selected_face_turn_angle_worker`,
+  `S2_q72_selected_face_turn_angle_worker_family`, and
+  `S2_q72_selected_face_turn_angle_worker_family_of_geometricSelection_orientation_localStrict`,
+  lowering the selected actual-carrier face-turn angle row to orientation and
+  local strict-order rows.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q72-exterior-frontier-arc-separation-worker` - owner: Hegel the 5th
+  (`019e4f95-f786-70b0-9208-b62350b3fbca`).  Role: repeated-tail exterior arc
+  separation prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, with
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only for cut packaging
+  if unavoidable.  Status: completed/checked 2026-05-22.  Deliverable: prove
+  or strictly reduce the exterior-frontier arc separation source for the
+  selected raw exterior orbit, feeding the q70 repeated-tail/no-cut erasers.
+  Result: added generic repeated-tail bridges
+  `S2_q72_exteriorFrontierArcSeparationSourceRows_of_selectedRawOrbit_repeatedTailCutPartitions`,
+  `S2_q72_exteriorFrontierArcSeparationSourceRows_of_selectedRawOrbit_cyclicSuccCutPartitions`,
+  `S2_q72_selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailCutPartitions`,
+  and
+  `S2_q72_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailCutPartitions`;
+  this complements the checked q72 q64/q67 same-orbit exterior-arc reducers in
+  `S2SeededRawOrbitSource.lean`.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q72-topology-singleton-source-worker` - owner: Franklin the 5th
+  (`019e4f95-fe25-7192-b3cb-c0fb7e41af94`).  Role: topology residual source
+  prover.  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean`,
+  with `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` only for natural
+  finite-drawing helpers.  Status: completed/checked 2026-05-22.  Deliverable: prove or
+  strictly reduce the q70 component-topology residual, namely the
+  no-compact-connected/Janiszewski branch plus singleton boundary-bumping
+  obstruction, without actual-sector or boundary-cycle premises.  Gate:
+  targeted owner-file build.  Result: the no-compact-connected branch is now
+  exposed from the q72 Janiszewski trace reducers
+  `S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTraceNoClosedSeparation_20260522q72`,
+  `S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTracePreconnected_20260522q72`,
+  and
+  `S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q72-route-integrator-main` - owner: main Codex GPT-5.  Role:
+  route integrator.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`, this workboard, and
+  `proof_workings/s2_route_workbook.md`.  Status: completed/checked
+  2026-05-22.  Result: composed the q70 component-topology branch, q70
+  selected-carrier rows, and the q72 exterior-frontier arc rows into
+  `S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_exteriorFrontierArcRows`,
+  with selected-head compatibility wrappers below it.  Gate passed:
+  `lake env lean -DmaxErrors=50 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+Current q73 decomposition and claims:
+
+- `S2-q73-carrier-local-separation-source-worker` - owner: subagent worker
+  (`Socrates the 5th`, `019e4fa5-b66e-7cc3-b010-99a74a5ae110`).  Role:
+  actual carrier two-neighbour source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for a
+  natural carrier helper.  Status: completed/checked/pruned 2026-05-22.
+  Deliverable was to prove or
+  strictly lower `UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource`
+  / finite-plane local separation from `FinitePlanarOuterComponentInputs C`,
+  feeding the q72 carrier two-neighbour reducers.  Gate: targeted
+  `S2CarrierCutSource.lean` build.  Result: lowered deleted-neighbor
+  local-separation and finite-plane local-separation primitives to the concrete
+  actual carrier row `unboundedFrontierCarrierGraph.neighborFinset.card = 2`
+  via the q73 theorems in `S2CarrierCutSource.lean`.
+
+- `S2-q73-frontier-incident-edge-source-worker` - owner: subagent worker
+  (`Schrodinger the 5th`, `019e4fa5-ca83-7873-93e0-d9145dd1a71b`).  Role:
+  finite drawing frontier-incidence source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for natural
+  finite-drawing lemmas.  Status: completed/checked/pruned 2026-05-22.
+  Deliverable was to prove or
+  strictly lower `FrontierVertexIncidentUnboundedFrontierEdgeSource` from the
+  existing embedded-drawing and unbounded-component rows, without all-adjacent
+  endpoint or induced-frontier shortcuts.  Gate: targeted topology/drawing
+  owner-file build.  Result: lowered frontier-edge incidence to
+  `FrontierVertexIncidentOpenSegmentFrontierPointSource` and added component
+  topology family composers from the existing no-compact/Janiszewski branches
+  in `S2TopologySource.lean`.
+
+- `S2-q73-selected-face-turn-source-worker` - owner: subagent worker
+  (`McClintock the 5th`, `019e4fa5-de88-7dd0-b264-3954812a0b86`).  Role:
+  geometric face-turn source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` only for genuine
+  angular helpers.  Status: completed/checked/pruned 2026-05-22.  Deliverable
+  was to prove or lower
+  the q72 orientation/local-strict rows for the selected exterior carrier from
+  the straight-line geometric rotation system, avoiding global all-outgoing
+  no-between rows.  Gate: targeted owner-file build.  Result: added q73
+  selected face-turn lowering the orientation/local-strict and angle worker
+  families to selected carrier successor-tail rows in
+  `S2SeededRawOrbitSource.lean`.
+
+- `S2-q73-janiszewski-trace-source-worker` - owner: subagent worker
+  (`Einstein the 5th`, `019e4fa5-ec2f-7732-a21b-2fab99c34945`).  Role:
+  topology source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for natural
+  topology helpers.  Status: completed/checked/pruned 2026-05-22.
+  Deliverable was to prove or
+  strictly lower the q72 Janiszewski/K-component trace no-closed-separation
+  source from `FinitePlanarOuterComponentInputs C`, feeding
+  `S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72`.
+  Gate: targeted `S2TopologySource.lean` build.  Result: added finite
+  K-trace no-closed-separation source rows and no-compact crossing reducers in
+  `S2TopologySource.lean`.
+
+Current q74 decomposition and claims:
+
+- `S2-q74-punctured-frontier-incidence-source-worker` - owner: Codex GPT-5
+  current-thread worker, taking over from subagent worker (`Herschel the 5th`,
+  `019e4faf-513e-7d62-b4b0-34b26e173425`).  Role:
+  finite drawing frontier incidence source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean`, with
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` or
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for small
+  natural helpers.  Status: completed/checked 2026-05-22.  Deliverable: prove or
+  strictly lower `UnboundedExteriorFrontierVertexPuncturedAccumulationSource`
+  / `FrontierVertexIncidentOpenSegmentFrontierPointSource` from
+  `FinitePlanarOuterComponentInputs C`, using only embedded-drawing and
+  unbounded-component data.  Result: added q74 finite no-closed plus direct
+  actual-frontier non-singleton lowerers
+  `S2_q74_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74`,
+  `S2_q74_puncturedAccumulationSource_family_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74`,
+  `S2_q74_frontierIncidentOpenSegmentFrontierPointSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74`,
+  and
+  `S2_q74_frontierIncidentOpenSegmentFrontierPointSource_family_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q74-carrier-card-two-source-worker` - owner: Codex GPT-5 current thread.
+  Role:
+  actual carrier two-neighbour source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`, with
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for a
+  natural carrier helper.  Status: completed/checked 2026-05-22.
+  Deliverable: prove or strictly lower
+  `unboundedFrontierCarrierGraph_neighborFinset_card_two` from
+  `FinitePlanarOuterComponentInputs C`, preferably through the no-cut/deleted
+  neighbour cut-partition route.  Result: added q74 no-cut cut-partition
+  lowering wrappers
+  `S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut`,
+  `S2_q74_carrier_card_two_source_worker_family_of_cutPartitionInputSource_noCut`,
+  `S2_q74_carrier_card_two_source_worker_of_nonempty_cutPartitionInputSource_noCut`,
+  and
+  `S2_q74_carrier_card_two_source_worker_nonempty_cutPartitionInputSource_iff`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q74-selected-successor-tail-source-worker` - owner: Codex GPT-5
+  (`current-thread`).  Role:
+  selected geometric face-successor source prover.
+  Write scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` only for genuine
+  angular helpers.  Status: completed/checked 2026-05-22.  Deliverable: prove or
+  strictly lower
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource`
+  from selected actual carrier/geometric neighbour rows, below actual-sector
+  rows and without global all-outgoing no-between shortcuts.  Result: added
+  `S2_q74_selected_successor_tail_source_of_geometricSelection_orientationRows_geometricNeighborRows`
+  and
+  `S2_q74_selected_successor_tail_source_family_of_geometricSelection_orientationRows_geometricNeighborRows`
+  in `S2SeededRawOrbitSource.lean`.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q74-topology-ktrace-source-worker` - owner: Codex GPT-5
+  current-thread worker, taking over from subagent worker (`Euclid the 5th`,
+  `019e4faf-6535-7ee1-a781-9103913fde17`).  Role:
+  Janiszewski/K-trace topology source prover.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean`, with
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for natural
+  topology helpers.  Status: completed/checked 2026-05-22.  Deliverable was
+  to prove or strictly lower
+  `FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation` or the
+  current no-compact-connected crossing primitive from
+  `FinitePlanarOuterComponentInputs C`.  Result: added q74 lowerers from
+  finite same-`K` point-between rows to finite K-trace no-closed-separation,
+  plus no-compact-connected and Janiszewski no-subcontinuum wrappers.  Gate
+  passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+Current dynamic S2 source claims after q72, 2026-05-22:
+
+- `S2-active-carrier-two-neighbour-source` - owner: subagent worker
+  (`Mendel the 8th`, `019e4fa8-e8d9-7891-b1a1-344458029c8d`).  Role:
+  carrier two-neighbour/local-separation source reducer.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only, plus docs after
+  a checked theorem.  Status: completed/checked 2026-05-22.  Deliverable:
+  strictly lower the q72
+  `hcard`/cutRows leaf from existing finite-plane or deleted-neighbour local
+  separation source rows, below actual-sector and W32.  Result: added
+  `S2_q72_cutrows_from_card_worker_of_deletedNeighborLocalSeparationInputSource`,
+  `S2_q72_cutrows_from_card_worker_of_finitePlaneLocalSeparationPrimitive`,
+  `S2_q72_cutrows_from_card_worker_family_of_finitePlaneLocalSeparationPrimitive`,
+  and nonempty wrappers.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-active-topology-frontier-source` - owner: subagent worker
+  (`Halley the 8th`, `019e4fa9-1866-7dc3-aba0-9da5f37ff7f8`).  Role:
+  topology/frontier source reducer.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean`, with tiny natural
+  helpers in `FinitePlaneDrawing.lean` or `ExteriorComponentTopology.lean`
+  only if needed.  Status: completed/checked 2026-05-22.  Deliverable: lower
+  the q72 no-compact or singleton/frontier-incident topology leaf from
+  existing finite-drawing sources, without all-adjacent endpoint or
+  induced-frontier shortcuts.  Result: added
+  `S2_q72_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_frontierVertexIncident_20260522q72`,
+  composing the checked Janiszewski boundary-bumping no-compact source with
+  the lower `FrontierVertexIncidentUnboundedFrontierEdgeSource` family.  Gate
+  passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-active-selected-face-turn-source` - owner: subagent worker
+  (`Laplace the 8th`, `019e4fa9-3bd2-7623-85a0-52f2c3878870`).  Role:
+  selected exterior face-turn source reducer.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, with
+  `GeometricRotationSystem.lean` only for genuine angular helpers.  Status:
+  completed/checked 2026-05-22.  Deliverable: lower selected actual-carrier faceSucc
+  angle/orientation/local-strict rows from the geometric rotation system,
+  below actual-sector, boundary-cycle, and W32.  Result: added
+  `S2_active_selected_face_turn_source_of_geometricSelection_selectedCarrierRows`
+  and
+  `S2_active_selected_face_turn_source_family_of_geometricSelection_selectedCarrierRows`,
+  and repaired the q73 selected-face-turn family call-site.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-active-source-leaf-map-explorer` - owner: subagent explorer
+  (`Boyle the 8th`, `019e4fa9-5c87-7d90-9fa4-5aec5d65964a`).  Role:
+  read-only route mapper.  Write scope: none.  Status: completed/pruned
+  2026-05-22.  Result: confirmed no unconditional route from
+  `FinitePlanarOuterComponentInputs C` to `actualExteriorSectorInputSourceRows_of_inputs`
+  yet; the shortest non-circular route remains the q72 actual-sector composer
+  chain, with real remaining producers for actual carrier degree/cardinality,
+  selected angular rows, endpoint-selected-head rows, selected face-turn rows,
+  exterior-arc rows, and Janiszewski/singleton topology inputs.
+
+- `S2-active-q72-source-integrator` - owner: subagent worker
+  (`Feynman the 8th`, `019e4fa9-7ecd-75c1-8bef-e26e7bdcae36`).  Role:
+  source-facing integrator.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`, plus docs after a
+  checked theorem.  Status: closed/pruned stale 2026-05-22.  The q72
+  actual-sector composer already exists as
+  `S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_exteriorFrontierArcRows`;
+  a later stale q72-source-integrator attempt was disabled rather than kept as
+  a source claim.  Future integration should target lower source leaves rather
+  than add another q72 composer.
+
+- `S2-active-endpoint-selected-head-source` - owner: subagent worker
+  (`Averroes the 8th`, `019e4fab-cfd2-78d1-acf7-84ed7d753c64`).  Role:
+  endpoint selected-head source reducer.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only, plus docs
+  after a checked theorem.  Status: completed/checked 2026-05-22.  Result:
+  added
+  `S2_active_endpointSelectedHeadRows_of_selectedLocalIsolation_endpointFrontierEdgeMembershipRows`,
+  its family form, and
+  `S2_active_selectedNeighborIncidentGermFrontierEdgeMembershipRows_of_localFrontierEdgeMembershipRows_endpointFrontierEdgeMembershipRows`
+  with its family form.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+- `S2-active-frontier-incident-source` - owner: subagent worker
+  (`Parfit the 8th`, `019e4fac-00cb-7e01-ae5b-fd155ad3abee`).  Role:
+  frontier-incident source reducer.  Write scope:
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean` only, plus docs after
+  a checked theorem.  Status: completed/checked 2026-05-22.  Result: added
+  `S2_active_frontier_incident_source_of_openSegmentFrontierPoint_20260522`,
+  `S2_active_frontier_incident_source_of_puncturedAccumulation_localIsolation_20260522`,
+  and its family form, strictly lowering the frontier-incident row to
+  punctured frontier accumulation plus existing local-isolation handoff.  Gates
+  passed for `ExteriorComponentTopology.lean` and `FinitePlaneDrawing.lean`.
+
+- `S2-active-lean-hygiene-and-dependency-explorer` - owner: subagent explorer
+  (`Mencius the 8th`, `019e4fac-15d0-7ab0-970b-48e5993bc407`).  Role:
+  read-only build/dependency and forbidden-token auditor.  Write scope: none.
+  Status: completed/pruned 2026-05-22.  Result: no import cycle found in the
+  touched S2 import graph; forbidden-token scan over touched S2 Lean files
+  found no `axiom`, `sorry`, `admit`, or `#check`; recommended build order is
+  finite drawing, exterior component, local two-germ, exterior boundary,
+  boundary-free raw, carrier cut, topology, seeded raw orbit, carrier local,
+  W32, then root.
+
+Current dynamic S2 source claims q74, 2026-05-22:
+
+- `S2-q74-punctured-frontier-accumulation-source` - owner: subagent worker.
+  Write scope: `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  only, plus docs after a checked theorem.  Status: completed/checked
+  2026-05-22.  Result: added
+  `S2_q74_puncturedAccumulationSource_of_componentTopologySourceRows_20260522q74`,
+  `S2_q74_puncturedAccumulationSource_of_componentTopologyInputSourceRows_20260522q74`,
+  `S2_q74_frontierIncidentOpenSegmentFrontierPointSource_of_componentTopologyInputSourceRows_20260522q74`,
+  `S2_q74_puncturedAccumulationSource_of_finiteDrawingSourceRows_20260522q74`,
+  `S2_q74_puncturedAccumulationSource_family_of_finiteDrawingSourceRows_20260522q74`,
+  and
+  `S2_q74_active_frontier_incident_source_family_of_finiteDrawingSourceRows_puncturedAccumulation_localIsolation_20260522q74`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+
+- `S2-q74-local-two-germ-selected-source` - owner: subagent worker.  Write
+  scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only, plus
+  docs after a checked theorem.  Status: completed/checked 2026-05-22.
+  Result: added
+  `S2_q74_selectedNeighborIncidentGermFrontierEdgeMembershipRows_of_geometricSelection_endpointFrontierEdgeMembershipRows`
+  and its family form, removing selected local frontier-edge membership as a
+  separate leaf by deriving it from the geometric-selection local drawing
+  source plus endpoint frontier-edge membership.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+- `S2-q74-carrier-card-two-source` - owner: subagent worker.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only, plus docs after
+  a checked theorem.  Status: completed/checked 2026-05-22.  Result: added
+  `S2_q74_carrier_card_two_source_worker_of_deletedNeighborLocalSeparationInputSource`,
+  `S2_q74_carrier_card_two_source_worker_of_finitePlaneLocalSeparationPrimitive`,
+  their family forms, and nonempty/iff wrappers, lowering actual carrier
+  cardinality to deleted-neighbour or finite-plane local separation rows.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q74-janiszewski-topology-source` - owner: subagent worker.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean` only, plus docs after a
+  checked theorem.  Status: completed/checked 2026-05-22.  Result: added
+  `S2_q74_noCompactConnectedKCrossing_of_nontrivialRelativeClopen_20260522q74`,
+  `S2_q74_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_frontierVertexIncident_20260522q74`,
+  `S2_q74_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_incidentOpenSegmentFrontierPoint_20260522q74`,
+  and
+  `S2_q74_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_localSectorRows_20260522q74`,
+  lowering the component-topology route below Janiszewski boundary-bumping to
+  nontrivial relative-clopen `K` side.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q74-repeated-tail-cut-source` - owner: subagent worker.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only, plus docs
+  after a checked theorem.  Status: completed/checked 2026-05-22.  Result:
+  added
+  `selectedRawOrbitRepeatedTailCutPartitions_of_pairwiseMinimalDeletedTailSeparationSource_20260522q74`,
+  `S2_q74_q64RepeatedTailCutPartitions_of_pairwiseMinimalDeletedTailSeparationSource`,
+  `S2_q74_q64ExteriorFrontierArcSeparationSourceRows_of_pairwiseMinimalDeletedTailSeparationSource`,
+  and its family form, lowering the q64 repeated-tail cut source to the
+  pairwise minimal deleted-tail separation source.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q74-source-route-explorer` - owner: subagent explorer.  Write scope:
+  none.  Status: completed/pruned 2026-05-22.  Result: identified the shortest
+  non-circular q74 route through
+  `S2_q62_selectedRawTailCoverageSourceRows_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows`,
+  `S2_q72_selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailCutPartitions`,
+  and
+  `S2_q62_actualExteriorSectorInputSourceRows_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_minimalDeletedTailSeparation`;
+  confirmed the named `actualExteriorSectorInputSourceRows_of_inputs` wrapper
+  still routes through `S2_q69_faceDartOrbitExteriorCarrierRows...` and
+  `actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_family`.
+  Deliverable was to identify the shortest non-circular
+  route from the q74 source leaves to
+  `actualExteriorSectorInputSourceRows_of_inputs`, naming exact theorem
+  surfaces and any stale active-looking claims that should be ignored.
+
+Historical dynamic S2 source claims q75, 2026-05-22:
+
+These source-leaf claims are superseded by the later "Current q75
+decomposition and claims" block below.  They are retained only as route
+history and are not active workboard claims.
+
+- `S2-q75-selected-angular-no-between-source` - owner: subagent worker.  Write
+  scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` only if a natural
+  angular helper belongs there.  Status: superseded/historical 2026-05-22.
+  Deliverable was to prove or
+  strictly lower the selected `GraphVertexAngularNoBetweenRows` family needed
+  by `S2_q66_geometricRows_family_of_cutPartitionInputSource_selectedAngularNoBetweenRows`,
+  using actual selected exterior turn/source rows rather than global
+  all-outgoing no-between shortcuts.
+
+- `S2-q75-endpoint-frontier-edge-membership-source` - owner: subagent worker.
+  Write scope: `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only if a
+  frontier-edge helper naturally belongs there.  Status:
+  superseded/historical 2026-05-22.  Deliverable was to
+  prove or strictly lower `IncidentGermEndpointFrontierEdgeMembershipRows
+  inputs`, the remaining endpoint source leaf after the q74 selected-neighbour
+  handoff.
+
+- `S2-q75-pairwise-minimal-deleted-tail-source` - owner: subagent worker.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only.  Status:
+  superseded/historical 2026-05-22.  Deliverable was to prove or strictly lower
+  `S2CarrierCutSource.S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource`
+  for the selected raw orbit from no-cut/deleted-tail separation data.
+
+- `S2-q75-finite-plane-local-separation-source` - owner: subagent worker.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only.
+  Status: superseded/historical 2026-05-22.  Deliverable was to prove or strictly lower the
+  `DeletedNeighborLocalSeparationInputSource` /
+  `FinitePlaneLocalSeparationPrimitive` source that feeds the q74 actual
+  carrier card-two source.
+
+- `S2-q75-topology-nontrivial-side-source` - owner: subagent worker.  Write
+  scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean` only.  Status:
+  superseded/historical 2026-05-22.  Deliverable was to prove or strictly lower
+  `PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide`
+  or the finite same-`K` point-between source feeding the q74 component
+  topology route.
+
+- `S2-q75-source-route-integrator` - owner: subagent explorer.  Write scope:
+  none unless a checked source-lowering theorem is identified as immediately
+  composable without new premises.  Status: superseded/historical 2026-05-22.
+  Deliverable was to map q75
+  source leaves to the shortest current `actualExteriorSectorInputSourceRows`
+  route and reject any circular path using actual-sector, W32, or completed
+  boundary-cycle rows as premises.
+- `S2-q47-local-geometric-producer-worker` - owner: subagent worker.  Write
+  scope: `S2CarrierLocalSource.lean`, `ExteriorComponentTopology.lean`, and
+  `GeometricRotationSystem.lean` only if a lemma naturally belongs there.
+  Status: completed/checked 2026-05-22.  Result: added
+  `S2_q47_localGeometricProducerRows`,
+  `S2_q47_localGeometricSourceRows_of_localGeometricProducerRows`, and
+  `S2_q47_localGeometricSourceRows_family_of_localGeometricProducerRows`,
+  strictly lowering `S2_q46_localGeometricSourceRows inputs` to selected
+  unbounded-frontier local-isolation rows, same-head geometric rows, endpoint
+  local-radius covers, and selected actual-carrier faceSucc angle rows.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+- `S2-q47-local-geometric-source-from-isolation` - owner: Codex current
+  thread.  Write scope: `S2CarrierLocalSource.lean` and this workboard only
+  unless a handoff is absolutely natural.  Status: completed/checked
+  2026-05-22.  Result: verified the stronger checked q47 lowering
+  `S2_q47_localGeometricProducerRows`,
+  `S2_q47_localGeometricSourceRows_of_localGeometricProducerRows`, and
+  `S2_q47_localGeometricSourceRows_family_of_localGeometricProducerRows`,
+  which lower `S2_q46_localGeometricSourceRows inputs` to selected
+  unbounded-frontier local-isolation rows, genuine same-head geometric rows,
+  endpoint local-radius cover rows, and selected actual-carrier faceSucc angle
+  rows; repaired the selected-carrier erasure proof.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+- `S2-q47-repeated-tail-arc-worker` - owner: Codex GPT-5 current thread.
+  Write scope: `S2SeededRawOrbitSource.lean` and `S2CarrierCutSource.lean`
+  only.  Status: completed/checked 2026-05-22.  Result: the q46
+  `SelectedRawOrbitRepeatedTailActualExteriorArcRows` premise for the exact
+  q42/q44/q45/q46 selected raw exterior orbit now strictly lowers to q38
+  pairwise minimal deleted-tail separation via
+  `selectedRawOrbitRepeatedTailActualExteriorArcRows_of_minimalDeletedTailSeparation_20260522q47`,
+  `selectedRawOrbitRepeatedTailActualExteriorArcRows_of_pairwiseMinimalDeletedTailSeparation_20260522q47`,
+  and
+  `S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_pairwiseMinimalDeletedTailSeparation`.
+  No actual-sector rows, finished boundary-cycle rows, or W32 consumers are
+  used.  Gate passed: `lake env lean -DmaxErrors=30
+  ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+- `S2-q47-repeated-tail-actual-arc-source` - owner: Codex GPT-5.
+  Write scope: `S2SeededRawOrbitSource.lean` and this workboard only.
+  Status: completed/checked 2026-05-22.  Result: added q47 selected raw-row
+  family lowerings from `SelectedRawOrbitRepeatedTailActualExteriorArcRows` to
+  existing primitive raw-index rows, cut partitions, q38 pairwise minimal
+  deleted-tail separation, and exterior-frontier arc rows:
+  `S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_primitiveSourceRows`,
+  `S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cutPartitions`,
+  `S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_pairwiseMinimalDeletedTailSeparation`,
+  and
+  `S2_q47_repeatedTailActualExteriorArcRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_exteriorFrontierArcRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+- `S2-q47-janiszewski-source-worker` - owner: Codex GPT-5 worker.  Write
+  scope: `ExteriorComponentTopology.lean` and `S2TopologySource.lean` only.
+  Status: completed/checked 2026-05-22.  Result: the Janiszewski relative
+  clopen `K`-side source is already strictly lowered through the checked
+  topology-only reducers
+  `planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_componentAvoidance`,
+  `planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_noSubcontinuumObstruction`,
+  `planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_crossingSubcontinuumForcesBounded`,
+  and `S2_k6k_relative_clopen_K_side_source`.  These use component tools and
+  compact-Hausdorff clopen separation only, with no carrier, actual-sector,
+  boundary-cycle, or W32 premise.  Gates passed: `lake env lean
+  -DmaxErrors=30 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  and `lake env lean -DmaxErrors=30
+  ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+- `S2-q47-frontier-topology-source-lowering` - owner: Codex current thread.
+  Write scope: `S2TopologySource.lean`, `ExteriorComponentTopology.lean`, and
+  this workboard.  Status: completed/checked 2026-05-22.  Result: added
+  `S2_q47_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_frontierPreconnected_boundaryBumpingObstruction_20260522q47`,
+  a non-circular family handoff from the q46 Janiszewski relative-clopen
+  boundary-bumping primitive plus actual-frontier preconnectedness and
+  singleton boundary-bumping obstruction to the current `trace_noClosed` and
+  `outside_accumulation` premises.  No actual-sector, boundary-cycle, or W32
+  premise.  Gates passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`
+  and
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+- `S2-q47-route-minimizer-explorer` - owner: subagent explorer.  Write scope:
+  none.  Status: completed/pruned 2026-05-22.  Result: no complete checked
+  non-circular unconditional chain exists; the shortest checked chain remains
+  conditional through the face-dart/angular producer
+  `faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs`, with the first
+  exposed primitive source premise under the q46 composer being the
+  Janiszewski relative-clopen `K`-side/topology row.  No file edits.
+- `S2-q47-face-dart-producer-composition` - owner: main Codex GPT-5 worker.
+  Write scope: `S2CarrierLocalSource.lean`, `TASK.md`, and route notebooks.
+  Status: completed/checked 2026-05-22.  Result: added
+  `S2_q47_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_traceNoClosed_outsideAccumulation_localGeometricProducer_pairwiseMinimalDeletedTailSeparation`,
+  the source-facing face-dart/angular producer on the same exact q47 selected
+  raw exterior orbit used by the actual-sector composer.  No actual-sector,
+  boundary-cycle, W32, induced frontier graph, endpoint shortcut, or global
+  no-between premise is used.  Gate passed:
+  `lake build ErdosProblems1066.Swanepoel.S2CarrierLocalSource`.
+- `S2-q48-actual-sector-source-assembler` - owner: main Codex GPT-5 worker.
+  Write scope: `S2CarrierLocalSource.lean`, `S2ExteriorBoundarySource.lean`,
+  `FaceBoundaryTopologySourceW32.lean`, `TASK.md`, and route notebooks after
+  checked Lean progress.  Status: completed/checked support 2026-05-22.
+  Result: added
+  `S2_q48_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_janiszewskiBoundaryBumping_frontierPreconnected_boundaryBumpingObstruction_selectedLocalIsolation_geometric_endpointLocalRadius_selectedActualCarrierFaceSuccAngles_pairwiseMinimalDeletedTailSeparation`,
+  which assembles the q47 face-dart/angular producer from q48 lower source
+  premises.  Gate passed:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+- `S2-q48-topology-trace-source-worker` - owner: subagent worker
+  (`Avicenna the 4th`, `019e4ec2-85b1-7182-8e9a-c8b580411351`).  Write
+  scope: `S2TopologySource.lean` and `ExteriorComponentTopology.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Result: added
+  `S2_q48_outsideAccumulationSource_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48`,
+  `S2_q48_outsideAccumulationSource_family_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48`,
+  and
+  `S2_q48_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_boundaryBumpingObstruction_20260522q48`.
+  Gates passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`
+  and
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+- `S2-q48-local-geometric-producer-source-worker` - owner: subagent worker
+  (`Descartes the 4th`, `019e4ec2-8c21-7940-8da1-517282863d4e`).
+  Write scope: `S2CarrierLocalSource.lean`, `S2LocalTwoGermAssembly.lean`,
+  and `GeometricRotationSystem.lean` only if ownership is natural.  Status:
+  completed/checked/pruned 2026-05-22.  Result: added the q48 pointwise and
+  family lowerings from selected local isolation, pointwise geometric rows,
+  endpoint local-radius covers, actual carrier degree/two-germ rows, and
+  deleted-neighbour rows into `S2_q47_localGeometricProducerRows`.  Gate passed:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+- `S2-q48-repeated-tail-pairwise-source-worker` - owner: subagent worker
+  (`Dewey the 4th`, `019e4ec2-9251-7152-9b61-7fd12c661599`).
+  Write scope: `S2CarrierCutSource.lean` and `S2SeededRawOrbitSource.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Result: added
+  `S2_q48_pairwiseMinimalDeletedTailSeparationSource_of_minimalDeletedTailSeparation`,
+  `S2_q48_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailCutPartitions_noCut`,
+  and
+  `S2_q48_pairwiseMinimalDeletedTailSeparationSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions_noCut`.
+  Gates passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`
+  and
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+- `S2-q48-route-audit-explorer` - owner: subagent explorer
+  (`James the 4th`, `019e4ec2-99de-7b71-83b5-6bc1daf29f2f`).  Write scope:
+  none.  Status: completed/pruned 2026-05-22.  Result: shortest non-circular
+  route remains the q48 lower-source package to the q47 face-dart producer,
+  then
+  `actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_family`.
+- `S2-q49-main-exterior-face-source` - owner: main Codex GPT-5 worker.  Write
+  scope: `S2CarrierLocalSource.lean`, `S2SeededRawOrbitSource.lean`,
+  `S2TopologySource.lean`, `ExteriorComponentTopology.lean`, route notebooks,
+  and this workboard.  Status: active.  Role: convert q48 support into the
+  input-facing exterior face-orbit producer by proving the remaining source
+  families from `FinitePlanarOuterComponentInputs C`, not by adding W32
+  consumers or actual-sector assumptions.  Immediate gate:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+- `S2-q49-topology-boundary-source-worker` - owner: subagent worker
+  (`Mill the 4th`, `019e4ed1-636b-7811-be08-bbe022452f4c`).
+  Write scope: `S2TopologySource.lean` and `ExteriorComponentTopology.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Result: added q49 topology
+  boundary-source lowerings in `S2TopologySource.lean`, including the
+  incident-open-segment and punctured-accumulation variants feeding the q48
+  trace/outside package.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+- `S2-q49-local-geometric-source-worker` - owner: Codex GPT-5 worker.
+  Write scope: `S2CarrierLocalSource.lean`, `S2LocalTwoGermAssembly.lean`, and
+  `GeometricRotationSystem.lean`.  Status: completed/checked 2026-05-22.
+  Result: added the actual-carrier-degree-two q49 producer family
+  `S2_q49_localGeometricProducerRows_family_of_actualCarrierDegreeTwo_angularNoBetween_endpointRadius_selectedActualCarrierFaceSuccAngles`,
+  replacing the q48 geometric-row premise by selected same-head
+  angular/no-between rows while preserving the explicit endpoint-radius and
+  selected actual-carrier `faceSucc` rows.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+- `S2-q49-local-geometric-premise-source` - owner: Codex GPT-5 worker.
+  Write scope: `S2CarrierLocalSource.lean` and this workboard.  Status:
+  completed/checked 2026-05-22.  Result: added
+  `S2_q49_geometricRows_of_selectedLocalIsolation_angularNoBetweenRows`,
+  `S2_q49_geometricRows_family_of_selectedLocalIsolation_angularNoBetweenRows`,
+  and
+  `S2_q49_localGeometricProducerRows_family_of_selectedLocalIsolation_angularNoBetween_endpointRadius_selectedActualCarrierFaceSuccAngles`,
+  lowering the q48 pointwise `GraphVertexGeometricAngularNeighborSelectionRow`
+  premise to same-head angular/no-between rows for the selected
+  local-isolation heads.  No actual-sector, boundary-cycle, W32, induced
+  frontier graph, all-adjacent endpoint, or global all-outgoing no-between
+  premise is used.  Gate passed:
+  `lake build ErdosProblems1066.Swanepoel.S2CarrierLocalSource`.
+- `S2-q49-repeated-tail-cut-source-worker` - owner: subagent worker
+  (`Newton the 4th`, `019e4ed1-d5c6-7540-93a1-f78875004659`).
+  Write scope: `S2CarrierCutSource.lean` and `S2SeededRawOrbitSource.lean`.
+  Status: completed/checked/pruned 2026-05-22.  Result: added q49
+  actual-exterior-arc lowerings to pairwise minimal deleted-tail separation,
+  including
+  `S2_q49_pairwiseMinimalDeletedTailSeparationSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows`
+  and the exterior-frontier-arc variant.  Gates passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`
+  and
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+- `S2-q49-route-check-explorer` - owner: subagent explorer
+  (`Ampere the 4th`, `019e4ed2-05c1-7fe2-9a17-52e29f824cbc`).  Write
+  scope: none.  Status: completed/pruned 2026-05-22.  Result: verified the
+  shortest acyclic q48/q49 route through
+  `S2_q48_faceDartOrbitExteriorCarrierRows_and_angularRows_family...` and the
+  existing actual-sector eraser, with the remaining source leaves still being
+  topology, local/geometric, and repeated-tail/cut sources rather than another
+  W32 composer.
+- `S2-q50-endpoint-radius-source-worker` - owner: subagent worker
+  (`Hilbert the 4th`, `019e4eda-b8d6-7fa2-a16c-ccce400f644a`).  Write scope:
+  `S2LocalTwoGermAssembly.lean` only, plus workbook if checked theorem names
+  are added.  Status: completed/checked/pruned 2026-05-22.  Result: added the
+  q50 endpoint-radius reduction
+  `S2_q50_endpointLocalRadiusCoversRows_family_of_selectedLocalIsolation_endpointSelectedHeadRows_endpointRadiusContains`,
+  reducing endpoint local-radius covers for heads coming from selected
+  unbounded-frontier local-isolation rows to same-selected-head endpoint rows
+  plus selected-endpoint radius containment.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+- `S2-q50-source-leaf-map-explorer` - owner: subagent explorer
+  (`Ramanujan the 5th`, `019e4eda-e9de-7383-8a52-f2bb71798070`).  Write scope:
+  none.  Status: completed/pruned 2026-05-22.  Result: confirmed the shortest
+  checked q49 actual-sector source wrapper is
+  `S2_q49_actualExteriorSectorInputSourceRows_of_inputs_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_repeatedTailCutPartitions`.
+  The exposed source leaves are the topology pair, geometric selection,
+  orientation, local strict-order, local angular, and selected raw-orbit cut
+  partitions.  It identified the singleton boundary-bumping family via
+  `FrontierVertexIncidentOpenSegmentFrontierPointSource` as a tractable next
+  topology leaf.
+- `S2-q50-topology-premise-composer-worker` - owner: subagent worker
+  (`Arendt the 5th`, `019e4edb-0da5-7753-a44e-d821308e0e4a`).  Write scope:
+  `S2TopologySource.lean` only, plus workbook if checked theorem names are
+  added.  Status: completed/checked/pruned 2026-05-22.  Result: added
+  `S2_q50_faceDartActualSectorTopologyComposer_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q50`,
+  composing the q49 topology premise package with a downstream face-dart or
+  actual-sector continuation.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+- `S2-q50-actual-arc-source-worker` - owner: subagent worker
+  (`Gauss the 5th`, `019e4edd-dd6f-7981-92b6-dcf51015c47c`).  Write scope:
+  `S2SeededRawOrbitSource.lean` and `S2CarrierCutSource.lean`, plus workbook
+  if checked theorem names are added.  Status: completed/checked/pruned
+  2026-05-22.  Result: added the q49 selected raw-orbit actual-exterior-arc
+  handoff to repeated-tail cut partitions on the exact q47/q49 orbit,
+  including
+  `S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows`
+  and the exterior-frontier-arc variant.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+- `S2-q51-topology-punctured-compression` - owner: main Codex GPT-5 worker.
+  Write scope: `S2TopologySource.lean`, this workboard, and the route
+  workbook.  Status: completed/checked 2026-05-22.  Result: added
+  `S2_q51_faceDartTopologyPremises_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q51`
+  and the continuation form, lowering the q49 topology premise package to
+  nontrivial relative-clopen plus punctured frontier accumulation.  Gate
+  passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+- `S2-q50-frontier-incident-point-source-worker` - owner: subagent worker
+  (`Parfit the 5th`, `019e4edf-2f54-7d10-9852-33d5a37583fd`).  Write scope:
+  `ExteriorComponentTopology.lean` and `S2TopologySource.lean`, plus workbook
+  if checked theorem names are added.  Status: completed/checked/pruned
+  2026-05-22.  Result: added q50 punctured-accumulation and
+  incident-open-segment lowerings to the singleton boundary-bumping
+  obstruction family, including
+  `S2_q50_boundaryBumpingObstruction_family_of_puncturedAccumulation_localIsolation_20260522q50`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+Current q75 decomposition and claims:
+
+- `S2-q75-actual-exterior-sector-integrator` - owner: Codex GPT-5 current
+  thread.  Role: compose the newest q74 lowerings into the narrowest
+  source-facing `actualExteriorSectorInputSourceRows` route, without adding a
+  W-facing facade or using actual-sector rows as premises.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/checked 2026-05-22.  Result: added
+  `S2_q75_actualExteriorSectorInputSourceRows_family_of_finiteNoClosed_singletonBumping_cutPartitionInputSource_geometricRows_endpointFrontierEdgeMembership_faceSuccRows_minimalDeletedTailSeparation`,
+  composing q75 component-topology, selected-head, selected-carrier `faceSucc`,
+  and exact q62 minimal deleted-tail separation leaves into the
+  actual exterior-sector source family.  Gates passed:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`
+  and
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q75-topology-nontrivial-frontier-source-worker` - owner: subagent worker
+  (`Sartre the 5th`, `019e4fba-2580-7123-ac52-4a51eda0bc3c`).  Role: prove or strictly lower the actual-frontier
+  nontriviality / singleton boundary-bumping source needed by the q74
+  punctured-accumulation and component-topology rows from
+  `FinitePlanarOuterComponentInputs C`.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean`,
+  `ErdosProblems1066/Swanepoel/FinitePlaneDrawing.lean`, and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for natural
+  topology helpers.  Status: completed/checked/pruned 2026-05-22.  Result:
+  added q75 non-singleton, punctured-accumulation, and component-topology
+  lowerers from finite no-closed separation plus
+  `UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction`:
+  `S2_q75_frontier_not_singleton_of_singletonBoundaryBumping_20260522q75`,
+  `S2_q75_frontier_not_singleton_family_of_singletonBoundaryBumping_20260522q75`,
+  `S2_q75_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75`,
+  `S2_q75_puncturedAccumulationSource_family_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75`,
+  `S2_q75_componentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75`,
+  and
+  `S2_q75_componentTopologyInputSourceRows_family_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q75-carrier-cut-source-worker` - owner: subagent worker
+  (`Kierkegaard the 5th`, `019e4fba-2d8e-7473-9a79-6b2c5218bb51`).
+  Role: prove or strictly lower
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs` from
+  no-cut / repeated-boundary separation data below actual-sector rows, feeding
+  the q74 carrier card-two source.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` and
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only if a local
+  two-germ helper naturally belongs there.  Status: completed/checked/pruned
+  2026-05-22.  Result: added q75 carrier-cut and card-two lowerers from
+  raw-orbit third-neighbour repeated-tail data plus cyclic-successor cut
+  partitions or q38 pairwise minimal deleted-tail separation:
+  `S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccCutPartitions`,
+  `S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_pairwiseMinimalDeletedTailSeparation`,
+  `S2_q75_carrier_card_two_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccCutPartitions_noCut`,
+  and
+  `S2_q75_carrier_card_two_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_pairwiseMinimalDeletedTailSeparation_noCut`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q75-selected-geometric-face-turn-source-worker` - owner: subagent worker
+  (`Banach the 5th`, `019e4fba-310d-79b1-bb89-72b8c27b913d`).  Role: prove or strictly lower the selected actual-carrier
+  orientation/geometric-neighbour/faceSucc angle rows consumed by q74 selected
+  successor-tail and q72 actual-sector composers, using the genuine geometric
+  rotation system and not global all-outgoing no-between as the live source.
+  Write scope: `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`, and
+  `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean` only for genuine
+  angular helpers.  Status: completed/checked/pruned 2026-05-22.  Result:
+  added the q75 contraction from selected orientation/geometric-neighbour and
+  selected actual-carrier `faceSucc` angle rows to the concrete selected
+  `RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailFaceSuccRowsNoOrbitSource`
+  surface:
+  `S2_q75_selected_actual_carrier_face_turn_sources_of_geometricSelection_faceSuccRows`,
+  `S2_q75_selected_actual_carrier_face_turn_sources_family_of_geometricSelection_faceSuccRows`,
+  `S2_q75_selected_successor_tail_source_of_geometricSelection_faceSuccRows`,
+  and
+  `S2_q75_selected_successor_tail_source_family_of_geometricSelection_faceSuccRows`.
+  Gate passed:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q75-route-contraction-explorer` - owner: subagent explorer
+  (`Goodall the 5th`, `019e4fba-3519-75c1-a4b1-0bdb47301ac4`).  Role: read-only contraction of the current q74/q75 route to name
+  the first unsupplied theorem under
+  `faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs` and reject any
+  circular dependency through actual-sector, W32, induced-frontier, or endpoint
+  shortcuts.  Write scope: none.  Status: completed/pruned 2026-05-22.
+  Result: contracted the route through the q69/q64 primitive spine and named
+  the first unsupplied source surfaces: finite K-component point-between plus
+  frontier non-singleton, `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource`,
+  selected faceSucc rows, endpoint selected-head rows, and selected raw-orbit
+  repeated-tail/minimal separation.  No file edits.
+
+- `S2-q76-singleton-boundary-bumping-source-worker` - owner: subagent worker
+  (`Nietzsche the 5th`, `019e4fbe-d1f9-7283-b118-9baf30a5724d`).  Role: prove or strictly lower the family
+  `forall C inputs, UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+  C inputs`, now exposed by q75 as the nontrivial-frontier/component-topology
+  leaf.  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean` and
+  `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for natural
+  topology helpers.  Status: completed/checked/pruned 2026-05-22.  Result:
+  added q76 singleton-boundary-bumping lowerers to selected frontier-vertex
+  incidence, incident open-segment frontier points, and component-topology
+  source rows:
+  `S2_q76_singletonBoundaryBumpingObstruction_of_frontierVertexIncident_20260522q76`,
+  `S2_q76_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q76`,
+  `S2_q76_singletonBoundaryBumpingObstruction_family_of_incidentOpenSegmentFrontierPoint_20260522q76`,
+  `S2_q76_singletonBoundaryBumpingObstruction_family_of_componentTopologySourceRows_20260522q76`,
+  and
+  `S2_q76_singletonBoundaryBumpingObstruction_family_of_componentTopologyInputSourceRows_20260522q76`.
+  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+Current q77 decomposition and claims:
+
+- `S2-q77-topology-finite-no-closed-source-worker` - owner: subagent worker.
+  Role: prove or strictly lower the topology source below the q75 actual-sector
+  route, especially
+  `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation` and the
+  singleton boundary-bumping family, from finite drawing / component topology
+  rows only.  Write scope: `ErdosProblems1066/Swanepoel/S2TopologySource.lean`
+  and `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` only for
+  natural topology helpers.  Status: claimed 2026-05-22.  Gate:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- `S2-q77-endpoint-frontier-membership-worker` - owner: subagent worker.
+  Role: prove or strictly lower
+  `IncidentGermEndpointFrontierEdgeMembershipRows inputs` from selected
+  unbounded-frontier edge membership/local isolation rows, not from
+  all-adjacent endpoint closure.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean` only.  Status:
+  claimed 2026-05-22.  Gate:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+- `S2-q77-carrier-cut-input-source-worker` - owner: subagent worker.  Role:
+  prove or strictly lower
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs` from
+  raw exterior face walk repeated-tail / deleted-neighbour separation data,
+  without using completed actual-sector rows or an induced frontier graph.
+  Write scope: `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean` only.
+  Status: claimed 2026-05-22.  Gate:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.
+
+- `S2-q77-raw-orbit-faceSucc-minimal-separation-worker` - owner: subagent
+  worker.  Role: prove or strictly lower the q75 selected raw-orbit
+  `faceSucc` and minimal deleted-tail separation leaves on the exact q62 raw
+  orbit, using genuine selected carrier/rotation rows and no global
+  all-outgoing no-between shortcut.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean` only.  Status:
+  claimed 2026-05-22.  Gate:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q77-route-integrator-main` - owner: Codex GPT-5 current thread.  Role:
+  keep the q75/q77 actual-sector route composed in
+  `S2CarrierLocalSource.lean`, integrate returned source lowerers without
+  adding a W-facing facade, and update this workboard/workbook after checked
+  file builds.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: claimed/in-progress
+  2026-05-22.  Gate:
+  `lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+Current q78 dynamic claims, 2026-05-22:
+
+- `S2-q78-actual-sector-cyclicSucc-integrator` - owner: Pauli the 8th
+  (`019e4fd4-cdd0-7b41-9d00-f7b5f0c069a0`).  Role: lower the q75/q77
+  actual-sector family by replacing the minimal deleted-tail separation leaf
+  with the q77 cyclic-successor deleted-tail nonreachability leaf where the
+  current checked route permits.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.  Status:
+  completed/checked/pruned.  Result: added
+  `S2_q78_actualExteriorSectorInputSourceRows_family_of_finiteNoClosed_frontierVertexIncident_cutPartitionInputSource_geometricRows_endpointFrontierEdgeMembership_faceSuccRows_cyclicSuccDeletedTailNonreachability`,
+  replacing the q75 minimal deleted-tail premise with the exact selected
+  raw-orbit cyclic-successor nonreachability premise.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- `S2-q78-topology-finite-no-closed-source` - owner: Godel the 8th
+  (`019e4fd4-d165-74e1-98d3-9cd8d30e44aa`).  Role: strictly lower the
+  finite no-closed-separation and singleton boundary-bumping topology leaves
+  from Janiszewski/no-subcontinuum/component-topology rows only.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2TopologySource.lean`, with only natural tiny
+  helpers in `ExteriorComponentTopology.lean`.  Status:
+  completed/checked/pruned.  Result: added
+  `S2_q78_topology_sources_of_janiszewskiNoSubcontinuum_finiteDrawingSourceRows_20260522q78`,
+  lowering the finite no-closed side to Janiszewski no-subcontinuum and the
+  singleton side to finite component-topology rows.  Gate passed:
+  pinned Lean check on `S2TopologySource.lean`.
+
+- `S2-q78-endpoint-selected-head-source` - owner: Ramanujan the 8th
+  (`019e4fd4-e925-7150-b879-4474ee2da956`).  Role: strictly lower
+  `IncidentGermEndpointFrontierEdgeMembershipRows` or the selected-head
+  endpoint leaf from selected unbounded-frontier/local-isolation rows, not
+  all-adjacent endpoint closure.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.  Status:
+  completed/checked/pruned.  Result: added
+  `S2_q78_incidentGermEndpointSelectedHeadAt_of_selectedLocalIsolation_endpointSelectedHeadRows`,
+  `S2_q78_incidentGermEndpointFrontierEdgeMembershipRows_of_selectedLocalIsolation_endpointSelectedHeadRows`,
+  and family forms.  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+- `S2-q78-carrier-cut-source-lowering` - owner: Hubble the 8th
+  (`019e4fd4-f105-7843-af50-bac311d4d196`).  Role: strictly lower
+  `UnboundedFrontierCarrierNeighborPairCutPartitionInputSource` or the q75/q77
+  carrier cut/card-two leaves from selected frontier-edge local isolation,
+  repeated-tail/deleted-neighbour separation, or no-cut rows.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean`.  Status:
+  completed/checked/pruned.  Result: added
+  `S2_q78_carrier_cut_source_lowering_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows`,
+  its family/nonempty forms, and
+  `S2_q78_carrier_card_two_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccDeletedTailNonreachability_noCut`.
+  Gates passed: pinned Lean check and later
+  `lake build ErdosProblems1066.Swanepoel.S2CarrierCutSource`.
+
+- `S2-q78-selected-raw-orbit-cyclic-nonreachability` - owner: Avicenna the 8th
+  (`019e4fd4-f80e-7371-b1d7-51540d967763`).  Role: lower the exact q64/q62
+  selected raw-orbit cyclic-successor nonreachability/minimal-separation leaf
+  using genuine selected faceSucc/frontier arc/cut rows.  Write scope:
+  `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
+  completed/checked/pruned.  Result: added
+  `selectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_of_exteriorFrontierArcSeparationRows_20260522q78`,
+  `S2_q78_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_exteriorFrontierArcRows`,
+  `S2_q78_q64SelectedRawOrbitMinimalDeletedTailSeparation_family_of_faceSuccRows_exteriorFrontierArcRows`,
+  and
+  `S2_q78_q64ActualExteriorWalkPrimitiveSourceRows_family_of_faceSuccRows_exteriorFrontierArcRows`.
+  Gate passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+
+- `S2-q78-route-audit-explorer` - owner: Copernicus the 8th
+  (`019e4fd4-fb2f-72e0-858f-eb5095bee894`).  Role: read-only route audit of
+  the shortest non-circular q75/q77/q78 path and the first unsupplied theorem
+  surfaces.  Write scope: none.  Status: completed/pruned.  Result: shortest
+  current route is the q78 actual-sector producer; first visible leaves are
+  Janiszewski no-subcontinuum, finite component-topology rows, selected local
+  isolation, selected local angular/no-between, selected-head endpoints,
+  selected faceSucc rows, and selected cyclic-successor nonreachability or
+  exterior-frontier arc rows for the exact selected raw orbit.
+
+Current q79 source claims, 2026-05-22:
+
+- `S2-q79-finite-component-topology-source` - owner: Faraday the 8th
+  (`019e4fdd-e2fa-7c30-9419-da02594c0f62`).  Role: prove or strictly lower
+  `forall C inputs, UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows inputs`
+  from `FinitePlanarOuterComponentInputs C` and finite drawing/exterior
+  component rows.  Write scope: `ExteriorComponentTopology.lean`, with only
+  natural tiny helpers in `S2TopologySource.lean` or `FinitePlaneDrawing.lean`.
+  Status: claimed/running.  Gate: pinned Lean checks on touched files.
+
+- `S2-q79-selected-local-isolation-source` - owner: Heisenberg the 8th
+  (`019e4fdd-e9bc-7d22-96e9-ae4e8a009820`).  Role: prove or strictly lower
+  `SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs` below q78
+  without deriving it from q78 carrier cut rows.  Write scope:
+  `S2LocalTwoGermAssembly.lean`, with only natural tiny helpers in
+  `ExteriorComponentTopology.lean`.  Status: claimed/running.  Gate: pinned
+  Lean checks on touched files.
+
+- `S2-q79-selected-local-angular-source` - owner: Volta the 8th
+  (`019e4fdd-f005-7d23-8b11-6c182ec60e38`).  Role: prove or strictly lower
+  q18 selected exterior-sector angular/no-between rows for the heads selected
+  by local-isolation rows, using actual selected exterior-sector or faceSucc
+  rotation rows and not global all-outgoing no-between.  Write scope:
+  `S2CarrierLocalSource.lean` or `GeometricRotationSystem.lean`.  Status:
+  claimed/running.  Gate: pinned Lean checks on touched files.
+
+- `S2-q79-endpoint-selected-head-source-completion` - owner: Lovelace the 8th
+  (`019e4fdd-f63f-7de1-abe2-83ac90f76781`).  Role: prove or strictly lower
+  `IncidentGermEndpointSelectedHeadRows` for the selected rows created from
+  selected local-isolation rows.  Write scope:
+  `S2LocalTwoGermAssembly.lean`.  Status: claimed/running.  Gate: pinned Lean
+  check on `S2LocalTwoGermAssembly.lean`.
+
+- `S2-q79-selected-faceSucc-source` - owner: Newton the 8th
+  (`019e4fdd-fd46-7d73-a987-5d9621e6f840`).  Role: prove or strictly lower
+  the selected `faceSucc` rows for the q60 geometric-selection heads used by
+  q78 from genuine geometric face-successor/orientation rows.  Write scope:
+  `S2SeededRawOrbitSource.lean`, with only genuine rotation helpers in
+  `GeometricRotationSystem.lean`.  Status: claimed/running.  Gate: pinned Lean
+  checks on touched files.
+
+- `S2-q79-exterior-frontier-arc-source` - owner: Leibniz the 8th
+  (`019e4fde-0441-7fb2-aafd-0dc89ed8c508`).  Role: prove or strictly lower
+  selected exterior-frontier arc separation rows for the exact q64/q62
+  selected raw orbit, feeding the q78 cyclic nonreachability lowerer.  Write
+  scope: `S2SeededRawOrbitSource.lean`, with only natural topology helpers in
+  `S2TopologySource.lean`.  Status: claimed/running.  Gate: pinned Lean checks
+  on touched files.
+
+- `S2-q79-route-integration-audit` - owner: Carson the 8th
+  (`019e4fde-0ae1-74d3-b5c0-8b24abf85ee7`).  Role: read-only audit of q78/q79
+  source leaves, existing non-circular suppliers, and the next highest-value
+  local theorem.  Write scope: none.  Status: claimed/running.
+- `S2-q51-geometric-angular-source-explorer` - owner: subagent explorer
+  (`Euler the 5th`, `019e4ee2-b73d-7263-a9b9-84535d27f54e`).  Write scope:
+  none.  Status: completed/pruned 2026-05-22.  Result:
+  map the shortest non-circular route from the current geometric rotation
+  declarations to the q49 `geometricSelection`, `orientationRows`,
+  `localStrictOrder`, and `localAngular` source leaves for the selected raw
+  exterior orbit.  The clean checked projection route is through
+  `S2_q47_localGeometricSourceRows_family_of_localGeometricProducerRows`,
+  then the q46 projection families into the q47/q49 selected raw-orbit
+  producer.  Euler also flagged that the current endpoint-radius containment
+  lane is support-only and should not be promoted as a live source unless it
+  is replaced by a selected-germ/actual-exterior-sector proof that avoids the
+  false all-adjacent endpoint reading.
+- `S2-q51-selected-endpoint-source-worker` - owner: subagent worker
+  (`Poincare the 5th`, `019e4ee2-be7f-7783-82e4-160e773e6273`).  Write
+  scope: `S2LocalTwoGermAssembly.lean` only, plus
+  workbook if checked theorem names are added.  Status:
+  completed/checked/pruned 2026-05-22.  Result: added the selected endpoint
+  local-radius source reductions
+  `S2_q51_endpointSelectedHeadLocalRows_of_selectedLocalIsolation`,
+  `S2_q51_selectedEndpointLocalRadiusSourceRows_of_selectedLocalIsolation`,
+  `S2_q51_selected_endpoint_source_worker`,
+  and their family forms.  These are the honest selected-germ endpoint
+  reductions; they do not prove the over-strong global endpoint selected-head
+  or endpoint-radius-containment rows for arbitrary adjacent frontier chords.
+- `S2-q51-route-compression-worker` - owner: subagent worker
+  (`Helmholtz the 5th`, `019e4ee2-c1d6-7430-9808-286e6ffa779c`).  Write
+  scope: `S2CarrierLocalSource.lean` only, plus
+  workbook if checked theorem names are added.  Status: completed/checked/pruned
+  2026-05-22.  Result: added
+  `S2_q51_localGeometricProducerRows_family_of_selectedLocalIsolation_angularNoBetween_endpointSelectedHead_endpointRadiusContains_selectedActualCarrierFaceSuccAngles`,
+  feeding the q50 endpoint-radius reducer into the q49 local-geometric
+  producer route and exposing only selected local-isolation, angular/no-between,
+  endpoint selected-head, endpoint-radius containment, and selected actual
+  carrier `faceSucc` angle rows.  Gate passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- `S2-q52-route-repair-main` - owner: main Codex GPT-5 worker.  Write scope:
+  `TASK.md`, `proof_workings/s2_route_workbook.md`, and then the natural S2
+  owner files only after a checked Lean theorem.  Status: active.  Role:
+  repair the live source route so it does not rely on the over-strong global
+  endpoint selected-head or selected-endpoint radius-containment rows.  The
+  preferred target is still
+  `faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs` /
+  `actualExteriorSectorInputSourceRows_of_inputs`; accepted progress is a
+  checked theorem that either bypasses the global endpoint lane using selected
+  exterior-sector rows, or proves a genuinely source-level exterior face-orbit
+  row from `FinitePlanarOuterComponentInputs C`.
+- `S2-q52-actual-sector-field-explorer` - owner: Nietzsche, subagent
+  explorer.  Write scope: none.  Status: completed/pruned 2026-05-22.
+  Result: confirmed the minimal non-circular source is the
+  `FaceDartOrbitExteriorCarrierRows C inputs` plus same-boundary
+  `BoundaryVertexAngularNoBetweenRows` family, consumed by
+  `actualExteriorSectorInputSourceRows_of_inputs`; the local-sector rows come
+  from `FaceDartOrbitExteriorCarrierRows.toLocalSectorRows`, not from global
+  endpoint-radius rows.
+- `S2-q52-local-angular-bypass-worker` - owner: subagent worker.  Write scope:
+  `S2LocalTwoGermAssembly.lean` and `S2CarrierLocalSource.lean` only if a
+  checked theorem is found.  Status: completed/checked/pruned 2026-05-22.
+  Result: added the q52 selected carrier/incident-germ bypass in
+  `S2CarrierLocalSource.lean`, with checked theorem
+  `S2_q52_selectedRawRows_of_traceNoClosed_outsideAccumulation_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles`.
+  This removes the q46/q47 local-angular endpoint promotion from that selected
+  raw handoff, but leaves the honest incident-germ membership and selected
+  actual-carrier `faceSucc` angle rows as source leaves.
+- `S2-q52-face-orbit-source-explorer` - owner: subagent explorer.  Write
+  scope: none.  Status: completed/pruned 2026-05-22.  Result: confirmed the
+  clean face-orbit route is the selected raw orbit plus
+  `SelectedRawOrbitRepeatedTailActualExteriorArcRows`, which erases to
+  repeated-tail cut partitions and then to
+  `FaceDartOrbitExteriorCarrierRows` plus angular rows.  The endpoint-radius
+  lane remains support-only.
+- Cleared completed q52 agents: Erdos, Noether, and Laplace are
+  completed/pruned after the latest checked q50/q51/q7/q42 support refresh.
+  Nietzsche remains the only active subagent claim in this block unless a
+  later workboard refresh reclaims another handle.
+
+Current dynamic source claims, 2026-05-22:
+
+- `S2-q52-route-repair-main` - owner: main Codex GPT-5 worker.  Status:
+  active.  Role: keep the live route on actual exterior face-orbit /
+  actual-sector source production from `FinitePlanarOuterComponentInputs C`,
+  not W32 or endpoint-radius/global endpoint shortcuts.
+- `S2-q52-doc-sync` - owner: Codex GPT-5 documentation worker.  Write scope:
+  `TASK.md` and `proof_workings/s2_route_workbook.md` only.  Status: active
+  for this documentation refresh; gate:
+  `git diff --check -- TASK.md proof_workings/s2_route_workbook.md`.
+- Hooke, Arendt, and Zeno dynamic q52/q53 source workers:
+  completed/pruned 2026-05-22; their reports are support/pruning data, not
+  live claims.
+- Pasteur dynamic source worker: pending unless a later checked report closes
+  it; keep any follow-up source-level and tied to the actual exterior
+  face-orbit / actual-sector producer, not W32.
+- Reserved for new S2 source workers: claim a concrete source row, owner,
+  write scope, and gate here before editing.
+
+- `S2-q53-actual-arc-main` - owner: main Codex GPT-5 worker.  Write scope:
+  `S2SeededRawOrbitSource.lean`, `S2CarrierCutSource.lean`, `TASK.md`, and
+  `proof_workings/s2_route_workbook.md`.  Status: active.  Role: turn the q52
+  selected raw handoff into the actual face-orbit/angular source by proving or
+  reducing `SelectedRawOrbitRepeatedTailActualExteriorArcRows` for the selected
+  exterior face walk; no W32-facing facade or endpoint-radius shortcut.
+- `S2-q53-incident-germ-source-explorer` - owner: subagent explorer.  Write
+  scope: none.  Status: active.  Role: find the shortest honest proof path for
+  `SelectedNeighborIncidentGermFrontierEdgeMembershipRows` from actual
+  unbounded-frontier edge/germ data, without all-adjacent endpoint or induced
+  frontier-graph shortcuts.
+- `S2-q53-repeated-tail-arc-worker` - owner: subagent worker.  Write scope:
+  `S2CarrierCutSource.lean` and, if needed, `S2SeededRawOrbitSource.lean`.
+  Status: active.  Role: prove or sharpen the actual-exterior-arc to
+  repeated-tail separation/cut source for the selected raw face walk.
+- `S2-q53-topology-leaf-explorer` - owner: subagent explorer.  Write scope:
+  none.  Status: active.  Role: audit the current topology leaf chain from
+  trace/no-closed separation and boundary-bumping rows to the component
+  topology input rows, identifying the smallest missing theorem rather than
+  adding another route layer.
 
 ### q39 Checked Support 2026-05-22
 
@@ -504,7 +2886,8 @@ Closed/pruned q38 claims:
 
 - `S2-q35-source-composition-main` - owner: main Codex GPT-5 worker.
   Write scope: `S2SeededRawOrbitSource.lean`, `FaceBoundaryTopologySourceW32.lean`,
-  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status: active.
+  `TASK.md`, and `proof_workings/s2_route_workbook.md`.  Status:
+  completed/pruned/historical 2026-05-22.
   Role: consume the checked q32 successor-nonwrap turn reduction, continue
   toward the input-facing actual exterior-sector source, and keep the active
   route expressed only in terms of source rows built from
@@ -513,6 +2896,8 @@ Closed/pruned q38 claims:
   lowering the q32 actual-sector family from successor-nonwrap rows to
   face-successor turn rows on the exposed q32 orbit.  Gate passed:
   `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
+  Superseded by q56-q61 route work; q35 remains checked support around the
+  exposed q32 orbit, not a live claim.
 - `S2-q35-selected-carrier-source-worker` - owner: subagent worker
   (`Arendt the 4th`, `019e4e33-651e-7d60-95db-05f1d7a6f199`).
   Write scope: `S2LocalTwoGermAssembly.lean` and, if needed,
@@ -2164,9 +4549,10 @@ elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066
 ```
 
 The full Lean forbidden-token scan over `ErdosProblems1066` and
-`ErdosProblems1066.lean` is clean.  The deferred-premise phrase scan over
-`TASK.md`, `proof_workings`, and `ErdosProblems1066/Swanepoel` is also clean.
-The `proof_workings/` directory contains only markdown proof-plan files.
+`ErdosProblems1066.lean` is clean.  The deferred-premise rule is enforced only
+by direct audit of theorem shapes and route claims: no route may depend on
+ghost source rows under any phrasing.  The `proof_workings/` directory contains
+only markdown proof-plan files.
 
 Live direct route:
 
@@ -2997,17 +5383,18 @@ claim.
   `elan run leanprover/lean4:v4.28.0 lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
 
 Current claim 2026-05-22 `S2-q10-exterior-face-source-closing`:
-active.  Owner: current-thread Codex GPT-5.  Role: close the actual exterior
-face producer instead of adding another consumer layer.  Write scope: S2 owner
-files, this workboard, and `proof_workings/s2_route_workbook.md`.
+completed/pruned/historical 2026-05-22.  Owner: current-thread Codex GPT-5.
+Role: close the actual exterior face producer instead of adding another
+consumer layer.  Write scope: S2 owner files, this workboard, and
+`proof_workings/s2_route_workbook.md`.
 Decomposition: (1) topology leaf to supply finite no-closed/no-open
 separation and singleton boundary-bumping obstruction; (2) selected exterior
 seed and incident frontier-edge rows from that topology leaf; (3) selected
 raw face-successor carrier propagation, selected carrier rows, and repeated-
 tail boundary-arc rows on the r17 raw orbit; (4) erase the resulting
 face-dart carrier plus angular rows to the actual exterior-sector source and
-then to W32.  Completion gate remains the unconditional
-`UnboundedExteriorFrontierCycleRows C inputs` family and W32 S2 target.
+then to W32.  The listed q10 theorem notes remain checked support; they are
+not the current live S2 source claim after q11/q12/q60/q61.
 
 - `S2-agent-q10-topology-source`: claimed.  Owner: subagent worker pool.
   Role: prove or strictly reduce the topology source leaf that supplies
@@ -8494,8 +10881,9 @@ Live refresh 2026-05-21 k6h:
     `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource`
     passed.
   - `S2-k6h-route-sanity-audit`
-    (`019e49ec-08ee-7693-ac54-f9a1ff824d6a`, Nietzsche): read-only running.
-    Target: shortest non-circular W32 route and exact remaining source leaves
+    (`019e49ec-08ee-7693-ac54-f9a1ff824d6a`, Nietzsche):
+    historical/superseded read-only scout.  Former target: shortest
+    non-circular W32 route and exact remaining source leaves
     after k6g/k6h edits.
   - `S2-k6h-subcontinuum-forces-bounded-face-dart-w32-composer`
     (`parent-codex-current-thread`): completed.  Scope:
@@ -8579,8 +10967,9 @@ Live refresh 2026-05-21 k6i:
     non-circular, while boundary-sector-derived local adapters must only be
     used after boundary-sector rows are supplied.
   - `S2-k6i-subcontinuum-forces-bounded-W32-boundary-sector-consolidator`
-    (`codex-gpt5-current-thread`, Codex): running.  Scope:
-    `FaceBoundaryTopologySourceW32.lean`.  Target: direct W32 composer with
+    (`codex-gpt5-current-thread`, Codex): historical/superseded.  Former
+    scope: `FaceBoundaryTopologySourceW32.lean`.  Former target: direct W32
+    composer with
     subcontinuum-forces-bounded topology plus k6h non-circular local leaves.
   - `S2-k6i-selected-carrier-tail-source`
     (`019e49f6-0227-77a2-b7b8-d8bb126065a9`, McClintock;
@@ -8629,8 +11018,9 @@ Live refresh 2026-05-21 k6i:
     local-sector rows.  Gate passed:
     `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly`.
   - `S2-k6i-build-after-subagent-edits`
-    (`019e49f6-106f-7cd2-868e-03b422ca4e50`, Hubble): read-only running.
-    Target: build touched S2 modules and run forbidden-token scan after k6h/k6i
+    (`019e49f6-106f-7cd2-868e-03b422ca4e50`, Hubble):
+    historical/superseded read-only scout.  Former target: build touched S2
+    modules and run forbidden-token scan after k6h/k6i
     edits.
 
 Live refresh 2026-05-21 k6j:
@@ -8721,8 +11111,9 @@ Live refresh 2026-05-21 k6j:
     or outgoing no-between source is introduced.  Gate:
     `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
   - `S2-k6j-source-route-audit`
-    (`019e49ff-6a6e-7f43-9446-772ac779bfba`, Heisenberg): read-only running.
-    Target: current shortest non-circular W32 route and exact remaining source
+    (`019e49ff-6a6e-7f43-9446-772ac779bfba`, Heisenberg):
+    historical/superseded read-only scout.  Former target: current shortest
+    non-circular W32 route and exact remaining source
     leaves after k6i/k6j edits.
 
 Live refresh 2026-05-21 k6k:
@@ -8800,8 +11191,9 @@ Live refresh 2026-05-21 k6k:
     for the selected heads.  Gate passed:
     `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.
   - `S2-k6k-build-and-forbidden-scan`
-    (`019e4a05-4a9c-73b3-8adc-99fe0d7d8539`, Copernicus): read-only running.
-    Target: build touched S2 modules and run the forbidden-token scan.
+    (`019e4a05-4a9c-73b3-8adc-99fe0d7d8539`, Copernicus):
+    historical/superseded read-only scout.  Former target: build touched S2
+    modules and run the forbidden-token scan.
   - `S2-k6k-live-route-composer`
     (`codex-gpt5-current-thread`, Codex): completed locally.  Scope:
     `FaceBoundaryTopologySourceW32.lean`.  Added
@@ -8844,8 +11236,9 @@ Live refresh 2026-05-21 k6l:
     Gate passed:
     `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`.
   - `S2-k6l-route-map-after-k6k`
-    (`019e4a0a-6d34-7792-80ed-f9096d04b459`, Euclid): read-only running.
-    Target: shortest checked W32 route and exact residual leaves after k6k.
+    (`019e4a0a-6d34-7792-80ed-f9096d04b459`, Euclid):
+    historical/superseded read-only scout.  Former target: shortest checked
+    W32 route and exact residual leaves after k6k.
   - `S2-k6l-pair-frontier-actual-sector-W32-composer`
     (`codex-gpt5-current-thread`, Codex): completed locally.  Scope:
     `FaceBoundaryTopologySourceW32.lean`.  Added
@@ -8979,30 +11372,33 @@ their residuals are repeated in k6):
     Remaining topology source:
     `PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded`.
   - `S2-k5-selected-local-isolation`
-    (`019e49af-6e78-73a3-afd5-4352046c0864`, Noether): running.  Target:
-    prove or strictly lower
+    (`019e49af-6e78-73a3-afd5-4352046c0864`, Noether):
+    historical/superseded.  Former target: prove or strictly lower
     `S2LocalTwoGermAssembly.SelectedUnboundedFrontierEdgeLocalIsolationSourceRows`
     from `FinitePlanarOuterComponentInputs`.
   - `S2-k5-raw-tail-coverage`
-    (`019e49af-9b1c-7ca3-bfa1-dfbe8b022290`, Schrodinger): running.
-    Target: prove or strictly lower selected raw exterior `faceSucc`
+    (`019e49af-9b1c-7ca3-bfa1-dfbe8b022290`, Schrodinger):
+    historical/superseded.  Former target: prove or strictly lower selected raw
+    exterior `faceSucc`
     orbit tail coverage for every actual unbounded-frontier carrier vertex.
   - `S2-k5-local-angular-head-between`
-    (`019e49af-badb-7352-91c8-fd873bf1fa31`, Chandrasekhar): running.
-    Target: prove or strictly lower
+    (`019e49af-badb-7352-91c8-fd873bf1fa31`, Chandrasekhar):
+    historical/superseded.  Former target: prove or strictly lower
     `RawOrbitIteratedFaceSuccHeadBetweenLocalAngularNoOrbitSource` for the
     geometric selected successor tail.
   - `S2-k5-deleted-neighbor-unreachable`
-    (`019e49af-f38f-7611-a0ff-8b2cd60587e4`, Hypatia): running.
-    Target: prove or strictly lower
+    (`019e49af-f38f-7611-a0ff-8b2cd60587e4`, Hypatia):
+    historical/superseded.  Former target: prove or strictly lower
     `UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource`.
   - `S2-k5-actual-boundary-cycle-from-inputs`
-    (`019e49b0-1e89-7791-913a-f05650708c4b`, Epicurus): running.  Target:
-    prove or strictly lower the input-facing boundary-sector theorem
+    (`019e49b0-1e89-7791-913a-f05650708c4b`, Epicurus):
+    historical/superseded.  Former target: prove or strictly lower the
+    input-facing boundary-sector theorem
     producing `B` and `BoundaryVertexExteriorSectorRowsAt`.
   - `S2-k5-cycle-repetition-separation`
-    (`019e49b0-4695-7b00-b155-b88093ef8ff7`, Gauss): running.  Target:
-    prove or strictly lower minimal deleted-tail separation for repeated
+    (`019e49b0-4695-7b00-b155-b88093ef8ff7`, Gauss):
+    historical/superseded.  Former target: prove or strictly lower minimal
+    deleted-tail separation for repeated
     selected raw exterior face-walk tails.
 
 Live refresh 2026-05-21 k4:
@@ -9784,8 +12180,8 @@ final integration only after those source families are actually closed.
 ### Live Claims Refresh
 
 Only the claims in this subsection are live.  Every older S2 allocation or
-claim below the archive marker is historical, even if its local text says
-`active`, `running`, `claimed`, `current`, or `shortest`.
+claim below the archive marker is historical, even if its local text uses stale
+status words such as `active`, `claimed`, `current`, or `shortest`.
 
 - Claim: `S2-codex-main-active-source-close-20260521k5`.
   Owner: Codex current thread.  Role: source closer/integrator.  Scope:
@@ -12442,7 +14838,7 @@ Ignore old live-count and `active`/`claimed` wording inside it; use only the
   Owner: Pascal the 3rd (`019e47ba-0c88-73a3-add4-e797aed9bfb9`).  Role:
   route leaf auditor/composer.  Scope:
   read-only owner files and `proof_workings/s2_route_workbook.md`.  Status:
-  running/read-only route scout.  Handoff: after the g5 same-boundary
+  historical/superseded read-only route scout.  Handoff: after the g5 same-boundary
   geometric composer, identify the shortest remaining non-circular route to
   unconditional `UnboundedExteriorFrontierCycleRows C inputs`, with exact
   theorem names and the first proof-owned source leaf.  Gate: no Lean build
@@ -12463,7 +14859,7 @@ Ignore old live-count and `active`/`claimed` wording inside it; use only the
   read-only endpoint/local-sector scout.  Scope:
   `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean` and
   `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
-  running.  Handoff: shortest selected-edge-only route to
+  historical/superseded.  Handoff: shortest selected-edge-only route to
   `BoundaryFrontierClosedSegmentSelectedEdgeSource inputs B` and its
   no-third-germ consumer; no all-adjacent endpoint shortcut.  Gate: no edits.
 
@@ -12474,7 +14870,7 @@ Ignore old live-count and `active`/`claimed` wording inside it; use only the
   `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`,
   `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`, and
   `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
-  running.  Handoff: shortest source route to
+  historical/superseded.  Handoff: shortest source route to
   `UnboundedFrontierEdgeCarrierSegmentChainConnected inputs`.  Gate: no edits.
 
 - Claim: `S2-agent-repeated-actual-arc-source-scout-20260520j`.
@@ -12483,7 +14879,7 @@ Ignore old live-count and `active`/`claimed` wording inside it; use only the
   `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
   `ErdosProblems1066/Swanepoel/S2ExteriorBoundarySource.lean`, and
   `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`.  Status:
-  running.  Handoff: shortest route to pairwise
+  historical/superseded.  Handoff: shortest route to pairwise
   `RawFaceSuccOrbitRepeatedTailActualExteriorArcRows`, preferably via
   `RepeatedExteriorBoundaryArcSeparationRows` or no-cut cut-partition rows.
   Gate: no edits.
@@ -12495,7 +14891,7 @@ Ignore old live-count and `active`/`claimed` wording inside it; use only the
   `ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`,
   `ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`, and
   `ErdosProblems1066/Swanepoel/S2BoundaryFreeRawSource.lean`.  Status:
-  running.  Handoff: prove or strictly reduce a family producing
+  historical/superseded.  Handoff: prove or strictly reduce a family producing
   `Exists B, frontier_iff_cycle_vertex ∧ forall k,
   BoundaryVertexExteriorSectorRowsAt inputs B k`, or the equivalent actual
   boundary plus angular and incident-completeness package.  Gate: pinned
@@ -12775,7 +15171,7 @@ inside it; use only the `Live Claims Refresh` block above for current work.
 - Claim: `S2-agent-current-integration-spine-scout-20260520m3`.
   Owner: Jason the 3rd (`019e47c9-acdf-79b3-bcf9-6307008a47ea`).  Role:
   read-only integration spine scout.  Scope: S2 owner files, W32, and route
-  workbook.  Status: historical/superseded (archive text formerly running/read-only).  Handoff: exact shortest Lean
+  workbook.  Status: historical/superseded read-only scout.  Handoff: exact shortest Lean
   expression for `UnboundedExteriorFrontierCycleRows C inputs` after k/l/m
   reducers, only unreduced leaves, and whether a small owner-file composition
   theorem is needed.  Status: stale/not-found 2026-05-21; no returned route
@@ -15234,9 +17630,10 @@ finishes, blocks, or is superseded.
 - Claim: `S2-codex-current-20260520-prune-route-sync`.
   Owner: Codex-current.  Role: workboard/route coordinator.  Scope:
   `TASK.md`, `proof_workings/s2_route_workbook.md`, and verification commands.
-  Status: in progress.  Deliverable: keep claims tied to actual running
-  workers, prune completed/stale workers, and keep the live S2 route focused
-  on finite topology plus genuine selected exterior-boundary carrier data.
+  Status: historical/superseded.  Deliverable was to keep claims tied to
+  active worker handles, prune completed/stale workers, and keep the live S2
+  route focused on finite topology plus genuine selected exterior-boundary
+  carrier data.
   Current result: added checked W32 consumer
   `minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_selectedEdgePair_geometricOutgoingListNoBetween_20260520`,
   reducing the finite S2 route to `FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`,
@@ -17309,7 +19706,7 @@ the active S2 owner files returned clean.
   `ErdosProblems1066/Swanepoel/GeometricRotationSystem.lean`,
   `ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean`, this workboard,
   and `proof_workings/s2_route_workbook.md`.  Status:
-  completed/strictly reduced and pruned; stale running handle was closed.
+  completed/strictly reduced and pruned; stale worker handle was closed.
   Result: reduced the selected
   `faceSucc` strict angular-order source to successor-tail geometric row,
   triple-index, and direct angular no-between sources for the exact
@@ -20884,8 +23281,8 @@ Dynamic S2 claims, 2026-05-20:
   propagation; Hooke completed the local-sector reduction down to a pointwise
   selected-edge/local-radius source; Cicero completed the read-only route
   audit.  Socrates confirmed the fixed-side edge-chain reducer is a live
-  downstream consumer rather than a stale final-cycle shortcut.  This keeps the
-  running worker set below the requested cap of ten and removes the older
+  downstream consumer rather than a stale final-cycle shortcut.  This kept the
+  then-active worker set below the requested cap of ten and removed the older
   pool/wave entries as live work.
 
 - Claim: `S2-dyn-20260520-two-arc-separation-source`.
@@ -25144,8 +27541,8 @@ hygiene.  All ten Codex-main spawn attempts were rejected by the global
 agent-thread cap.  A concurrent worker later opened the active S2 tasks
 `S2-agent-boundary-free-local-source-20260520bk`,
 `S2-agent-carrier-connected-source-20260520bk`, and
-`S2-agent-raw-dart-frontier-source-20260520bk`; leave those running until they
-complete or become stale.
+`S2-agent-raw-dart-frontier-source-20260520bk`; those handles are historical
+and should not be treated as open work.
 
 2026-05-20 S2 certification/order refresh: after pruning the 20260520bk
 workers, repaired the declaration order for
@@ -25740,7 +28137,7 @@ four-residual composition theorem, the full Lean forbidden-token scan returned
   returned `clean`.  Fresh
   dynamic delegation for the successor interior-frontier source was attempted
   again on 2026-05-20, but the global agent-thread cap rejected the spawn, so
-  no new running subagent was recorded for this claim.
+  no new open subagent was recorded for this claim.
 
 - Claim: `S2-agent-endpoint-closure-source-20260520af`.
   Owner: subagent-worker.  Role: theorem prover/API finder.  Scope:
@@ -33480,3 +35877,159 @@ targets are unconditional and audited.
   `UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction`; and
   `S2_agent_q7_topology_boundary_bumping_sources_20260522`, the paired
   source handoff for both leaves.
+
+- Claim: `S2-q49-face-dart-topology-package`.
+  Owner: Codex (`S2-q49-face-dart-topology-package`, worker).  Role: q49
+  topology package reducer.  Scope: `Swanepoel/S2TopologySource.lean` only.
+  Task: add the direct q48/q49 topology package consumed by the current q46
+  face-dart producer, without carrier, actual-sector, boundary-cycle, W32,
+  induced graph, or endpoint-shortcut premises.  Status: completed
+  2026-05-22.  Result: added `S2_q49FaceDartTopologyPremises` and
+  `S2_q49_faceDartTopologyPremises_of_nontrivialRelativeClopen_boundaryBumpingObstruction_20260522q49`,
+  projecting exactly finite no-open separation and frontier-vertex incidence
+  from the existing q48 trace/outside-accumulation package sourced by
+  nontrivial relative-clopen plus singleton boundary-bumping obstruction.
+  Gate:
+  `elan run leanprover/lean4:v4.28.0 lake env lean ErdosProblems1066/Swanepoel/S2TopologySource.lean`.
+
+- Claim: `S2-q49-topology-boundary-source-worker`.
+  Owner: Codex (`S2-q49-topology-boundary-source-worker`, worker).  Role:
+  q48 singleton boundary-source reducer.  Scope:
+  `Swanepoel/S2TopologySource.lean` only.  Task: strictly reduce q48's
+  `UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction` family to
+  lower finite drawing component-topology sources, without carrier,
+  actual-sector, boundary-cycle, W32, synthetic enclosure, induced frontier
+  graph, or all-adjacent endpoint premises.  Status: completed 2026-05-22.
+  Result: added
+  `S2_q49_boundaryBumpingObstruction_of_incidentOpenSegmentFrontierPoint_20260522q49`,
+  `S2_q49_boundaryBumpingObstruction_of_puncturedAccumulation_localIsolation_20260522q49`,
+  `S2_q49_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_incidentOpenSegmentFrontierPoint_20260522q49`,
+  and
+  `S2_q49_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_puncturedAccumulation_20260522q49`.
+  The q48 package now has a checked variant whose singleton obstruction input
+  is sourced from the one-incident-open-segment frontier point family, with a
+  punctured-accumulation local-isolation variant.  Gates passed:
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean`
+  and
+  `lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean`.
+
+### S2 Dynamic Claims 2026-05-22 q61
+
+- Claim: `S2-main-q61-workboard-and-source-spine`.
+  Owner: Codex-main.  Role: route steward and integration prover.  Scope:
+  `TASK.md`, `proof_workings/s2_route_workbook.md`,
+  `proof_workings/theorem_dependency_map.md`, and non-overlapping Lean
+  source-spine adapters only.  Status: active/checked support updated
+  2026-05-22.  Current decision: do not use
+  the attempted q60/q32 start-edge projection as a live route.  The q32 raw
+  package hides the chosen start dart behind `Classical.choice`; rebuilding a
+  visually identical start dart gives a different definitional object, so the
+  local-row projection is not a clean source theorem from the current package.
+  The direct attempt was removed instead of leaving a fake or brittle theorem.
+  Result so far: repaired and checked the q61 seed-visible support surface in
+  `S2SeededRawOrbitSource.lean`; checked the q23 exact-field adapter in
+  `S2CarrierLocalSource.lean`; synchronized this workboard and the route map.
+  Gates passed:
+  `elan run leanprover/lean4:v4.28.0 lake env lean -DmaxErrors=20 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean`,
+  `... S2CarrierLocalSource.lean`,
+  `... S2LocalTwoGermAssembly.lean`, and
+  `... S2TopologySource.lean`.
+
+- Claim: `S2-agent-q61-q31-source-spine-audit`.
+  Owner: Ptolemy the 7th (`019e4f40-8574-7590-92fb-e8f1ffb360a8`,
+  explorer).  Role: read-only source-spine auditor.  Scope:
+  `Swanepoel/S2SeededRawOrbitSource.lean` and
+  `Swanepoel/S2CarrierLocalSource.lean`.  Task: identify the cleanest q31/q52
+  route that avoids the q32 start-edge projection and reports only genuine
+  source leaves.  Status: completed/pruned 2026-05-22.  Result: the clean
+  non-q32 route is q52 into q31, with remaining leaves
+  finite no-open topology, frontier-vertex incidence, geometric selection,
+  incident-germ frontier membership, selected actual-carrier `faceSucc` angles,
+  and minimal deleted-tail separation on the same seed-visible q31 raw orbit.
+
+- Claim: `S2-agent-q61-actual-sector-erasure-audit`.
+  Owner: Hypatia the 7th (`019e4f40-8b6d-7ab3-903d-ee099abb3ec0`,
+  explorer).  Role: read-only erasure auditor.  Scope:
+  `Swanepoel/ExteriorComponentTopology.lean` and
+  `Swanepoel/S2ExteriorBoundarySource.lean`.  Task: map the current eraser from
+  `FaceDartOrbitExteriorCarrierRows` plus same-boundary angular rows to
+  `actualExteriorSectorInputSourceRows_of_inputs`, without proposing another
+  W-facing facade.  Status: completed/pruned 2026-05-22.  Result: the direct
+  eraser is
+  `boundaryVertexExteriorSectorRows_of_faceDartOrbitExteriorCarrierRows_angularRows`,
+  then
+  `actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_angularRows`,
+  then the family/input-shaped wrappers in `S2ExteriorBoundarySource.lean`.
+  The real producer remains `forall C inputs, PSigma fun rows :
+  FaceDartOrbitExteriorCarrierRows C inputs => forall k, BoundaryVertexAngularNoBetweenRows ...`.
+
+- Claim: `S2-agent-q61-topology-leaf-audit`.
+  Owner: Poincare the 7th (`019e4f40-92df-7691-afbf-6b70c305310e`,
+  explorer).  Role: read-only topology leaf auditor.  Scope:
+  `Swanepoel/S2TopologySource.lean`.  Task: map the checked q10/q60 topology
+  lowerings and the remaining real Janiszewski/frontier leaves.  Status:
+  completed/pruned 2026-05-22.  Result: finite no-closed/no-open and component
+  topology rows are checked consequences of
+  `PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTracePreconnected`
+  or `ClosedSeparationRelativeClopenKSide`, plus the pointwise singleton
+  outside-accumulation row; those consequences are not the honest topology
+  leaves.
+
+- Claim: `S2-agent-q61-q23-exact-field-adapter`.
+  Owner: Carver the 7th (`019e4f40-9959-7973-9198-870e1eafbd79`,
+  worker).  Role: bounded theorem prover.  Scope:
+  `Swanepoel/S2CarrierLocalSource.lean` only.  Task: add, if it compiles
+  cleanly, the q23 adapter from
+  `UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource`
+  and matching r36 selected angular rows to
+  `UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource`.
+  Status: completed/checked/pruned 2026-05-22.  Result: added
+  `S2_q23_finitePlaneLocalSeparationPrimitive_of_deletedNeighborExactField`,
+  `S2_q23_geometricSelectionInputSource_of_deletedNeighborExactField_selectedAngularNoBetweenRows`,
+  and
+  `S2_q23_geometricSelectionInputSource_family_of_deletedNeighborExactField_selectedAngularNoBetweenRows`.
+  Gate passed:
+  `lake env lean ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean`.
+
+- Claim: `S2-agent-q61-workboard-stale-route-audit`.
+  Owner: Cicero the 7th (`019e4f40-9f67-72f2-8c3e-069d44ba8ba4`,
+  explorer).  Role: read-only workboard auditor.  Scope: this file,
+  `proof_workings/s2_route_workbook.md`, and
+  `proof_workings/theorem_dependency_map.md`.  Task: find stale live references
+  to the failed q32 start-edge projection and recommend precise cleanup.
+  Status: completed/pruned 2026-05-22.  Result: q60 start-edge projection was
+  relabelled as superseded/failed, q35 and q10 old active claims were demoted
+  to historical checked support, and the workbook/dependency map now identify
+  q61 seed-visible as the live continuation.
+
+Live q61 source spine:
+
+```text
+FinitePlanarOuterComponentInputs C
+  -> topology no-open/no-closed and frontier incidence support
+  -> selected actual unbounded-frontier carrier neighbours
+  -> q31 exterior face-orbit seed source
+  -> same-boundary selected carrier/faceSucc angular rows
+  -> repeated-tail minimal deleted-tail separation on the same raw orbit
+  -> faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs
+  -> actualExteriorSectorInputSourceRows_of_inputs
+```
+
+The preferred concrete checked route is q31/q52-based, not the q32
+start-edge projection:
+
+```text
+FiniteDrawingUnboundedComplementFrontierNoOpenSeparation
++ FrontierVertexIncidentUnboundedFrontierEdgeSource
++ UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
++ SelectedNeighborIncidentGermFrontierEdgeMembershipRows
++ RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
++ SelectedSeededRawOrbitMinimalDeletedTailSeparation
+-> actualExteriorSectorInputSourceRows
+```
+
+The q60 package remains useful as a conditional support route, but its
+`startEdgeRows` binder is not currently discharged by the q32 package.  Do not
+revive all-adjacent endpoint closure, induced frontier graphs, arbitrary
+cycles, convex-hull boundaries, synthetic enclosure rows, identity angular
+order, or a new W-facing facade.

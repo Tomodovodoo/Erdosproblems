@@ -20,6 +20,10 @@ and should not be imported into the Swanepoel route.
 - Record tried routes by theorem shape and reason, not by worker narrative.
 - Keep immediate tasks source-level.  A task that needs a missing row must prove
   that row first or become that missing-row task.
+- Audit deferred-premise work by theorem shape, not phrasing.  A
+  consumer-only adapter that assumes the real source rows under a different
+  name is still a ghost-result route; split out the missing producer and prove
+  it from `FinitePlanarOuterComponentInputs C`.
 - Do not write disposable command output here.  Disposable logs belong in
   `../proof_logs/`.
 
@@ -31,6 +35,984 @@ rather than live work claims.  q40 endpoint closed-side support remains
 audit-sensitive: it is useful only when it feeds the selected raw-orbit source
 without using actual-sector rows, finished boundary-cycle rows, or W32 rows as
 premises.
+
+Hygiene refresh, 2026-05-22: q44/q45/q46 support is checked and root-built,
+but it is not a replacement for the producer.  The only live S2 proof target is
+still the input-facing exterior face-orbit producer:
+`faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs`, followed by the
+actual exterior-sector eraser.  Accepted source-level progress must prove or
+strictly reduce that producer, the actual carrier degree-two/deleted-neighbour
+source, the frontier-vertex incident exterior-edge source, or the
+Janiszewski/K-component points-between topology source.  New consumer-only
+transport claims should be rewritten as one of those source subtasks.
+
+q57 direct source-facing composer checked, 2026-05-22:
+
+```lean
+S2_q57_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_repeatedTailActualExteriorArcRows_faceSuccTurn
+S2_q57_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_repeatedTailActualExteriorArcRows
+S2_q57_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q57
+```
+
+Historical q57/q32 conditional support route:
+
+```text
+component topology input rows
++ selected carrier geometric-neighbour source rows
++ selected actual-carrier faceSucc angle rows
++ packaged start-edge local row
++ repeated-tail actual exterior-arc rows on the exact q32 raw orbit
+-> q32 raw orbit + q32 faceSucc turn + q32 minimal deleted-tail separation
+-> actualExteriorSectorInputSourceRows
+```
+
+This q57 route remains checked support, but its packaged start-edge local row is
+not a live source obligation after q61.  Live work uses the seed-visible route
+below.  Do not replace any source leaf with a W32 composer, induced frontier
+graph, arbitrary cycle, convex hull, identity angular order,
+all-adjacent endpoint row, or completed actual-sector premise.
+
+q58 primitive source handoff checked, 2026-05-22:
+
+```lean
+S2_q58_q57RepeatedTailActualExteriorArcRows_family_of_componentTopology_geometricSelection_strictSuccessor_primitiveSourceRows
+S2_q58_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_primitiveSourceRows
+```
+
+This replaces the q57 repeated-tail actual exterior-arc leaf by the smaller
+exact q32 raw-index primitive leaf:
+
+```text
+forall i j on the q32 raw orbit,
+  i != j
+  -> same raw tail
+  -> S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+```
+
+The eraser is only:
+
+```text
+S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+-> S2RepeatedBoundaryArcRealWitnessPrimitiveRows
+-> RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+```
+
+q60 source-leaf reductions checked, 2026-05-22:
+
+```lean
+S2_q60_q32PrimitiveRepeatedTailSourceRows_family_of_componentTopology_geometricSelection_strictSuccessor_minimalDeletedTailSeparation
+S2_q60_actualExteriorSectorInputSourceRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows_minimalDeletedTailSeparation
+S2_q60_traceNoClosed_componentTopologyInputSourceRows_family_of_kComponentTracePreconnected_outsideAccumulation_20260522q60
+S2_q60_traceNoClosed_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_outsideAccumulation_20260522q60
+S2_q60_geometricSelectionInputSource_family_of_cutPartitionInputSource_geometricRows
+```
+
+The q60 conditional/support actual-sector route is:
+
+```text
+component topology input rows
++ selected carrier geometric-neighbour source rows
++ selected actual-carrier faceSucc angle rows
++ packaged start-edge local row
++ minimal deleted-tail separation on the exact q32 raw orbit
+-> q32 primitive repeated-tail source rows
+-> q57/q58 actualExteriorSectorInputSourceRows
+```
+
+For this q60 composer, the visible premises include the packaged start-edge
+local row, but that row is not a live source obligation.  The attempted q32
+projection is superseded by the q61 seed-visible route below; live work keeps
+the selected seeded raw orbit visible instead of extracting data from the lossy
+q32 package.
+
+q61 seed-visible route checked, 2026-05-22:
+
+```lean
+selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_minimalDeletedTailSeparation_noCut_20260522q61
+S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_cyclicSuccCutPartitions
+S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation
+```
+
+This supersedes the q60 q32 start-edge local-row projection.  The q32 package
+keeps the seed hidden behind the q31/q32 chosen package, so the route now keeps
+the selected seeded raw orbit visible through the r14/r12 face-dart/angular
+producer and erases that producer directly to actual exterior-sector rows.
+
+The current shortest source-facing actual-sector route is:
+
+```text
+component topology input rows
++ selected carrier geometric-neighbour source rows
++ selected neighbour incident-germ frontier-edge rows
++ selected actual-carrier faceSucc angle rows
++ minimal deleted-tail separation on the same r13/r14 selected raw orbit
+-> cyclic-successor deleted-tail cut partitions on that selected raw orbit
+-> r14/r12 face-dart exterior carrier + angular rows
+-> actualExteriorSectorInputSourceRows
+```
+
+The remaining non-circular leaves are component-topology/topology primitives,
+selected carrier geometric-neighbour rows, selected incident-germ frontier-edge
+rows, selected actual-carrier faceSucc angle rows, and minimal deleted-tail
+separation for the same selected raw orbit.  No q32 start-edge projection is
+on the live route.
+
+q62 source-facing compression checked, 2026-05-22:
+
+```lean
+S2_q62_r14_selectedActualCarrierFaceSuccAngleRows_family_of_cutPartitionInputSource_geometricRows_selectedCarrierRows
+S2_q62_selectedRawTailCoverageSourceRows_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows
+S2_q62_actualExteriorSectorInputSourceRows_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_minimalDeletedTailSeparation
+S2_q62_actualExteriorSectorInputSourceRows_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_cyclicSuccDeletedTailNonreachability
+S2_q62_cyclicSuccDeletedTailNonreachability_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_finiteNoClosed_endpointClosedSeparation
+S2_q61_selectedRawTailCoverageRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+S2_q62_actualExteriorSectorInputSourceRows_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability
+S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability
+S2_q62_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q61SelectedRawOrbit_finiteNoClosed_endpointClosedSeparation
+S2_q62_traceNoClosed_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q62
+```
+
+The current q62 source-facing route is:
+
+```text
+component topology input rows
++ actual carrier neighbour cut rows
++ selected-head geometric neighbour rows
++ selected-head incident-germ endpoint rows
++ selected-carrier successor rows
++ minimal deleted-tail separation for the q62 selected raw orbit
+-> selected raw-tail coverage rows
+-> actualExteriorSectorInputSourceRows
+```
+
+The component-topology row is lowered one step by q62 topology wrappers to
+nontrivial relative-clopen `K`-side plus a singleton frontier local source
+(boundary-bumping obstruction / incident open-segment frontier point /
+punctured accumulation).  The minimal-deleted-tail row for the concrete
+q62/q61 selected raw orbit is lowered directly from cyclic-successor
+nonreachability, from repeated-tail separation rows, or from finite no-closed
+plus reachable frontier/endpoint closed separation.  The endpoint-closed
+source itself remains a live support leaf and must stay tied to the selected
+raw orbit, not to all adjacent frontier endpoints.
+
+q63 source-leaf audit, 2026-05-22:
+
+No q62 residual is currently produced from bare
+`FinitePlanarOuterComponentInputs C`.  Lowest checked producers:
+
+```text
+UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+  <- local-sector / local-two-germ / deleted-neighbor local-separation rows
+
+selected-head GraphVertexGeometricAngularNeighborSelectionRow
+  <- angular no-between or geometric outgoing-list no-between rows
+
+IncidentGermEndpointSelectedHeadAt
+  <- endpoint frontier-edge membership / selected-head rows / cut-input support
+
+selected-carrier successor rows
+  <- selected actual-carrier orientation rows + local strict order
+
+q61 minimal deleted-tail separation
+  <- cyclic successor nonreachability, repeated-tail separation, or finite
+     no-closed + selected endpoint/frontier closed separation
+```
+
+Do not use the q40 adapter from nonreachability to endpoint-closed as a source
+and then use endpoint-closed to prove nonreachability; that loop is circular.
+The next proof work should construct an actual exterior face-walk local source
+that supplies these leaves together, rather than adding another consumer.
+
+q63 endpoint-closed selected-raw-orbit lowering checked, 2026-05-22:
+
+```lean
+S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_cyclicSuccDeletedTailNonreachability
+S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_cyclicSuccCutPartitionSource
+S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_boundaryArcRows
+S2_q63_endpointClosedSeparationSource_family_of_q61SelectedRawOrbit_primitiveSourceRows
+```
+
+These are same-selected-raw-orbit support erasers only.  They are valid when
+the cyclic/nonreachability/cut/boundary-arc/primitive premise is produced
+below the q61 selected raw orbit.  They do not license the circular route
+nonreachability -> endpoint closed -> nonreachability, and they do not replace
+the actual exterior face-walk source.
+
+q64 actual exterior walk primitive checked, 2026-05-22:
+
+```lean
+S2_q64_actualExteriorWalkSelectedRawTailCoverageSourceRows
+S2_q64ActualExteriorWalkPrimitiveSourceRows
+S2_q64ActualExteriorWalkPrimitiveSourceRows.toSelectedRawTailCoverageSourceRows
+S2_q64ActualExteriorWalkPrimitiveSourceRows.toSelectedRawOrbitMinimalDeletedTailSeparation
+S2_q64_actualExteriorSectorInputSourceRows_family_of_actualExteriorWalkPrimitiveSourceRows
+```
+
+The q64 bundle is the same-orbit primitive surface for component topology,
+actual carrier cut rows, selected-head geometric rows, selected-head endpoint
+rows, selected-carrier successor rows, and matching minimal deleted-tail
+separation.  The final q64 actual-sector declaration is an eraser/composer from
+that bundle into the checked q62 route, not a new W-facing source theorem.
+
+q65 source-facing compression checked, 2026-05-22:
+
+```lean
+S2_q65_finiteDrawing_topology_accumulation_sources_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q65
+S2_q65_finiteDrawing_noClosedSeparation_source_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q65
+S2_q65_reachableClosedSeparationTopologyPremises_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q65
+S2_q63_selectedRawTailCoverageSourceRows_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedActualCarrierFaceSuccAngles
+S2_q63_actualExteriorSectorInputSourceRows_family_of_componentTopology_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation
+S2_q65_actualExteriorSectorInputSourceRows_family_of_nontrivialRelativeClopen_puncturedAccumulation_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedActualCarrierFaceSuccAngles_primitiveSourceRows
+```
+
+The current compressed source-facing actual-sector route is:
+
+```text
+nontrivial relative-clopen K-side
++ pointwise punctured frontier accumulation
++ actual carrier neighbour cut rows
++ selected-head angular/geometric rows
++ selected-head incident-germ endpoint rows
++ selected actual-carrier faceSucc angle rows
++ primitive repeated-tail rows on the exact selected raw orbit
+-> actualExteriorSectorInputSourceRows
+```
+
+This lowers both the topology row and the deleted-tail row one step while
+keeping the selected raw orbit visible.  The remaining live source work is to
+construct those listed rows from `FinitePlanarOuterComponentInputs C`, or to
+replace them by an equivalent exterior face-walk primitive that supplies them
+together.
+
+q66 selected-head geometric lowering checked, 2026-05-22:
+
+```lean
+S2_q60_geometricRows_of_cutPartitionInputSource_angularNoBetweenRows
+```
+
+This pointwise bridge lowers the q60/q62 selected-head geometric row to honest
+`GraphVertexAngularNoBetweenRows` for the exact heads selected by the actual
+carrier cut source.  It is smaller than a route-level q62 wrapper and does not
+revive the global all-outgoing no-between branch.
+
+q68 selected exterior-sector angular source checked, 2026-05-22:
+
+```lean
+S2_q68_selectedAngularNoBetweenRows_of_cutPartitionInputSource
+S2_q68_selectedCutPartitionHeadsMatchBoundaryExteriorSector
+S2_q68_selectedAngularNoBetweenRows_of_cutPartitionInputSource_boundaryVertexExteriorSectorRows_selectedHeads
+S2_q68_selectedAngularNoBetweenRows_family_of_cutPartitionInputSource_boundaryVertexExteriorSectorRows_selectedHeads
+```
+
+Route impact:
+
+```text
+q60 actual carrier cut rows
++ same-boundary BoundaryVertexExteriorSectorRowsAt rows
++ exact match between the q60 selected heads and that boundary predecessor/successor sector
+-> q66 selected-head GraphVertexAngularNoBetweenRows
+```
+
+This strictly lowers the q66 angular leaf to the real selected exterior sector.
+The residual head-match row is intentional: it prevents using a global
+outgoing-list no-between interval and keeps legal interior chords outside the
+selected exterior sector available.  The bridge does not use actual-sector
+source rows, W32, completed boundary cycles, induced-frontier graphs,
+arbitrary cycles, all-adjacent endpoint shortcuts, or identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean
+```
+
+q68 finite same-`K` point-between lowering checked, 2026-05-22:
+
+```lean
+S2_q68_finiteDrawing_kComponentPointsBetween_of_noCompactConnectedKCrossing_20260522q68
+```
+
+Route impact:
+
+```text
+PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing
+-> PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide
+-> PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween
+-> FiniteDrawingUnboundedComplementFrontierKComponentPointsBetween
+```
+
+This strictly lowers the q67 finite frontier-preconnectedness leaf without
+actual-sector rows, completed boundary cycles, W32, induced-frontier graphs,
+arbitrary cycles, convex-hull data, endpoint shortcuts, or identity angular
+order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+```
+
+q68 local finite-plane separation primitive checked, 2026-05-22:
+
+```lean
+S2_q68_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+```
+
+Route impact:
+
+```text
+SelectedUnboundedFrontierEdgeLocalIsolationSourceRows
+-> actual unboundedFrontierCarrierGraph local-sector rows
+-> UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+-> S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+```
+
+The q68 source direction is now the selected local finite-plane isolation row:
+two genuine `unboundedFrontierEdgeSet` heads at each actual frontier carrier
+vertex plus the local radius/no-third-germ data.  The exact residual theorem
+records that this is the smallest checked local surface currently exposed in
+`S2CarrierCutSource.lean`.  The proof does not use actual-sector rows,
+completed boundary cycles, W32, induced-frontier graphs, arbitrary cycles, or
+all-adjacent endpoint premises.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean
+```
+
+q69 selected local-isolation leaf trimming checked, 2026-05-22:
+
+```lean
+S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_selectedIncidentEdgePairRows
+S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_localSelectedNoThirdGermSource
+S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_family_of_selectedIncidentEdgePairRows
+S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_family_of_localSelectedNoThirdGermSource
+S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedIncidentEdgePairRows
+S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_localSelectedNoThirdGermSource
+S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_selectedIncidentEdgePairRows
+S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_localSelectedNoThirdGermSource
+S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedIncidentEdgePairRows
+S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_localSelectedNoThirdGermSource
+```
+
+Route impact:
+
+```text
+LocalSelectedIncidentEdgePairSourceRows
+-> finite drawing vertex-isolation eraser
+-> SelectedUnboundedFrontierEdgeLocalIsolationSourceRows
+-> S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+
+UnboundedFrontierCarrierLocalSelectedNoThirdGermSource
+-> selected incident rows
+-> finite drawing vertex-isolation eraser
+-> SelectedUnboundedFrontierEdgeLocalIsolationSourceRows
+-> S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+```
+
+The exact residuals now expose both local selected no-third rows and selected
+incident finite-drawing isolation rows below the q68 local-isolation surface.
+No actual-sector rows, completed boundary cycles, W32, induced graph, arbitrary
+cycle, or all-adjacent endpoint premise is used.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean
+```
+
+q70 live source decomposition, 2026-05-22:
+
+The checked eraser spine now has two equivalent source-facing presentations:
+
+```text
+S2_q64ActualExteriorWalkPrimitiveSourceRows inputs
+-> face-dart exterior carrier + same-boundary angular rows
+-> actualExteriorSectorInputSourceRows
+```
+
+and
+
+```text
+S2_q67ActualFaceWalkSourceBundleRows inputs
+-> face-dart exterior carrier + same-boundary angular rows
+-> actualExteriorSectorInputSourceRows
+```
+
+The q64 bundle is the current active integration surface because it keeps the
+same selected raw orbit visible through the component-topology rows, actual
+carrier cut rows, selected-head geometric rows, selected-head endpoint rows,
+selected-carrier successor rows, and minimal deleted-tail separation.  The
+q67 eraser is checked for an already bundled q67 source, but q67 source
+compression is not the live leaf unless it avoids changing the selected raw
+orbit.
+
+The q70 source work is split into four producer leaves on the same actual
+unbounded exterior carrier:
+
+```text
+1. Component topology:
+   UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs
+   from finite no-closed/Janiszewski point-between topology plus selected
+   frontier-vertex incident exterior edges.
+
+2. Local selected pair/no-third:
+   LocalSelectedIncidentEdgePairSourceRows inputs
+   or UnboundedFrontierCarrierLocalSelectedNoThirdGermSource inputs
+   from the actual unboundedFrontierCarrierGraph, not the induced frontier
+   graph.
+
+3. Selected carrier successor:
+   RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+   for the q64/q67 selected raw orbit from the genuine exterior face turn.
+
+4. Repeated tail separation:
+   SelectedRawOrbitMinimalDeletedTailSeparation or pairwise minimal deleted-tail
+   separation for the same selected raw orbit from no-cut plus finite-plane
+   exterior-arc separation.
+```
+
+The q70 integrator should compose completed leaves only when they lower one of
+these producers.  Consumer-only W32 wrappers, induced frontier graphs,
+arbitrary cycles, convex hulls, all-adjacent endpoint rows, and identity
+angular-order shortcuts remain demoted.
+
+q70 component-topology source reduction checked, 2026-05-22:
+
+```lean
+S2_q70_componentTopologyInputSourceRows_of_finiteDrawingKComponentPointsBetween_boundaryBumping_20260522q70
+S2_q70_componentTopologyInputSourceRows_of_janiszewskiKComponentPointsBetween_boundaryBumping_20260522q70
+S2_q70_componentTopologyInputSourceRows_of_noCompactConnectedKCrossing_boundaryBumping_20260522q70
+S2_q70_componentTopologyInputSourceRows_of_janiszewskiNoSubcontinuum_boundaryBumping_20260522q70
+S2_q70_componentTopologyInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_20260522q70
+S2_q70_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_boundaryBumping_20260522q70
+```
+
+Route impact:
+
+```text
+finite same-K points-between
++ singleton boundary-bumping obstruction
+-> UnboundedExteriorFrontierComponentTopologyInputSourceRows
+
+no-compact-connected K crossing
+or Janiszewski no-subcontinuum obstruction
+-> finite same-K points-between
+-> component topology source rows
+```
+
+The component-topology leaf is now strictly reduced to the topology
+no-compact/no-subcontinuum branch plus the singleton boundary-bumping
+obstruction.  It still does not construct the exterior face walk by itself.
+
+q70 selected-carrier successor source reduction checked, 2026-05-22:
+
+```lean
+S2_q70_selectedCarrierRows_of_cutPartitionInputSource_geometricRows_selectedActualCarrierFaceSuccAngles
+S2_q70_selectedCarrierRows_of_q67ActualFaceWalkSourceBundleRows
+```
+
+Route impact:
+
+```text
+actual carrier cut rows
++ selected-head geometric rows
++ selected actual-carrier faceSucc angle rows
+-> selected-carrier successor rows on the q64/q67 selected raw orbit
+```
+
+This demotes the selected-carrier successor row as an independent source leaf:
+it is now a projection of the genuine selected actual-carrier face-turn angle
+row.  The live local/geometric source still has to produce that selected
+face-turn row, selected-head rows, and repeated-tail separation below the
+actual exterior face walk.
+
+q70 local selected-pair source reductions checked, 2026-05-22:
+
+```lean
+S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborPairRows
+S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+S2_q70_local_selected_pair_source_worker_family_of_frontierCarrierGraph_neighborFinset_card_two
+S2_q70_localSelectedNoThirdGermSource_of_frontierCarrierGraph_neighborFinset_card_two
+S2_q70_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_frontierCarrierGraph_neighborFinset_card_two
+S2_q70_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_frontierCarrierGraph_neighborFinset_card_two
+S2_q70_local_selected_pair_source_worker_nonempty_iff_frontierCarrierGraph_neighborFinset_card_two
+```
+
+Route impact:
+
+```text
+forall actual exterior-frontier carrier vertex a,
+  (unboundedFrontierCarrierGraph C inputs).neighborFinset a has card 2
+-> LocalSelectedIncidentEdgePairSourceRows
+-> local selected no-third rows
+-> selected-edge local isolation rows
+-> deleted-neighbour finite-plane local-separation primitive
+```
+
+The local selected-pair/no-third branch is now reduced to the exact
+two-neighbour theorem for the actual `unboundedFrontierCarrierGraph`; it does
+not use the induced frontier graph, arbitrary adjacent frontier endpoints,
+actual-sector rows, a completed boundary cycle, W32, or identity angular order.
+
+q70 repeated-tail/no-cut reductions checked, 2026-05-22:
+
+```lean
+selectedRawOrbitRepeatedTailSeparationRows_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+selectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcSeparationRows_noCut_20260522q70
+S2_q70_pairwiseMinimalDeletedTailSeparationSource_of_exteriorFrontierArcSeparationRows_noCut
+S2_q70_q67SelectedRawOrbitMinimalDeletedTailSeparation_of_exteriorFrontierArcRows
+S2_q70_q67PairwiseMinimalDeletedTailSeparationSource_of_exteriorFrontierArcRows
+S2_q70_selectedRawOrbitMinimalDeletedTailSeparation_family_of_q67SelectedRawOrbit_exteriorFrontierArcRows
+S2_q70_pairwiseMinimalDeletedTailSeparationSource_family_of_q67SelectedRawOrbit_exteriorFrontierArcRows
+S2_q70_q64ActualExteriorWalkPrimitiveSourceRows_of_exteriorFrontierArcRows
+S2_q70_q64ActualExteriorWalkPrimitiveSourceRows_family_of_exteriorFrontierArcRows
+```
+
+Route impact:
+
+```text
+ExteriorFrontierArcSeparationRows on the same selected raw orbit
++ inputs.noCutVertex
+-> repeated-tail cut rows
+-> minimal / pairwise deleted-tail separation
+-> q64 actual exterior-walk primitive rows
+```
+
+The repeated-tail leaf is now expressed as the geometric/topological arc
+separation theorem for the same actual exterior raw face walk.  This is the
+finite-plane part of the standard "repeated exterior face vertex gives a cut
+vertex" argument.
+
+q71 component-topology integration checked, 2026-05-22:
+
+```lean
+S2_q71_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation
+```
+
+Route impact:
+
+```text
+no-compact-connected K crossing
++ singleton boundary-bumping obstruction
++ actual carrier cut rows
++ selected-head geometric rows
++ selected-head endpoint rows
++ selected actual-carrier faceSucc angle rows
++ minimal deleted-tail separation for the q63 selected raw orbit
+-> actualExteriorSectorInputSourceRows
+```
+
+The q71 theorem is still a source-facing composer, not a completed S2 proof.
+It records the shortest checked path after q70: the remaining real producer
+must construct the actual exterior raw face walk/carrier, including exact
+two-neighbour carrier rows, selected face-turn angle rows, and repeated-tail
+arc separation from `FinitePlanarOuterComponentInputs C`.
+
+q72 arc-source composer checked, 2026-05-22:
+
+```lean
+S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_exteriorFrontierArcRows
+S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_selectedAngularNoBetween_endpointSelectedHeadRows_selectedActualCarrierFaceSuccAngles_exteriorFrontierArcRows
+```
+
+Route impact:
+
+```text
+no-compact-connected K crossing
++ singleton boundary-bumping obstruction
++ actual carrier cut rows
++ selected-head geometric rows
++ selected-head endpoint rows
++ selected-carrier successor rows
++ exterior-frontier arc separation rows on the same q64 selected raw orbit
+-> q64 primitive actual exterior-walk source rows
+-> actualExteriorSectorInputSourceRows
+```
+
+The composer replaces the q71 minimal-deleted-tail leaf by
+`RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows` for the same q64
+selected raw orbit.  It uses the q70 selected-carrier projection route and the
+q70 no-cut exterior-arc-to-repeated-tail handoff before erasing through the
+checked q64 actual-sector eraser.  It does not add W32 facades, completed
+boundary-cycle premises, induced frontier graphs, arbitrary cycles,
+convex-hull shortcuts, all-adjacent endpoint claims, or identity angular
+order.
+
+q72 selected-head geometric lowering checked, 2026-05-22:
+
+```lean
+S2_q72_q71_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_selectedAngularNoBetween_endpointSelectedHeadRows_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation
+S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_selectedAngularNoBetween_endpointSelectedHeadRows_selectedActualCarrierFaceSuccAngles_exteriorFrontierArcRows
+```
+
+Route impact:
+
+```text
+selected angular no-between rows for the exact cut-selected heads
++ endpoint-selected-head rows for the resulting selected local edge pair
+-> q66 selected-head geometric rows
+-> q66 selectedHeadAt rows
+-> q71/q72 actualExteriorSectorInputSourceRows composers
+```
+
+This strictly lowers the q71/q72 selected-head geometric and endpoint leaves
+without using a global all-outgoing no-between row, W32, actual-sector rows,
+completed boundary cycles, induced frontier graphs, arbitrary cycles, or
+identity angular order.  The q72 form also composes the existing q70
+selected-actual-carrier faceSucc angle to selected-carrier row projection so
+the exterior-frontier arc source remains on the same q64 selected raw orbit.
+
+q72 live decomposition, 2026-05-22:
+
+The route is now deliberately split along the four source facts that together
+constitute the exterior face-orbit theorem, rather than another W32 or
+actual-sector composer:
+
+```text
+1. actual carrier two-neighbour rows:
+   forall a in unboundedFrontierVertexSet,
+     (unboundedFrontierCarrierGraph C inputs).neighborFinset a has card 2
+
+2. selected exterior face-turn rows:
+   selected actual-carrier faceSucc angle rows for the selected raw orbit
+
+3. repeated-tail exterior arc separation:
+   exterior-frontier arc rows on the same selected raw orbit, then no-cut
+   gives minimal/pairwise deleted-tail separation
+
+4. component topology residual:
+   no-compact/no-subcontinuum topology plus singleton boundary-bumping
+   obstruction for the unbounded exterior component
+```
+
+The claims are active in `TASK.md` as q72 workers.  Each source must remain
+below `actualExteriorSectorInputSourceRows`, below a completed boundary cycle,
+and below W32.  The source theorem produced by a successful q72 lane should be
+immediately composed through q71/q63/q70 into the actual exterior-sector
+source route, then into the checked W32 consumer only at the final S2 gate.
+
+q72 exterior-frontier arc source reduction checked, 2026-05-22:
+
+```lean
+S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows
+S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_actualExteriorArcRows
+S2_q72_q64ExteriorFrontierArcSeparationSourceRows_of_cutPartitions
+S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_boundaryArcRows
+S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_actualExteriorArcRows
+S2_q72_q67ExteriorFrontierArcSeparationSourceRows_of_cutPartitions
+```
+
+Route impact:
+
+```text
+same q64/q67 selected raw orbit
++ selected repeated-tail boundary-arc rows
+or selected repeated-tail actual exterior-arc rows
+or selected repeated-tail cut partitions
+-> RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+-> q70 repeated-tail/no-cut erasers
+```
+
+These are source reducers only.  The consecutive-tail frontier field is the
+one stored in the q64/q67 selected raw orbit, and the repeated-tail branch is
+lowered through existing boundary-arc, actual exterior-arc, or direct
+cut-partition erasers.  No actual-sector row, W32 consumer, completed boundary
+cycle, induced frontier graph, arbitrary cycle, all-adjacent endpoint shortcut,
+convex-hull shortcut, or identity angular-order shortcut is introduced.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean
+```
+
+q72 topology no-compact source checked, 2026-05-22:
+
+```lean
+S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTraceNoClosedSeparation_20260522q72
+S2_q72_noCompactConnectedKCrossing_of_janiszewskiKComponentTracePreconnected_20260522q72
+S2_q72_noCompactConnectedKCrossing_of_janiszewskiBoundaryBumping_20260522q72
+S2_q72_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_frontierVertexIncident_20260522q72
+```
+
+Route impact:
+
+```text
+PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation
+-> PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing
+
+PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide
++ FrontierVertexIncidentUnboundedFrontierEdgeSource family
+-> UnboundedExteriorFrontierComponentTopologyInputSourceRows family
+```
+
+The trace-preconnected and relative-clopen boundary-bumping wrappers compose
+the same route through the checked q37 and q60 topology reducers.  The
+component-topology wrapper additionally supplies q70's singleton obstruction
+from the frontier-incident edge source.  This is topology/frontier-source only
+and does not use actual-sector rows, completed boundary cycles, W32, induced
+frontier graphs, all-adjacent endpoint shortcuts, convex-hull shortcuts, or
+identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+```
+
+q72 cutrows-from-card worker checked, 2026-05-22:
+
+```lean
+S2_q72_cutrows_from_card_worker_of_frontierCarrierGraph_neighborFinset_card_two
+S2_q72_cutrows_from_card_worker_family_of_frontierCarrierGraph_neighborFinset_card_two
+```
+
+Route impact:
+
+```text
+actual concrete-carrier neighborFinset.card = 2
+-> q70 LocalSelectedIncidentEdgePairSourceRows
+-> e65 UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+```
+
+This closes the q71/q72 cut-partition family from the concrete carrier
+two-neighbour row, without induced frontier graphs, completed boundary cycles,
+actual-sector rows, arbitrary adjacent endpoint claims, or W32.
+
+q72 cutrows-from-local-separation refresh checked, 2026-05-22:
+
+```lean
+S2_q72_cutrows_from_card_worker_of_deletedNeighborLocalSeparationInputSource
+S2_q72_cutrows_from_card_worker_of_finitePlaneLocalSeparationPrimitive
+S2_q72_cutrows_from_card_worker_family_of_finitePlaneLocalSeparationPrimitive
+S2_q72_cutrows_from_card_worker_nonempty_of_finitePlaneLocalSeparationPrimitive
+S2_q72_cutrows_from_card_worker_family_nonempty_of_finitePlaneLocalSeparationPrimitive
+```
+
+Route impact:
+
+```text
+r30 deleted-neighbour finite-plane local separation
+-> q72 actual concrete-carrier neighborFinset.card = 2
+-> q72 cutrows-from-card worker
+-> UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+```
+
+This is the direct family lowering below the existing q72 `hcard` reducer and
+keeps the route on actual `unboundedFrontierEdgeSet` incidences.
+
+q73 source-frontier and selected-turn refresh checked, 2026-05-22:
+
+```lean
+S2_q73_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_incidentOpenSegmentFrontierPoint_20260522q73
+S2_q73_componentTopologyInputSourceRows_family_of_janiszewskiBoundaryBumping_localSectorRows_20260522q73
+S2_active_frontier_incident_source_of_openSegmentFrontierPoint_20260522
+S2_active_frontier_incident_source_of_puncturedAccumulation_localIsolation_20260522
+S2_active_frontier_incident_source_family_of_puncturedAccumulation_localIsolation_20260522
+S2_active_endpointSelectedHeadRows_of_selectedLocalIsolation_endpointFrontierEdgeMembershipRows
+S2_active_endpointSelectedHeadRows_family_of_selectedLocalIsolation_endpointFrontierEdgeMembershipRows
+S2_active_selectedNeighborIncidentGermFrontierEdgeMembershipRows_of_localFrontierEdgeMembershipRows_endpointFrontierEdgeMembershipRows
+S2_active_selectedNeighborIncidentGermFrontierEdgeMembershipRows_family_of_localFrontierEdgeMembershipRows_endpointFrontierEdgeMembershipRows
+S2_active_selected_face_turn_source_of_geometricSelection_selectedCarrierRows
+S2_active_selected_face_turn_source_family_of_geometricSelection_selectedCarrierRows
+```
+
+Route impact:
+
+```text
+Janiszewski boundary-bumping
++ incident open-segment frontier point source
+-> frontier incident edge source
+-> singleton obstruction
+-> component-topology input source rows
+
+geometric selection
++ selected carrier successor-tail rows
+-> selected face-turn angle rows
++ orientation rows
++ local strict exterior turn rows
+
+punctured accumulation at graph-frontier vertices
+-> incident open-segment frontier point source
+-> frontier incident edge source
+
+selected local isolation
++ endpoint frontier-edge membership
+-> endpoint selected-head rows
+-> selected-neighbour incident-germ frontier-edge membership
+```
+
+These are still source reducers, not an unconditional S2 proof.  They lower
+the component-topology and selected-turn leaves while staying below
+actual-sector rows, W32, completed boundary cycles, induced frontier graphs,
+all-adjacent endpoint shortcuts, convex hull shortcuts, and identity
+angular-order shortcuts.
+
+q74 live source focus, 2026-05-22:
+
+```text
+Prove one of the genuine producers below, not another W32/final facade:
+
+UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+IncidentGermEndpointFrontierEdgeMembershipRows
+SelectedUnboundedFrontierEdgeLocalIsolationSourceRows
+actual carrier neighbour-cardinality/card = 2
+Janiszewski/boundary-bumping topology source
+SelectedRawOrbitRepeatedTailCutPartitions for the selected raw orbit
+```
+
+The stale q72 source-integrator attempt in `S2CarrierLocalSource.lean` was
+disabled after the checked q72 composer was already present; future work should
+inhabit lower leaves rather than revive that block.
+
+q74 source reducers checked, 2026-05-22:
+
+```lean
+S2_q74_puncturedAccumulationSource_of_componentTopologySourceRows_20260522q74
+S2_q74_puncturedAccumulationSource_of_componentTopologyInputSourceRows_20260522q74
+S2_q74_active_frontier_incident_source_family_of_finiteDrawingSourceRows_puncturedAccumulation_localIsolation_20260522q74
+S2_q74_carrier_card_two_source_worker_of_deletedNeighborLocalSeparationInputSource
+S2_q74_carrier_card_two_source_worker_of_finitePlaneLocalSeparationPrimitive
+S2_q74_selectedNeighborIncidentGermFrontierEdgeMembershipRows_family_of_geometricSelection_endpointFrontierEdgeMembershipRows
+S2_q74_noCompactConnectedKCrossing_of_nontrivialRelativeClopen_20260522q74
+S2_q74_componentTopologyInputSourceRows_family_of_nontrivialRelativeClopen_incidentOpenSegmentFrontierPoint_20260522q74
+S2_q74_q64RepeatedTailCutPartitions_of_pairwiseMinimalDeletedTailSeparationSource
+S2_q74_q64ExteriorFrontierArcSeparationSourceRows_family_of_pairwiseMinimalDeletedTailSeparationSource
+```
+
+Route impact:
+
+```text
+component-topology rows
+-> punctured accumulation
+-> frontier incident source
+
+deleted-neighbour / finite-plane local separation
+-> carrier card-two
+
+geometric selection + endpoint frontier-edge membership
+-> selected-neighbour incident-germ frontier-edge membership
+
+nontrivial relative-clopen K side
+-> no-compact-connected crossing / component-topology rows
+
+pairwise minimal deleted-tail separation
+-> selected raw-orbit repeated-tail cut partitions
+-> q64 exterior-frontier arc rows
+```
+
+q75 live source focus:
+
+```text
+selected angular no-between rows
+endpoint frontier-edge membership rows
+pairwise minimal deleted-tail separation source
+deleted-neighbour / finite-plane local-separation source
+nontrivial relative-clopen or finite same-K point-between topology source
+```
+
+These are still the lower source leaves; do not re-expand them into another
+W32 or final-bound facade.
+
+q72 source-lowering refresh checked, 2026-05-22:
+
+```lean
+S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource
+S2_q72_carrier_two_neighbour_source_worker_of_finitePlaneLocalSeparationPrimitive
+S2_q72_local_selected_pair_source_worker_of_deletedNeighborLocalSeparationInputSource
+S2_q72_local_selected_pair_source_worker_of_finitePlaneLocalSeparationPrimitive
+S2_q72_selected_face_turn_angle_worker_family_of_geometricSelection_orientation_localStrict
+S2_q72_exteriorFrontierArcSeparationSourceRows_of_selectedRawOrbit_repeatedTailCutPartitions
+S2_q72_selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailCutPartitions
+S2_q72_actualExteriorSectorInputSourceRows_family_of_noCompactConnectedKCrossing_boundaryBumping_cutPartitionInputSource_geometricRows_selectedHeadAt_selectedCarrierRows_exteriorFrontierArcRows
+```
+
+Route impact:
+
+```text
+deleted-neighbour / finite-plane local separation
+  -> actual carrier two-neighbour + local selected pair rows
+
+geometric orientation + local strict exterior turn
+  -> selected actual-carrier faceSucc angle rows
+
+same selected raw orbit + repeated-tail cut partitions
+  -> exterior-frontier arc separation
+  -> minimal/pairwise deleted-tail separation
+
+q70 component topology + q70 selected carrier rows + q72 arc separation
+  -> actual exterior-sector source family
+```
+
+q73 source-lowering refresh checked, 2026-05-22:
+
+```lean
+S2_q73_deleted_neighbor_localSeparationInputSource_of_frontierCarrierGraph_neighborFinset_card_two
+S2_q73_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_frontierCarrierGraph_neighborFinset_card_two
+S2_q73_deleted_neighbor_localSeparationInputSource_nonempty_iff_frontierCarrierGraph_neighborFinset_card_two
+S2_q73_frontierVertexIncidentUnboundedFrontierEdgeSource_of_incidentOpenSegmentFrontierPoint_20260522q73
+S2_q73_componentTopologyInputSourceRows_family_of_janiszewskiNoSubcontinuum_incidentOpenSegmentFrontierPoint_20260522q73
+FiniteDrawingUnboundedComplementFrontierKTraceNoClosedSeparation
+S2_q73_finiteDrawing_kTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q73
+S2_q73_noCompactConnectedKCrossing_of_nontrivialRelativeClopen_20260522q73
+S2_q73_selected_face_turn_orientation_localStrict_worker_family_of_geometricSelection_selectedCarrierRows
+S2_q73_selected_face_turn_angle_worker_family_of_geometricSelection_selectedCarrierRows
+```
+
+Route impact:
+
+```text
+actual carrier neighborFinset.card = 2
+  <-> deleted-neighbour local-separation / finite-plane local-separation
+
+FrontierVertexIncidentOpenSegmentFrontierPointSource
+  -> FrontierVertexIncidentUnboundedFrontierEdgeSource
+  -> component topology input rows
+
+K-trace no-closed-separation / nontrivial relative-clopen K-side
+  -> no-compact-connected crossing support
+
+geometricSelection + selected successor-tail carrier rows
+  -> orientation/local-strict selected face-turn rows
+  -> selected actual-carrier faceSucc angle rows
+```
+
+After q73, the remaining source work is the direct input-facing production of
+the still-unproved leaf rows from `FinitePlanarOuterComponentInputs C`: actual
+carrier `neighborFinset.card = 2`, punctured/open-segment frontier incidence,
+selected carrier successor-tail rows for the geometric face turn, repeated-tail
+cut partitions for the selected exterior raw orbit, and the Janiszewski/K-trace
+topology primitive.  These are source-facing and remain below actual-sector
+rows, W32, completed boundary cycles, induced frontier graphs, arbitrary
+cycles, all-adjacent endpoint shortcuts, convex hull shortcuts, and identity
+angular-order shortcuts.
+
+q61 implementation refresh:
+
+```lean
+S2_q61_actualExteriorSectorInputSourceRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles_minimalDeletedTailSeparation
+S2_q23_finitePlaneLocalSeparationPrimitive_of_deletedNeighborExactField
+S2_q23_geometricSelectionInputSource_of_deletedNeighborExactField_selectedAngularNoBetweenRows
+S2_q23_geometricSelectionInputSource_family_of_deletedNeighborExactField_selectedAngularNoBetweenRows
+```
+
+The q61 seed-visible support file and the q23 exact-field local source adapter
+build with the pinned Lean 4.28 toolchain.  The q23 adapter lowers geometric
+selection from exact deleted-neighbour local-separation fields plus the same
+selected-head r36 angular row; the angular row remains a genuine geometric
+source obligation.
+
+Topology audit q59: component topology input rows are currently sourced by
+`S2_q23_component_topology_input_source_family_of_janiszewskiBoundaryBumping_outsideAccumulation_20260522`.
+The lowest leaves on that branch are
+`PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide`
+and the pointwise outside-accumulation-to-actual-frontier family.  This branch
+does not use W32, actual-sector rows, or a completed boundary cycle.
 
 The support route currently checked is:
 
@@ -156,6 +1138,18 @@ incident selected edge, actual geometric neighbour selection, local
 orientation/strict-turn/angular rows, and cyclic-successor cut partitions for
 the same selected raw orbit.
 
+q41 topology support now lowers the finite no-open premise in the r18
+actual-sector source surface to the same-`K` trace no-closed theorem, while
+keeping frontier-vertex incident rows as an explicit source premise:
+
+```lean
+S2_q41_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_frontierVertexIncident_geometricSelection_incidentGerm_selectedCarrierRows_cyclicSuccCutPartitions_faceSuccTurn
+```
+
+This is checked support for the actual exterior face-orbit route.  It does not
+replace the source theorem constructing the exterior orbit, repeated-tail rows,
+or same-boundary angular rows from `FinitePlanarOuterComponentInputs C`.
+
 q42 local carrier support now lowers actual carrier degree two to the selected
 unbounded-frontier edge local-isolation row:
 
@@ -195,6 +1189,70 @@ unboundedFrontierCarrierGraph_neighborFinset_card_two_of_inputs
 for the actual `unboundedFrontierCarrierGraph C inputs`.  Proving this is the
 no-cut/two-connected exterior-boundary step; it must not be replaced by the
 induced frontier graph or an arbitrary two-regular spanning cycle.
+
+q44 checked support:
+
+```lean
+S2_q44_kComponentPointsBetween_of_traceNoClosedSeparation_direct_20260522q44
+frontierVertexIncidentSource_of_punctured_vertex_localIsolation
+S2_q44_carrier_degree_two_source_family_of_unreachableAfterDeleteInputSource
+S2_q44_localSelectedIncidentEdgePairSourceRows_family_of_unreachableAfterDeleteInputSource
+S2_q44_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+S2_q44_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_frontierVertexIncident_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+S2_q45_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_geometricSelection_orientation_localStrict_localAngular_cyclicSuccCutPartitions
+```
+
+These strictly lower support surfaces: topology points-between from trace
+no-closed separation; frontier incident-edge rows from punctured local-isolation
+frontier points; actual carrier degree two / selected incident-edge pairs from
+unreachable-after-delete rows; and the q42 raw `faceSucc` route to the
+actual-sector source once finite no-open, frontier incidence, geometric
+selection, orientation, local strict/local angular rows, and cyclic-successor
+cut partitions are supplied.  The q45 composer additionally reads frontier
+incidence from finite-frontier preconnectedness plus outside-accumulation, but
+it still leaves the geometric/local/cut source rows as genuine producer
+obligations.
+
+They do not close the input-facing theorem by themselves.  The live source
+remains construction of the selected exterior face walk and its same-boundary
+carrier/angular rows from `FinitePlanarOuterComponentInputs C`.
+
+q45 checked support:
+
+```lean
+S2_q45_rawFaceWalkThirdCarrierNeighborRepeatedTailCutPartitionSource_of_repeatedTailIndex_cyclicSuccCutPartitions
+S2_q45_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource_of_repeatedTailIndex_cyclicSuccCutPartitions_noCut
+S2_q45_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q45
+frontierVertexIncidentSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation
+S2_q45_geometricSelectionInputSource_family_of_unreachableAfterDelete_boundaryVertexExteriorSectorRows_selectedHeads
+S2_q45_boundaryFreeLocalSectorGeometricAngularSource_family_of_unreachableAfterDelete_boundaryVertexExteriorSectorRows_selectedHeads
+S2_q45_orientationRows_family_of_geometricSelection_selectedCarrierRows
+S2_q45_localStrictOrder_family_of_geometricSelection_selectedCarrierRows
+```
+
+These close the q45 worker claims as strict lowerings: third-neighbor
+deleted-tail separation from repeated-tail/cyclic-successor cut partitions,
+trace no-closed topology from the Janiszewski boundary-bumping primitive,
+frontier incident-edge rows from preconnected/boundary-bumping local isolation,
+and local geometric/orientation rows from actual selected-head sector data.
+They are still producer support.  The remaining source task is to construct the
+actual exterior face walk/selected heads and feed these rows without assuming
+the finished boundary-cycle or actual-sector package.
+
+q46 frontier/outside support:
+
+```lean
+S2_q46_outsideAccumulationForcesActualFrontier_of_boundaryBumpingObstruction_20260522
+S2_q46_outsideAccumulationSource_of_frontierVertexIncident_20260522
+S2_q46_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_20260522
+S2_q46_frontierVertexIncidentSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522
+S2_q46_outsideAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_localIsolation_20260522
+```
+
+This gives the current outside-accumulation/frontier-incident handoff from the
+same boundary-bumping obstruction and finite vertex-star local-isolation route.
+It remains a local-topology input to the selected exterior walk producer, not a
+standalone exterior boundary cycle.
 
 ## 2026-05-22 q39/q38/q37 Checked Support
 
@@ -12004,6 +13062,844 @@ Targeted verification passed:
 
 ```powershell
 elan run leanprover/lean4:v4.28.0 lake env lean -DmaxErrors=80 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+```
+
+2026-05-22 q80 topology trace source:
+
+Claim `S2-q80-topology-trace-source` is checked in
+`Swanepoel/S2TopologySource.lean`.
+
+New declarations:
+
+```lean
+S2_q80_kComponentPointsBetween_of_janiszewskiNoSubcontinuum_20260522q80
+S2_q80_kComponentTracePreconnected_of_janiszewskiNoSubcontinuum_20260522q80
+S2_q80_kComponentTraceNoClosedSeparation_of_janiszewskiNoSubcontinuum_20260522q80
+```
+
+Route impact:
+
+```text
+PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction
+-> PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween
+-> PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTracePreconnected
+-> PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation
+```
+
+This records the q80 source-facing direction for the same-`K` trace row.  It
+uses the checked r11 no-subcontinuum-to-point-between reducer and the q43/q37
+trace conversions, with no W32, actual-sector, arbitrary-cycle,
+induced-frontier, endpoint, or identity-angular shortcut.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=50 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+```
+
+2026-05-22 q78 source-route contraction refresh:
+
+Checked declarations:
+
+```lean
+S2_q78_actualExteriorSectorInputSourceRows_family_of_finiteNoClosed_frontierVertexIncident_cutPartitionInputSource_geometricRows_endpointFrontierEdgeMembership_faceSuccRows_cyclicSuccDeletedTailNonreachability
+
+S2_q78_topology_sources_of_janiszewskiNoSubcontinuum_finiteDrawingSourceRows_20260522q78
+
+S2_q78_carrier_cut_source_lowering_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+S2_q78_carrier_cut_source_lowering_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+S2_q78_carrier_cut_source_lowering_nonempty_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+S2_q78_carrier_card_two_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccDeletedTailNonreachability_noCut
+
+S2_q78_incidentGermEndpointSelectedHeadAt_of_selectedLocalIsolation_endpointSelectedHeadRows
+S2_q78_incidentGermEndpointFrontierEdgeMembershipRows_of_selectedLocalIsolation_endpointSelectedHeadRows
+S2_q78_incidentGermEndpointSelectedHeadAt_family_of_selectedLocalIsolation_endpointSelectedHeadRows
+S2_q78_incidentGermEndpointFrontierEdgeMembershipRows_family_of_selectedLocalIsolation_endpointSelectedHeadRows
+
+selectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_of_exteriorFrontierArcSeparationRows_20260522q78
+S2_q78_q64SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource_family_of_faceSuccRows_exteriorFrontierArcRows
+S2_q78_q64SelectedRawOrbitMinimalDeletedTailSeparation_family_of_faceSuccRows_exteriorFrontierArcRows
+S2_q78_q64ActualExteriorWalkPrimitiveSourceRows_family_of_faceSuccRows_exteriorFrontierArcRows
+```
+
+Current shortest source-shaped route:
+
+```text
+FiniteDrawingUnboundedComplementFrontierNoClosedSeparation
++ frontier vertex incident source
++ UnboundedFrontierCarrierNeighborPairCutPartitionInputSource family
++ selected-head geometric rows
++ IncidentGermEndpointFrontierEdgeMembershipRows family
++ selected faceSucc rows
++ SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource on the exact q62 raw orbit
+-> actualExteriorSectorInputSourceRows family
+```
+
+Strict lowerers now available underneath that route:
+
+```text
+Finite no-closed + singleton boundary-bumping
+<- Janiszewski no-subcontinuum + finite component-topology source rows
+
+frontier vertex incident
+<- finite component-topology source rows
+
+cut partition input
+<- selected unbounded-frontier edge local-isolation rows
+
+endpoint frontier-edge membership
+<- selected local-isolation rows + endpoint-selected-head rows
+
+selected raw-orbit cyclic nonreachability
+<- selected faceSucc rows + selected exterior-frontier arc rows
+```
+
+The remaining live source surfaces below q78 are therefore:
+
+```text
+PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction
+forall C inputs, UnboundedExteriorFrontierComponentTopologyFiniteDrawingSourceRows inputs
+forall C inputs, SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs
+selected angular/no-between rows for the selected local-isolation heads
+endpoint-selected-head rows for those selected local-isolation heads
+selected faceSucc rows for the q60 geometric-selection heads
+selected exterior-frontier arc rows for the exact selected raw orbit
+```
+
+Do not derive selected local-isolation from q78 cut rows in this route; that
+would be a local/carrier self-loop.  Do not route through actual-sector rows,
+W32 consumers, completed boundary-cycle rows, induced frontier graphs,
+arbitrary cycles, all-adjacent endpoint closure, or global all-outgoing
+no-between rows.
+
+2026-05-22 q75/q76 source-route contraction refresh:
+
+Checked owner-file additions:
+
+```lean
+S2_q75_componentTopologyInputSourceRows_family_of_finiteDrawingNoClosedSeparation_singletonBoundaryBumping_20260522q75
+S2_q76_singletonBoundaryBumpingObstruction_family_of_frontierVertexIncident_20260522q76
+S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_pairwiseMinimalDeletedTailSeparation
+S2_q75_selected_successor_tail_source_family_of_geometricSelection_faceSuccRows
+S2_q75_actualExteriorSectorInputSourceRows_family_of_finiteNoClosed_singletonBumping_cutPartitionInputSource_geometricRows_endpointFrontierEdgeMembership_faceSuccRows_minimalDeletedTailSeparation
+```
+
+Current contracted actual-sector route:
+
+```text
+FiniteDrawingUnboundedComplementFrontierNoClosedSeparation
++ singleton boundary-bumping family
++ UnboundedFrontierCarrierNeighborPairCutPartitionInputSource family
++ selected-head geometric rows
++ IncidentGermEndpointFrontierEdgeMembershipRows family
++ selected actual-carrier faceSucc rows
++ SelectedRawOrbitMinimalDeletedTailSeparation on the exact q62 raw orbit
+-> actualExteriorSectorInputSourceRows family
+```
+
+The q76 singleton branch can itself be lowered to selected frontier-vertex
+incidence / incident open-segment frontier rows / component-topology rows, but
+those are support routes rather than S2 completion.  The remaining source
+work stays below the displayed inputs: no actual-sector premise, W-facing
+facade, induced frontier graph, arbitrary cycle, all-adjacent endpoint row,
+identity angular row, convex-hull shortcut, or synthetic enclosure is used.
+
+Targeted verification passed:
+
+```powershell
+lake build ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource
+lake env lean -DmaxErrors=40 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean
+```
+
+2026-05-22 q74 source-lowering refresh:
+
+Checked declarations now lower four live S2 leaves without introducing a new
+W-facing route or actual-sector premise:
+
+```lean
+S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut
+S2_q74_carrier_card_two_source_worker_family_of_cutPartitionInputSource_noCut
+S2_q74_carrier_card_two_source_worker_of_nonempty_cutPartitionInputSource_noCut
+S2_q74_carrier_card_two_source_worker_nonempty_cutPartitionInputSource_iff
+
+S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_kComponentPointsBetween_20260522q74
+S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_noCompactConnectedKCrossing_20260522q74
+S2_q74_finiteDrawing_kTraceNoClosedSeparation_of_janiszewskiNoSubcontinuumObstruction_20260522q74
+S2_q74_finiteDrawing_noClosed_noOpen_of_kComponentPointsBetween_20260522q74
+
+S2_q74_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+S2_q74_puncturedAccumulationSource_family_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+S2_q74_frontierIncidentOpenSegmentFrontierPointSource_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+S2_q74_frontierIncidentOpenSegmentFrontierPointSource_family_of_finiteDrawingNoClosedSeparation_frontier_not_singleton_20260522q74
+
+S2_q74_selected_successor_tail_source_of_geometricSelection_orientationRows_geometricNeighborRows
+S2_q74_selected_successor_tail_source_family_of_geometricSelection_orientationRows_geometricNeighborRows
+```
+
+The current route contraction after q74 is:
+
+```text
+actualExteriorSectorInputSourceRows_of_inputs
+<- faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs
+<- q72/q74 selected raw exterior-orbit route
+<- component topology rows
+   + UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+   + selected carrier geometric neighbour rows
+   + selected orientation / faceSucc rows
+   + repeated-tail cut partition rows
+
+component topology rows
+<- finite no-closed separation
+   + actual-frontier nontriviality / singleton boundary-bumping
+
+finite no-closed separation
+<- KComponentPointsBetween or no-compact-connected / Janiszewski
+
+actual carrier card-two
+<- UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+   + inputs.noCutVertex
+```
+
+q75 therefore owns the next source-producing work instead of another consumer:
+
+```text
+1. topology nontrivial-frontier / singleton boundary-bumping source;
+2. carrier cut-partition source below card-two;
+3. selected geometric face-turn / successor rows below the actual carrier;
+4. route contraction to remove any circular premise before another integration.
+```
+
+The q75 workboard claims in `TASK.md` mirror these four lanes.
+
+2026-05-22 q57 topology trace source:
+
+Claim `S2-q57-topology-trace-source-worker` is checked in
+`Swanepoel/S2TopologySource.lean`.
+
+New declaration:
+
+```lean
+S2_q57_kComponentTraceNoClosedSeparation_of_janiszewskiBoundaryBumping_20260522q57
+```
+
+Route impact:
+
+```text
+PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide
+-> PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween
+-> PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation
+```
+
+This records the q46/q37 Janiszewski relative-clopen boundary-bumping source
+path under the q57 claim name.  It does not use actual-sector rows, final
+boundary-cycle rows, W32/facade rows, induced frontier graphs, arbitrary
+cycles, convex-hull data, endpoint shortcuts, or identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+```
+
+2026-05-22 q56 q32 face-successor turn source:
+
+Claim `S2-q56-q32-faceSucc-turn-worker` is checked in
+`Swanepoel/S2SeededRawOrbitSource.lean`.
+
+New declaration:
+
+```lean
+S2_q56_q32RawGeometricOrbitPackageFaceSuccTurnRows_family_of_componentTopology_geometricSelection_selectedActualCarrierFaceSuccAngles_startEdgeLocalRows
+```
+
+Route impact:
+
+```text
+component topology
++ geometric selection
++ selected actual-carrier faceSucc angle rows
++ packaged q32 start-edge local row
+-> q32 raw geometric orbit package faceSucc turn rows
+```
+
+The strict-successor order used to expose the q32 package is derived inside the
+theorem from the selected actual-carrier face-successor angle rows via
+`S2_selected_faceSucc_local_strict_order_source_of_selectedActualCarrierFaceSuccAngles`.
+No actual-sector rows, final boundary cycle, W32 consumer, induced frontier
+graph, arbitrary cycle, endpoint shortcut, identity angular order, or global
+all-outgoing no-between row is used.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean
+```
+
+2026-05-22 q51 geometric route and selected endpoint closeout:
+
+Claim `S2-q51-geometric-angular-source-explorer` is completed/pruned with no
+file edits.  Euler mapped the shortest checked projection path through
+`S2_q47_localGeometricSourceRows_family_of_localGeometricProducerRows`, then
+the q46 projection families into the q47/q49 selected raw-orbit producer.  The
+same audit flags the endpoint-radius containment lane as support-only: it
+should not be promoted to a live source unless the proof is replaced by a
+selected-germ or actual exterior-sector argument that avoids arbitrary
+all-adjacent frontier endpoint chords.
+
+Claim `S2-q51-selected-endpoint-source-worker` is checked in
+`Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+New declarations:
+
+```lean
+S2_q51_endpointSelectedHeadLocalRows_of_selectedLocalIsolation
+S2_q51_selectedEndpointLocalRadiusSourceRows_of_selectedLocalIsolation
+S2_q51_selected_endpoint_source_worker
+S2_q51_endpointSelectedHeadLocalRows_family_of_selectedLocalIsolation
+S2_q51_selectedEndpointLocalRadiusSourceRows_family_of_selectedLocalIsolation
+S2_q51_selected_endpoint_source_worker_family
+```
+
+Route impact:
+
+```text
+SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs
+-> selected endpoint local selected-head rows
+-> selected endpoint local-radius source rows
+```
+
+This is the honest selected-germ endpoint branch.  It does not prove the
+over-strong global endpoint selected-head row or selected-endpoint
+radius-containment row for arbitrary adjacent frontier chords, and it does not
+use actual-sector rows, W32, induced frontier graphs, arbitrary cycles,
+convex-hull data, or identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean
+```
+
+2026-05-22 q52 route-repair claim:
+
+Claim `S2-q52-route-repair-main` is active in the workboard.  The current
+decomposition is:
+
+```text
+1. Inspect the actual-sector and boundary-sector field erasers.
+2. Bypass or replace the global endpoint selected-head /
+   endpoint-radius-containment promotion.
+3. Keep the target as the actual exterior face-orbit source:
+   faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs
+   or actualExteriorSectorInputSourceRows_of_inputs.
+4. Only then route to UnboundedExteriorFrontierCycleRows and W32.
+```
+
+Delegated subtasks:
+
+```text
+S2-q52-actual-sector-field-explorer:
+  identify the minimal non-circular field package consumed by
+  ActualExteriorSectorInputSourceRows and BoundaryVertexExteriorSectorRowsAt.
+
+S2-q52-local-angular-bypass-worker:
+  try to replace the q46/q47 local-angular handoff with a selected-germ or
+  actual-carrier handoff that consumes the selected endpoint local-radius
+  source rather than global endpoint promotion.
+
+S2-q52-face-orbit-source-explorer:
+  inspect the raw faceSucc / geometric rotation source path for a direct
+  face-orbit producer that avoids actual-sector, boundary-cycle, W32,
+  induced-frontier, convex-hull, and identity-order premises.
+```
+
+Current live-claim refresh: Hooke, Arendt, and Zeno have completed/pruned
+their q52/q53 dynamic source-worker lanes.  Pasteur remains pending unless a
+later checked report closes it.  The main live claim is still source-level:
+produce the actual exterior face-orbit / actual-sector source from
+`FinitePlanarOuterComponentInputs C`, not a W32 consumer.  A documentation-only
+claim is open for syncing `../TASK.md` and this workbook; new S2 source workers
+should add a concrete source row, owner, write scope, and gate before editing.
+
+2026-05-22 q54 checked support:
+
+```lean
+S2_q54_actualCarrierDegreeTwoSource_family_of_rawOrbit_thirdNeighborRepeatedTailIndex_minimalDeletedTailSeparation
+S2_q54_actualExteriorSectorInputSourceRows_source_of_rawFaceSuccOrbitSourceRows_via_r19
+S2_q54_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_incidentOpenSegmentFrontierPoint_20260522q54
+S2_q54_faceDartTopologyPremises_of_finiteDrawingNoClosedSeparation_puncturedAccumulation_20260522q54
+S2_q54_frontierVertexIncident_and_carrierConnected_of_componentTopologySourceRows_20260522q54
+S2_q54_frontierVertexIncident_and_carrierConnected_of_finiteDrawingSourceRows_20260522q54
+S2_q55_actualCarrierDegreeTwoSource_family_of_componentTopology_geometricSelection_strictSuccessor_thirdRepeatedTail_minimalDeletedTailSeparation
+```
+
+The next live theorem should produce the q54 raw-orbit
+third-neighbour/minimal-deleted-tail package from
+`FinitePlanarOuterComponentInputs C`, then feed
+`S2_q54_actualCarrierDegreeTwoSource_family_of_rawOrbit_thirdNeighborRepeatedTailIndex_minimalDeletedTailSeparation`.
+The q55 handoff fixes this target to the q32 raw geometric orbit: after
+component topology, geometric selection, and strict successor-order rows are
+supplied, the remaining carrier-degree leaves are the third-neighbour
+repeated-tail index row and minimal deleted-tail separation row on that same
+orbit.
+This remains below actual-sector rows, final boundary cycles, W32, induced
+frontier graphs, arbitrary cycles, convex hull data, identity angular order,
+and global all-outgoing no-between rows.
+
+2026-05-22 q56 decomposition:
+
+The next split keeps the live target on the actual exterior face orbit rather
+than a W32 consumer.
+
+```text
+q32 raw geometric orbit package
++ repeated-tail/minimal-deleted-tail source on that same orbit
++ raw faceSucc turn/orientation rows
+-> actualExteriorSectorInputSourceRows_of_inputs
+```
+
+The q54/q55 carrier-degree route is support for the local-sector/degree-two
+side; it is not itself the actual exterior-sector source.  The q53 arc worker
+closed the checked eraser
+
+```text
+RawFaceSuccOrbitActualExteriorArcSeparationRows
+-> pairwise minimal deleted-tail separation
+-> cyclicSucc/repeated-tail cut rows
+```
+
+for the selected raw orbit.  The remaining proof work is decomposed into:
+
+1. source-leaf map: identify which q32/q33/q54/q55 leaves are already sourced
+   and which one theorem is still the honest producer;
+2. q32 raw faceSucc turn source: reduce or prove the turn/orientation row on
+   the q32 selected orbit;
+3. carrier-degree integration: expose exactly what q54/q55 supplies to the
+   actual exterior-sector route without feeding from actual-sector rows;
+4. topology/component source audit: determine whether component topology,
+   frontier incidence, and no-closed-separation are already produced from
+   `FinitePlanarOuterComponentInputs C`.
+
+The checked q56 reports and remaining open source leaves are recorded in
+`../TASK.md`.  No q56 entry should be treated as a running subagent unless it
+has an explicit live agent id and a status that has not already been consumed
+and pruned.
+
+2026-05-22 q56 carrier-degree integration:
+
+Claim `S2-q56-carrier-degree-integration-worker` is checked in
+`Swanepoel/S2CarrierLocalSource.lean`.
+
+New declaration:
+
+```lean
+S2_q56_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_componentTopology_geometricSelection_strictSuccessor_thirdRepeatedTail_minimalDeletedTailSeparation_angularNoBetween_endpointRadius_selectedActualCarrierFaceSuccAngles_pairwiseMinimalDeletedTailSeparation
+```
+
+Route impact:
+
+```text
+q55 actual-carrier degree-two source
++ selected angular/no-between rows
++ endpoint local-radius covers
++ selected actual-carrier faceSucc angle rows
+-> q49 local-geometric producer rows
++ trace no-closed / outside accumulation topology
++ pairwise minimal deleted-tail separation for the exact q47 selected raw orbit
+-> actual exterior-sector source family
+```
+
+The q55 part exposes only component topology, geometric selection, strict
+successor order, the third-neighbour repeated-tail index row, and minimal
+deleted-tail separation on the q32 raw geometric orbit.  The composer does not
+assume actual-sector rows, final boundary cycles, W32 rows, induced frontier
+graphs, arbitrary cycles, endpoint shortcuts, convex hull data, or identity
+angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean
+```
+
+2026-05-22 q56 topology/component source audit:
+
+Claim `S2-q56-topology-component-source-explorer` is completed/pruned with no
+file edits.
+
+Audit result:
+
+```text
+UnboundedExteriorFrontierComponentTopologyInputSourceRows
+  is already downstream of finite-drawing/component topology rows.
+
+FrontierVertexIncidentUnboundedFrontierEdgeSource
+  is already downstream of existing local-sector / finite-drawing source rows.
+
+FiniteDrawingUnboundedComplementFrontierNoClosedSeparation
+  is not yet sourced directly from FinitePlanarOuterComponentInputs C on this path.
+```
+
+The remaining topology source leaf for this branch is still
+`PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation`.
+This topology branch remains support for the actual exterior face-orbit
+producer; it is not a replacement for constructing
+`faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs`.
+
+2026-05-22 q50 actual-arc source worker:
+
+Claim `S2-q50-actual-arc-source-worker` is checked in
+`Swanepoel/S2SeededRawOrbitSource.lean`.
+
+New declarations:
+
+```lean
+S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+S2_q49_repeatedTailCutPartitions_family_of_nontrivialRelativeClopen_boundaryBumping_geometricSelection_orientation_localStrict_localAngular_exteriorFrontierArcRows
+```
+
+Route impact:
+
+```text
+q49 topology premises
++ selected q47 raw orbit
++ SelectedRawOrbitRepeatedTailActualExteriorArcRows
+-> SelectedRawOrbitRepeatedTailCutPartitions
+
+q49 topology premises
++ selected q47 raw orbit
++ RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+-> SelectedRawOrbitRepeatedTailCutPartitions
+```
+
+This gives the q49 face-dart route its concrete repeated-tail cut-partition
+premise from either selected actual exterior-arc rows or exterior-frontier arc
+separation rows on the same selected q47/q49 raw orbit.  It does not introduce
+completed boundary cycles, actual-sector premises, W32 consumers, induced
+frontier graphs, arbitrary cycles, all-adjacent endpoint shortcuts, convex hull
+data, or identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean
+```
+
+2026-05-22 q50 endpoint-radius selected-head reduction:
+
+Claim `S2-q50-endpoint-radius-source-worker` is checked in
+`Swanepoel/S2LocalTwoGermAssembly.lean`.
+
+New declarations:
+
+```lean
+incidentGermEndpointLocalRadiusCoversAt_of_selectedHeadAt_endpointRadiusContainsAt_20260522q50
+incidentGermEndpointLocalRadiusCoversRows_of_selectedHeadRows_endpointRadiusContains_20260522q50
+S2_q50_endpointLocalRadiusCoversRows_of_selectedLocalIsolation_endpointSelectedHeadRows_endpointRadiusContains
+S2_q50_endpointLocalRadiusCoversRows_family_of_selectedLocalIsolation_endpointSelectedHeadRows_endpointRadiusContains
+```
+
+Route impact:
+
+```text
+SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs
++ same-selected-head endpoint rows
++ selected-endpoint radius containment
+-> IncidentGermEndpointLocalRadiusCoversRows inputs
+```
+
+This keeps the endpoint-radius branch tied to selected unbounded-frontier
+edges.  It does not prove or assume actual-sector rows, a completed boundary
+cycle, W32, induced frontier graphs, all-adjacent endpoint rows, convex hull
+data, or identity angular order.  The live local branch still needs the
+same-selected-head endpoint rows and selected-endpoint radius containment from
+the actual exterior carrier/orbit construction.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2LocalTwoGermAssembly.lean
+```
+
+2026-05-22 q49 actual exterior-arc repeated-tail reduction:
+
+Claim `S2-q49-repeated-tail-cut-source-worker` is checked in
+`Swanepoel/S2CarrierCutSource.lean` and
+`Swanepoel/S2SeededRawOrbitSource.lean`.
+
+New declarations:
+
+```lean
+S2_q49_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+S2_q49_pairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+selectedRawOrbitMinimalDeletedTailSeparation_of_repeatedTailActualExteriorArcRows_20260522q49
+S2_q49_pairwiseMinimalDeletedTailSeparationSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_actualExteriorArcRows
+S2_q49_pairwiseMinimalDeletedTailSeparationSource_family_of_finiteNoOpen_vertexIncident_geometricSelection_orientation_localStrict_localAngular_exteriorFrontierArcRows
+```
+
+Route impact:
+
+```text
+selected raw-tail coverage rows
++ selected repeated-tail actual exterior-arc rows
+-> pairwise minimal deleted-tail separation source
+```
+
+This closes the q49 repeated-tail cut/minimal-separation bridge once the
+actual exterior-arc rows for the selected raw face walk are supplied.  It does
+not use the finished cycle, actual-sector package, W32, induced frontier
+graphs, arbitrary cycles, all-adjacent endpoint rows, convex-hull data, or
+identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierCutSource.lean
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2SeededRawOrbitSource.lean
+```
+
+2026-05-22 q50 frontier incident point and singleton bumping reduction:
+
+Claim `S2-q50-frontier-incident-point-source-worker` is checked in
+`Swanepoel/S2TopologySource.lean`.
+
+New declarations:
+
+```lean
+S2_q50_frontierIncidentOpenSegmentFrontierPointSource_of_puncturedAccumulation_20260522q50
+S2_q50_frontierIncidentOpenSegmentFrontierPointSource_family_of_puncturedAccumulation_20260522q50
+S2_q50_boundaryBumpingObstruction_family_of_incidentOpenSegmentFrontierPoint_20260522q50
+S2_q50_boundaryBumpingObstruction_family_of_puncturedAccumulation_localIsolation_20260522q50
+```
+
+Route impact:
+
+```text
+punctured frontier accumulation
+-> FrontierVertexIncidentOpenSegmentFrontierPointSource
+-> UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+```
+
+This lowers the singleton boundary-bumping source to punctured accumulation
+plus local isolation, while keeping the source independent of actual-sector
+rows, completed cycles, W32, induced frontier graphs, arbitrary cycles,
+all-adjacent endpoint rows, convex-hull data, and identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+```
+
+2026-05-22 q51 local-geometric endpoint-radius compression:
+
+Claim `S2-q51-route-compression-worker` is checked in
+`Swanepoel/S2CarrierLocalSource.lean`.
+
+New declaration:
+
+```lean
+S2_q51_localGeometricProducerRows_family_of_selectedLocalIsolation_angularNoBetween_endpointSelectedHead_endpointRadiusContains_selectedActualCarrierFaceSuccAngles
+```
+
+Route impact:
+
+```text
+selected local-isolation rows
++ selected exterior-sector angular/no-between rows
++ endpoint selected-head rows
++ selected-endpoint radius containment
++ selected actual-carrier faceSucc angle rows
+-> S2_q47_localGeometricProducerRows
+```
+
+The composer uses the q50 endpoint-radius reducer to replace the older
+`endpointLocalRadiusCovers` premise in the q49 local-geometric producer route.
+It remains source-level and does not add a W32 consumer, target synonym,
+actual-sector assumption, induced frontier graph, arbitrary cycle,
+all-adjacent endpoint shortcut, convex-hull shortcut, or identity-angular
+shortcut.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean
+```
+
+2026-05-22 q51 topology punctured-source compression:
+
+Claim `S2-q51-topology-punctured-compression` is checked in
+`Swanepoel/S2TopologySource.lean`.
+
+New declarations:
+
+```lean
+S2_q51_faceDartTopologyPremises_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q51
+S2_q51_faceDartActualSectorTopologyComposer_of_nontrivialRelativeClopen_puncturedAccumulation_20260522q51
+```
+
+Route impact:
+
+```text
+PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide
++ forall C inputs, UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs
+-> S2_q49FaceDartTopologyPremises
+```
+
+This replaces the q49 singleton boundary-bumping family premise in the
+face-dart topology package with the sharper punctured frontier accumulation
+source via the q50 local-isolation handoff.  It does not use actual-sector
+rows, completed cycles, W32, induced frontier graphs, arbitrary cycles,
+all-adjacent endpoint rows, convex-hull data, or identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+```
+
+2026-05-22 q50 frontier incident point source worker:
+
+Claim `S2-q50-frontier-incident-point-source-worker` is checked in
+`Swanepoel/S2TopologySource.lean`.
+
+New declarations:
+
+```lean
+S2_q50_frontierIncidentOpenSegmentFrontierPointSource_of_puncturedAccumulation_20260522q50
+S2_q50_frontierIncidentOpenSegmentFrontierPointSource_family_of_puncturedAccumulation_20260522q50
+S2_q50_boundaryBumpingObstruction_family_of_incidentOpenSegmentFrontierPoint_20260522q50
+S2_q50_boundaryBumpingObstruction_family_of_puncturedAccumulation_localIsolation_20260522q50
+```
+
+Route impact:
+
+```text
+UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs
+-> FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs
+
+forall C inputs,
+  FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs
+-> forall C inputs,
+  UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs
+```
+
+The singleton family theorem goes through
+`S2_q49_boundaryBumpingObstruction_of_incidentOpenSegmentFrontierPoint_20260522q49`,
+so the clean local finite-drawing source is preserved as the exposed residual.
+It does not use actual-sector rows, completed boundary cycles, W32 consumers,
+induced frontier graphs, arbitrary cycles, all-adjacent endpoint claims,
+convex hull data, or identity angular order.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+```
+
+2026-05-22 q49 local geometric source:
+
+Claim `S2-q49-local-geometric-source-worker` is checked in
+`Swanepoel/S2CarrierLocalSource.lean`.
+
+New declaration:
+
+```lean
+S2_q49_localGeometricProducerRows_family_of_actualCarrierDegreeTwo_angularNoBetween_endpointRadius_selectedActualCarrierFaceSuccAngles
+```
+
+Route impact:
+
+```text
+ActualCarrierDegreeTwoSource inputs
++ selected same-head angular/no-between rows
++ endpoint local-radius covers
++ selected actual-carrier faceSucc angle rows
+-> q49 geometric rows for the selected local-isolation heads
+-> S2_q47_localGeometricProducerRows inputs
+```
+
+This strictly lowers the q48 actual-carrier-degree-two producer surface by
+replacing the explicit `GraphVertexGeometricAngularNeighborSelectionRow`
+premise with selected angular/no-between rows for the chosen actual carrier
+heads.  It uses the checked q49 angular-to-geometric bridge and does not use
+actual-sector rows, completed boundary-cycle rows, W32 consumers, induced
+frontier graph shortcuts, all-adjacent endpoint claims, convex hull shortcuts,
+identity angular order, or global outgoing-list no-between.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean
+```
+
+2026-05-22 q49 topology boundary source:
+
+Claim `S2-q49-topology-boundary-source-worker` is checked in
+`Swanepoel/S2TopologySource.lean`.
+
+New declarations:
+
+```lean
+S2_q49_boundaryBumpingObstruction_of_incidentOpenSegmentFrontierPoint_20260522q49
+S2_q49_boundaryBumpingObstruction_of_puncturedAccumulation_localIsolation_20260522q49
+S2_q49_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_incidentOpenSegmentFrontierPoint_20260522q49
+S2_q49_traceNoClosed_outsideAccumulation_sources_of_janiszewskiBoundaryBumping_puncturedAccumulation_20260522q49
+```
+
+Route impact:
+
+```text
+FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs
+-> FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs
+-> UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs
+
+UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs
+-> FrontierVertexIncidentOpenSegmentFrontierPointSource C inputs
+-> q48 trace/outside-accumulation package
+```
+
+This strictly lowers q48's singleton boundary-bumping family input to the
+one-incident-open-segment frontier point source, with a punctured-accumulation
+local-isolation variant.  It does not use carrier, sector, W32,
+completed boundary-cycle, actual-sector, synthetic enclosure, induced frontier
+graph, or all-adjacent endpoint premises.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2TopologySource.lean
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/ExteriorComponentTopology.lean
+```
+
+2026-05-22 q47 actual-sector composer:
+
+Checked in `Swanepoel/S2CarrierLocalSource.lean`:
+
+```lean
+S2_q47_selectedRawRows_of_traceNoClosed_outsideAccumulation_localGeometricProducer
+S2_q47_actualExteriorSectorInputSourceRows_family_of_traceNoClosed_outsideAccumulation_localGeometricProducer_pairwiseMinimalDeletedTailSeparation
+```
+
+The current shortest actual-sector producer route is now:
+
+```text
+PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentTraceNoClosedSeparation
++ outside-accumulation source
++ q47 local-geometric producer rows
++ q38 pairwise minimal deleted-tail separation for the exact selected raw orbit
+-> actual exterior-sector source family
+```
+
+The selected raw orbit is named before the actual-sector eraser, so the
+pairwise repeated-tail source can target the same orbit without using W32,
+finished boundary-cycle rows, induced frontier graphs, arbitrary cycles, or
+synthetic enclosure rows.
+
+Targeted verification passed:
+
+```powershell
+lake env lean -DmaxErrors=30 ErdosProblems1066/Swanepoel/S2CarrierLocalSource.lean
 ```
 
 2026-05-22 q11 repeated-tail primitive lowering:

@@ -1467,6 +1467,111 @@ theorem
         (C := C) (inputs := inputs) (source C inputs)
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q65-carrier-field-source-worker`, cut-partition field form.
+
+The q62/q63 actual exterior face-walk route consumes the carrier
+cut-partition family before it builds q60 selected-neighbour rows.  This
+q65-facing declaration lowers that field directly to the current r30
+deleted-neighbour finite-plane local-separation primitive, with no W32,
+actual-sector, completed boundary-cycle, induced-frontier graph, arbitrary
+cycle, convex hull, identity angular order, global all-outgoing no-between, or
+all-adjacent endpoint shortcut. -/
+noncomputable def
+    S2_q65_carrier_field_source_worker_cutPartitionInputSource_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q25_cutPartitionInputSource_of_finitePlaneLocalSeparationPrimitive
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- Family q65 carrier field source from the r30 deleted-neighbour primitive. -/
+noncomputable def
+    S2_q65_carrier_field_source_worker_cutPartitionInputSource_family_of_finitePlaneLocalSeparationPrimitive
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q65_carrier_field_source_worker_cutPartitionInputSource_of_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- q65 selected carrier cut rows for the q60/q62/q63 route.
+
+After the r30 primitive has produced the actual carrier cut-partition input
+field, this projection exposes exactly the selected-neighbour cut rows used by
+the q60 geometric-selection step in the actual exterior face-walk route. -/
+noncomputable def
+    S2_q65_carrier_field_source_worker_selectedCutPartitionRows_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs :=
+  S2_q60_selectedCutPartitionSourceRows_of_cutPartitionInputSource
+    (C := C) (inputs := inputs)
+    (S2_q65_carrier_field_source_worker_cutPartitionInputSource_of_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family q65 selected carrier cut rows for q60/q62/q63. -/
+noncomputable def
+    S2_q65_carrier_field_source_worker_selectedCutPartitionRows_family_of_finitePlaneLocalSeparationPrimitive
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+          inputs := by
+  intro m C inputs
+  exact
+    S2_q65_carrier_field_source_worker_selectedCutPartitionRows_of_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q65 nonempty residual for the carrier cut-partition field. -/
+theorem
+    S2_q65_carrier_field_source_worker_cutPartitionInputSource_nonempty_iff_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs) <->
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs :=
+  S2_q25_carrier_cut_source_nonempty_iff_finitePlaneLocalSeparationPrimitive
+    (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- q65 nonempty selected-row consequence for the q60/q62/q63 carrier field. -/
+theorem
+    S2_q65_carrier_field_source_worker_selectedCutPartitionRows_nonempty_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    Nonempty
+        (UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows
+          inputs) :=
+  ⟨S2_q65_carrier_field_source_worker_selectedCutPartitionRows_of_finitePlaneLocalSeparationPrimitive
+    (C := C) (inputs := inputs) source⟩
+
+set_option linter.style.longLine false in
 /-- Claim `S2-q22-carrier-cut-to-selection-source`, e32 local-separation form.
 
 The e32 fieldwise carrier-cut source is exactly the concrete finite-plane
@@ -1905,6 +2010,107 @@ abbrev S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
                   k ≠ j ∧ (O.dart j).tail = a.1
 
 set_option linter.style.longLine false in
+/-- q56 raw edge-coverage eraser for the q36 third-neighbour index source.
+
+If a concrete third carrier neighbour `b` of the raw-tail occurrence `k` is an
+actual unbounded-frontier edge, raw edge coverage places that same edge as a
+consecutive pair somewhere on the raw orbit.  Since `b` is not the predecessor
+or successor at `k`, that covered edge gives a different occurrence of the
+same tail.  This uses only the raw coverage row and the carrier graph
+definition. -/
+theorem
+    S2_q56_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource_of_rawOrbitEdgeCoverage
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (edge_coverage :
+      forall e : {e : PlanarInterface.Edge n //
+          e ∈ unboundedFrontierEdgeSet C inputs},
+        Exists fun l : Fin O.period =>
+          e.1 =
+              ((O.dart l).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail) ∨
+            e.1 =
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail,
+                (O.dart l).tail)) :
+    S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+      (inputs := inputs) O := by
+  intro a b hb k hk hb_pred hb_succ
+  rcases (unboundedFrontierCarrierGraph_adj_iff).1 hb with hab | hba
+  · let e : {e : PlanarInterface.Edge n //
+        e ∈ unboundedFrontierEdgeSet C inputs} := ⟨(a.1, b.1), hab⟩
+    rcases edge_coverage e with ⟨l, hforward | hreverse⟩
+    · refine ⟨l, ?_, ?_⟩
+      · intro hkl
+        have hb_eq_succ :
+            b.1 =
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail := by
+          have hsnd :
+              e.1.2 =
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail :=
+            congrArg Prod.snd hforward
+          simpa [e, hkl] using hsnd
+        exact hb_succ hb_eq_succ
+      · have hfst : e.1.1 = (O.dart l).tail :=
+          congrArg Prod.fst hforward
+        simpa [e] using hfst.symm
+    · let j : Fin O.period := PlanarInterface.cyclicSucc O.period_pos l
+      refine ⟨j, ?_, ?_⟩
+      · intro hkj
+        have hpred_l :
+            PlanarInterface.cyclicPred O.period_pos k = l := by
+          simp [j, hkj, PlanarInterface.cyclicPred_cyclicSucc]
+        have hb_eq_pred :
+            b.1 =
+              (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail := by
+          have hsnd : e.1.2 = (O.dart l).tail :=
+            congrArg Prod.snd hreverse
+          simpa [e, hpred_l] using hsnd
+        exact hb_pred hb_eq_pred
+      · have hfst :
+            e.1.1 =
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail :=
+          congrArg Prod.fst hreverse
+        simpa [e, j] using hfst.symm
+  · let e : {e : PlanarInterface.Edge n //
+        e ∈ unboundedFrontierEdgeSet C inputs} := ⟨(b.1, a.1), hba⟩
+    rcases edge_coverage e with ⟨l, hforward | hreverse⟩
+    · let j : Fin O.period := PlanarInterface.cyclicSucc O.period_pos l
+      refine ⟨j, ?_, ?_⟩
+      · intro hkj
+        have hpred_l :
+            PlanarInterface.cyclicPred O.period_pos k = l := by
+          simp [j, hkj, PlanarInterface.cyclicPred_cyclicSucc]
+        have hb_eq_pred :
+            b.1 =
+              (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail := by
+          have hfst : e.1.1 = (O.dart l).tail :=
+            congrArg Prod.fst hforward
+          simpa [e, hpred_l] using hfst
+        exact hb_pred hb_eq_pred
+      · have hsnd :
+            e.1.2 =
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail :=
+          congrArg Prod.snd hforward
+        simpa [e, j] using hsnd.symm
+    · refine ⟨l, ?_, ?_⟩
+      · intro hkl
+        have hb_eq_succ :
+            b.1 =
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail := by
+          have hfst :
+              e.1.1 =
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail :=
+            congrArg Prod.fst hreverse
+          simpa [e, hkl] using hfst
+        exact hb_succ hb_eq_succ
+      · have hsnd : e.1.2 = (O.dart l).tail :=
+          congrArg Prod.snd hreverse
+        simpa [e] using hsnd.symm
+
+set_option linter.style.longLine false in
 /-- q36 r12 source adapter, minimal deleted-tail form.
 
 The third-neighbour branch contributes only the repeated-tail index; the
@@ -2299,6 +2505,61 @@ noncomputable def
     · simpa [P, right] using hright_mem
 
 set_option linter.style.longLine false in
+/-- q45 third-neighbour cut-partition source from repeated-tail indices and
+canonical deleted-tail cut partitions.
+
+The third-neighbour branch supplies only the second occurrence of the same raw
+tail.  The concrete cut partition is then read from the canonical
+cyclic-successor deleted-tail cut-partition source on that repeated pair. -/
+theorem
+    S2_q45_rawFaceWalkThirdCarrierNeighborRepeatedTailCutPartitionSource_of_repeatedTailIndex_cyclicSuccCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (cyclicSuccCutPartitions :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource O) :
+    S2_r11_rawFaceWalkThirdCarrierNeighborRepeatedTailCutPartitionSource
+      (inputs := inputs) O := by
+  intro a b hb k hk hb_pred hb_succ
+  rcases thirdRepeatedTail a b hb k hk hb_pred hb_succ with
+    ⟨j, hkj, hj_tail⟩
+  have htail : (O.dart k).tail = (O.dart j).tail := hk.trans hj_tail.symm
+  rcases cyclicSuccCutPartitions (i := k) (j := j) hkj htail with
+    ⟨cutRows⟩
+  exact ⟨j, hkj, hj_tail, ⟨cutRows.1⟩⟩
+
+set_option linter.style.longLine false in
+/-- q45 r12 source from repeated-tail index data plus canonical
+deleted-tail cut partitions.
+
+This strictly lowers the r12 minimal deleted-tail source to the index-only
+third-neighbour branch and concrete repeated-tail cut partitions on the same
+raw orbit, using only the existing `inputs.noCutVertex` contradiction eraser. -/
+theorem
+    S2_q45_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource_of_repeatedTailIndex_cyclicSuccCutPartitions_noCut
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (cyclicSuccCutPartitions :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource O) :
+    S2_r12_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource
+      (inputs := inputs) O :=
+  S2_r13_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource_of_repeatedTailCutPartitions_noCut
+    (C := C) (inputs := inputs)
+    (S2_q45_rawFaceWalkThirdCarrierNeighborRepeatedTailCutPartitionSource_of_repeatedTailIndex_cyclicSuccCutPartitions
+      (C := C) (inputs := inputs) thirdRepeatedTail cyclicSuccCutPartitions)
+
+set_option linter.style.longLine false in
 /-- Claim `S2-q41-repeated-tail-cut-worker`, actual exterior-arc form.
 
 Pair-level repeated raw-tail actual exterior arc rows already separate the two
@@ -2503,6 +2764,188 @@ def
     simpa [rows] using rows.unreachable_after_delete
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q75-pairwise-minimal-deleted-tail-source`, canonical
+deleted-tail nonreachability form.
+
+The q24 cyclic-successor deleted-tail separation row is exactly enough to
+build the q38 pairwise minimal deleted-tail package: choose the two immediate
+raw successors of the repeated-tail occurrences as the two open-side witnesses.
+This is a raw face-walk source lowering and uses no actual-sector premise,
+W32 facade, completed boundary cycle, induced-frontier graph, arbitrary cycle,
+or endpoint shortcut. -/
+noncomputable def
+    S2_q75_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_cyclicSuccDeletedTailNonreachability
+    {C : _root_.UDConfig n}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (nonreachability :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource O) :
+    S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource O where
+  rows := by
+    intro i j hij htail
+    let left : Fin O.period := PlanarInterface.cyclicSucc O.period_pos i
+    let right : Fin O.period := PlanarInterface.cyclicSucc O.period_pos j
+    have hleft_ne_j : left ≠ j := by
+      intro hleft_eq
+      have htail_succ :
+          (O.dart i).tail =
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos i)).tail := by
+        simpa [left, hleft_eq] using htail
+      exact (rawFaceSuccOrbit_tail_ne_cyclicSucc O i) htail_succ
+    have hright_ne_i : right ≠ i := by
+      intro hright_eq
+      have htail_succ :
+          (O.dart j).tail =
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos j)).tail := by
+        simpa [right, hright_eq] using htail.symm
+      exact (rawFaceSuccOrbit_tail_ne_cyclicSucc O j) htail_succ
+    have hleft_arc : cyclicForwardOpenArc i j left := by
+      simpa [left] using
+        cyclicForwardOpenArc_cyclicSucc_left O.period_pos hleft_ne_j
+    have hright_arc : cyclicForwardOpenArc j i right := by
+      simpa [right] using
+        cyclicForwardOpenArc_cyclicSucc_left O.period_pos hright_ne_i
+    have hleft_ne_cut : (O.dart left).tail ≠ (O.dart i).tail := by
+      intro hleft_tail
+      exact
+        (rawFaceSuccOrbit_tail_ne_cyclicSucc O i)
+          (by simpa [left] using hleft_tail.symm)
+    have hright_ne_cut : (O.dart right).tail ≠ (O.dart i).tail := by
+      intro hright_tail
+      exact
+        (rawFaceSuccOrbit_tail_ne_cyclicSucc O j)
+          (by simpa [right] using htail.symm.trans hright_tail.symm)
+    have hnonreach :
+        ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+            ({(O.dart i).tail}ᶜ : Set (Fin n))).Reachable
+            ⟨(O.dart left).tail, by simpa using hleft_ne_cut⟩
+            ⟨(O.dart right).tail, by simpa using hright_ne_cut⟩ := by
+      simpa [left, right] using
+        nonreachability (i := i) (j := j) hij htail
+    exact
+      ⟨⟨left, hleft_arc, hleft_ne_cut⟩,
+        ⟨right, hright_arc, hright_ne_cut⟩,
+        hnonreach⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q49-repeated-tail-cut-source-worker`, actual exterior-arc form.
+
+Pairwise repeated-tail actual exterior-arc rows strictly lower to the q38
+pairwise minimal deleted-tail source by taking the two canonical cyclic
+successor tails as the open-side witnesses.  The nonreachability payload is the
+q41 exterior-arc topology row, so this step uses no no-cut contradiction,
+actual-sector rows, completed boundary cycle rows, W32 target, induced frontier
+graph, arbitrary cycle, all-adjacent endpoint shortcut, or synthetic enclosure
+row. -/
+noncomputable def
+    S2_q49_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (arcRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+            (inputs := inputs) O i j) :
+    S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource O where
+  rows := by
+    intro i j hij htail
+    let left : Fin O.period := PlanarInterface.cyclicSucc O.period_pos i
+    let right : Fin O.period := PlanarInterface.cyclicSucc O.period_pos j
+    have hleft_ne_j : left ≠ j := by
+      intro hleft_eq
+      have htail_succ :
+          (O.dart i).tail =
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos i)).tail := by
+        simpa [left, hleft_eq] using htail
+      exact (rawFaceSuccOrbit_tail_ne_cyclicSucc O i) htail_succ
+    have hright_ne_i : right ≠ i := by
+      intro hright_eq
+      have htail_succ :
+          (O.dart j).tail =
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos j)).tail := by
+        simpa [right, hright_eq] using htail.symm
+      exact (rawFaceSuccOrbit_tail_ne_cyclicSucc O j) htail_succ
+    have hleft_arc : cyclicForwardOpenArc i j left := by
+      simpa [left] using
+        cyclicForwardOpenArc_cyclicSucc_left O.period_pos hleft_ne_j
+    have hright_arc : cyclicForwardOpenArc j i right := by
+      simpa [right] using
+        cyclicForwardOpenArc_cyclicSucc_left O.period_pos hright_ne_i
+    have hleft_ne_cut : (O.dart left).tail ≠ (O.dart i).tail := by
+      intro hleft_tail
+      exact
+        (rawFaceSuccOrbit_tail_ne_cyclicSucc O i)
+          (by simpa [left] using hleft_tail.symm)
+    have hright_ne_cut : (O.dart right).tail ≠ (O.dart i).tail := by
+      intro hright_tail
+      exact
+        (rawFaceSuccOrbit_tail_ne_cyclicSucc O j)
+          (by simpa [right] using htail.symm.trans hright_tail.symm)
+    have hnonreach :
+        ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+            ({(O.dart i).tail}ᶜ : Set (Fin n))).Reachable
+            ⟨(O.dart left).tail, by simpa using hleft_ne_cut⟩
+            ⟨(O.dart right).tail, by simpa using hright_ne_cut⟩ := by
+      simpa [left, right] using
+        S2_q41_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource_of_repeatedTailActualExteriorArcRows
+          (C := C) (inputs := inputs) (O := O) arcRows
+          (i := i) (j := j) hij htail
+    exact
+      ⟨⟨left, hleft_arc, hleft_ne_cut⟩,
+        ⟨right, hright_arc, hright_ne_cut⟩,
+        hnonreach⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q53-repeated-tail-arc-worker`, orbit-level actual exterior-arc
+form.
+
+The stronger raw actual exterior-arc package already contains the pairwise
+repeated-tail actual-arc callback.  This names the direct handoff to the q38
+pairwise minimal deleted-tail source for the same raw face walk. -/
+noncomputable def
+    S2_q53_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_actualExteriorArcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource O :=
+  S2_q49_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+    (C := C) (inputs := inputs) (O := O)
+    (fun hij htail =>
+      actualArcRows.repeated_tail_arcRows hij htail)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q53-repeated-tail-arc-worker`, cyclic-successor cut source form.
+
+The same actual exterior-arc package also directly supplies the canonical
+cyclic-successor deleted-tail cut partitions, by projecting its repeated-tail
+arc rows and applying the q41 exterior-arc cut composer. -/
+noncomputable def
+    S2_q53_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource_of_actualExteriorArcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    S2_q24_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource O :=
+  S2_q41_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource_of_repeatedTailActualExteriorArcRows
+    (C := C) (inputs := inputs) O
+    (fun hij htail =>
+      actualArcRows.repeated_tail_arcRows hij htail)
+
+set_option linter.style.longLine false in
 /-- The q38 minimal deleted-tail source rebuilds the pointwise exterior cut
 rows when a downstream consumer still expects the older row shape. -/
 def
@@ -2529,6 +2972,31 @@ def
       right_index_mem := right.2.1
       right_index_ne_cut := right.2.2
       unreachable_after_delete := hnonreach }
+
+set_option linter.style.longLine false in
+/-- q45 r12 source from repeated-tail index data plus the q38 packaged
+pairwise minimal deleted-tail separation source. -/
+theorem
+    S2_q45_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource_of_repeatedTailIndex_pairwiseMinimalDeletedTailSeparation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (pairwiseSeparation :
+      S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource O) :
+    S2_r12_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource
+      (inputs := inputs) O :=
+  S2_q36_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource_of_repeatedTailIndex_minimalDeletedTailSeparation
+    (C := C) (inputs := inputs) thirdRepeatedTail
+    (by
+      intro i j hij htail
+      rcases pairwiseSeparation.rows hij htail with
+        ⟨left, right, hnonreach⟩
+      exact ⟨left, right, hnonreach⟩)
 
 set_option linter.style.longLine false in
 /-- Pairwise repeated-tail exterior cut rows strictly lower to the existing
@@ -3234,6 +3702,152 @@ noncomputable def
       (C := C) (inputs := inputs) (localRows C inputs)
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q66-local-cut-source-worker`, deleted-neighbour local separation
+form.
+
+The q66 local cut source is the checked r24 eraser: local Boolean
+deleted-neighbour separation rows on the actual carrier graph produce the
+carrier neighbour-pair cut-partition input source.  This source does not use
+actual-sector rows, W32, completed boundary cycles, induced frontier graphs,
+arbitrary cycles, convex hulls, identity angular order, global all-outgoing
+no-between rows, or all-adjacent endpoint shortcuts. -/
+noncomputable def
+    S2_q66_local_cut_source_worker_of_deletedNeighborLocalSeparationInputSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+        C inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_r24_carrier_cut_input_source_of_deletedNeighborLocalSeparationInputSource
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- Family form of the q66 local cut source from deleted-neighbour local
+separation rows. -/
+noncomputable def
+    S2_q66_local_cut_source_worker_family_of_deletedNeighborLocalSeparationInputSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs := by
+  intro m C inputs
+  exact
+    S2_q66_local_cut_source_worker_of_deletedNeighborLocalSeparationInputSource
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- q66 local cut source from the r30 finite-plane deleted-neighbour local
+separation primitive. -/
+noncomputable def
+    S2_q66_local_cut_source_worker_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q65_carrier_field_source_worker_cutPartitionInputSource_of_finitePlaneLocalSeparationPrimitive
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- Family q66 local cut source from the r30 finite-plane local-separation
+primitive. -/
+noncomputable def
+    S2_q66_local_cut_source_worker_family_of_finitePlaneLocalSeparationPrimitive
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q66_local_cut_source_worker_of_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- q66 local cut source from pointwise local two-germ rows.
+
+The local two-germ rows already name the two actual selected
+`unboundedFrontierEdgeSet` germs and exclude any third actual carrier
+neighbour through the checked local-sector eraser. -/
+noncomputable def
+    S2_q66_local_cut_source_worker_of_localTwoGermRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (localRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_agent_carrier_cut_source_direct_20260521e65_of_localTwoGermRows
+    (C := C) (inputs := inputs) localRows
+
+set_option linter.style.longLine false in
+/-- Family q66 local cut source from pointwise local two-germ rows. -/
+noncomputable def
+    S2_q66_local_cut_source_worker_family_of_localTwoGermRows
+    (localRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs := by
+  intro m C inputs
+  exact
+    S2_q66_local_cut_source_worker_of_localTwoGermRows
+      (C := C) (inputs := inputs) (localRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q66 residual in the current finite-plane local-separation primitive
+surface. -/
+theorem
+    S2_q66_local_cut_source_worker_nonempty_iff_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs) ↔
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs :=
+  S2_q65_carrier_field_source_worker_cutPartitionInputSource_nonempty_iff_finitePlaneLocalSeparationPrimitive
+    (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Family-level q66 residual: producing the local cut source for every
+finite-plane input is equivalent to producing the r30 finite-plane
+local-separation primitive for every input. -/
+theorem
+    S2_q66_local_cut_source_worker_family_nonempty_iff_finitePlaneLocalSeparationPrimitive_family :
+    Nonempty
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs) ↔
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) := by
+  constructor
+  · rintro ⟨source⟩ m C inputs
+    exact
+      (S2_q66_local_cut_source_worker_nonempty_iff_finitePlaneLocalSeparationPrimitive
+        (C := C) (inputs := inputs)).1 ⟨source C inputs⟩
+  · intro source
+    exact
+      ⟨S2_q66_local_cut_source_worker_family_of_finitePlaneLocalSeparationPrimitive
+        source⟩
+
+set_option linter.style.longLine false in
 /-- Claim `S2-agent-pool8-neighbor-cut-partition-source`.
 
 The actual carrier neighbour-pair/cut-partition input source is strictly
@@ -3507,6 +4121,939 @@ theorem
   exact
     S2_q26_finitePlaneLocalSeparationPrimitive_of_actualUnboundedFrontierGermCarrierCutSource
       (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q68-local-separation-primitive-worker`, local finite-plane data
+form.
+
+The q68 deleted-neighbour primitive is produced directly from the selected
+local finite-plane isolation rows.  Those rows first erase to actual
+`unboundedFrontierCarrierGraph` local-sector rows, and the local-sector
+constructor fills the deleted-neighbour Boolean side-separation source for
+each third actual carrier neighbour.  No actual-sector rows, completed
+boundary cycle, W32 consumer, induced frontier graph, arbitrary cycle, or
+all-adjacent endpoint premise is used. -/
+noncomputable def
+    S2_q68_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+      C inputs :=
+  unboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource_of_localSectorRows
+    (C := C) (inputs := inputs)
+    (localSectorRows_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- q68 r30 primitive from the concrete selected local finite-plane isolation
+rows. -/
+theorem
+    S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs :=
+  S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_localPlanarSeparationInputSource
+    (C := C) (inputs := inputs)
+    (S2_q68_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family q68 r30 primitive from selected local finite-plane isolation rows. -/
+theorem
+    S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+          (C := C) inputs := by
+  intro m C inputs
+  exact
+    S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q68 residual: the r30 deleted-neighbour primitive is equivalent to
+nonempty selected local finite-plane isolation rows.  The source direction for
+q68 is the direct theorem above; this equivalence records the smallest checked
+local residual currently exposed in this file. -/
+theorem
+    S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs <->
+      Nonempty (SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) := by
+  simpa [S2_q26_actualUnboundedFrontierGermCarrierCutSource] using
+    S2_q26_finitePlaneLocalSeparationPrimitive_iff_actualUnboundedFrontierGermCarrierCutSource
+      (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- q69 local-isolation lowering from selected incident frontier edges.
+
+The selected heads are the actual `unboundedFrontierEdgeSet` incidences.  The
+metric radius and no-third-germ row are supplied by the existing finite drawing
+vertex-isolation eraser in `S2_q43_local_isolation_source_worker_of_selectedIncidentEdgePairRows`,
+so no actual-sector, boundary-cycle, W32, induced graph, arbitrary cycle, or
+all-adjacent endpoint premise is introduced. -/
+noncomputable def
+    S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_selectedIncidentEdgePairRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source : LocalSelectedIncidentEdgePairSourceRows inputs) :
+    SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs :=
+  S2_q43_local_isolation_source_worker_of_selectedIncidentEdgePairRows
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- q69 local-isolation lowering from local selected no-third rows.
+
+Local selected no-third rows first expose the same actual selected incident
+edge pair; the finite drawing vertex-isolation eraser then rebuilds the
+structured selected local-isolation package. -/
+noncomputable def
+    S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_localSelectedNoThirdGermSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs :=
+  S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_selectedIncidentEdgePairRows
+    (C := C) (inputs := inputs)
+    (localSelectedIncidentEdgePairSourceRows_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family q69 local-isolation lowering from selected incident frontier edges. -/
+noncomputable def
+    S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_family_of_selectedIncidentEdgePairRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          LocalSelectedIncidentEdgePairSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_selectedIncidentEdgePairRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Family q69 local-isolation lowering from local selected no-third rows. -/
+noncomputable def
+    S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_family_of_localSelectedNoThirdGermSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- q69 r30 deleted-neighbour primitive from selected incident frontier edges.
+
+This composes the finite drawing selected local-isolation eraser with the q68
+local finite-plane separation reducer. -/
+theorem
+    S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedIncidentEdgePairRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source : LocalSelectedIncidentEdgePairSourceRows inputs) :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs :=
+  S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (C := C) (inputs := inputs)
+    (S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_selectedIncidentEdgePairRows
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- q69 r30 deleted-neighbour primitive from local selected no-third rows. -/
+theorem
+    S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_localSelectedNoThirdGermSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs :=
+  S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (C := C) (inputs := inputs)
+    (S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family q69 r30 primitive from selected incident frontier edges. -/
+theorem
+    S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_selectedIncidentEdgePairRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          LocalSelectedIncidentEdgePairSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+          (C := C) inputs := by
+  intro m C inputs
+  exact
+    S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedIncidentEdgePairRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Family q69 r30 primitive from local selected no-third rows. -/
+theorem
+    S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_localSelectedNoThirdGermSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+          (C := C) inputs := by
+  intro m C inputs
+  exact
+    S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- q69/q64 cutRows residual from selected local finite-plane isolation rows.
+
+This names the full q68 route at the exact q64 `cutRows` surface:
+selected edge local isolation first gives the r30 finite-plane
+deleted-neighbour local-separation primitive, and the checked q66 local cut
+eraser packages that primitive as the carrier neighbour-pair cut input source.
+No actual-sector rows, completed boundary cycle, W32 consumer, induced graph,
+arbitrary cycle, or all-adjacent endpoint premise is used. -/
+noncomputable def
+    S2_q69_q64_cutRows_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q66_local_cut_source_worker_of_finitePlaneLocalSeparationPrimitive
+    (C := C) (inputs := inputs)
+    (S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- q69/q64 cutRows residual from local selected no-third-germ rows.
+
+The only extra step is the checked q69 lowering from local selected no-third
+rows to selected local finite-plane isolation rows, after which the q68 route
+above supplies the q64 carrier cutRows field. -/
+noncomputable def
+    S2_q69_q64_cutRows_of_localSelectedNoThirdGermSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q69_q64_cutRows_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (C := C) (inputs := inputs)
+    (S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family q69/q64 cutRows residual from selected local finite-plane isolation
+rows. -/
+noncomputable def
+    S2_q69_q64_cutRows_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q69_q64_cutRows_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Family q69/q64 cutRows residual from local selected no-third-germ rows. -/
+noncomputable def
+    S2_q69_q64_cutRows_family_of_localSelectedNoThirdGermSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q69_q64_cutRows_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q69/q64 cutRows residual at selected local finite-plane isolation
+rows. -/
+theorem
+    S2_q69_q64_cutRows_nonempty_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs) <->
+      Nonempty (SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :=
+  Iff.trans
+    (S2_q66_local_cut_source_worker_nonempty_iff_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs))
+    (S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs))
+
+set_option linter.style.longLine false in
+/-- Exact q69/q64 cutRows residual at local selected no-third-germ rows. -/
+theorem
+    S2_q69_q64_cutRows_nonempty_iff_localSelectedNoThirdGermSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs) <->
+      Nonempty
+        (UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) := by
+  constructor
+  · rintro ⟨cutRows⟩
+    exact
+      ⟨localSelectedNoThirdGermSource_of_selectedIncidentEdgePairRows
+        (C := C) (inputs := inputs)
+        (localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+          (C := C) (inputs := inputs) cutRows)⟩
+  · rintro ⟨source⟩
+    exact
+      ⟨S2_q69_q64_cutRows_of_localSelectedNoThirdGermSource
+        (C := C) (inputs := inputs) source⟩
+
+set_option linter.style.longLine false in
+/-- Exact q69 residual: r30 is equivalent to nonempty selected incident rows. -/
+theorem
+    S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedIncidentEdgePairRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs <->
+      Nonempty (LocalSelectedIncidentEdgePairSourceRows inputs) :=
+  Iff.trans
+    (S2_q25_carrier_cut_source_nonempty_iff_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs)).symm
+    (S2_agent_carrier_cut_source_direct_20260521e65_nonempty_iff_selectedIncidentEdgePairRows
+      (C := C) (inputs := inputs))
+
+set_option linter.style.longLine false in
+/-- Exact q69 residual: r30 is equivalent to nonempty local selected no-third
+rows. -/
+theorem
+    S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_localSelectedNoThirdGermSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs <->
+      Nonempty
+        (UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) := by
+  constructor
+  · intro source
+    exact
+      ⟨localSelectedNoThirdGermSource_of_selectedIncidentEdgePairRows
+        (C := C) (inputs := inputs)
+        (Classical.choice
+          ((S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs)).1 source))⟩
+  · rintro ⟨source⟩
+    exact
+      S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_localSelectedNoThirdGermSource
+        (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q70-local-selected-pair-source-worker`, actual carrier-neighbour
+row form.
+
+The q70 selected-pair source is reduced to pointwise two-neighbour rows of the
+actual `unboundedFrontierCarrierGraph`.  The selected heads and incidences are
+read back through `unboundedFrontierCarrierGraph_adj_iff`, hence through the
+actual `unboundedFrontierEdgeSet`; no induced frontier graph, boundary cycle,
+actual-sector row, endpoint shortcut, convex hull, or identity angular order is
+introduced. -/
+noncomputable def
+    S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborPairRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (neighborRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierNeighborPairAt inputs a) :
+    LocalSelectedIncidentEdgePairSourceRows inputs :=
+  S2_agent_selected_incident_edge_source_20260520c_of_neighborPairRows
+    (C := C) (inputs := inputs) neighborRows
+
+set_option linter.style.longLine false in
+/-- q70 selected-pair source from actual two-regularity of the concrete
+unbounded-frontier carrier graph, in `neighborFinset.card = 2` form.
+
+This is the strict local residual below `FinitePlanarOuterComponentInputs`:
+prove that every actual frontier carrier vertex has exactly two neighbours in
+`unboundedFrontierCarrierGraph C inputs`; the existing actual-edge eraser then
+constructs `LocalSelectedIncidentEdgePairSourceRows inputs`. -/
+noncomputable def
+    S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    LocalSelectedIncidentEdgePairSourceRows inputs := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    S2_agent_selected_incident_edge_source_20260520c_of_localSectorRows
+      (C := C) (inputs := inputs)
+      (localSectorRows_of_unboundedFrontierCarrierGraph_degree_two
+        (C := C) (inputs := inputs)
+        (by
+          intro a
+          exact hcard a))
+
+set_option linter.style.longLine false in
+/-- Family q70 selected-pair source from actual concrete-carrier
+two-regularity. -/
+noncomputable def
+    S2_q70_local_selected_pair_source_worker_family_of_frontierCarrierGraph_neighborFinset_card_two
+    (hcard :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+            unboundedFrontierCarrierGraph_decidableAdj C inputs
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+                2) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        LocalSelectedIncidentEdgePairSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs (hcard C inputs)
+
+set_option linter.style.longLine false in
+/-- q70 no-third-germ source from actual concrete-carrier two-regularity.
+
+The selected incident rows produced above feed the existing finite local-star
+eraser, which promotes nearby frontier germs to actual
+`unboundedFrontierEdgeSet` incidences before excluding a third selected head. -/
+noncomputable def
+    S2_q70_localSelectedNoThirdGermSource_of_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs :=
+  localSelectedNoThirdGermSource_of_selectedIncidentEdgePairRows
+    (C := C) (inputs := inputs)
+    (S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs hcard)
+
+set_option linter.style.longLine false in
+/-- q70 rows in the exact q69 local-isolation surface.
+
+This names the handoff requested by the q69 reducers: actual concrete-carrier
+two-regularity first supplies `LocalSelectedIncidentEdgePairSourceRows`, and
+q69 turns those selected incident edges into selected local finite-plane
+isolation rows. -/
+noncomputable def
+    S2_q70_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs :=
+  S2_q69_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_of_selectedIncidentEdgePairRows
+    (C := C) (inputs := inputs)
+    (S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs hcard)
+
+set_option linter.style.longLine false in
+/-- q70/q69 finite-plane local-separation consequence from actual concrete
+carrier two-regularity. -/
+theorem
+    S2_q70_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs :=
+  S2_q69_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedIncidentEdgePairRows
+    (C := C) (inputs := inputs)
+    (S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs hcard)
+
+set_option linter.style.longLine false in
+/-- Exact q70 residual: selected incident-edge rows are equivalent to actual
+two-neighbour rows on `unboundedFrontierCarrierGraph C inputs`. -/
+theorem
+    S2_q70_local_selected_pair_source_worker_nonempty_iff_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty (LocalSelectedIncidentEdgePairSourceRows inputs) <->
+      (letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    Iff.intro
+      (by
+        intro source
+        exact
+          unboundedFrontierCarrierGraph_neighborFinset_card_two_of_neighborPairRows
+            (C := C) inputs
+            (unboundedFrontierCarrierNeighborPairRows_of_selectedIncidentEdgePairRows
+              (C := C) (inputs := inputs) (Classical.choice source)))
+      (by
+        intro hcard
+        exact
+          Nonempty.intro
+            (S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+              (C := C) inputs hcard))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-carrier-two-neighbour-source-worker`.
+
+The actual carrier two-neighbour source is lowered to the finite-plane
+deleted-neighbour local separation input source.  That source names two
+genuine incident `unboundedFrontierEdgeSet` heads at each actual
+exterior-frontier carrier vertex and supplies the local deleted-neighbour
+separation for every purported third carrier neighbour; the checked
+exterior-component eraser then turns those rows into the concrete
+`neighborFinset.card = 2` theorem consumed by q70. -/
+theorem
+    S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+        C inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    unboundedFrontierCarrierGraph_neighborFinset_card_two_of_deletedNeighborLocalSeparationInputSource
+      (C := C) inputs source
+
+set_option linter.style.longLine false in
+/-- r30 compatibility wrapper for
+`S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource`.
+-/
+theorem
+    S2_q72_carrier_two_neighbour_source_worker_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource
+      (C := C) inputs
+      (S2_r30_deleted_neighbor_local_separation_source_20260521r30_of_finitePlaneLocalSeparationPrimitive
+        (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q72_carrier_two_neighbour_source_worker_of_finitePlaneLocalSeparationPrimitive`.
+-/
+theorem
+    S2_q72_carrier_two_neighbour_source_worker_family_of_finitePlaneLocalSeparationPrimitive
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2 := by
+  intro m C inputs
+  exact
+    S2_q72_carrier_two_neighbour_source_worker_of_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs (source C inputs)
+
+set_option linter.style.longLine false in
+/-- q72 feeds the existing q70 selected-pair consumer. -/
+noncomputable def
+    S2_q72_local_selected_pair_source_worker_of_deletedNeighborLocalSeparationInputSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+        C inputs) :
+    LocalSelectedIncidentEdgePairSourceRows inputs :=
+  S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+    (C := C) inputs
+    (S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource
+      (C := C) inputs source)
+
+set_option linter.style.longLine false in
+/-- q72/r30 feeds the existing q70 selected-pair consumer. -/
+noncomputable def
+    S2_q72_local_selected_pair_source_worker_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    LocalSelectedIncidentEdgePairSourceRows inputs :=
+  S2_q72_local_selected_pair_source_worker_of_deletedNeighborLocalSeparationInputSource
+    (C := C) inputs
+    (S2_r30_deleted_neighbor_local_separation_source_20260521r30_of_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family q72/q70 selected-pair consumer wrapper. -/
+noncomputable def
+    S2_q72_local_selected_pair_source_worker_family_of_finitePlaneLocalSeparationPrimitive
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        LocalSelectedIncidentEdgePairSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_q72_local_selected_pair_source_worker_of_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q73-carrier-local-separation-source-worker`.
+
+The q72 deleted-neighbour local-separation leaf is exactly the concrete
+two-neighbour row for the actual unbounded-frontier carrier graph.  In this
+source direction, the two carrier neighbours give local-sector rows, and those
+rows fill the deleted-neighbour Boolean side-separation source. -/
+noncomputable def
+    S2_q73_deleted_neighbor_localSeparationInputSource_of_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+      C inputs := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    unboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource_of_localSectorRows
+      (C := C) (inputs := inputs)
+      (localSectorRows_of_unboundedFrontierCarrierGraph_degree_two
+        (C := C) (inputs := inputs) hcard)
+
+set_option linter.style.longLine false in
+/-- q73 r30 finite-plane local-separation primitive from the concrete
+two-neighbour row for the actual carrier graph. -/
+theorem
+    S2_q73_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs :=
+  S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_localPlanarSeparationInputSource
+    (C := C) (inputs := inputs)
+    (S2_q73_deleted_neighbor_localSeparationInputSource_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs hcard)
+
+set_option linter.style.longLine false in
+/-- Family form of the q73 local-separation source from concrete carrier
+two-neighbour rows. -/
+noncomputable def
+    S2_q73_deleted_neighbor_localSeparationInputSource_family_of_frontierCarrierGraph_neighborFinset_card_two
+    (hcard :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+            unboundedFrontierCarrierGraph_decidableAdj C inputs
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+              2) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q73_deleted_neighbor_localSeparationInputSource_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs (hcard C inputs)
+
+set_option linter.style.longLine false in
+/-- Family form of the q73 r30 primitive from concrete carrier
+two-neighbour rows. -/
+theorem
+    S2_q73_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_frontierCarrierGraph_neighborFinset_card_two
+    (hcard :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+            unboundedFrontierCarrierGraph_decidableAdj C inputs
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+              2) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+          (C := C) inputs := by
+  intro m C inputs
+  exact
+    S2_q73_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs (hcard C inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q73 residual for the deleted-neighbour local-separation source.
+
+Thus the local Boolean side-separation package is not the remaining input-level
+carrier leaf: it is equivalent to proving that the concrete
+`unboundedFrontierCarrierGraph` has exactly two neighbours at every actual
+unbounded-frontier carrier vertex. -/
+theorem
+    S2_q73_deleted_neighbor_localSeparationInputSource_nonempty_iff_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+          C inputs) <->
+      (letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) := by
+  constructor
+  · rintro ⟨source⟩
+    exact
+      S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource
+        (C := C) inputs source
+  · intro hcard
+    exact
+      ⟨S2_q73_deleted_neighbor_localSeparationInputSource_of_frontierCarrierGraph_neighborFinset_card_two
+        (C := C) inputs hcard⟩
+
+set_option linter.style.longLine false in
+/-- Exact q73 residual for the r30 finite-plane local-separation primitive. -/
+theorem
+    S2_q73_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs <->
+      (letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) := by
+  constructor
+  · intro source
+    exact
+      S2_q72_carrier_two_neighbour_source_worker_of_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs source
+  · intro hcard
+    exact
+      S2_q73_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_frontierCarrierGraph_neighborFinset_card_two
+        (C := C) inputs hcard
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q72-cutrows-from-card-worker`.
+
+The q71/q72 carrier cut-partition input source is reduced directly from the
+actual concrete-carrier two-neighbour row.  The proof routes through the
+checked q70 selected-pair source and then the e65 selected-incident
+cut-partition constructor, so the selected heads remain genuine
+`unboundedFrontierEdgeSet` incidences and no induced frontier graph,
+completed boundary cycle, actual-sector row, arbitrary endpoint claim, or W32
+consumer is used. -/
+noncomputable def
+    S2_q72_cutrows_from_card_worker_of_frontierCarrierGraph_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_agent_carrier_cut_source_direct_20260521e65_of_selectedIncidentEdgePairRows
+    (C := C) (inputs := inputs)
+    (S2_q70_local_selected_pair_source_worker_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs hcard)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q72_cutrows_from_card_worker_of_frontierCarrierGraph_neighborFinset_card_two`.
+-/
+noncomputable def
+    S2_q72_cutrows_from_card_worker_family_of_frontierCarrierGraph_neighborFinset_card_two
+    (hcard :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+            unboundedFrontierCarrierGraph_decidableAdj C inputs
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+              2) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q72_cutrows_from_card_worker_of_frontierCarrierGraph_neighborFinset_card_two
+      (C := C) inputs (hcard C inputs)
+
+set_option linter.style.longLine false in
+/-- q72 cut rows directly from the deleted-neighbour local-separation source.
+
+This is the promised strict lowering below the q72 `hcard` leaf: the local
+finite-plane deleted-neighbour rows first prove actual
+`unboundedFrontierCarrierGraph` two-neighbour cardinality, and the existing
+q72 card worker then packages the carrier cut-partition input source. -/
+noncomputable def
+    S2_q72_cutrows_from_card_worker_of_deletedNeighborLocalSeparationInputSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+        C inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q72_cutrows_from_card_worker_of_frontierCarrierGraph_neighborFinset_card_two
+    (C := C) inputs
+    (S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource
+      (C := C) inputs source)
+
+set_option linter.style.longLine false in
+/-- q72 cut rows directly from the r30 finite-plane local-separation primitive.
+
+This is the pointwise r30 wrapper around
+`S2_q72_cutrows_from_card_worker_of_deletedNeighborLocalSeparationInputSource`.
+-/
+noncomputable def
+    S2_q72_cutrows_from_card_worker_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q72_cutrows_from_card_worker_of_deletedNeighborLocalSeparationInputSource
+    (C := C) inputs
+    (S2_r30_deleted_neighbor_local_separation_source_20260521r30_of_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family form of the q72 cut-row lowering from the r30 finite-plane
+local-separation primitive. -/
+noncomputable def
+    S2_q72_cutrows_from_card_worker_family_of_finitePlaneLocalSeparationPrimitive
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q72_cutrows_from_card_worker_of_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Nonempty q72 cut-row consequence of the r30 finite-plane local-separation
+primitive. -/
+theorem
+    S2_q72_cutrows_from_card_worker_nonempty_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    Nonempty
+        (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs) :=
+  ⟨S2_q72_cutrows_from_card_worker_of_finitePlaneLocalSeparationPrimitive
+    (C := C) inputs source⟩
+
+set_option linter.style.longLine false in
+/-- Family nonempty q72 cut-row consequence of the r30 finite-plane
+local-separation primitive. -/
+theorem
+    S2_q72_cutrows_from_card_worker_family_nonempty_of_finitePlaneLocalSeparationPrimitive
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) :
+    Nonempty
+        (forall {m : Nat} (C : _root_.UDConfig m)
+          (inputs : FinitePlanarOuterComponentInputs C),
+            UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+              C inputs) :=
+  ⟨S2_q72_cutrows_from_card_worker_family_of_finitePlaneLocalSeparationPrimitive
+    source⟩
 
 set_option linter.style.longLine false in
 /-- Claim `S2-agent-carrier-cutpartition-source-20260521f9`.
@@ -4256,6 +5803,1051 @@ theorem
     exact
       ⟨S2_agent_q5_cutpartition_source_of_localSelectedNoThirdGermSource
         (C := C) (inputs := inputs) source⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q74-carrier-card-two-source-worker`.
+
+The actual carrier `neighborFinset.card = 2` source is strictly lowered to the
+sharp actual cut-partition input source.  The proof is the no-cut eraser:
+every third concrete carrier neighbour supplies a
+`CutVertexInterface.CutVertexPartition`, contradicting
+`inputs.noCutVertex`, so only the two selected actual `unboundedFrontierEdgeSet`
+heads remain. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+        C inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    S2_agent_carrier_degree_two_source_worker_20260521d1_neighborFinset_card_two
+      (C := C) inputs source
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut`. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_family_of_cutPartitionInputSource_noCut
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2 := by
+  intro m C inputs
+  exact
+    S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut
+      (C := C) inputs (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Nonempty q74 form of the no-cut cut-partition lowering. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_of_nonempty_cutPartitionInputSource_noCut
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Nonempty
+        (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs)) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 := by
+  rcases source with ⟨source⟩
+  exact
+    S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut
+      (C := C) inputs source
+
+set_option linter.style.longLine false in
+/-- Exact q74 residual: the carrier card-two row is equivalent to the sharp
+actual cut-partition source.  The forward direction is the existing q72 card
+worker; the reverse direction is the no-cut eraser above. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_nonempty_cutPartitionInputSource_iff
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs) <->
+      (letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) := by
+  constructor
+  · intro source
+    exact
+      S2_q74_carrier_card_two_source_worker_of_nonempty_cutPartitionInputSource_noCut
+        (C := C) (inputs := inputs) source
+  · intro hcard
+    exact
+      ⟨S2_q72_cutrows_from_card_worker_of_frontierCarrierGraph_neighborFinset_card_two
+        (C := C) inputs hcard⟩
+
+set_option linter.style.longLine false in
+/-- q74 direct deleted-neighbour lowering for the actual carrier card-two leaf.
+
+This exposes the local-separation row itself as the source of the concrete
+`unboundedFrontierCarrierGraph` two-neighbour cardinality, without routing
+through a downstream `hcard` premise. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_of_deletedNeighborLocalSeparationInputSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+        C inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 :=
+  S2_q72_carrier_two_neighbour_source_worker_of_deletedNeighborLocalSeparationInputSource
+    (C := C) inputs source
+
+set_option linter.style.longLine false in
+/-- q74 r30 finite-plane local-separation lowering for the actual carrier
+card-two leaf. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_of_finitePlaneLocalSeparationPrimitive
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 :=
+  S2_q72_carrier_two_neighbour_source_worker_of_finitePlaneLocalSeparationPrimitive
+    (C := C) inputs source
+
+set_option linter.style.longLine false in
+/-- Family q74 deleted-neighbour lowering for the actual carrier card-two
+leaf. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_family_of_deletedNeighborLocalSeparationInputSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2 := by
+  intro m C inputs
+  exact
+    S2_q74_carrier_card_two_source_worker_of_deletedNeighborLocalSeparationInputSource
+      (C := C) inputs (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Family q74 r30 finite-plane local-separation lowering for the actual
+carrier card-two leaf. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_family_of_finitePlaneLocalSeparationPrimitive
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+            (C := C) inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2 := by
+  intro m C inputs
+  exact
+    S2_q74_carrier_card_two_source_worker_of_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q74 residual at deleted-neighbour local separation. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_nonempty_deletedNeighborLocalSeparationInputSource_iff
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+          C inputs) <->
+      (letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :=
+  S2_q73_deleted_neighbor_localSeparationInputSource_nonempty_iff_frontierCarrierGraph_neighborFinset_card_two
+    (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q74 residual at the r30 finite-plane local-separation primitive. -/
+theorem
+    S2_q74_carrier_card_two_source_worker_finitePlaneLocalSeparationPrimitive_iff
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+        (C := C) inputs <->
+      (letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :=
+  S2_q73_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_frontierCarrierGraph_neighborFinset_card_two
+    (C := C) (inputs := inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q75-finite-plane-local-separation-source`,
+selected local finite-plane isolation form.
+
+The deleted-neighbour local-separation source feeding the q74 carrier card-two
+worker is lowered to selected local isolation rows: the selected actual
+`unboundedFrontierEdgeSet` heads first erase to local-sector rows, and those
+rows provide the Boolean deleted-neighbour separation for every third carrier
+neighbour. -/
+noncomputable def
+    S2_q75_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+      C inputs :=
+  S2_q68_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- q75 r30 finite-plane local-separation primitive from selected local
+finite-plane isolation rows. -/
+theorem
+    S2_q75_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+      (C := C) inputs :=
+  S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- Family q75 deleted-neighbour local-separation source from selected local
+finite-plane isolation rows. -/
+noncomputable def
+    S2_q75_deleted_neighbor_localSeparationInputSource_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q75_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Family q75 r30 finite-plane local-separation primitive from selected local
+finite-plane isolation rows. -/
+theorem
+    S2_q75_deleted_neighbor_finitePlaneLocalSeparationPrimitive_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+          (C := C) inputs := by
+  intro m C inputs
+  exact
+    S2_q75_deleted_neighbor_finitePlaneLocalSeparationPrimitive_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q75 residual for the deleted-neighbour local-separation source. -/
+theorem
+    S2_q75_deleted_neighbor_localSeparationInputSource_nonempty_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+          C inputs) ↔
+      Nonempty (SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :=
+  Iff.trans
+    (S2_r30_deleted_neighbor_local_separation_source_nonempty_iff_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs))
+    (S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs))
+
+set_option linter.style.longLine false in
+/-- q75 card-two consequence from selected local finite-plane isolation rows,
+feeding the q74 deleted-neighbour carrier card-two worker. -/
+theorem
+    S2_q75_carrier_card_two_source_worker_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 :=
+  S2_q74_carrier_card_two_source_worker_of_deletedNeighborLocalSeparationInputSource
+    (C := C) inputs
+    (S2_q75_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family q75 card-two consequence from selected local finite-plane
+isolation rows. -/
+theorem
+    S2_q75_carrier_card_two_source_worker_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2 := by
+  intro m C inputs
+  exact
+    S2_q75_carrier_card_two_source_worker_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) inputs (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Nonempty q75 card-two consequence from selected local finite-plane
+isolation rows. -/
+theorem
+    S2_q75_carrier_card_two_source_worker_of_nonempty_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Nonempty (SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs)) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 := by
+  rcases source with ⟨source⟩
+  exact
+    S2_q75_carrier_card_two_source_worker_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) inputs source
+
+set_option linter.style.longLine false in
+/-- Exact q75 residual for the q74 carrier card-two worker at selected local
+finite-plane isolation rows. -/
+theorem
+    S2_q75_carrier_card_two_source_worker_nonempty_selectedUnboundedFrontierEdgeLocalIsolationSourceRows_iff
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty (SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) ↔
+      (letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :=
+  Iff.trans
+    (S2_q75_deleted_neighbor_localSeparationInputSource_nonempty_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs)).symm
+    (S2_q74_carrier_card_two_source_worker_nonempty_deletedNeighborLocalSeparationInputSource_iff
+      (C := C) (inputs := inputs))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q78-carrier-cut-source-lowering`, selected local-isolation form.
+
+The selected unbounded-frontier edge local-isolation rows feed the q75/q68
+deleted-neighbour local-separation source, and the checked r24 eraser then
+packages the sharp actual carrier cut-partition input source.  This stays on
+actual selected frontier edges and deleted-neighbour separation rows; it does
+not use actual-sector, W32, boundary-cycle, induced-frontier, arbitrary-cycle,
+or all-adjacent endpoint premises. -/
+noncomputable def
+    S2_q78_carrier_cut_source_lowering_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_r24_carrier_cut_input_source_of_deletedNeighborLocalSeparationInputSource
+    (C := C) (inputs := inputs)
+    (S2_q75_deleted_neighbor_localSeparationInputSource_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family form of the q78 selected local-isolation carrier-cut lowering. -/
+noncomputable def
+    S2_q78_carrier_cut_source_lowering_family_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_q78_carrier_cut_source_lowering_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Exact q78 residual for the sharp carrier cut source at selected local
+isolation rows. -/
+theorem
+    S2_q78_carrier_cut_source_lowering_nonempty_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty
+        (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+          C inputs) ↔
+      Nonempty (SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :=
+  Iff.trans
+    (S2_q25_carrier_cut_source_nonempty_iff_finitePlaneLocalSeparationPrimitive
+      (C := C) (inputs := inputs))
+    (S2_q68_deleted_neighbor_finitePlaneLocalSeparationPrimitive_iff_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+      (C := C) (inputs := inputs))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q75-carrier-cut-source-worker`, cyclic repeated-boundary
+cut-partition form.
+
+The raw repeated-tail index source identifies the second occurrence of a
+third-neighbour tail.  Concrete cyclic-successor deleted-tail cut partitions
+then provide the actual cut partition needed by the carrier input source.
+The final card-two consequence is handled separately by the q74 no-cut eraser,
+so this step stays below actual-sector, W32, induced-frontier, endpoint, and
+global no-between premises. -/
+noncomputable def
+    S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (cyclicSuccCutPartitions :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource O) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_agent_carrier_cut_source_worker_20260521e32_inputSource_of_fieldwise
+    (C := C) (inputs := inputs)
+    (S2_r11_carrierCutFieldwise_of_rawOrbit_thirdNeighborRepeatedTailCutPartitions
+      (C := C) (inputs := inputs) O
+      edge_openSegment_frontier frontier_vertex_tail_coverage
+      raw_pred_succ_tail_ne
+      (S2_q45_rawFaceWalkThirdCarrierNeighborRepeatedTailCutPartitionSource_of_repeatedTailIndex_cyclicSuccCutPartitions
+        (C := C) (inputs := inputs) thirdRepeatedTail
+        cyclicSuccCutPartitions))
+
+set_option linter.style.longLine false in
+/-- q75 carrier cut source from index-only repeated-tail data plus the q38
+pairwise minimal deleted-tail separation package. -/
+noncomputable def
+    S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_pairwiseMinimalDeletedTailSeparation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (pairwiseSeparation :
+      S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource O) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_agent_carrier_cut_source_worker_20260521e32_inputSource_of_fieldwise
+    (C := C) (inputs := inputs)
+    (S2_r12_carrierCutFieldwise_of_rawOrbit_thirdNeighborMinimalDeletedTailSeparation
+      (C := C) (inputs := inputs) O
+      edge_openSegment_frontier frontier_vertex_tail_coverage
+      raw_pred_succ_tail_ne
+      (S2_q45_rawFaceWalkThirdCarrierNeighborMinimalDeletedTailSeparationSource_of_repeatedTailIndex_pairwiseMinimalDeletedTailSeparation
+        (C := C) (inputs := inputs) thirdRepeatedTail
+        pairwiseSeparation))
+
+set_option linter.style.longLine false in
+/-- q75 card-two consequence from cyclic repeated-boundary cut partitions,
+feeding the q74 no-cut carrier card-two source. -/
+theorem
+    S2_q75_carrier_card_two_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccCutPartitions_noCut
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (cyclicSuccCutPartitions :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource O) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 :=
+  S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut
+    (C := C) inputs
+    (S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccCutPartitions
+      (C := C) (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage raw_pred_succ_tail_ne
+      thirdRepeatedTail cyclicSuccCutPartitions)
+
+set_option linter.style.longLine false in
+/-- q75 card-two consequence from pairwise minimal deleted-tail separation,
+feeding the q74 no-cut carrier card-two source. -/
+theorem
+    S2_q75_carrier_card_two_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_pairwiseMinimalDeletedTailSeparation_noCut
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (pairwiseSeparation :
+      S2_q38_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource O) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 :=
+  S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut
+    (C := C) inputs
+    (S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_pairwiseMinimalDeletedTailSeparation
+      (C := C) (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage raw_pred_succ_tail_ne
+      thirdRepeatedTail pairwiseSeparation)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q77-carrier-cut-input-source-worker`, deleted-tail
+nonreachability form.
+
+This is the narrow raw exterior-walk lowerer for the sharp carrier cut source:
+raw orbit frontier edges and tail coverage pick the two predecessor/successor
+carrier heads, the q36 row supplies the repeated tail forced by a third carrier
+neighbour, and the q24 deleted-tail nonreachability row supplies the finite
+separation data.  It does not pass through actual-sector rows, W32, induced
+frontier graphs, arbitrary cycles, or synthetic enclosure predicates. -/
+noncomputable def
+    S2_q77_carrier_cut_input_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccDeletedTailNonreachability
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (deletedTailNonreachability :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource O) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_pairwiseMinimalDeletedTailSeparation
+    (C := C) (inputs := inputs) O
+    edge_openSegment_frontier frontier_vertex_tail_coverage
+    raw_pred_succ_tail_ne thirdRepeatedTail
+    (S2_q75_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_cyclicSuccDeletedTailNonreachability
+      (C := C) (O := O) deletedTailNonreachability)
+
+set_option linter.style.longLine false in
+/-- q78 no-cut card-two consequence for the q77 deleted-tail nonreachability
+carrier-cut leaf.
+
+The q77 repeated-tail/deleted-tail source first supplies the sharp carrier cut
+input source; the existing q74 no-cut eraser then lowers that source to the
+actual carrier `neighborFinset.card = 2` row. -/
+theorem
+    S2_q78_carrier_card_two_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccDeletedTailNonreachability_noCut
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (deletedTailNonreachability :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource O) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 :=
+  S2_q74_carrier_card_two_source_worker_of_cutPartitionInputSource_noCut
+    (C := C) inputs
+    (S2_q77_carrier_cut_input_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccDeletedTailNonreachability
+      (C := C) (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage raw_pred_succ_tail_ne
+      thirdRepeatedTail deletedTailNonreachability)
+
+set_option linter.style.longLine false in
+/-- q77 raw exterior-arc form of the same cut-input lowerer.
+
+Pairwise repeated-tail actual exterior-arc rows supply the q38 deleted-tail
+separation package, then the q75 carrier-cut constructor packages the sharp
+`UnboundedFrontierCarrierNeighborPairCutPartitionInputSource`. -/
+noncomputable def
+    S2_q77_carrier_cut_input_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_repeatedTailActualExteriorArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (arcRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+            (inputs := inputs) O i j) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_pairwiseMinimalDeletedTailSeparation
+    (C := C) (inputs := inputs) O
+    edge_openSegment_frontier frontier_vertex_tail_coverage
+    raw_pred_succ_tail_ne thirdRepeatedTail
+    (S2_q49_rawFaceWalkPairwiseMinimalDeletedTailSeparationSource_of_repeatedTailActualExteriorArcRows
+      (C := C) (inputs := inputs) (O := O) arcRows)
+
+set_option linter.style.longLine false in
+/-- q77 bundled actual exterior-arc form.
+
+The bundled raw exterior-arc separation row is only used to project the
+pairwise repeated-tail arc callback; the carrier cut source is still produced
+through the raw repeated-tail/deleted-neighbour route above. -/
+noncomputable def
+    S2_q77_carrier_cut_input_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_actualExteriorArcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q77_carrier_cut_input_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_repeatedTailActualExteriorArcRows
+    (C := C) (inputs := inputs) O
+    edge_openSegment_frontier frontier_vertex_tail_coverage
+    raw_pred_succ_tail_ne thirdRepeatedTail
+    (fun hij htail =>
+      actualArcRows.repeated_tail_arcRows hij htail)
+
+set_option linter.style.longLine false in
+/-- q77 edge-coverage form.
+
+Raw orbit coverage of all selected unbounded-frontier carrier edges supplies
+the q36 repeated-tail index source, so this is the carrier-cut input source
+from one raw exterior walk plus bundled repeated-tail exterior-arc separation. -/
+noncomputable def
+    S2_q77_carrier_cut_input_source_of_rawOrbitEdgeCoverage_actualExteriorArcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (edge_coverage :
+      forall e : {e : PlanarInterface.Edge n //
+          e ∈ unboundedFrontierEdgeSet C inputs},
+        Exists fun l : Fin O.period =>
+          e.1 =
+              ((O.dart l).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail) ∨
+            e.1 =
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail,
+                (O.dart l).tail))
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q77_carrier_cut_input_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_actualExteriorArcSeparationRows
+    (C := C) (inputs := inputs) O
+    edge_openSegment_frontier frontier_vertex_tail_coverage
+    raw_pred_succ_tail_ne
+    (S2_q56_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource_of_rawOrbitEdgeCoverage
+      (C := C) (inputs := inputs) (O := O) edge_coverage)
+    actualArcRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q79-carrier-cut-cyclic-nonreachability-source`, direct
+cut-partition row form.
+
+Concrete cyclic-successor deleted-tail cut partitions on one raw orbit already
+separate the two successor tails after deleting the repeated tail.  This is the
+finite cut-partition eraser on the same raw orbit, with no actual-sector,
+boundary-cycle, W32, or induced-frontier premise. -/
+theorem
+    S2_q79_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource_of_cyclicSuccCutPartitions
+    {C : _root_.UDConfig n}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (cutPartitions :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource O) :
+    S2_q24_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource O := by
+  intro i j hij htail
+  let left : Fin n :=
+    (O.dart (PlanarInterface.cyclicSucc O.period_pos i)).tail
+  let right : Fin n :=
+    (O.dart (PlanarInterface.cyclicSucc O.period_pos j)).tail
+  let cut : Fin n := (O.dart i).tail
+  have hleft_ne_cut : left ≠ cut := by
+    intro h
+    exact
+      (rawFaceSuccOrbit_tail_ne_cyclicSucc O i)
+        (by simpa [left, cut] using h.symm)
+  have hright_ne_cut : right ≠ cut := by
+    intro h
+    exact
+      (rawFaceSuccOrbit_tail_ne_cyclicSucc O j)
+        (by simpa [right, cut] using htail.symm.trans h.symm)
+  rcases cutPartitions (i := i) (j := j) hij htail with ⟨cutRows⟩
+  rcases cutRows with ⟨P, hP_cut, hopposite⟩
+  have hnonreach :
+      ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+          ({cut}ᶜ : Set (Fin n))).Reachable
+          ⟨left, by simpa using hleft_ne_cut⟩
+          ⟨right, by simpa using hright_ne_cut⟩ :=
+    cutVertexPartition_not_reachable_after_delete_of_mem_opposite_sides
+      (C := C) P (cut := cut) (u := left) (v := right)
+      (by simpa [cut] using hP_cut)
+      hleft_ne_cut hright_ne_cut
+      (by simpa [left, right] using hopposite)
+  simpa [left, right, cut] using hnonreach
+
+set_option linter.style.longLine false in
+/-- q79 cyclic-successor deleted-tail nonreachability from pairwise repeated
+exterior-arc separation rows on the same raw orbit. -/
+noncomputable def
+    S2_q79_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource_of_repeatedTailActualExteriorArcRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (arcRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+            (inputs := inputs) O i j) :
+    S2_q24_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource O :=
+  S2_q41_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource_of_repeatedTailActualExteriorArcRows
+    (C := C) (inputs := inputs) (O := O) arcRows
+
+set_option linter.style.longLine false in
+/-- q79 bundled exterior-arc source for cyclic-successor deleted-tail
+nonreachability on the same raw orbit. -/
+noncomputable def
+    S2_q79_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource_of_actualExteriorArcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    S2_q24_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource O :=
+  S2_q79_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource_of_repeatedTailActualExteriorArcRows
+    (C := C) (inputs := inputs) (O := O)
+    (fun hij htail =>
+      actualArcRows.repeated_tail_arcRows hij htail)
+
+set_option linter.style.longLine false in
+/-- q79 carrier-cut leaf from selected local isolation rows. -/
+noncomputable def
+    S2_q79_carrier_cut_source_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      SelectedUnboundedFrontierEdgeLocalIsolationSourceRows inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q78_carrier_cut_source_lowering_of_selectedUnboundedFrontierEdgeLocalIsolationSourceRows
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- q79 carrier-cut leaf from direct cyclic-successor deleted-tail cut
+partitions on the same raw orbit. -/
+noncomputable def
+    S2_q79_carrier_cut_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (cyclicSuccCutPartitions :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailCutPartitionSource O) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q75_carrier_cut_source_worker_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccCutPartitions
+    (C := C) (inputs := inputs) O edge_openSegment_frontier
+    frontier_vertex_tail_coverage raw_pred_succ_tail_ne
+    thirdRepeatedTail cyclicSuccCutPartitions
+
+set_option linter.style.longLine false in
+/-- q79 carrier-cut leaf from cyclic-successor deleted-tail nonreachability on
+the same raw orbit. -/
+noncomputable def
+    S2_q79_carrier_cut_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccDeletedTailNonreachability
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (thirdRepeatedTail :
+      S2_q36_rawFaceWalkThirdCarrierNeighborRepeatedTailIndexSource
+        (inputs := inputs) O)
+    (deletedTailNonreachability :
+      S2_q24_rawFaceWalkCyclicSuccDeletedTailNonreachabilitySource O) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q77_carrier_cut_input_source_of_rawOrbit_thirdNeighborRepeatedTailIndex_cyclicSuccDeletedTailNonreachability
+    (C := C) (inputs := inputs) O edge_openSegment_frontier
+    frontier_vertex_tail_coverage raw_pred_succ_tail_ne
+    thirdRepeatedTail deletedTailNonreachability
+
+set_option linter.style.longLine false in
+/-- q79 carrier-cut leaf from raw edge coverage plus bundled repeated exterior
+arc separation on the same raw orbit. -/
+noncomputable def
+    S2_q79_carrier_cut_source_of_rawOrbitEdgeCoverage_actualExteriorArcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)
+    (edge_coverage :
+      forall e : {e : PlanarInterface.Edge n //
+          e ∈ unboundedFrontierEdgeSet C inputs},
+        Exists fun l : Fin O.period =>
+          e.1 =
+              ((O.dart l).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail) ∨
+            e.1 =
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos l)).tail,
+                (O.dart l).tail))
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_q77_carrier_cut_input_source_of_rawOrbitEdgeCoverage_actualExteriorArcSeparationRows
+    (C := C) (inputs := inputs) O
+    edge_openSegment_frontier frontier_vertex_tail_coverage
+    raw_pred_succ_tail_ne edge_coverage actualArcRows
 
 set_option linter.style.longLine false in
 /-- Direct nonempty cycle-row handoff for the f9 same-boundary exterior-sector source.

@@ -3358,6 +3358,130 @@ theorem rawFaceSuccOrbit_graphVertexAngularNoBetweenRows_of_actualFaceSucc_stric
       O strictTurnRows)
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q80-selected-actual-carrier-angle-source`, raw-orbit geometric
+angle core.
+
+For the exact selected successor tail of a geometric raw face-successor orbit,
+the selected actual-carrier angle row is just the two local strict turns:
+the predecessor reverse-to-current turn at the raw dart, and the current-to-next
+turn coming from the actual `faceSucc` of the reversed current dart.  This
+bridge only transports the predecessor reverse head to the predecessor tail;
+it introduces no global outgoing-list source or synthetic angular order. -/
+theorem S2_q80_selected_actual_carrier_angle_source_rawFaceSuccOrbit_angleRows_of_faceSuccTurnRows
+    {C : _root_.UDConfig n} {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C) start)
+    (leftTurnRows :
+      forall k : Fin O.period,
+        let pred : Fin O.period :=
+          PlanarInterface.cyclicPred O.period_pos k
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+            ((O.dart pred).reverse).head <
+          graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+            (O.dart k).head)
+    (rightTurnRows :
+      forall k : Fin O.period,
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+            (O.dart k).head <
+          graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+            ((geometricUnitDistanceRotationSystem C).faceSucc
+              (O.dart k).reverse).head) :
+    forall k : Fin O.period,
+      let pred : Fin O.period :=
+        PlanarInterface.cyclicPred O.period_pos k
+      let next : UnitDistanceDart C :=
+        (geometricUnitDistanceRotationSystem C).faceSucc (O.dart k).reverse
+      graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart pred).tail <
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart k).head /\
+      graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart k).head <
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          next.head := by
+  intro k
+  let pred : Fin O.period := PlanarInterface.cyclicPred O.period_pos k
+  let next : UnitDistanceDart C :=
+    (geometricUnitDistanceRotationSystem C).faceSucc (O.dart k).reverse
+  have hleftRaw :
+      graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          ((O.dart pred).reverse).head <
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart k).head := by
+    simpa [pred] using leftTurnRows k
+  have hleft :
+      graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart pred).tail <
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart k).head := by
+    simpa [UnitDistanceDart.reverse_head] using hleftRaw
+  have hright :
+      graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          (O.dart k).head <
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+          next.head := by
+    simpa [next] using rightTurnRows k
+  exact And.intro hleft hright
+
+set_option linter.style.longLine false in
+/-- Non-wrap geometric-neighbour form of
+`S2_q80_selected_actual_carrier_angle_source_rawFaceSuccOrbit_angleRows_of_faceSuccTurnRows`.
+
+The two q80 strict turns select the actual non-wrap neighbouring rows around
+the selected `faceSucc` head in the genuine geometric outgoing list. -/
+theorem S2_q80_selected_actual_carrier_neighborRows_of_rawFaceSuccOrbit_faceSuccTurnRows
+    {C : _root_.UDConfig n} {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C) start)
+    (leftTurnRows :
+      forall k : Fin O.period,
+        let pred : Fin O.period :=
+          PlanarInterface.cyclicPred O.period_pos k
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+            ((O.dart pred).reverse).head <
+          graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+            (O.dart k).head)
+    (rightTurnRows :
+      forall k : Fin O.period,
+        graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+            (O.dart k).head <
+          graphDartArg (canonicalGeometricGraph C) (O.dart k).tail
+            ((geometricUnitDistanceRotationSystem C).faceSucc
+              (O.dart k).reverse).head) :
+    forall k : Fin O.period,
+      let pred : Fin O.period :=
+        PlanarInterface.cyclicPred O.period_pos k
+      let next : UnitDistanceDart C :=
+        (geometricUnitDistanceRotationSystem C).faceSucc (O.dart k).reverse
+      Nonempty
+          (GraphVertexGeometricAngularNeighborSelectionRow C
+            (O.dart k).tail (O.dart pred).tail (O.dart k).head) /\
+        Nonempty
+          (GraphVertexGeometricAngularNeighborSelectionRow C
+            (O.dart k).tail (O.dart k).head next.head) := by
+  intro k
+  let pred : Fin O.period := PlanarInterface.cyclicPred O.period_pos k
+  let next : UnitDistanceDart C :=
+    (geometricUnitDistanceRotationSystem C).faceSucc (O.dart k).reverse
+  have hsucc_pred : PlanarInterface.cyclicSucc O.period_pos pred = k := by
+    simp [pred, PlanarInterface.cyclicSucc_cyclicPred O.period_pos k]
+  have hface :
+      (geometricUnitDistanceRotationSystem C).faceSucc (O.dart pred) =
+        O.dart k := by
+    simp [pred, hsucc_pred]
+  have hnext :
+      (geometricUnitDistanceRotationSystem C).faceSucc (O.dart k).reverse =
+        next := rfl
+  have hangle :=
+    S2_q80_selected_actual_carrier_angle_source_rawFaceSuccOrbit_angleRows_of_faceSuccTurnRows
+      O leftTurnRows rightTurnRows k
+  exact
+    geometricUnitDistanceRotationSystem_successorTail_neighborSelectionRows_of_two_faceSucc_strictOrder
+      C (O.dart pred) (O.dart k) next hface hnext hangle.1 hangle.2
+
+set_option linter.style.longLine false in
 /-- Every dart step in a geometric raw face-successor orbit is a genuine
 consecutive pair of entries in the concrete sorted outgoing-dart list.
 

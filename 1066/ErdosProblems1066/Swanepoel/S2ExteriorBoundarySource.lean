@@ -12671,6 +12671,87 @@ noncomputable def
       (C := C) (inputs := inputs) (start := start) O rows raw_orientation
 
 set_option linter.style.longLine false in
+/-- Claim `S2-q54-face-orbit-source-worker`.
+
+The actual exterior-sector source can be lowered through the existing r19
+face-orbit route to the compact raw face-successor source package.  The only
+remaining family data are the selected raw exterior orbit, its
+`RawFaceSuccOrbitSourceRows`, and the genuine raw
+predecessor-before-successor orientation row.  The proof merely unpacks those
+raw rows into the r19 package surface: cyclic carrier coverage gives actual
+carrier connectedness, and the consecutive raw-tail frontier row rewrites back
+to each dart edge by face-successor endpoint chaining. -/
+theorem
+    S2_q54_actualExteriorSectorInputSourceRows_source_of_rawFaceSuccOrbitSourceRows_via_r19
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun start : UnitDistanceDart C =>
+          PSigma fun O :
+              UnitDistanceRotationSystem.RawFaceSuccOrbit
+                (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                start =>
+          PSigma fun _rows : RawFaceSuccOrbitSourceRows (inputs := inputs) O =>
+            forall k : Fin O.period,
+              GeometricRotationSystem.graphDartArg
+                  (GeometricRotationSystem.canonicalGeometricGraph C)
+                  (O.dart k).tail
+                  (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                GeometricRotationSystem.graphDartArg
+                  (GeometricRotationSystem.canonicalGeometricGraph C)
+                  (O.dart k).tail
+                  (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  actualExteriorSectorInputSourceRows_of_inputs
+    (S2_r19_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_rawOrbit_package
+      (by
+        intro m C inputs
+        rcases source C inputs with ⟨start, O, rows, raw_orientation⟩
+        let carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected :=
+          unboundedFrontierCarrierGraph_connected_of_cyclicCoverageRows
+            rows.connectedRows
+        let edge_openSegment_frontier :
+            forall k : Fin O.period,
+              forall p : PlanarInterface.Point,
+                PlanarInterface.InOpenSegment p
+                  ((canonicalGraph C).point (O.dart k).tail)
+                  ((canonicalGraph C).point
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+                p ∈ frontier
+                  (unboundedExteriorComponentRows C inputs).exterior :=
+          rawFaceSuccOrbit_edge_openSegment_frontier_of_inOpenSegment_frontier_and_nearby_edge_point_exterior_points
+            O rows.edge_frontier_point rows.nearby_edge_point_exterior_points
+        let dart_edge_openSegment_frontier :
+            forall k : Fin O.period,
+              forall p : PlanarInterface.Point,
+                PlanarInterface.InOpenSegment p
+                  ((canonicalGraph C).point (O.dart k).tail)
+                  ((canonicalGraph C).point (O.dart k).head) ->
+                p ∈ frontier
+                  (unboundedExteriorComponentRows C inputs).exterior := by
+          intro k p hp
+          let next : Fin O.period :=
+            PlanarInterface.cyclicSucc O.period_pos k
+          have hsucc := rawFaceSuccOrbit_faceSucc_eq_cyclicSucc O k
+          have hhead : (O.dart k).head = (O.dart next).tail :=
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C).endpoint_chaining_of_faceSucc_eq_next
+              hsucc
+          exact edge_openSegment_frontier k p
+            (by simpa [next, hhead] using hp)
+        exact
+          ⟨rows.localSectorRows, carrier_connected, start, O,
+            dart_edge_openSegment_frontier, rows.repeated_tail_rows,
+            raw_orientation⟩))
+
+set_option linter.style.longLine false in
 /-- Claim `S2-q13-boundary-sector-erasure-source`.
 
 Strict raw-orbit erasure to the actual exterior-sector source.  The residual
