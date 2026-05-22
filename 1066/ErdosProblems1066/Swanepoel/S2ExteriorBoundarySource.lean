@@ -194,6 +194,95 @@ noncomputable def
       incident_complete := incident_complete k }
 
 set_option linter.style.longLine false in
+/-- Actual boundary/frontier rows plus same-boundary incident completeness
+source the reduced incident-sector package.
+
+This is the local source requested by
+`S2-agent-boundary-incident-sector-source-worker-20260520o2`: the boundary is
+the actual boundary from the frontier-equivalence rows, and every vertex row is
+read from the actual boundary edge frontier rows plus
+`BoundaryCycleIncidentFrontierEdgeCompleteness`. -/
+noncomputable def
+    boundaryVertexFrontierIncidentSectorSource_of_actualBoundaryRows_incidentComplete
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      forall k : Fin B.length,
+        BoundaryVertexFrontierIncidentSectorRowsAt inputs B k :=
+  Exists.intro actualRows.boundary
+    (And.intro actualRows.frontier_iff_cycle_vertex
+      (boundaryVertexFrontierIncidentSectorRows_of_actualBoundaryRows_incidentComplete
+        (C := C) (inputs := inputs) actualRows incident_complete))
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-incident-sector-source-worker-20260520o2`.
+
+Strict reducer for the local incident-sector package.  The remaining source is
+only the actual boundary/frontier equivalence package together with
+`BoundaryCycleIncidentFrontierEdgeCompleteness` for that same boundary; no
+outgoing-list no-between row, all-adjacent endpoint row, induced frontier
+graph, final cycle row, or unproved primitive is used. -/
+theorem
+    S2_agent_boundary_incident_sector_source_worker_20260520o2_of_actualBoundaryRows_incidentComplete
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun actualRows :
+          ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+        BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+          actualRows.boundary) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      forall k : Fin B.length,
+        BoundaryVertexFrontierIncidentSectorRowsAt inputs B k := by
+  classical
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    Classical.choose source
+  have incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+    Classical.choose_spec source
+  exact
+    boundaryVertexFrontierIncidentSectorSource_of_actualBoundaryRows_incidentComplete
+      (C := C) (inputs := inputs) actualRows incident_complete
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_boundary_incident_sector_source_worker_20260520o2_of_actualBoundaryRows_incidentComplete`. -/
+theorem S2_agent_boundary_incident_sector_source_worker_20260520o2
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun actualRows :
+              ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+            BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+              actualRows.boundary) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          forall k : Fin B.length,
+            BoundaryVertexFrontierIncidentSectorRowsAt inputs B k := by
+  intro n C inputs
+  exact
+    S2_agent_boundary_incident_sector_source_worker_20260520o2_of_actualBoundaryRows_incidentComplete
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
 /-- Strict reduction of the actual-boundary local-sector source.
 
 To get pointwise `UnboundedFrontierCarrierLocalSectorRowsAt` from an actual
@@ -241,6 +330,63 @@ noncomputable def
     (C := C) (inputs := inputs)
     (localSectorRows_of_boundaryVertexFrontierIncidentSectorRows
       (C := C) (inputs := inputs) B frontier_iff_cycle_vertex rows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-selected-incident-edge-pair-source-scout-20260520n5`.
+
+The reduced same-boundary incident-sector package is exactly enough to source
+the local selected incident-edge pair rows.  This keeps the live local source
+below the exterior-sector/angular rows and does not use outgoing-list
+no-between, all-adjacent endpoint closure, or the induced frontier graph. -/
+noncomputable def
+    S2_agent_selected_incident_edge_pair_source_scout_20260520n5
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+        (forall v : Fin n,
+          (canonicalGraph C).point v ∈
+              frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+            Exists fun k : Fin B.length => B.vertex k = v) ∧
+        forall k : Fin B.length,
+          BoundaryVertexFrontierIncidentSectorRowsAt inputs B k) :
+    LocalSelectedIncidentEdgePairSourceRows inputs := by
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose source
+  have hsource :
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      forall k : Fin B.length,
+        BoundaryVertexFrontierIncidentSectorRowsAt inputs B k :=
+    Classical.choose_spec source
+  exact
+    localSelectedIncidentEdgePairSourceRows_of_boundaryVertexFrontierIncidentSectorRows
+      (C := C) (inputs := inputs) B hsource.1 hsource.2
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_selected_incident_edge_pair_source_scout_20260520n5`. -/
+noncomputable def
+    S2_agent_selected_incident_edge_pair_source_family_scout_20260520n5
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin m,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            forall k : Fin B.length,
+              BoundaryVertexFrontierIncidentSectorRowsAt inputs B k) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        LocalSelectedIncidentEdgePairSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_agent_selected_incident_edge_pair_source_scout_20260520n5
+      (C := C) (inputs := inputs) (source C inputs)
 
 set_option linter.style.longLine false in
 /-- Actual boundary/frontier rows reduce the selected incident-edge pair source
@@ -415,6 +561,26 @@ noncomputable def S2_codex_current_20260520_local_selected_incident_source
       (C := C) (inputs := inputs) (faceRows C inputs)
 
 set_option linter.style.longLine false in
+/-- Claim `S2-agent-selected-incident-family-source-20260520e`,
+face-dart carrier form.
+
+Honest exterior face-dart carrier rows source the requested selected-incident
+family.  Pointwise, the selected heads and edge fields are read from
+`FaceDartOrbitExteriorCarrierRows.toLocalSectorRowsAt`, so they remain actual
+`unboundedFrontierEdgeSet` incidences; no all-adjacent frontier endpoint row is
+introduced. -/
+noncomputable def
+    S2_agent_selected_incident_family_source_20260520e_of_faceDartOrbitExteriorCarrierRows
+    (faceRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FaceDartOrbitExteriorCarrierRows C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        LocalSelectedIncidentEdgePairSourceRows inputs :=
+  S2_codex_current_20260520_local_selected_incident_source faceRows
+
+set_option linter.style.longLine false in
 /-- Claim `S2-dyn-20260520-local-selected-no-third-source`.
 
 Endpoint-free source eraser for the selected-edge/no-third-germ row.  The
@@ -527,6 +693,168 @@ noncomputable def
         sectorRows)).2)
 
 set_option linter.style.longLine false in
+/-- A selected frontier-edge cover discharges the vertex branch of the
+unbounded-exterior seed-to-dart constructor.
+
+If the chosen exterior seed is exactly a graph vertex, the selected cover gives
+an actual `unboundedFrontierEdgeSet` edge whose closed segment contains that
+vertex. The finite unit-edge endpoint lemma makes it incident to the vertex,
+and the selected edge's interior frontier point gives the local edge row used
+by the geometric raw `faceSucc` seed. -/
+theorem seed_vertex_edgeInterior_frontier_point_of_selectedFrontierEdgeCover
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selected_frontier_edge_cover :
+      UnboundedExteriorSelectedFrontierEdgeCover C inputs)
+    (seed : UnboundedExteriorFrontierSeed inputs)
+    {v : Fin n}
+    (hv : seed.point = (canonicalGraph C).point v) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        e ∈ (canonicalGraph C).edgeSet ∧
+          (e.1 = v ∨ e.2 = v) ∧
+            p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              PlanarInterface.InOpenSegment p
+                ((canonicalGraph C).point e.1)
+                ((canonicalGraph C).point e.2) := by
+  have hvfrontier :
+      (canonicalGraph C).point v ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior := by
+    simpa [hv] using seed.point_mem_frontier
+  rcases selected_frontier_edge_cover
+      ((canonicalGraph C).point v) hvfrontier with
+    ⟨e, he, hvseg⟩
+  have he_edge : e ∈ (canonicalGraph C).edgeSet :=
+    (mem_unboundedFrontierEdgeSet_iff.1 he).1
+  rcases unboundedFrontierEdgeSet_has_frontier_interior_point he with
+    ⟨p, hpfrontier, hpseg⟩
+  have hadj : (canonicalGraph C).Adj e.1 e.2 :=
+    unboundedFrontierEdgeSet_adj he
+  rcases graph_vertex_on_unit_edge_segment_is_endpoint hadj hvseg with
+    hleft | hright
+  · exact ⟨e, p, he_edge, Or.inl hleft.symm, hpfrontier, hpseg⟩
+  · exact ⟨e, p, he_edge, Or.inr hright.symm, hpfrontier, hpseg⟩
+
+set_option linter.style.longLine false in
+/-- A selected frontier-edge cover orients any chosen unbounded-exterior seed
+into the geometric raw face-successor seed data.
+
+This is the seed/local-edge source step only: it chooses no boundary cycle and
+does not consume connected raw-orbit rows. The vertex-seed branch is lowered
+by `seed_vertex_edgeInterior_frontier_point_of_selectedFrontierEdgeCover`. -/
+theorem exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_selectedFrontierEdgeCover
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selected_frontier_edge_cover :
+      UnboundedExteriorSelectedFrontierEdgeCover C inputs)
+    (seed : UnboundedExteriorFrontierSeed inputs) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun start : UnitDistanceDart C =>
+          UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+            start.tail = e.1 ∧
+              start.head = e.2 ∧
+                Nonempty
+                  (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                    (GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                      C)
+                    start) :=
+  exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed
+    (C := C) (inputs := inputs) seed
+    (fun {v} hv =>
+      seed_vertex_edgeInterior_frontier_point_of_selectedFrontierEdgeCover
+        (C := C) (inputs := inputs) (v := v)
+        selected_frontier_edge_cover seed hv)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-p2a-seed-dart-existence-20260521p1`.
+
+From the finite unbounded-exterior input package and an actual selected
+frontier-edge cover, choose the unbounded-exterior frontier seed, a local
+frontier edge row through that seed, and the corresponding geometric raw
+`faceSucc` start dart/orbit seed. This is source data only: no boundary cycle,
+consumer route, or facade is introduced. -/
+noncomputable def S2_p2a_seed_dart_existence_20260521p1
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (selected_frontier_edge_cover :
+      UnboundedExteriorSelectedFrontierEdgeCover C inputs) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+              start.tail = e.1 ∧
+                start.head = e.2 ∧
+                  Nonempty
+                    (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                      start) := by
+  classical
+  let seed : UnboundedExteriorFrontierSeed inputs :=
+    Classical.choice (unboundedExteriorFrontierSeed_nonempty inputs)
+  exact
+    ⟨seed,
+      exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_selectedFrontierEdgeCover
+        (C := C) (inputs := inputs) selected_frontier_edge_cover seed⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-p2a-component-topology-seed-cover-source-20260521p4`.
+
+Component-topology source rows for the actual unbounded exterior frontier
+already contain the selected `unboundedFrontierEdgeSet` cover needed by the
+p2a seed constructor.  This removes the standalone selected-cover premise from
+the seed handoff while keeping the source below any actual boundary, sector,
+carrier-cycle, or W32 row. -/
+noncomputable def
+    S2_p2a_seed_dart_existence_20260521p4_of_componentTopologySourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (componentRows :
+      UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+              start.tail = e.1 ∧
+                start.head = e.2 ∧
+                  Nonempty
+                    (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                      start) :=
+  S2_p2a_seed_dart_existence_20260521p1
+    (C := C) inputs
+    (unboundedExterior_selectedFrontierEdgeCover_of_componentTopologySourceRows
+      (C := C) (inputs := inputs) componentRows)
+
+set_option linter.style.longLine false in
+/-- Input-facing component-topology rows are enough for the p2a exterior seed
+and selected local edge/orbit seed. -/
+noncomputable def
+    S2_p2a_seed_dart_existence_20260521p4_of_componentTopologyInputSourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (componentRows :
+      UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+              start.tail = e.1 ∧
+                start.head = e.2 ∧
+                  Nonempty
+                    (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                      start) :=
+  S2_p2a_seed_dart_existence_20260521p4_of_componentTopologySourceRows
+    (C := C) inputs componentRows.toComponentTopologyRows
+
+set_option linter.style.longLine false in
 /-- Exact selected-edge boundary-successor source.
 
 This is the honest source row below the seeded raw-orbit
@@ -547,6 +875,110 @@ def SelectedEdgeBoundarySuccessorSource
               B.vertex (PlanarInterface.cyclicSucc B.length_pos j)
 
 set_option linter.style.longLine false in
+/-- Actual selected boundary-successor edge rows.
+
+This is the split source form for `SelectedEdgeBoundarySuccessorSource`: each
+selected local exterior edge is an actual `unboundedFrontierEdgeSet` edge, and
+the same stored edge is oriented as a forward boundary successor of `B`. -/
+structure ActualSelectedBoundarySuccessorEdgeRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C) : Prop where
+  edge_mem_unboundedFrontierEdgeSet :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        e ∈ unboundedFrontierEdgeSet C inputs
+  boundary_successor :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        Exists fun j : Fin B.length =>
+          e.1 = B.vertex j ∧
+            e.2 =
+              B.vertex (PlanarInterface.cyclicSucc B.length_pos j)
+
+namespace ActualSelectedBoundarySuccessorEdgeRows
+
+variable {C : _root_.UDConfig n}
+variable {inputs : FinitePlanarOuterComponentInputs C}
+variable {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+
+set_option linter.style.longLine false in
+/-- Erase the split actual selected boundary-edge rows to the compact selected
+boundary-successor source. -/
+theorem toSelectedEdgeBoundarySuccessorSource
+    (rows : ActualSelectedBoundarySuccessorEdgeRows inputs B) :
+    SelectedEdgeBoundarySuccessorSource inputs B := by
+  intro e p edgeRows
+  exact
+    ⟨rows.edge_mem_unboundedFrontierEdgeSet edgeRows,
+      rows.boundary_successor edgeRows⟩
+
+end ActualSelectedBoundarySuccessorEdgeRows
+
+set_option linter.style.longLine false in
+/-- Split-row reducer for the exact selected-edge boundary-successor source.
+
+The remaining row is just the actual selected boundary-edge data: membership in
+`unboundedFrontierEdgeSet` and forward boundary-successor orientation for the
+same selected local edge. -/
+theorem selectedEdgeBoundarySuccessorSource_of_actualSelectedBoundarySuccessorEdgeRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (rows : ActualSelectedBoundarySuccessorEdgeRows inputs B) :
+    SelectedEdgeBoundarySuccessorSource inputs B :=
+  rows.toSelectedEdgeBoundarySuccessorSource
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-selected-boundary-successor-source-20260520e`.
+
+The selected boundary-successor source is reduced to actual selected
+unbounded-frontier boundary-edge rows for the same concrete boundary. -/
+theorem S2_agent_selected_boundary_successor_source_20260520e
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (rows : ActualSelectedBoundarySuccessorEdgeRows inputs B) :
+    SelectedEdgeBoundarySuccessorSource inputs B :=
+  selectedEdgeBoundarySuccessorSource_of_actualSelectedBoundarySuccessorEdgeRows
+    (C := C) (inputs := inputs) (B := B) rows
+
+set_option linter.style.longLine false in
+/-- Actual boundary rows, sector rows, and reverse-orientation exclusion produce
+the split actual selected boundary-edge rows.
+
+This keeps the two pieces of information separate: the selected local edge is
+first promoted to `unboundedFrontierEdgeSet`, and only then oriented as the
+forward successor side of the same concrete boundary cycle. -/
+theorem actualSelectedBoundarySuccessorEdgeRows_of_actualBoundaryRows_sectorRows_reverseExcluded
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (sectorRows :
+      forall j : Fin actualRows.boundary.length,
+        BoundaryVertexExteriorSectorRowsAt inputs actualRows.boundary j)
+    (not_reverse :
+      EdgeLocalRowsBoundaryReverseExcluded inputs actualRows.boundary) :
+    ActualSelectedBoundarySuccessorEdgeRows inputs actualRows.boundary where
+  edge_mem_unboundedFrontierEdgeSet := by
+    intro e p edgeRows
+    exact
+      interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+        (C := C) (inputs := inputs)
+        edgeRows.edge_mem edgeRows.center_in_openSegment
+        edgeRows.center_frontier
+  boundary_successor := by
+    intro e p edgeRows
+    exact
+      edgeRows_boundary_succ_of_actualBoundaryCycleFrontierEquivalenceRows
+        (C := C) (inputs := inputs) actualRows
+        (BoundaryVertexExteriorSectorRowsAt.boundaryCycleIncidentFrontierEdgeCompleteness
+          (C := C) (inputs := inputs) (B := actualRows.boundary) sectorRows)
+        (interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+          (C := C) (inputs := inputs))
+        not_reverse edgeRows
+
+set_option linter.style.longLine false in
 /-- Claim `S2-dyn-20260520-selected-edge-boundary-succ-source`.
 
 Actual boundary rows plus primitive boundary-sector rows reduce the selected
@@ -565,27 +997,11 @@ theorem selectedEdgeBoundarySuccessorSource_of_actualBoundaryRows_sectorRows_rev
     (not_reverse :
       EdgeLocalRowsBoundaryReverseExcluded inputs actualRows.boundary) :
     SelectedEdgeBoundarySuccessorSource inputs actualRows.boundary := by
-  intro e p edgeRows
-  have he_frontier : e ∈ unboundedFrontierEdgeSet C inputs :=
-    interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
-      (C := C) (inputs := inputs)
-      edgeRows.edge_mem edgeRows.center_in_openSegment
-      edgeRows.center_frontier
-  have hsucc :
-      Exists fun j : Fin actualRows.boundary.length =>
-        e.1 = actualRows.boundary.vertex j ∧
-          e.2 =
-            actualRows.boundary.vertex
-              (PlanarInterface.cyclicSucc
-                actualRows.boundary.length_pos j) :=
-    edgeRows_boundary_succ_of_actualBoundaryCycleFrontierEquivalenceRows
-      (C := C) (inputs := inputs) actualRows
-      (BoundaryVertexExteriorSectorRowsAt.boundaryCycleIncidentFrontierEdgeCompleteness
-        (C := C) (inputs := inputs) (B := actualRows.boundary) sectorRows)
-      (interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
-        (C := C) (inputs := inputs))
-      not_reverse edgeRows
-  exact ⟨he_frontier, hsucc⟩
+  exact
+    selectedEdgeBoundarySuccessorSource_of_actualSelectedBoundarySuccessorEdgeRows
+    (C := C) (inputs := inputs) (B := actualRows.boundary)
+    (actualSelectedBoundarySuccessorEdgeRows_of_actualBoundaryRows_sectorRows_reverseExcluded
+      (C := C) (inputs := inputs) actualRows sectorRows not_reverse)
 
 /-!
 This file is the S2 source-assembly surface.  It keeps the input-level
@@ -1299,6 +1715,87 @@ theorem
       angularRows cycle_edge_openSegment_frontier incident_complete
 
 set_option linter.style.longLine false in
+/-- Actual boundary rows, genuine angular no-between rows, and same-boundary
+incident frontier-edge completeness produce the primitive boundary-sector
+family on the same concrete exterior boundary.
+
+This is the pointwise `20260520g` source reducer: the actual boundary rows
+supply the frontier equivalence and open-segment frontier rows, while the
+remaining leaves are exactly the geometric no-between payload and the actual
+incident-completeness row for that boundary. -/
+theorem
+    S2_boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_angularRows_incidentComplete
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (angularRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k)
+    (incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k :=
+  S2_boundaryVertexExteriorSectorRows_source_of_boundaryCycleIncidentFrontierEdgeCompleteness
+    (C := C) (inputs := inputs)
+    actualRows.boundary
+    actualRows.frontier_iff_cycle_vertex
+    actualRows.cycle_edge_openSegment_frontier
+    angularRows
+    incident_complete
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-sector-family-source-20260520g`.
+
+Family-level strict reduction of the primitive same-boundary exterior-sector
+source to actual boundary rows, genuine geometric angular no-between rows, and
+same-boundary incident frontier-edge completeness.  The selected boundary
+cycle is the one stored in `ActualBoundaryCycleFrontierEquivalenceRows`; no
+induced frontier graph, arbitrary cycle, all-adjacent endpoint shortcut,
+synthetic enclosure, or unproved source is introduced. -/
+noncomputable def S2_agent_boundary_sector_family_source_20260520g
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun actualRows :
+              ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+            (forall k : Fin actualRows.boundary.length,
+              GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+                C actualRows.boundary k) ∧
+            BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+              actualRows.boundary) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          forall k : Fin B.length,
+            BoundaryVertexExteriorSectorRowsAt inputs B k := by
+  intro n C inputs
+  classical
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    Classical.choose (source C inputs)
+  have hsource :
+      (forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k) ∧
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+    Classical.choose_spec (source C inputs)
+  exact
+    S2_boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_angularRows_incidentComplete
+      (C := C) (inputs := inputs)
+      actualRows hsource.1 hsource.2
+
+set_option linter.style.longLine false in
 /-- Claim `S2-main-co-actualSector-boundaryVertex-source-20260520co`.
 
 Actual exterior-sector input rows are already the primitive
@@ -1327,6 +1824,167 @@ theorem
   ⟨B, frontier_iff_cycle_vertex, rows.sectorRows⟩
 
 set_option linter.style.longLine false in
+/-- Primitive boundary-sector rows directly contain the honest angular
+no-between payload for the same concrete boundary cycle.
+
+This is only field projection from the current same-boundary sector rows; it
+does not introduce an identity angular order, endpoint/chord shortcut, or any
+synthetic boundary. -/
+theorem boundaryVertexAngularNoBetweenRows_of_boundaryVertexExteriorSectorRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (sectorRows :
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k) :
+    forall k : Fin B.length,
+      GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows C B k := by
+  intro k
+  exact
+    BoundaryVertexExteriorSectorRowsAt.toBoundaryVertexAngularNoBetweenRows
+      (sectorRows k)
+
+set_option linter.style.longLine false in
+/-- Bundled actual exterior-sector rows directly source the boundary angular
+no-between family on the same concrete boundary cycle. -/
+theorem boundaryVertexAngularNoBetweenRows_of_actualExteriorSectorInputSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (rows : ActualExteriorSectorInputSourceRows inputs B) :
+    forall k : Fin B.length,
+      GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows C B k :=
+  rows.angularRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-angular-no-between-current-source-20260520h`.
+
+Current same-boundary source for the angular no-between family.  The remaining
+leaf is the strongest checked local geometry package currently carried through
+S2: an actual exterior boundary with exact frontier-vertex coverage and
+`ActualExteriorSectorInputSourceRows` on that same boundary.  The returned
+angular rows are the rows consumed both by the boundary-sector reducers and by
+the geometric outgoing-list order reducers. -/
+noncomputable def
+    S2_agent_boundary_angular_no_between_current_source_20260520h
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          forall k : Fin B.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C B k := by
+  intro n C inputs
+  classical
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose (source C inputs)
+  have hsource :
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+    Classical.choose_spec (source C inputs)
+  exact
+    ⟨B, hsource.1,
+      boundaryVertexAngularNoBetweenRows_of_actualExteriorSectorInputSourceRows
+        (C := C) (inputs := inputs) (B := B)
+        (Classical.choice hsource.2)⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-codex-main-20260520-actual-sector-source`.
+
+Conditional same-boundary actual exterior-sector projection.
+
+This is the strict reducer for the current claimed target: the residual is the
+primitive same-boundary `BoundaryVertexExteriorSectorRowsAt` family together
+with exact graph-vertex frontier coverage.  The output keeps the same concrete
+boundary `B` and its `frontier_iff_cycle_vertex` row beside the bundled
+`ActualExteriorSectorInputSourceRows`; no induced frontier graph, arbitrary
+cycle, synthetic enclosure predicate, or W-facing facade is introduced. -/
+noncomputable def
+    S2_codex_main_20260520_actual_sector_source_of_boundaryVertexExteriorSectorRows
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            forall k : Fin B.length,
+              BoundaryVertexExteriorSectorRowsAt inputs B k) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  intro n C inputs
+  exact
+    exists_actualExteriorSectorInputSourceRows_with_frontier_of_boundaryVertexExteriorSectorRows_source
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Same-boundary actual exterior-sector source from the existing
+actual-boundary/face-successor/incident-completeness surface.
+
+This composes the S2 owner-file boundary-sector constructor with the
+`ExteriorComponentTopology` same-boundary eraser.  The residual is exactly the
+actual boundary-cycle frontier-equivalence row, genuine geometric
+face-successor/orientation rows, and incident frontier-edge completeness for
+that same boundary. -/
+noncomputable def
+    S2_codex_main_20260520_actual_sector_source_of_actualBoundaryRows_faceSuccIncidentComplete
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (faceSuccRows :
+      UnitDistanceCycleFaceSuccRows C
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        actualRows.boundary)
+    (boundary_orientation :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicPred actualRows.boundary.length_pos k)) <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicSucc actualRows.boundary.length_pos k)))
+    (incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  exists_actualExteriorSectorInputSourceRows_with_frontier_of_boundaryVertexExteriorSectorRows_source
+    (C := C) (inputs := inputs)
+    (S2_boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_faceSuccIncidentComplete
+      (C := C) (inputs := inputs)
+      actualRows faceSuccRows boundary_orientation incident_complete)
+
+set_option linter.style.longLine false in
 /-- Actual exterior-sector rows directly source the local selected
 incident-edge pair rows.
 
@@ -1350,14 +2008,13 @@ noncomputable def
     (C := C) (inputs := inputs) B frontier_iff_cycle_vertex rows.sectorRows
 
 set_option linter.style.longLine false in
-/-- Family-level selected incident-edge source from actual exterior-sector
-rows.
+/-- Conditional selected incident-edge eraser from actual exterior-sector rows.
 
-This closes the local source family modulo the actual exterior-sector package:
-for every input, construct one concrete exterior boundary cycle, its exact
-frontier equivalence, and the same-boundary `ActualExteriorSectorInputSourceRows`.
-No endpoint-only all-adjacent row, induced frontier graph, or arbitrary cycle
-is introduced. -/
+This projects the local source family from a supplied actual exterior-sector
+package: for every input, the signature already provides one concrete exterior
+boundary cycle, its exact frontier equivalence, and the same-boundary
+`ActualExteriorSectorInputSourceRows`.  No endpoint-only all-adjacent row,
+induced frontier graph, or arbitrary cycle is introduced. -/
 noncomputable def
     S2_codex_cont_20260520_selected_incident_edge_family_source_of_actualExteriorSectorInputSourceRows
     (source :
@@ -1387,6 +2044,250 @@ noncomputable def
     localSelectedIncidentEdgePairSourceRows_of_actualExteriorSectorInputSourceRows
       (C := C) (inputs := inputs) B hsource.1
       (Classical.choice hsource.2)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-selected-incident-close-route-20260520f`.
+
+The selected-incident family is conditionally erased through the strongest
+checked S2 surface currently available here: one supplied actual exterior
+boundary with exact frontier coverage and primitive same-boundary
+exterior-sector rows.  This strictly projects the earlier
+local-sector/face-dart alternatives to the actual boundary-sector residual
+while preserving the selected
+`unboundedFrontierEdgeSet` incidences. -/
+noncomputable def
+    S2_agent_selected_incident_close_route_20260520f_of_boundaryVertexExteriorSectorRows
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            forall k : Fin B.length,
+              BoundaryVertexExteriorSectorRowsAt inputs B k) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        LocalSelectedIncidentEdgePairSourceRows inputs :=
+  S2_codex_cont_20260520_selected_incident_edge_family_source_of_boundaryVertexExteriorSectorRows
+    source
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-selected-head-no-between-source-20260520g`.
+
+For the selected heads induced by
+`S2_agent_selected_incident_close_route_20260520f_of_boundaryVertexExteriorSectorRows`,
+the reusable outgoing-list no-between family is equivalent to pointwise
+nonwrap neighbour-selection rows in the genuine
+`GeometricRotationSystem.geometricOutgoingDartList`.
+
+This is a strict source reduction: the remaining leaf is concrete adjacent
+sorted-list data for the exact selected cut rows, not an identity angular
+order, endpoint/chord shortcut, or synthetic cycle row. -/
+theorem
+    S2_agent_selected_head_no_between_source_20260520g_iff_geometricAngularNeighborSelectionRows_of_boundaryVertexExteriorSectorRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin m,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            forall k : Fin B.length,
+              BoundaryVertexExteriorSectorRowsAt inputs B k) :
+    ((forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedEdgeRows :
+            LocalSelectedIncidentEdgePairSourceRows inputs :=
+          S2_agent_selected_incident_close_route_20260520f_of_boundaryVertexExteriorSectorRows
+            source C inputs
+        let cutSource :
+            UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+          S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) selectedEdgeRows
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs :=
+          S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          GeometricRotationSystem.GraphVertexGeometricOutgoingListNoBetweenRows
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right) ↔
+      (forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedEdgeRows :
+            LocalSelectedIncidentEdgePairSourceRows inputs :=
+          S2_agent_selected_incident_close_route_20260520f_of_boundaryVertexExteriorSectorRows
+            source C inputs
+        let cutSource :
+            UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+          S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) selectedEdgeRows
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs :=
+          S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          Nonempty
+            (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+              C a.1 (selectedRows.selectedNeighborRows a).left
+                (selectedRows.selectedNeighborRows a).right))) := by
+  constructor
+  · intro listRows m C inputs
+    let selectedEdgeRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+      S2_agent_selected_incident_close_route_20260520f_of_boundaryVertexExteriorSectorRows
+        source C inputs
+    let cutSource :
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+      S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+        (C := C) (inputs := inputs) selectedEdgeRows
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs :=
+      S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+        (C := C) (inputs := inputs)
+        (S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+          (C := C) (inputs := inputs) cutSource)
+    have listRows' :
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+      GeometricRotationSystem.GraphVertexGeometricOutgoingListNoBetweenRows
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right := by
+      simpa [selectedRows, cutSource, selectedEdgeRows] using listRows C inputs
+    dsimp
+    intro a
+    let cutRows := selectedRows.selectedNeighborRows a
+    have hleft_canonical : (canonicalGraph C).Adj a.1 cutRows.left := by
+      rcases cutRows.left_edge with h | h
+      · exact unboundedFrontierEdgeSet_adj h
+      · exact canonicalAdj_symm (unboundedFrontierEdgeSet_adj h)
+    have hright_canonical : (canonicalGraph C).Adj a.1 cutRows.right := by
+      rcases cutRows.right_edge with h | h
+      · exact unboundedFrontierEdgeSet_adj h
+      · exact canonicalAdj_symm (unboundedFrontierEdgeSet_adj h)
+    have hleft_unit : GraphBridge.UnitDistanceAdj C a.1 cutRows.left :=
+      ((canonicalGraph C).adj_iff_unitDistanceAdj a.1 cutRows.left).1
+        hleft_canonical
+    have hright_unit : GraphBridge.UnitDistanceAdj C a.1 cutRows.right :=
+      ((canonicalGraph C).adj_iff_unitDistanceAdj a.1 cutRows.right).1
+        hright_canonical
+    exact
+      (GeometricRotationSystem.graphVertexGeometricOutgoingListNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow
+        (C := C) (center := a.1) (left := cutRows.left)
+        (right := cutRows.right) hleft_unit hright_unit).1
+        (by simpa [cutRows] using listRows' a)
+  · intro geometricRows m C inputs
+    let selectedEdgeRows : LocalSelectedIncidentEdgePairSourceRows inputs :=
+      S2_agent_selected_incident_close_route_20260520f_of_boundaryVertexExteriorSectorRows
+        source C inputs
+    let cutSource :
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+      S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+        (C := C) (inputs := inputs) selectedEdgeRows
+    let selectedRows :
+        UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs :=
+      S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+        (C := C) (inputs := inputs)
+        (S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+          (C := C) (inputs := inputs) cutSource)
+    have geometricRows' :
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          Nonempty
+            (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+              C a.1 (selectedRows.selectedNeighborRows a).left
+                (selectedRows.selectedNeighborRows a).right) := by
+      simpa [selectedRows, cutSource, selectedEdgeRows] using
+        geometricRows C inputs
+    dsimp
+    intro a
+    let cutRows := selectedRows.selectedNeighborRows a
+    have hleft_canonical : (canonicalGraph C).Adj a.1 cutRows.left := by
+      rcases cutRows.left_edge with h | h
+      · exact unboundedFrontierEdgeSet_adj h
+      · exact canonicalAdj_symm (unboundedFrontierEdgeSet_adj h)
+    have hright_canonical : (canonicalGraph C).Adj a.1 cutRows.right := by
+      rcases cutRows.right_edge with h | h
+      · exact unboundedFrontierEdgeSet_adj h
+      · exact canonicalAdj_symm (unboundedFrontierEdgeSet_adj h)
+    have hleft_unit : GraphBridge.UnitDistanceAdj C a.1 cutRows.left :=
+      ((canonicalGraph C).adj_iff_unitDistanceAdj a.1 cutRows.left).1
+        hleft_canonical
+    have hright_unit : GraphBridge.UnitDistanceAdj C a.1 cutRows.right :=
+      ((canonicalGraph C).adj_iff_unitDistanceAdj a.1 cutRows.right).1
+        hright_canonical
+    exact
+      (GeometricRotationSystem.graphVertexGeometricOutgoingListNoBetweenRows_iff_nonempty_geometricAngularNeighborSelectionRow
+        (C := C) (center := a.1) (left := cutRows.left)
+        (right := cutRows.right) hleft_unit hright_unit).2
+        (by simpa [cutRows] using geometricRows' a)
+
+set_option linter.style.longLine false in
+/-- Forward use of claim `S2-agent-selected-head-no-between-source-20260520g`.
+
+It fills the selected-head `GraphVertexGeometricOutgoingListNoBetweenRows`
+family induced by the 20260520f boundary-sector route from the strictly
+smaller genuine `geometricOutgoingDartList` neighbour-selection family. -/
+theorem
+    S2_agent_selected_head_no_between_source_20260520g_of_boundaryVertexExteriorSectorRows_geometricAngularNeighborSelectionRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin m,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            forall k : Fin B.length,
+              BoundaryVertexExteriorSectorRowsAt inputs B k)
+    (geometricRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedEdgeRows :
+            LocalSelectedIncidentEdgePairSourceRows inputs :=
+          S2_agent_selected_incident_close_route_20260520f_of_boundaryVertexExteriorSectorRows
+            source C inputs
+        let cutSource :
+            UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+          S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) selectedEdgeRows
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs :=
+          S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          Nonempty
+            (GeometricRotationSystem.GraphVertexGeometricAngularNeighborSelectionRow
+              C a.1 (selectedRows.selectedNeighborRows a).left
+                (selectedRows.selectedNeighborRows a).right)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        let selectedEdgeRows :
+            LocalSelectedIncidentEdgePairSourceRows inputs :=
+          S2_agent_selected_incident_close_route_20260520f_of_boundaryVertexExteriorSectorRows
+            source C inputs
+        let cutSource :
+            UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+          S2_agent_20260520_neighbor_pair_cutpartition_source_of_selectedIncidentEdgePairRows
+            (C := C) (inputs := inputs) selectedEdgeRows
+        let selectedRows :
+            UnboundedFrontierCarrierSelectedNeighborCutPartitionSourceRows inputs :=
+          S2_worker_20260520_selected_cutpartition_source_of_localTwoGermRows
+            (C := C) (inputs := inputs)
+            (S2_worker_20260520_local_two_germ_source_of_neighborPairCutPartitionInputSource
+              (C := C) (inputs := inputs) cutSource)
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          GeometricRotationSystem.GraphVertexGeometricOutgoingListNoBetweenRows
+            C a.1 (selectedRows.selectedNeighborRows a).left
+              (selectedRows.selectedNeighborRows a).right :=
+  (S2_agent_selected_head_no_between_source_20260520g_iff_geometricAngularNeighborSelectionRows_of_boundaryVertexExteriorSectorRows
+    source).2 geometricRows
 
 set_option linter.style.longLine false in
 /-- Actual exterior-sector selected rows feed the existing geometric-neighbour
@@ -1466,12 +2367,12 @@ noncomputable def
     B frontier_iff_cycle_vertex rows.sectorRows
 
 set_option linter.style.longLine false in
-/-- Family-level direct actual-sector S2 eraser.
+/-- Conditional direct actual-sector S2 eraser.
 
-This is the current shortest source-facing surface: for each input construct
-one actual exterior boundary cycle, prove the exact frontier-vertex
-equivalence for that cycle, and provide the bundled actual exterior-sector
-rows on the same boundary. -/
+This is the current shortest source-facing surface once each input already
+supplies one actual exterior boundary cycle, the exact frontier-vertex
+equivalence for that cycle, and the bundled actual exterior-sector rows on the
+same boundary. -/
 noncomputable def
     S2_unboundedExteriorFrontierCycleRows_family_of_actualExteriorSectorInputSourceRows
     (source :
@@ -2599,6 +3500,89 @@ theorem
       frontier_vertex_tail_coverage localSectorRows raw_pred_succ_tail_ne
 
 set_option linter.style.longLine false in
+/-- Claim `S2-p2c-frontier-tail-coverage-20260521p1`, subtype coverage form.
+
+Connectedness of the actual unbounded-frontier carrier, together with the
+selected raw dart frontier propagation and pointwise local-sector rows, reaches
+every concrete frontier carrier vertex as a tail of the selected raw exterior
+face orbit. -/
+theorem
+    S2_p2c_frontier_tail_coverage_20260521p1_subtype
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+  (S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source_no_edgeRows
+    (C := C) (inputs := inputs) localSectorRows carrier_connected O
+    dart_edge_openSegment_frontier).2
+
+set_option linter.style.longLine false in
+/-- Claim `S2-p2c-frontier-tail-coverage-20260521p1`.
+
+Graph vertices lying on the unbounded exterior frontier are exactly the tails
+of the selected raw exterior face orbit.  The positive coverage is sourced from
+the actual carrier connectedness and selected-edge propagation above; the
+reverse direction is the raw consecutive-edge frontier row. -/
+theorem
+    S2_p2c_frontier_tail_coverage_20260521p1
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected) :
+    forall v : Fin n,
+      (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+        Exists fun k : Fin O.period => (O.dart k).tail = v := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  exact
+    rawFaceSuccOrbit_frontier_iff_tail_of_frontier_vertex_tail_coverage
+      O edge_openSegment_frontier
+      (S2_p2c_frontier_tail_coverage_20260521p1_subtype
+        (C := C) (inputs := inputs) O dart_edge_openSegment_frontier
+        localSectorRows carrier_connected)
+
+set_option linter.style.longLine false in
 /-- Selected edge-chain connectivity with no standalone `edge_coverage`
 source field.
 
@@ -3118,6 +4102,80 @@ def toRealWitnessSourceRows
       ha_cut hb_cut
 
 end S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-dyn-repeated-tail-primitive-source`, minimal exterior-cut form.
+
+A pointwise repeated-tail exterior cut row strictly lowers the primitive
+raw-index real-witness source.  The residual is the honest deleted-tail cut
+row itself: it already yields a concrete cut-vertex partition, so
+`inputs.noCutVertex` makes the hypothetical repeated-tail branch impossible.
+
+This eraser uses no actual exterior-sector rows, final boundary cycle, W32
+route, arbitrary cycle, induced frontier graph, endpoint all-adjacency, or
+global outgoing-list no-between row. -/
+noncomputable def
+    S2_repeatedBoundaryPrimitiveSourceRows_of_repeatedTailExteriorCutRows_20260522q8
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    {i j : Fin O.period}
+    (cutRows :
+      RawFaceSuccOrbitRepeatedTailExteriorCutRows
+        (inputs := inputs) O i j) :
+    S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+      (inputs := inputs) O i j :=
+  False.elim
+    (RawFaceSuccOrbitRepeatedTailExteriorCutRows.false_of_noCutVertex
+      (inputs := inputs) cutRows)
+
+set_option linter.style.longLine false in
+/-- Input-shaped version of
+`S2_repeatedBoundaryPrimitiveSourceRows_of_repeatedTailExteriorCutRows_20260522q8`.
+
+This removes the concrete primitive source callback from the live selected
+raw-orbit lane.  The next exact source premise is the repeated-tail exterior
+cut-row callback for the same raw orbit and repeated-tail hypotheses. -/
+noncomputable def
+    S2_repeatedBoundaryPrimitiveSourceRows_input_source_of_repeatedTailExteriorCutRows_20260522q8
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (cutRows_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          forall {i j : Fin O.period},
+            i ≠ j ->
+            (O.dart i).tail = (O.dart j).tail ->
+              RawFaceSuccOrbitRepeatedTailExteriorCutRows
+                (inputs := inputs) O i j) :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+        {start : UnitDistanceDart C},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+      start.tail = e.1 ->
+      start.head = e.2 ->
+      forall O :
+        UnitDistanceRotationSystem.RawFaceSuccOrbit
+          (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+          start,
+        forall {i j : Fin O.period},
+          i ≠ j ->
+          (O.dart i).tail = (O.dart j).tail ->
+            S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+              (inputs := inputs) O i j := by
+  intro e p start edgeRows htail hhead O i j hij hrepeat
+  exact
+    S2_repeatedBoundaryPrimitiveSourceRows_of_repeatedTailExteriorCutRows_20260522q8
+      (inputs := inputs)
+      (cutRows_source edgeRows htail hhead O hij hrepeat)
 
 namespace S2RepeatedBoundaryArcRealWitnessPrimitiveRows
 
@@ -4107,6 +5165,460 @@ theorem false_of_noCutVertex
 
 end S2RepeatedTailExteriorCutWitnessSource
 
+namespace S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+
+variable {C : _root_.UDConfig n}
+variable {inputs : FinitePlanarOuterComponentInputs C}
+variable {R : UnitDistanceRotationSystem C}
+variable {start : UnitDistanceDart C}
+variable {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+variable {i j : Fin O.period}
+
+set_option linter.style.longLine false in
+/-- The concrete primitive raw-index source directly supplies the deleted-tail
+cut witness by erasing through the checked arc-separation source. -/
+noncomputable def toRepeatedTailExteriorCutWitnessSource
+    (rows :
+      S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+        (inputs := inputs) O i j)
+    (hij : i ≠ j)
+    (hrepeat : (O.dart i).tail = (O.dart j).tail) :
+    S2RepeatedTailExteriorCutWitnessSource (inputs := inputs) O i j :=
+  S2RepeatedTailExteriorCutWitnessSource.ofRepeatedBoundaryArcSeparationSource
+    (inputs := inputs)
+    ((rows.toPrimitiveRows).toRepeatedBoundaryArcSeparationSource
+      hij hrepeat)
+
+set_option linter.style.longLine false in
+/-- The concrete primitive raw-index source also erases all the way to the
+minimal repeated-tail exterior cut row. -/
+noncomputable def toRepeatedTailExteriorCutRows
+    (rows :
+      S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+        (inputs := inputs) O i j)
+    (hij : i ≠ j)
+    (hrepeat : (O.dart i).tail = (O.dart j).tail) :
+    RawFaceSuccOrbitRepeatedTailExteriorCutRows
+      (inputs := inputs) O i j :=
+  (rows.toRepeatedTailExteriorCutWitnessSource
+    hij hrepeat).toRepeatedTailExteriorCutRows
+
+end S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+
+set_option linter.style.longLine false in
+/-- Raw-orbit repeated-tail exterior cut-row source.
+
+This is the upstream, non-selected form of the repeated-tail separation source:
+for every hypothetical repeated tail in a raw face-successor orbit, supply the
+minimal deleted-tail exterior cut row on that same orbit. -/
+abbrev S2RawOrbitRepeatedTailExteriorCutSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start) :=
+  forall {i j : Fin O.period},
+    i ≠ j ->
+    (O.dart i).tail = (O.dart j).tail ->
+      RawFaceSuccOrbitRepeatedTailExteriorCutRows
+        (inputs := inputs) O i j
+
+set_option linter.style.longLine false in
+/-- Raw-orbit repeated-tail deleted-tail witness source.
+
+This is the fieldwise primitive exterior separation row: one non-cut witness on
+each cyclic open side and nonreachability after deleting the repeated tail. -/
+abbrev S2RawOrbitRepeatedTailExteriorWitnessSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start) :=
+  forall {i j : Fin O.period},
+    i ≠ j ->
+    (O.dart i).tail = (O.dart j).tail ->
+      S2RepeatedTailExteriorCutWitnessSource
+        (inputs := inputs) O i j
+
+set_option linter.style.longLine false in
+/-- Raw-orbit finite boundary-arc rows for hypothetical repeated tails.
+
+This is the non-selected analogue of the downstream
+`SelectedRawOrbitRepeatedTailBoundaryArcRows` abbreviation: it is stated only
+on the raw orbit in this file, before any selected-row wrappers are introduced. -/
+abbrev S2RawOrbitRepeatedTailBoundaryArcRows
+    {C : _root_.UDConfig n}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start) :=
+  forall {i j : Fin O.period},
+    i ≠ j ->
+    (O.dart i).tail = (O.dart j).tail ->
+      RepeatedExteriorBoundaryArcSeparationRows C
+        (fun k : Fin O.period => (O.dart k).tail) i j
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q14-boundary-arc-source`, primitive-source half.
+
+The concrete primitive raw-index witness row is strictly below the honest
+deleted-tail exterior separation witness.  The witness already yields a cut
+partition, so the checked no-cut field rules out the hypothetical repeated-tail
+branch.
+
+This assumes no actual-sector rows, final cycles, W32 facade, induced frontier
+graph, or endpoint all-adjacency row. -/
+noncomputable def
+    S2_q14_repeatedBoundaryPrimitiveSourceRows_of_repeatedTailExteriorWitness
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    {i j : Fin O.period}
+    (witness :
+      S2RepeatedTailExteriorCutWitnessSource
+        (inputs := inputs) O i j) :
+    S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+      (inputs := inputs) O i j :=
+  False.elim witness.false_of_noCutVertex
+
+set_option linter.style.longLine false in
+/-- Input-callback form of
+`S2_q14_repeatedBoundaryPrimitiveSourceRows_of_repeatedTailExteriorWitness`.
+
+For a selected edge-local raw orbit callback, the remaining primitive-source
+obligation is exactly the deleted-tail exterior witness callback for the same
+raw orbit and repeated-tail hypotheses. -/
+noncomputable def
+    S2_q14_repeatedBoundaryPrimitiveSourceRows_input_source_of_repeatedTailExteriorWitnesses
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (witness_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          S2RawOrbitRepeatedTailExteriorWitnessSourceRows
+            (inputs := inputs) O) :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+        {start : UnitDistanceDart C},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+      start.tail = e.1 ->
+      start.head = e.2 ->
+      forall O :
+        UnitDistanceRotationSystem.RawFaceSuccOrbit
+          (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+          start,
+        forall {i j : Fin O.period},
+          i ≠ j ->
+          (O.dart i).tail = (O.dart j).tail ->
+            S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows
+              (inputs := inputs) O i j := by
+  intro e p start edgeRows htail hhead O i j hij hrepeat
+  exact
+    S2_q14_repeatedBoundaryPrimitiveSourceRows_of_repeatedTailExteriorWitness
+      (inputs := inputs)
+      (witness_source edgeRows htail hhead O hij hrepeat)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q14-boundary-arc-source`, boundary-arc half.
+
+Finite repeated-tail boundary-arc rows on a raw orbit are strictly lowered to
+the same raw orbit's minimal deleted-tail exterior cut rows.  The cut row
+contains the concrete repeated-tail separation and erases to a cut partition;
+`inputs.noCutVertex` makes the hypothetical repeated-tail branch impossible. -/
+noncomputable def
+    S2_q14_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorCutRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (cutRows :
+      S2RawOrbitRepeatedTailExteriorCutSourceRows
+        (inputs := inputs) O) :
+    S2RawOrbitRepeatedTailBoundaryArcRows O := by
+  intro i j hij hrepeat
+  exact False.elim ((cutRows hij hrepeat).false_of_noCutVertex)
+
+set_option linter.style.longLine false in
+/-- Witness-row form of
+`S2_q14_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorCutRows`.
+
+The source leaf is the fieldwise deleted-tail witness row; it is first erased
+to `RawFaceSuccOrbitRepeatedTailExteriorCutRows` and then consumed by the q14
+boundary-arc reducer. -/
+noncomputable def
+    S2_q14_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorWitnesses
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (witness_source :
+      S2RawOrbitRepeatedTailExteriorWitnessSourceRows
+        (inputs := inputs) O) :
+    S2RawOrbitRepeatedTailBoundaryArcRows O :=
+  S2_q14_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorCutRows
+    (inputs := inputs) O
+    (fun hij hrepeat =>
+      (witness_source hij hrepeat).toRepeatedTailExteriorCutRows)
+
+set_option linter.style.longLine false in
+/-- Input-callback form of the q14 raw boundary-arc source.
+
+This is the form tied to the existing raw orbit/component callback lane:
+edge-local exterior rows select the raw orbit, and the only repeated-tail
+residual is the minimal exterior cut-row callback for that orbit. -/
+noncomputable def
+    S2_q14_rawOrbitRepeatedTailBoundaryArcRows_input_source_of_repeatedTailExteriorCutRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (cutRows_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          S2RawOrbitRepeatedTailExteriorCutSourceRows
+            (inputs := inputs) O) :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+        {start : UnitDistanceDart C},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+      start.tail = e.1 ->
+      start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+        S2RawOrbitRepeatedTailBoundaryArcRows O := by
+  intro e p start edgeRows htail hhead O
+  exact
+    S2_q14_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorCutRows
+      (inputs := inputs) O
+      (cutRows_source edgeRows htail hhead O)
+
+set_option linter.style.longLine false in
+/-- Deleted-tail witness callback form of the q14 raw boundary-arc source. -/
+noncomputable def
+    S2_q14_rawOrbitRepeatedTailBoundaryArcRows_input_source_of_repeatedTailExteriorWitnesses
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (witness_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          S2RawOrbitRepeatedTailExteriorWitnessSourceRows
+            (inputs := inputs) O) :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+        {start : UnitDistanceDart C},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+      start.tail = e.1 ->
+      start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+        S2RawOrbitRepeatedTailBoundaryArcRows O := by
+  intro e p start edgeRows htail hhead O
+  exact
+    S2_q14_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorWitnesses
+      (inputs := inputs) O
+      (witness_source edgeRows htail hhead O)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q15-repeated-tail-boundary-arc-source`, raw cut-row form.
+
+The deleted-tail witness row is exactly the nonreachability payload needed for
+`S2RawOrbitRepeatedTailExteriorCutSourceRows`: one non-cut index on each
+cyclic open side and nonreachability in the graph induced after deleting the
+repeated tail.  This is a strict raw-orbit lowering and does not use actual
+sector rows, W32 consumers, final cycles, induced frontier graphs, arbitrary
+cycles, or global outgoing-list no-between rows. -/
+def
+    S2_q15_rawOrbitRepeatedTailExteriorCutSourceRows_of_repeatedTailExteriorWitnesses
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (witness_source :
+      S2RawOrbitRepeatedTailExteriorWitnessSourceRows
+        (inputs := inputs) O) :
+    S2RawOrbitRepeatedTailExteriorCutSourceRows
+      (inputs := inputs) O := by
+  intro i j hij hrepeat
+  exact (witness_source hij hrepeat).toRepeatedTailExteriorCutRows
+
+set_option linter.style.longLine false in
+/-- Deleted-tail cut partitions also source the raw repeated-tail exterior cut
+rows for the same raw orbit.
+
+This is the sharper no-cut form: once a hypothetical repeated tail supplies a
+cut partition, the finite-planar no-cut field makes that branch impossible, so
+the requested cut-row callback is available by contradiction. -/
+def
+    S2_q15_rawOrbitRepeatedTailExteriorCutSourceRows_of_deletedTailCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (cut_partitions :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          Nonempty (CutVertexInterface.CutVertexPartition C)) :
+    S2RawOrbitRepeatedTailExteriorCutSourceRows
+      (inputs := inputs) O := by
+  intro i j hij hrepeat
+  exact False.elim (inputs.noCutVertex (cut_partitions hij hrepeat))
+
+set_option linter.style.longLine false in
+/-- Concrete deleted-tail cut partitions source the raw repeated-tail exterior
+cut rows for the same raw orbit. -/
+def
+    S2_q15_rawOrbitRepeatedTailExteriorCutSourceRows_of_concreteDeletedTailCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (cut_partitions :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          CutVertexInterface.CutVertexPartition C) :
+    S2RawOrbitRepeatedTailExteriorCutSourceRows
+      (inputs := inputs) O :=
+  S2_q15_rawOrbitRepeatedTailExteriorCutSourceRows_of_deletedTailCutPartitions
+    (inputs := inputs) O
+    (fun hij hrepeat => ⟨cut_partitions hij hrepeat⟩)
+
+set_option linter.style.longLine false in
+/-- The q15 witness lowering also proves the raw finite boundary-arc rows for
+the same raw orbit, through the q14 no-cut boundary-arc eraser. -/
+noncomputable def
+    S2_q15_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorWitnesses
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (witness_source :
+      S2RawOrbitRepeatedTailExteriorWitnessSourceRows
+        (inputs := inputs) O) :
+    S2RawOrbitRepeatedTailBoundaryArcRows O :=
+  S2_q14_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorCutRows
+    (inputs := inputs) O
+    (S2_q15_rawOrbitRepeatedTailExteriorCutSourceRows_of_repeatedTailExteriorWitnesses
+      (inputs := inputs) O witness_source)
+
+set_option linter.style.longLine false in
+/-- Deleted-tail cut partitions strictly lower the raw finite boundary-arc
+rows for the same raw orbit. -/
+noncomputable def
+    S2_q15_rawOrbitRepeatedTailBoundaryArcRows_of_deletedTailCutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (cut_partitions :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          Nonempty (CutVertexInterface.CutVertexPartition C)) :
+    S2RawOrbitRepeatedTailBoundaryArcRows O :=
+  S2_q14_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorCutRows
+    (inputs := inputs) O
+    (S2_q15_rawOrbitRepeatedTailExteriorCutSourceRows_of_deletedTailCutPartitions
+      (inputs := inputs) O cut_partitions)
+
+set_option linter.style.longLine false in
+/-- Input-callback form of the q15 raw cut-row witness lowering. -/
+def
+    S2_q15_rawOrbitRepeatedTailExteriorCutSourceRows_input_source_of_repeatedTailExteriorWitnesses
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (witness_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          S2RawOrbitRepeatedTailExteriorWitnessSourceRows
+            (inputs := inputs) O) :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+        {start : UnitDistanceDart C},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+      start.tail = e.1 ->
+      start.head = e.2 ->
+      forall O :
+        UnitDistanceRotationSystem.RawFaceSuccOrbit
+          (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+          start,
+        S2RawOrbitRepeatedTailExteriorCutSourceRows
+          (inputs := inputs) O := by
+  intro e p start edgeRows htail hhead O
+  exact
+    S2_q15_rawOrbitRepeatedTailExteriorCutSourceRows_of_repeatedTailExteriorWitnesses
+      (inputs := inputs) O
+      (witness_source edgeRows htail hhead O)
+
+set_option linter.style.longLine false in
+/-- Input-callback form of the q15 raw boundary-arc witness lowering. -/
+noncomputable def
+    S2_q15_rawOrbitRepeatedTailBoundaryArcRows_input_source_of_repeatedTailExteriorWitnesses
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (witness_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          S2RawOrbitRepeatedTailExteriorWitnessSourceRows
+            (inputs := inputs) O) :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+        {start : UnitDistanceDart C},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+      start.tail = e.1 ->
+      start.head = e.2 ->
+      forall O :
+        UnitDistanceRotationSystem.RawFaceSuccOrbit
+          (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+          start,
+        S2RawOrbitRepeatedTailBoundaryArcRows O := by
+  intro e p start edgeRows htail hhead O
+  exact
+    S2_q15_rawOrbitRepeatedTailBoundaryArcRows_of_repeatedTailExteriorWitnesses
+      (inputs := inputs) O
+      (witness_source edgeRows htail hhead O)
+
 /-- Claim `S2-dyn-20260520-repeated-tail-witness-source`.
 
 Witness-level no-cut reducer for repeated selected raw tails.  If the selected
@@ -4542,6 +6054,56 @@ theorem
       ((RepeatedExteriorBoundaryArcSeparationRows.toRepeatedExteriorBoundarySeparationRows
           (boundary_arcRows_source edgeRows htail hhead O hij hrepeat)).toCutVertexPartition)
 
+/-- Claim `S2-agent-repeated-tail-separation-route-20260520g2`.
+
+Selected raw-orbit repeated-tail separation from the real repeated-boundary
+arc witness source.  The route is deliberately the no-cut/cut-partition route:
+the real witness rows first erase through the existing repeated-boundary arc
+rows, those rows provide the concrete cut-partition callback, and
+`inputs.noCutVertex` makes the repeated-tail separation callback vacuous. -/
+noncomputable def
+    S2_agent_repeatedTail_separationRows_of_realWitnessRows_noCut_cutPartition_20260520g2
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (real_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          forall {i j : Fin O.period},
+            Not (i = j) ->
+            (O.dart i).tail = (O.dart j).tail ->
+              S2RepeatedBoundaryArcRealWitnessSourceRows
+                (inputs := inputs) O i j) :
+    forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+        {start : UnitDistanceDart C},
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+      start.tail = e.1 ->
+      start.head = e.2 ->
+      forall O :
+        UnitDistanceRotationSystem.RawFaceSuccOrbit
+          (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+          start,
+        forall {i j : Fin O.period},
+          Not (i = j) ->
+          (O.dart i).tail = (O.dart j).tail ->
+            RepeatedExteriorBoundarySeparationRows C
+              (fun k : Fin O.period => (O.dart k).tail) i j := by
+  intro e p start edgeRows htail hhead O i j hij hrepeat
+  exact
+    S2_agent_no_cut_repeated_tail_source_from_inputs (inputs := inputs) O
+      (S2_agent_repeatedTail_cutPartition_nonempty_source_of_boundaryArcSeparationRows_20260520
+        inputs
+        (S2_agent_repeated_boundary_arc_real_witness_source_20260520ad
+          inputs real_source)
+        edgeRows htail hhead O)
+      hij hrepeat
+
 /-- Primitive two-open-arc version of the repeated-tail cut-partition
 callback.
 
@@ -4878,6 +6440,158 @@ noncomputable def
       witness.right_index witness.right_index_mem witness.right_index_ne_cut
       witness.unreachable_after_delete
 
+set_option linter.style.longLine false in
+/-- Claim `S2-dynamic-repeated-tail-cut-k4`, raw-orbit finite-separation form.
+
+For a hypothetical repeated tail in the selected exterior face-successor walk,
+the only remaining cut-row payload is the finite graph separation after
+deleting that repeated tail: one raw-tail witness on each cyclic open side,
+both different from the deleted tail, and nonreachability between those
+witnesses in the induced graph.  This stays upstream of actual-boundary/cycle
+rows and avoids induced frontier graphs, arbitrary cycles, and endpoint
+shortcuts. -/
+noncomputable def
+    S2_dynamic_repeated_tail_cut_k4_of_minimalDeletedTailSeparation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (minimalSeparation :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          PSigma fun left :
+              {k : Fin O.period //
+                cyclicForwardOpenArc i j k ∧
+                  (O.dart k).tail ≠ (O.dart i).tail} =>
+            PSigma fun right :
+                {k : Fin O.period //
+                  cyclicForwardOpenArc j i k ∧
+                    (O.dart k).tail ≠ (O.dart i).tail} =>
+              ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                  ({(O.dart i).tail}ᶜ : Set (Fin n))).Reachable
+                  ⟨(O.dart left.1).tail, by simpa using left.2.2⟩
+                  ⟨(O.dart right.1).tail, by simpa using right.2.2⟩) :
+    forall {i j : Fin O.period},
+      i ≠ j ->
+      (O.dart i).tail = (O.dart j).tail ->
+        RawFaceSuccOrbitRepeatedTailExteriorCutRows
+          (inputs := inputs) O i j := by
+  intro i j hij htail
+  rcases minimalSeparation hij htail with ⟨left, right, hunreach⟩
+  exact
+    S2_repeatedTailExteriorCutRows_of_unreachable_after_delete
+      (inputs := inputs) O
+      left.1 left.2.1 left.2.2
+      right.1 right.2.1 right.2.2
+      hunreach
+
+set_option linter.style.longLine false in
+/-- Separation-row form of
+`S2_dynamic_repeated_tail_cut_k4_of_minimalDeletedTailSeparation`.
+
+The same minimal deleted-tail finite-graph separation erases directly to the
+ordinary repeated-boundary separation rows consumed by the no-cut interface. -/
+noncomputable def
+    S2_dynamic_repeated_tail_separation_k4_of_minimalDeletedTailSeparation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (minimalSeparation :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          PSigma fun left :
+              {k : Fin O.period //
+                cyclicForwardOpenArc i j k ∧
+                  (O.dart k).tail ≠ (O.dart i).tail} =>
+            PSigma fun right :
+                {k : Fin O.period //
+                  cyclicForwardOpenArc j i k ∧
+                    (O.dart k).tail ≠ (O.dart i).tail} =>
+              ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                  ({(O.dart i).tail}ᶜ : Set (Fin n))).Reachable
+                  ⟨(O.dart left.1).tail, by simpa using left.2.2⟩
+                  ⟨(O.dart right.1).tail, by simpa using right.2.2⟩) :
+    forall {i j : Fin O.period},
+      i ≠ j ->
+      (O.dart i).tail = (O.dart j).tail ->
+        RepeatedExteriorBoundarySeparationRows C
+          (fun k : Fin O.period => (O.dart k).tail) i j := by
+  intro i j hij htail
+  exact
+    (S2_dynamic_repeated_tail_cut_k4_of_minimalDeletedTailSeparation
+      (inputs := inputs) O minimalSeparation hij htail).toRepeatedExteriorBoundarySeparationRows
+      hij htail
+
+set_option linter.style.longLine false in
+/-- No-cut consequence of the k4 minimal deleted-tail separation source.
+
+If every hypothetical repeated tail in the selected raw exterior face walk
+supplies the minimal deleted-tail finite-graph separation above, then
+`inputs.noCutVertex` rules out repeated tails. -/
+theorem S2_dynamic_repeated_tail_nonrepeat_k4_of_minimalDeletedTailSeparation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (minimalSeparation :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          PSigma fun left :
+              {k : Fin O.period //
+                cyclicForwardOpenArc i j k ∧
+                  (O.dart k).tail ≠ (O.dart i).tail} =>
+            PSigma fun right :
+                {k : Fin O.period //
+                  cyclicForwardOpenArc j i k ∧
+                    (O.dart k).tail ≠ (O.dart i).tail} =>
+              ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                  ({(O.dart i).tail}ᶜ : Set (Fin n))).Reachable
+                  ⟨(O.dart left.1).tail, by simpa using left.2.2⟩
+                  ⟨(O.dart right.1).tail, by simpa using right.2.2⟩) :
+    forall {i j : Fin O.period},
+      i ≠ j -> (O.dart i).tail ≠ (O.dart j).tail :=
+  rawFaceSuccOrbit_tail_ne_of_repeatedTailExteriorCutRows
+    (inputs := inputs) O
+    (S2_dynamic_repeated_tail_cut_k4_of_minimalDeletedTailSeparation
+      (inputs := inputs) O minimalSeparation)
+
+set_option linter.style.longLine false in
+/-- Injective-tail form of the k4 no-cut repeated-tail handoff. -/
+theorem S2_dynamic_repeated_tail_injective_k4_of_minimalDeletedTailSeparation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (minimalSeparation :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          PSigma fun left :
+              {k : Fin O.period //
+                cyclicForwardOpenArc i j k ∧
+                  (O.dart k).tail ≠ (O.dart i).tail} =>
+            PSigma fun right :
+                {k : Fin O.period //
+                  cyclicForwardOpenArc j i k ∧
+                    (O.dart k).tail ≠ (O.dart i).tail} =>
+              ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                  ({(O.dart i).tail}ᶜ : Set (Fin n))).Reachable
+                  ⟨(O.dart left.1).tail, by simpa using left.2.2⟩
+                  ⟨(O.dart right.1).tail, by simpa using right.2.2⟩) :
+    Function.Injective fun k : Fin O.period => (O.dart k).tail :=
+  rawFaceSuccOrbit_tail_injective_of_repeatedTailExteriorCutRows
+    (inputs := inputs) O
+    (S2_dynamic_repeated_tail_cut_k4_of_minimalDeletedTailSeparation
+      (inputs := inputs) O minimalSeparation)
+
 /-- A deleted-tail witness is enough for the repeated-boundary separation row
 needed by raw source rows.
 
@@ -5089,14 +6803,14 @@ noncomputable def
 /-- Claim `S2-agent-repeated-tail-actual-arc-source-20260520w`.
 
 Callback-shaped reducer for the selected raw-orbit actual exterior-arc source.
-If an existing repeated-boundary separation source can produce the no-cut
-separation rows for every hypothetical repeated raw tail, then the stronger
-actual exterior-arc callback is available vacuously from
-`FinitePlanarOuterComponentInputs.noCutVertex`.
+The existing repeated-boundary separation source supplies the no-cut separation
+rows for every hypothetical repeated raw tail, and
+`FinitePlanarOuterComponentInputs.noCutVertex` turns that into the stronger
+actual exterior-arc callback.
 
-This is intentionally a reducer to the existing repeated-boundary source row:
-it does not introduce a new package or manufacture the actual finite arc
-witness data directly. -/
+This is support infrastructure, not a live source task: it does not construct
+the exterior boundary cycle or manufacture the actual finite arc witness data
+directly. -/
 noncomputable def repeatedTailActualArcRows_source_of_repeatedBoundarySeparationRows
     {C : _root_.UDConfig n}
     {inputs : FinitePlanarOuterComponentInputs C}
@@ -5334,13 +7048,9 @@ theorem S2_carrier_connected_of_frontierPreconnectedSourceRows
     unboundedFrontierCarrierAdjClosedTopologyRows_of_frontier_preconnected_and_frontier_edge_cover
       (C := C) (inputs := inputs)
       frontier_preconnected rows.frontier_edge_cover
-  let frontier_vertices_nonempty :
-      Nonempty {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
-    unboundedFrontierCarrier_nonempty_of_frontier_edge_cover
-      inputs rows.frontier_edge_cover
   exact
-    unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows
-      inputs frontier_vertices_nonempty topologyRows
+    unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows_noAuxNonempty
+      inputs topologyRows
 
 /-- Carrier route to the concrete actual-boundary-cycle frontier rows.
 
@@ -6882,6 +8592,384 @@ noncomputable def S2_dyn_20260520_actual_boundary_rows_source
       edge_openSegment_frontier
 
 set_option linter.style.longLine false in
+/-- Claim `S2-k6m-boundary-incident-completeness-source`, pointwise form.
+
+For the same actual exterior boundary stored in `actualRows`, pointwise local
+sector rows on the actual unbounded-frontier carrier prove boundary-cycle
+incident frontier-edge completeness.  The proof is the existing selected-edge
+membership/local-sector bridge; it does not use all-adjacent endpoint closure
+or an induced frontier graph. -/
+theorem
+    S2_k6m_boundary_incident_completeness_source_of_actualBoundary_localSectorRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+      actualRows.boundary :=
+  S2_agent_local_sector_incident_bridge
+    (C := C) (inputs := inputs) actualRows localSectorRows
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_k6m_boundary_incident_completeness_source_of_actualBoundary_localSectorRows`.
+
+This exposes the current k6m source surface: an actual boundary package and
+local sector rows for the same input produce the corresponding same-boundary
+incident-completeness row. -/
+theorem S2_k6m_boundary_incident_completeness_source
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _actualRows :
+              ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+            forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun actualRows :
+            ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+          BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+            actualRows.boundary := by
+  intro m C inputs
+  classical
+  let sourceRows := source C inputs
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    sourceRows.1
+  have localSectorRows :
+      forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a :=
+    sourceRows.2
+  exact
+    Exists.intro actualRows
+      (S2_k6m_boundary_incident_completeness_source_of_actualBoundary_localSectorRows
+        (C := C) (inputs := inputs) actualRows localSectorRows)
+
+set_option linter.style.longLine false in
+/-- Raw exterior face-successor data plus local-sector rows source the exact
+actual-boundary/incident-completeness package.
+
+This is the small source eraser identified by
+`S2-agent-actual-boundary-incident-source-scout-20260520p1`: first construct
+the concrete `ActualBoundaryCycleFrontierEquivalenceRows` from the raw orbit,
+then prove incident completeness for that same boundary using the checked
+local-sector incident bridge. -/
+noncomputable def
+    S2_agent_actual_boundary_incident_source_of_rawOrbit_localSectorRows_20260520p1
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j) :
+    Exists fun actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary := by
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    S2_dyn_20260520_actual_boundary_rows_source
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows
+  exact
+    Exists.intro actualRows
+      (S2_k6m_boundary_incident_completeness_source_of_actualBoundary_localSectorRows
+        (C := C) (inputs := inputs) actualRows localSectorRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-actual-boundary-cycle-rows-20260520e`.
+
+Strict actual-boundary-cycle reduction from local-sector carrier rows,
+connectedness of the actual unbounded-frontier carrier, and the selected
+geometric raw face-successor orbit's actual exterior-arc package.  The
+constructed boundary inside `ActualBoundaryCycleFrontierEquivalenceRows` is
+the genuine `UnitDistanceCycleBoundary` obtained from the raw orbit after
+repeated-tail separation; the frontier iff cycle-vertex row is transported
+from raw-tail coverage of the same orbit.
+
+The remaining leaves are exactly `localSectorRows`, `carrier_connected`, the
+selected raw orbit `O`, and `RawFaceSuccOrbitActualExteriorArcSeparationRows`
+for that orbit. -/
+noncomputable def
+    S2_agent_actual_boundary_cycle_rows_20260520e_of_actualExteriorArcRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+  S2_dyn_20260520_actual_boundary_rows_source
+    (C := C) inputs
+    (fun a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} =>
+      localSectorRows a)
+    carrier_connected O
+    (rawFaceSuccOrbit_dart_edge_openSegment_frontier_of_actualExteriorArcSeparationRows
+      (inputs := inputs) O actualArcRows)
+    (S2_agent_no_cut_repeated_tail_source_from_actualExteriorArcRows
+      (inputs := inputs) O actualArcRows)
+
+set_option linter.style.longLine false in
+/-- Boundary-edge source projection of
+`S2_agent_actual_boundary_cycle_rows_20260520e_of_actualExteriorArcRows`.
+
+This displays the constructed `UnitDistanceCycleBoundary`, the exact
+frontier iff cycle-vertex row, and actual `unboundedFrontierEdgeSet`
+membership for every consecutive boundary side. -/
+noncomputable def
+    S2_agent_actual_boundary_cycle_rows_20260520e_boundaryEdgeMemSource_of_actualExteriorArcRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (actualArcRows :
+      RawFaceSuccOrbitActualExteriorArcSeparationRows
+        (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows.BoundaryCycleEdgeMemSource
+      C inputs :=
+  ActualBoundaryCycleFrontierEquivalenceRows.boundaryCycleEdgeMemSource
+    (S2_agent_actual_boundary_cycle_rows_20260520e_of_actualExteriorArcRows
+      (C := C) inputs
+      (fun a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} =>
+        localSectorRows a)
+      carrier_connected O actualArcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-actual-boundary-from-actual-arc-source-20260520h`.
+
+Input-facing selected-orbit version of
+`S2_agent_actual_boundary_cycle_rows_20260520e_of_actualExteriorArcRows`.
+The raw face-successor orbit is selected from an actual unbounded-frontier
+seed using the same pointwise local-sector rows, while carrier connectedness
+is supplied by the existing frontier-preconnected source package.
+
+The remaining leaves are the local-sector rows, the frontier-preconnected
+source rows, and an actual exterior-arc source callback for the selected raw
+orbit produced from the seed. -/
+noncomputable def
+    S2_agent_actual_boundary_from_actual_arc_source_20260520h
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (preconnectedRows : UnboundedExteriorFrontierPreconnectedSourceRows inputs)
+    (actualArcRows_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          RawFaceSuccOrbitActualExteriorArcSeparationRows
+            (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs := by
+  classical
+  let seed : UnboundedExteriorFrontierSeed inputs :=
+    Classical.choice (unboundedExteriorFrontierSeed_nonempty inputs)
+  let selected :=
+    exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localSectorRows
+      (C := C) (inputs := inputs) localSectorRows seed
+  let e : PlanarInterface.Edge n := Classical.choose selected
+  let hp := Classical.choose_spec selected
+  let p : PlanarInterface.Point := Classical.choose hp
+  let hstart := Classical.choose_spec hp
+  let start : UnitDistanceDart C := Classical.choose hstart
+  let hstart_spec := Classical.choose_spec hstart
+  let edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p :=
+    hstart_spec.1
+  let htail : start.tail = e.1 := hstart_spec.2.1
+  let hhead : start.head = e.2 := hstart_spec.2.2.1
+  let hraw :
+      Nonempty
+        (UnitDistanceRotationSystem.RawFaceSuccOrbit
+          (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+          start) :=
+    hstart_spec.2.2.2
+  let O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start :=
+    Classical.choice hraw
+  exact
+    S2_agent_actual_boundary_cycle_rows_20260520e_of_actualExteriorArcRows
+      (C := C) inputs localSectorRows
+      (S2_carrier_connected_of_frontierPreconnectedSourceRows
+        (C := C) inputs preconnectedRows)
+      O
+      (actualArcRows_source edgeRows htail hhead O)
+
+set_option linter.style.longLine false in
+/-- Boundary-free local-source version of
+`S2_agent_actual_boundary_from_actual_arc_source_20260520h`.
+
+This closes the displayed `localSectorRows`, `carrier_connected`, and selected
+raw-orbit leaves of the `20260520e` reducer.  The remaining proof-owning
+inputs are the actual selected-edge chain, the boundary-free no-third-germ
+source, and the actual exterior-arc source callback for the selected orbit. -/
+noncomputable def
+    S2_agent_actual_boundary_from_actual_arc_source_20260520h_of_edgeChain_boundaryFree
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (edge_segment_chain :
+      UnboundedFrontierEdgeCarrierSegmentChainConnected inputs)
+    (source :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun left : Fin n =>
+          Exists fun right : Fin n =>
+            ((a.1, left) ∈ unboundedFrontierEdgeSet C inputs ∨
+              (left, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+            ((a.1, right) ∈ unboundedFrontierEdgeSet C inputs ∨
+              (right, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+            left ≠ right ∧
+            forall (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+              q ∈ Metric.ball ((canonicalGraph C).point a.1) ε ->
+                q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+                  (canonicalGraph C).Adj a.1 x ->
+                    q ∈ vertexIncidentGermW3 C a.1 x ε ->
+                      q ≠ (canonicalGraph C).point a.1 ->
+                        x ≠ left ->
+                          x ≠ right ->
+                            False)
+    (actualArcRows_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          RawFaceSuccOrbitActualExteriorArcSeparationRows
+            (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs := by
+  let localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a :=
+    S2_localSectorRows_of_boundaryFree_twoSelectedEdges_noThirdGerm_source
+      (C := C) (inputs := inputs) source
+  exact
+    S2_agent_actual_boundary_from_actual_arc_source_20260520h
+      (C := C) inputs localSectorRows
+      (S2_frontierPreconnectedSourceRows_of_edgeChain_boundaryFree_noThirdGerm_fixedSide
+        (C := C) (inputs := inputs) edge_segment_chain source)
+      actualArcRows_source
+
+set_option linter.style.longLine false in
+/-- Edge-membership/repeated-tail actual-arc version of
+`S2_agent_actual_boundary_from_actual_arc_source_20260520h_of_edgeChain_boundaryFree`.
+
+This additionally reduces the selected
+`RawFaceSuccOrbitActualExteriorArcSeparationRows` leaf through the underlying
+actual-arc eraser, leaving only raw selected edge membership and pairwise
+repeated-tail actual exterior-arc rows for the chosen orbit. -/
+noncomputable def
+    S2_agent_actual_boundary_from_edgeMem_repeatedActualArc_source_20260520h
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (edge_segment_chain :
+      UnboundedFrontierEdgeCarrierSegmentChainConnected inputs)
+    (source :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun left : Fin n =>
+          Exists fun right : Fin n =>
+            ((a.1, left) ∈ unboundedFrontierEdgeSet C inputs ∨
+              (left, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+            ((a.1, right) ∈ unboundedFrontierEdgeSet C inputs ∨
+              (right, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+            left ≠ right ∧
+            forall (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+              q ∈ Metric.ball ((canonicalGraph C).point a.1) ε ->
+                q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+                  (canonicalGraph C).Adj a.1 x ->
+                    q ∈ vertexIncidentGermW3 C a.1 x ε ->
+                      q ≠ (canonicalGraph C).point a.1 ->
+                        x ≠ left ->
+                          x ≠ right ->
+                            False)
+    (edge_mem_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          forall k : Fin O.period,
+            ((O.dart k).tail,
+                (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∈
+                unboundedFrontierEdgeSet C inputs ∨
+              ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+                  (O.dart k).tail) ∈
+                unboundedFrontierEdgeSet C inputs)
+    (repeated_tail_actualArcRows_source :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          forall {i j : Fin O.period},
+            i ≠ j ->
+            (O.dart i).tail = (O.dart j).tail ->
+              RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+                (inputs := inputs) O i j) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+  S2_agent_actual_boundary_from_actual_arc_source_20260520h_of_edgeChain_boundaryFree
+    (C := C) inputs edge_segment_chain source
+    (fun edgeRows htail hhead O =>
+      S2_agent_actual_arc_rows_source
+        (C := C) (inputs := inputs) O
+        (edge_mem_source edgeRows htail hhead O)
+        (fun hij hrepeat =>
+          repeated_tail_actualArcRows_source edgeRows htail hhead O hij hrepeat))
+
+set_option linter.style.longLine false in
 /-- Claim `S2-agent-20260520-boundary-sector-input-source`.
 
 Actual boundary-cycle rows plus the existing pointwise local-sector rows
@@ -7260,6 +9348,41 @@ noncomputable def
         left right left_edge right_edge heads_ne no_third_germ))
     carrier_connected edgeRows htail hhead O actualArcRows
 
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-actual-exterior-arc-rows-source-20260520f`.
+
+S2-facing strict reduction of the selected raw-orbit actual exterior-arc
+package.  The remaining orbit-level leaves are exactly actual
+`unboundedFrontierEdgeSet` membership for every selected raw side and the
+pair-level repeated-tail actual exterior-arc rows. -/
+def S2_agent_actual_exterior_arc_rows_source_20260520f
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (edge_mem :
+      forall k : Fin O.period,
+        ((O.dart k).tail,
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+              (O.dart k).tail) ∈
+            unboundedFrontierEdgeSet C inputs)
+    (repeated_tail_actualArcRows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RawFaceSuccOrbitRepeatedTailActualExteriorArcRows
+            (inputs := inputs) O i j) :
+    RawFaceSuccOrbitActualExteriorArcSeparationRows
+      (inputs := inputs) O :=
+  S2_agent_actual_arc_rows_source
+    (C := C) (inputs := inputs) O edge_mem repeated_tail_actualArcRows
+
+set_option linter.style.longLine false in
 /-- Carrier-connected assembly from the two minimal actual-arc source rows.
 
 This is the eraser form for the raw-orbit actual-arc route: the only
@@ -7496,6 +9619,40 @@ theorem
         C actualRows.boundary geometricOrderRows k).angle⟩
 
 set_option linter.style.longLine false in
+/-- Thin S2-k6m consumer for the geometric owner theorem.
+
+The boundary is exactly `actualRows.boundary`: face-successor rows and the
+ordinary exterior raw-orbit orientation inequality are consumed on that same
+actual boundary to produce the pointwise non-wrap geometric rotation-order
+family. -/
+theorem
+    S2_k6m_boundary_geometric_order_source_of_actualBoundary_faceSucc_orientation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (faceSuccRows :
+      UnitDistanceCycleFaceSuccRows C
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        actualRows.boundary)
+    (boundary_orientation :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicPred actualRows.boundary.length_pos k)) <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicSucc actualRows.boundary.length_pos k))) :
+    forall k : Fin actualRows.boundary.length,
+      GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+        C actualRows.boundary k :=
+  GeometricRotationSystem.S2_agent_geometric_boundary_order_source_of_pred_arg_lt_succ_arg
+    C actualRows.boundary faceSuccRows boundary_orientation
+
+set_option linter.style.longLine false in
 /-- Actual exterior-sector rows on a concrete exterior boundary source the
 honest face-dart exterior carrier rows.
 
@@ -7547,6 +9704,50 @@ noncomputable def
     (C := C) (inputs := inputs)
     (R := GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
     actualRows faceRowsAndOrientation.1 incident_complete
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-face-dart-orbit-carrier-source-20260520d`, pointwise form.
+
+Strict boundary-edge reduction for the honest exterior face-dart carrier rows.
+The remaining inputs all refer to the same concrete exterior boundary `B`:
+exact frontier-vertex coverage, consecutive sides in the actual
+`unboundedFrontierEdgeSet`, genuine sorted geometric boundary-order rows, and
+same-boundary incident frontier-edge completeness. -/
+noncomputable def
+    S2_agent_face_dart_orbit_carrier_source_20260520d_of_boundaryEdgeGeometricOrderRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (frontier_iff_cycle_vertex :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v)
+    (cycle_edge_mem :
+      forall k : Fin B.length,
+        (B.vertex k,
+            B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+            B.vertex k) ∈
+            unboundedFrontierEdgeSet C inputs)
+    (geometricOrderRows :
+      forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C B k)
+    (incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs B) :
+    FaceDartOrbitExteriorCarrierRows C inputs :=
+  faceDartOrbitExteriorCarrierRows_of_boundaryCarrierRows_complete
+    inputs
+    (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+    B
+    (GeometricRotationSystem.unitDistanceCycleFaceSuccRows_of_boundaryVertexGeometricRotationOrderRows
+      C B geometricOrderRows)
+    frontier_iff_cycle_vertex
+    (cycle_edge_openSegment_frontier_of_unboundedFrontierEdgeSet_or_symm
+      (C := C) (inputs := inputs) (B := B) cycle_edge_mem)
+    incident_complete
 
 set_option linter.style.longLine false in
 /-- Raw-orbit/local-sector reduction of the exact source required by
@@ -7673,14 +9874,401 @@ noncomputable def
       forall k : Fin actualRows.boundary.length,
         GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
           C actualRows.boundary k :=
-    GeometricRotationSystem.S2_agent_geometric_boundary_order_source_of_pred_arg_lt_succ_arg
-      C actualRows.boundary faceSuccRows boundary_orientation
+    S2_k6m_boundary_geometric_order_source_of_actualBoundary_faceSucc_orientation
+      (C := C) (inputs := inputs) actualRows faceSuccRows
+      boundary_orientation
   let incident_complete :
       BoundaryCycleIncidentFrontierEdgeCompleteness inputs
         actualRows.boundary :=
     S2_agent_local_sector_incident_bridge
       (C := C) (inputs := inputs) actualRows localSectorRows
   exact ⟨actualRows, geometricOrderRows, incident_complete⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-raw-orbit-actual-boundary-source-worker-20260520k`.
+
+Family reducer for the exact actual-boundary geometric-order/incident package.
+It is just the existing raw face-successor/local-sector construction in family
+form: local sector rows and connected carrier topology select the actual raw
+face walk, repeated-tail separation makes the boundary simple, and raw
+orientation supplies genuine geometric boundary-order rows. -/
+theorem
+    S2_agent_raw_orbit_actual_boundary_source_worker_20260520k
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _repeated_tail_rows :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  RepeatedExteriorBoundarySeparationRows C
+                    (fun k : Fin O.period => (O.dart k).tail) i j) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun actualRows :
+            ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+          (forall k : Fin actualRows.boundary.length,
+            GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+              C actualRows.boundary k) /\
+          BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+            actualRows.boundary := by
+  intro n C inputs
+  rcases source C inputs with
+    ⟨localSectorRows, carrier_connected, start, O,
+      dart_edge_openSegment_frontier, repeated_tail_rows, raw_orientation⟩
+  exact
+    S2_codex_current_20260520_actualBoundary_geometricOrder_incident_source_of_rawOrbit_localSectorRows
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_orientation
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-actual-boundary-incident-source-worker-20260520p2`,
+same-boundary eraser.
+
+The sharper actual-boundary package already contains the requested incident
+completeness row for the same `actualRows.boundary`; this declaration only
+forgets the geometric-order component. -/
+theorem
+    S2_agent_actual_boundary_incident_source_worker_20260520p2_of_actualBoundary_geometricOrder_incident
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun actualRows :
+          ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+        (forall k : Fin actualRows.boundary.length,
+          GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+            C actualRows.boundary k) /\
+        BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+          actualRows.boundary) :
+    Exists fun actualRows :
+        ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary := by
+  classical
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    Classical.choose source
+  have hsource :
+      (forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C actualRows.boundary k) /\
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+    Classical.choose_spec source
+  exact Exists.intro actualRows hsource.2
+
+set_option linter.style.longLine false in
+/-- Raw-orbit/local-sector source for the p2 incident-completeness leaf.
+
+The actual boundary and its incident row are supplied by the existing
+raw face-successor construction; this theorem exposes only the live local
+leaf. -/
+theorem
+    S2_agent_actual_boundary_incident_source_worker_20260520p2_of_rawOrbit_localSectorRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j)
+    (raw_orientation :
+      forall k : Fin O.period,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    Exists fun actualRows :
+        ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+  S2_agent_actual_boundary_incident_source_worker_20260520p2_of_actualBoundary_geometricOrder_incident
+    (C := C) (inputs := inputs)
+    (S2_codex_current_20260520_actualBoundary_geometricOrder_incident_source_of_rawOrbit_localSectorRows
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_orientation)
+
+set_option linter.style.longLine false in
+/-- Family form of Claim
+`S2-agent-actual-boundary-incident-source-worker-20260520p2`. -/
+theorem S2_agent_actual_boundary_incident_source_worker_20260520p2
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _repeated_tail_rows :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  RepeatedExteriorBoundarySeparationRows C
+                    (fun k : Fin O.period => (O.dart k).tail) i j) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun actualRows :
+            ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+          BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+            actualRows.boundary := by
+  intro n C inputs
+  rcases source C inputs with
+    ⟨localSectorRows, carrier_connected, start, O,
+      dart_edge_openSegment_frontier, repeated_tail_rows, raw_orientation⟩
+  exact
+    S2_agent_actual_boundary_incident_source_worker_20260520p2_of_rawOrbit_localSectorRows
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_orientation
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r14-incident-completeness-source-20260521r14`.
+
+The actual boundary is extracted from the selected raw exterior face orbit
+using the local two-germ rows as the carrier-local source and the repeated-tail
+separation rows as the no-cut input.  The conclusion is the exact
+`BoundaryCycleIncidentFrontierEdgeCompleteness` row for that extracted
+boundary; it does not use global outgoing no-between rows, all-adjacent
+endpoint closure, an induced frontier graph, or a W32 composer. -/
+noncomputable def
+    S2_r14_actualBoundaryRows_of_rawOrbit_localTwoGermRows_noCut_20260521r14
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localTwoGermRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+  S2_dyn_20260520_actual_boundary_rows_source
+    (C := C) inputs
+    (localSectorRows_of_localTwoGermRows
+      (C := C) (inputs := inputs) localTwoGermRows)
+    carrier_connected O dart_edge_openSegment_frontier repeated_tail_rows
+
+set_option linter.style.longLine false in
+/-- Incident completeness for the actual raw exterior boundary extracted by
+`S2_r14_actualBoundaryRows_of_rawOrbit_localTwoGermRows_noCut_20260521r14`.
+
+This is the strict local-two-germ/no-cut lowering of the r14 incident leaf:
+local two-germ rows erase to carrier local-sector rows, the selected raw orbit
+and no-cut repeated-tail rows build the concrete boundary, and the existing
+local incident bridge proves that any selected frontier edge incident to a
+boundary vertex is one of the two boundary sides. -/
+theorem
+    S2_r14_boundaryCycleIncidentFrontierEdgeCompleteness_of_rawOrbit_localTwoGermRows_noCut_20260521r14
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localTwoGermRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j) :
+    BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+      (S2_r14_actualBoundaryRows_of_rawOrbit_localTwoGermRows_noCut_20260521r14
+        (C := C) inputs localTwoGermRows carrier_connected O
+        dart_edge_openSegment_frontier repeated_tail_rows).boundary :=
+  S2_k6m_boundary_incident_completeness_source_of_actualBoundary_localSectorRows
+    (C := C) (inputs := inputs)
+    (S2_r14_actualBoundaryRows_of_rawOrbit_localTwoGermRows_noCut_20260521r14
+      (C := C) inputs localTwoGermRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows)
+    (localSectorRows_of_localTwoGermRows
+      (C := C) (inputs := inputs) localTwoGermRows)
+
+set_option linter.style.longLine false in
+/-- Existential package form of the r14 local-two-germ/no-cut incident source. -/
+theorem
+    S2_r14_actualBoundary_incident_source_of_rawOrbit_localTwoGermRows_noCut_20260521r14
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localTwoGermRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j) :
+    Exists fun actualRows :
+        ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+  ⟨S2_r14_actualBoundaryRows_of_rawOrbit_localTwoGermRows_noCut_20260521r14
+      (C := C) inputs localTwoGermRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows,
+    S2_r14_boundaryCycleIncidentFrontierEdgeCompleteness_of_rawOrbit_localTwoGermRows_noCut_20260521r14
+      (C := C) inputs localTwoGermRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows⟩
+
+set_option linter.style.longLine false in
+/-- Family form of claim `S2-r14-incident-completeness-source-20260521r14`.
+
+The residual source surface is exactly the selected raw exterior orbit with
+local two-germ rows, actual carrier connectedness, raw dart frontier
+propagation, and repeated-tail/no-cut separation rows. -/
+theorem S2_r14_incident_completeness_source_20260521r14
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localTwoGermRows :
+            (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+            forall {i j : Fin O.period},
+              i ≠ j ->
+              (O.dart i).tail = (O.dart j).tail ->
+                RepeatedExteriorBoundarySeparationRows C
+                  (fun k : Fin O.period => (O.dart k).tail) i j) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun actualRows :
+            ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+          BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+            actualRows.boundary := by
+  intro n C inputs
+  rcases source C inputs with
+    ⟨localTwoGermRows, carrier_connected, start, O,
+      dart_edge_openSegment_frontier, repeated_tail_rows⟩
+  exact
+    S2_r14_actualBoundary_incident_source_of_rawOrbit_localTwoGermRows_noCut_20260521r14
+      (C := C) inputs localTwoGermRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows
 
 set_option linter.style.longLine false in
 /-- Direct raw-orbit/local-sector form of the honest face-dart exterior carrier
@@ -7783,6 +10371,2430 @@ noncomputable def
     S2_codex_current_20260520_face_dart_orbit_carrier_source_of_actualBoundary_geometricOrderRows
       (C := C) (inputs := inputs) actualRows hsource.1 hsource.2
 
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-face-dart-orbit-carrier-source-20260520d`.
+
+Family source reduction for `FaceDartOrbitExteriorCarrierRows C inputs`.
+It exposes only the actual exterior boundary-edge/orbit carrier leaves: one
+boundary cycle with exact frontier vertices, selected unbounded-frontier side
+edges, genuine geometric boundary-order rows, and same-boundary incident
+frontier-edge completeness. -/
+noncomputable def
+    S2_agent_face_dart_orbit_carrier_source_20260520d
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            (forall k : Fin B.length,
+              (B.vertex k,
+                  B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+                  unboundedFrontierEdgeSet C inputs ∨
+                (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+                  B.vertex k) ∈
+                  unboundedFrontierEdgeSet C inputs) ∧
+            (forall k : Fin B.length,
+              GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+                C B k) ∧
+            BoundaryCycleIncidentFrontierEdgeCompleteness inputs B) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FaceDartOrbitExteriorCarrierRows C inputs := by
+  intro n C inputs
+  classical
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose (source C inputs)
+  have hsource :
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      (forall k : Fin B.length,
+        (B.vertex k,
+            B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+            B.vertex k) ∈
+            unboundedFrontierEdgeSet C inputs) ∧
+      (forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C B k) ∧
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs B :=
+    Classical.choose_spec (source C inputs)
+  exact
+    S2_agent_face_dart_orbit_carrier_source_20260520d_of_boundaryEdgeGeometricOrderRows
+      (C := C) (inputs := inputs) B hsource.1 hsource.2.1
+      hsource.2.2.1 hsource.2.2.2
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-incident-completeness-20260520e`.
+
+Boundary-cycle incident completeness strictly reduces to the actual selected
+incident-edge angular row plus the genuine boundary angular no-between rows.
+The incident row quantifies only concrete `unboundedFrontierEdgeSet`
+incidences at `B.vertex k`; it is not an all-adjacent frontier-endpoint or
+induced-frontier-graph assumption. -/
+theorem
+    S2_agent_boundary_incident_completeness_20260520e_of_incidentEdgeAngular_angularRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (incident_edge_angular :
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B)
+    (angularRows :
+      forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows C B k) :
+    BoundaryCycleIncidentFrontierEdgeCompleteness inputs B :=
+  boundaryCycleIncidentFrontierEdgeCompleteness_of_boundary_frontier_incident_edge_exterior_angular_sector
+    (C := C) (inputs := inputs) (B := B)
+    incident_edge_angular
+    (fun k x hAdj hnot_pred hnot_succ =>
+      (angularRows k).no_between x hAdj hnot_pred hnot_succ)
+
+set_option linter.style.longLine false in
+/-- Geometric-order form of
+`S2_agent_boundary_incident_completeness_20260520e_of_incidentEdgeAngular_angularRows`.
+
+The remaining leaves are now the actual incident selected-edge angular source
+and ordinary adjacent predecessor/successor rows in the concrete sorted
+geometric outgoing-dart lists. -/
+theorem
+    S2_agent_boundary_incident_completeness_20260520e_of_incidentEdgeAngular_geometricOrderRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (incident_edge_angular :
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B)
+    (geometricOrderRows :
+      forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C B k) :
+    BoundaryCycleIncidentFrontierEdgeCompleteness inputs B :=
+  S2_agent_boundary_incident_completeness_20260520e_of_incidentEdgeAngular_angularRows
+    (C := C) (inputs := inputs) (B := B)
+    incident_edge_angular
+    (GeometricRotationSystem.boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRows
+      C B geometricOrderRows)
+
+set_option linter.style.longLine false in
+/-- Face-dart carrier source with the incident-completeness leaf replaced by
+the actual selected incident-edge angular leaf.
+
+This is the S2-facing strict reduction for the current handoff: callers still
+provide the same concrete boundary cycle, exact frontier-vertex coverage,
+actual consecutive `unboundedFrontierEdgeSet` sides, and genuine geometric
+order rows, but no longer need to provide
+`BoundaryCycleIncidentFrontierEdgeCompleteness` directly. -/
+noncomputable def
+    S2_agent_face_dart_orbit_carrier_source_20260520e_of_boundaryIncidentAngular_geometricOrderRows
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            (forall k : Fin B.length,
+              (B.vertex k,
+                  B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+                  unboundedFrontierEdgeSet C inputs ∨
+                (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+                  B.vertex k) ∈
+                  unboundedFrontierEdgeSet C inputs) ∧
+            (forall k : Fin B.length,
+              GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+                C B k) ∧
+            BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FaceDartOrbitExteriorCarrierRows C inputs := by
+  intro n C inputs
+  classical
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose (source C inputs)
+  have hsource :
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      (forall k : Fin B.length,
+        (B.vertex k,
+            B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+            B.vertex k) ∈
+            unboundedFrontierEdgeSet C inputs) ∧
+      (forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C B k) ∧
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B :=
+    Classical.choose_spec (source C inputs)
+  exact
+    S2_agent_face_dart_orbit_carrier_source_20260520d_of_boundaryEdgeGeometricOrderRows
+      (C := C) (inputs := inputs) B hsource.1 hsource.2.1
+      hsource.2.2.1
+      (S2_agent_boundary_incident_completeness_20260520e_of_incidentEdgeAngular_geometricOrderRows
+        (C := C) (inputs := inputs) (B := B)
+        hsource.2.2.2 hsource.2.2.1)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-incident-angular-sector-source-20260520f`,
+repeated-boundary form.
+
+The selected incident-edge angular row is reduced to rows for actual bad
+`unboundedFrontierEdgeSet` incidences at boundary vertices: every such edge,
+when it is not one of the predecessor/successor boundary sides, supplies
+repeated-boundary separation rows, so `inputs.noCutVertex` makes the angular
+goal vacuous. -/
+theorem
+    S2_agent_boundary_incident_angular_sector_source_20260520f_of_badIncidentEdge_repeatedBoundarySeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (badIncidentEdge_repeatedRows :
+      forall k : Fin B.length, forall x : Fin n,
+        ((B.vertex k, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (x, B.vertex k) ∈ unboundedFrontierEdgeSet C inputs) ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              Nonempty
+                (Sigma fun i : Fin B.length =>
+                  Sigma fun j : Fin B.length =>
+                    RepeatedExteriorBoundarySeparationRows C B.vertex i j)) :
+    BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B :=
+  boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
+    (C := C) (inputs := inputs) (B := B)
+    (boundaryCycleIncidentFrontierEdgeCompleteness_of_badIncidentEdge_repeatedBoundarySeparationRows
+      (C := C) (inputs := inputs) (B := B) badIncidentEdge_repeatedRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-incident-angular-sector-source-20260520f`,
+arc-separation form.
+
+This is the sharper source-facing handoff when the bad actual incident edge
+already produces repeated exterior boundary arc separation rows. -/
+theorem
+    S2_agent_boundary_incident_angular_sector_source_20260520f_of_badIncidentEdge_arcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (badIncidentEdge_arcRows :
+      forall k : Fin B.length, forall x : Fin n,
+        ((B.vertex k, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (x, B.vertex k) ∈ unboundedFrontierEdgeSet C inputs) ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              Nonempty
+                (Sigma fun i : Fin B.length =>
+                  Sigma fun j : Fin B.length =>
+                    RepeatedExteriorBoundaryArcSeparationRows C B.vertex i j)) :
+    BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B :=
+  boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
+    (C := C) (inputs := inputs) (B := B)
+    (boundaryCycleIncidentFrontierEdgeCompleteness_of_badIncidentEdge_arcSeparationRows
+      (C := C) (inputs := inputs) (B := B) badIncidentEdge_arcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-actual-boundary-package-source-20260520i2`.
+
+The requested actual-boundary package is sourced from the sharper same-boundary
+geometric-order package.  This keeps the concrete `actualRows.boundary` fixed:
+only the row language changes, via the genuine sorted outgoing-dart-list
+eraser from geometric rotation order to angular no-between rows. -/
+theorem
+    S2_agent_actual_boundary_package_source_20260520i2_of_actualBoundary_geometricOrder_incident
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun actualRows :
+          ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+        (forall k : Fin actualRows.boundary.length,
+          GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+            C actualRows.boundary k) /\
+        BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+          actualRows.boundary) :
+    Exists fun actualRows :
+        ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+      (forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k) /\
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary := by
+  classical
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    Classical.choose source
+  have hsource :
+      (forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C actualRows.boundary k) /\
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+    Classical.choose_spec source
+  exact
+    Exists.intro actualRows
+      (And.intro
+        (GeometricRotationSystem.boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRows
+          C actualRows.boundary hsource.1)
+        hsource.2)
+
+set_option linter.style.longLine false in
+/-- Raw face-successor/local-sector source for the requested actual-boundary
+package.
+
+The boundary is constructed by the existing raw face-successor route, the
+incident-completeness row is the same local-sector bridge used by that route,
+and the angular no-between rows are read from the genuine geometric
+boundary-order rows for that constructed boundary.  No final exterior cycle,
+induced frontier graph, arbitrary cycle, identity order, endpoint-chord
+shortcut, or synthetic enclosure is used. -/
+theorem
+    S2_agent_actual_boundary_package_source_20260520i2_of_rawOrbit_localSectorRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j)
+    (raw_orientation :
+      forall k : Fin O.period,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    Exists fun actualRows :
+        ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+      (forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k) /\
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+  S2_agent_actual_boundary_package_source_20260520i2_of_actualBoundary_geometricOrder_incident
+    (C := C) (inputs := inputs)
+    (S2_codex_current_20260520_actualBoundary_geometricOrder_incident_source_of_rawOrbit_localSectorRows
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_orientation)
+
+set_option linter.style.longLine false in
+/-- Family form of the `20260520i2` actual-boundary package reduction.
+
+It strictly reduces the live package
+`Exists actualRows, angularRows actualRows /\ incidentComplete actualRows` to
+the same-boundary package with genuine geometric rotation-order rows. -/
+theorem S2_agent_actual_boundary_package_source_20260520i2
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun actualRows :
+              ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+            (forall k : Fin actualRows.boundary.length,
+              GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+                C actualRows.boundary k) /\
+            BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+              actualRows.boundary) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun actualRows :
+            ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+          (forall k : Fin actualRows.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C actualRows.boundary k) /\
+          BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+            actualRows.boundary := by
+  intro n C inputs
+  exact
+    S2_agent_actual_boundary_package_source_20260520i2_of_actualBoundary_geometricOrder_incident
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-actual-boundary-package-source-worker-20260520j`,
+actual-boundary package form.
+
+The current actual-boundary package (`ActualBoundaryCycleFrontierEquivalenceRows`
+plus genuine angular no-between rows and same-boundary incident completeness)
+strictly produces the primitive same-boundary boundary-sector source package.
+This is only the existing checked actual-boundary/incident-completeness
+sector-row reducer; no final-cycle assumption, induced frontier graph,
+arbitrary carrier cycle, endpoint closure shortcut, synthetic enclosure, or
+identity angular order is introduced. -/
+theorem
+    S2_agent_actual_boundary_package_source_worker_20260520j_of_actualBoundary_angular_incident
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun actualRows :
+          ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+        (forall k : Fin actualRows.boundary.length,
+          GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+            C actualRows.boundary k) /\
+        BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+          actualRows.boundary) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) /\
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k := by
+  classical
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    Classical.choose source
+  have hsource :
+      (forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k) /\
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+    Classical.choose_spec source
+  exact
+    S2_boundaryVertexExteriorSectorRows_source_of_actualBoundaryRows_angularRows_incidentComplete
+      (C := C) (inputs := inputs) actualRows hsource.1 hsource.2
+
+set_option linter.style.longLine false in
+/-- Geometric-order form of
+`S2_agent_actual_boundary_package_source_worker_20260520j_of_actualBoundary_angular_incident`.
+
+The only row-language change is the established eraser from genuine geometric
+boundary rotation order rows to angular no-between rows. -/
+theorem
+    S2_agent_actual_boundary_package_source_worker_20260520j_of_actualBoundary_geometricOrder_incident
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun actualRows :
+          ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+        (forall k : Fin actualRows.boundary.length,
+          GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+            C actualRows.boundary k) /\
+        BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+          actualRows.boundary) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) /\
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k :=
+  S2_agent_actual_boundary_package_source_worker_20260520j_of_actualBoundary_angular_incident
+    (C := C) (inputs := inputs)
+    (S2_agent_actual_boundary_package_source_20260520i2_of_actualBoundary_geometricOrder_incident
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Raw face-successor/local-sector worker for Claim
+`S2-agent-actual-boundary-package-source-worker-20260520j`.
+
+The boundary-sector package is obtained by the existing actual-exterior
+raw-face-successor route: the raw orbit constructs the actual boundary and
+geometric order rows, while the local-sector incident bridge supplies
+same-boundary incident completeness. -/
+theorem
+    S2_agent_actual_boundary_package_source_worker_20260520j_of_rawOrbit_localSectorRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j)
+    (raw_orientation :
+      forall k : Fin O.period,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) /\
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k :=
+  S2_agent_actual_boundary_package_source_worker_20260520j_of_actualBoundary_angular_incident
+    (C := C) (inputs := inputs)
+    (S2_agent_actual_boundary_package_source_20260520i2_of_rawOrbit_localSectorRows
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_orientation)
+
+set_option linter.style.longLine false in
+/-- Family form of Claim
+`S2-agent-actual-boundary-package-source-worker-20260520j`.
+
+It upgrades the existing actual-boundary geometric-order/incident package
+source to the primitive boundary-sector family requested by the S2 exterior
+boundary source. -/
+theorem S2_agent_actual_boundary_package_source_worker_20260520j
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun actualRows :
+              ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+            (forall k : Fin actualRows.boundary.length,
+              GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+                C actualRows.boundary k) /\
+            BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+              actualRows.boundary) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) /\
+          forall k : Fin B.length,
+            BoundaryVertexExteriorSectorRowsAt inputs B k := by
+  intro n C inputs
+  exact
+    S2_agent_actual_boundary_package_source_worker_20260520j_of_actualBoundary_geometricOrder_incident
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-dynamic-boundary-sector-source-k4`, family raw-orbit source form.
+
+The pointwise raw face-successor/local-sector worker above already has the
+requested boundary-sector target.  This declaration is the non-duplicating
+family lowering below it: a single selected raw-orbit source family (local
+sector rows, connected carrier, raw dart frontier, repeated-tail separation,
+and raw orientation) first gives the checked actual-boundary geometric-order
+package, then the existing `20260520j` worker produces the live primitive
+boundary-sector package. -/
+theorem S2_dynamic_boundary_sector_source_k4_of_rawOrbit_localSectorRows_family
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _repeated_tail_rows :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  RepeatedExteriorBoundarySeparationRows C
+                    (fun k : Fin O.period => (O.dart k).tail) i j) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) /\
+          forall k : Fin B.length,
+            BoundaryVertexExteriorSectorRowsAt inputs B k :=
+  S2_agent_actual_boundary_package_source_worker_20260520j
+    (S2_agent_raw_orbit_actual_boundary_source_worker_20260520k source)
+
+set_option linter.style.longLine false in
+/-- Exact actual-sector eraser for the S2-k5 input-facing boundary-sector
+target.
+
+The residual is the honest same-boundary actual exterior-sector package
+together with exact frontier-vertex coverage for that boundary.  The sector
+rows are not reconstructed or replaced by a facade; they are the primitive
+`ActualExteriorSectorInputSourceRows.sectorRows` field. -/
+noncomputable def
+    S2_k5_boundaryVertexExteriorSectorRows_of_actualExteriorSectorInputSourceRows_family
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin n,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          forall k : Fin B.length,
+            BoundaryVertexExteriorSectorRowsAt inputs B k := by
+  intro n C inputs
+  classical
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose (source C inputs)
+  have hsource :
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+    Classical.choose_spec (source C inputs)
+  exact
+    S2_boundaryVertexExteriorSectorRows_source_of_actualExteriorSectorInputSourceRows
+      (C := C) (inputs := inputs) B hsource.1
+      (Classical.choice hsource.2)
+
+set_option linter.style.longLine false in
+/-- S2-k5 generic raw-orbit lowering with the repeated-tail residual stated in
+the k4 minimal deleted-tail form.
+
+This is the same source surface as
+`S2_dynamic_boundary_sector_source_k4_of_rawOrbit_localSectorRows_family`,
+except the repeated-tail row is lowered to the finite deleted-tail
+nonreachability package and erased internally by
+`S2_dynamic_repeated_tail_separation_k4_of_minimalDeletedTailSeparation`. -/
+theorem
+    S2_k5_boundaryVertexExteriorSectorRows_k4_of_rawOrbit_localSectorRows_minimalDeletedTailSeparation_family
+    (source :
+      forall {n : Nat} (C : _root_.UDConfig n)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _minimalSeparation :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  PSigma fun left :
+                      {k : Fin O.period //
+                        cyclicForwardOpenArc i j k ∧
+                          (O.dart k).tail ≠ (O.dart i).tail} =>
+                    PSigma fun right :
+                        {k : Fin O.period //
+                          cyclicForwardOpenArc j i k ∧
+                            (O.dart k).tail ≠ (O.dart i).tail} =>
+                      ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                          ({(O.dart i).tail}ᶜ : Set (Fin n))).Reachable
+                          ⟨(O.dart left.1).tail, by simpa using left.2.2⟩
+                          ⟨(O.dart right.1).tail, by simpa using right.2.2⟩) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {n : Nat} (C : _root_.UDConfig n)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin n,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          forall k : Fin B.length,
+            BoundaryVertexExteriorSectorRowsAt inputs B k := by
+  refine
+    S2_dynamic_boundary_sector_source_k4_of_rawOrbit_localSectorRows_family
+      ?_
+  intro n C inputs
+  let src := source C inputs
+  refine
+    ⟨src.1, src.2.1, src.2.2.1, src.2.2.2.1,
+      src.2.2.2.2.1, ?_, src.2.2.2.2.2.2⟩
+  intro i j hij htail
+  exact
+    S2_dynamic_repeated_tail_separation_k4_of_minimalDeletedTailSeparation
+      (inputs := inputs) src.2.2.2.1 src.2.2.2.2.2.1 hij htail
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6d-actual-face-dart-carrier-source`, pointwise actual-sector
+boundary source form.
+
+An honest `FaceDartOrbitExteriorCarrierRows` package already carries the
+actual exterior boundary cycle and its exact frontier-vertex equivalence.  With
+the same-boundary angular no-between rows, it packages directly as the current
+actual exterior-sector source.  The primitive sector edges remain the carrier's
+actual `unboundedFrontierEdgeSet` predecessor/successor incidences. -/
+noncomputable def
+    S2_k6d_actualExteriorSectorInputSourceRows_with_frontier_of_faceDartOrbitExteriorCarrierRows_angularRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : FaceDartOrbitExteriorCarrierRows C inputs)
+    (angularRows :
+      forall k : Fin rows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  ⟨rows.orbit.boundary, rows.frontier_iff_orbit_vertex,
+    ⟨actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_angularRows
+      (C := C) (inputs := inputs) rows angularRows⟩⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6d-actual-face-dart-carrier-source`, family actual-sector
+boundary source form.
+
+This strictly lowers the input-facing actual exterior-sector source to an
+honest face-dart exterior carrier plus angular no-between rows on that same
+carrier boundary.  It does not use an induced frontier graph, arbitrary
+spanning cycle, convex-hull enclosure, all-adjacent endpoint row, or identity
+angular order. -/
+noncomputable def
+    S2_k6d_actual_face_dart_carrier_source
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+            forall k : Fin rows.orbit.boundary.length,
+              GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+                C rows.orbit.boundary k) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  intro m C inputs
+  rcases source C inputs with ⟨rows, angularRows⟩
+  exact
+    S2_k6d_actualExteriorSectorInputSourceRows_with_frontier_of_faceDartOrbitExteriorCarrierRows_angularRows
+      (C := C) (inputs := inputs) rows angularRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r37`, pointwise eraser.
+
+An honest face-dart exterior carrier together with same-boundary angular
+no-between rows already has the actual exterior-sector source shape.  This is
+only an eraser: the actual boundary, frontier equivalence, and sector edge
+honesty are all read from `FaceDartOrbitExteriorCarrierRows`. -/
+theorem
+    actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : FaceDartOrbitExteriorCarrierRows C inputs)
+    (angularRows :
+      forall k : Fin rows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  S2_k6d_actualExteriorSectorInputSourceRows_with_frontier_of_faceDartOrbitExteriorCarrierRows_angularRows
+    (C := C) (inputs := inputs) rows angularRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r37`, family eraser.
+
+This is the short non-circular handoff from the face-dart/angular producer
+family to the actual exterior-sector source family.  The residual premise is
+exactly the producer family
+`forall C inputs, PSigma rows, BoundaryVertexAngularNoBetweenRows` on the
+carrier boundary; no source leaf is hidden behind an assumption, and no W32 or
+facade route is used. -/
+theorem
+    actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_family
+    (faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+            forall k : Fin rows.orbit.boundary.length,
+              GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+                C rows.orbit.boundary k) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  intro m C inputs
+  rcases faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs C inputs with
+    ⟨rows, angularRows⟩
+  exact
+    actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows
+      (C := C) (inputs := inputs) rows angularRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r37`, input-shaped wrapper.
+
+Pointwise wrapper for the current desired theorem shape.  It deliberately keeps
+the face-dart/angular producer family as an explicit argument, so the remaining
+source obligation is visible rather than discharged by assumption. -/
+theorem actualExteriorSectorInputSourceRows_of_inputs
+    (faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+            forall k : Fin rows.orbit.boundary.length,
+              GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+                C rows.orbit.boundary k)
+    {n : Nat} (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_family
+    faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs C inputs
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6j-boundary-cycle-sector-source`, pointwise form.
+
+An honest face-dart exterior carrier already stores the actual boundary cycle,
+exact unbounded-frontier vertex coverage, and genuine exterior frontier-edge
+incidences.  With same-boundary angular no-between rows it directly sources
+the primitive boundary-sector package requested by the local S2 route. -/
+noncomputable def
+    S2_k6j_boundary_cycle_sector_source_of_faceDartOrbitExteriorCarrierRows_angularRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : FaceDartOrbitExteriorCarrierRows C inputs)
+    (angularRows :
+      forall k : Fin rows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k :=
+  S2_boundaryVertexExteriorSectorRows_source_of_actualExteriorSectorInputSourceRows
+    (C := C) (inputs := inputs)
+    rows.orbit.boundary rows.frontier_iff_orbit_vertex
+    (actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_angularRows
+      (C := C) (inputs := inputs) rows angularRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6j-boundary-cycle-sector-source`, family form.
+
+This strictly lowers the boundary-facing local source to construction of the
+real face-dart exterior carrier and angular rows on that same carrier
+boundary.  It preserves exterior boundary-edge honesty: the boundary, frontier
+equivalence, and sector incidences are all read from
+`FaceDartOrbitExteriorCarrierRows`, not from an arbitrary cycle, induced
+frontier graph, convex hull shortcut, synthetic enclosure, or identity angular
+order. -/
+noncomputable def S2_k6j_boundary_cycle_sector_source
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+            forall k : Fin rows.orbit.boundary.length,
+              GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+                C rows.orbit.boundary k) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          forall k : Fin B.length,
+            BoundaryVertexExteriorSectorRowsAt inputs B k := by
+  intro m C inputs
+  rcases source C inputs with ⟨rows, angularRows⟩
+  exact
+    S2_k6j_boundary_cycle_sector_source_of_faceDartOrbitExteriorCarrierRows_angularRows
+      (C := C) (inputs := inputs) rows angularRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6f-face-dart-carrier-construction`, pointwise package form.
+
+The requested source package is strictly reduced to the already checked actual
+exterior boundary data: an exact boundary/frontier equivalence row, genuine
+same-boundary geometric rotation-order rows, and incident completeness for
+actual `unboundedFrontierEdgeSet` carrier edges.  The carrier is the real
+face-dart orbit carrier on that boundary, and the angular no-between payload is
+derived from the same geometric-order rows. -/
+noncomputable def
+    S2_k6f_face_dart_carrier_package_of_actualBoundary_geometricOrder_incident
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun actualRows :
+          ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+        (forall k : Fin actualRows.boundary.length,
+          GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+            C actualRows.boundary k) /\
+        BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+          actualRows.boundary) :
+    PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+      forall k : Fin rows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k := by
+  classical
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    Classical.choose source
+  have hsource :
+      (forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C actualRows.boundary k) /\
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+    Classical.choose_spec source
+  let carrierRows : FaceDartOrbitExteriorCarrierRows C inputs :=
+    S2_codex_current_20260520_face_dart_orbit_carrier_source_of_actualBoundary_geometricOrderRows
+      (C := C) (inputs := inputs) actualRows hsource.1 hsource.2
+  refine PSigma.mk carrierRows ?_
+  simpa [carrierRows,
+    S2_codex_current_20260520_face_dart_orbit_carrier_source_of_actualBoundary_geometricOrderRows,
+    S2_dyn_20260520_faceSucc_orientation_source_of_actualBoundary_geometricOrderRows,
+    S2_codex_current_20260520_actual_boundary_cycle_source,
+    faceDartOrbitExteriorCarrierRows_of_actualBoundaryCycleFrontierEquivalenceRows_faceSuccRows_complete,
+    faceDartOrbitExteriorCarrierRows_of_boundaryCarrierRows_complete,
+    faceDartOrbitExteriorCarrierRows_of_boundaryCarrierRows,
+    FaceDartOrbit.ofBoundaryFaceSuccRows] using
+    GeometricRotationSystem.boundaryVertexAngularNoBetweenRows_of_geometricRotationOrderRows
+      C actualRows.boundary hsource.1
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6f-face-dart-carrier-construction`, family package form.
+
+For every input, the `PSigma` package of an honest
+`FaceDartOrbitExteriorCarrierRows` together with angular no-between rows on
+its actual orbit boundary is sourced from actual-boundary geometric-order and
+incident-completeness rows. -/
+noncomputable def S2_k6f_face_dart_carrier_construction
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun actualRows :
+              ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+            (forall k : Fin actualRows.boundary.length,
+              GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+                C actualRows.boundary k) /\
+            BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+              actualRows.boundary) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k := by
+  intro m C inputs
+  exact
+    S2_k6f_face_dart_carrier_package_of_actualBoundary_geometricOrder_incident
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Raw-orbit/local-sector source form of
+`S2_k6f_face_dart_carrier_construction`.
+
+This is the same selected geometric raw-face-successor surface used by the
+boundary-sector route: local sector rows, connected actual carrier, dart
+frontier rows, repeated-tail separation, and the genuine raw orientation row.
+It packages the constructed face-dart carrier together with angular
+no-between rows, without introducing a synthetic cycle or replacing
+`unboundedFrontierEdgeSet` edges by an induced frontier graph. -/
+noncomputable def
+    S2_k6f_face_dart_carrier_construction_of_rawOrbit_localSectorRows_family
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _repeated_tail_rows :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  RepeatedExteriorBoundarySeparationRows C
+                    (fun k : Fin O.period => (O.dart k).tail) i j) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k :=
+  S2_k6f_face_dart_carrier_construction
+    (S2_agent_raw_orbit_actual_boundary_source_worker_20260520k source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6d-actual-face-dart-carrier-source`, direct final-row eraser.
+
+If the source work constructs honest face-dart exterior carrier rows for every
+input, the current cycle-row target follows through the checked concrete
+carrier/orbit eraser.  This keeps the final row sourced by actual
+`unboundedFrontierEdgeSet` carrier edges rather than by a synthetic cycle. -/
+noncomputable def
+    S2_k6d_unboundedExteriorFrontierCycleRows_of_faceDartOrbitExteriorCarrierRows
+    (rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FaceDartOrbitExteriorCarrierRows C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierCycleRows C inputs :=
+  unboundedExteriorFrontierCycleRows_of_faceDartOrbitExteriorCarrierRows rows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6g-face-dart-carrier-source`, boundary-sector eraser.
+
+The exact boundary-sector package already contains the real boundary cycle,
+frontier-vertex equivalence, geometric face-successor rows, actual
+`unboundedFrontierEdgeSet` successor sides, and incident completeness.  Hence
+it constructs the honest `FaceDartOrbitExteriorCarrierRows` directly, with no
+synthetic cycle, induced frontier graph, identity angular order, or
+all-adjacent endpoint shortcut. -/
+noncomputable def
+    S2_k6g_face_dart_carrier_source_of_boundarySectorRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+        (forall v : Fin n,
+          (canonicalGraph C).point v ∈
+              frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+            Exists fun k : Fin B.length => B.vertex k = v) ∧
+        forall k : Fin B.length,
+          BoundaryVertexExteriorSectorRowsAt inputs B k) :
+    FaceDartOrbitExteriorCarrierRows C inputs := by
+  classical
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose source
+  have hsource :
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k :=
+    Classical.choose_spec source
+  exact
+    faceDartOrbitExteriorCarrierRows_of_boundaryVertexExteriorSectorRows
+      (C := C) (inputs := inputs) B hsource.1 hsource.2
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_k6g_face_dart_carrier_source_of_boundarySectorRows`. -/
+noncomputable def
+    S2_k6g_face_dart_carrier_source_family_of_boundarySectorRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin m,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            forall k : Fin B.length,
+              BoundaryVertexExteriorSectorRowsAt inputs B k) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FaceDartOrbitExteriorCarrierRows C inputs :=
+  fun C inputs =>
+    S2_k6g_face_dart_carrier_source_of_boundarySectorRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6g-face-dart-carrier-source`, actual-sector eraser.
+
+This is the same carrier source written at the `ActualExteriorSectorInputSourceRows`
+surface used by the current boundary-sector route.  It simply projects the
+primitive sector rows from the actual-sector package and applies the honest
+boundary-sector carrier constructor. -/
+noncomputable def
+    S2_k6g_face_dart_carrier_source_of_actualExteriorSectorInputSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+        (forall v : Fin n,
+          (canonicalGraph C).point v ∈
+              frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+            Exists fun k : Fin B.length => B.vertex k = v) ∧
+        _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) :
+    FaceDartOrbitExteriorCarrierRows C inputs := by
+  classical
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose source
+  have hsource :
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+    Classical.choose_spec source
+  exact
+    S2_codex_current_20260520_face_dart_orbit_carrier_source_of_actualExteriorSectorInputSourceRows
+      (C := C) (inputs := inputs) B hsource.1
+      (Classical.choice hsource.2)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_k6g_face_dart_carrier_source_of_actualExteriorSectorInputSourceRows`. -/
+noncomputable def
+    S2_k6g_face_dart_carrier_source_family_of_actualExteriorSectorInputSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin m,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FaceDartOrbitExteriorCarrierRows C inputs :=
+  fun C inputs =>
+    S2_k6g_face_dart_carrier_source_of_actualExteriorSectorInputSourceRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-carrier-from-actual-sector-source-20260521k17`.
+
+Actual exterior-sector input packages erase directly to honest
+`FaceDartOrbitExteriorCarrierRows`.  This is the named k17 family surface for
+the existing `S2_agent_cl_face_orbit_carrier_source_20260520cl` pointwise
+eraser; the only residual is the same-boundary actual exterior-sector package
+with exact frontier-vertex coverage. -/
+noncomputable def
+    S2_agent_carrier_from_actual_sector_source_family_20260521k17
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin m,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FaceDartOrbitExteriorCarrierRows C inputs :=
+  fun C inputs =>
+    S2_agent_cl_face_orbit_carrier_source_20260520cl
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6k-face-dart-carrier-source`, pointwise package form.
+
+The actual exterior-sector package on one concrete boundary supplies both
+parts of the current face-dart source package: the honest carrier rows are
+constructed from its primitive sector rows, and the angular no-between payload
+is the bundled same-boundary angular row. -/
+noncomputable def
+    S2_k6k_face_dart_carrier_source_of_actualExteriorSectorInputSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+        (forall v : Fin n,
+          (canonicalGraph C).point v ∈
+              frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+            Exists fun k : Fin B.length => B.vertex k = v) ∧
+        _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) :
+    PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+      forall k : Fin rows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k := by
+  classical
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose source
+  have hsource :
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+    Classical.choose_spec source
+  let sectorRows : ActualExteriorSectorInputSourceRows inputs B :=
+    Classical.choice hsource.2
+  let carrierRows : FaceDartOrbitExteriorCarrierRows C inputs :=
+    faceDartOrbitExteriorCarrierRows_of_actualExteriorSectorInputSourceRows
+      (C := C) (inputs := inputs) B hsource.1 sectorRows
+  refine PSigma.mk carrierRows ?_
+  simpa [carrierRows,
+    faceDartOrbitExteriorCarrierRows_of_actualExteriorSectorInputSourceRows,
+    faceDartOrbitExteriorCarrierRows_of_boundaryVertexExteriorSectorRows,
+    faceDartOrbitExteriorCarrierRows_of_boundaryCarrierRows,
+    FaceDartOrbit.ofBoundaryFaceSuccRows] using sectorRows.angularRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6k-face-dart-carrier-source`, family package form.
+
+This strictly lowers the package
+`FaceDartOrbitExteriorCarrierRows` plus same-boundary angular no-between rows
+to the already current actual exterior-sector source surface.  The carrier and
+angular rows are read from the same exterior boundary sector package. -/
+noncomputable def S2_k6k_face_dart_carrier_source
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+            (forall v : Fin m,
+              (canonicalGraph C).point v ∈
+                  frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+                Exists fun k : Fin B.length => B.vertex k = v) ∧
+            _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k := by
+  intro m C inputs
+  exact
+    S2_k6k_face_dart_carrier_source_of_actualExteriorSectorInputSourceRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6l-actual-exterior-sector-source`, pointwise actual-boundary
+package form.
+
+The current shared actual exterior-sector source is strictly lowered to the
+honest actual-boundary package: one concrete unbounded exterior boundary with
+exact frontier-vertex coverage, genuine same-boundary geometric rotation-order
+rows, and actual incident-frontier edge completeness.  The resulting
+`ActualExteriorSectorInputSourceRows` are built through the checked primitive
+boundary-sector constructor for that same boundary, so the source does not use
+an arbitrary cycle, induced frontier graph, synthetic enclosure, identity
+angular order, or all-adjacent endpoint rows. -/
+noncomputable def
+    S2_k6l_actual_exterior_sector_source_of_actualBoundary_geometricOrder_incident
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      Exists fun actualRows :
+          ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+        (forall k : Fin actualRows.boundary.length,
+          GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+            C actualRows.boundary k) /\
+        BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+          actualRows.boundary) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  exists_actualExteriorSectorInputSourceRows_with_frontier_of_boundaryVertexExteriorSectorRows_source
+    (C := C) (inputs := inputs)
+    (S2_agent_actual_boundary_package_source_worker_20260520j_of_actualBoundary_geometricOrder_incident
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r1-strict-producer-lemma`.
+
+Strict pointwise producer toward `actualExteriorSectorInputSourceRows_of_inputs`.
+The selected raw exterior orbit is consumed at the source surface: local
+sector rows and actual carrier connectedness give frontier-tail coverage,
+raw dart frontier propagation gives the boundary-edge frontier rows,
+repeated-tail separation makes the raw boundary simple, and raw geometric
+order supplies the same-boundary rotation-order rows.  The final step is the
+existing actual-boundary geometric-order/incident lowerer, not a W32 consumer
+or facade. -/
+noncomputable def
+    S2_r1_actualExteriorSectorInputSourceRows_of_rawOrbit_localSectorRows_carrierConnected_repeatedTail_geometricOrder
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j)
+    (raw_geometric_order :
+      forall k : Fin O.period,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  S2_k6l_actual_exterior_sector_source_of_actualBoundary_geometricOrder_incident
+    (C := C) (inputs := inputs)
+    (S2_codex_current_20260520_actualBoundary_geometricOrder_incident_source_of_rawOrbit_localSectorRows
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_geometric_order)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-main-same-boundary-angular-raw-face-orbit-20260521`.
+
+Strict same-boundary angular-row source for the actual boundary constructed
+from a selected geometric raw `faceSucc` orbit.  The boundary is extracted
+from the raw orbit using frontier-tail coverage and the no-cut repeated-tail
+rows; the angular row family is then read from the genuine geometric
+face-successor rows together with the exterior predecessor-before-successor
+orientation on that same orbit.
+
+This theorem only proves the angular family.  It does not use W32 consumers,
+an arbitrary cycle, an induced frontier graph, endpoint all-adjacency, or an
+extra incident-completeness payload; interior unit chords outside the selected
+exterior sector are not excluded by the hypotheses. -/
+noncomputable def
+    S2_main_same_boundary_angularRows_of_rawGeometricFaceSuccOrbit_20260521
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j)
+    (raw_orientation :
+      forall k : Fin O.period,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows C B k := by
+  classical
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+    (S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source_no_edgeRows
+      (C := C) (inputs := inputs) localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier).2
+  let frontier_iff_tail :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin O.period => (O.dart k).tail = v :=
+    rawFaceSuccOrbit_frontier_iff_tail_of_frontier_vertex_tail_coverage
+      O edge_openSegment_frontier frontier_vertex_tail_coverage
+  let period_ge_three : 3 <= O.period :=
+    rawFaceSuccOrbit_period_three_le_of_edge_openSegment_frontier_tail_coverage_localSectorRows
+      (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage localSectorRows
+  let hB :=
+    exists_unitDistanceCycleBoundary_of_rawFaceSuccOrbit_tail_injective
+      O period_ge_three
+      (rawFaceSuccOrbit_tail_injective_of_noCutVertex
+        (inputs := inputs) O repeated_tail_rows)
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose hB
+  let hperiod : B.length = O.period :=
+    Classical.choose (Classical.choose_spec hB)
+  let tail_eq :
+      forall k : Fin B.length,
+        (O.dart (Fin.cast hperiod k)).tail = B.vertex k :=
+    Classical.choose_spec (Classical.choose_spec hB)
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    ActualBoundaryCycleFrontierEquivalenceRows.ofRawFaceSuccOrbitBoundaryRows
+      (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+      edge_openSegment_frontier
+  let faceSuccRows :
+      UnitDistanceCycleFaceSuccRows C
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        actualRows.boundary := by
+    simpa [actualRows] using
+      rawFaceSuccOrbit_unitDistanceCycleFaceSuccRows_of_tail_eq
+        O B hperiod tail_eq
+  let boundary_orientation :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicPred actualRows.boundary.length_pos k)) <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicSucc actualRows.boundary.length_pos k)) := by
+    simpa [actualRows] using
+      ActualBoundaryCycleFrontierEquivalenceRows.boundary_orientation_of_rawFaceSuccOrbitBoundaryRows
+        (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+        edge_openSegment_frontier raw_orientation
+  let angularRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k :=
+    GeometricRotationSystem.boundaryVertexAngularNoBetweenRows_of_faceSuccRows_pred_arg_lt_succ_arg
+      C actualRows.boundary faceSuccRows boundary_orientation
+  exact ⟨actualRows.boundary, actualRows.frontier_iff_cycle_vertex, angularRows⟩
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_main_same_boundary_angularRows_of_rawGeometricFaceSuccOrbit_20260521`. -/
+theorem S2_main_same_boundary_angularRows_rawGeometricFaceSuccOrbit_family_20260521
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _repeated_tail_rows :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  RepeatedExteriorBoundarySeparationRows C
+                    (fun k : Fin O.period => (O.dart k).tail) i j) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          forall k : Fin B.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C B k := by
+  intro m C inputs
+  rcases source C inputs with
+    ⟨localSectorRows, carrier_connected, start, O,
+      dart_edge_openSegment_frontier, repeated_tail_rows, raw_orientation⟩
+  exact
+    S2_main_same_boundary_angularRows_of_rawGeometricFaceSuccOrbit_20260521
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_orientation
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r19-actual-sector-producer-20260521r19`, pointwise raw-orbit
+package form.
+
+This is the nearest currently checked source-facing producer for
+`faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs`: from the raw
+geometric exterior face orbit, local-sector rows, actual carrier
+connectedness, dart-frontier propagation, repeated-tail separation, and raw
+predecessor-before-successor orientation, it constructs the honest
+`FaceDartOrbitExteriorCarrierRows` together with genuine same-boundary angular
+no-between rows.  The proof composes existing raw-boundary and face-dart
+carrier reducers; it assumes no actual exterior-sector rows and uses no W32
+composer. -/
+noncomputable def
+    S2_r19_faceDartOrbitExteriorCarrierRows_and_angularRows_of_rawOrbit_localSectorRows_carrierConnected_repeatedTail_orientation
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (repeated_tail_rows :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          RepeatedExteriorBoundarySeparationRows C
+            (fun k : Fin O.period => (O.dart k).tail) i j)
+    (raw_orientation :
+      forall k : Fin O.period,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+      forall k : Fin rows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k :=
+  S2_k6f_face_dart_carrier_package_of_actualBoundary_geometricOrder_incident
+    (C := C) (inputs := inputs)
+    (S2_codex_current_20260520_actualBoundary_geometricOrder_incident_source_of_rawOrbit_localSectorRows
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_orientation)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r19-actual-sector-producer-20260521r19`, family raw-orbit
+package form.
+
+This is the source-family handoff corresponding to the requested
+`faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs` theorem, with the
+still-open input-only work made explicit as a raw geometric orbit package
+source. -/
+noncomputable def
+    S2_r19_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_rawOrbit_package
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _repeated_tail_rows :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  RepeatedExteriorBoundarySeparationRows C
+                    (fun k : Fin O.period => (O.dart k).tail) i j) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin rows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C rows.orbit.boundary k := by
+  intro m C inputs
+  rcases source C inputs with
+    ⟨localSectorRows, carrier_connected, start, O,
+      dart_edge_openSegment_frontier, repeated_tail_rows, raw_orientation⟩
+  exact
+    S2_r19_faceDartOrbitExteriorCarrierRows_and_angularRows_of_rawOrbit_localSectorRows_carrierConnected_repeatedTail_orientation
+      (C := C) inputs localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier repeated_tail_rows raw_orientation
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6l-actual-exterior-sector-source`, family form.
+
+This is the input-family source now shared by the face-dart carrier,
+boundary-sector, and e32 local routes: for every finite planar outer-component
+input, it suffices to provide the actual-boundary frontier equivalence,
+same-boundary geometric order, and actual incident-frontier edge completeness.
+-/
+noncomputable def S2_k6l_actual_exterior_sector_source
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Exists fun actualRows :
+              ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+            (forall k : Fin actualRows.boundary.length,
+              GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+                C actualRows.boundary k) /\
+            BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+              actualRows.boundary) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  intro m C inputs
+  exact
+    S2_k6l_actual_exterior_sector_source_of_actualBoundary_geometricOrder_incident
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Producer packaging for claim `S2-p2e-actual-sector-packaging-20260521p1`.
+
+The raw exterior orbit has already been identified with the concrete boundary
+cycle `B` by `hperiod` and `tail_eq`.  Exact frontier-tail coverage and raw
+edge-frontier propagation give the actual boundary/frontier rows; the supplied
+same-boundary geometric order and incident-completeness rows then assemble the
+full `ActualExteriorSectorInputSourceRows inputs B` package.  This is a
+producer: it returns the actual-sector rows themselves, not a downstream
+consumer target. -/
+noncomputable def
+    actualExteriorSectorInputSourceRows_of_rawExteriorOrbitBoundary_geometricOrder_incidentComplete
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (hperiod : B.length = O.period)
+    (tail_eq : forall k : Fin B.length,
+      (O.dart (Fin.cast hperiod k)).tail = B.vertex k)
+    (frontier_iff_tail :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin O.period => (O.dart k).tail = v)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (geometricOrderRows :
+      forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C B k)
+    (incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs B) :
+    ActualExteriorSectorInputSourceRows inputs B := by
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    ActualBoundaryCycleFrontierEquivalenceRows.ofRawFaceSuccOrbitBoundaryRows
+      (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+      edge_openSegment_frontier
+  let angularRows :
+      forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C B k :=
+    S2_agent_angle_order_from_geometric_rotation
+      (C := C) (B := B) geometricOrderRows
+  let sectorRows :
+      forall k : Fin B.length,
+        BoundaryVertexExteriorSectorRowsAt inputs B k :=
+    boundaryVertexExteriorSectorRows_of_boundaryVertexAngularNoBetweenRows_boundaryCycleIncidentFrontierEdgeCompleteness
+      (C := C) (inputs := inputs) (B := B)
+      angularRows
+      (by
+        simpa [actualRows] using actualRows.cycle_edge_openSegment_frontier)
+      incident_complete
+  exact
+    { angularRows := angularRows
+      sectorRows := sectorRows
+      localSectorRows :=
+        localSectorRows_of_boundaryVertexExteriorSectorRows
+          (C := C) (inputs := inputs) B
+          (by
+            simpa [actualRows] using actualRows.frontier_iff_cycle_vertex)
+          sectorRows }
+
+set_option linter.style.longLine false in
+/-- Claim `S2-p2e-actual-sector-packaging-20260521p1`.
+
+Claim-named alias for the producer package
+`actualExteriorSectorInputSourceRows_of_rawExteriorOrbitBoundary_geometricOrder_incidentComplete`. -/
+noncomputable def S2_p2e_actual_sector_packaging_20260521p1
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (hperiod : B.length = O.period)
+    (tail_eq : forall k : Fin B.length,
+      (O.dart (Fin.cast hperiod k)).tail = B.vertex k)
+    (frontier_iff_tail :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin O.period => (O.dart k).tail = v)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (geometricOrderRows :
+      forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C B k)
+    (incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs B) :
+    ActualExteriorSectorInputSourceRows inputs B :=
+  actualExteriorSectorInputSourceRows_of_rawExteriorOrbitBoundary_geometricOrder_incidentComplete
+    (C := C) (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+    edge_openSegment_frontier geometricOrderRows incident_complete
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6m-actual-boundary-equivalence-source`, raw orbit package form.
+
+The raw face-successor source package already contains the honest exterior
+orbit rows: consecutive raw-edge frontier points, nearby exterior points,
+actual carrier cyclic coverage, period/no-cut repeated-tail rows, and the
+pointwise local-sector family.  This reducer exposes the requested
+`ActualBoundaryCycleFrontierEquivalenceRows` object directly from that package,
+without passing through an arbitrary cycle, induced frontier graph, synthetic
+enclosure, convex hull, or endpoint-complete shortcut. -/
+noncomputable def
+    S2_k6m_actual_boundary_equivalence_source_of_rawFaceSuccOrbitSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (rows : RawFaceSuccOrbitSourceRows (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+  actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbitSourceRows
+    O rows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6m-actual-boundary-equivalence-source`, input-callback form.
+
+For the selected unbounded exterior seed, the remaining source is precisely the
+raw face-successor exterior-orbit callback already used by the workbook route.
+The constructed boundary is the one extracted from that selected raw orbit via
+the existing no-cut repeated-tail row. -/
+noncomputable def
+    S2_k6m_actual_boundary_equivalence_source_of_rawFaceSuccOrbit_inputRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (remainingRows :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+        start.tail = e.1 ->
+        start.head = e.2 ->
+        forall O :
+          UnitDistanceRotationSystem.RawFaceSuccOrbit
+            (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+            start,
+          RawFaceSuccOrbitRemainingSourceRows (inputs := inputs) O) :
+    ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+  actualBoundaryCycleFrontierEquivalenceRows_of_rawFaceSuccOrbit_inputRows
+    inputs localSectorRows remainingRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6m-actual-boundary-equivalence-source`, family form.
+
+This is the source-family surface for the actual unbounded exterior boundary:
+local sector rows plus the selected raw face-successor exterior-orbit callback
+produce `ActualBoundaryCycleFrontierEquivalenceRows C inputs` for every input
+package. -/
+noncomputable def S2_k6m_actual_boundary_equivalence_source
+    (localSectorRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (remainingRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall {e : PlanarInterface.Edge m} {p : PlanarInterface.Point}
+              {start : UnitDistanceDart C},
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+            start.tail = e.1 ->
+            start.head = e.2 ->
+            forall O :
+              UnitDistanceRotationSystem.RawFaceSuccOrbit
+                (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                start,
+              RawFaceSuccOrbitRemainingSourceRows (inputs := inputs) O) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        ActualBoundaryCycleFrontierEquivalenceRows C inputs := by
+  intro m C inputs
+  exact
+    S2_k6m_actual_boundary_equivalence_source_of_rawFaceSuccOrbit_inputRows
+      (C := C) inputs (localSectorRows C inputs) (remainingRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-dynamic-exterior-boundary-source-20260521o7`, raw-orbit
+actual-sector form.
+
+The existing raw face-successor/local-sector boundary-sector lowerer already
+constructs the real exterior boundary cycle, its exact frontier-vertex
+equivalence, and primitive same-boundary `BoundaryVertexExteriorSectorRowsAt`
+rows.  This declaration exposes that result at the stronger
+`ActualExteriorSectorInputSourceRows` surface consumed by the checked S2
+boundary package, without adding a synthetic enclosure, induced frontier graph,
+identity angular order, arbitrary cycle, or endpoint all-adjacency shortcut. -/
+theorem
+    S2_dynamic_exterior_boundary_source_20260521o7_of_rawOrbit_localSectorRows_family
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _repeated_tail_rows :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  RepeatedExteriorBoundarySeparationRows C
+                    (fun k : Fin O.period => (O.dart k).tail) i j) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  S2_codex_main_20260520_actual_sector_source_of_boundaryVertexExteriorSectorRows
+    (S2_dynamic_boundary_sector_source_k4_of_rawOrbit_localSectorRows_family
+      source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-dynamic-exterior-boundary-source-20260521o7`, minimal
+deleted-tail source form.
+
+This is the narrower autonomous o7 source: the actual exterior-sector input
+row is produced from the same selected raw face-successor/local-sector data,
+while the repeated-tail separation residual is lowered to the finite
+deleted-tail nonreachability row used by the k4 cut lowerer. -/
+theorem
+    S2_dynamic_exterior_boundary_source_20260521o7_of_minimalDeletedTailSeparation_family
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _minimalSeparation :
+              (forall {i j : Fin O.period},
+                i ≠ j ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  PSigma fun left :
+                      {k : Fin O.period //
+                        cyclicForwardOpenArc i j k ∧
+                          (O.dart k).tail ≠ (O.dart i).tail} =>
+                    PSigma fun right :
+                        {k : Fin O.period //
+                          cyclicForwardOpenArc j i k ∧
+                            (O.dart k).tail ≠ (O.dart i).tail} =>
+                      ¬ ((GraphBridge.unitDistanceSimpleGraph C).induce
+                          ({(O.dart i).tail}ᶜ : Set (Fin m))).Reachable
+                          ⟨(O.dart left.1).tail, by simpa using left.2.2⟩
+                          ⟨(O.dart right.1).tail, by simpa using right.2.2⟩) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  S2_codex_main_20260520_actual_sector_source_of_boundaryVertexExteriorSectorRows
+    (S2_k5_boundaryVertexExteriorSectorRows_k4_of_rawOrbit_localSectorRows_minimalDeletedTailSeparation_family
+      source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q3-exterior-boundary-source-assembler`.
+
+No-extra-facade assembler for the input-facing actual exterior-sector source.
+The remaining source is exactly the selected raw geometric face-successor
+package already consumed by the r19 face-dart carrier reducer: local carrier
+sectors, connectedness of the actual unbounded-frontier carrier, raw dart
+frontier propagation, repeated-tail separation, and the genuine raw
+predecessor-before-successor orientation row.  The final step is explicitly
+through `actualExteriorSectorInputSourceRows_of_inputs`, with the required
+face-dart carrier plus same-boundary angular rows supplied by the checked r19
+package reducer. -/
+theorem S2_q3_exterior_boundary_source_assembler
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun _localSectorRows :
+            (forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+              UnboundedFrontierCarrierLocalSectorRowsAt inputs a) =>
+          PSigma fun _carrier_connected :
+            (unboundedFrontierCarrierGraph C inputs).Connected =>
+          PSigma fun start : UnitDistanceDart C =>
+            PSigma fun O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                  start =>
+          PSigma fun _dart_edge_openSegment_frontier :
+              (forall k : Fin O.period,
+                forall q : PlanarInterface.Point,
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point (O.dart k).head) ->
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior) =>
+          PSigma fun _repeated_tail_rows :
+              (forall {i j : Fin O.period},
+                Not (i = j) ->
+                (O.dart i).tail = (O.dart j).tail ->
+                  RepeatedExteriorBoundarySeparationRows C
+                    (fun k : Fin O.period => (O.dart k).tail) i j) =>
+              (forall k : Fin O.period,
+                GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                  GeometricRotationSystem.graphDartArg
+                    (GeometricRotationSystem.canonicalGeometricGraph C)
+                    (O.dart k).tail
+                    (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) :=
+  actualExteriorSectorInputSourceRows_of_inputs
+    (S2_r19_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_rawOrbit_package
+      source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q24-face-orbit-source`, raw-orbit boundary package.
+
+The raw face-successor source rows already contain the Csizmadia-style
+exterior orbit data: frontier points on consecutive raw sides, nearby exterior
+points, cyclic carrier coverage, local sectors, and no-cut repeated-tail
+separation.  With the genuine raw predecessor-before-successor orientation,
+they produce the exact actual-boundary/geometric-order/incident package used by
+the honest face-dart carrier constructor. -/
+noncomputable def
+    S2_q24_actualBoundary_geometricOrder_incident_source_of_rawFaceSuccOrbitSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (rows : RawFaceSuccOrbitSourceRows (inputs := inputs) O)
+    (raw_orientation :
+      forall k : Fin O.period,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    Exists fun actualRows :
+        ActualBoundaryCycleFrontierEquivalenceRows C inputs =>
+      (forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C actualRows.boundary k) /\
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary := by
+  classical
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_inOpenSegment_frontier_and_nearby_edge_point_exterior_points
+      O rows.edge_frontier_point rows.nearby_edge_point_exterior_points
+  let frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+    rawFaceSuccOrbit_frontier_vertex_tail_coverage_of_connected_closed_carrier
+      O edge_openSegment_frontier rows.connectedRows
+      (rawFaceSuccOrbit_neighbor_tail_closed_of_localSectorRows
+        O edge_openSegment_frontier rows.localSectorRows
+        (rawFaceSuccOrbit_pred_succ_tail_ne_of_period_three_noCutVertex
+          (inputs := inputs) O rows.period_ge_three rows.repeated_tail_rows))
+  let frontier_iff_tail :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin O.period => (O.dart k).tail = v :=
+    rawFaceSuccOrbit_frontier_iff_tail_of_frontier_vertex_tail_coverage
+      O edge_openSegment_frontier frontier_vertex_tail_coverage
+  let hB :=
+    exists_unitDistanceCycleBoundary_of_rawFaceSuccOrbit_tail_injective
+      O rows.period_ge_three
+      (rawFaceSuccOrbit_tail_injective_of_noCutVertex
+        (inputs := inputs) O rows.repeated_tail_rows)
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose hB
+  let hperiod : B.length = O.period :=
+    Classical.choose (Classical.choose_spec hB)
+  let tail_eq :
+      forall k : Fin B.length,
+        (O.dart (Fin.cast hperiod k)).tail = B.vertex k :=
+    Classical.choose_spec (Classical.choose_spec hB)
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    ActualBoundaryCycleFrontierEquivalenceRows.ofRawFaceSuccOrbitBoundaryRows
+      (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+      edge_openSegment_frontier
+  let faceSuccRows :
+      UnitDistanceCycleFaceSuccRows C
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        actualRows.boundary := by
+    simpa [actualRows] using
+      rawFaceSuccOrbit_unitDistanceCycleFaceSuccRows_of_tail_eq
+        (C := C)
+        (R := GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        O B hperiod tail_eq
+  let boundary_orientation :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicPred actualRows.boundary.length_pos k)) <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicSucc actualRows.boundary.length_pos k)) := by
+    simpa [actualRows] using
+      ActualBoundaryCycleFrontierEquivalenceRows.boundary_orientation_of_rawFaceSuccOrbitBoundaryRows
+        (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+        edge_openSegment_frontier raw_orientation
+  let geometricOrderRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C actualRows.boundary k :=
+    S2_k6m_boundary_geometric_order_source_of_actualBoundary_faceSucc_orientation
+      (C := C) (inputs := inputs) actualRows faceSuccRows
+      boundary_orientation
+  let incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+    S2_agent_local_sector_incident_bridge
+      (C := C) (inputs := inputs) actualRows rows.localSectorRows
+  exact Exists.intro actualRows (And.intro geometricOrderRows incident_complete)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q24-face-orbit-source`, pointwise producer.
+
+This lands directly on the face-orbit producer surface: from one selected raw
+geometric exterior `faceSucc` orbit with its source rows and raw orientation,
+we construct honest `FaceDartOrbitExteriorCarrierRows` plus same-boundary
+angular no-between rows.  The construction uses the no-cut tail-injectivity
+boundary extracted from the raw orbit and does not pass through W32 or an
+actual-sector consumer facade. -/
+noncomputable def
+    S2_q24_faceDartOrbitExteriorCarrierRows_and_angularRows_of_rawFaceSuccOrbitSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        start)
+    (rows : RawFaceSuccOrbitSourceRows (inputs := inputs) O)
+    (raw_orientation :
+      forall k : Fin O.period,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (O.dart k).tail
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    PSigma fun carrierRows : FaceDartOrbitExteriorCarrierRows C inputs =>
+      forall k : Fin carrierRows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C carrierRows.orbit.boundary k :=
+  S2_k6f_face_dart_carrier_package_of_actualBoundary_geometricOrder_incident
+    (C := C) (inputs := inputs)
+    (S2_q24_actualBoundary_geometricOrder_incident_source_of_rawFaceSuccOrbitSourceRows
+      (C := C) (inputs := inputs) O rows raw_orientation)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q24-face-orbit-source`, family producer.
+
+This strictly lowers `faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs`
+to a selected raw exterior `faceSucc` orbit package for each input: the
+residual data are `RawFaceSuccOrbitSourceRows` and the genuine raw
+predecessor-before-successor orientation row for that same orbit. -/
+noncomputable def
+    S2_q24_faceDartOrbitExteriorCarrierRows_and_angularRows_family_of_rawFaceSuccOrbitSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun start : UnitDistanceDart C =>
+          PSigma fun O :
+              UnitDistanceRotationSystem.RawFaceSuccOrbit
+                (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                start =>
+          PSigma fun _rows : RawFaceSuccOrbitSourceRows (inputs := inputs) O =>
+            forall k : Fin O.period,
+              GeometricRotationSystem.graphDartArg
+                  (GeometricRotationSystem.canonicalGeometricGraph C)
+                  (O.dart k).tail
+                  (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                GeometricRotationSystem.graphDartArg
+                  (GeometricRotationSystem.canonicalGeometricGraph C)
+                  (O.dart k).tail
+                  (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        PSigma fun carrierRows : FaceDartOrbitExteriorCarrierRows C inputs =>
+          forall k : Fin carrierRows.orbit.boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C carrierRows.orbit.boundary k := by
+  intro m C inputs
+  rcases source C inputs with ⟨start, O, rows, raw_orientation⟩
+  exact
+    S2_q24_faceDartOrbitExteriorCarrierRows_and_angularRows_of_rawFaceSuccOrbitSourceRows
+      (C := C) (inputs := inputs) (start := start) O rows raw_orientation
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q13-boundary-sector-erasure-source`.
+
+Strict raw-orbit erasure to the actual exterior-sector source.  The residual
+source is the live raw face-successor package, including the carrier rows
+stored in `RawFaceSuccOrbitSourceRows`, plus the genuine raw
+predecessor-before-successor orientation row.  The proof constructs the actual
+boundary/frontier package, derives same-boundary geometric order and incident
+completeness from those raw/carrier rows, and then packages
+`ActualExteriorSectorInputSourceRows`; it assumes no final actual-sector rows
+and uses no W32 facade. -/
+theorem S2_q13_boundary_sector_erasure_source_of_rawFaceSuccOrbitSourceRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          PSigma fun start : UnitDistanceDart C =>
+          PSigma fun O :
+              UnitDistanceRotationSystem.RawFaceSuccOrbit
+                (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+                start =>
+          PSigma fun _rows : RawFaceSuccOrbitSourceRows (inputs := inputs) O =>
+            forall k : Fin O.period,
+              GeometricRotationSystem.graphDartArg
+                  (GeometricRotationSystem.canonicalGeometricGraph C)
+                  (O.dart k).tail
+                  (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail <
+                GeometricRotationSystem.graphDartArg
+                  (GeometricRotationSystem.canonicalGeometricGraph C)
+                  (O.dart k).tail
+                  (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+          (forall v : Fin m,
+            (canonicalGraph C).point v ∈
+                frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+              Exists fun k : Fin B.length => B.vertex k = v) ∧
+          _root_.Nonempty (ActualExteriorSectorInputSourceRows inputs B) := by
+  intro m C inputs
+  classical
+  rcases source C inputs with ⟨start, O, rows, raw_orientation⟩
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_inOpenSegment_frontier_and_nearby_edge_point_exterior_points
+      O rows.edge_frontier_point rows.nearby_edge_point_exterior_points
+  let frontier_vertex_tail_coverage :
+      forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+    rawFaceSuccOrbit_frontier_vertex_tail_coverage_of_connected_closed_carrier
+      O edge_openSegment_frontier rows.connectedRows
+      (rawFaceSuccOrbit_neighbor_tail_closed_of_localSectorRows
+        O edge_openSegment_frontier rows.localSectorRows
+        (rawFaceSuccOrbit_pred_succ_tail_ne_of_period_three_noCutVertex
+          (inputs := inputs) O rows.period_ge_three rows.repeated_tail_rows))
+  let frontier_iff_tail :
+      forall v : Fin m,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin O.period => (O.dart k).tail = v :=
+    rawFaceSuccOrbit_frontier_iff_tail_of_frontier_vertex_tail_coverage
+      O edge_openSegment_frontier frontier_vertex_tail_coverage
+  let hB :=
+    exists_unitDistanceCycleBoundary_of_rawFaceSuccOrbit_tail_injective
+      O rows.period_ge_three
+      (rawFaceSuccOrbit_tail_injective_of_noCutVertex
+        (inputs := inputs) O rows.repeated_tail_rows)
+  let B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C :=
+    Classical.choose hB
+  let hperiod : B.length = O.period :=
+    Classical.choose (Classical.choose_spec hB)
+  let tail_eq :
+      forall k : Fin B.length,
+        (O.dart (Fin.cast hperiod k)).tail = B.vertex k :=
+    Classical.choose_spec (Classical.choose_spec hB)
+  let actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs :=
+    ActualBoundaryCycleFrontierEquivalenceRows.ofRawFaceSuccOrbitBoundaryRows
+      (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+      edge_openSegment_frontier
+  let faceSuccRows :
+      UnitDistanceCycleFaceSuccRows C
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        actualRows.boundary := by
+    simpa [actualRows] using
+      rawFaceSuccOrbit_unitDistanceCycleFaceSuccRows_of_tail_eq
+        (C := C)
+        (R := GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        O B hperiod tail_eq
+  let boundary_orientation :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicPred actualRows.boundary.length_pos k)) <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicSucc actualRows.boundary.length_pos k)) := by
+    simpa [actualRows] using
+      ActualBoundaryCycleFrontierEquivalenceRows.boundary_orientation_of_rawFaceSuccOrbitBoundaryRows
+        (inputs := inputs) O B hperiod tail_eq frontier_iff_tail
+        edge_openSegment_frontier raw_orientation
+  let geometricOrderRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexGeometricRotationOrderRow
+          C actualRows.boundary k :=
+    S2_k6m_boundary_geometric_order_source_of_actualBoundary_faceSucc_orientation
+      (C := C) (inputs := inputs) actualRows faceSuccRows
+      boundary_orientation
+  let incident_complete :
+      BoundaryCycleIncidentFrontierEdgeCompleteness inputs
+        actualRows.boundary :=
+    S2_agent_local_sector_incident_bridge
+      (C := C) (inputs := inputs) actualRows rows.localSectorRows
+  exact
+    S2_k6l_actual_exterior_sector_source_of_actualBoundary_geometricOrder_incident
+      (C := C) (inputs := inputs)
+      ⟨actualRows, geometricOrderRows, incident_complete⟩
 end ExteriorComponentTopology
 end Swanepoel
 end ErdosProblems1066

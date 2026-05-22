@@ -5,16 +5,17 @@ It explains the live theorem routes, current guardrails, and where a worker
 should look before editing.  It is not a proof claim and not an execution
 checklist.  Use `../TASK.md` for active tasks.
 
-Status note, 2026-05-20:
+Status note, 2026-05-21:
 
 - `ErdosProblems1066.lean` imports the retained Lean tree: `877 / 877`
   project files, with no missing, extra, or duplicate imports in the latest
   coverage check.
 - The Lean forbidden-token/trust-source scan over `ErdosProblems1066/` and
   `ErdosProblems1066.lean` was clean.
-- The pinned full root build was replayed after the current S2 source-file
-  imports.  `../TASK.md` records the CI-style axiom-audit status and proof-log
-  paths.
+- The pinned full root build was replayed after the current S2 cleanup with
+  `elan run leanprover/lean4:v4.28.0 lake build ErdosProblems1066`, and it
+  completed successfully.  `../TASK.md` records the live S2 source target and
+  completion gate.
 
 ## Reading Order
 
@@ -120,20 +121,24 @@ The S5 compact package is now the preferred final angle handoff.  Atomic
 Figure 8/Figure 9 rows are still useful local proof tasks, but they are not
 the top-level blockers when the compact S5 package is available.
 
-S2 is reduced to the live input-only boundary-sector theorem for the finite
-embedded unit-edge drawing.  The intended internal construction is the
-Csizmadia-style rotating exterior angular walk, followed by no-cut tail
-injectivity and boundary-sector packaging:
+S2 q41 is reduced to the live actual exterior face-orbit source for the finite
+embedded unit-edge drawing.  The intended construction is the Csizmadia-style
+rotating exterior angular walk, followed by no-cut tail injectivity, actual
+`FaceDartOrbitExteriorCarrierRows C inputs`, and same-boundary angular rows:
 
 ```text
 FinitePlanarOuterComponentInputs C
   -> unboundedExteriorComponentRows C inputs
+  -> FaceDartOrbitExteriorCarrierRows C inputs
+     + same-boundary BoundaryVertexAngularNoBetweenRows
+  -> actualExteriorSectorInputSourceRows_of_inputs
   -> Exists B : UnitDistanceCycleBoundary C,
        graph vertex on frontier iff boundary-cycle vertex of B
-       + forall k, BoundaryVertexExteriorSectorRowsAt inputs B k
-  -> FaceBoundaryTopologySourceW32.
-       minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows
+       + Nonempty (ActualExteriorSectorInputSourceRows inputs B)
 ```
+
+The q37 primitive-to-cut route and q38/q39/q40 endpoint-side routes are checked
+support for this source, not live S2 targets.
 
 The direct actual-boundary eraser remains checked support:
 
@@ -176,6 +181,212 @@ The actual-boundary eraser still converts
 `UnboundedExteriorFrontierCycleRows C inputs` via
 `unboundedExteriorFrontierCycleRows_of_actualBoundaryCycleFrontierEquivalenceRows`.
 
+2026-05-21 local-source update: the concrete local selected-carrier leaf now
+has checked handoffs from the honest exterior face-dart carrier package:
+
+```text
+FaceDartOrbitExteriorCarrierRows C inputs
+  -> S2CarrierLocalSource.ActualCarrierDegreeTwoSource inputs
+  -> S2CarrierCutSource.S2_agent_carrier_cut_source_worker_20260521e32_fieldwise inputs
+```
+
+2026-05-21 j16 local-source refinement: the e32 fieldwise cut source is also
+checked below actual exterior-sector input rows:
+
+```text
+exists B,
+  graph vertex on unbounded exterior frontier iff B.vertex k
+  + Nonempty (ActualExteriorSectorInputSourceRows inputs B)
+  -> FaceDartOrbitExteriorCarrierRows C inputs
+  -> S2CarrierCutSource.S2_agent_carrier_cut_source_worker_20260521e32_fieldwise inputs
+```
+
+The exact declarations are
+`S2CarrierCutSource.S2_agent_carrier_cut_fieldwise_source_20260521j16_of_actualExteriorSectorInputSourceRows`
+and
+`S2CarrierCutSource.S2_agent_carrier_cut_fieldwise_source_family_20260521j16_of_actualExteriorSectorInputSourceRows`.
+The same lowering is also available directly from primitive same-boundary
+sector rows through
+`S2CarrierCutSource.S2_agent_carrier_cut_fieldwise_source_20260521j17_of_boundaryVertexExteriorSectorRows`
+and
+`S2CarrierCutSource.S2_agent_carrier_cut_fieldwise_source_family_20260521j17_of_boundaryVertexExteriorSectorRows`.
+
+2026-05-21 r9 S2 source boundary:
+
+```text
+FinitePlanarOuterComponentInputs C
+  -> BoundaryFreeNoThirdGermSource inputs
+  -> (unboundedFrontierCarrierGraph C inputs).Connected
+  -> RawOrbitIteratedFaceSuccOpenSegmentFrontierNoOrbitSource inputs
+     or RawOrbitIteratedFaceSuccLocalSectorTransitionNoOrbitSource inputs
+  -> pairwise RawFaceSuccOrbitRepeatedTailExteriorCutRows on the selected orbit
+  -> SelectedRawOrbitGeometricFaceSuccTurnRows on that same orbit
+  -> S2RawGeometricFaceSuccOrbitSourcePackage C inputs
+  -> FaceDartOrbitExteriorCarrierRows C inputs + same-boundary angular rows
+  -> actualExteriorSectorInputSourceRows_of_inputs
+```
+
+New checked source-boundary declarations:
+
+```text
+RawOrbitIteratedFaceSuccOpenSegmentFrontierNoOrbitSource
+rawOrbitIteratedFaceSuccOpenSegmentFrontierNoOrbitSource_of_localSectorTransition
+rawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource_of_openSegmentFrontierNoOrbitSource
+S2_r8h_rawGeometricFaceSuccOrbit_sourcePackage_family_of_boundaryFree_connected_selectedEdge_repeatedTailExteriorCutRows_faceSuccTurn
+S2_r7j_component_topology_input_source_family_of_finiteDrawingNoClosedSeparation_puncturedAccumulation_20260521r7j
+S2_selected_carrier_neighbor_source_family_20260521_of_geometricSelectionInputSource
+unboundedFrontierCarrierGraph_connected_family_of_componentTopologyInputSourceRows
+boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointNoThird_20260521r61
+selectedRawOrbitRepeatedTailExteriorCutRows_of_cyclicSuccCutPartitionSource_20260521current7
+selectedRawOrbitGeometricFaceSuccTurnRows_of_faceSuccGeometricNonwrapRows
+```
+
+These declarations are source lowerings and erasers only.  The remaining S2
+producer work is still the finite plane-graph construction of those source
+leaves from `FinitePlanarOuterComponentInputs C`, especially the actual
+exterior-oriented `faceSucc` local transition, repeated-tail cut partitions,
+and raw same-boundary turn/orientation rows.
+
+2026-05-21 r11 S2 source boundary update:
+
+```text
+topology points-between
+  <- PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction
+
+BoundaryFreeLocalSectorGeometricAngularSource
+  <- S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
+     + selected-head getElem geometric-order rows
+     + IncidentGermEndpointSelectedEdgeNoThirdRows
+
+SelectedRawOrbitCyclicSuccDeletedTailCutPartitionSource
+  <- SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+
+SelectedRawOrbitFaceSuccGeometricNonwrapRows
+  <- SelectedRawOrbitGeometricFaceSuccTurnRows
+
+carrier-cut fieldwise rows
+  <- concrete third-neighbour repeated-tail cut partitions
+```
+
+Checked r11 declarations:
+
+```text
+S2TopologySource.S2_r11_topology_points_between_source_20260521r11
+S2CarrierLocalSource.S2_r11_boundaryFreeLocalSectorGeometricAngularSource_family_of_finitePlaneLocalSeparationPrimitive_getElem_selectedEdgeNoThirdRows
+S2SeededRawOrbitSource.selectedRawOrbitCyclicSuccDeletedTailCutPartitionSource_of_primitiveSourceRows_20260521pool7
+S2SeededRawOrbitSource.S2_r11_faceSucc_nonwrap_source_family_20260521r11
+S2CarrierCutSource.S2_r11_carrierCutFieldwiseFamily_of_rawOrbit_thirdNeighborRepeatedTailCutPartitions
+```
+
+Q37 repeated-tail lowerings:
+
+```text
+S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows O i j
+  + i != j
+  + (O.dart i).tail = (O.dart j).tail
+  -> RawFaceSuccOrbitRepeatedTailExteriorCutRows O i j
+
+SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+  <- SelectedRawOrbitRepeatedTailBoundaryArcRows
+  <- SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+
+SelectedSeededRawOrbitMinimalDeletedTailSeparation
+  <- SelectedRawOrbitCyclicSuccDeletedTailNonreachabilitySource
+  <- SelectedRawOrbitRepeatedTailPrimitiveSourceRows on the q30 selected seed
+
+actualExteriorSectorInputSourceRows q30 family
+  <- FiniteDrawingUnboundedComplementFrontierNoOpenSeparation
+  + FrontierVertexIncidentUnboundedFrontierEdgeSource
+  + UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+  + SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+  + RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedCarrierRowsNoOrbitSource
+  + SelectedRawOrbitRepeatedTailPrimitiveSourceRows
+```
+
+Checked q37 declarations:
+
+```text
+S2ExteriorBoundarySource.S2RepeatedBoundaryArcRealWitnessPrimitiveSourceRows.toRepeatedTailExteriorCutRows
+S2SeededRawOrbitSource.S2_q37_cyclicSuccDeletedTailNonreachabilitySource_family_of_exteriorFaceOrbitSeedSource_boundaryArcRows
+S2SeededRawOrbitSource.S2_q37_cyclicSuccDeletedTailNonreachabilitySource_family_of_exteriorFaceOrbitSeedSource_primitiveSourceRows
+S2SeededRawOrbitSource.S2_q37_actualExteriorSectorInputSourceRows_family_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows_primitiveSourceRows
+S2SeededRawOrbitSource.S2_q37_selectedSeededRawOrbitMinimalDeletedTailSeparation_family_of_finiteNoOpen_vertexIncident_geometricSelection_incidentGerm_selectedCarrierRows_primitiveSourceRows
+```
+
+These still do not construct the exterior boundary cycle.  They sharpen the
+remaining producer obligations to: topology no-subcontinuum obstruction,
+selected carrier `getElem`/endpoint no-third rows, actual `faceSucc`
+open-segment preservation, repeated-tail cut partitions from the exterior
+walk, and genuine selected geometric turn rows.
+
+2026-05-21 r13 faceSucc-turn update:
+
+```text
+SelectedRawOrbitGeometricFaceSuccTurnRows on the selected seeded raw orbit
+  <- RawOrbitIteratedFaceSuccHeadLocalAngularSuccessorTailSelectedActualCarrierFaceSuccAngleRowsNoOrbitSource
+     on the same selected exterior carrier heads
+```
+
+Checked declarations:
+
+```text
+S2SeededRawOrbitSource.selectedSeededRawOrbitGeometricFaceSuccTurnRows_of_selectedActualCarrierFaceSuccAngleRows_20260521r13
+S2SeededRawOrbitSource.S2_r13_selectedRawOrbitGeometricFaceSuccTurnRows_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+S2SeededRawOrbitSource.S2_r13_selectedRawOrbitGeometricFaceSuccTurnRows_family_of_componentInput_geometricSelection_incidentGerm_selectedActualCarrierFaceSuccAngles
+```
+
+The r13 bridge is a source lowering, not a final-S2 assumption: it still
+requires the actual selected-carrier `faceSucc` angle rows.  It uses the
+geometric raw `faceSucc` orbit endpoint equality at the cyclic predecessor and
+eta-expands the successor-tail geometric row through dependent selected-row
+lets.  It does not revive global all-outgoing no-between or W32/final
+actual-sector rows.
+
+2026-05-21 r15 r30/r36 local update:
+
+```text
+S2_r30_deleted_neighbor_finitePlaneLocalSeparationPrimitive
++ Nonempty UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+  <- BoundaryFreeLocalSectorGeometricAngularSource
+```
+
+Checked declarations:
+
+```text
+S2CarrierLocalSource.S2_r15_r30_finitePlaneLocalSeparationPrimitive_of_boundaryFreeLocalSectorGeometricAngularSource
+S2CarrierLocalSource.S2_r15_r36_geometricSelectionInputSource_of_boundaryFreeLocalSectorGeometricAngularSource
+S2CarrierLocalSource.S2_r15_r30_r36_local_sources_of_boundaryFreeLocalSectorGeometricAngularSource
+S2CarrierLocalSource.S2_r15_r30_r36_local_sources_family_of_boundaryFreeLocalSectorGeometricAngularSource
+```
+
+This is the current strict local dependency boundary.  The remaining
+input-only theorem below it is the boundary-free local geometric-angular
+source at each actual unbounded-frontier vertex; the r15 declarations only
+erase that source to the r30/r36 lane and do not introduce boundary cycles,
+actual-sector rows, W32, induced frontier graphs, or global outgoing
+no-between rows.
+
+Topology refinement on the same pass:
+
+```text
+PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween
+  -> PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded
+PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween
+  -> PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween
+  -> PlanarContinuumUnboundedComplementFrontierPreconnected
+```
+
+The checked declarations are
+`ExteriorComponentTopology.planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_subcontinuumPointsBetween`,
+`ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_crossingSubcontinuumPointsBetween`,
+and
+`ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierPreconnected_of_crossingSubcontinuumPointsBetween`.
+
+The local remaining construction can therefore be pursued as the actual
+exterior face-orbit carrier, with selected `unboundedFrontierEdgeSet` edge
+rows, rather than as an induced frontier graph, all-adjacent endpoint row, or
+outgoing-list no-between row.
+
 The carrier route remains checked and useful for building those rows, but it
 is no longer the shortest final eraser.  The existing
 `ExteriorComponentTopology.exteriorFrontierCarrierRows_of_inputs` consumes a
@@ -216,34 +427,262 @@ GeometricRotationSystem.geometricUnitDistanceRotationSystem_nextAround_getElem_s
 GeometricRotationSystem.geometricUnitDistanceRotationSystem_nextAround_getElem_last
 ```
 
-The active final proof path is:
+The checked final consumer path is:
 
 ```text
-actual exterior boundary cycle B
-  + frontier iff B.vertex
-  + forall k, BoundaryVertexExteriorSectorRowsAt inputs B k
-  -> FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_boundaryVertexExteriorSectorRows
+actualExteriorSectorInputSourceRows_of_inputs
+  + S1 noCutRows
+  -> FaceBoundaryTopologySourceW32.
+       minimalFailureExactActualTopologyFieldsTarget_of_actualExteriorSectorInputSourceRows
 ```
 
 S2 should be proved orbit-first internally and boundary-sector externally.  The
-external theorem name to target is:
+primary theorem to target is:
 
 ```text
-S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs
+S2ExteriorBoundarySource.faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs
 ```
+
+After that producer is proved from `FinitePlanarOuterComponentInputs C`, the
+next theorem is
+`S2ExteriorBoundarySource.actualExteriorSectorInputSourceRows_of_inputs`.
+Do not add a new W32 composer while this producer/eraser pair remains open.
 
 The checked final-cycle handoffs are reducer support only.  Do not make a new
 S2 task that hands actual rows, sector rows, carrier rows, or selected
 successor-edge rows to a later worker while only adding an eraser to
-`UnboundedExteriorFrontierCycleRows`.  If a proof needs one of those premises,
-the task must first prove that premise from `FinitePlanarOuterComponentInputs C`
-or be rewritten as the missing-premise task itself.
+`UnboundedExteriorFrontierCycleRows`.  Missing exterior-boundary premises are
+the next producer subtasks and must be proved from
+`FinitePlanarOuterComponentInputs C`.
+
+2026-05-21 p correction: the live S2 handoff is now the actual
+exterior-sector producer recorded at the top of `../TASK.md`.  The topology
+no-compact-connected-crossing source remains useful support, but the direct
+W32 consumer below does not need another topology composer once the actual
+producer is proved:
+
+```text
+forall C inputs,
+    exists B,
+      exact unbounded-frontier/cycle-vertex equivalence for B
+      + Nonempty (ActualExteriorSectorInputSourceRows inputs B)
++ S1 noCutRows
+-> FaceBoundaryTopologySourceW32.
+     minimalFailureExactActualTopologyFieldsTarget_of_actualExteriorSectorInputSourceRows
+```
+
+Live local producer theorem:
+
+```lean
+theorem actualExteriorSectorInputSourceRows_of_inputs
+    {n : Nat} (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    Exists fun B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C =>
+      (forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v) ∧
+      Nonempty (ActualExteriorSectorInputSourceRows inputs B)
+```
+
+First live intermediate producer theorem:
+
+```lean
+theorem faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs
+    {n : Nat} (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    PSigma fun rows : FaceDartOrbitExteriorCarrierRows C inputs =>
+      forall k : Fin rows.orbit.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k
+```
+
+This is the source-level exterior face-orbit theorem.  It should be proved
+from the Csizmadia-style rotating seed/face-successor construction and then
+erased to `actualExteriorSectorInputSourceRows_of_inputs`.
+
+Checked support composers:
+
+```text
+FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumForcesBounded_carrierCutFieldwise_20260521j15
+S2CarrierLocalSource.finitePlanarStraightLineOuterComponentTheorem_of_subcontinuumForcesBounded_carrierCutFieldwise_20260521j15
+S2CarrierLocalSource.unboundedExteriorFrontierCycleRowsFamily_of_subcontinuumForcesBounded_carrierCutFieldwise_20260521j15
+FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_continuousKSide_carrierCutFieldwise_20260521j10
+S2CarrierLocalSource.finitePlanarStraightLineOuterComponentTheorem_of_continuousKSide_carrierCutFieldwise_20260521j10
+S2CarrierLocalSource.unboundedExteriorFrontierCycleRowsFamily_of_continuousKSide_carrierCutFieldwise_20260521j10
+FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumBetween_boundaryVertexExteriorSectorRows_20260521k2
+FaceBoundaryTopologySourceW32.minimalFailureExactActualTopologyFieldsTarget_of_subcontinuumBetween_carrierCutFieldwise_20260521k1
+S2CarrierLocalSource.finitePlanarStraightLineOuterComponentTheorem_of_subcontinuumBetween_carrierCutFieldwise_20260521k1
+S2CarrierLocalSource.unboundedExteriorFrontierCycleRowsFamily_of_subcontinuumBetween_carrierCutFieldwise_20260521k1
+S2CarrierCutSource.S2_agent_carrier_cut_fieldwise_source_20260521j16_of_actualExteriorSectorInputSourceRows
+S2CarrierCutSource.S2_agent_carrier_cut_fieldwise_source_family_20260521j16_of_actualExteriorSectorInputSourceRows
+S2CarrierCutSource.S2_agent_carrier_cut_fieldwise_source_20260521j17_of_boundaryVertexExteriorSectorRows
+S2CarrierCutSource.S2_agent_carrier_cut_fieldwise_source_family_20260521j17_of_boundaryVertexExteriorSectorRows
+ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_crossingSubcontinuumPointsBetween
+ExteriorComponentTopology.planarContinuumUnboundedComplementFrontierPreconnected_of_crossingSubcontinuumPointsBetween
+```
+
+The local side is the actual exterior unit-distance boundary cycle with
+same-boundary exterior-sector rows:
+
+```text
+exists B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C,
+  (forall v,
+    (canonicalGraph C).point v ∈
+      frontier (unboundedExteriorComponentRows C inputs).exterior <->
+      Exists fun k : Fin B.length => B.vertex k = v) /\
+  forall k : Fin B.length,
+    BoundaryVertexExteriorSectorRowsAt inputs B k
+```
+
+The j16/j17, k2, k6m/k9, carrier-cut, and g1/g2/g3 raw-orbit routes are
+support for proving or consuming this same producer.  They are not displayed
+live routes unless the top `Current S2 Active Workboard` promotes them again.
+
+Historical 2026-05-21 local-leaf support: the following W32 route avoids the
+over-strong selected-head outgoing-list no-between leaf, but it is support for
+older finite-drawing/carrier work rather than the live p producer route:
+
+```text
+FiniteDrawingUnboundedComplementFrontierNoClosedSeparation
+  + forall C inputs a, UnboundedFrontierCarrierNeighborPairAt inputs a
+  + S1 noCutRows
+-> FaceBoundaryTopologySourceW32.
+     minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_neighborPairRows_20260521
+```
+
+The same preferred handoff is checked with the local leaf written directly as
+the sharper cut-partition source:
+
+```text
+FiniteDrawingUnboundedComplementFrontierNoClosedSeparation
+  + forall C inputs, UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs
+  + S1 noCutRows
+-> FaceBoundaryTopologySourceW32.
+     minimalFailureExactActualTopologyFieldsTarget_of_finiteDrawingNoClosedSeparation_cutPartitionInputSource_20260521
+```
+
+The older route through
+`UnboundedFrontierCarrierGeometricNeighborSelectionSourceRows` or
+`GraphVertexGeometricOutgoingListNoBetweenRows` remains compatibility support.
+Do not treat it as the live source leaf unless it is explicitly reformulated
+with a cyclic exterior-sector orientation that does not exclude legal interior
+unit chords.  The local S2 source is the actual exterior-boundary carrier
+degree-two statement: every unbounded-frontier vertex has exactly two actual
+unbounded-frontier carrier neighbours.
+
+2026-05-21 carrier nonemptiness/no-isolated support:
+
+```text
+FinitePlanarOuterComponentInputs C
+  -> nontrivial_vertices_of_finitePlanarOuterComponentInputs
+  -> exists_unitDistanceSimpleGraph_adjacent_of_finitePlanarOuterComponentInputs
+  -> exists_canonicalGraph_adjacent_of_finitePlanarOuterComponentInputs
+
+FinitePlanarOuterComponentInputs C
+  -> unboundedExterior_frontier seed
+  -> unboundedFrontierCarrier_nonempty
+  -> unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows_noAuxNonempty
+
+FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs
+  -> exists_unboundedFrontierCarrierGraph_adj_of_frontierVertexIncidentSource
+  -> unboundedFrontierCarrierGraph_neighborFinset_nonempty_of_frontierVertexIncidentSource
+  -> unboundedFrontierCarrierGraph_neighborFinset_card_pos_of_frontierVertexIncidentSource
+```
+
+These are support facts, not replacements for the live local leaf.  The live
+leaf remains selected exterior-boundary incident edges plus the sharp
+third-neighbour cut-partition source.
+
+2026-05-21 punctured-frontier incident-edge support:
+
+```text
+IsPreconnected (frontier (unboundedExteriorComponentRows C inputs).exterior)
++ forall graph-frontier vertices v, another point of that same frontier
+-> punctured_vertex_frontier_of_preconnected_frontier_nontrivialAt
+-> frontierVertexIncidentSource_of_frontierPreconnected_nontrivialAt
+<-> frontierVertexIncidentSource_iff_frontier_nontrivialAt_of_preconnected
+<- frontier_nontrivialAt_of_two_frontier_points
+-> frontierVertexIncidentSource_of_frontierPreconnected_two_frontier_points
+<- exists_two_frontier_points_of_unboundedFrontierEdgeSet
+<- exists_two_frontier_points_of_frontier_edgeInterior
+<- exists_two_frontier_points_of_two_unboundedFrontierVertices
+<- exists_unboundedFrontierVertexSet_or_two_frontier_points
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_frontierPreconnected_nontrivialAt
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_nontrivialAt
+-> unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_nontrivialAt
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_points
+-> unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_points
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_selectedEdge
+-> unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_selectedEdge
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontier_edgeInterior
+-> unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_frontier_edgeInterior
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_vertices
+-> unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_vertices
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_no_frontier_vertex
+-> unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_no_frontier_vertex
+-> exists_two_frontier_points_or_no_unboundedFrontierVertexSet_of_card_ne_one
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one
+-> unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one
+-> unboundedFrontierVertexSet_card_ne_one_of_frontierVertexIncidentSource
+-> unboundedFrontierEdgeSet_empty_of_unboundedFrontierVertexSet_card_eq_one
+-> no_frontier_edgeInterior_of_unboundedFrontierVertexSet_card_eq_one
+-> unboundedExterior_frontier_eq_singleton_of_unboundedFrontierVertexSet_card_eq_one
+-> unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontier_not_singleton
+-> unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_frontier_not_singleton
+-> inOpenSegment_mem_frontier_drawingComplement_of_edge_mem
+-> inOpenSegment_mem_frontier_drawingComplement_of_adj
+-> exists_drawingComplement_frontier_point_ne_graph_vertex
+-> exists_drawingComplement_point_not_unboundedExterior_near_of_ambient_frontier_not_unboundedExterior_frontier
+-> exists_ambient_frontier_nearby_complement_outside_unboundedExterior_of_frontier_singleton
+-> exists_ambient_frontier_nearby_complement_outside_unboundedExterior_of_unboundedFrontierVertexSet_card_eq_one
+-> S2CarrierLocalSource.unboundedFrontierVertexSet_card_ne_one_of_actualCarrierDegreeTwo
+-> S2CarrierLocalSource.frontierVertexIncidentSource_of_actualCarrierDegreeTwo
+-> S2CarrierLocalSource.unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_actualCarrierDegreeTwo
+```
+
+This support route converts actual frontier preconnectedness plus pointwise
+nontriviality into the graph-vertex selected incident-edge source.  It leaves
+the pointwise nontriviality proof as genuine local topology, now with a
+checked reduction from two distinct actual unbounded-frontier points.  The
+open-edge branch of the canonical frontier seed gives those two points via the
+selected-edge endpoint row; the non-singleton graph-frontier carrier case is
+also closed under finite-drawing no-closed-separation.  The remaining seed case
+is exactly the singleton graph-frontier carrier case.  A selected incident
+frontier edge at that singleton would contradict the singleton cardinality by
+`unboundedFrontierVertexSet_card_ne_one_of_frontierVertexIncidentSource`, so
+the unique graph-frontier vertex still needs a lower accumulation/topology
+proof that supplies such an edge or proves the singleton carrier impossible.
+The singleton case now also has checked empty selected-edge carrier and
+no-open-edge-frontier rows, and the actual unbounded exterior frontier is
+identified with that singleton point.  Thus any remaining singleton
+contradiction must be a point-frontier/accumulation theorem at the unique graph
+vertex; equivalently, finite-drawing no-closed-separation plus the lower
+statement that the actual unbounded exterior frontier is not a single graph
+point closes the component-topology source rows.  The ambient drawing frontier
+midpoint row now gives a distinct drawing-complement frontier point, and the
+metric separation adapter shows that in the singleton actual-frontier case
+arbitrarily nearby drawing-complement points lie outside the selected
+unbounded exterior component; the remaining topology/cut step is to convert
+that other-component boundary bumping into the singleton contradiction.  The
+local carrier side also has a checked bridge: actual carrier degree two rules
+out singleton graph-frontier carriers, supplies selected incident-edge rows at
+actual frontier graph vertices, and, with finite-drawing no-closed-separation,
+feeds component-topology rows directly.  This
+is not an all-adjacent
+endpoint, induced frontier graph, or final boundary-cycle route.  The ambient
+drawing-complement side now has a concrete midpoint theorem: every graph
+vertex has a distinct nearby whole-complement frontier point along an incident
+edge.  The still-missing bridge is to lift the relevant ambient frontier point
+to the unbounded component frontier, or use its bounded-component side to
+derive the promised local cut/separation contradiction.
 
 Historical checked handoff:
 
 ```text
 FinitePlanarOuterComponentInputs C
 -> unboundedExteriorComponentRows C inputs
+-> BoundaryFreeLocalSectorGeometricAngularInputRows inputs
 -> BoundaryFreeNoThirdGermSource inputs
    + UnboundedExteriorFrontierComponentTopologySourceRows inputs
    + RawOrbitIteratedFaceSuccSuccessorLocalTwoGermRowsNoOrbitSource inputs
@@ -252,14 +691,85 @@ FinitePlanarOuterComponentInputs C
 -> finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows
 ```
 
-Concrete live S2 subgoals:
+2026-05-21 r18 update: `S2CarrierLocalSource.lean` checks
+`S2_r18_boundaryFreeNoThirdGermSource_of_boundaryFreeLocalSectorGeometricAngularInputRows_20260521r18`
+and
+`S2_r18_frontierVertexIncidentSource_of_boundaryFreeLocalSectorGeometricAngularInputRows_20260521r18`.
+The exact remaining local source for both
+`BoundaryFreeNoThirdGermSource inputs` and
+`FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs` on this lane is
+`BoundaryFreeLocalSectorGeometricAngularInputRows inputs`.
+
+Concrete live S2 subgoals after the 2026-05-22 q41 refresh:
 
 | Task | Owner surface | Deliverable |
 |---|---|---|
-| S2-A local two-germ/no-third source | `S2BoundaryFreeRawSource`, `S2LocalTwoGermAssembly`, `ExteriorComponentTopology`, `GeometricRotationSystem` | Prove `BoundaryFreeNoThirdGermSource inputs` from `FinitePlanarOuterComponentInputs C`, or the pointwise `UnboundedFrontierCarrierLocalSectorRowsAt` family.  Do not derive it from a completed boundary cycle or `BoundaryVertexExteriorSectorRowsAt`. |
-| S2-B component topology/carrier connectedness source | `ExteriorComponentTopology`, `FinitePlaneDrawing` | Prove `UnboundedExteriorFrontierComponentTopologySourceRows inputs`, or directly prove `unboundedFrontierCarrierGraph C inputs` connected, from the unbounded component and actual frontier-edge carrier. |
-| S2-C selected geometric `faceSucc` frontier propagation | `S2SeededRawOrbitSource`, `GeometricRotationSystem`, `ExteriorComponentTopology` | Prove `RawOrbitIteratedFaceSuccInteriorFrontierPointNoOrbitSource inputs`, or the edge version `RawOrbitIteratedFaceSuccFrontierEdgeNoOrbitSource inputs`, from local topology and geometric successor facts. |
-| S2-D final composition | `S2ExteriorBoundarySource`, `FaceBoundaryTopologySourceW32` | Compose `S2ExteriorBoundarySource.boundaryVertexExteriorSectorRows_of_inputs` and the W32 exact topology target, proving any unmet S2-A/B/C source row inside the same claim or closing S2-D and claiming the missing source row. |
+| S2-A topology support | `ExteriorComponentTopology`, `S2TopologySource`, `FinitePlaneDrawing` | Prove or strictly reduce `PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing` when working on topology-dependent support branches.  Do not route through final boundary-cycle rows or finite S2 conclusions. |
+| S2-B exterior face-orbit producer | `S2ExteriorBoundarySource`, `S2SeededRawOrbitSource`, owner modules for local lemmas | Prove `faceDartOrbitExteriorCarrierRows_and_angularRows_of_inputs` from `FinitePlanarOuterComponentInputs C`: construct the actual exterior face orbit, prove carrier/frontier rows, and prove genuine same-boundary angular rows. |
+| S2-C actual exterior-sector producer | `S2ExteriorBoundarySource`, `ExteriorComponentTopology` | Erase S2-B to `actualExteriorSectorInputSourceRows_of_inputs`, producing the actual boundary cycle `B`, frontier equivalence, and `Nonempty (ActualExteriorSectorInputSourceRows inputs B)`. |
+| S2-D final composition | `FaceBoundaryTopologySourceW32`, `S2CarrierLocalSource` | Use existing checked consumers only after S2-C is proved.  Consumer-only reducers are support, not live source tasks. |
+
+Topology e61 update: `S2TopologySource.lean` now checks
+`planarJaniszewskiBoundaryBumpingSubcontinuumCarrier_of_kComponentFrontierComponent`
+and `S2_agent_subcontinuum_carrier_source_20260521e61`.  Thus the
+subcontinuum-carrier source is reduced to the same-`K` frontier-component
+source by packaging the connected component of `frontier U` through a chosen
+trace point.  The remaining topology work is to source that standard
+Janiszewski/frontier-component theorem or an equivalent lower planar theorem,
+not to route through final boundary cycles.
+
+Topology h13 update: `ExteriorComponentTopology.lean` now also checks
+`planarContinuumUnboundedComplementFrontierConnected_of_subcontinuumBetween`.
+Together with the earlier
+`planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_connected`,
+the connected-frontier and pairwise subcontinuum-between source surfaces are
+equivalent for compact connected planar continua.  The nonempty frontier field
+comes from `planarContinuumUnboundedComplement_frontier_nonempty`; this is an
+actual Lean proof, not a new source assumption.  Future S2-A topology work
+should target the closed-split/Janiszewski boundary-bumping theorem below this
+equivalence, not shuttle between these two surfaces.
+
+Topology j1 update: `ExteriorComponentTopology.lean` now checks
+`planarContinuumUnboundedComplementFrontierPreconnected_of_closedSeparationForcesContinuumSeparation`.
+`S2CarrierLocalSource.lean` and `FaceBoundaryTopologySourceW32.lean` also have
+checked consumers from
+`PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation`
+plus actual selected-carrier degree two.  The live topology leaf is therefore
+the closed-frontier continuum-separation theorem, not preconnectedness itself.
+
+Topology j7 update: `ExteriorComponentTopology.lean` now checks
+`planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_janiszewskiKComponentPointsBetween`.
+On the current branch, the topology source is lowered to
+`PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween`;
+the other live local source remains the actual selected-carrier e32 fieldwise
+cut package.
+
+Topology/local j11 handoff: `S2CarrierLocalSource.lean` and
+`FaceBoundaryTopologySourceW32.lean` now compose the lower point-level topology
+source
+`PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween`
+directly with the e32 fieldwise actual-carrier cut source:
+
+```text
+PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween
++ forall C inputs,
+    S2CarrierCutSource.S2_agent_carrier_cut_source_worker_20260521e32_fieldwise inputs
++ S1 noCutRows
+-> FaceBoundaryTopologySourceW32.MinimalFailureExactActualTopologyFieldsTarget
+```
+
+The checked declaration names are
+`unboundedExteriorFrontierCycleRowsFamily_of_crossingSubcontinuumPointsBetween_carrierCutFieldwise_20260521j11`,
+`finitePlanarStraightLineOuterComponentTheorem_of_crossingSubcontinuumPointsBetween_carrierCutFieldwise_20260521j11`,
+and
+`minimalFailureExactActualTopologyFieldsTarget_of_crossingSubcontinuumPointsBetween_carrierCutFieldwise_20260521j11`.
+This is a strict source lowering below the continuous-side alias; the two
+open leaves remain the point-level planar topology theorem and the actual
+selected-carrier e32 fieldwise theorem.
+
+The older local two-germ/geometric `faceSucc` rows remain useful below the
+orbit-first proof when they prove the actual carrier-neighbour family, but
+they are not the top-level live leaves by themselves.
 
 No-orientation raw-orbit core:
 

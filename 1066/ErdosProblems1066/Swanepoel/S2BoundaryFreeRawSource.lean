@@ -221,6 +221,282 @@ noncomputable def ofBoundaryCycleAngularRows_localExteriorSector
     (boundary_frontier_third_germ_between_of_local_exterior_sector_source
       (C := C) (inputs := inputs) (B := B) local_exterior_sector)
 
+set_option linter.style.longLine false in
+/-- Boundary-cycle angular rows plus the closed-segment local exterior-angular
+row package as the structured boundary-free no-third-germ source.
+
+This is the narrow closed-germ reducer: the far-endpoint case is part of the
+same closed-segment angular row, so no all-adjacent endpoint/chord classifier
+or synthetic enclosure row is introduced. -/
+noncomputable def ofBoundaryCycleAngularRows_closedSegmentLocalExteriorAngular
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C)
+    (frontier_iff_cycle_vertex :
+      forall v : Fin n,
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+          Exists fun k : Fin B.length => B.vertex k = v)
+    (cycle_edge_mem :
+      forall k : Fin B.length,
+        (B.vertex k,
+            B.vertex (PlanarInterface.cyclicSucc B.length_pos k)) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (B.vertex (PlanarInterface.cyclicSucc B.length_pos k),
+            B.vertex k) ∈
+            unboundedFrontierEdgeSet C inputs)
+    (angularRows :
+      forall k : Fin B.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows C B k)
+    (closedSegment_local_exterior_angular :
+      BoundaryFrontierClosedSegmentLocalExteriorAngularSector inputs B) :
+    BoundaryFreeNoThirdGermSource inputs :=
+  ofBoundaryCycleAngularRows
+    (C := C) (inputs := inputs)
+    B frontier_iff_cycle_vertex cycle_edge_mem angularRows
+    (fun k eps q x hqball hqfrontier hadj hgerm hqne hxpred hxsucc =>
+      closedSegment_local_exterior_angular k eps q x hqball hqfrontier hadj
+        hgerm.2 hqne hxpred hxsucc)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundaryfree-no-third-germ-source-20260520f`.
+
+Actual boundary-cycle rows, boundary angular no-between rows, and the
+same-boundary closed-segment local exterior-angular row strictly reduce the
+global boundary-free no-third-germ source. -/
+noncomputable def
+    S2_agent_boundaryfree_no_third_germ_source_20260520f_of_actualBoundaryRows_angular_closedSegmentLocalExteriorAngular
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (angularRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k)
+    (closedSegment_local_exterior_angular :
+      BoundaryFrontierClosedSegmentLocalExteriorAngularSector
+        inputs actualRows.boundary) :
+    BoundaryFreeNoThirdGermSource inputs :=
+  ofBoundaryCycleAngularRows_closedSegmentLocalExteriorAngular
+    (C := C) (inputs := inputs)
+    actualRows.boundary
+    actualRows.frontier_iff_cycle_vertex
+    (fun k => actualRows.cycle_edge_mem_unboundedFrontierEdgeSet_or_symm k)
+    angularRows
+    closedSegment_local_exterior_angular
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-closed-segment-local-exterior-angular-source-20260520g`,
+boundary-free consumer form.
+
+This is the strict same-boundary reduction of the closed-segment angular leaf
+exposed by
+`S2_agent_boundaryfree_no_third_germ_source_20260520f_of_actualBoundaryRows_angular_closedSegmentLocalExteriorAngular`.
+The residual is selected-edge-gated: the exact incident closed segment is first
+promoted to `unboundedFrontierEdgeSet`, and bad selected incident edges are
+ruled out through repeated exterior-boundary arc separation rows. -/
+noncomputable def
+    S2_agent_boundaryfree_no_third_germ_source_20260520g_of_actualBoundaryRows_angular_closedSegmentSelectedEdge_badIncidentEdgeArcRows
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (angularRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k)
+    (closedSegment_selected_edge :
+      BoundaryFrontierClosedSegmentSelectedEdgeSource
+        inputs actualRows.boundary)
+    (badIncidentEdge_arcRows :
+      forall k : Fin actualRows.boundary.length, forall x : Fin n,
+        ((actualRows.boundary.vertex k, x) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (x, actualRows.boundary.vertex k) ∈
+            unboundedFrontierEdgeSet C inputs) ->
+          x ≠
+              actualRows.boundary.vertex
+                (PlanarInterface.cyclicPred
+                  actualRows.boundary.length_pos k) ->
+            x ≠
+                actualRows.boundary.vertex
+                  (PlanarInterface.cyclicSucc
+                    actualRows.boundary.length_pos k) ->
+              Nonempty
+                (Sigma fun i : Fin actualRows.boundary.length =>
+                  Sigma fun j : Fin actualRows.boundary.length =>
+                    RepeatedExteriorBoundaryArcSeparationRows C
+                      actualRows.boundary.vertex i j)) :
+    BoundaryFreeNoThirdGermSource inputs :=
+  S2_agent_boundaryfree_no_third_germ_source_20260520f_of_actualBoundaryRows_angular_closedSegmentLocalExteriorAngular
+    (C := C) (inputs := inputs)
+    actualRows angularRows
+    (S2_agent_closed_segment_local_exterior_angular_source_20260520g
+      (C := C) (inputs := inputs) (B := actualRows.boundary)
+      closedSegment_selected_edge badIncidentEdge_arcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-free-no-third-selected-edge-worker-20260520l4`.
+
+Selected closed-segment source rows and bad selected incident-edge arc rows are
+the current selected-edge-only residual for the global boundary-free
+no-third-germ source.  The conversion stays on actual
+`unboundedFrontierEdgeSet` incidences: the closed segment first names the
+selected incident edge, and the bad selected incident edge is then ruled out
+through repeated exterior-boundary arc rows plus `inputs.noCutVertex`. -/
+noncomputable def
+    S2_agent_boundary_free_no_third_selected_edge_worker_20260520l4
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (angularRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k)
+    (closedSegment_selected_edge :
+      BoundaryFrontierClosedSegmentSelectedEdgeSource
+        inputs actualRows.boundary)
+    (badIncidentEdge_arcRows :
+      forall k : Fin actualRows.boundary.length, forall x : Fin n,
+        ((actualRows.boundary.vertex k, x) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (x, actualRows.boundary.vertex k) ∈
+            unboundedFrontierEdgeSet C inputs) ->
+          x ≠
+              actualRows.boundary.vertex
+                (PlanarInterface.cyclicPred
+                  actualRows.boundary.length_pos k) ->
+            x ≠
+                actualRows.boundary.vertex
+                  (PlanarInterface.cyclicSucc
+                    actualRows.boundary.length_pos k) ->
+              Nonempty
+                (Sigma fun i : Fin actualRows.boundary.length =>
+                  Sigma fun j : Fin actualRows.boundary.length =>
+                    RepeatedExteriorBoundaryArcSeparationRows C
+                      actualRows.boundary.vertex i j)) :
+    BoundaryFreeNoThirdGermSource inputs :=
+  S2_agent_boundaryfree_no_third_germ_source_20260520g_of_actualBoundaryRows_angular_closedSegmentSelectedEdge_badIncidentEdgeArcRows
+    (C := C) (inputs := inputs)
+    actualRows angularRows closedSegment_selected_edge badIncidentEdge_arcRows
+
+set_option linter.style.longLine false in
+/-- Nonempty form of
+`S2_agent_boundary_free_no_third_selected_edge_worker_20260520l4`. -/
+noncomputable def
+    S2_agent_boundary_free_no_third_selected_edge_worker_nonempty_20260520l4
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (angularRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k)
+    (closedSegment_selected_edge :
+      BoundaryFrontierClosedSegmentSelectedEdgeSource
+        inputs actualRows.boundary)
+    (badIncidentEdge_arcRows :
+      forall k : Fin actualRows.boundary.length, forall x : Fin n,
+        ((actualRows.boundary.vertex k, x) ∈
+            unboundedFrontierEdgeSet C inputs ∨
+          (x, actualRows.boundary.vertex k) ∈
+            unboundedFrontierEdgeSet C inputs) ->
+          x ≠
+              actualRows.boundary.vertex
+                (PlanarInterface.cyclicPred
+                  actualRows.boundary.length_pos k) ->
+            x ≠
+                actualRows.boundary.vertex
+                  (PlanarInterface.cyclicSucc
+                    actualRows.boundary.length_pos k) ->
+              Nonempty
+                (Sigma fun i : Fin actualRows.boundary.length =>
+                  Sigma fun j : Fin actualRows.boundary.length =>
+                    RepeatedExteriorBoundaryArcSeparationRows C
+                      actualRows.boundary.vertex i j)) :
+    Nonempty (BoundaryFreeNoThirdGermSource inputs) :=
+  ⟨S2_agent_boundary_free_no_third_selected_edge_worker_20260520l4
+    (C := C) (inputs := inputs)
+    actualRows angularRows closedSegment_selected_edge badIncidentEdge_arcRows⟩
+
+set_option linter.style.longLine false in
+/-- Family form of the selected-edge-only l4 boundary-free source reducer. -/
+noncomputable def
+    S2_agent_boundary_free_no_third_selected_edge_worker_family_20260520l4
+    (actualRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (angularRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall k : Fin (actualRows C inputs).boundary.length,
+            GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+              C (actualRows C inputs).boundary k)
+    (closedSegment_selected_edge :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFrontierClosedSegmentSelectedEdgeSource
+            inputs (actualRows C inputs).boundary)
+    (badIncidentEdge_arcRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall k : Fin (actualRows C inputs).boundary.length,
+            forall x : Fin m,
+              (((actualRows C inputs).boundary.vertex k, x) ∈
+                  unboundedFrontierEdgeSet C inputs ∨
+                (x, (actualRows C inputs).boundary.vertex k) ∈
+                  unboundedFrontierEdgeSet C inputs) ->
+                x ≠
+                    (actualRows C inputs).boundary.vertex
+                      (PlanarInterface.cyclicPred
+                        (actualRows C inputs).boundary.length_pos k) ->
+                  x ≠
+                      (actualRows C inputs).boundary.vertex
+                        (PlanarInterface.cyclicSucc
+                          (actualRows C inputs).boundary.length_pos k) ->
+                    Nonempty
+                      (Sigma fun i : Fin (actualRows C inputs).boundary.length =>
+                        Sigma fun j : Fin (actualRows C inputs).boundary.length =>
+                          RepeatedExteriorBoundaryArcSeparationRows C
+                            (actualRows C inputs).boundary.vertex i j)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeNoThirdGermSource inputs := by
+  intro m C inputs
+  exact
+    S2_agent_boundary_free_no_third_selected_edge_worker_20260520l4
+      (C := C) (inputs := inputs)
+      (actualRows C inputs)
+      (angularRows C inputs)
+      (closedSegment_selected_edge C inputs)
+      (badIncidentEdge_arcRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Face-successor/orientation form of the 20260520f boundary-free
+no-third-germ reducer. -/
+noncomputable def
+    S2_agent_boundaryfree_no_third_germ_source_20260520f_of_actualBoundaryRows_faceSucc_closedSegmentLocalExteriorAngular
+    (actualRows : ActualBoundaryCycleFrontierEquivalenceRows C inputs)
+    (faceSuccRows :
+      UnitDistanceCycleFaceSuccRows C
+        (GeometricRotationSystem.geometricUnitDistanceRotationSystem C)
+        actualRows.boundary)
+    (boundary_orientation :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicPred actualRows.boundary.length_pos k)) <
+          GeometricRotationSystem.graphDartArg
+            (GeometricRotationSystem.canonicalGeometricGraph C)
+            (actualRows.boundary.vertex k)
+            (actualRows.boundary.vertex
+              (PlanarInterface.cyclicSucc actualRows.boundary.length_pos k)))
+    (closedSegment_local_exterior_angular :
+      BoundaryFrontierClosedSegmentLocalExteriorAngularSector
+        inputs actualRows.boundary) :
+    BoundaryFreeNoThirdGermSource inputs :=
+  let angularRows :
+      forall k : Fin actualRows.boundary.length,
+        GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C actualRows.boundary k :=
+    GeometricRotationSystem.boundaryVertexAngularNoBetweenRows_of_faceSuccRows_pred_arg_lt_succ_arg
+      C actualRows.boundary faceSuccRows boundary_orientation
+  S2_agent_boundaryfree_no_third_germ_source_20260520f_of_actualBoundaryRows_angular_closedSegmentLocalExteriorAngular
+    (C := C) (inputs := inputs)
+    actualRows angularRows closedSegment_local_exterior_angular
+
 /-- Actual boundary-cycle rows, angular no-between rows, the open-segment
 local exterior-sector source, and the endpoint-only incident row give the
 structured boundary-free no-third-germ source.
@@ -406,6 +682,55 @@ def toFrontierVertexIncidentSource
   frontierVertexIncidentSource_of_neighborPairRows
     (C := C) (inputs := inputs) source.toNeighborPairRows
 
+/-- Boundary-free no-third-germ rows supply the selected-edge cover of the
+actual unbounded exterior frontier. -/
+def toSelectedFrontierEdgeCover
+    (source : BoundaryFreeNoThirdGermSource inputs) :
+    UnboundedExteriorSelectedFrontierEdgeCover C inputs :=
+  frontier_edge_cover_of_localSectorRows_fixedSide
+    inputs source.toLocalSectorRows
+
+/-- Boundary-free no-third-germ rows plus actual frontier preconnectedness fill
+the local/component topology package.
+
+The local source supplies only the fixed-side local-sector cover of the actual
+`unboundedFrontierEdgeSet`; the topology field remains the honest
+preconnectedness of `frontier (unboundedExteriorComponentRows C inputs).exterior`. -/
+def toComponentTopologyRowsFromFrontierPreconnected
+    (source : BoundaryFreeNoThirdGermSource inputs)
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior)) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  componentTopologySourceRows_of_frontierPreconnected_localSectorRows
+    (C := C) inputs frontier_preconnected source.toLocalSectorRows
+
+/-- Finite-drawing no-closed-separation plus boundary-free no-third-germ rows
+fill the local/component topology package. -/
+def toComponentTopologyRowsFromFiniteDrawingNoClosedSeparation
+    (source : BoundaryFreeNoThirdGermSource inputs)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  source.toComponentTopologyRowsFromFrontierPreconnected
+    (C := C) (inputs := inputs)
+    (actualFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      (C := C) inputs frontier_noClosedSeparation)
+
+/-- Claim `S2-agent-component-topology-source-worker-20260520r4`,
+boundary-free local-cover form.
+
+The finite-drawing topology row supplies actual frontier preconnectedness, and
+the boundary-free local source supplies the concrete selected
+`unboundedFrontierEdgeSet` cover through fixed-side local-sector rows. -/
+def S2_agent_component_topology_source_worker_20260520r4_boundaryFree
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (source : BoundaryFreeNoThirdGermSource inputs) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  source.toComponentTopologyRowsFromFiniteDrawingNoClosedSeparation
+    (C := C) (inputs := inputs) frontier_noClosedSeparation
+
 /-- Claim `S2-agent-cw-boundaryfree-from-deleted-neighbor`.
 
 The boundary-free local source reduces to the current deleted-neighbour
@@ -439,6 +764,101 @@ def S2_agent_cw_unreachableAfterDeleteInputSource_nonempty_of_boundaryFreeNoThir
       (UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
         C inputs) :=
   ⟨(Classical.choice source).toUnreachableAfterDeleteInputSource⟩
+
+/-- Claim `S2-agent-local-component-rows-source-20260520e`.
+
+Sharp local/component row reducer from the actual frontier preconnectedness row
+and the same boundary-free no-third-germ local source.  The returned subtype
+preserves the local source as data and proves the component-topology field from
+the fixed-side local-sector cover derived from that source. -/
+def boundaryFreeLocalComponentRows_of_frontierPreconnected_boundaryFreeNoThirdGermSource_20260520e
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (source : BoundaryFreeNoThirdGermSource inputs) :
+    Subtype
+      (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+        UnboundedExteriorFrontierComponentTopologySourceRows inputs) where
+  val := source
+  property :=
+    source.toComponentTopologyRowsFromFrontierPreconnected
+      (C := C) (inputs := inputs) frontier_preconnected
+
+/-- Claim `S2-agent-local-component-rows-source-20260520e`.
+
+Current finite-drawing topology form of the local/component row reducer.  The
+only global topology leaf is
+`FiniteDrawingUnboundedComplementFrontierNoClosedSeparation`; the local leaf is
+the supplied `BoundaryFreeNoThirdGermSource`. -/
+def boundaryFreeLocalComponentRows_of_finiteDrawingNoClosedSeparation_boundaryFreeNoThirdGermSource_20260520e
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (source : BoundaryFreeNoThirdGermSource inputs) :
+    Subtype
+      (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+        UnboundedExteriorFrontierComponentTopologySourceRows inputs) where
+  val := source
+  property :=
+    source.toComponentTopologyRowsFromFiniteDrawingNoClosedSeparation
+      (C := C) (inputs := inputs) frontier_noClosedSeparation
+
+/-- Family form of
+`boundaryFreeLocalComponentRows_of_finiteDrawingNoClosedSeparation_boundaryFreeNoThirdGermSource_20260520e`. -/
+def boundaryFreeLocalComponentRows_family_of_finiteDrawingNoClosedSeparation_boundaryFreeNoThirdGermSource_20260520e
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeNoThirdGermSource inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Subtype
+          (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+            UnboundedExteriorFrontierComponentTopologySourceRows inputs) := by
+  intro m C inputs
+  exact
+    boundaryFreeLocalComponentRows_of_finiteDrawingNoClosedSeparation_boundaryFreeNoThirdGermSource_20260520e
+      (C := C) (inputs := inputs) frontier_noClosedSeparation (source C inputs)
+
+/-- Claim `S2-agent-finite-no-closed-separation-source-20260520f`,
+boundary-free local/component form.
+
+The same-`K` Janiszewski boundary-bumping point source supplies the exact
+actual-frontier preconnectedness row consumed by the boundary-free local
+component reducer; the local leaf remains the supplied
+`BoundaryFreeNoThirdGermSource`. -/
+def boundaryFreeLocalComponentRows_of_janiszewskiKComponentPointsBetween_boundaryFreeNoThirdGermSource_20260520f
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween)
+    (source : BoundaryFreeNoThirdGermSource inputs) :
+    Subtype
+      (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+        UnboundedExteriorFrontierComponentTopologySourceRows inputs) :=
+  boundaryFreeLocalComponentRows_of_frontierPreconnected_boundaryFreeNoThirdGermSource_20260520e
+    (C := C) (inputs := inputs)
+    (S2_agent_frontier_preconnected_source_for_boundaryFreeReducers_20260520f
+      (C := C) inputs points_between)
+    source
+
+/-- Family form of
+`boundaryFreeLocalComponentRows_of_janiszewskiKComponentPointsBetween_boundaryFreeNoThirdGermSource_20260520f`. -/
+def boundaryFreeLocalComponentRows_family_of_janiszewskiKComponentPointsBetween_boundaryFreeNoThirdGermSource_20260520f
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween)
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeNoThirdGermSource inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Subtype
+          (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+            UnboundedExteriorFrontierComponentTopologySourceRows inputs) := by
+  intro m C inputs
+  exact
+    boundaryFreeLocalComponentRows_of_janiszewskiKComponentPointsBetween_boundaryFreeNoThirdGermSource_20260520f
+      (C := C) (inputs := inputs) points_between (source C inputs)
 
 /-- Edge-chain connectivity plus boundary-free no-third-germ rows fill the
 component-topology source package. -/
@@ -753,6 +1173,27 @@ noncomputable def toUnreachableAfterDeleteInputSource
   unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_localSectorRows
     source.toLocalSectorRows
 
+/-- Local no-third-germ rows are exactly the structured version of the
+selected-edge/no-third-germ local leaf.
+
+This eraser keeps the two selected heads and their actual
+`unboundedFrontierEdgeSet` incidences unchanged; it only repackages the local
+radius/no-third-germ row into the existential pointwise source used by the
+carrier reducers. -/
+noncomputable def toLocalSelectedNoThirdGermSource
+    (source : BoundaryFreeLocalNoThirdGermSourceRows inputs) :
+    UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs := by
+  intro a
+  exact
+    Exists.intro (source.left a) <|
+      Exists.intro (source.right a) <|
+        And.intro (source.left_edge a) <|
+          And.intro (source.right_edge a) <|
+            And.intro (source.heads_ne a) <|
+              Exists.intro (source.radius a) <|
+                And.intro (source.radius_pos a)
+                  (source.local_no_third_germ a)
+
 /-- Local no-third-germ rows supply the selected-edge incidence row at every
 unbounded-frontier graph vertex, through the honest local-sector eraser. -/
 noncomputable def toFrontierVertexIncidentSource
@@ -950,6 +1391,181 @@ noncomputable def boundaryFreeLocalNoThirdGermSourceRows_of_selectedIncidentEdge
   · exact hx_right hx
 
 set_option linter.style.longLine false in
+/-- Selected carrier/geometric-order rows plus the local incident-germ
+membership row directly fill the honest local no-third-germ source.
+
+The two named heads and their `unboundedFrontierEdgeSet` incidences are read
+from the selected carrier rows.  The no-third-germ field is exactly the
+local-radius no-third-germ row obtained from local incident-germ membership,
+so this constructor does not pass through all-adjacent endpoint closure,
+global closed-germ membership, or an induced frontier graph. -/
+noncomputable def
+    boundaryFreeLocalNoThirdGermSourceRows_of_selectedNeighborGeometricOrder_localIncident_20260521k6
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (localIncidentRows :
+      S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) :
+    BoundaryFreeLocalNoThirdGermSourceRows inputs := by
+  classical
+  let localNoThird :
+      S2LocalTwoGermAssembly.SelectedNeighborGeometricOrderLocalNoThirdGermRows
+        (C := C) (inputs := inputs) selectedRows :=
+    S2LocalTwoGermAssembly.selectedNeighborGeometricOrderLocalNoThirdGermRows_of_localIncidentGermMembership
+      (C := C) (inputs := inputs) selectedRows localIncidentRows
+  let radius :
+      {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} → Real :=
+    Classical.choose localNoThird
+  have radiusSpec :
+      (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        0 < radius a) ∧
+        forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+            (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+          q ∈ Metric.ball ((canonicalGraph C).point a.1) (radius a) ->
+            q ∈ Metric.ball ((canonicalGraph C).point a.1) ε ->
+              q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+                (canonicalGraph C).Adj a.1 x ->
+                  q ∈ vertexIncidentGermW3 C a.1 x ε ->
+                    q ≠ (canonicalGraph C).point a.1 ->
+                      x ≠ (selectedRows.selectedNeighborRows a).left ->
+                        x ≠ (selectedRows.selectedNeighborRows a).right ->
+                          False :=
+    Classical.choose_spec localNoThird
+  refine
+    { left := fun a => (selectedRows.selectedNeighborRows a).left
+      right := fun a => (selectedRows.selectedNeighborRows a).right
+      left_edge := fun a => (selectedRows.selectedNeighborRows a).left_edge
+      right_edge := fun a => (selectedRows.selectedNeighborRows a).right_edge
+      heads_ne := fun a => (selectedRows.selectedNeighborRows a).heads_ne
+      radius := radius
+      radius_pos := radiusSpec.1
+      local_no_third_germ := ?_ }
+  intro a ε q x hq_local hq_eps hq_frontier hadj hgerm hq_center
+    hx_left hx_right
+  exact
+    radiusSpec.2 a ε q x hq_local hq_eps hq_frontier hadj hgerm
+      hq_center hx_left hx_right
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeLocalNoThirdGermSourceRows_of_selectedNeighborGeometricOrder_localIncident_20260521k6`. -/
+noncomputable def
+    boundaryFreeLocalNoThirdGermSourceRowsFamily_of_selectedNeighborGeometricOrder_localIncident_20260521k6
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (localIncidentRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs)
+            (selectedRows C inputs).toGeometricSelectionInputSource) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeLocalNoThirdGermSourceRows inputs := by
+  intro m C inputs
+  exact
+    boundaryFreeLocalNoThirdGermSourceRows_of_selectedNeighborGeometricOrder_localIncident_20260521k6
+      (C := C) (inputs := inputs)
+      (selectedRows C inputs) (localIncidentRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6c-local-selected-geometric-source`.
+
+The local boundary-free no-third-germ source is reduced to the selected
+carrier/geometric-order rows and the safe local incident-germ membership row.
+The selected carrier rows provide the two actual `unboundedFrontierEdgeSet`
+heads; the incident-germ row provides the local-radius membership needed to
+exclude any third incident germ. -/
+noncomputable def S2_k6c_local_selected_geometric_source
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (localIncidentRows :
+      S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) :
+    BoundaryFreeLocalNoThirdGermSourceRows inputs :=
+  boundaryFreeLocalNoThirdGermSourceRows_of_selectedNeighborGeometricOrder_localIncident_20260521k6
+    (C := C) (inputs := inputs) selectedRows localIncidentRows
+
+set_option linter.style.longLine false in
+/-- Family form of `S2_k6c_local_selected_geometric_source`. -/
+noncomputable def S2_k6c_local_selected_geometric_source_family
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (localIncidentRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs)
+            (selectedRows C inputs).toGeometricSelectionInputSource) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeLocalNoThirdGermSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_k6c_local_selected_geometric_source
+      (C := C) (inputs := inputs)
+      (selectedRows C inputs) (localIncidentRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Geometric-selection rows alone fill the honest local no-third-germ source.
+
+The selected-neighbour rows are extracted from the actual geometric-selection
+input, and the local incident-germ membership row is the finite-drawing local
+isolation theorem.  This is the compact local-source endpoint for the k6
+boundary-free branch. -/
+noncomputable def
+    boundaryFreeLocalNoThirdGermSourceRows_of_geometricSelection_localIncident_20260521k6
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (geometricSelection :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+        C inputs) :
+    BoundaryFreeLocalNoThirdGermSourceRows inputs := by
+  let selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs :=
+    S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+      (C := C) (inputs := inputs) geometricSelection
+  exact
+    boundaryFreeLocalNoThirdGermSourceRows_of_selectedNeighborGeometricOrder_localIncident_20260521k6
+      (C := C) (inputs := inputs) selectedRows
+      (S2LocalTwoGermAssembly.S2_dyn_20260520_incident_germ_global_source_reduced_to_local_radius
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeLocalNoThirdGermSourceRows_of_geometricSelection_localIncident_20260521k6`. -/
+noncomputable def
+    boundaryFreeLocalNoThirdGermSourceRowsFamily_of_geometricSelection_localIncident_20260521k6
+    (geometricSelection :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeLocalNoThirdGermSourceRows inputs := by
+  intro m C inputs
+  exact
+    boundaryFreeLocalNoThirdGermSourceRows_of_geometricSelection_localIncident_20260521k6
+      (C := C) (inputs := inputs) (geometricSelection C inputs)
+
+set_option linter.style.longLine false in
 /-- Claim `S2-dyn-20260520-local-sector-input-source-worker`, sharpened leaf.
 
 The live S2-A source now reduces to the selected incident exterior-edge pair
@@ -1064,6 +1680,113 @@ noncomputable def boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutParti
     (C := C) (inputs := inputs)
     (S2_agent_frontier_neighbor_pair_input_20260520ax_neighborPairRows
       (C := C) (inputs := inputs) source)
+
+/-- Family source reducer for the local no-third-germ leaf.
+
+The remaining family source is the sharp cut-partition input package: it
+selects two actual incident `unboundedFrontierEdgeSet` heads at each frontier
+carrier vertex and supplies the no-cut/cut-partition contradiction for every
+third carrier neighbour. -/
+noncomputable def
+    boundaryFreeLocalNoThirdGermSourceRows_family_of_neighborPairCutPartitionInputSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeLocalNoThirdGermSourceRows inputs := by
+  intro m C inputs
+  exact
+    boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutPartitionInputSource
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q1-boundary-free-no-third-germ-source-20260521q1`,
+local source form.
+
+For the source-side local no-third-germ branch, the honest remaining input
+leaf is exactly the sharp carrier neighbour cut-partition source: choose two
+actual incident `unboundedFrontierEdgeSet` heads at every actual unbounded
+frontier vertex, and turn every third concrete carrier neighbour into a
+`CutVertexInterface.CutVertexPartition`.  The reverse direction uses the
+existing local-sector/deleted-neighbour eraser, so no endpoint-all-adjacent,
+induced frontier graph, arbitrary cycle, synthetic enclosure, or W32 facade is
+introduced. -/
+theorem
+    S2_q1_boundary_free_no_third_germ_source_20260521q1_local_nonempty_iff_cutPartitionInputSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty (BoundaryFreeLocalNoThirdGermSourceRows inputs) ↔
+      Nonempty (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+        C inputs) := by
+  constructor
+  · rintro ⟨localRows⟩
+    exact
+      ⟨S2_agent_cutpartition_source_construction_worker_20260521e4
+        (C := C) (inputs := inputs)
+        localRows.toUnreachableAfterDeleteInputSource⟩
+  · rintro ⟨source⟩
+    exact
+      ⟨boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutPartitionInputSource
+        (C := C) (inputs := inputs) source⟩
+
+set_option linter.style.longLine false in
+/-- Forward q1 reducer from the sharp neighbour-cut input source to the local
+boundary-free no-third-germ source rows. -/
+noncomputable def
+    S2_q1_boundary_free_no_third_germ_source_20260521q1_local_of_cutPartitionInputSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs) :
+    BoundaryFreeLocalNoThirdGermSourceRows inputs :=
+  boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutPartitionInputSource
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_q1_boundary_free_no_third_germ_source_20260521q1_local_of_cutPartitionInputSource`.
+
+The first remaining real input-only theorem is
+`forall {m : Nat} (C : _root_.UDConfig m)
+  (inputs : FinitePlanarOuterComponentInputs C),
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs`. -/
+noncomputable def
+    S2_q1_boundary_free_no_third_germ_source_20260521q1_local_family_of_cutPartitionInputSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeLocalNoThirdGermSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_q1_boundary_free_no_third_germ_source_20260521q1_local_of_cutPartitionInputSource
+      (C := C) (inputs := inputs) (source C inputs)
+
+/-- Family source reducer for the selected-edge/no-third-germ local leaf.
+
+This is the same strict lower cut-partition residual as
+`boundaryFreeLocalNoThirdGermSourceRows_family_of_neighborPairCutPartitionInputSource`,
+followed only by the structured existential eraser. -/
+noncomputable def
+    unboundedFrontierCarrierLocalSelectedNoThirdGermSource_family_of_neighborPairCutPartitionInputSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs := by
+  intro m C inputs
+  exact
+    (boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutPartitionInputSource
+      (C := C) (inputs := inputs) (source C inputs)).toLocalSelectedNoThirdGermSource
 
 /-- Claim `S2-dyn-20260520-boundaryfree-localTwoGerm-bridge`.
 
@@ -2727,6 +3450,257 @@ structure BoundaryFreeLocalInputSourceReduction
   localNoThirdGermSource :
     BoundaryFreeLocalNoThirdGermSourceRows inputs
 
+set_option linter.style.longLine false in
+/-- Local two-germ rows fill the corrected boundary-free local input package.
+
+The same pointwise local two-germ rows supply the positive local field and,
+through the checked cut-partition eraser, the local no-third-germ source.  This
+keeps the live local leaf on actual selected `unboundedFrontierEdgeSet` germs
+instead of all-adjacent endpoint or outgoing-list shortcuts. -/
+noncomputable def boundaryFreeLocalInputSourceReduction_of_localTwoGermRows_20260521h1
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (localTwoGermRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    BoundaryFreeLocalInputSourceReduction inputs where
+  localTwoGermRows := localTwoGermRows
+  localNoThirdGermSource :=
+    S2_dyn_20260520_boundaryfree_localTwoGerm_bridge
+      (C := C) (inputs := inputs) localTwoGermRows
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeLocalInputSourceReduction_of_localTwoGermRows_20260521h1`. -/
+noncomputable def boundaryFreeLocalInputSourceReductionFamily_of_localTwoGermRows_20260521h1
+    (localTwoGermRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeLocalInputSourceReduction inputs := by
+  intro m C inputs
+  exact
+    boundaryFreeLocalInputSourceReduction_of_localTwoGermRows_20260521h1
+      (C := C) (inputs := inputs) (localTwoGermRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Sharp cut-partition source for the corrected boundary-free local input.
+
+This is the source-level form of the live local S2 reduction: the same actual
+carrier cut-partition package first supplies the local no-third-germ rows, and
+those rows provide both fields of `BoundaryFreeLocalInputSourceReduction`. -/
+noncomputable def
+    boundaryFreeLocalInputSourceReduction_of_neighborPairCutPartitionInputSource_20260521h2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs) :
+    BoundaryFreeLocalInputSourceReduction inputs := by
+  let localSource :
+      BoundaryFreeLocalNoThirdGermSourceRows inputs :=
+    boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutPartitionInputSource
+      (C := C) (inputs := inputs) source
+  exact
+    { localTwoGermRows := localSource.toLocalTwoGermRows
+      localNoThirdGermSource := localSource }
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeLocalInputSourceReduction_of_neighborPairCutPartitionInputSource_20260521h2`. -/
+noncomputable def
+    boundaryFreeLocalInputSourceReductionFamily_of_neighborPairCutPartitionInputSource_20260521h2
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeLocalInputSourceReduction inputs := by
+  intro m C inputs
+  exact
+    boundaryFreeLocalInputSourceReduction_of_neighborPairCutPartitionInputSource_20260521h2
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Pointwise concrete neighbour-pair rows fill the corrected boundary-free
+local input package.
+
+This is the selected-edge local leaf in its smallest current form: the
+neighbour rows are already about the actual `unboundedFrontierCarrierGraph`,
+and the local two-germ proof comes from finite vertex-star isolation plus the
+fixed-side interior-frontier edge-membership theorem. -/
+noncomputable def
+    boundaryFreeLocalInputSourceReduction_of_neighborPairRows_20260521h4
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (neighborRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierNeighborPairAt inputs a) :
+    BoundaryFreeLocalInputSourceReduction inputs :=
+  boundaryFreeLocalInputSourceReduction_of_localTwoGermRows_20260521h1
+    (C := C) (inputs := inputs)
+    (S2LocalTwoGermAssembly.localTwoGermRows_of_neighborPairRows
+      (C := C) (inputs := inputs) neighborRows)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeLocalInputSourceReduction_of_neighborPairRows_20260521h4`. -/
+noncomputable def
+    boundaryFreeLocalInputSourceReductionFamily_of_neighborPairRows_20260521h4
+    (neighborRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierNeighborPairAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeLocalInputSourceReduction inputs := by
+  intro m C inputs
+  exact
+    boundaryFreeLocalInputSourceReduction_of_neighborPairRows_20260521h4
+      (C := C) (inputs := inputs) (neighborRows C inputs)
+
+set_option linter.style.longLine false in
+/-- The corrected boundary-free local input package is equivalent to the
+pointwise actual carrier-neighbour rows.
+
+The forward direction erases the local two-germ field to local-sector rows and
+then to neighbour-pair rows; the reverse direction is the h4 constructor above.
+This keeps the local S2 source in the selected-edge carrier graph rather than
+an induced frontier graph or all-adjacent endpoint statement. -/
+theorem
+    nonempty_boundaryFreeLocalInputSourceReduction_iff_neighborPairRows_20260521h5
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty (BoundaryFreeLocalInputSourceReduction inputs) ↔
+      Nonempty
+        (forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+          UnboundedFrontierCarrierNeighborPairAt inputs a) := by
+  constructor
+  · rintro ⟨source⟩
+    exact
+      ⟨unboundedFrontierCarrierNeighborPairRows_of_localTwoGermRows
+        (C := C) (inputs := inputs) source.localTwoGermRows⟩
+  · rintro ⟨neighborRows⟩
+    exact
+      ⟨boundaryFreeLocalInputSourceReduction_of_neighborPairRows_20260521h4
+        (C := C) (inputs := inputs) neighborRows⟩
+
+set_option linter.style.longLine false in
+/-- Explicit cycle-row handoff for the current live two-leaf S2 route. -/
+noncomputable def
+    unboundedExteriorFrontierCycleRows_of_janiszewskiSubcontinuumPointsBetween_localTwoGermRows_20260521h3
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween)
+    (localTwoGermRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    UnboundedExteriorFrontierCycleRows C inputs :=
+  unboundedExteriorFrontierCycleRows_of_planarContinuumPreconnected_localSectorRows
+    inputs
+    (planarContinuumUnboundedComplementFrontierPreconnected_of_janiszewskiSubcontinuumPointsBetween
+      points_between)
+    (localSectorRows_of_localTwoGermRows
+      (C := C) (inputs := inputs) localTwoGermRows)
+
+set_option linter.style.longLine false in
+/-- Smaller topology-surface handoff for the local two-germ S2 branch.
+
+This factors the h3 route through the primitive planar-continuum
+preconnectedness source, avoiding the broader Janiszewski point-between leaf
+whenever the actual unbounded exterior frontier preconnectedness theorem is
+available directly. -/
+noncomputable def
+    unboundedExteriorFrontierCycleRows_of_planarContinuumPreconnected_localTwoGermRows_20260521i1
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (localTwoGermRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    UnboundedExteriorFrontierCycleRows C inputs :=
+  unboundedExteriorFrontierCycleRows_of_planarContinuumPreconnected_localSectorRows
+    inputs frontier_preconnected
+    (localSectorRows_of_localTwoGermRows
+      (C := C) (inputs := inputs) localTwoGermRows)
+
+set_option linter.style.longLine false in
+/-- Family form of the smaller topology-surface local two-germ handoff. -/
+noncomputable def
+    unboundedExteriorFrontierCycleRowsFamily_of_planarContinuumPreconnected_localTwoGermRows_20260521i1
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (localTwoGermRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierCycleRows C inputs := by
+  intro m C inputs
+  exact
+    unboundedExteriorFrontierCycleRows_of_planarContinuumPreconnected_localTwoGermRows_20260521i1
+      (C := C) inputs frontier_preconnected (localTwoGermRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Finite planar outer-component theorem handoff for the smaller
+preconnected-topology local two-germ route. -/
+noncomputable def
+    finitePlanarStraightLineOuterComponentTheorem_of_planarContinuumPreconnected_localTwoGermRows_20260521i1
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (localTwoGermRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows
+    (unboundedExteriorFrontierCycleRowsFamily_of_planarContinuumPreconnected_localTwoGermRows_20260521i1
+      frontier_preconnected localTwoGermRows)
+
+set_option linter.style.longLine false in
+/-- Family form of the explicit h3 cycle-row handoff. -/
+noncomputable def
+    unboundedExteriorFrontierCycleRowsFamily_of_janiszewskiSubcontinuumPointsBetween_localTwoGermRows_20260521h3
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween)
+    (localTwoGermRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierCycleRows C inputs := by
+  intro m C inputs
+  exact
+    unboundedExteriorFrontierCycleRows_of_janiszewskiSubcontinuumPointsBetween_localTwoGermRows_20260521h3
+      (C := C) inputs points_between (localTwoGermRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Finite planar outer-component theorem handoff for the current live two-leaf S2 route. -/
+noncomputable def
+    finitePlanarStraightLineOuterComponentTheorem_of_janiszewskiSubcontinuumPointsBetween_localTwoGermRows_20260521h3
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween)
+    (localTwoGermRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows
+    (unboundedExteriorFrontierCycleRowsFamily_of_janiszewskiSubcontinuumPointsBetween_localTwoGermRows_20260521h3
+      points_between localTwoGermRows)
+
 namespace BoundaryFreeLocalInputSourceReduction
 
 variable {C : _root_.UDConfig n}
@@ -2824,6 +3798,55 @@ noncomputable def componentTopologyRows_of_frontierPreconnected_localNoThirdGerm
       frontier_preconnected
 
 set_option linter.style.longLine false in
+/-- No-compact-crossing topology plus boundary-free local no-third-germ rows
+fill the component-topology source rows for the actual unbounded exterior
+frontier.
+
+The topology leaf supplies only actual frontier preconnectedness; the
+boundary-free local rows supply the selected `unboundedFrontierEdgeSet` cover
+through the fixed-side local-sector eraser.  No final boundary cycle,
+actual-sector package, induced frontier graph, or arbitrary cycle is used. -/
+noncomputable def
+    componentTopologyRows_of_noCompactCrossing_localNoThirdGermSource_20260521r5i
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing)
+    (source : BoundaryFreeLocalNoThirdGermSourceRows inputs) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  componentTopologyRows_of_frontierPreconnected_localNoThirdGermSource
+    (C := C) (inputs := inputs)
+    (by
+      simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+        unboundedExteriorFrontier_frontierPreconnected_of_inputs
+          (C := C) inputs no_crossing)
+    source
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r5i-component-topology-source-reduction-20260521r5i`.
+
+Family-level strict reducer from the current topology leaf and the
+boundary-free local no-third-germ rows to
+`UnboundedExteriorFrontierComponentTopologySourceRows`.  The only global
+mathematical source theorem left in this route is
+`PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing`;
+the local rows are used solely to recover the selected frontier-edge cover. -/
+theorem S2_r5i_component_topology_source_reduction_20260521r5i
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing)
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalNoThirdGermSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologySourceRows inputs := by
+  intro m C inputs
+  exact
+    componentTopologyRows_of_noCompactCrossing_localNoThirdGermSource_20260521r5i
+      (C := C) inputs no_crossing (source C inputs)
+
+set_option linter.style.longLine false in
 /-- Local selected-neighbour rows reduce to the corrected boundary-free local
 input package using only actual selected edge incidences. -/
 noncomputable def
@@ -2872,11 +3895,14 @@ noncomputable def
       S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
         (C := C) (inputs := inputs)
         selectedRows.toGeometricSelectionInputSource) :
-    BoundaryFreeLocalInputSourceReduction inputs :=
-  boundaryFreeLocalInputSourceReduction_of_localSelectedNeighborRows_selectedEdges_20260520
-    (C := C) (inputs := inputs)
-    (S2LocalTwoGermAssembly.localSelectedNeighborRows_of_selectedNeighborGeometricOrder_localIncidentGermMembership
-      (C := C) (inputs := inputs) selectedRows localIncidentRows)
+    BoundaryFreeLocalInputSourceReduction inputs := by
+  let localSource :
+      BoundaryFreeLocalNoThirdGermSourceRows inputs :=
+    boundaryFreeLocalNoThirdGermSourceRows_of_selectedNeighborGeometricOrder_localIncident_20260521k6
+      (C := C) (inputs := inputs) selectedRows localIncidentRows
+  exact
+    { localTwoGermRows := localSource.toLocalTwoGermRows
+      localNoThirdGermSource := localSource }
 
 set_option linter.style.longLine false in
 /-- Family form of
@@ -2914,17 +3940,13 @@ noncomputable def
       S2LocalTwoGermAssembly.UnboundedFrontierCarrierNeighborPairGeometricSelectionInputSource
         C inputs) :
     BoundaryFreeLocalInputSourceReduction inputs := by
-  let selectedRows :
-      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
-        inputs :=
-    S2LocalTwoGermAssembly.selectedNeighborGeometricOrderSourceRows_of_geometricSelectionInputSource
+  let localSource :
+      BoundaryFreeLocalNoThirdGermSourceRows inputs :=
+    boundaryFreeLocalNoThirdGermSourceRows_of_geometricSelection_localIncident_20260521k6
       (C := C) (inputs := inputs) geometricSelection
   exact
-    boundaryFreeLocalInputSourceReduction_of_selectedNeighborGeometricOrder_localIncident_20260520
-      (C := C) (inputs := inputs) selectedRows
-      (S2LocalTwoGermAssembly.S2_dyn_20260520_incident_germ_global_source_reduced_to_local_radius
-        (C := C) (inputs := inputs)
-        selectedRows.toGeometricSelectionInputSource)
+    { localTwoGermRows := localSource.toLocalTwoGermRows
+      localNoThirdGermSource := localSource }
 
 set_option linter.style.longLine false in
 /-- Family form of
@@ -3144,6 +4166,1174 @@ noncomputable def
     S2_codex_current_20260520_boundaryfree_input_reduction_leaf
       (C := C) (inputs := inputs)
       (localSectorRows C inputs) (incident_germ_frontier_edge C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-free-input-source-worker-20260520r5`,
+selected-edge endpoint support.
+
+A local no-third-germ source already names two actual selected
+`unboundedFrontierEdgeSet` edges at each frontier vertex.  The endpoint closure
+needed along those two selected edges is therefore discharged by the selected
+frontier-edge endpoint API, not by an all-adjacent frontier-endpoint closure
+source. -/
+theorem
+    selectedIncidentEndpointClosureRows_of_boundaryFreeLocalNoThirdGermSource_20260520r5
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source : BoundaryFreeLocalNoThirdGermSourceRows inputs) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((Exists fun r : Real =>
+        0 < r ∧
+          forall z : PlanarInterface.Point,
+            z ∈ Metric.ball ((canonicalGraph C).point a.1) r ->
+            z ∈ closedSegment
+              ((canonicalGraph C).point a.1)
+              ((canonicalGraph C).point (source.left a)) ->
+            z ∈ closure
+              (unboundedExteriorComponentRows C inputs).exterior) ∧
+      (Exists fun r : Real =>
+        0 < r ∧
+          forall z : PlanarInterface.Point,
+            z ∈ Metric.ball ((canonicalGraph C).point (source.left a)) r ->
+            z ∈ closedSegment
+              ((canonicalGraph C).point a.1)
+              ((canonicalGraph C).point (source.left a)) ->
+            z ∈ closure
+              (unboundedExteriorComponentRows C inputs).exterior)) ∧
+      ((Exists fun r : Real =>
+        0 < r ∧
+          forall z : PlanarInterface.Point,
+            z ∈ Metric.ball ((canonicalGraph C).point a.1) r ->
+            z ∈ closedSegment
+              ((canonicalGraph C).point a.1)
+              ((canonicalGraph C).point (source.right a)) ->
+            z ∈ closure
+              (unboundedExteriorComponentRows C inputs).exterior) ∧
+      (Exists fun r : Real =>
+        0 < r ∧
+          forall z : PlanarInterface.Point,
+            z ∈ Metric.ball ((canonicalGraph C).point (source.right a)) r ->
+            z ∈ closedSegment
+              ((canonicalGraph C).point a.1)
+              ((canonicalGraph C).point (source.right a)) ->
+            z ∈ closure
+              (unboundedExteriorComponentRows C inputs).exterior)) := by
+  intro a
+  have hleft :=
+    selectedUnboundedFrontierEdgeEndpointClosureSource_of_selectedIncidentEdge
+      (C := C) (inputs := inputs)
+      selectedUnboundedFrontierEdgeEndpointClosureSource_of_definition
+      (source.left_edge a)
+  have hright :=
+    selectedUnboundedFrontierEdgeEndpointClosureSource_of_selectedIncidentEdge
+      (C := C) (inputs := inputs)
+      selectedUnboundedFrontierEdgeEndpointClosureSource_of_definition
+      (source.right_edge a)
+  exact ⟨hleft, hright⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundary-free-input-source-worker-20260520r5`.
+
+Strict input-source reduction from the honest local no-third-germ source plus
+the genuine closed incident-germ frontier-edge membership row.  The positive
+local field is read from `BoundaryFreeLocalNoThirdGermSourceRows`; the global
+closed-germ field is produced by the existing boundary-free no-third-germ
+selected-edge eraser.  Endpoint support for the selected edges is available
+from
+`selectedIncidentEndpointClosureRows_of_boundaryFreeLocalNoThirdGermSource_20260520r5`.
+-/
+noncomputable def
+    boundaryFreeInputSourceReduction_of_localNoThirdGermSource_incidentGermFrontierEdge_20260520r5
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (localSource : BoundaryFreeLocalNoThirdGermSourceRows inputs)
+    (incident_germ_frontier_edge :
+      forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+          (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+        q ∈ Metric.ball ((canonicalGraph C).point a.1) ε ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+            (canonicalGraph C).Adj a.1 x ->
+              q ∈ vertexIncidentGermW3 C a.1 x ε ->
+                q ≠ (canonicalGraph C).point a.1 ->
+                  (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+                    (x, a.1) ∈ unboundedFrontierEdgeSet C inputs) :
+    BoundaryFreeInputSourceReduction inputs where
+  localTwoGermRows := localSource.toLocalTwoGermRows
+  boundaryFreeNoThirdGermSource :=
+    boundaryFreeNoThirdGermSource_of_localSectorRows_incidentGermFrontierEdge
+      (C := C) (inputs := inputs)
+      localSource.toLocalSectorRows incident_germ_frontier_edge
+
+set_option linter.style.longLine false in
+/-- Selected incident-edge version of the r5 boundary-free input-source
+reducer.
+
+This preserves the selected heads from
+`LocalSelectedIncidentEdgePairSourceRows`: those rows build the local
+no-third-germ source for the positive local field, and the same selected rows
+feed the global boundary-free no-third-germ eraser. -/
+noncomputable def
+    S2_agent_boundary_free_input_source_worker_20260520r5_of_selectedIncidentEdgePairRows_incidentGermFrontierEdge
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedEdges :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs)
+    (incident_germ_frontier_edge :
+      forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+          (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+        q ∈ Metric.ball ((canonicalGraph C).point a.1) ε ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+            (canonicalGraph C).Adj a.1 x ->
+              q ∈ vertexIncidentGermW3 C a.1 x ε ->
+                q ≠ (canonicalGraph C).point a.1 ->
+                  (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+                    (x, a.1) ∈ unboundedFrontierEdgeSet C inputs) :
+    BoundaryFreeInputSourceReduction inputs := by
+  let localSource :
+      BoundaryFreeLocalNoThirdGermSourceRows inputs :=
+    boundaryFreeLocalNoThirdGermSourceRows_of_selectedIncidentEdgePairRows
+      (C := C) (inputs := inputs) selectedEdges
+  exact
+    { localTwoGermRows := localSource.toLocalTwoGermRows
+      boundaryFreeNoThirdGermSource :=
+        boundaryFreeNoThirdGermSource_of_selectedIncidentEdgePairRows_incidentGermFrontierEdge
+          (C := C) (inputs := inputs)
+          selectedEdges incident_germ_frontier_edge }
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_boundary_free_input_source_worker_20260520r5_of_selectedIncidentEdgePairRows_incidentGermFrontierEdge`.
+-/
+noncomputable def
+    S2_agent_boundary_free_input_source_worker_family_20260520r5_of_selectedIncidentEdgePairRows_incidentGermFrontierEdge
+    (selectedEdges :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs)
+    (incident_germ_frontier_edge :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall (a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs})
+              (ε : Real) (q : PlanarInterface.Point) (x : Fin m),
+            q ∈ Metric.ball ((canonicalGraph C).point a.1) ε ->
+              q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+                (canonicalGraph C).Adj a.1 x ->
+                  q ∈ vertexIncidentGermW3 C a.1 x ε ->
+                    q ≠ (canonicalGraph C).point a.1 ->
+                      (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+                        (x, a.1) ∈ unboundedFrontierEdgeSet C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeInputSourceReduction inputs := by
+  intro m C inputs
+  exact
+    S2_agent_boundary_free_input_source_worker_20260520r5_of_selectedIncidentEdgePairRows_incidentGermFrontierEdge
+      (C := C) (inputs := inputs)
+      (selectedEdges C inputs)
+      (incident_germ_frontier_edge C inputs)
+
+set_option linter.style.longLine false in
+/-- Selected incident-germ membership row for the boundary-free input cut.
+
+This is the exact global closed-germ source still needed after the local
+finite-drawing radius theorem: every noncenter frontier point in an incident
+W3 germ must certify the germ head by an actual selected
+`unboundedFrontierEdgeSet` edge.  It does not classify all adjacent frontier
+endpoints or pass through a boundary cycle, induced frontier graph, outgoing
+no-between facade, or synthetic enclosure. -/
+abbrev BoundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
+  forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (ε : Real) (q : PlanarInterface.Point) (x : Fin n),
+    q ∈ Metric.ball ((canonicalGraph C).point a.1) ε ->
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+        (canonicalGraph C).Adj a.1 x ->
+          q ∈ vertexIncidentGermW3 C a.1 x ε ->
+            q ≠ (canonicalGraph C).point a.1 ->
+              (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+                (x, a.1) ∈ unboundedFrontierEdgeSet C inputs
+
+set_option linter.style.longLine false in
+/-- Endpoint branch of the genuine incident-germ selected-edge source.
+
+This is narrower than an all-adjacent endpoint row: it only asks for selected
+`unboundedFrontierEdgeSet` membership when the far endpoint itself occurs as
+the noncenter frontier point in the same closed incident germ. -/
+abbrev BoundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
+  forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (ε : Real) (x : Fin n),
+    (canonicalGraph C).point x ∈
+        Metric.ball ((canonicalGraph C).point a.1) ε ->
+      (canonicalGraph C).point x ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ->
+        (canonicalGraph C).Adj a.1 x ->
+          (canonicalGraph C).point x ∈ vertexIncidentGermW3 C a.1 x ε ->
+            (canonicalGraph C).point x ≠ (canonicalGraph C).point a.1 ->
+              (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+                (x, a.1) ∈ unboundedFrontierEdgeSet C inputs
+
+set_option linter.style.longLine false in
+/-- Reduce the global incident-germ selected-edge membership row to its only
+unproved closed-germ branch.
+
+The relative-interior branch is discharged by the pointwise interior frontier
+edge carrier theorem; the center branch contradicts the noncenter hypothesis.
+Thus the residual is exactly the far endpoint of the same incident germ, not
+an all-adjacent endpoint closure or incident-row source. -/
+theorem boundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows_of_endpoint_20260521c3
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (endpointRows :
+      BoundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows inputs) :
+    BoundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows inputs := by
+  intro a ε q x hqball hqfrontier hadj hgerm hqne
+  rcases hgerm with ⟨_hqball_germ, hqclosed⟩
+  rcases mem_closedSegment_eq_left_or_eq_right_or_inOpenSegment hqclosed with
+    hq_center | hq_endpoint | hq_open
+  · exact False.elim (hqne hq_center)
+  · have hxball :
+        (canonicalGraph C).point x ∈
+          Metric.ball ((canonicalGraph C).point a.1) ε := by
+      simpa [hq_endpoint] using hqball
+    have hxfrontier :
+        (canonicalGraph C).point x ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior := by
+      simpa [hq_endpoint] using hqfrontier
+    have hxgerm :
+        (canonicalGraph C).point x ∈ vertexIncidentGermW3 C a.1 x ε := by
+      exact ⟨hxball, right_mem_closedSegment _ _⟩
+    have hxne :
+        (canonicalGraph C).point x ≠ (canonicalGraph C).point a.1 := by
+      intro hx
+      exact hqne (by simp [hq_endpoint, hx])
+    exact endpointRows a ε x hxball hxfrontier hadj hxgerm hxne
+  · have hsource :
+        InteriorFrontierEdgeCarrierMembershipSource C inputs :=
+      interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+    rcases hadj with hforward | hreverse
+    · exact Or.inl
+        (hsource (e := (a.1, x)) (p := q)
+          hforward hq_open hqfrontier)
+    · exact Or.inr
+        (hsource (e := (x, a.1)) (p := q)
+          hreverse (inOpenSegment_symm hq_open) hqfrontier)
+
+set_option linter.style.longLine false in
+/-- Smallest selected-edge source bundle for
+`BoundaryFreeInputSourceReduction`.
+
+The first field names the two actual selected incident carrier edges at each
+unbounded-frontier vertex and proves selected incident-edge completeness.  The
+second field is the remaining global closed-germ membership row, also stated
+only as actual `unboundedFrontierEdgeSet` membership. -/
+structure BoundaryFreeSelectedEdgeInputSourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) where
+  selectedIncidentEdges :
+    S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs
+  incidentGermFrontierEdge :
+    BoundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows inputs
+
+set_option linter.style.longLine false in
+/-- Sharper selected-edge input bundle whose only global residual is the
+far-endpoint branch of a closed incident germ.
+
+The open-segment branch of the old incident-germ membership row is proved by
+`boundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows_of_endpoint_20260521c3`,
+so this source keeps the remaining work tied to the same selected incident
+germ instead of asking for an all-adjacent endpoint row. -/
+structure BoundaryFreeSelectedEdgeEndpointInputSourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) where
+  selectedIncidentEdges :
+    S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs
+  incidentGermEndpointFrontierEdge :
+    BoundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows inputs
+
+namespace BoundaryFreeSelectedEdgeInputSourceRows
+
+variable {C : _root_.UDConfig n}
+variable {inputs : FinitePlanarOuterComponentInputs C}
+
+/-- Erase the selected-edge input bundle to the boundary-free input reduction.
+
+This is just the checked r5 selected-edge reducer with its two selected-edge
+premises packaged into one source row. -/
+noncomputable def toBoundaryFreeInputSourceReduction
+    (rows : BoundaryFreeSelectedEdgeInputSourceRows inputs) :
+    BoundaryFreeInputSourceReduction inputs :=
+  S2_agent_boundary_free_input_source_worker_20260520r5_of_selectedIncidentEdgePairRows_incidentGermFrontierEdge
+    (C := C) (inputs := inputs)
+    rows.selectedIncidentEdges rows.incidentGermFrontierEdge
+
+end BoundaryFreeSelectedEdgeInputSourceRows
+
+namespace BoundaryFreeSelectedEdgeEndpointInputSourceRows
+
+variable {C : _root_.UDConfig n}
+variable {inputs : FinitePlanarOuterComponentInputs C}
+
+/-- Erase the endpoint-branch selected-edge bundle to the previous selected
+input rows by proving the open-segment incident-germ branch directly. -/
+noncomputable def toSelectedEdgeInputSourceRows
+    (rows : BoundaryFreeSelectedEdgeEndpointInputSourceRows inputs) :
+    BoundaryFreeSelectedEdgeInputSourceRows inputs where
+  selectedIncidentEdges := rows.selectedIncidentEdges
+  incidentGermFrontierEdge :=
+    boundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows_of_endpoint_20260521c3
+      (C := C) (inputs := inputs)
+      rows.incidentGermEndpointFrontierEdge
+
+end BoundaryFreeSelectedEdgeEndpointInputSourceRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundaryfree-selected-edge-input-worker-20260521c3`.
+
+Strict reducer for `BoundaryFreeSelectedEdgeInputSourceRows`: selected
+incident-edge pairs plus the genuine far-endpoint incident-germ selected-edge
+row imply the former global incident-germ membership source. -/
+noncomputable def
+    S2_agent_boundaryfree_selected_edge_input_worker_20260521c3
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : BoundaryFreeSelectedEdgeEndpointInputSourceRows inputs) :
+    BoundaryFreeSelectedEdgeInputSourceRows inputs :=
+  rows.toSelectedEdgeInputSourceRows
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_boundaryfree_selected_edge_input_worker_20260521c3`. -/
+noncomputable def
+    S2_agent_boundaryfree_selected_edge_input_worker_family_20260521c3
+    (rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeSelectedEdgeEndpointInputSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeSelectedEdgeInputSourceRows inputs := by
+  intro m C inputs
+  exact
+    S2_agent_boundaryfree_selected_edge_input_worker_20260521c3
+      (C := C) (inputs := inputs) (rows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundaryfree-input-source-worker-20260521a2`.
+
+Strict non-circular reducer for `BoundaryFreeInputSourceReduction inputs` from
+the selected-edge input row.  The only live leaf is
+`BoundaryFreeSelectedEdgeInputSourceRows`: actual selected incident
+`unboundedFrontierEdgeSet` pairs plus actual selected closed-germ membership. -/
+noncomputable def
+    S2_agent_boundaryfree_input_source_worker_20260521a2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : BoundaryFreeSelectedEdgeInputSourceRows inputs) :
+    BoundaryFreeInputSourceReduction inputs :=
+  rows.toBoundaryFreeInputSourceReduction
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_boundaryfree_input_source_worker_20260521a2`. -/
+noncomputable def
+    S2_agent_boundaryfree_input_source_worker_family_20260521a2
+    (rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeSelectedEdgeInputSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeInputSourceReduction inputs := by
+  intro m C inputs
+  exact
+    S2_agent_boundaryfree_input_source_worker_20260521a2
+      (C := C) (inputs := inputs) (rows C inputs)
+
+set_option linter.style.longLine false in
+/-- Endpoint selected-head rows imply the endpoint membership row used by
+`BoundaryFreeSelectedEdgeInputSourceRows`.
+
+The endpoint residual remains tied to the same selected incident-edge pair:
+once the closed-germ endpoint is one of the two selected heads, the stored
+actual `unboundedFrontierEdgeSet` incidence supplies membership. -/
+theorem
+    boundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows_of_selectedHeadRows_20260521k18
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+        selectedRows) :
+    BoundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows inputs := by
+  intro a ε x hxball hxfrontier hadj hxgerm hxne
+  rcases endpointRows a ε x hxball hxfrontier hadj hxgerm hxne with
+    hx_left | hx_right
+  · simpa [hx_left] using selectedRows.left_edge a
+  · simpa [hx_right] using selectedRows.right_edge a
+
+set_option linter.style.longLine false in
+/-- Same-germ endpoint no-third rows imply the endpoint membership row needed
+by the global boundary-free source.
+
+The source stays attached to the selected actual carrier heads: it only rules
+out a closed-germ far endpoint distinct from the two selected
+`unboundedFrontierEdgeSet` heads, and the stored selected-edge incidences then
+provide the required frontier-edge membership. -/
+theorem
+    boundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows_of_selectedEdgeNoThirdRows_20260521r61
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedEdgeNoThirdRows
+        selectedRows) :
+    BoundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows inputs :=
+  boundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows_of_selectedHeadRows_20260521k18
+    (C := C) (inputs := inputs) selectedRows
+    (S2LocalTwoGermAssembly.incidentGermEndpointSelectedHeadRows_of_selectedEdgeNoThirdRows_20260521k6j
+      (C := C) (inputs := inputs) selectedRows endpointRows)
+
+set_option linter.style.longLine false in
+/-- Selected incident-edge rows plus the same-germ endpoint no-third residual
+fill the selected-edge source bundle for the global boundary-free input.
+
+The open-segment branch is discharged by the existing incident-germ splitter;
+the only remaining global source is the closed-germ endpoint no-third row for
+the same selected actual carrier heads. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputSourceRows_of_selectedIncidentEdgePairRows_endpointNoThird_20260521r61
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedEdgeNoThirdRows
+        selectedRows) :
+    BoundaryFreeSelectedEdgeInputSourceRows inputs where
+  selectedIncidentEdges := selectedRows
+  incidentGermFrontierEdge :=
+    boundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows_of_endpoint_20260521c3
+      (C := C) (inputs := inputs)
+      (boundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows_of_selectedEdgeNoThirdRows_20260521r61
+        (C := C) (inputs := inputs) selectedRows endpointRows)
+
+set_option linter.style.longLine false in
+/-- Global `BoundaryFreeNoThirdGermSource` from selected actual carrier heads
+and the sharp same-germ endpoint no-third residual.
+
+This is the direct global counterpart of the local-radius source: local
+frontier-germ membership handles nearby points, while this theorem records
+that the full arbitrary-radius source still needs exactly the endpoint
+no-third row. -/
+noncomputable def
+    boundaryFreeNoThirdGermSource_of_selectedIncidentEdgePairRows_endpointNoThird_20260521r61
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedEdgeNoThirdRows
+        selectedRows) :
+    BoundaryFreeNoThirdGermSource inputs :=
+  boundaryFreeNoThirdGermSource_of_selectedIncidentEdgePairRows_incidentGermFrontierEdge
+    (C := C) (inputs := inputs) selectedRows
+    (boundaryFreeSelectedEdgeInputSourceRows_of_selectedIncidentEdgePairRows_endpointNoThird_20260521r61
+      (C := C) (inputs := inputs) selectedRows endpointRows).incidentGermFrontierEdge
+
+set_option linter.style.longLine false in
+/-- Actual carrier-neighbour rows reduce the global boundary-free no-third
+source to the same-germ endpoint no-third residual for the selected neighbour
+heads.
+
+The two selected heads are projected from the actual
+`UnboundedFrontierCarrierNeighborPairAt` rows.  No boundary cycle, actual
+sector package, W32 facade, or all-adjacent endpoint shortcut is used. -/
+noncomputable def
+    boundaryFreeNoThirdGermSource_of_neighborPairRows_endpointNoThird_20260521r61
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (neighborRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierNeighborPairAt inputs a)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedEdgeNoThirdRows
+        (S2LocalTwoGermAssembly.S2_agent_selected_incident_edge_source_20260520c_of_neighborPairRows
+          (C := C) (inputs := inputs) neighborRows)) :
+    BoundaryFreeNoThirdGermSource inputs :=
+  boundaryFreeNoThirdGermSource_of_selectedIncidentEdgePairRows_endpointNoThird_20260521r61
+    (C := C) (inputs := inputs)
+    (S2LocalTwoGermAssembly.S2_agent_selected_incident_edge_source_20260520c_of_neighborPairRows
+      (C := C) (inputs := inputs) neighborRows)
+    endpointRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r21-local-no-third-germ-source`, local selected-germ form.
+
+The r20 minimal local no-third-germ source is strictly lowered to the selected
+frontier carrier/cut input package.  The cut package selects the two actual
+frontier-carrier heads; the checked local star isolation inside
+`BoundaryFreeLocalNoThirdGermSourceRows.toLocalSelectedNoThirdGermSource`
+turns those selected heads into the local-radius no-third-germ source.  No
+final boundary cycle, actual exterior-sector row, W32 facade, or global
+endpoint classifier is used. -/
+noncomputable def
+    S2_r21_local_no_third_germ_source_of_cutPartitionInputSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs) :
+    UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs :=
+  (boundaryFreeLocalNoThirdGermSourceRows_of_neighborPairCutPartitionInputSource
+    (C := C) (inputs := inputs) source).toLocalSelectedNoThirdGermSource
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_r21_local_no_third_germ_source_of_cutPartitionInputSource`. -/
+noncomputable def
+    S2_r21_local_no_third_germ_source_family_of_cutPartitionInputSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs := by
+  intro m C inputs
+  exact
+    S2_r21_local_no_third_germ_source_of_cutPartitionInputSource
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r21-local-no-third-germ-source`, global boundary-free form.
+
+The global arbitrary-radius `BoundaryFreeNoThirdGermSource` is lowered to the
+same selected frontier carrier/cut input package plus the exact remaining
+closed-germ endpoint row for the selected heads produced from that package.
+The local star part is handled by the selected cut data; the only residual is
+the endpoint branch needed to promote the local source to the global
+arbitrary-radius source. -/
+noncomputable def
+    S2_r21_boundaryFreeNoThirdGermSource_of_cutPartitionInputSource_endpointSelectedHeadRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+        (S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+          (C := C) (inputs := inputs) source)) :
+    BoundaryFreeNoThirdGermSource inputs := by
+  let selectedRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+        inputs :=
+    S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+      (C := C) (inputs := inputs) source
+  exact
+    boundaryFreeNoThirdGermSource_of_selectedIncidentEdgePairRows_endpointNoThird_20260521r61
+      (C := C) (inputs := inputs) selectedRows
+      (S2LocalTwoGermAssembly.incidentGermEndpointSelectedEdgeNoThirdRows_of_selectedHeadRows_20260521k6k
+        (C := C) (inputs := inputs) selectedRows
+        (by
+          simpa [selectedRows] using endpointRows))
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_r21_boundaryFreeNoThirdGermSource_of_cutPartitionInputSource_endpointSelectedHeadRows`. -/
+noncomputable def
+    S2_r21_boundaryFreeNoThirdGermSource_family_of_cutPartitionInputSource_endpointSelectedHeadRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs)
+    (endpointRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+            (S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+              (C := C) (inputs := inputs) (source C inputs))) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeNoThirdGermSource inputs := by
+  intro m C inputs
+  exact
+    S2_r21_boundaryFreeNoThirdGermSource_of_cutPartitionInputSource_endpointSelectedHeadRows
+      (C := C) (inputs := inputs)
+      (source C inputs) (endpointRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r22-endpoint-selected-head-rows`, selected-edge endpoint
+closure support.
+
+For the same selected incident pair projected from the k9 cut input source,
+the two stored `unboundedFrontierEdgeSet` incidences give the local
+closed-segment endpoint closure rows for both selected heads.  This is
+selected-edge gated: it uses only actual selected frontier edges, not an
+all-adjacent endpoint closure theorem. -/
+theorem
+    S2_r22_selectedIncidentEndpointClosureRows_of_cutPartitionInputSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs) :
+    let selectedRows :
+        S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs :=
+      S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+        (C := C) (inputs := inputs) source
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((Exists fun r : Real =>
+        0 < r ∧
+          forall z : PlanarInterface.Point,
+            z ∈ Metric.ball ((canonicalGraph C).point a.1) r ->
+            z ∈ closedSegment
+              ((canonicalGraph C).point a.1)
+              ((canonicalGraph C).point (selectedRows.left a)) ->
+            z ∈ closure
+              (unboundedExteriorComponentRows C inputs).exterior) ∧
+      (Exists fun r : Real =>
+        0 < r ∧
+          forall z : PlanarInterface.Point,
+            z ∈ Metric.ball
+              ((canonicalGraph C).point (selectedRows.left a)) r ->
+            z ∈ closedSegment
+              ((canonicalGraph C).point a.1)
+              ((canonicalGraph C).point (selectedRows.left a)) ->
+            z ∈ closure
+              (unboundedExteriorComponentRows C inputs).exterior)) ∧
+      ((Exists fun r : Real =>
+        0 < r ∧
+          forall z : PlanarInterface.Point,
+            z ∈ Metric.ball ((canonicalGraph C).point a.1) r ->
+            z ∈ closedSegment
+              ((canonicalGraph C).point a.1)
+              ((canonicalGraph C).point (selectedRows.right a)) ->
+            z ∈ closure
+              (unboundedExteriorComponentRows C inputs).exterior) ∧
+      (Exists fun r : Real =>
+        0 < r ∧
+          forall z : PlanarInterface.Point,
+            z ∈ Metric.ball
+              ((canonicalGraph C).point (selectedRows.right a)) r ->
+            z ∈ closedSegment
+              ((canonicalGraph C).point a.1)
+              ((canonicalGraph C).point (selectedRows.right a)) ->
+            z ∈ closure
+              (unboundedExteriorComponentRows C inputs).exterior)) := by
+  dsimp
+  intro a
+  let selectedRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs :=
+    S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+      (C := C) (inputs := inputs) source
+  have hleft :=
+    selectedUnboundedFrontierEdgeEndpointClosureSource_of_selectedIncidentEdge
+      (C := C) (inputs := inputs)
+      selectedUnboundedFrontierEdgeEndpointClosureSource_of_definition
+      (selectedRows.left_edge a)
+  have hright :=
+    selectedUnboundedFrontierEdgeEndpointClosureSource_of_selectedIncidentEdge
+      (C := C) (inputs := inputs)
+      selectedUnboundedFrontierEdgeEndpointClosureSource_of_definition
+      (selectedRows.right_edge a)
+  exact
+    ⟨by simpa [selectedRows] using hleft,
+      by simpa [selectedRows] using hright⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-r22-endpoint-selected-head-rows`, global boundary-free form.
+
+The r21 global boundary-free residual is lowered one step: for the selected
+pair projected by
+`localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9`,
+it is enough to supply the explicit local-radius coverage row for the bounded
+selected-head endpoint theorem.  The selected endpoint closure rows for those
+same two actual frontier edges are available from
+`S2_r22_selectedIncidentEndpointClosureRows_of_cutPartitionInputSource`. -/
+noncomputable def
+    S2_r22_boundaryFreeNoThirdGermSource_of_cutPartitionInputSource_endpointLocalRadiusCovers
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (endpointLocalRadiusCovers :
+      let selectedRows :
+          S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs :=
+        S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+          (C := C) (inputs := inputs) source
+      let localRows :
+          S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadLocalRows
+            selectedRows :=
+        S2LocalTwoGermAssembly.S2_r22_incidentGerm_endpoint_selectedHeadLocalRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) source
+      S2LocalTwoGermAssembly.IncidentGermEndpointLocalRadiusCoversRows
+        (C := C) (inputs := inputs) (selectedRows := selectedRows)
+        localRows) :
+    BoundaryFreeNoThirdGermSource inputs :=
+  S2_r21_boundaryFreeNoThirdGermSource_of_cutPartitionInputSource_endpointSelectedHeadRows
+    (C := C) (inputs := inputs) source
+    (S2LocalTwoGermAssembly.S2_r22_incidentGerm_endpoint_selectedHeadRows_of_cutPartitionInputSource_endpointLocalRadiusCovers
+      (C := C) (inputs := inputs) source endpointLocalRadiusCovers)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-boundary-free-no-third-source`.
+
+The global boundary-free no-third package is reduced to concrete selected
+neighbour data plus the two endpoint-local leaves.  The selected neighbours
+come from the cut-partition input source.  The remaining endpoint work is
+exactly:
+
+* `IncidentGermEndpointFrontierEdgeMembershipRows inputs`, identifying an
+  incident same-germ endpoint as an actual unbounded-frontier edge;
+* `IncidentGermSelectedEndpointLocalRadiusContainsAt`, saying the two selected
+  endpoint points lie in the local endpoint radius.
+
+No final boundary cycle, actual-sector row, W32 facade, induced frontier graph,
+all-adjacent endpoint theorem, identity angular row, or global all-outgoing
+no-between source is used. -/
+noncomputable def
+    S2_boundaryFreeNoThirdGermSource_of_cutPartitionInputSource_endpointFrontierEdge_endpointRadiusContains_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointFrontierEdgeMembershipRows
+        inputs)
+    (endpointRadiusContains :
+      let selectedRows :
+          S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+            inputs :=
+        S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+          (C := C) (inputs := inputs) source
+      let localRows :
+          S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadLocalRows
+            selectedRows :=
+        S2LocalTwoGermAssembly.S2_r22_incidentGerm_endpoint_selectedHeadLocalRows_of_cutPartitionInputSource
+          (C := C) (inputs := inputs) source
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        (canonicalGraph C).point (selectedRows.left a) ∈
+            Metric.ball ((canonicalGraph C).point a.1)
+              ((Classical.choose localRows) a) ∧
+          (canonicalGraph C).point (selectedRows.right a) ∈
+            Metric.ball ((canonicalGraph C).point a.1)
+              ((Classical.choose localRows) a)) :
+    BoundaryFreeNoThirdGermSource inputs := by
+  let selectedRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs :=
+    S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+      (C := C) (inputs := inputs) source
+  let localRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadLocalRows
+        selectedRows :=
+    S2LocalTwoGermAssembly.S2_r22_incidentGerm_endpoint_selectedHeadLocalRows_of_cutPartitionInputSource
+      (C := C) (inputs := inputs) source
+  exact
+    S2_r22_boundaryFreeNoThirdGermSource_of_cutPartitionInputSource_endpointLocalRadiusCovers
+      (C := C) (inputs := inputs) source
+      (by
+        dsimp [S2LocalTwoGermAssembly.IncidentGermEndpointLocalRadiusCoversRows]
+        intro a ε x hxball hxfrontier hadj hxgerm hxne
+        have hedge :
+            (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+              (x, a.1) ∈ unboundedFrontierEdgeSet C inputs :=
+          endpointRows a ε x hxball hxfrontier hadj hxgerm hxne
+        rcases selectedRows.only_selected_incident a x hedge with
+          hx_left | hx_right
+        · exact
+            (by
+              simpa [selectedRows, localRows, hx_left]
+                using (endpointRadiusContains a).1)
+        · exact
+            (by
+              simpa [selectedRows, localRows, hx_right]
+                using (endpointRadiusContains a).2))
+
+set_option linter.style.longLine false in
+/-- Family form of the r22 global boundary-free lowering. -/
+noncomputable def
+    S2_r22_boundaryFreeNoThirdGermSource_family_of_cutPartitionInputSource_endpointLocalRadiusCovers
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs)
+    (endpointLocalRadiusCovers :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          let selectedRows :
+              S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows
+                inputs :=
+            S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_cutPartitionInputSource_20260521k9
+              (C := C) (inputs := inputs) (source C inputs)
+          let localRows :
+              S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadLocalRows
+                selectedRows :=
+            S2LocalTwoGermAssembly.S2_r22_incidentGerm_endpoint_selectedHeadLocalRows_of_cutPartitionInputSource
+              (C := C) (inputs := inputs) (source C inputs)
+          S2LocalTwoGermAssembly.IncidentGermEndpointLocalRadiusCoversRows
+            (C := C) (inputs := inputs) (selectedRows := selectedRows)
+            localRows) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeNoThirdGermSource inputs := by
+  intro m C inputs
+  exact
+    S2_r22_boundaryFreeNoThirdGermSource_of_cutPartitionInputSource_endpointLocalRadiusCovers
+      (C := C) (inputs := inputs)
+      (source C inputs) (endpointLocalRadiusCovers C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundaryfree-selected-edge-input-source-20260521k18`.
+
+Selected-neighbour geometric-order rows plus the same-germ endpoint selected
+head residual fill `BoundaryFreeSelectedEdgeInputSourceRows`.  The selected
+incident pair is projected from the real carrier rows; the arbitrary-radius
+incident-germ membership field is obtained through the checked endpoint/open
+segment splitter, with the endpoint case discharged by selected heads. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+        (S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+          (C := C) (inputs := inputs) selectedRows)) :
+    BoundaryFreeSelectedEdgeInputSourceRows inputs := by
+  let selectedEdgeRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs :=
+    S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+      (C := C) (inputs := inputs) selectedRows
+  exact
+    { selectedIncidentEdges := selectedEdgeRows
+      incidentGermFrontierEdge :=
+        boundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows_of_endpoint_20260521c3
+          (C := C) (inputs := inputs)
+          (boundaryFreeIncidentGermEndpointSelectedFrontierEdgeRows_of_selectedHeadRows_20260521k18
+            (C := C) (inputs := inputs)
+            selectedEdgeRows
+            (by
+              simpa [selectedEdgeRows] using endpointRows)) }
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18`. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputSourceRows_family_of_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (endpointRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+            (S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+              (C := C) (inputs := inputs) (selectedRows C inputs))) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeSelectedEdgeInputSourceRows inputs := by
+  intro m C inputs
+  exact
+    boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18
+      (C := C) (inputs := inputs)
+      (selectedRows C inputs) (endpointRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-p2j-boundary-free-selected-edge-source-20260521p3`.
+
+Selected-neighbour/geometric-order rows supply the selected incident-edge field
+of `BoundaryFreeSelectedEdgeInputSourceRows`; the remaining global
+incident-germ field is kept as the genuine selected-frontier-edge membership
+source.  This is a strict source-field reduction only: it does not use
+all-adjacent endpoint closure, final boundary-cycle rows, or a W32 composer. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_incidentGermFrontierEdge_20260521p3
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (incidentGermRows :
+      BoundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows inputs) :
+    BoundaryFreeSelectedEdgeInputSourceRows inputs where
+  selectedIncidentEdges :=
+    S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+      (C := C) (inputs := inputs) selectedRows
+  incidentGermFrontierEdge := incidentGermRows
+
+set_option linter.style.longLine false in
+/-- Selected-neighbour incident-germ membership rows are exactly the
+boundary-free selected-frontier-edge membership field, with the selected
+geometric row retained only to align the source route. -/
+theorem
+    boundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows_of_selectedNeighborIncidentGermRows_20260521p3
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (incidentGermRows :
+      S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) :
+    BoundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows inputs := by
+  simpa [BoundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows,
+    S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows]
+    using incidentGermRows
+
+set_option linter.style.longLine false in
+/-- Same p3 source-field reduction, stated with the existing selected-neighbour
+incident-germ row from `S2LocalTwoGermAssembly`.
+
+The local-radius incident-germ rows already in the project remain the sharp
+local support theorem; the global arbitrary-radius membership row is still the
+honest residual for this selected-edge input package. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_selectedIncidentGermRows_20260521p3
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (incidentGermRows :
+      S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) :
+    BoundaryFreeSelectedEdgeInputSourceRows inputs :=
+  boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_incidentGermFrontierEdge_20260521p3
+    (C := C) (inputs := inputs) selectedRows
+    (boundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows_of_selectedNeighborIncidentGermRows_20260521p3
+      (C := C) (inputs := inputs) selectedRows incidentGermRows)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_selectedIncidentGermRows_20260521p3`. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputSourceRows_family_of_selectedNeighborGeometricOrder_selectedIncidentGermRows_20260521p3
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (incidentGermRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs)
+            (selectedRows C inputs).toGeometricSelectionInputSource) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        BoundaryFreeSelectedEdgeInputSourceRows inputs := by
+  intro m C inputs
+  exact
+    boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_selectedIncidentGermRows_20260521p3
+      (C := C) (inputs := inputs)
+      (selectedRows C inputs) (incidentGermRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Component-topology rows from the same selected-neighbour geometric-order
+carrier source used by the boundary-free selected-edge input row.
+
+The planar-continuum theorem supplies actual frontier preconnectedness, while
+the selected carrier rows supply the fixed-side selected-edge cover through the
+checked local-sector eraser. -/
+noncomputable def
+    componentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_20260521k18
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs := by
+  let selectedEdgeRows :
+      S2LocalTwoGermAssembly.LocalSelectedIncidentEdgePairSourceRows inputs :=
+    S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+      (C := C) (inputs := inputs) selectedRows
+  exact
+    componentTopologySourceRows_of_frontierPreconnected_localSectorRows
+      (C := C) inputs
+      (by
+        simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+          S2_dyn_20260520_frontier_preconnected_source_of_planarContinuum
+            (C := C) inputs frontier_preconnected)
+      (S2LocalTwoGermAssembly.localSectorRows_of_selectedIncidentEdgePairSourceRows
+        (C := C) (inputs := inputs) selectedEdgeRows)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`componentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_20260521k18`. -/
+noncomputable def
+    componentTopologyRows_family_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_20260521k18
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologySourceRows inputs := by
+  intro m C inputs
+  exact
+    componentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_20260521k18
+      (C := C) inputs frontier_preconnected (selectedRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Paired source package for the S2 raw-orbit route.
+
+This packages the two rows consumed together downstream: selected-edge
+boundary-free input rows and component topology rows.  Both are built from the
+same selected-neighbour carrier/geometric-order rows, so the selected
+`unboundedFrontierEdgeSet` heads stay aligned across the local and topology
+lanes. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputComponentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+        (S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+          (C := C) (inputs := inputs) selectedRows)) :
+    Subtype
+      (fun _ : BoundaryFreeSelectedEdgeInputSourceRows inputs =>
+        UnboundedExteriorFrontierComponentTopologySourceRows inputs) :=
+  ⟨boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18
+      (C := C) (inputs := inputs) selectedRows endpointRows,
+    componentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_20260521k18
+      (C := C) inputs frontier_preconnected selectedRows⟩
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeSelectedEdgeInputComponentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18`. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputComponentTopologyRows_family_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (endpointRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+            (S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+              (C := C) (inputs := inputs) (selectedRows C inputs))) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Subtype
+          (fun _ : BoundaryFreeSelectedEdgeInputSourceRows inputs =>
+            UnboundedExteriorFrontierComponentTopologySourceRows inputs) := by
+  intro m C inputs
+  exact
+    boundaryFreeSelectedEdgeInputComponentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18
+      (C := C) inputs frontier_preconnected
+      (selectedRows C inputs) (endpointRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-dynamic-boundary-free-raw-source-20260521o6`.
+
+Selected-neighbour geometric-order rows, the local-radius incident-germ row,
+and the same-germ endpoint selected-head row give the exact pair consumed by
+the connected raw-orbit source worker: selected-edge boundary-free input rows
+and component-topology rows.  The component side is built through
+`BoundaryFreeLocalInputSourceReduction`, so only the local-radius
+no-third-germ eraser is used there; the arbitrary-radius closed-germ branch
+stays confined to the selected-edge input row. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputComponentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_localIncident_selectedHeadRows_20260521o6
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (localIncidentRows :
+      S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource)
+    (endpointRows :
+      S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+        (S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+          (C := C) (inputs := inputs) selectedRows)) :
+    Subtype
+      (fun _ : BoundaryFreeSelectedEdgeInputSourceRows inputs =>
+        UnboundedExteriorFrontierComponentTopologySourceRows inputs) := by
+  let selectedEdgeRows :
+      BoundaryFreeSelectedEdgeInputSourceRows inputs :=
+    boundaryFreeSelectedEdgeInputSourceRows_of_selectedNeighborGeometricOrder_selectedHeadRows_20260521k18
+      (C := C) (inputs := inputs) selectedRows endpointRows
+  let localInput :
+      BoundaryFreeLocalInputSourceReduction inputs :=
+    boundaryFreeLocalInputSourceReduction_of_selectedNeighborGeometricOrder_localIncident_20260520
+      (C := C) (inputs := inputs) selectedRows localIncidentRows
+  let actualFrontierPreconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior) := by
+    simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+      S2_dyn_20260520_frontier_preconnected_source_of_planarContinuum
+        (C := C) inputs frontier_preconnected
+  exact
+    ⟨selectedEdgeRows,
+      localInput.toComponentTopologyRowsFromFrontierPreconnected
+        (C := C) (inputs := inputs) actualFrontierPreconnected⟩
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeSelectedEdgeInputComponentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_localIncident_selectedHeadRows_20260521o6`. -/
+noncomputable def
+    boundaryFreeSelectedEdgeInputComponentTopologyRows_family_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_localIncident_selectedHeadRows_20260521o6
+    (frontier_preconnected :
+      PlanarContinuumUnboundedComplementFrontierPreconnected)
+    (selectedRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+            inputs)
+    (localIncidentRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+            (C := C) (inputs := inputs)
+            (selectedRows C inputs).toGeometricSelectionInputSource)
+    (endpointRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          S2LocalTwoGermAssembly.IncidentGermEndpointSelectedHeadRows
+            (S2LocalTwoGermAssembly.localSelectedIncidentEdgePairSourceRows_of_selectedNeighborGeometricOrderSourceRows_20260521k6h
+              (C := C) (inputs := inputs) (selectedRows C inputs))) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Subtype
+          (fun _ : BoundaryFreeSelectedEdgeInputSourceRows inputs =>
+            UnboundedExteriorFrontierComponentTopologySourceRows inputs) := by
+  intro m C inputs
+  exact
+    boundaryFreeSelectedEdgeInputComponentTopologyRows_of_planarContinuumPreconnected_selectedNeighborGeometricOrder_localIncident_selectedHeadRows_20260521o6
+      (C := C) inputs frontier_preconnected
+      (selectedRows C inputs) (localIncidentRows C inputs)
+      (endpointRows C inputs)
 
 set_option linter.style.longLine false in
 /-- Current selected-carrier reduction of the local-sector residual.
@@ -4350,6 +6540,45 @@ theorem adjacentFrontierEndpointsClosedSegmentEndpointClosureSource_of_endpointF
         · exact hwhole (j, i) hedge z
             (by simpa [a, b] using inOpenSegment_symm hz_open)
       exact frontier_subset_closure hzfrontier
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundaryfree-selected-endpoint-route-20260520g2`.
+
+Selected-edge endpoint closure for the boundary-free local route.
+
+This theorem is deliberately stated for an already selected
+`unboundedFrontierEdgeSet` edge, in either orientation.  It exposes the safe
+endpoint reducer used by the local route without assuming the all-adjacent
+frontier-endpoint source that would also classify possible frontier chords. -/
+theorem S2_agent_boundaryfree_selected_endpoint_closure_of_unboundedFrontierEdgeSet_20260520g2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {i j : Fin n}
+    (hselected :
+      (i, j) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (j, i) ∈ unboundedFrontierEdgeSet C inputs) :
+    (Exists fun r : Real =>
+      0 < r ∧
+        forall z : PlanarInterface.Point,
+          z ∈ Metric.ball ((canonicalGraph C).point i) r →
+          z ∈ closedSegment
+            ((canonicalGraph C).point i)
+            ((canonicalGraph C).point j) →
+          z ∈ closure
+            (unboundedExteriorComponentRows C inputs).exterior) ∧
+    (Exists fun r : Real =>
+      0 < r ∧
+        forall z : PlanarInterface.Point,
+          z ∈ Metric.ball ((canonicalGraph C).point j) r →
+          z ∈ closedSegment
+            ((canonicalGraph C).point i)
+            ((canonicalGraph C).point j) →
+          z ∈ closure
+            (unboundedExteriorComponentRows C inputs).exterior) :=
+  selectedUnboundedFrontierEdgeEndpointClosureSource_of_selectedIncidentEdge
+    (C := C) (inputs := inputs)
+    selectedUnboundedFrontierEdgeEndpointClosureSource_of_definition
+    hselected
 
 /-- Endpoint-frontier edge membership closes the closed-segment
 relative-openness source used by the endpoint branch of the boundary-free S2
@@ -6282,6 +8511,127 @@ def toCarrierGraphConnected
     (C := C) inputs
     (rows.toFrontierPreconnectedSourceRows localSource)
 
+/-- Raw edge coverage plus the honest local incident-edge source proves that
+every concrete unbounded-frontier vertex is hit as a raw orbit tail.
+
+This uses only the selected incident edge contained in the local source.  It
+does not promote the local row to the stronger global no-third-germ classifier. -/
+def frontierVertexTailCoverageFromLocalSource
+    (rows : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localSource : BoundaryFreeLocalNoThirdGermSourceRows inputs) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      Exists fun k : Fin O.period => (O.dart k).tail = a.1 := by
+  classical
+  intro a
+  rcases localSource.left_edge a with hleft | hleft
+  · let e : {e : PlanarInterface.Edge n //
+        e ∈ unboundedFrontierEdgeSet C inputs} := ⟨(a.1, localSource.left a), hleft⟩
+    rcases rows.edge_coverage e with ⟨k, hk⟩
+    rcases hk with hk | hk
+    · refine ⟨k, ?_⟩
+      have hfst : e.1.1 = (O.dart k).tail := congrArg Prod.fst hk
+      simpa [e] using hfst.symm
+    · refine ⟨PlanarInterface.cyclicSucc O.period_pos k, ?_⟩
+      have hfst :
+          e.1.1 =
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+        congrArg Prod.fst hk
+      simpa [e] using hfst.symm
+  · let e : {e : PlanarInterface.Edge n //
+        e ∈ unboundedFrontierEdgeSet C inputs} := ⟨(localSource.left a, a.1), hleft⟩
+    rcases rows.edge_coverage e with ⟨k, hk⟩
+    rcases hk with hk | hk
+    · refine ⟨PlanarInterface.cyclicSucc O.period_pos k, ?_⟩
+      have hsnd :
+          e.1.2 =
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+        congrArg Prod.snd hk
+      simpa [e] using hsnd.symm
+    · refine ⟨k, ?_⟩
+      have hsnd : e.1.2 = (O.dart k).tail := congrArg Prod.snd hk
+      simpa [e] using hsnd.symm
+
+/-- Raw coverage plus local incident-edge rows gives the exact frontier-iff-tail
+row for the same raw orbit. -/
+def frontierIffTailFromLocalSource
+    (rows : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localSource : BoundaryFreeLocalNoThirdGermSourceRows inputs) :
+    forall v : Fin n,
+      (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+        Exists fun k : Fin O.period => (O.dart k).tail = v :=
+  rawFaceSuccOrbit_frontier_iff_tail_of_frontier_vertex_tail_coverage
+    O
+    (rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O rows.dart_edge_openSegment_frontier)
+    (rows.frontierVertexTailCoverageFromLocalSource localSource)
+
+/- Direct raw-row projections used by the local S2 route.  These stay below
+the global `BoundaryFreeNoThirdGermSource`: raw coverage supplies the orbit
+edge rows, the local no-third source supplies tail coverage, and pointwise
+local-sector rows supply the geometric predecessor/successor separation. -/
+
+/-- Consecutive raw-tail open segments lie on the exterior frontier. -/
+def edge_openSegment_frontier
+    (rows : RawOrbitCoverageSourceRows (inputs := inputs) O) :
+    forall k : Fin O.period,
+      forall p : PlanarInterface.Point,
+        PlanarInterface.InOpenSegment p
+          ((canonicalGraph C).point (O.dart k).tail)
+          ((canonicalGraph C).point
+            (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+        p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+  rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+    (inputs := inputs) O rows.dart_edge_openSegment_frontier
+
+/-- At each raw tail, the predecessor and successor raw tails are distinct. -/
+def raw_pred_succ_tail_ne
+    {start : UnitDistanceDart C}
+    {O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C)
+        start}
+    (rows : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall k : Fin O.period,
+      (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+        (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+  rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+    (C := C) (inputs := inputs) O
+    (rows.edge_openSegment_frontier) localSectorRows
+
+/-- Raw coverage, local no-third-germ rows, and local sectors force period at
+least three. -/
+def period_ge_three
+    (rows : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localSource : BoundaryFreeLocalNoThirdGermSourceRows inputs)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    3 <= O.period :=
+  rawFaceSuccOrbit_period_three_le_of_edge_openSegment_frontier_tail_coverage_localSectorRows
+    (inputs := inputs) O
+    (rows.edge_openSegment_frontier)
+    (rows.frontierVertexTailCoverageFromLocalSource localSource)
+    localSectorRows
+
+/-- Raw coverage, local no-third-germ rows, and local sectors produce cyclic
+coverage of the concrete unbounded-frontier carrier. -/
+def cyclicCarrierCoverage
+    (rows : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localSource : BoundaryFreeLocalNoThirdGermSourceRows inputs)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    UnboundedFrontierCarrierCyclicCoverageRows C inputs :=
+  unboundedFrontierCarrierCyclicCoverageRows_of_rawFaceSuccOrbit_tail_coverage
+    O
+    (rows.period_ge_three localSource localSectorRows)
+    (rows.edge_openSegment_frontier)
+    (rows.frontierVertexTailCoverageFromLocalSource localSource)
+
 end RawOrbitCoverageSourceRows
 
 /-- Direct theorem form of
@@ -7413,6 +9763,396 @@ noncomputable def unboundedExteriorCycleRows_of_rawCoverage_localSectorRows
       coverage.toEdgeCarrierSegmentChainConnected
       localSectorRows
 
+set_option linter.style.longLine false in
+/-- Local boundary-free raw-orbit source row.
+
+This is the local-radius/raw-coverage package: the orbit covers the actual
+selected `unboundedFrontierEdgeSet`, and the local source supplies the
+pointwise selected-germ/local-sector rows.  It intentionally does not contain
+the global arbitrary-radius closed-germ source. -/
+abbrev BoundaryFreeLocalRawOrbitSourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
+  Exists fun R : UnitDistanceRotationSystem C =>
+    Exists fun start : UnitDistanceDart C =>
+      Exists fun O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start =>
+        RawOrbitCoverageSourceRows (inputs := inputs) O ∧
+          Nonempty (BoundaryFreeLocalNoThirdGermSourceRows inputs)
+
+set_option linter.style.longLine false in
+/-- Raw coverage plus local selected-germ rows fill the local boundary-free
+raw-orbit source row. -/
+def boundaryFreeLocalRawOrbitSourceRows_of_rawCoverage_localNoThirdGermSource_20260522s2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (coverage : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localSource : BoundaryFreeLocalNoThirdGermSourceRows inputs) :
+    BoundaryFreeLocalRawOrbitSourceRows inputs :=
+  ⟨R, start, O, coverage, ⟨localSource⟩⟩
+
+set_option linter.style.longLine false in
+/-- Raw coverage plus pointwise local-sector rows fill the local
+boundary-free raw-orbit source row. -/
+def boundaryFreeLocalRawOrbitSourceRows_of_rawCoverage_localSectorRows_20260522s2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (coverage : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    BoundaryFreeLocalRawOrbitSourceRows inputs :=
+  boundaryFreeLocalRawOrbitSourceRows_of_rawCoverage_localNoThirdGermSource_20260522s2
+    (C := C) (inputs := inputs) coverage
+    (boundaryFreeLocalNoThirdGermSourceRows_of_localSectorRows_selectedEdges
+      (C := C) (inputs := inputs) localSectorRows)
+
+set_option linter.style.longLine false in
+/-- Raw-tail coverage plus pointwise local-sector rows fill the local
+boundary-free raw-orbit source row. -/
+def boundaryFreeLocalRawOrbitSourceRows_of_rawTailCoverage_localSectorRows_20260522s2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    BoundaryFreeLocalRawOrbitSourceRows inputs :=
+  boundaryFreeLocalRawOrbitSourceRows_of_rawCoverage_localSectorRows_20260522s2
+    (C := C) (inputs := inputs)
+    (rawOrbitCoverageSourceRows_of_tailCoverage_localSectorRows
+      (C := C) (inputs := inputs) O
+      dart_edge_openSegment_frontier frontier_vertex_tail_coverage
+      localSectorRows)
+    localSectorRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q16-exterior-seed-raw-orbit`.
+
+Input-facing selected seed/raw-orbit source reducer.  The finite outer-component
+input first supplies a genuine unbounded exterior frontier seed; local-sector
+rows orient it to a selected geometric raw face-successor start dart.  The two
+remaining orbit-tracing rows are stated only for that selected local edge and
+raw orbit, and are immediately erased to the checked raw-coverage plus local
+boundary-free package. -/
+theorem S2_q16_selected_seed_rawCoverage_boundaryFreeLocalRawOrbitSourceRows_of_inputs_localSectorRows_rawTailCoverage_20260522
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (dart_edge_openSegment_frontier :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+          start.tail = e.1 ->
+            start.head = e.2 ->
+              forall O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (geometricUnitDistanceRotationSystem C)
+                  start,
+                forall k : Fin O.period,
+                  forall q : PlanarInterface.Point,
+                    PlanarInterface.InOpenSegment q
+                      ((canonicalGraph C).point (O.dart k).tail)
+                      ((canonicalGraph C).point (O.dart k).head) ->
+                    q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+          start.tail = e.1 ->
+            start.head = e.2 ->
+              forall O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (geometricUnitDistanceRotationSystem C)
+                  start,
+                forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+                  Exists fun k : Fin O.period => (O.dart k).tail = a.1) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            e ∈ unboundedFrontierEdgeSet C inputs ∧
+              UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                start.tail = e.1 ∧
+                  start.head = e.2 ∧
+                    Exists fun O :
+                      UnitDistanceRotationSystem.RawFaceSuccOrbit
+                        (geometricUnitDistanceRotationSystem C)
+                        start =>
+                      RawOrbitCoverageSourceRows (inputs := inputs) O ∧
+                        BoundaryFreeLocalRawOrbitSourceRows inputs := by
+  rcases unboundedExteriorFrontierSeed_nonempty inputs with ⟨seed⟩
+  rcases
+      S2_r57_selected_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localSectorRows_20260521r57
+        (C := C) (inputs := inputs) localSectorRows seed with
+    ⟨e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+  rcases horbit with ⟨O⟩
+  let coverage : RawOrbitCoverageSourceRows (inputs := inputs) O :=
+    rawOrbitCoverageSourceRows_of_tailCoverage_localSectorRows
+      (C := C) (inputs := inputs) O
+      (dart_edge_openSegment_frontier edgeRows htail hhead O)
+      (frontier_vertex_tail_coverage edgeRows htail hhead O)
+      localSectorRows
+  exact
+    ⟨seed, e, p, start, hselected, edgeRows, htail, hhead, O, coverage,
+      boundaryFreeLocalRawOrbitSourceRows_of_rawCoverage_localSectorRows_20260522s2
+        (C := C) (inputs := inputs) coverage localSectorRows⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q17-raw-tail-coverage-source`.
+
+Strict q17 lowering of the two raw-tail inputs used by q16.  Actual component
+topology rows give connectedness of the concrete unbounded-frontier carrier;
+local-sector rows give neighbour closure of the raw-tail set; therefore the
+positive `frontier_vertex_tail_coverage` callback is derived internally from
+the remaining primitive
+`dart_edge_openSegment_frontier`.
+
+No completed boundary cycle, actual-sector rows, cyclic carrier coverage, or
+actual-sector-row source is used. -/
+theorem S2_q17_selected_seed_rawCoverage_boundaryFreeLocalRawOrbitSourceRows_of_inputs_componentTopology_localSectorRows_dartEdgeFrontier_20260522
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (componentRows :
+      UnboundedExteriorFrontierComponentTopologySourceRows inputs)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (dart_edge_openSegment_frontier :
+      forall {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
+          {start : UnitDistanceDart C},
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p ->
+          start.tail = e.1 ->
+            start.head = e.2 ->
+              forall O :
+                UnitDistanceRotationSystem.RawFaceSuccOrbit
+                  (geometricUnitDistanceRotationSystem C)
+                  start,
+                forall k : Fin O.period,
+                  forall q : PlanarInterface.Point,
+                    PlanarInterface.InOpenSegment q
+                      ((canonicalGraph C).point (O.dart k).tail)
+                      ((canonicalGraph C).point (O.dart k).head) ->
+                    q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            e ∈ unboundedFrontierEdgeSet C inputs ∧
+              UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                start.tail = e.1 ∧
+                  start.head = e.2 ∧
+                    Exists fun O :
+                      UnitDistanceRotationSystem.RawFaceSuccOrbit
+                        (geometricUnitDistanceRotationSystem C)
+                        start =>
+                      RawOrbitCoverageSourceRows (inputs := inputs) O ∧
+                        BoundaryFreeLocalRawOrbitSourceRows inputs := by
+  refine
+    S2_q16_selected_seed_rawCoverage_boundaryFreeLocalRawOrbitSourceRows_of_inputs_localSectorRows_rawTailCoverage_20260522
+      (C := C) inputs localSectorRows dart_edge_openSegment_frontier ?_
+  intro e p start edgeRows htail hhead O
+  let dartFrontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    dart_edge_openSegment_frontier edgeRows htail hhead O
+  let edgeFrontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dartFrontier
+  let raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+    rawFaceSuccOrbit_pred_succ_tail_ne_of_geometric_localSectorRows
+      (C := C) (inputs := inputs) O edgeFrontier localSectorRows
+  exact
+    S2_q13_raw_tail_hit_from_component_frontier_rows
+      (C := C) (inputs := inputs) O dartFrontier componentRows
+      localSectorRows raw_pred_succ_tail_ne
+
+set_option linter.style.longLine false in
+/-- Raw coverage plus selected-neighbour geometric rows and the safe local
+incident-germ row fill the local boundary-free raw-orbit source row. -/
+noncomputable def
+    boundaryFreeLocalRawOrbitSourceRows_of_rawCoverage_selectedNeighborGeometricOrder_localIncident_20260522s2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (coverage : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (localIncidentRows :
+      S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) :
+    BoundaryFreeLocalRawOrbitSourceRows inputs :=
+  boundaryFreeLocalRawOrbitSourceRows_of_rawCoverage_localNoThirdGermSource_20260522s2
+    (C := C) (inputs := inputs) coverage
+    (boundaryFreeLocalNoThirdGermSourceRows_of_selectedNeighborGeometricOrder_localIncident_20260521k6
+      (C := C) (inputs := inputs) selectedRows localIncidentRows)
+
+set_option linter.style.longLine false in
+/-- Raw-tail coverage plus selected-neighbour geometric rows and the safe local
+incident-germ row fill the local boundary-free raw-orbit source row. -/
+noncomputable def
+    boundaryFreeLocalRawOrbitSourceRows_of_rawTailCoverage_selectedNeighborGeometricOrder_localIncident_20260522s2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (selectedRows :
+      S2LocalTwoGermAssembly.UnboundedFrontierCarrierSelectedNeighborGeometricOrderSourceRows
+        inputs)
+    (localIncidentRows :
+      S2LocalTwoGermAssembly.SelectedNeighborIncidentGermLocalFrontierEdgeMembershipRows
+        (C := C) (inputs := inputs)
+        selectedRows.toGeometricSelectionInputSource) :
+    BoundaryFreeLocalRawOrbitSourceRows inputs := by
+  let localSource :
+      BoundaryFreeLocalNoThirdGermSourceRows inputs :=
+    boundaryFreeLocalNoThirdGermSourceRows_of_selectedNeighborGeometricOrder_localIncident_20260521k6
+      (C := C) (inputs := inputs) selectedRows localIncidentRows
+  exact
+    boundaryFreeLocalRawOrbitSourceRows_of_rawCoverage_localNoThirdGermSource_20260522s2
+      (C := C) (inputs := inputs)
+      (rawOrbitCoverageSourceRows_of_tailCoverage_localSectorRows
+        (C := C) (inputs := inputs) O
+        dart_edge_openSegment_frontier frontier_vertex_tail_coverage
+        localSource.toLocalSectorRows)
+      localSource
+
+set_option linter.style.longLine false in
+/-- The local boundary-free raw-orbit source row is enough for the selected
+edge-chain/local-sector final S2 eraser. -/
+noncomputable def unboundedExteriorCycleRows_of_boundaryFreeLocalRawOrbitSourceRows_20260522s2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : BoundaryFreeLocalRawOrbitSourceRows inputs) :
+    UnboundedExteriorFrontierCycleRows C inputs :=
+  let R : UnitDistanceRotationSystem C := Classical.choose rows
+  let hstart := Classical.choose_spec rows
+  let start : UnitDistanceDart C := Classical.choose hstart
+  let hO := Classical.choose_spec hstart
+  let O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start :=
+    Classical.choose hO
+  let hrows := Classical.choose_spec hO
+  unboundedExteriorCycleRows_of_rawCoverage_localSectorRows
+    (C := C) (inputs := inputs)
+    ⟨R, start, O, hrows.1⟩
+    (Classical.choice hrows.2).toLocalSectorRows
+
+set_option linter.style.longLine false in
+/-- Family-level S2 handoff from the local boundary-free raw-orbit source row. -/
+noncomputable def
+    finitePlanarStraightLineOuterComponentTheorem_of_boundaryFreeLocalRawOrbitSourceRows_20260522s2
+    (rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          BoundaryFreeLocalRawOrbitSourceRows inputs) :
+    FinitePlanarStraightLineOuterComponentTheorem :=
+  finitePlanarStraightLineOuterComponentTheorem_of_unboundedExteriorFrontierCycleRows
+    (fun C inputs =>
+      unboundedExteriorCycleRows_of_boundaryFreeLocalRawOrbitSourceRows_20260522s2
+        (C := C) (inputs := inputs) (rows C inputs))
+
+set_option linter.style.longLine false in
+/-- When the genuine selected incident-germ frontier-edge row is supplied, the
+local boundary-free raw-orbit source row upgrades to the existing global
+boundary-free raw-coverage row. -/
+noncomputable def
+    boundaryFreeRawOrbitSourceRows_of_boundaryFreeLocalRawOrbitSourceRows_incidentGermFrontierEdge_20260522s2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : BoundaryFreeLocalRawOrbitSourceRows inputs)
+    (incident_germ_frontier_edge :
+      BoundaryFreeIncidentGermSelectedFrontierEdgeMembershipRows inputs) :
+    Exists fun R : UnitDistanceRotationSystem C =>
+      Exists fun start : UnitDistanceDart C =>
+        Exists fun O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start =>
+          RawOrbitCoverageSourceRows (inputs := inputs) O ∧
+            Nonempty (BoundaryFreeNoThirdGermSource inputs) :=
+  let R : UnitDistanceRotationSystem C := Classical.choose rows
+  let hstart := Classical.choose_spec rows
+  let start : UnitDistanceDart C := Classical.choose hstart
+  let hO := Classical.choose_spec hstart
+  let O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start :=
+    Classical.choose hO
+  let hrows := Classical.choose_spec hO
+  let localSource : BoundaryFreeLocalNoThirdGermSourceRows inputs :=
+    Classical.choice hrows.2
+  ⟨R, start, O, hrows.1,
+    ⟨boundaryFreeNoThirdGermSource_of_localSectorRows_incidentGermFrontierEdge
+      (C := C) (inputs := inputs)
+      localSource.toLocalSectorRows incident_germ_frontier_edge⟩⟩
+
+set_option linter.style.longLine false in
+/-- Raw coverage plus selected-edge input rows directly fill the existing
+global boundary-free raw-coverage row. -/
+noncomputable def
+    boundaryFreeRawOrbitSourceRows_of_rawCoverage_selectedEdgeInputSourceRows_20260522s2
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (coverage : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (rows : BoundaryFreeSelectedEdgeInputSourceRows inputs) :
+    Exists fun R : UnitDistanceRotationSystem C =>
+      Exists fun start : UnitDistanceDart C =>
+        Exists fun O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start =>
+          RawOrbitCoverageSourceRows (inputs := inputs) O ∧
+            Nonempty (BoundaryFreeNoThirdGermSource inputs) :=
+  ⟨R, start, O, coverage,
+    ⟨rows.toBoundaryFreeInputSourceReduction.boundaryFreeNoThirdGermSource⟩⟩
+
 /-- Raw-orbit coverage plus pointwise cut-partition rows give the final S2
 cycle rows through the current non-circular carrier split.
 
@@ -7749,6 +10489,31 @@ noncomputable def
       (C := C) (inputs := inputs) carrierRows⟩
 
 set_option linter.style.longLine false in
+/-- Claim `S2-agent-boundaryfree-connected-raw-source-20260520d`,
+local/component projection.
+
+The current downstream connected raw-orbit package needs the same
+boundary-free local source together with connectedness of the concrete
+unbounded-frontier carrier.  A packaged local/component row is enough:
+component topology supplies connectedness, while the subtype preserves the
+exact local source that will be paired with the raw dart-frontier row in the
+seeded raw-orbit layer. -/
+noncomputable def
+    boundaryFreeCarrierConnected_source_of_localComponentRows_20260520d
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (localComponentRows :
+      Subtype
+        (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs)) :
+    Subtype
+      (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+        (unboundedFrontierCarrierGraph C inputs).Connected) :=
+  ⟨localComponentRows.1,
+    unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
+      inputs localComponentRows.2⟩
+
+set_option linter.style.longLine false in
 /-- Carrier-connected projection of
 `boundaryFreeLocalComponentRows_of_faceDartOrbitExteriorCarrierRows_incidentGermFrontierEdge_20260520c`.
 
@@ -7772,13 +10537,11 @@ noncomputable def
     Subtype
       (fun _ : BoundaryFreeNoThirdGermSource inputs =>
         (unboundedFrontierCarrierGraph C inputs).Connected) := by
-  let rows :=
-    boundaryFreeLocalComponentRows_of_faceDartOrbitExteriorCarrierRows_incidentGermFrontierEdge_20260520c
-      (C := C) (inputs := inputs) carrierRows incident_germ_frontier_edge
   exact
-    ⟨rows.1,
-      unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
-        inputs rows.2⟩
+    boundaryFreeCarrierConnected_source_of_localComponentRows_20260520d
+      (C := C) (inputs := inputs)
+      (boundaryFreeLocalComponentRows_of_faceDartOrbitExteriorCarrierRows_incidentGermFrontierEdge_20260520c
+        (C := C) (inputs := inputs) carrierRows incident_germ_frontier_edge)
 
 set_option linter.style.longLine false in
 /-- Family-level local/component handoff for claim
@@ -7811,6 +10574,117 @@ noncomputable def
     boundaryFreeLocalComponentRows_of_faceDartOrbitExteriorCarrierRows_incidentGermFrontierEdge_20260520c
       (C := C) (inputs := inputs) (carrierRows C inputs)
       (incident_germ_frontier_edge C inputs)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`boundaryFreeCarrierConnected_source_of_localComponentRows_20260520d`. -/
+noncomputable def
+    boundaryFreeCarrierConnected_source_family_of_localComponentRows_20260520d
+    (localComponentRows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          Subtype
+            (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+              UnboundedExteriorFrontierComponentTopologySourceRows inputs)) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        Subtype
+          (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+            (unboundedFrontierCarrierGraph C inputs).Connected) := by
+  intro m C inputs
+  exact
+    boundaryFreeCarrierConnected_source_of_localComponentRows_20260520d
+      (C := C) (inputs := inputs) (localComponentRows C inputs)
+
+set_option linter.style.longLine false in
+/-- Raw-coverage/local-component packaging for the same 20260520d handoff.
+
+When the raw-orbit layer has already supplied a selected raw coverage row, the
+local/component package preserves the matching boundary-free local source as
+the only local input needed by the raw-coverage erasers.  This is the
+import-safe upstream form of the connected raw-orbit source cut: this file
+owns raw coverage and local/component rows, while the seeded raw-orbit file
+owns `RawOrbitDartEdgeFrontierSource` and
+`BoundaryFreeConnectedRawOrbitSourceRows`. -/
+def rawCoverage_boundaryFreeRows_of_rawCoverage_localComponentRows_20260520d
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    {O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start}
+    (coverage : RawOrbitCoverageSourceRows (inputs := inputs) O)
+    (localComponentRows :
+      Subtype
+        (fun _ : BoundaryFreeNoThirdGermSource inputs =>
+          UnboundedExteriorFrontierComponentTopologySourceRows inputs)) :
+    RawOrbitCoverageSourceRows (inputs := inputs) O ∧
+      Nonempty (BoundaryFreeNoThirdGermSource inputs) :=
+  ⟨coverage, ⟨localComponentRows.1⟩⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q18-dart-edge-frontier-source`.
+
+Selected unbounded-frontier edge local rows supply the start dart's whole
+open-segment frontier row.  A one-step geometric `faceSucc` propagation
+callback then gives the q17 primitive for every dart in the selected raw
+geometric face-successor orbit, using the existing pure orbit induction and no
+completed boundary cycle. -/
+theorem S2_q18_dart_edge_openSegment_frontier_of_selectedEdgeLocalRows_faceSuccPropagation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    {start : UnitDistanceDart C}
+    (edgeRows : UnboundedExteriorFrontierEdgeLocalRows C inputs e p)
+    (htail : start.tail = e.1)
+    (hhead : start.head = e.2)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (geometricUnitDistanceRotationSystem C) start)
+    (faceSucc_preserves_openSegment_frontier :
+      forall d : UnitDistanceDart C,
+        (forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point d.tail)
+            ((canonicalGraph C).point d.head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) ->
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point
+              ((geometricUnitDistanceRotationSystem C).faceSucc d).tail)
+            ((canonicalGraph C).point
+              ((geometricUnitDistanceRotationSystem C).faceSucc d).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    forall k : Fin O.period,
+      forall q : PlanarInterface.Point,
+        PlanarInterface.InOpenSegment q
+          ((canonicalGraph C).point (O.dart k).tail)
+          ((canonicalGraph C).point (O.dart k).head) ->
+        q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior := by
+  let start_openSegment_frontier :
+      forall q : PlanarInterface.Point,
+        PlanarInterface.InOpenSegment q
+          ((canonicalGraph C).point start.tail)
+          ((canonicalGraph C).point start.head) ->
+        q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior := by
+    intro q hq
+    have hcarrier :
+        e ∈ unboundedFrontierEdgeSet C inputs :=
+      interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+        edgeRows.edge_mem edgeRows.center_in_openSegment
+        edgeRows.center_frontier
+    have hq_edge :
+        PlanarInterface.InOpenSegment q
+          ((canonicalGraph C).point e.1)
+          ((canonicalGraph C).point e.2) := by
+      simpa [htail, hhead] using hq
+    exact (mem_unboundedFrontierEdgeSet_iff.1 hcarrier).2 q hq_edge
+  exact
+    rawFaceSuccOrbit_dart_edge_openSegment_frontier_of_start_and_faceSucc_step
+      (C := C) (inputs := inputs)
+      (R := geometricUnitDistanceRotationSystem C) (start := start) O
+      start_openSegment_frontier
+      faceSucc_preserves_openSegment_frontier
 
 /-- Raw-coverage reducer for the boundary-free/carrier-connected package.
 

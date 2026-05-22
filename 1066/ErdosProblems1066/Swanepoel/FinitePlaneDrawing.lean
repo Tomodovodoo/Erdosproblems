@@ -1381,6 +1381,196 @@ theorem right_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_adj
     (closedSegment_subset_embeddedEdgeSet_of_adj hAdj)
     (right_mem_closedSegment _ _)
 
+/-- Reachability in an induced simple graph forgets back to reachability in the
+ambient graph. -/
+theorem simpleGraph_reachable_of_induce_reachable
+    {V : Type*} {G : SimpleGraph V} {s : Set V} {u v : s}
+    (hreach : (G.induce s).Reachable u v) :
+    G.Reachable u v :=
+  hreach.map (SimpleGraph.Embedding.induce s).toHom
+
+/-- The project canonical graph and the simple unit-distance graph have the
+same adjacency relation on canonical vertices. -/
+theorem canonical_adj_of_unitDistanceSimpleGraph_adj
+    {C : _root_.UDConfig n} {i j : Fin n}
+    (hAdj : (GraphBridge.unitDistanceSimpleGraph C).Adj i j) :
+    (canonicalGraph C).Adj i j :=
+  ((canonicalGraph C).adj_iff_unitDistanceAdj i j).2
+    ((GraphBridge.unitDistanceSimpleGraph_adj C i j).1 hAdj)
+
+/-- The point-set carried by a finite unit-distance walk: a singleton for the
+trivial walk, and otherwise the union of the closed unit-edge segments along
+the walk. -/
+def walkEmbeddedCarrier
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (walk : (GraphBridge.unitDistanceSimpleGraph C).Walk u v) :
+    Set PlanarInterface.Point :=
+  match walk with
+  | .nil => {(canonicalGraph C).point u}
+  | .cons (v := w) _ tail =>
+      closedSegment
+          ((canonicalGraph C).point u)
+          ((canonicalGraph C).point w) ∪
+        walkEmbeddedCarrier tail
+
+/-- The initial endpoint of a finite walk lies in its embedded carrier. -/
+theorem left_mem_walkEmbeddedCarrier
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (walk : (GraphBridge.unitDistanceSimpleGraph C).Walk u v) :
+    (canonicalGraph C).point u ∈ walkEmbeddedCarrier walk := by
+  cases walk with
+  | nil =>
+      simp [walkEmbeddedCarrier]
+  | cons hAdj tail =>
+      simp [walkEmbeddedCarrier, left_mem_closedSegment]
+
+/-- The terminal endpoint of a finite walk lies in its embedded carrier. -/
+theorem right_mem_walkEmbeddedCarrier
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (walk : (GraphBridge.unitDistanceSimpleGraph C).Walk u v) :
+    (canonicalGraph C).point v ∈ walkEmbeddedCarrier walk := by
+  induction walk with
+  | nil =>
+      simp [walkEmbeddedCarrier]
+  | cons hAdj tail ih =>
+      simp [walkEmbeddedCarrier, ih]
+
+/-- A finite walk carrier is compact. -/
+theorem walkEmbeddedCarrier_compact
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (walk : (GraphBridge.unitDistanceSimpleGraph C).Walk u v) :
+    IsCompact (walkEmbeddedCarrier walk) := by
+  induction walk with
+  | nil =>
+      simp [walkEmbeddedCarrier]
+  | cons hAdj tail ih =>
+      change
+        IsCompact
+          (closedSegment ((canonicalGraph C).point _)
+              ((canonicalGraph C).point _) ∪
+            walkEmbeddedCarrier tail)
+      exact
+        (isCompact_closedSegment
+            ((canonicalGraph C).point _)
+            ((canonicalGraph C).point _)).union ih
+
+/-- A finite walk carrier is preconnected. -/
+theorem walkEmbeddedCarrier_preconnected
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (walk : (GraphBridge.unitDistanceSimpleGraph C).Walk u v) :
+    IsPreconnected (walkEmbeddedCarrier walk) := by
+  induction walk with
+  | nil =>
+      simpa [walkEmbeddedCarrier] using
+        (isPreconnected_singleton :
+          IsPreconnected
+            ({(canonicalGraph C).point _} : Set PlanarInterface.Point))
+  | cons hAdj tail ih =>
+      change
+        IsPreconnected
+          (closedSegment ((canonicalGraph C).point _)
+              ((canonicalGraph C).point _) ∪
+            walkEmbeddedCarrier tail)
+      refine
+        (isPreconnected_closedSegment
+          ((canonicalGraph C).point _)
+          ((canonicalGraph C).point _)).union' ?_ ih
+      exact
+        ⟨(canonicalGraph C).point _, right_mem_closedSegment _ _,
+          left_mem_walkEmbeddedCarrier tail⟩
+
+/-- A finite walk carrier is connected. -/
+theorem walkEmbeddedCarrier_connected
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (walk : (GraphBridge.unitDistanceSimpleGraph C).Walk u v) :
+    IsConnected (walkEmbeddedCarrier walk) :=
+  ⟨⟨(canonicalGraph C).point u, left_mem_walkEmbeddedCarrier walk⟩,
+    walkEmbeddedCarrier_preconnected walk⟩
+
+/-- If the initial endpoint is already in the embedded drawing, then the whole
+finite walk carrier is contained in the embedded drawing. -/
+theorem walkEmbeddedCarrier_subset_embeddedEdgeSet
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (walk : (GraphBridge.unitDistanceSimpleGraph C).Walk u v)
+    (hu : (canonicalGraph C).point u ∈ embeddedEdgeSet C) :
+    walkEmbeddedCarrier walk ⊆ embeddedEdgeSet C := by
+  induction walk with
+  | nil =>
+      simpa [walkEmbeddedCarrier] using
+        (Set.singleton_subset_iff.2 hu)
+  | cons hAdj tail ih =>
+      have hcanonAdj :=
+        canonical_adj_of_unitDistanceSimpleGraph_adj hAdj
+      have hseg :=
+        closedSegment_subset_embeddedEdgeSet_of_adj hcanonAdj
+      have htail_start :=
+        right_vertex_mem_embeddedEdgeSet_of_adj hcanonAdj
+      have htail :
+          walkEmbeddedCarrier tail ⊆ embeddedEdgeSet C :=
+        ih htail_start
+      simpa [walkEmbeddedCarrier] using Set.union_subset hseg htail
+
+/-- A finite reachable walk carries its terminal graph vertex into the embedded
+drawing component of its initial graph vertex, provided the initial graph
+vertex lies in the drawing. -/
+theorem graph_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_walk
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (walk : (GraphBridge.unitDistanceSimpleGraph C).Walk u v)
+    (hu : (canonicalGraph C).point u ∈ embeddedEdgeSet C) :
+    (canonicalGraph C).point v ∈
+      connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point u) :=
+  (walkEmbeddedCarrier_preconnected walk).subset_connectedComponentIn
+    (left_mem_walkEmbeddedCarrier walk)
+    (walkEmbeddedCarrier_subset_embeddedEdgeSet walk hu)
+    (right_mem_walkEmbeddedCarrier walk)
+
+/-- Reachability carries graph vertices into the same embedded-drawing
+component, assuming only that the initial graph vertex lies in the drawing. -/
+theorem graph_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_reachable_of_left_mem
+    {C : _root_.UDConfig n} {u v : Fin n}
+    (hu : (canonicalGraph C).point u ∈ embeddedEdgeSet C)
+    (hreach : (GraphBridge.unitDistanceSimpleGraph C).Reachable u v) :
+    (canonicalGraph C).point v ∈
+      connectedComponentIn (embeddedEdgeSet C) ((canonicalGraph C).point u) := by
+  rcases hreach with ⟨walk⟩
+  exact graph_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_walk walk hu
+
+set_option linter.style.longLine false in
+/-- Deleted-tail induced reachability gives a compact connected embedded walk
+carrier crossing any two sets that contain the two endpoint vertices.
+
+This is the drawing-side carrier extracted from a finite graph path.  It does
+not construct the closed frontier sides; it only supplies the compact
+connected subset of the embedded drawing needed once those sides are known. -/
+theorem exists_compact_connected_walkEmbeddedCarrier_crossing_of_deletedTail_induce_reachable
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    {deleted : Fin n}
+    {u v : ({deleted}ᶜ : Set (Fin n))}
+    {A B : Set PlanarInterface.Point}
+    (hreach :
+      ((GraphBridge.unitDistanceSimpleGraph C).induce
+        ({deleted}ᶜ : Set (Fin n))).Reachable u v)
+    (huA : (canonicalGraph C).point u.1 ∈ A)
+    (hvB : (canonicalGraph C).point v.1 ∈ B) :
+    Exists fun T : Set PlanarInterface.Point =>
+      IsCompact T ∧
+        IsConnected T ∧
+          T ⊆ embeddedEdgeSet C ∧
+            (T ∩ A).Nonempty ∧
+              (T ∩ B).Nonempty := by
+  rcases hreach with ⟨q⟩
+  let p : (GraphBridge.unitDistanceSimpleGraph C).Walk u.1 v.1 :=
+    q.map (SimpleGraph.Embedding.induce ({deleted}ᶜ : Set (Fin n))).toHom
+  refine
+    ⟨walkEmbeddedCarrier p, walkEmbeddedCarrier_compact p,
+      walkEmbeddedCarrier_connected p, ?_, ?_, ?_⟩
+  · exact
+      walkEmbeddedCarrier_subset_embeddedEdgeSet p
+        (vertex_mem_embeddedEdgeSet_of_inputs inputs u.1)
+  · exact ⟨(canonicalGraph C).point u.1, left_mem_walkEmbeddedCarrier p, huA⟩
+  · exact ⟨(canonicalGraph C).point v.1, right_mem_walkEmbeddedCarrier p, hvB⟩
+
 /-- Graph reachability lifts to membership in the same component of the
 embedded straight-line drawing. -/
 theorem graph_vertex_mem_connectedComponentIn_embeddedEdgeSet_of_reachable
@@ -1924,6 +2114,73 @@ theorem exists_ball_inter_embeddedEdgeSet_eq_inter_closedSegment_of_inOpenSegmen
       ⟨hy.1,
         closedSegment_subset_embeddedEdgeSet_of_adj (Or.inl he) hy.2⟩
 
+/-- Adjacency-facing local drawing equality at an interior point of a
+canonical unit edge.  This removes ordered-edge bookkeeping for consumers that
+already work with `Adj`. -/
+theorem exists_ball_inter_embeddedEdgeSet_eq_inter_closedSegment_of_adj_inOpenSegment
+    {C : _root_.UDConfig n} {p : PlanarInterface.Point} {i j : Fin n}
+    (hij : (canonicalGraph C).Adj i j)
+    (hpij :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point i)
+        ((canonicalGraph C).point j)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball p ε ∩ embeddedEdgeSet C =
+          Metric.ball p ε ∩
+            closedSegment
+              ((canonicalGraph C).point i)
+              ((canonicalGraph C).point j) := by
+  rcases hij with hij | hji
+  · exact
+      exists_ball_inter_embeddedEdgeSet_eq_inter_closedSegment_of_inOpenSegment
+        (C := C) (p := p) (e := (i, j)) hij hpij
+  · rcases
+      exists_ball_inter_embeddedEdgeSet_eq_inter_closedSegment_of_inOpenSegment
+        (C := C) (p := p) (e := (j, i)) hji
+          (inOpenSegment_symm hpij) with
+      ⟨ε, hεpos, hε⟩
+    refine ⟨ε, hεpos, ?_⟩
+    simpa [closedSegment_symm
+      ((canonicalGraph C).point i) ((canonicalGraph C).point j)] using hε
+
+/-- Pointwise adjacency-facing local drawing equality at an edge-interior
+point.  Inside the isolation ball, membership in the embedded drawing is
+equivalent to membership in the selected closed edge segment. -/
+theorem exists_ball_forall_mem_embeddedEdgeSet_iff_closedSegment_of_adj_inOpenSegment
+    {C : _root_.UDConfig n} {p : PlanarInterface.Point} {i j : Fin n}
+    (hij : (canonicalGraph C).Adj i j)
+    (hpij :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point i)
+        ((canonicalGraph C).point j)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball p ε ->
+            (q ∈ embeddedEdgeSet C ↔
+              q ∈ closedSegment
+                ((canonicalGraph C).point i)
+                ((canonicalGraph C).point j)) := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_eq_inter_closedSegment_of_adj_inOpenSegment
+        hij hpij with
+    ⟨ε, hεpos, hε⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hqball
+  have hiff :
+      q ∈ Metric.ball p ε ∩ embeddedEdgeSet C ↔
+        q ∈ Metric.ball p ε ∩
+          closedSegment
+            ((canonicalGraph C).point i)
+            ((canonicalGraph C).point j) := by
+    simpa [hε]
+  constructor
+  · intro hqdraw
+    exact (hiff.1 ⟨hqball, hqdraw⟩).2
+  · intro hqseg
+    exact (hiff.2 ⟨hqball, hqseg⟩).2
+
 /-- Pointwise form of local edge-interior isolation.  In a sufficiently small
 ball around an interior point of `e`, every embedded-drawing point lies on
 the closed segment of `e`. -/
@@ -2093,6 +2350,38 @@ theorem exists_ball_forall_mem_inOpenSegment_of_adj_inOpenSegment
         hij hpij with
     ⟨ε, hεpos, hsubset⟩
   exact ⟨ε, hεpos, fun q hqball hqdraw => hsubset ⟨hqball, hqdraw⟩⟩
+
+/-- Pointwise adjacency-facing local drawing equality sharpened to the
+relative interior.  Inside the isolation ball, membership in the embedded
+drawing is equivalent to membership in the selected open edge segment. -/
+theorem exists_ball_forall_mem_embeddedEdgeSet_iff_inOpenSegment_of_adj_inOpenSegment
+    {C : _root_.UDConfig n} {p : PlanarInterface.Point} {i j : Fin n}
+    (hij : (canonicalGraph C).Adj i j)
+    (hpij :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point i)
+        ((canonicalGraph C).point j)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball p ε ->
+            (q ∈ embeddedEdgeSet C ↔
+              PlanarInterface.InOpenSegment q
+                ((canonicalGraph C).point i)
+                ((canonicalGraph C).point j)) := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_inOpenSegment_of_adj_inOpenSegment
+        hij hpij with
+    ⟨ε, hεpos, hsubset⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hqball
+  constructor
+  · intro hqdraw
+    exact hsubset ⟨hqball, hqdraw⟩
+  · intro hqopen
+    exact
+      closedSegment_subset_embeddedEdgeSet_of_adj hij
+        (inOpenSegment_mem_closedSegment hqopen)
 
 /-! ### Local isolation of vertex stars -/
 
@@ -2368,6 +2657,59 @@ def vertexIncidentGermW3
       ((canonicalGraph C).point v)
       ((canonicalGraph C).point w)
 
+/-- Membership in an incident W3 germ is exactly local ball membership plus
+membership in the selected incident closed segment. -/
+theorem mem_vertexIncidentGermW3_iff
+    {C : _root_.UDConfig n} {v w : Fin n} {ε : Real}
+    {p : PlanarInterface.Point} :
+    p ∈ vertexIncidentGermW3 C v w ε <->
+      p ∈ Metric.ball ((canonicalGraph C).point v) ε ∧
+        p ∈ closedSegment
+          ((canonicalGraph C).point v)
+          ((canonicalGraph C).point w) := by
+  rfl
+
+/-- An incident W3 germ is contained in its metric ball around the tail
+vertex. -/
+theorem vertexIncidentGermW3_subset_ball
+    {C : _root_.UDConfig n} {v w : Fin n} {ε : Real} :
+    vertexIncidentGermW3 C v w ε ⊆
+      Metric.ball ((canonicalGraph C).point v) ε := by
+  intro p hp
+  exact hp.1
+
+/-- An incident W3 germ is contained in its selected incident closed segment. -/
+theorem vertexIncidentGermW3_subset_closedSegment
+    {C : _root_.UDConfig n} {v w : Fin n} {ε : Real} :
+    vertexIncidentGermW3 C v w ε ⊆
+      closedSegment
+        ((canonicalGraph C).point v)
+        ((canonicalGraph C).point w) := by
+  intro p hp
+  exact hp.2
+
+/-- Ball membership and selected incident closed-segment membership build the
+corresponding W3 incident germ membership. -/
+theorem mem_vertexIncidentGermW3_of_mem_ball_of_mem_closedSegment
+    {C : _root_.UDConfig n} {v w : Fin n} {ε : Real}
+    {p : PlanarInterface.Point}
+    (hpball : p ∈ Metric.ball ((canonicalGraph C).point v) ε)
+    (hpseg :
+      p ∈ closedSegment
+        ((canonicalGraph C).point v)
+        ((canonicalGraph C).point w)) :
+    p ∈ vertexIncidentGermW3 C v w ε :=
+  ⟨hpball, hpseg⟩
+
+/-- A selected incident W3 germ lies in the embedded drawing whenever its
+directed carrier is a canonical adjacency. -/
+theorem vertexIncidentGermW3_subset_embeddedEdgeSet_of_adj
+    {C : _root_.UDConfig n} {v w : Fin n} {ε : Real}
+    (hvw : (canonicalGraph C).Adj v w) :
+    vertexIncidentGermW3 C v w ε ⊆ embeddedEdgeSet C := by
+  intro p hp
+  exact closedSegment_subset_embeddedEdgeSet_of_adj hvw hp.2
+
 /-- Local vertex-germ isolation: after shrinking around `v`, the embedded
 drawing inside the ball is contained in the union of the `ε`-germs of the
 edges incident to `v`. -/
@@ -2388,6 +2730,31 @@ theorem exists_ball_inter_embeddedEdgeSet_subset_vertexIncidentGermsW3
   rcases hsubset hp with ⟨w, hvw, hpseg⟩
   exact ⟨w, hvw, hp.1, hpseg⟩
 
+/-- Local vertex-star equality: after shrinking around `v`, the embedded
+drawing inside the ball is exactly the union of the incident closed germs from
+`v` in that same ball. -/
+theorem exists_ball_inter_embeddedEdgeSet_eq_vertexIncidentGermsW3
+    {C : _root_.UDConfig n} (v : Fin n) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball ((canonicalGraph C).point v) ε ∩ embeddedEdgeSet C =
+          {p | Exists fun w : Fin n =>
+            (canonicalGraph C).Adj v w ∧
+              p ∈ vertexIncidentGermW3 C v w ε} := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_vertexIncidentGermsW3
+        (C := C) v with
+    ⟨ε, hεpos, hsubset⟩
+  refine ⟨ε, hεpos, ?_⟩
+  ext p
+  constructor
+  · intro hp
+    exact hsubset hp
+  · rintro ⟨w, hvw, hpgerm⟩
+    exact
+      ⟨hpgerm.1,
+        closedSegment_subset_embeddedEdgeSet_of_adj hvw hpgerm.2⟩
+
 /-- Pointwise form of the W3 vertex-germ isolation statement. -/
 theorem exists_ball_forall_mem_vertexIncidentGermW3
     {C : _root_.UDConfig n} (v : Fin n) :
@@ -2404,6 +2771,36 @@ theorem exists_ball_forall_mem_vertexIncidentGermW3
         (C := C) v with
     ⟨ε, hεpos, hsubset⟩
   exact ⟨ε, hεpos, fun q hqball hqdraw => hsubset ⟨hqball, hqdraw⟩⟩
+
+/-- Pointwise local vertex-star equality.  In the isolation ball around `v`,
+being in the embedded drawing is equivalent to being in one of the incident
+`ε`-germs from `v`. -/
+theorem exists_ball_forall_mem_embeddedEdgeSet_iff_vertexIncidentGermW3
+    {C : _root_.UDConfig n} (v : Fin n) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball ((canonicalGraph C).point v) ε ->
+            (q ∈ embeddedEdgeSet C ↔
+              Exists fun w : Fin n =>
+                (canonicalGraph C).Adj v w ∧
+                  q ∈ vertexIncidentGermW3 C v w ε) := by
+  rcases exists_ball_inter_embeddedEdgeSet_eq_vertexIncidentGermsW3
+      (C := C) v with
+    ⟨ε, hεpos, hε⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hqball
+  have hiff :
+      q ∈ Metric.ball ((canonicalGraph C).point v) ε ∩ embeddedEdgeSet C ↔
+        q ∈ {p | Exists fun w : Fin n =>
+          (canonicalGraph C).Adj v w ∧
+            p ∈ vertexIncidentGermW3 C v w ε} := by
+    simpa [hε]
+  constructor
+  · intro hqdraw
+    exact hiff.1 ⟨hqball, hqdraw⟩
+  · intro hqgerm
+    exact (hiff.2 hqgerm).2
 
 theorem closedSegment_inter_closedSegment_eq_empty_of_adj_edgeVertexDisjoint
     {C : _root_.UDConfig n} {i j k l : Fin n}
@@ -2699,6 +3096,159 @@ theorem drawingComplement_open
     (C : _root_.UDConfig n) :
     IsOpen (drawingComplement C) := by
   simpa [drawingComplement] using (embeddedEdgeSet_closed C).isOpen_compl
+
+/-- Every relative-interior point of a canonical edge lies on the frontier of
+the whole drawing complement.
+
+The edge-interior isolation theorem supplies a strict side-ball contained in
+the complement and accumulating at the point; the point itself lies in the
+embedded drawing through the closed segment of the selected edge. -/
+theorem inOpenSegment_mem_frontier_drawingComplement_of_edge_mem
+    {C : _root_.UDConfig n}
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    p ∈ frontier (drawingComplement C) := by
+  rw [(drawingComplement_open C).frontier_eq]
+  constructor
+  · rcases
+      exists_edgePositiveSideBall_local_patches_of_edge_inOpenSegment
+        (C := C) he hp with
+      ⟨ε, hεpos, hpatches⟩
+    have hpball : p ∈ Metric.ball p ε :=
+      Metric.mem_ball_self hεpos
+    rcases hpatches p hpball hp with
+      ⟨hpatch, _hpatch_rev⟩
+    exact closure_mono hpatch.2.1 hpatch.2.2.2
+  · have hpdraw : p ∈ embeddedEdgeSet C :=
+      closedSegment_subset_embeddedEdgeSet_of_adj (Or.inl he)
+        (inOpenSegment_mem_closedSegment hp)
+    simpa [drawingComplement] using hpdraw
+
+/-- Adjacent-pair form of
+`inOpenSegment_mem_frontier_drawingComplement_of_edge_mem`. -/
+theorem inOpenSegment_mem_frontier_drawingComplement_of_adj
+    {C : _root_.UDConfig n}
+    {i j : Fin n}
+    {p : PlanarInterface.Point}
+    (hij : (canonicalGraph C).Adj i j)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point i)
+        ((canonicalGraph C).point j)) :
+    p ∈ frontier (drawingComplement C) := by
+  rcases hij with he | he
+  · exact
+      inOpenSegment_mem_frontier_drawingComplement_of_edge_mem
+        (C := C) (e := (i, j)) he hp
+  · exact
+      inOpenSegment_mem_frontier_drawingComplement_of_edge_mem
+        (C := C) (e := (j, i)) he
+        (by simpa using inOpenSegment_symm hp)
+
+/-- If one strict side-ball of a selected edge interior is already known to
+lie in a chosen drawing-complement component, then the selected edge-interior
+point lies on that component frontier.  This is the incidence handoff used
+after an exterior side has been selected. -/
+theorem inOpenSegment_mem_frontier_connectedComponentIn_drawingComplement_of_edgePositiveSideBall_subset
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point} {ε : Real}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hε : 0 < ε)
+    (hside :
+      edgePositiveSideBall
+          ((canonicalGraph C).point e.1)
+          ((canonicalGraph C).point e.2) p ε ⊆
+        connectedComponentIn (drawingComplement C) base) :
+    p ∈ frontier (connectedComponentIn (drawingComplement C) base) := by
+  let component : Set PlanarInterface.Point :=
+    connectedComponentIn (drawingComplement C) base
+  have hp_line :
+      edgeNormalCoord
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2) p = 0 :=
+    edgeNormalCoord_eq_zero_of_mem_closedSegment
+      (inOpenSegment_mem_closedSegment hp)
+  have hp_closure_side :
+      p ∈ closure
+        (edgePositiveSideBall
+          ((canonicalGraph C).point e.1)
+          ((canonicalGraph C).point e.2) p ε) :=
+    mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero
+      hp_line (canonical_edge_point_ne_of_mem_edgeSet he) hε
+  have hp_closure_component : p ∈ closure component :=
+    closure_mono hside hp_closure_side
+  have hpdraw : p ∈ embeddedEdgeSet C :=
+    closedSegment_subset_embeddedEdgeSet_of_adj (Or.inl he)
+      (inOpenSegment_mem_closedSegment hp)
+  have hpnot_component : p ∉ component := by
+    intro hpcomponent
+    have hpcomplement : p ∈ drawingComplement C :=
+      connectedComponentIn_subset (drawingComplement C) base hpcomponent
+    exact hpcomplement hpdraw
+  have hcomponent_open : IsOpen component :=
+    (drawingComplement_open C).connectedComponentIn
+  rw [hcomponent_open.frontier_eq]
+  exact ⟨hp_closure_component, hpnot_component⟩
+
+/-- Reversed-side version of
+`inOpenSegment_mem_frontier_connectedComponentIn_drawingComplement_of_edgePositiveSideBall_subset`. -/
+theorem inOpenSegment_mem_frontier_connectedComponentIn_drawingComplement_of_edgePositiveSideBall_swap_subset
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point} {ε : Real}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hε : 0 < ε)
+    (hside :
+      edgePositiveSideBall
+          ((canonicalGraph C).point e.2)
+          ((canonicalGraph C).point e.1) p ε ⊆
+        connectedComponentIn (drawingComplement C) base) :
+    p ∈ frontier (connectedComponentIn (drawingComplement C) base) := by
+  let component : Set PlanarInterface.Point :=
+    connectedComponentIn (drawingComplement C) base
+  have hp_line :
+      edgeNormalCoord
+        ((canonicalGraph C).point e.2)
+        ((canonicalGraph C).point e.1) p = 0 :=
+    edgeNormalCoord_eq_zero_of_mem_closedSegment
+      (by
+        rw [closedSegment_symm]
+        exact inOpenSegment_mem_closedSegment hp)
+  have hp_closure_side :
+      p ∈ closure
+        (edgePositiveSideBall
+          ((canonicalGraph C).point e.2)
+          ((canonicalGraph C).point e.1) p ε) :=
+    mem_closure_edgePositiveSideBall_of_edgeNormalCoord_eq_zero
+      hp_line (canonical_edge_point_ne_of_mem_edgeSet he).symm hε
+  have hp_closure_component : p ∈ closure component :=
+    closure_mono hside hp_closure_side
+  have hpdraw : p ∈ embeddedEdgeSet C :=
+    closedSegment_subset_embeddedEdgeSet_of_adj (Or.inl he)
+      (inOpenSegment_mem_closedSegment hp)
+  have hpnot_component : p ∉ component := by
+    intro hpcomponent
+    have hpcomplement : p ∈ drawingComplement C :=
+      connectedComponentIn_subset (drawingComplement C) base hpcomponent
+    exact hpcomplement hpdraw
+  have hcomponent_open : IsOpen component :=
+    (drawingComplement_open C).connectedComponentIn
+  rw [hcomponent_open.frontier_eq]
+  exact ⟨hp_closure_component, hpnot_component⟩
 
 /-- The drawing complement is nonempty.  A finite union of compact edge
 segments cannot cover the whole Euclidean plane. -/
@@ -3094,6 +3644,31 @@ theorem exists_ball_inter_frontier_drawingComplement_subset_inOpenSegment_of_inO
   exact hlocal
     ⟨hq.1, frontier_drawingComplement_subset_embeddedEdgeSet C hq.2⟩
 
+/-- Edge-interior isolation on the frontier of the whole drawing complement,
+with the local carrier stated as the selected closed segment. -/
+theorem exists_ball_inter_frontier_drawingComplement_subset_closedSegment_of_inOpenSegment
+    {C : _root_.UDConfig n} {p : PlanarInterface.Point}
+    {e : PlanarInterface.Edge n}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpe :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball p ε ∩ frontier (drawingComplement C) ⊆
+          closedSegment
+            ((canonicalGraph C).point e.1)
+            ((canonicalGraph C).point e.2) := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_closedSegment_of_inOpenSegment
+        he hpe with
+    ⟨ε, hεpos, hlocal⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hq
+  exact hlocal
+    ⟨hq.1, frontier_drawingComplement_subset_embeddedEdgeSet C hq.2⟩
+
 /-- Pointwise edge-interior isolation on the frontier of the whole drawing
 complement. -/
 theorem exists_ball_forall_frontier_drawingComplement_mem_inOpenSegment_of_inOpenSegment
@@ -3167,6 +3742,54 @@ theorem exists_ball_forall_frontier_drawingComplement_mem_inOpenSegment_of_adj_i
   exact ⟨ε, hεpos, fun q hqball hqfrontier =>
     hsubset ⟨hqball, hqfrontier⟩⟩
 
+/-- Source row for selected-edge frontier incidence and local carrier
+isolation in the whole drawing complement.  An interior point of the selected
+ordered edge is on the complement frontier, and nearby frontier points are
+carried by the same selected open segment. -/
+theorem edge_interior_frontier_drawingComplement_local_source
+    {C : _root_.UDConfig n}
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    p ∈ frontier (drawingComplement C) ∧
+      Exists fun ε : Real =>
+        0 < ε ∧
+          Metric.ball p ε ∩ frontier (drawingComplement C) ⊆
+            {q | PlanarInterface.InOpenSegment q
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2)} := by
+  exact
+    ⟨inOpenSegment_mem_frontier_drawingComplement_of_edge_mem he hp,
+      exists_ball_inter_frontier_drawingComplement_subset_inOpenSegment_of_inOpenSegment
+        he hp⟩
+
+/-- Adjacency-facing source row for selected-edge frontier incidence and
+local carrier isolation in the whole drawing complement. -/
+theorem edge_interior_frontier_drawingComplement_local_source_of_adj
+    {C : _root_.UDConfig n}
+    {i j : Fin n}
+    {p : PlanarInterface.Point}
+    (hij : (canonicalGraph C).Adj i j)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point i)
+        ((canonicalGraph C).point j)) :
+    p ∈ frontier (drawingComplement C) ∧
+      Exists fun ε : Real =>
+        0 < ε ∧
+          Metric.ball p ε ∩ frontier (drawingComplement C) ⊆
+            {q | PlanarInterface.InOpenSegment q
+              ((canonicalGraph C).point i)
+              ((canonicalGraph C).point j)} := by
+  exact
+    ⟨inOpenSegment_mem_frontier_drawingComplement_of_adj hij hp,
+      exists_ball_inter_frontier_drawingComplement_subset_inOpenSegment_of_adj_inOpenSegment
+        hij hp⟩
+
 /-- Ordered-edge component-frontier edge-interior isolation for the drawing
 complement. -/
 theorem exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_inOpenSegment_of_inOpenSegment
@@ -3194,6 +3817,59 @@ theorem exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset
     ⟨hq.1,
       frontier_connectedComponentIn_subset_frontier
         (drawingComplement_open C) hq.2⟩
+
+/-- Ordered-edge component-frontier edge-interior isolation for the drawing
+complement, with the local carrier stated as the closed segment. -/
+theorem exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_closedSegment_of_inOpenSegment
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {p : PlanarInterface.Point} {e : PlanarInterface.Edge n}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpe :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball p ε ∩
+            frontier (connectedComponentIn (drawingComplement C) base) ⊆
+          closedSegment
+            ((canonicalGraph C).point e.1)
+            ((canonicalGraph C).point e.2) := by
+  rcases
+      exists_ball_inter_frontier_drawingComplement_subset_closedSegment_of_inOpenSegment
+        he hpe with
+    ⟨ε, hεpos, hlocal⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hq
+  exact hlocal
+    ⟨hq.1,
+      frontier_connectedComponentIn_subset_frontier
+        (drawingComplement_open C) hq.2⟩
+
+/-- Pointwise ordered-edge component-frontier carrier row with the local
+carrier stated as the selected closed segment. -/
+theorem exists_ball_forall_frontier_connectedComponentIn_drawingComplement_mem_closedSegment_of_inOpenSegment
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {p : PlanarInterface.Point} {e : PlanarInterface.Edge n}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpe :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball p ε ->
+            q ∈ frontier (connectedComponentIn (drawingComplement C) base) ->
+              q ∈ closedSegment
+                ((canonicalGraph C).point e.1)
+                ((canonicalGraph C).point e.2) := by
+  rcases
+      exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_closedSegment_of_inOpenSegment
+        (C := C) base he hpe with
+    ⟨ε, hεpos, hsubset⟩
+  exact ⟨ε, hεpos, fun q hqball hqfrontier =>
+    hsubset ⟨hqball, hqfrontier⟩⟩
 
 /-- Pointwise ordered-edge component-frontier edge-interior isolation for the
 drawing complement. -/
@@ -3249,6 +3925,59 @@ theorem exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset
       frontier_connectedComponentIn_subset_frontier
         (drawingComplement_open C) hq.2⟩
 
+/-- Adjacency-facing component-frontier edge-interior isolation for the drawing
+complement, with the local carrier stated as the closed segment. -/
+theorem exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_closedSegment_of_adj_inOpenSegment
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {p : PlanarInterface.Point} {i j : Fin n}
+    (hij : (canonicalGraph C).Adj i j)
+    (hpij :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point i)
+        ((canonicalGraph C).point j)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball p ε ∩
+            frontier (connectedComponentIn (drawingComplement C) base) ⊆
+          closedSegment
+            ((canonicalGraph C).point i)
+            ((canonicalGraph C).point j) := by
+  rcases
+      exists_ball_forall_mem_closedSegment_of_adj_inOpenSegment
+        (C := C) (p := p) hij hpij with
+    ⟨ε, hεpos, hlocal⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hq
+  exact hlocal q hq.1
+    (frontier_drawingComplement_subset_embeddedEdgeSet C
+      (frontier_connectedComponentIn_subset_frontier
+        (drawingComplement_open C) hq.2))
+
+/-- Pointwise adjacency-facing component-frontier carrier row with the local
+carrier stated as the selected closed segment. -/
+theorem exists_ball_forall_frontier_connectedComponentIn_drawingComplement_mem_closedSegment_of_adj_inOpenSegment
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {p : PlanarInterface.Point} {i j : Fin n}
+    (hij : (canonicalGraph C).Adj i j)
+    (hpij :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point i)
+        ((canonicalGraph C).point j)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball p ε ->
+            q ∈ frontier (connectedComponentIn (drawingComplement C) base) ->
+              q ∈ closedSegment
+                ((canonicalGraph C).point i)
+                ((canonicalGraph C).point j) := by
+  rcases
+      exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_closedSegment_of_adj_inOpenSegment
+        (C := C) base hij hpij with
+    ⟨ε, hεpos, hsubset⟩
+  exact ⟨ε, hεpos, fun q hqball hqfrontier =>
+    hsubset ⟨hqball, hqfrontier⟩⟩
+
 /-- Pointwise component-frontier edge-interior isolation for the drawing
 complement. -/
 theorem exists_ball_forall_frontier_connectedComponentIn_drawingComplement_mem_inOpenSegment_of_adj_inOpenSegment
@@ -3273,6 +4002,137 @@ theorem exists_ball_forall_frontier_connectedComponentIn_drawingComplement_mem_i
     ⟨ε, hεpos, hsubset⟩
   exact ⟨ε, hεpos, fun q hqball hqfrontier =>
     hsubset ⟨hqball, hqfrontier⟩⟩
+
+/-- Source row for a selected ordered edge interior point already known to be
+on a chosen component frontier: nearby points of that component frontier are
+carried by the same selected open segment. -/
+theorem edge_interior_frontier_connectedComponentIn_drawingComplement_local_source
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (hpfrontier :
+      p ∈ frontier (connectedComponentIn (drawingComplement C) base))
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    p ∈ frontier (connectedComponentIn (drawingComplement C) base) ∧
+      Exists fun ε : Real =>
+        0 < ε ∧
+          Metric.ball p ε ∩
+              frontier (connectedComponentIn (drawingComplement C) base) ⊆
+            {q | PlanarInterface.InOpenSegment q
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2)} := by
+  exact
+    ⟨hpfrontier,
+      exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_inOpenSegment_of_inOpenSegment
+        (C := C) base he hp⟩
+
+/-- Adjacency-facing source row for a selected edge-interior point already on a
+chosen component frontier. -/
+theorem edge_interior_frontier_connectedComponentIn_drawingComplement_local_source_of_adj
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {i j : Fin n}
+    {p : PlanarInterface.Point}
+    (hpfrontier :
+      p ∈ frontier (connectedComponentIn (drawingComplement C) base))
+    (hij : (canonicalGraph C).Adj i j)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point i)
+        ((canonicalGraph C).point j)) :
+    p ∈ frontier (connectedComponentIn (drawingComplement C) base) ∧
+      Exists fun ε : Real =>
+        0 < ε ∧
+          Metric.ball p ε ∩
+              frontier (connectedComponentIn (drawingComplement C) base) ⊆
+            {q | PlanarInterface.InOpenSegment q
+              ((canonicalGraph C).point i)
+              ((canonicalGraph C).point j)} := by
+  exact
+    ⟨hpfrontier,
+      exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_inOpenSegment_of_adj_inOpenSegment
+        (C := C) base hij hp⟩
+
+/-- A selected incident germ has a vertex-local radius on which every
+noncenter point carried by that germ is actually in the relative interior of
+the selected incident edge.  The germ radius itself is left arbitrary so this
+can be used by local two-germ/no-third-germ rows after later shrinkings. -/
+theorem exists_vertex_radius_forall_selectedIncidentGermW3_mem_inOpenSegment
+    {C : _root_.UDConfig n} {v w : Fin n}
+    (hvw : (canonicalGraph C).Adj v w) :
+    Exists fun ρ : Real =>
+      0 < ρ ∧
+        forall (ε : Real) (q : PlanarInterface.Point),
+          q ∈ Metric.ball ((canonicalGraph C).point v) ρ ->
+            q ∈ vertexIncidentGermW3 C v w ε ->
+              q ≠ (canonicalGraph C).point v ->
+                PlanarInterface.InOpenSegment q
+                  ((canonicalGraph C).point v)
+                  ((canonicalGraph C).point w) := by
+  rcases exists_ball_forall_graph_vertex_eq_of_mem_ball (C := C) v with
+    ⟨ρ, hρpos, hvertex⟩
+  refine ⟨ρ, hρpos, ?_⟩
+  intro ε q hqball hqgerm hqne
+  rcases
+      mem_closedSegment_eq_left_or_eq_right_or_inOpenSegment
+        (vertexIncidentGermW3_subset_closedSegment hqgerm) with
+    hleft | hright | hopen
+  · exact False.elim (hqne hleft)
+  · have hw_eq : w = v := hvertex w (by simpa [hright] using hqball)
+    have hpoint_eq :
+        (canonicalGraph C).point v = (canonicalGraph C).point w := by
+      rw [hw_eq]
+    exact False.elim ((canonical_adj_point_ne hvw) hpoint_eq)
+  · exact hopen
+
+/-- Selected incident-germ local source for a drawing-complement component
+frontier.  After shrinking around the vertex, any noncenter component-frontier
+point carried by the selected germ is an edge-interior point, and the existing
+edge-interior frontier isolation gives a local open-segment carrier around
+that point.
+
+This is intentionally local: it does not assert that every adjacent chord at
+the vertex is an exterior boundary edge. -/
+theorem exists_radius_forall_selectedIncidentGermW3_frontier_connectedComponentIn_drawingComplement_local_source
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point)
+    {v w : Fin n}
+    (hvw : (canonicalGraph C).Adj v w) :
+    Exists fun ρ : Real =>
+      0 < ρ ∧
+        forall (ε : Real) (q : PlanarInterface.Point),
+          q ∈ Metric.ball ((canonicalGraph C).point v) ρ ->
+            q ∈ frontier (connectedComponentIn (drawingComplement C) base) ->
+              q ∈ vertexIncidentGermW3 C v w ε ->
+                q ≠ (canonicalGraph C).point v ->
+                  PlanarInterface.InOpenSegment q
+                    ((canonicalGraph C).point v)
+                    ((canonicalGraph C).point w) ∧
+                    Exists fun δ : Real =>
+                      0 < δ ∧
+                        Metric.ball q δ ∩
+                            frontier
+                              (connectedComponentIn (drawingComplement C) base) ⊆
+                          {r | PlanarInterface.InOpenSegment r
+                            ((canonicalGraph C).point v)
+                            ((canonicalGraph C).point w)} := by
+  rcases
+      exists_vertex_radius_forall_selectedIncidentGermW3_mem_inOpenSegment
+        (C := C) hvw with
+    ⟨ρ, hρpos, hρ⟩
+  refine ⟨ρ, hρpos, ?_⟩
+  intro ε q hqball hqfrontier hqgerm hqne
+  have hqopen :
+      PlanarInterface.InOpenSegment q
+        ((canonicalGraph C).point v)
+        ((canonicalGraph C).point w) :=
+    hρ ε q hqball hqgerm hqne
+  exact
+    ⟨hqopen,
+      (edge_interior_frontier_connectedComponentIn_drawingComplement_local_source_of_adj
+        (C := C) base hqfrontier hvw hqopen).2⟩
 
 /-- Local frontier-sector isolation at a vertex: after shrinking around `v`,
 the frontier of the whole drawing complement is carried by incident W3
@@ -3361,6 +4221,31 @@ theorem exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset
       frontier_connectedComponentIn_subset_frontier
         (drawingComplement_open C) hp.2⟩
 
+/-- Component-frontier vertex-star isolation with the local carrier stated as
+incident closed segments. -/
+theorem exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_incident_closedSegment
+    {C : _root_.UDConfig n} (base : PlanarInterface.Point) (v : Fin n) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball ((canonicalGraph C).point v) ε ∩
+            frontier (connectedComponentIn (drawingComplement C) base) ⊆
+          {p | Exists fun w : Fin n =>
+            (canonicalGraph C).Adj v w ∧
+              p ∈ closedSegment
+                ((canonicalGraph C).point v)
+                ((canonicalGraph C).point w)} := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_incident_closedSegment
+        (C := C) v with
+    ⟨ε, hεpos, hlocal⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro p hp
+  exact hlocal
+    ⟨hp.1,
+      frontier_drawingComplement_subset_embeddedEdgeSet C
+        (frontier_connectedComponentIn_subset_frontier
+          (drawingComplement_open C) hp.2)⟩
+
 /-- A point on the frontier of the whole drawing complement lies on a concrete
 canonical unit-edge segment. -/
 theorem exists_edge_segment_of_mem_frontier_drawingComplement
@@ -3384,6 +4269,105 @@ theorem frontier_drawingComplement_graph_vertex_incident
   exact
     graph_vertex_mem_embeddedEdgeSet_iff_exists_adj.1
       (frontier_drawingComplement_subset_embeddedEdgeSet C hv)
+
+/-- The frontier of any selected drawing-complement component is still carried
+by the embedded unit-edge drawing. -/
+theorem frontier_connectedComponentIn_drawingComplement_subset_embeddedEdgeSet
+    (C : _root_.UDConfig n) (base : PlanarInterface.Point) :
+    frontier (connectedComponentIn (drawingComplement C) base) ⊆
+      embeddedEdgeSet C := by
+  intro p hp
+  exact
+    frontier_drawingComplement_subset_embeddedEdgeSet C
+      (frontier_connectedComponentIn_subset_frontier
+        (drawingComplement_open C) hp)
+
+/-- A point on the frontier of a selected drawing-complement component lies on
+a concrete canonical unit-edge segment. -/
+theorem exists_edge_segment_of_mem_frontier_connectedComponentIn_drawingComplement
+    {C : _root_.UDConfig n} {base p : PlanarInterface.Point}
+    (hp : p ∈ frontier (connectedComponentIn (drawingComplement C) base)) :
+    Exists fun i : Fin n =>
+      Exists fun j : Fin n =>
+        (canonicalGraph C).Adj i j /\
+          p ∈ closedSegment
+            ((canonicalGraph C).point i)
+            ((canonicalGraph C).point j) := by
+  simpa [embeddedEdgeSet] using
+    frontier_connectedComponentIn_drawingComplement_subset_embeddedEdgeSet
+      C base hp
+
+/-- A graph vertex on the frontier of a selected drawing-complement component
+has an incident canonical edge. -/
+theorem frontier_connectedComponentIn_drawingComplement_graph_vertex_incident
+    {C : _root_.UDConfig n} {base : PlanarInterface.Point} {v : Fin n}
+    (hv :
+      (canonicalGraph C).point v ∈
+        frontier (connectedComponentIn (drawingComplement C) base)) :
+    Exists fun w : Fin n => (canonicalGraph C).Adj v w := by
+  exact
+    graph_vertex_mem_embeddedEdgeSet_iff_exists_adj.1
+      (frontier_connectedComponentIn_drawingComplement_subset_embeddedEdgeSet
+        C base hv)
+
+/-- Convert an adjacency incident to `v` into a stored ordered canonical edge
+incident to `v`. -/
+theorem exists_edgeSet_incident_of_adj
+    {C : _root_.UDConfig n} {v w : Fin n}
+    (hvw : (canonicalGraph C).Adj v w) :
+    Exists fun e : PlanarInterface.Edge n =>
+      e ∈ (canonicalGraph C).edgeSet ∧ (e.1 = v ∨ e.2 = v) := by
+  rcases hvw with he | he
+  · exact ⟨(v, w), he, Or.inl rfl⟩
+  · exact ⟨(w, v), he, Or.inr rfl⟩
+
+/-- A graph vertex on the frontier of the whole drawing complement has a
+stored ordered canonical edge incident to it. -/
+theorem frontier_drawingComplement_graph_vertex_incident_edgeSet
+    {C : _root_.UDConfig n} {v : Fin n}
+    (hv : (canonicalGraph C).point v ∈ frontier (drawingComplement C)) :
+    Exists fun e : PlanarInterface.Edge n =>
+      e ∈ (canonicalGraph C).edgeSet ∧ (e.1 = v ∨ e.2 = v) := by
+  rcases frontier_drawingComplement_graph_vertex_incident hv with ⟨w, hvw⟩
+  exact exists_edgeSet_incident_of_adj hvw
+
+/-- A graph vertex on the frontier of a selected drawing-complement component
+has a stored ordered canonical edge incident to it. -/
+theorem frontier_connectedComponentIn_drawingComplement_graph_vertex_incident_edgeSet
+    {C : _root_.UDConfig n} {base : PlanarInterface.Point} {v : Fin n}
+    (hv :
+      (canonicalGraph C).point v ∈
+        frontier (connectedComponentIn (drawingComplement C) base)) :
+    Exists fun e : PlanarInterface.Edge n =>
+      e ∈ (canonicalGraph C).edgeSet ∧ (e.1 = v ∨ e.2 = v) := by
+  rcases
+      frontier_connectedComponentIn_drawingComplement_graph_vertex_incident
+        (C := C) (base := base) (v := v) hv with
+    ⟨w, hvw⟩
+  exact exists_edgeSet_incident_of_adj hvw
+
+/-- Source row for a component-frontier graph vertex: it has an incident
+canonical edge, and nearby component-frontier points are carried by incident
+closed segments from that vertex. -/
+theorem vertex_frontier_connectedComponentIn_drawingComplement_local_source
+    {C : _root_.UDConfig n} {base : PlanarInterface.Point} {v : Fin n}
+    (hv :
+      (canonicalGraph C).point v ∈
+        frontier (connectedComponentIn (drawingComplement C) base)) :
+    (Exists fun w : Fin n => (canonicalGraph C).Adj v w) ∧
+      Exists fun ε : Real =>
+        0 < ε ∧
+          Metric.ball ((canonicalGraph C).point v) ε ∩
+              frontier (connectedComponentIn (drawingComplement C) base) ⊆
+            {p | Exists fun w : Fin n =>
+              (canonicalGraph C).Adj v w ∧
+                p ∈ closedSegment
+                  ((canonicalGraph C).point v)
+                  ((canonicalGraph C).point w)} := by
+  exact
+    ⟨frontier_connectedComponentIn_drawingComplement_graph_vertex_incident hv,
+      exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_incident_closedSegment
+        (C := C) base v⟩
 
 end
 

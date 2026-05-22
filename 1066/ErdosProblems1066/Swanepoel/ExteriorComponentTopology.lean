@@ -1039,6 +1039,177 @@ def
                                 y ∈ S /\
                                   z ∈ S
 
+/-- U-indexed boundary-bumping point source for one compact connected
+subcontinuum of the compactum.
+
+This is the precise non-trace source behind
+`PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween`:
+if two points of an unbounded complement-component frontier lie on the same
+compact connected subset of `K`, then they lie in a compact connected subset of
+the whole selected frontier.  The witness is not required to stay in
+`T ∩ frontier U`, avoiding the overstrong arbitrary-trace surface. -/
+def
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween :
+    Prop :=
+  forall (K U T : Set PlanarInterface.Point) (y z : PlanarInterface.Point),
+    IsCompact K ->
+      (Exists fun x : PlanarInterface.Point =>
+        x ∈ Kᶜ /\ U = connectedComponentIn Kᶜ x) ->
+        ¬ Bornology.IsBounded U ->
+          IsCompact T ->
+            IsConnected T ->
+              T ⊆ K ->
+                y ∈ T ->
+                  z ∈ T ->
+                    y ∈ frontier U ->
+                      z ∈ frontier U ->
+                        Exists fun S : Set PlanarInterface.Point =>
+                          IsCompact S /\
+                            IsConnected S /\
+                              S ⊆ frontier U /\
+                                y ∈ S /\
+                                  z ∈ S
+
+/-- Standard subcontinuum boundary-bumping carrier source.
+
+For an unbounded complement component `U`, every compact connected
+subcontinuum `T ⊆ K` that meets `frontier U` has its entire frontier trace
+carried by one compact connected subset of `frontier U`.  This is the
+component-witness planar theorem sitting directly below the pointwise
+`SubcontinuumPointsBetween` surface. -/
+def
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumCarrier :
+    Prop :=
+  forall (K U T : Set PlanarInterface.Point),
+    IsCompact K ->
+      (Exists fun x : PlanarInterface.Point =>
+        x ∈ Kᶜ /\ U = connectedComponentIn Kᶜ x) ->
+        ¬ Bornology.IsBounded U ->
+          IsCompact T ->
+            IsConnected T ->
+              T ⊆ K ->
+                (T ∩ frontier U).Nonempty ->
+                  Exists fun S : Set PlanarInterface.Point =>
+                    IsCompact S /\
+                      IsConnected S /\
+                        S ⊆ frontier U /\
+                          T ∩ frontier U ⊆ S
+
+/-- The subcontinuum carrier source supplies the pointwise
+subcontinuum-between source by applying the carrier to the trace containing
+the first requested frontier point. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_subcontinuumCarrier
+    (subcontinuum_carrier :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumCarrier) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween := by
+  intro K U T y z hcompact hcomponent hunbounded hTcompact hTconnected hTsubset
+    hyT hzT hyFrontier hzFrontier
+  rcases
+      subcontinuum_carrier K U T hcompact hcomponent hunbounded hTcompact
+        hTconnected hTsubset ⟨y, hyT, hyFrontier⟩ with
+    ⟨S, hScompact, hSconnected, hSsubset, htrace_subset⟩
+  exact
+    ⟨S, hScompact, hSconnected, hSsubset,
+      htrace_subset ⟨hyT, hyFrontier⟩,
+      htrace_subset ⟨hzT, hzFrontier⟩⟩
+
+/-- Same-`K`-component form of the U-indexed boundary-bumping point source.
+
+This is the honest residual below the displayed subcontinuum-`T` statement:
+the arbitrary compact connected `T ⊆ K` is used only to prove that the two
+frontier points lie in the same relative component of `K`.  The source itself
+does not assert connectivity of an arbitrary trace `T ∩ frontier U`. -/
+def
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween :
+    Prop :=
+  forall (K U : Set PlanarInterface.Point) (y z : PlanarInterface.Point),
+    IsCompact K ->
+      (Exists fun x : PlanarInterface.Point =>
+        x ∈ Kᶜ /\ U = connectedComponentIn Kᶜ x) ->
+        ¬ Bornology.IsBounded U ->
+          y ∈ frontier U ->
+            z ∈ frontier U ->
+              z ∈ connectedComponentIn K y ->
+                Exists fun S : Set PlanarInterface.Point =>
+                  IsCompact S /\
+                    IsConnected S /\
+                      S ⊆ frontier U /\
+                        y ∈ S /\
+                          z ∈ S
+
+/-- The subcontinuum-`T` point source is strictly reduced to the same-component
+boundary-bumping point source. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_kComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween := by
+  intro K U T y z hcompact hcomponent hunbounded _hTcompact hTconnected hTsubset
+    hyT hzT hyFrontier hzFrontier
+  have hz_component : z ∈ connectedComponentIn K y :=
+    hTconnected.isPreconnected.subset_connectedComponentIn hyT hTsubset hzT
+  exact
+    points_between K U y z hcompact hcomponent hunbounded hyFrontier
+      hzFrontier hz_component
+
+/-- Claim `S2-agent-janiszewski-points-between-source-20260520e`.
+
+The remaining U-indexed boundary-bumping leaf is now the same-`K`-component
+point source above.  The checked reducer uses the displayed compact connected
+`T ⊆ K` only to place `z` in `connectedComponentIn K y`; no arbitrary trace
+connectivity, endpoint shortcut, or synthetic enclosure is introduced. -/
+theorem S2_agent_janiszewski_points_between_source_20260520e
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween :=
+  planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_kComponentPointsBetween
+    points_between
+
+/-- The U-indexed boundary-bumping point source specializes to the selected
+`connectedComponentIn Kᶜ x` point-between source. -/
+theorem
+    planarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween_of_janiszewskiBoundaryBumpingPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween := by
+  intro K x T y z hcompact hx hunbounded hTcompact hTconnected hTsubset
+    hyT hzT hyFrontier hzFrontier
+  exact
+    points_between K (connectedComponentIn Kᶜ x) T y z hcompact
+      ⟨x, hx, rfl⟩ hunbounded hTcompact hTconnected hTsubset hyT hzT
+      hyFrontier hzFrontier
+
+/-- Claim `S2-agent-topology-points-between-source-20260520d`.
+
+The point-level crossing-subcontinuum source is strictly reduced to the
+U-indexed Janiszewski/boundary-bumping point source above.  The remaining leaf
+is exactly the compact-connected/frontier-points-between theorem for one
+unbounded complement component and one compact connected subcontinuum of `K`. -/
+theorem S2_agent_topology_points_between_source_20260520d
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween_of_janiszewskiBoundaryBumpingPointsBetween
+    points_between
+
+/-- Claim `S2-agent-crossing-point-between-worker-20260520q1`.
+
+The assigned point-between leaf is reduced directly to the U-indexed
+Janiszewski/boundary-bumping subcontinuum point theorem by specializing
+`U` to the selected exterior component and forwarding the displayed
+subcontinuum hypotheses. -/
+theorem S2_agent_crossing_point_between_worker_20260520q1
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween := by
+  intro K x T y z hcompact hx hunbounded hTcompact hTconnected hTsubset
+    hyT hzT hyFrontier hzFrontier
+  exact
+    points_between K (connectedComponentIn Kᶜ x) T y z hcompact
+      ⟨x, hx, rfl⟩ hunbounded hTcompact hTconnected hTsubset hyT hzT
+      hyFrontier hzFrontier
+
 /-- The point-level crossing source supplies the displayed closed-side frontier
 subcontinuum witness by choosing one point from each side of the crossing. -/
 theorem
@@ -1138,6 +1309,228 @@ theorem S2_codex_current_20260520_crossing_subcontinuum_bounded_source
     PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
   planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_frontierSubcontinuum
     frontier_subcontinuum
+
+/-- Component-witness boundary-bumping/Jordan source for a closed frontier
+split crossed by a compact connected subcontinuum of `K`.
+
+This is lower than the x-indexed boundedness target: under the unbounded
+component hypothesis it only has to produce a compact connected subset of that
+same frontier meeting both closed sides of the split. -/
+def
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum :
+    Prop :=
+  forall (K U : Set PlanarInterface.Point) (A B T : Set PlanarInterface.Point),
+    IsCompact K ->
+      (Exists fun x : PlanarInterface.Point =>
+        x ∈ Kᶜ /\ U = connectedComponentIn Kᶜ x) ->
+        ¬ Bornology.IsBounded U ->
+          IsClosed A ->
+            IsClosed B ->
+              Disjoint A B ->
+                frontier U = A ∪ B ->
+                  IsCompact T ->
+                    IsConnected T ->
+                      T ⊆ K ->
+                        (T ∩ A).Nonempty ->
+                          (T ∩ B).Nonempty ->
+                            Exists fun S : Set PlanarInterface.Point =>
+                              IsCompact S /\
+                                IsConnected S /\
+                                  S ⊆ frontier U /\
+                                    (S ∩ A).Nonempty /\
+                                      (S ∩ B).Nonempty
+
+set_option linter.style.longLine false in
+/-- Component-witness crossing source from the U-indexed point-between
+boundary-bumping theorem.
+
+The crossing compact connected `T` is used only to select one frontier point
+on each closed side; the point-between source then supplies the compact
+connected frontier witness. -/
+theorem
+    planarJaniszewskiBoundaryBumpingCrossingSubcontinuumYieldsFrontierSubcontinuum_of_subcontinuumPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum := by
+  intro K U A B T hcompact hcomponent hunbounded _hAclosed _hBclosed
+    _hABdisjoint hcover hTcompact hTconnected hTsubset hTA hTB
+  rcases hTA with ⟨y, hyT, hyA⟩
+  rcases hTB with ⟨z, hzT, hzB⟩
+  have hyFrontier : y ∈ frontier U := by
+    rw [hcover]
+    exact Or.inl hyA
+  have hzFrontier : z ∈ frontier U := by
+    rw [hcover]
+    exact Or.inr hzB
+  rcases
+      points_between K U T y z hcompact hcomponent hunbounded hTcompact
+        hTconnected hTsubset hyT hzT hyFrontier hzFrontier with
+    ⟨S, hScompact, hSconnected, hSsubset, hyS, hzS⟩
+  exact
+    ⟨S, hScompact, hSconnected, hSsubset,
+      ⟨y, hyS, hyA⟩,
+      ⟨z, hzS, hzB⟩⟩
+
+/-- Claim `S2-agent-topology-frontier-subcontinuum-source-20260521g1`.
+
+The direct frontier-subcontinuum witness source is reduced to the U-indexed
+point-between boundary-bumping theorem, with no boundedness/no-subcontinuum,
+same-`K`, continuous-side, relative-clopen, final S2, or finite frontier-cycle
+route. -/
+theorem S2_agent_topology_frontier_subcontinuum_source_20260521g1
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum :=
+  planarJaniszewskiBoundaryBumpingCrossingSubcontinuumYieldsFrontierSubcontinuum_of_subcontinuumPointsBetween
+    points_between
+
+/-- The component-witness closed-split source specializes to the selected
+x-indexed frontier-subcontinuum source. -/
+theorem
+    planarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum_of_janiszewskiCrossingSubcontinuum
+    (frontier_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum := by
+  intro K x A B T hcompact hx hunbounded hAclosed hBclosed hABdisjoint
+    hcover hTcompact hTconnected hTsubset hTA hTB
+  exact
+    frontier_subcontinuum K (connectedComponentIn Kᶜ x) A B T hcompact
+      ⟨x, hx, rfl⟩ hunbounded hAclosed hBclosed hABdisjoint hcover
+      hTcompact hTconnected hTsubset hTA hTB
+
+/-- The crossing-boundedness target strictly reduces to the component-witness
+closed-split boundary-bumping/Jordan source. -/
+theorem
+    planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiCrossingSubcontinuum
+    (frontier_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_frontierSubcontinuum
+    (planarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum_of_janiszewskiCrossingSubcontinuum
+      frontier_subcontinuum)
+
+/-- Claim `S2-agent-crossing-bounded-source-worker-20260521e24`.
+
+The live crossing-bounded source is reduced to the direct component-witness
+closed-frontier-split theorem above.  The route stays on the boundary-bumping
+frontier-subcontinuum branch and does not use the relative-clopen,
+component-avoidance, no-subcontinuum, open-cover, or continuous-side aliases. -/
+theorem S2_agent_crossing_bounded_source_worker_20260521e24
+    (frontier_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiCrossingSubcontinuum
+    frontier_subcontinuum
+
+/-- Claim `S2-k6-topology-crossing-subcontinuum`.
+
+The crossing-subcontinuum boundedness leaf is strictly reduced to the
+U-indexed subcontinuum carrier boundary-bumping theorem.  In the unbounded
+case, the carrier supplies one compact connected subset of the selected
+frontier containing the two trace points chosen from the closed sides; the
+closed frontier split then separates that connected witness. -/
+theorem S2_k6_topology_crossing_subcontinuum
+    (subcontinuum_carrier :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumCarrier) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded := by
+  intro K x A B T hcompact hx hAclosed hBclosed hABdisjoint hcover
+    hTcompact hTconnected hTsubset hTA hTB
+  let U : Set PlanarInterface.Point := connectedComponentIn Kᶜ x
+  by_cases hbounded : Bornology.IsBounded U
+  · simpa [U] using hbounded
+  · exfalso
+    rcases hTA with ⟨a, haT, haA⟩
+    rcases hTB with ⟨b, hbT, hbB⟩
+    have haFrontier : a ∈ frontier U := by
+      simpa [U, hcover] using (Or.inl haA : a ∈ A ∪ B)
+    have hbFrontier : b ∈ frontier U := by
+      simpa [U, hcover] using (Or.inr hbB : b ∈ A ∪ B)
+    rcases
+        subcontinuum_carrier K U T hcompact ⟨x, hx, rfl⟩ hbounded
+          hTcompact hTconnected hTsubset ⟨a, haT, haFrontier⟩ with
+      ⟨S, hScompact, hSconnected, hSsubset, htrace_subset⟩
+    have hSclosed : IsClosed S := hScompact.isClosed
+    have hleftClosed : IsClosed (S ∩ A) := hSclosed.inter hAclosed
+    have hrightClosed : IsClosed (S ∩ B) := hSclosed.inter hBclosed
+    have hdisjoint : Disjoint (S ∩ A) (S ∩ B) := by
+      rw [Set.disjoint_left]
+      intro y hyLeft hyRight
+      exact (Set.disjoint_left.mp hABdisjoint) hyLeft.2 hyRight.2
+    have hScover : S = (S ∩ A) ∪ (S ∩ B) := by
+      ext y
+      constructor
+      · intro hyS
+        have hyFrontier : y ∈ frontier U := hSsubset hyS
+        have hyAB : y ∈ A ∪ B := by
+          simpa [U, hcover] using hyFrontier
+        rcases hyAB with hyA | hyB
+        · exact Or.inl ⟨hyS, hyA⟩
+        · exact Or.inr ⟨hyS, hyB⟩
+      · intro hy
+        rcases hy with hyLeft | hyRight
+        · exact hyLeft.1
+        · exact hyRight.1
+    have hSA : (S ∩ A).Nonempty :=
+      ⟨a, htrace_subset ⟨haT, haFrontier⟩, haA⟩
+    have hSB : (S ∩ B).Nonempty :=
+      ⟨b, htrace_subset ⟨hbT, hbFrontier⟩, hbB⟩
+    exact
+      (noClosedSeparation_of_isPreconnected hSconnected.isPreconnected)
+        (S ∩ A) (S ∩ B) hleftClosed hrightClosed hdisjoint hScover hSA hSB
+
+/-- The crossing-boundedness leaf reduces to the point-between source.
+
+This is the non-Janiszewski route for claim
+`S2-agent-crossing-bounded-proof-worker-20260520m1`: the proof uses only the
+point-level crossing source, the existing frontier-subcontinuum extraction,
+and the direct boundedness reducer above.  The remaining leaf is exactly
+`PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween`. -/
+theorem
+    planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_pointsBetween
+    (points_between :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_frontierSubcontinuum
+    (planarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum_of_pointsBetween
+      points_between)
+
+/-- Claim `S2-agent-crossing-bounded-proof-worker-20260520m1`. -/
+theorem S2_agent_crossing_bounded_proof_worker_20260520m1
+    (points_between :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_pointsBetween
+    points_between
+
+/-- The assigned crossing-bounded source reduces directly to the sharp
+same-`K` boundary-bumping point source.
+
+The composition keeps the old frontier-subcontinuum reducer as bookkeeping
+only: the sole mathematical source is the point-between theorem saying that
+two frontier points in the same relative component of `K` lie in a compact
+connected subset of the selected frontier. -/
+theorem
+    planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiKComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_frontierSubcontinuum
+    (planarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum_of_pointsBetween
+      (planarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween_of_janiszewskiBoundaryBumpingPointsBetween
+        (planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_kComponentPointsBetween
+          points_between)))
+
+/-- Claim `S2-agent-crossing-subcontinuum-bounded-source-implementation-20260520g5`.
+
+The crossing-subcontinuum boundedness leaf is now strictly reduced to
+`PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween`,
+the same-`K` boundary-bumping point source already isolated in this file. -/
+theorem S2_agent_crossing_subcontinuum_bounded_source_implementation_20260520g5
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiKComponentPointsBetween
+    points_between
 
 /-- Compatibility crossing-subcontinuum relative-clopen source.
 
@@ -1373,6 +1766,81 @@ def
                         (T ∩ B).Nonempty ->
                           Bornology.IsBounded U
 
+/-- A frontier-subcontinuum witness source directly forces the component-indexed
+Janiszewski boundedness leaf.
+
+After assuming `U` is unbounded, the witness source gives a compact connected
+subset of `frontier U` meeting both closed sides.  The displayed frontier cover
+then separates that connected witness into two nonempty closed pieces. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_frontierSubcontinuum
+    (frontier_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded := by
+  intro K U A B T hcompact hcomponent hAclosed hBclosed hABdisjoint hcover
+    hTcompact hTconnected hTsubset hTA hTB
+  by_cases hbounded : Bornology.IsBounded U
+  · exact hbounded
+  · exfalso
+    rcases
+        frontier_subcontinuum K U A B T hcompact hcomponent hbounded
+          hAclosed hBclosed hABdisjoint hcover hTcompact hTconnected
+          hTsubset hTA hTB with
+      ⟨S, hScompact, hSconnected, hSsubset, hSA, hSB⟩
+    have hSclosed : IsClosed S := hScompact.isClosed
+    have hleftClosed : IsClosed (S ∩ A) := hSclosed.inter hAclosed
+    have hrightClosed : IsClosed (S ∩ B) := hSclosed.inter hBclosed
+    have hdisjoint : Disjoint (S ∩ A) (S ∩ B) := by
+      rw [Set.disjoint_left]
+      intro y hyLeft hyRight
+      exact (Set.disjoint_left.mp hABdisjoint) hyLeft.2 hyRight.2
+    have hScover : S = (S ∩ A) ∪ (S ∩ B) := by
+      ext y
+      constructor
+      · intro hyS
+        have hyFrontier : y ∈ frontier U := hSsubset hyS
+        have hyAB : y ∈ A ∪ B := by
+          simpa [hcover] using hyFrontier
+        rcases hyAB with hyA | hyB
+        · exact Or.inl ⟨hyS, hyA⟩
+        · exact Or.inr ⟨hyS, hyB⟩
+      · intro hy
+        rcases hy with hyLeft | hyRight
+        · exact hyLeft.1
+        · exact hyRight.1
+    exact
+      (noClosedSeparation_of_isPreconnected hSconnected.isPreconnected)
+        (S ∩ A) (S ∩ B) hleftClosed hrightClosed hdisjoint hScover hSA hSB
+
+/-- Claim `S2-agent-topology-boundedness-source-20260521f8`.
+
+The exact boundedness source is strictly reduced to the direct U-indexed
+frontier-subcontinuum witness source.  This avoids the same-`K`,
+continuous-side, relative-clopen, final S2, finite frontier-cycle, and
+no-subcontinuum-obstruction consumer routes. -/
+theorem S2_agent_topology_boundedness_source_20260521f8
+    (frontier_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded :=
+  planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_frontierSubcontinuum
+    frontier_subcontinuum
+
+set_option linter.style.longLine false in
+/-- The U-indexed point-between boundary-bumping theorem directly supplies
+the live Janiszewski boundedness source.
+
+This composes the point-between-to-frontier-subcontinuum witness with the
+connected-witness boundedness contradiction, keeping the remaining topology
+leaf at the point-between theorem rather than at a closed-split alias. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_subcontinuumPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded :=
+  planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_frontierSubcontinuum
+    (planarJaniszewskiBoundaryBumpingCrossingSubcontinuumYieldsFrontierSubcontinuum_of_subcontinuumPointsBetween
+      points_between)
+
 /-- The Janiszewski no-subcontinuum obstruction supplies the boundedness leaf:
 if a compact connected subset of `K` crosses both closed frontier sides while
 `U` is unbounded, it is exactly the forbidden subcontinuum. -/
@@ -1408,6 +1876,78 @@ theorem S2_dyn_20260520_janiszewski_boundedness_source
     PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded :=
   planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_noSubcontinuumObstruction
     no_subcontinuum
+
+/-- Claim `S2-agent-janiszewski-boundedness-worker-20260521c1`.
+
+The live Janiszewski boundedness source is reduced to the direct
+no-subcontinuum obstruction: under an unbounded component hypothesis, any
+displayed compact connected `T ⊆ K` meeting both closed frontier sides is
+exactly the forbidden subcontinuum. -/
+theorem S2_agent_janiszewski_boundedness_worker_20260521c1
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded :=
+  planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_noSubcontinuumObstruction
+    no_subcontinuum
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-topology-bounded-subcontinuum-20260521k7`.
+
+The component-indexed bounded-subcontinuum source is strictly lowered to the
+standard Janiszewski relative-clopen `K`-side theorem.  If `U` were unbounded,
+the relative-clopen side supplied for the closed frontier split would separate
+the compact connected crossing subcontinuum `T`, contradiction. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_janiszewskiRelativeClopenKSide
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded := by
+  intro K U A B T hcompact hcomponent hAclosed hBclosed hABdisjoint hcover
+    hTcompact hTconnected hTsubset hTA hTB
+  by_cases hbounded : Bornology.IsBounded U
+  · exact hbounded
+  · exfalso
+    have hAnonempty : A.Nonempty := by
+      rcases hTA with ⟨a, _haT, haA⟩
+      exact ⟨a, haA⟩
+    have hBnonempty : B.Nonempty := by
+      rcases hTB with ⟨b, _hbT, hbB⟩
+      exact ⟨b, hbB⟩
+    rcases
+        relative_side K U A B hcompact hcomponent hbounded hAclosed hBclosed
+          hABdisjoint hcover hAnonempty hBnonempty with
+      ⟨K1, _hK1subset, hK1closed, hKdiffclosed, hAK1, hK1Bdisjoint⟩
+    have hTclosed : IsClosed T := hTcompact.isClosed
+    have hleftClosed : IsClosed (T ∩ K1) := hTclosed.inter hK1closed
+    have hrightClosed : IsClosed (T ∩ (K \ K1)) :=
+      hTclosed.inter hKdiffclosed
+    have hdisjoint : Disjoint (T ∩ K1) (T ∩ (K \ K1)) := by
+      rw [Set.disjoint_left]
+      intro y hyLeft hyRight
+      exact hyRight.2.2 hyLeft.2
+    have hTcover : T = (T ∩ K1) ∪ (T ∩ (K \ K1)) := by
+      ext y
+      constructor
+      · intro hyT
+        by_cases hyK1 : y ∈ K1
+        · exact Or.inl ⟨hyT, hyK1⟩
+        · exact Or.inr ⟨hyT, hTsubset hyT, hyK1⟩
+      · intro hy
+        rcases hy with hyLeft | hyRight
+        · exact hyLeft.1
+        · exact hyRight.1
+    have hleftNonempty : (T ∩ K1).Nonempty := by
+      rcases hTA with ⟨a, haT, haA⟩
+      exact ⟨a, haT, hAK1 haA⟩
+    have hrightNonempty : (T ∩ (K \ K1)).Nonempty := by
+      rcases hTB with ⟨b, hbT, hbB⟩
+      exact
+        ⟨b, hbT, hTsubset hbT,
+          fun hbK1 => (Set.disjoint_left.mp hK1Bdisjoint) hbK1 hbB⟩
+    exact
+      (noClosedSeparation_of_isPreconnected hTconnected.isPreconnected)
+        (T ∩ K1) (T ∩ (K \ K1))
+        hleftClosed hrightClosed hdisjoint hTcover hleftNonempty hrightNonempty
 
 /-- The x-indexed crossing-boundedness source supplies the component-witness
 Janiszewski no-subcontinuum obstruction.
@@ -1695,66 +2235,6 @@ theorem
   exact
     ⟨S, hScompact, hSconnected, hSsubset,
       ⟨a, haS, haA⟩, ⟨b, hbS, hbB⟩⟩
-
-/-- Connected-compactum direct boundedness form for the displayed crossing.
-
-This is the non-circular repair for the crossing leaf in settings where the
-compactum is known connected, such as the finite S2 embedded drawing: the
-remaining source is the pairwise frontier-subcontinuum theorem, not a
-relative-clopen/no-subcontinuum cycle. -/
-theorem
-    planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_subcontinuumBetween_connected
-    (subcontinuum_between :
-      PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween)
-    {K : Set PlanarInterface.Point} {x : PlanarInterface.Point}
-    {A B T : Set PlanarInterface.Point}
-    (hcompact : IsCompact K)
-    (hconnected : IsConnected K)
-    (hx : x ∈ Kᶜ)
-    (hAclosed : IsClosed A)
-    (hBclosed : IsClosed B)
-    (hABdisjoint : Disjoint A B)
-    (hcover : frontier (connectedComponentIn Kᶜ x) = A ∪ B)
-    (hTcompact : IsCompact T)
-    (hTconnected : IsConnected T)
-    (hTsubset : T ⊆ K)
-    (hTA : (T ∩ A).Nonempty)
-    (hTB : (T ∩ B).Nonempty) :
-    Bornology.IsBounded (connectedComponentIn Kᶜ x) := by
-  by_cases hbounded : Bornology.IsBounded (connectedComponentIn Kᶜ x)
-  · exact hbounded
-  · exfalso
-    rcases
-        planarContinuumUnboundedComplementFrontierCrossingSubcontinuumYieldsFrontierSubcontinuum_of_subcontinuumBetween_connected
-          subcontinuum_between hcompact hconnected hx hbounded hAclosed hBclosed
-          hABdisjoint hcover hTcompact hTconnected hTsubset hTA hTB with
-      ⟨S, hScompact, hSconnected, hSsubset, hSA, hSB⟩
-    have hSclosed : IsClosed S := hScompact.isClosed
-    have hleftClosed : IsClosed (S ∩ A) := hSclosed.inter hAclosed
-    have hrightClosed : IsClosed (S ∩ B) := hSclosed.inter hBclosed
-    have hdisjoint : Disjoint (S ∩ A) (S ∩ B) := by
-      rw [Set.disjoint_left]
-      intro y hyLeft hyRight
-      exact (Set.disjoint_left.mp hABdisjoint) hyLeft.2 hyRight.2
-    have hScover : S = (S ∩ A) ∪ (S ∩ B) := by
-      ext y
-      constructor
-      · intro hyS
-        have hyFrontier :
-            y ∈ frontier (connectedComponentIn Kᶜ x) :=
-          hSsubset hyS
-        have hyAB : y ∈ A ∪ B := by
-          simpa [hcover] using hyFrontier
-        rcases hyAB with hyA | hyB
-        · exact Or.inl ⟨hyS, hyA⟩
-        · exact Or.inr ⟨hyS, hyB⟩
-      · intro hy
-        rcases hy with hyLeft | hyRight
-        · exact hyLeft.1
-        · exact hyRight.1
-    exact
-      (noClosedSeparation_of_isPreconnected hSconnected.isPreconnected)
-        (S ∩ A) (S ∩ B) hleftClosed hrightClosed hdisjoint hScover hSA hSB
 
 /-- Claim `S2-codex-cont-20260520-crossing-frontier-subcontinuum-source`.
 
@@ -2397,6 +2877,237 @@ theorem finiteDrawingUnboundedComplement_frontier_subset_embeddedEdgeSet
   planarContinuumUnboundedComplement_frontier_subset
     (K := embeddedEdgeSet C) (x := x) (embeddedEdgeSet_compact C)
 
+/-- The same-`K` Janiszewski boundary-bumping point source supplies the
+pairwise frontier-subcontinuum source for connected compacta.
+
+Connectedness of `K` is used only to put the two frontier points in the same
+relative component of `K`; the remaining witness is exactly the
+same-component boundary-bumping source. -/
+theorem
+    planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_janiszewskiKComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween := by
+  intro K x hcompact hconnected hx hunbounded y z hyFrontier hzFrontier
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  have hyK : y ∈ K := hfrontier_subset_K hyFrontier
+  have hzK : z ∈ K := hfrontier_subset_K hzFrontier
+  have hz_component : z ∈ connectedComponentIn K y :=
+    hconnected.isPreconnected.subset_connectedComponentIn hyK subset_rfl hzK
+  exact
+    points_between K (connectedComponentIn Kᶜ x) y z hcompact
+      ⟨x, hx, rfl⟩ hunbounded hyFrontier hzFrontier hz_component
+
+/-- The U-indexed subcontinuum boundary-bumping source supplies the pairwise
+frontier-subcontinuum source for connected compacta.
+
+For connected `K`, the compact connected subcontinuum displayed in the
+U-indexed source can simply be `K` itself; the ordinary frontier-subset lemma
+places the two requested frontier points in `K`. -/
+theorem
+    planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_janiszewskiSubcontinuumPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween := by
+  intro K x hcompact hconnected hx hunbounded y z hyFrontier hzFrontier
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  exact
+    points_between K (connectedComponentIn Kᶜ x) K y z hcompact
+      ⟨x, hx, rfl⟩ hunbounded hcompact hconnected subset_rfl
+      (hfrontier_subset_K hyFrontier) (hfrontier_subset_K hzFrontier)
+      hyFrontier hzFrontier
+
+/-- The selected point-level crossing source already gives the pairwise
+frontier-subcontinuum source for connected compacta.
+
+The compact connected witness in the point-level source can be chosen to be
+`K` itself; the standard frontier-containment lemma supplies the two endpoint
+memberships in `K`. -/
+theorem
+    planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_crossingSubcontinuumPointsBetween
+    (points_between :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween := by
+  intro K x hcompact hconnected hx hunbounded y z hyFrontier hzFrontier
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  exact
+    points_between K x K y z hcompact hx hunbounded hcompact hconnected
+      subset_rfl (hfrontier_subset_K hyFrontier)
+      (hfrontier_subset_K hzFrontier) hyFrontier hzFrontier
+
+/-- The selected point-level crossing source supplies the direct
+preconnected-frontier theorem for connected compacta. -/
+theorem
+    planarContinuumUnboundedComplementFrontierPreconnected_of_crossingSubcontinuumPointsBetween
+    (points_between :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierPreconnected :=
+  planarContinuumUnboundedComplementFrontierPreconnected_of_subcontinuumBetween
+    (planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_crossingSubcontinuumPointsBetween
+      points_between)
+
+/-- The U-indexed subcontinuum boundary-bumping source supplies the direct
+planar-continuum frontier-preconnectedness source. -/
+theorem
+    planarContinuumUnboundedComplementFrontierPreconnected_of_janiszewskiSubcontinuumPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierPreconnected :=
+  planarContinuumUnboundedComplementFrontierPreconnected_of_subcontinuumBetween
+    (planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_janiszewskiSubcontinuumPointsBetween
+      points_between)
+
+/-- The finite drawing frontier-preconnectedness source is strictly reduced
+to the same-`K` Janiszewski boundary-bumping point source. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierPreconnected_of_janiszewskiKComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierPreconnected :=
+  finiteDrawingUnboundedComplementFrontierPreconnected_of_subcontinuumBetween
+    (planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_janiszewskiKComponentPointsBetween
+      points_between)
+
+/-- The finite drawing frontier-preconnectedness source is strictly reduced
+to the U-indexed subcontinuum boundary-bumping source. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierPreconnected_of_janiszewskiSubcontinuumPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierPreconnected :=
+  finiteDrawingUnboundedComplementFrontierPreconnected_of_subcontinuumBetween
+    (planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_janiszewskiSubcontinuumPointsBetween
+      points_between)
+
+/-- The finite drawing no-closed-separation source is strictly reduced to the
+same-`K` Janiszewski boundary-bumping point source. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiKComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_frontierPreconnected
+    (finiteDrawingUnboundedComplementFrontierPreconnected_of_janiszewskiKComponentPointsBetween
+      points_between)
+
+/-- The finite drawing no-closed-separation source is strictly reduced to the
+U-indexed subcontinuum boundary-bumping source. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiSubcontinuumPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_frontierPreconnected
+    (finiteDrawingUnboundedComplementFrontierPreconnected_of_janiszewskiSubcontinuumPointsBetween
+      points_between)
+
+/-- Claim `S2-agent-finite-no-closed-separation-source-20260520f`.
+
+The live finite no-closed-separation topology leaf is reduced to the
+same-`K` boundary-bumping point source.  No boundary cycle, induced frontier
+graph, all-adjacent endpoint closure, or synthetic enclosure enters this
+handoff. -/
+theorem S2_agent_finite_no_closed_separation_source_20260520f
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiKComponentPointsBetween
+    points_between
+
+/-- Same-`K` point source for the finite closed-split boundedness
+contradiction.
+
+Given a nonempty closed split of the frontier of an unbounded finite drawing
+complement component, choose one point from each side.  The finite drawing is
+connected, so the two frontier points lie in the same relative component of
+`embeddedEdgeSet C`; the same-`K` point source then supplies a compact
+connected subset of the frontier meeting both sides, contradicting the closed
+split. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierClosedSeparationForcesBounded_of_janiszewskiKComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierClosedSeparationForcesBounded := by
+  intro n C inputs x A B hx hAclosed hBclosed hABdisjoint hcover
+    hAnonempty hBnonempty
+  by_cases hbounded :
+      Bornology.IsBounded (connectedComponentIn (embeddedEdgeSet C)ᶜ x)
+  · exact hbounded
+  · exfalso
+    let K : Set PlanarInterface.Point := embeddedEdgeSet C
+    let U : Set PlanarInterface.Point := connectedComponentIn Kᶜ x
+    rcases hAnonempty with ⟨a, haA⟩
+    rcases hBnonempty with ⟨b, hbB⟩
+    have hfrontier_subset_K : frontier U ⊆ K := by
+      simpa [K, U] using
+        (planarContinuumUnboundedComplement_frontier_subset
+          (K := embeddedEdgeSet C) (x := x) (embeddedEdgeSet_compact C))
+    have haFrontier : a ∈ frontier U := by
+      simpa [K, U, hcover] using Or.inl haA
+    have hbFrontier : b ∈ frontier U := by
+      simpa [K, U, hcover] using Or.inr hbB
+    have haK : a ∈ K := hfrontier_subset_K haFrontier
+    have hbK : b ∈ K := hfrontier_subset_K hbFrontier
+    have hb_component : b ∈ connectedComponentIn K a :=
+      (embeddedEdgeSet_connected_of_inputs inputs).isPreconnected
+        |>.subset_connectedComponentIn haK subset_rfl hbK
+    rcases
+        points_between K U a b (embeddedEdgeSet_compact C)
+          ⟨x, by simpa [K] using hx, rfl⟩
+          (by simpa [K, U] using hbounded) haFrontier hbFrontier
+          hb_component with
+      ⟨S, hScompact, hSconnected, hSsubset, haS, hbS⟩
+    have hSclosed : IsClosed S := hScompact.isClosed
+    have hleftClosed : IsClosed (S ∩ A) := hSclosed.inter hAclosed
+    have hrightClosed : IsClosed (S ∩ B) := hSclosed.inter hBclosed
+    have hdisjoint : Disjoint (S ∩ A) (S ∩ B) := by
+      rw [Set.disjoint_left]
+      intro y hyLeft hyRight
+      exact (Set.disjoint_left.mp hABdisjoint) hyLeft.2 hyRight.2
+    have hScover : S = (S ∩ A) ∪ (S ∩ B) := by
+      ext y
+      constructor
+      · intro hyS
+        have hyFrontier : y ∈ frontier U := hSsubset hyS
+        have hyAB : y ∈ A ∪ B := by
+          simpa [K, U, hcover] using hyFrontier
+        rcases hyAB with hyA | hyB
+        · exact Or.inl ⟨hyS, hyA⟩
+        · exact Or.inr ⟨hyS, hyB⟩
+      · intro hy
+        rcases hy with hyLeft | hyRight
+        · exact hyLeft.1
+        · exact hyRight.1
+    exact
+      (noClosedSeparation_of_isPreconnected hSconnected.isPreconnected)
+        (S ∩ A) (S ∩ B) hleftClosed hrightClosed hdisjoint hScover
+        ⟨a, haS, haA⟩ ⟨b, hbS, hbB⟩
+
+/-- Claim `S2-agent-no-closed-topology-source-20260521b`.
+
+The live finite no-closed-separation leaf is reduced through the finite
+closed-split boundedness contradiction sourced directly from the same-`K`
+boundary-bumping point theorem.  The proof uses only the compact finite
+drawing frontier rows and connectedness of `embeddedEdgeSet C`; it does not
+pass through boundary cycles, arbitrary traces, induced frontier graphs,
+convex hulls, synthetic enclosures, or outgoing-list data. -/
+theorem S2_agent_no_closed_topology_source_20260521b
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_closedSeparationForcesBounded
+    (finiteDrawingUnboundedComplementFrontierClosedSeparationForcesBounded_of_janiszewskiKComponentPointsBetween
+      points_between)
+
 /-- The standard no-closed-separation planar-continuum theorem is already
 enough for the finite-drawing aligned K-split leaf.
 
@@ -2771,6 +3482,167 @@ theorem S2_codex_current_20260520_janiszewski_component_avoidance_leaf
   planarJaniszewskiBoundaryBumpingComponentAvoidance_of_crossingSubcontinuumForcesBounded
     crossing_forces_bounded
 
+/-- The same-`K` boundary-bumping point source gives component avoidance.
+
+If an `A`-point and a `B`-point of a closed frontier split lay in the same
+relative component of `K`, the point source would place them in a compact
+connected subset of the frontier.  The displayed closed cover of the frontier
+would then split that compact connected set into two nonempty closed pieces. -/
+theorem
+    planarJaniszewskiBoundaryBumpingComponentAvoidance_of_kComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance := by
+  intro K U A B hcompact hcomponent hunbounded hAclosed hBclosed hABdisjoint
+    hcover _hAnonempty _hBnonempty b hb a ha hab
+  have hbFrontier : (b : PlanarInterface.Point) ∈ frontier U := by
+    rw [hcover]
+    exact Or.inr hb
+  have haFrontier : (a : PlanarInterface.Point) ∈ frontier U := by
+    rw [hcover]
+    exact Or.inl ha
+  have ha_componentIn :
+      (a : PlanarInterface.Point) ∈
+        connectedComponentIn K (b : PlanarInterface.Point) := by
+    rw [connectedComponentIn_eq_image b.property]
+    exact ⟨a, hab, rfl⟩
+  rcases
+      points_between K U (b : PlanarInterface.Point) (a : PlanarInterface.Point)
+        hcompact hcomponent hunbounded hbFrontier haFrontier ha_componentIn with
+    ⟨S, hScompact, hSconnected, hSsubset, hbS, haS⟩
+  have hSclosed : IsClosed S := hScompact.isClosed
+  have hleftClosed : IsClosed (S ∩ A) := hSclosed.inter hAclosed
+  have hrightClosed : IsClosed (S ∩ B) := hSclosed.inter hBclosed
+  have hdisjoint : Disjoint (S ∩ A) (S ∩ B) := by
+    rw [Set.disjoint_left]
+    intro y hyLeft hyRight
+    exact (Set.disjoint_left.mp hABdisjoint) hyLeft.2 hyRight.2
+  have hScover : S = (S ∩ A) ∪ (S ∩ B) := by
+    ext y
+    constructor
+    · intro hyS
+      have hyFrontier : y ∈ frontier U := hSsubset hyS
+      have hyAB : y ∈ A ∪ B := by
+        simpa [hcover] using hyFrontier
+      rcases hyAB with hyA | hyB
+      · exact Or.inl ⟨hyS, hyA⟩
+      · exact Or.inr ⟨hyS, hyB⟩
+    · intro hy
+      rcases hy with hyLeft | hyRight
+      · exact hyLeft.1
+      · exact hyRight.1
+  have hSA : (S ∩ A).Nonempty := ⟨a, haS, ha⟩
+  have hSB : (S ∩ B).Nonempty := ⟨b, hbS, hb⟩
+  exact
+    (noClosedSeparation_of_isPreconnected hSconnected.isPreconnected)
+      (S ∩ A) (S ∩ B) hleftClosed hrightClosed hdisjoint hScover hSA hSB
+
+/-- Claim `S2-agent-component-avoidance-source-worker-20260520j`.
+
+The component-avoidance source is strictly reduced to the current
+same-`K` boundary-bumping point source.  No relative-clopen side, final
+boundary-cycle row, induced frontier graph, arbitrary carrier cycle, or
+synthetic enclosure is introduced. -/
+theorem S2_agent_component_avoidance_source_worker_20260520j
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance :=
+  planarJaniszewskiBoundaryBumpingComponentAvoidance_of_kComponentPointsBetween
+    points_between
+
+/-- The same-`K` boundary-bumping point source directly rules out a crossing
+compact connected subcontinuum.
+
+Choose one point of the displayed compact connected `T` on each closed
+frontier side.  Since both points lie in the same relative component of `K`,
+the point-between source supplies a compact connected subset of the frontier
+meeting both closed sides, contradicting closed separation of that subset. -/
+theorem
+    planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_kComponentPointsBetween_20260521c6
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction := by
+  intro K U A B hcompact hcomponent hunbounded hAclosed hBclosed hABdisjoint
+    hcover _hAnonempty _hBnonempty T _hTcompact hTconnected hTsubset hTA hTB
+  rcases hTA with ⟨a, haT, haA⟩
+  rcases hTB with ⟨b, hbT, hbB⟩
+  have haFrontier : a ∈ frontier U := by
+    rw [hcover]
+    exact Or.inl haA
+  have hbFrontier : b ∈ frontier U := by
+    rw [hcover]
+    exact Or.inr hbB
+  have ha_componentIn : a ∈ connectedComponentIn K b :=
+    hTconnected.isPreconnected.subset_connectedComponentIn hbT hTsubset haT
+  rcases
+      points_between K U b a hcompact hcomponent hunbounded hbFrontier
+        haFrontier ha_componentIn with
+    ⟨S, hScompact, hSconnected, hSsubset, hbS, haS⟩
+  have hSclosed : IsClosed S := hScompact.isClosed
+  have hleftClosed : IsClosed (S ∩ A) := hSclosed.inter hAclosed
+  have hrightClosed : IsClosed (S ∩ B) := hSclosed.inter hBclosed
+  have hdisjoint : Disjoint (S ∩ A) (S ∩ B) := by
+    rw [Set.disjoint_left]
+    intro y hyLeft hyRight
+    exact (Set.disjoint_left.mp hABdisjoint) hyLeft.2 hyRight.2
+  have hScover : S = (S ∩ A) ∪ (S ∩ B) := by
+    ext y
+    constructor
+    · intro hyS
+      have hyFrontier : y ∈ frontier U := hSsubset hyS
+      have hyAB : y ∈ A ∪ B := by
+        simpa [hcover] using hyFrontier
+      rcases hyAB with hyA | hyB
+      · exact Or.inl ⟨hyS, hyA⟩
+      · exact Or.inr ⟨hyS, hyB⟩
+    · intro hy
+      rcases hy with hyLeft | hyRight
+      · exact hyLeft.1
+      · exact hyRight.1
+  have hSA : (S ∩ A).Nonempty := ⟨a, haS, haA⟩
+  have hSB : (S ∩ B).Nonempty := ⟨b, hbS, hbB⟩
+  exact
+    (noClosedSeparation_of_isPreconnected hSconnected.isPreconnected)
+      (S ∩ A) (S ∩ B) hleftClosed hrightClosed hdisjoint hScover hSA hSB
+
+/-- Claim `S2-agent-janiszewski-no-subcontinuum-worker-20260521c6`.
+
+The current no-subcontinuum obstruction is strictly reduced to the same-`K`
+boundary-bumping point-between source, with no boundedness equivalence or
+trace-connectedness source inserted. -/
+theorem S2_agent_janiszewski_no_subcontinuum_worker_20260521c6
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction :=
+  planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_kComponentPointsBetween_20260521c6
+    points_between
+
+/-- Same-`K` point-between source to the Janiszewski relative-clopen `K` side.
+
+This is the shortest non-circular route: the point-between theorem gives
+component avoidance directly, and the compact-Hausdorff separator turns
+component avoidance into the relative-clopen side. -/
+theorem planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_kComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_componentAvoidance
+    (planarJaniszewskiBoundaryBumpingComponentAvoidance_of_kComponentPointsBetween
+      points_between)
+
+/-- Claim `S2-agent-relative-k-side-source-20260521d`.
+
+The relative-clopen `K`-side source is reduced to the same-`K`
+boundary-bumping point theorem.  This avoids the relative-clopen/component
+avoidance loop by deriving component avoidance from the point-between witness
+first. -/
+theorem S2_agent_relative_k_side_source_20260521d
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_kComponentPointsBetween
+    points_between
+
 /-- Component avoidance directly rules out a compact connected subcontinuum
 crossing the two closed frontier pieces.
 
@@ -2913,6 +3785,35 @@ theorem S2_dyn_20260520_janiszewski_relative_clopen_current_source
   planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_noSubcontinuumObstruction
     no_subcontinuum
 
+/-- Claim `S2-agent-relative-clopen-source-worker-20260521e36`.
+
+The remaining relative-clopen topology source is strictly reduced to the
+component-witness no-subcontinuum obstruction.  The checked route is the
+compact-Hausdorff clopen separator above, after frontier containment places
+the two closed sides back inside `K`; it avoids the same-`K`
+points-between/frontier-component and crossing-boundedness routes. -/
+theorem S2_agent_relative_clopen_source_worker_20260521e36
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_noSubcontinuumObstruction
+    no_subcontinuum
+
+/-- Claim `S2-agent-relative-clopen-kside-source-worker-20260521d5`.
+
+The relative-clopen `K`-side source is reduced to the same-`K`
+boundary-bumping point-between theorem through the direct no-subcontinuum
+obstruction.  The final separator is the compact-Hausdorff clopen machinery;
+no arbitrary trace-connectedness, boundary-cycle row, synthetic enclosure, or
+component-avoidance loop is introduced. -/
+theorem S2_agent_relative_clopen_kside_source_worker_20260521d5
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_noSubcontinuumObstruction
+    (planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_kComponentPointsBetween_20260521c6
+      points_between)
+
 /-- The component-witness Janiszewski/boundary-bumping relative-clopen source
 reduces to the x-indexed whole-frontier no-subcontinuum obstruction.
 
@@ -3020,6 +3921,63 @@ theorem S2_codex_current_20260520_janiszewski_no_subcontinuum_leaf
       PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
     PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction :=
   planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_relativeClopenKSide
+    relative_side
+
+/-- The whole-frontier no-subcontinuum obstruction reduces to the standard
+Janiszewski relative-clopen separator for the same unbounded complement
+component.
+
+The compact connected candidate `T ⊆ K` is split by the relatively clopen
+`K`-side supplied for the closed frontier decomposition; connectedness of `T`
+then gives the contradiction before any finite drawing data is used. -/
+theorem
+    planarContinuumUnboundedComplementFrontierNoSubcontinuumObstruction_of_janiszewskiRelativeClopenKSide
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction :=
+  planarContinuumUnboundedComplementFrontierNoSubcontinuumObstruction_of_janiszewskiNoSubcontinuumObstruction
+    (planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_relativeClopenKSide
+      relative_side)
+
+/-- Claim `S2-agent-no-subcontinuum-obstruction-worker-20260520p6`.
+
+The active whole-frontier obstruction is now reduced to the Janiszewski
+relative-clopen separator theorem.  The checked bridge is the direct compact
+subcontinuum split in the compactum `K`, followed only by specializing the
+component witness to `connectedComponentIn Kᶜ x`. -/
+theorem S2_agent_no_subcontinuum_obstruction_worker_20260520p6
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction :=
+  planarContinuumUnboundedComplementFrontierNoSubcontinuumObstruction_of_janiszewskiRelativeClopenKSide
+    relative_side
+
+/-- The crossing-subcontinuum boundedness source is reduced to the
+Janiszewski relative-clopen `K`-side theorem.
+
+This follows the same local contradiction used for the no-subcontinuum leaf:
+the relative-clopen side separates any crossing compact connected subcontinuum,
+and the boundedness wrapper specializes the component witness back to
+`connectedComponentIn Kᶜ x`. -/
+theorem
+    planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiRelativeClopenKSide
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiNoSubcontinuumObstruction
+    (planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_relativeClopenKSide
+      relative_side)
+
+/-- Claim `S2-agent-crossing-forces-bounded-source-20260520g`.
+
+The target crossing-bounded topology leaf is strictly reduced to the current
+Janiszewski relative-clopen `K`-side source, which is also the source used by
+the finite no-closed-separation handoff. -/
+theorem S2_agent_crossing_forces_bounded_source_20260520g
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded :=
+  planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_janiszewskiRelativeClopenKSide
     relative_side
 
 /-- The Janiszewski no-subcontinuum obstruction is exactly the same source as
@@ -3335,6 +4293,22 @@ theorem S2_codex_20260520_planar_obstruction_source
     PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction :=
   planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_subcontinuumForcesBounded
     subcontinuum_forces_bounded
+
+/-- Claim `S2-agent-janiszewski-boundedness-worker-20260521c1`.
+
+The boundedness and no-subcontinuum formulations are the same Janiszewski
+boundary-bumping source surface.  The boundedness-to-obstruction direction
+uses unboundedness to contradict the produced bounded component; the reverse
+direction is the direct reducer above. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_iff_noSubcontinuumObstruction_20260521c1 :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded ↔
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction := by
+  constructor
+  · exact
+      planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_subcontinuumForcesBounded
+  · exact
+      planarJaniszewskiBoundaryBumpingSubcontinuumForcesBounded_of_noSubcontinuumObstruction
 
 /-- Connected-compactum local reducer for the Janiszewski no-subcontinuum
 leaf.
@@ -3766,6 +4740,612 @@ theorem planarContinuumUnboundedComplement_frontier_compact
     hcompact.of_isClosed_subset isClosed_frontier
       (hcomponent_frontier_subset.trans hfrontier_compl_subset)
 
+/-- The pointwise subcontinuum boundary-bumping source carries the whole trace.
+
+Fix one point of `T ∩ frontier U`.  The pointwise source puts every other trace
+point in the same connected component of `frontier U`; compactness of that
+frontier component gives one compact connected carrier for the trace. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumCarrier_of_subcontinuumPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumCarrier := by
+  intro K U T hcompact hcomponent hunbounded hTcompact hTconnected hTsubset
+    htrace_nonempty
+  rcases htrace_nonempty with ⟨y, hyT, hyFrontier⟩
+  have hFcompact : IsCompact (frontier U) := by
+    rcases hcomponent with ⟨x, _hx, rfl⟩
+    exact
+      planarContinuumUnboundedComplement_frontier_compact
+        (K := K) (x := x) hcompact
+  haveI : CompactSpace (frontier U) := isCompact_iff_compactSpace.mp hFcompact
+  let yF : frontier U := ⟨y, hyFrontier⟩
+  let S : Set PlanarInterface.Point := Subtype.val '' connectedComponent yF
+  refine ⟨S, ?_, ?_, ?_, ?_⟩
+  · exact isClosed_connectedComponent.isCompact.image continuous_subtype_val
+  · exact
+      isConnected_connectedComponent.image Subtype.val
+        continuous_subtype_val.continuousOn
+  · intro p hpS
+    rcases hpS with ⟨pF, _hp_component, rfl⟩
+    exact pF.property
+  · intro p hpTrace
+    rcases hpTrace with ⟨hpT, hpFrontier⟩
+    rcases
+        points_between K U T y p hcompact hcomponent hunbounded hTcompact
+          hTconnected hTsubset hyT hpT hyFrontier hpFrontier with
+      ⟨P, _hPcompact, hPconnected, hPsubset, hyP, hpP⟩
+    have hp_componentInFrontier :
+        p ∈ connectedComponentIn (frontier U) y :=
+      hPconnected.isPreconnected.subset_connectedComponentIn hyP hPsubset hpP
+    have hp_image :
+        p ∈ (Subtype.val '' connectedComponent yF :
+          Set PlanarInterface.Point) := by
+      simpa [connectedComponentIn_eq_image hyFrontier, yF] using
+        hp_componentInFrontier
+    simpa [S] using hp_image
+
+/-- The displayed subcontinuum point-between theorem follows from the direct
+Janiszewski no-subcontinuum obstruction.
+
+If the two requested frontier points lay in different frontier components, a
+compact-Hausdorff quasicomponent separator of the actual frontier would split
+the frontier into two nonempty closed pieces.  The given compact connected
+`T ⊆ K` meets both pieces, contradicting the direct obstruction. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_noSubcontinuumObstruction
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween := by
+  intro K U T y z hcompact hcomponent hunbounded hTcompact hTconnected hTsubset
+    hyT hzT hyFrontier hzFrontier
+  rcases hcomponent with ⟨x, hx, rfl⟩
+  let F : Set PlanarInterface.Point := frontier (connectedComponentIn Kᶜ x)
+  have hFcompact : IsCompact F :=
+    planarContinuumUnboundedComplement_frontier_compact (K := K) (x := x)
+      hcompact
+  have hFclosed : IsClosed F := hFcompact.isClosed
+  haveI : CompactSpace F := isCompact_iff_compactSpace.mp hFcompact
+  let yF : F := ⟨y, hyFrontier⟩
+  let zF : F := ⟨z, hzFrontier⟩
+  let S : Set PlanarInterface.Point := Subtype.val '' connectedComponent yF
+  have hz_componentF : zF ∈ connectedComponent yF := by
+    by_contra hz_not_component
+    have hex :
+        Exists fun t : {t : Set F // IsClopen t ∧ yF ∈ t} =>
+          zF ∉ (t : Set F) := by
+      by_contra h
+      have hall :
+          forall t : {t : Set F // IsClopen t ∧ yF ∈ t},
+            zF ∈ (t : Set F) := by
+        intro t
+        by_contra hz_not_t
+        exact h ⟨t, hz_not_t⟩
+      exact hz_not_component (by
+        rw [connectedComponent_eq_iInter_isClopen]
+        exact Set.mem_iInter.mpr hall)
+    rcases hex with ⟨t, hz_not_t⟩
+    let A : Set PlanarInterface.Point := Subtype.val '' (t : Set F)
+    let B : Set PlanarInterface.Point := Subtype.val '' ((t : Set F)ᶜ)
+    have hAclosed : IsClosed A := by
+      exact
+        hFclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+          t.property.1.isClosed
+    have hBclosed : IsClosed B := by
+      exact
+        hFclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+          t.property.1.compl.isClosed
+    have hABdisjoint : Disjoint A B := by
+      rw [Set.disjoint_left]
+      intro p hpA hpB
+      rcases hpA with ⟨a, ha, rfl⟩
+      rcases hpB with ⟨b, hb, hb_eq⟩
+      have hba : b = a := Subtype.ext hb_eq
+      exact hb (by simpa [hba] using ha)
+    have hcover : F = A ∪ B := by
+      ext p
+      constructor
+      · intro hpF
+        let pF : F := ⟨p, hpF⟩
+        by_cases hp_t : pF ∈ (t : Set F)
+        · exact Or.inl ⟨pF, hp_t, rfl⟩
+        · exact Or.inr ⟨pF, hp_t, rfl⟩
+      · intro hp
+        rcases hp with hpA | hpB
+        · rcases hpA with ⟨pF, _hpF, rfl⟩
+          exact pF.property
+        · rcases hpB with ⟨pF, _hpF, rfl⟩
+          exact pF.property
+    have hAnonempty : A.Nonempty :=
+      ⟨y, ⟨yF, t.property.2, rfl⟩⟩
+    have hBnonempty : B.Nonempty :=
+      ⟨z, ⟨zF, hz_not_t, rfl⟩⟩
+    have hTA : (T ∩ A).Nonempty :=
+      ⟨y, hyT, ⟨yF, t.property.2, rfl⟩⟩
+    have hTB : (T ∩ B).Nonempty :=
+      ⟨z, hzT, ⟨zF, hz_not_t, rfl⟩⟩
+    exact
+      no_subcontinuum K (connectedComponentIn Kᶜ x) A B hcompact
+        ⟨x, hx, rfl⟩ hunbounded hAclosed hBclosed hABdisjoint
+        (by simpa [F] using hcover) hAnonempty hBnonempty T hTcompact
+        hTconnected hTsubset hTA hTB
+  refine ⟨S, ?_, ?_, ?_, ?_, ?_⟩
+  · exact isClosed_connectedComponent.isCompact.image continuous_subtype_val
+  · exact
+      isConnected_connectedComponent.image Subtype.val
+        continuous_subtype_val.continuousOn
+  · intro p hpS
+    rcases hpS with ⟨pF, _hp_component, rfl⟩
+    exact pF.property
+  · exact ⟨yF, mem_connectedComponent, rfl⟩
+  · exact ⟨zF, hz_componentF, rfl⟩
+
+/-- Claim `S2-agent-janiszewski-subcontinuum-points-worker-20260520r1`.
+
+The live U-indexed point-between leaf is strictly reduced to the direct
+Janiszewski no-subcontinuum obstruction for the same compactum, selected
+unbounded complement component, and displayed compact connected `T`. -/
+theorem S2_agent_janiszewski_subcontinuum_points_worker_20260520r1
+    (no_subcontinuum :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween :=
+  planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_noSubcontinuumObstruction
+    no_subcontinuum
+
+/-- Boundedness/crosscut form of the Janiszewski source supplies the displayed
+subcontinuum point-between theorem.
+
+This lowers the point-between residual past the closed-split obstruction: if a
+frontier component separator existed between the two requested points, the
+displayed compact connected `T` would cross its two closed sides, so the
+boundedness source would contradict the unboundedness of `U`. -/
+theorem
+    planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_subcontinuumForcesBounded
+    (subcontinuum_forces_bounded :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween :=
+  planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_noSubcontinuumObstruction
+    (planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_subcontinuumForcesBounded
+      subcontinuum_forces_bounded)
+
+/-- Claim `S2-agent-topology-subcontinuum-points-worker-20260521a1`.
+
+The assigned Janiszewski/boundary-bumping point-between leaf is strictly
+reduced to the same-lane boundedness/crosscut theorem
+`PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded`.
+This route does not pass through same-`K` components, component avoidance,
+boundary-cycle rows, or synthetic enclosure assumptions. -/
+theorem S2_agent_topology_subcontinuum_points_worker_20260521a1
+    (subcontinuum_forces_bounded :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumPointsBetween :=
+  planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_subcontinuumForcesBounded
+    subcontinuum_forces_bounded
+
+/-- Direct frontier-component form of the same-`K` boundary-bumping point
+source.
+
+This isolates the remaining planar topology content from the compact-connected
+witness packaging: two points of the selected unbounded complement frontier
+that lie in the same relative component of `K` must already lie in the same
+relative component of that frontier. -/
+def
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent :
+    Prop :=
+  forall (K U : Set PlanarInterface.Point) (y z : PlanarInterface.Point),
+    IsCompact K ->
+      (Exists fun x : PlanarInterface.Point =>
+        x ∈ Kᶜ ∧ U = connectedComponentIn Kᶜ x) ->
+        ¬ Bornology.IsBounded U ->
+          y ∈ frontier U ->
+            z ∈ frontier U ->
+              z ∈ connectedComponentIn K y ->
+                z ∈ connectedComponentIn (frontier U) y
+
+/-- The direct frontier-component source supplies the compact connected
+frontier witness for the same-`K` point-between theorem.
+
+The witness is the image in the plane of the connected component of `y` inside
+`frontier U`; compactness comes from the generic compact-frontier lemma for
+unbounded complement components of compact planar sets. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_frontierComponent
+    (frontier_component :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween := by
+  intro K U y z hcompact hcomponent hunbounded hyFrontier hzFrontier
+    hz_componentIn
+  have hFcompact : IsCompact (frontier U) := by
+    rcases hcomponent with ⟨x, _hx, rfl⟩
+    exact
+      planarContinuumUnboundedComplement_frontier_compact (K := K) (x := x)
+        hcompact
+  haveI : CompactSpace (frontier U) := isCompact_iff_compactSpace.mp hFcompact
+  let yF : frontier U := ⟨y, hyFrontier⟩
+  let zF : frontier U := ⟨z, hzFrontier⟩
+  have hz_frontierComponent :
+      z ∈ connectedComponentIn (frontier U) y :=
+    frontier_component K U y z hcompact hcomponent hunbounded hyFrontier
+      hzFrontier hz_componentIn
+  have hz_componentF : zF ∈ connectedComponent yF := by
+    have hz_image :
+        z ∈
+          (Subtype.val '' connectedComponent yF : Set PlanarInterface.Point) := by
+      simpa [connectedComponentIn_eq_image hyFrontier, yF] using
+        hz_frontierComponent
+    rcases hz_image with ⟨w, hw_component, hw_eq⟩
+    have hw_eq_zF : w = zF := Subtype.ext hw_eq
+    simpa [hw_eq_zF, yF] using hw_component
+  let S : Set PlanarInterface.Point := Subtype.val '' connectedComponent yF
+  refine ⟨S, ?_, ?_, ?_, ?_, ?_⟩
+  · exact isClosed_connectedComponent.isCompact.image continuous_subtype_val
+  · exact
+      isConnected_connectedComponent.image Subtype.val
+        continuous_subtype_val.continuousOn
+  · intro p hpS
+    rcases hpS with ⟨pF, _hp_component, rfl⟩
+    exact pF.property
+  · exact ⟨yF, mem_connectedComponent, rfl⟩
+  · exact ⟨zF, hz_componentF, rfl⟩
+
+/-- Claim `S2-agent-kcomponent-points-between-worker-20260521e29`.
+
+The same-`K` boundary-bumping point source is strictly reduced to the direct
+frontier-component theorem above.  This reducer only packages the frontier
+connected component as a compact connected witness; it does not route through
+crossing-boundedness, component avoidance, or a reverse relative-clopen alias. -/
+theorem S2_agent_kcomponent_points_between_worker_20260521e29
+    (frontier_component :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween :=
+  planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_frontierComponent
+    frontier_component
+
+set_option linter.style.longLine false in
+/-- The compact-witness same-`K` point-between theorem also gives the direct
+frontier-component source.
+
+This removes the compact connected witness packaging: the witness `S` supplied
+by point-between is connected and lies in `frontier U`, so Mathlib's
+connected-component closure principle puts `z` in the same frontier component
+as `y`. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_kComponentPointsBetween_20260522q21
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent := by
+  intro K U y z hcompact hcomponent hunbounded hyFrontier hzFrontier
+    hz_componentIn
+  rcases
+      points_between K U y z hcompact hcomponent hunbounded hyFrontier
+        hzFrontier hz_componentIn with
+    ⟨S, _hScompact, hSconnected, hSsubset, hyS, hzS⟩
+  exact hSconnected.isPreconnected.subset_connectedComponentIn hyS hSsubset hzS
+
+set_option linter.style.longLine false in
+/-- The same-`K` point-between source is equivalent to the primitive
+frontier-component source.
+
+The forward direction is only connected-component bookkeeping, while the
+reverse direction packages the frontier component as a compact connected plane
+witness using the already available compactness of unbounded
+complement-component frontiers. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentPointsBetween_iff_frontierComponent_20260522q21 :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween ↔
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent := by
+  constructor
+  · exact
+      planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_kComponentPointsBetween_20260522q21
+  · exact planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_frontierComponent
+
+set_option linter.style.longLine false in
+/-- The finite drawing no-closed-separation source is lowered to the direct
+same-`K` frontier-component Janiszewski source. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_kComponentFrontierComponent
+    (frontier_component :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiKComponentPointsBetween
+    (planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_frontierComponent
+      frontier_component)
+
+set_option linter.style.longLine false in
+/-- The finite drawing no-open-separation source follows from the same
+frontier-component source via the checked closed-piece/preconnected
+conversion. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierNoOpenSeparation_of_kComponentFrontierComponent
+    (frontier_component :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent) :
+    FiniteDrawingUnboundedComplementFrontierNoOpenSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoOpenSeparation_of_frontierPreconnected
+    (finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      (finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_kComponentFrontierComponent
+        frontier_component))
+
+/-- Direct frontier-component source from the Janiszewski relative-clopen
+K-side theorem.
+
+If `z` were outside the connected component of `y` in the selected frontier,
+compact-Hausdorff quasicomponent separation gives a nontrivial closed split of
+that frontier.  The relative-clopen K-side for this split separates `y` and
+`z` inside `K`, contradicting `z ∈ connectedComponentIn K y`. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_relativeClopenKSide
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent := by
+  intro K U y z hcompact hcomponent hunbounded hyFrontier hzFrontier
+    hz_componentIn
+  rcases hcomponent with ⟨x, hx, rfl⟩
+  let F : Set PlanarInterface.Point := frontier (connectedComponentIn Kᶜ x)
+  have hFcompact : IsCompact F :=
+    planarContinuumUnboundedComplement_frontier_compact (K := K) (x := x)
+      hcompact
+  have hFclosed : IsClosed F := hFcompact.isClosed
+  have hfrontier_subset_K : F ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  haveI : CompactSpace F := isCompact_iff_compactSpace.mp hFcompact
+  let yF : F := ⟨y, hyFrontier⟩
+  let zF : F := ⟨z, hzFrontier⟩
+  have hz_componentF : zF ∈ connectedComponent yF := by
+    by_contra hz_not_component
+    have hex :
+        Exists fun t : {t : Set F // IsClopen t ∧ yF ∈ t} =>
+          zF ∉ (t : Set F) := by
+      by_contra h
+      have hall :
+          forall t : {t : Set F // IsClopen t ∧ yF ∈ t},
+            zF ∈ (t : Set F) := by
+        intro t
+        by_contra hz_not_t
+        exact h ⟨t, hz_not_t⟩
+      exact hz_not_component (by
+        rw [connectedComponent_eq_iInter_isClopen]
+        exact Set.mem_iInter.mpr hall)
+    rcases hex with ⟨t, hz_not_t⟩
+    let A : Set PlanarInterface.Point := Subtype.val '' (t : Set F)
+    let B : Set PlanarInterface.Point := Subtype.val '' ((t : Set F)ᶜ)
+    have hAclosed : IsClosed A := by
+      exact
+        hFclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+          t.property.1.isClosed
+    have hBclosed : IsClosed B := by
+      exact
+        hFclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+          t.property.1.compl.isClosed
+    have hABdisjoint : Disjoint A B := by
+      rw [Set.disjoint_left]
+      intro p hpA hpB
+      rcases hpA with ⟨a, ha, rfl⟩
+      rcases hpB with ⟨b, hb, hb_eq⟩
+      have hba : b = a := Subtype.ext hb_eq
+      exact hb (by simpa [hba] using ha)
+    have hcover : F = A ∪ B := by
+      ext p
+      constructor
+      · intro hpF
+        let pF : F := ⟨p, hpF⟩
+        by_cases hp_t : pF ∈ (t : Set F)
+        · exact Or.inl ⟨pF, hp_t, rfl⟩
+        · exact Or.inr ⟨pF, hp_t, rfl⟩
+      · intro hp
+        rcases hp with hpA | hpB
+        · rcases hpA with ⟨pF, _hpF, rfl⟩
+          exact pF.property
+        · rcases hpB with ⟨pF, _hpF, rfl⟩
+          exact pF.property
+    have hAnonempty : A.Nonempty :=
+      ⟨y, ⟨yF, t.property.2, rfl⟩⟩
+    have hBnonempty : B.Nonempty :=
+      ⟨z, ⟨zF, hz_not_t, rfl⟩⟩
+    rcases
+        relative_side K (connectedComponentIn Kᶜ x) A B hcompact
+          ⟨x, hx, rfl⟩ hunbounded hAclosed hBclosed hABdisjoint hcover
+          hAnonempty hBnonempty with
+      ⟨K1, _hK1subset, hK1closed, hKdiffclosed, hAK1, hK1Bdisjoint⟩
+    let yK : K := ⟨y, hfrontier_subset_K hyFrontier⟩
+    let zK : K := ⟨z, hfrontier_subset_K hzFrontier⟩
+    have hz_componentK : zK ∈ connectedComponent yK := by
+      have hz_componentIn' :
+          z ∈
+            (Subtype.val '' connectedComponent yK : Set PlanarInterface.Point) := by
+        simpa [connectedComponentIn_eq_image (hfrontier_subset_K hyFrontier),
+          yK] using hz_componentIn
+      rcases hz_componentIn' with ⟨w, hw_component, hw_eq⟩
+      have hw_eq_zK : w = zK := Subtype.ext hw_eq
+      simpa [hw_eq_zK, yK] using hw_component
+    let L : Set K := {p | (p : PlanarInterface.Point) ∈ K1}
+    have hLclosed : IsClosed L :=
+      hK1closed.preimage continuous_subtype_val
+    have hLcomplClosed : IsClosed Lᶜ := by
+      have hpre : IsClosed {p : K | (p : PlanarInterface.Point) ∈ K \ K1} :=
+        hKdiffclosed.preimage continuous_subtype_val
+      convert hpre using 1
+      ext p
+      simp [L, Set.mem_diff]
+    have hLclopen : IsClopen L :=
+      ⟨hLclosed, by simpa using hLcomplClosed.isOpen_compl⟩
+    have hyL : yK ∈ L :=
+      hAK1 ⟨yF, t.property.2, rfl⟩
+    have hz_not_L : zK ∉ L := by
+      intro hzL
+      exact
+        (Set.disjoint_left.mp hK1Bdisjoint) hzL
+          ⟨zF, hz_not_t, rfl⟩
+    exact hz_not_L (hLclopen.connectedComponent_subset hyL hz_componentK)
+  have hz_image :
+      z ∈
+        (Subtype.val '' connectedComponent yF : Set PlanarInterface.Point) :=
+    ⟨zF, hz_componentF, rfl⟩
+  simpa [connectedComponentIn_eq_image hyFrontier, yF] using hz_image
+
+/-- Claim `S2-agent-frontier-component-source-worker-20260521e31`.
+
+The direct same-`K` frontier-component theorem is strictly reduced to the
+Janiszewski closed-frontier relative-clopen K-side source.  This stays below
+the compact-witness packaging and does not use crossing-boundedness or a
+reverse relative-clopen alias. -/
+theorem S2_agent_frontier_component_source_worker_20260521e31
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent :=
+  planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_relativeClopenKSide
+    relative_side
+
+/-- Same-`K`-component point-between source from the Janiszewski relative-clopen
+K-side theorem.
+
+The compact connected witness is the connected component of `y` inside the
+actual frontier.  If `z` missed that component, compact-Hausdorff
+quasicomponent separation in the frontier would give a nontrivial closed split
+of `frontier U`; the relative-clopen K-side for that split would separate `y`
+and `z` in `K`, contradicting `z ∈ connectedComponentIn K y`. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_relativeClopenKSide
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween := by
+  intro K U y z hcompact hcomponent hunbounded hyFrontier hzFrontier
+    hz_componentIn
+  rcases hcomponent with ⟨x, hx, rfl⟩
+  let F : Set PlanarInterface.Point := frontier (connectedComponentIn Kᶜ x)
+  have hFcompact : IsCompact F :=
+    planarContinuumUnboundedComplement_frontier_compact (K := K) (x := x)
+      hcompact
+  have hFclosed : IsClosed F := hFcompact.isClosed
+  have hfrontier_subset_K : F ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  haveI : CompactSpace F := isCompact_iff_compactSpace.mp hFcompact
+  let yF : F := ⟨y, hyFrontier⟩
+  let zF : F := ⟨z, hzFrontier⟩
+  let S : Set PlanarInterface.Point := Subtype.val '' connectedComponent yF
+  have hz_componentF : zF ∈ connectedComponent yF := by
+    by_contra hz_not_component
+    have hex :
+        Exists fun t : {t : Set F // IsClopen t ∧ yF ∈ t} =>
+          zF ∉ (t : Set F) := by
+      by_contra h
+      have hall :
+          forall t : {t : Set F // IsClopen t ∧ yF ∈ t},
+            zF ∈ (t : Set F) := by
+        intro t
+        by_contra hz_not_t
+        exact h ⟨t, hz_not_t⟩
+      exact hz_not_component (by
+        rw [connectedComponent_eq_iInter_isClopen]
+        exact Set.mem_iInter.mpr hall)
+    rcases hex with ⟨t, hz_not_t⟩
+    let A : Set PlanarInterface.Point := Subtype.val '' (t : Set F)
+    let B : Set PlanarInterface.Point := Subtype.val '' ((t : Set F)ᶜ)
+    have hAclosed : IsClosed A := by
+      exact
+        hFclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+          t.property.1.isClosed
+    have hBclosed : IsClosed B := by
+      exact
+        hFclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+          t.property.1.compl.isClosed
+    have hABdisjoint : Disjoint A B := by
+      rw [Set.disjoint_left]
+      intro p hpA hpB
+      rcases hpA with ⟨a, ha, rfl⟩
+      rcases hpB with ⟨b, hb, hb_eq⟩
+      have hba : b = a := Subtype.ext hb_eq
+      exact hb (by simpa [hba] using ha)
+    have hcover : F = A ∪ B := by
+      ext p
+      constructor
+      · intro hpF
+        let pF : F := ⟨p, hpF⟩
+        by_cases hp_t : pF ∈ (t : Set F)
+        · exact Or.inl ⟨pF, hp_t, rfl⟩
+        · exact Or.inr ⟨pF, hp_t, rfl⟩
+      · intro hp
+        rcases hp with hpA | hpB
+        · rcases hpA with ⟨pF, _hpF, rfl⟩
+          exact pF.property
+        · rcases hpB with ⟨pF, _hpF, rfl⟩
+          exact pF.property
+    have hAnonempty : A.Nonempty :=
+      ⟨y, ⟨yF, t.property.2, rfl⟩⟩
+    have hBnonempty : B.Nonempty :=
+      ⟨z, ⟨zF, hz_not_t, rfl⟩⟩
+    rcases
+        relative_side K (connectedComponentIn Kᶜ x) A B hcompact
+          ⟨x, hx, rfl⟩ hunbounded hAclosed hBclosed hABdisjoint hcover
+          hAnonempty hBnonempty with
+      ⟨K1, _hK1subset, hK1closed, hKdiffclosed, hAK1, hK1Bdisjoint⟩
+    let yK : K := ⟨y, hfrontier_subset_K hyFrontier⟩
+    let zK : K := ⟨z, hfrontier_subset_K hzFrontier⟩
+    have hz_componentK : zK ∈ connectedComponent yK := by
+      have hz_componentIn' :
+          z ∈
+            (Subtype.val '' connectedComponent yK : Set PlanarInterface.Point) := by
+        simpa [connectedComponentIn_eq_image (hfrontier_subset_K hyFrontier),
+          yK] using hz_componentIn
+      rcases hz_componentIn' with ⟨w, hw_component, hw_eq⟩
+      have hw_eq_zK : w = zK := Subtype.ext hw_eq
+      simpa [hw_eq_zK, yK] using hw_component
+    let L : Set K := {p | (p : PlanarInterface.Point) ∈ K1}
+    have hLclosed : IsClosed L :=
+      hK1closed.preimage continuous_subtype_val
+    have hLcomplClosed : IsClosed Lᶜ := by
+      have hpre : IsClosed {p : K | (p : PlanarInterface.Point) ∈ K \ K1} :=
+        hKdiffclosed.preimage continuous_subtype_val
+      convert hpre using 1
+      ext p
+      simp [L, Set.mem_diff]
+    have hLclopen : IsClopen L :=
+      ⟨hLclosed, by simpa using hLcomplClosed.isOpen_compl⟩
+    have hyL : yK ∈ L :=
+      hAK1 ⟨yF, t.property.2, rfl⟩
+    have hz_not_L : zK ∉ L := by
+      intro hzL
+      exact
+        (Set.disjoint_left.mp hK1Bdisjoint) hzL
+          ⟨zF, hz_not_t, rfl⟩
+    exact hz_not_L (hLclopen.connectedComponent_subset hyL hz_componentK)
+  refine ⟨S, ?_, ?_, ?_, ?_, ?_⟩
+  · exact isClosed_connectedComponent.isCompact.image continuous_subtype_val
+  · exact
+      isConnected_connectedComponent.image Subtype.val
+        continuous_subtype_val.continuousOn
+  · intro p hpS
+    rcases hpS with ⟨pF, _hp_component, rfl⟩
+    exact pF.property
+  · exact ⟨yF, mem_connectedComponent, rfl⟩
+  · exact ⟨zF, hz_componentF, rfl⟩
+
+/-- Claim `S2-agent-kcomponent-points-between-source-20260520f`.
+
+The same-`K`-component boundary-bumping point source is strictly reduced to the
+existing Janiszewski relative-clopen K-side theorem. -/
+theorem S2_agent_kcomponent_points_between_source_20260520f
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween :=
+  planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_relativeClopenKSide
+    relative_side
+
+/-- Claim `S2-agent-topology-kcomponent-source-worker-20260520k`.
+
+The live topology source leaf
+`PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween`
+is strictly reduced to the Janiszewski relative-clopen `K`-side theorem.  This
+uses the direct compact-frontier component proof above, not the cyclic
+component-avoidance route or any final boundary-cycle row. -/
+theorem S2_agent_topology_kcomponent_source_worker_20260520k
+    (relative_side :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween :=
+  planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_relativeClopenKSide
+    relative_side
+
 /-- The unbounded complement component frontier is nonempty.  The component is
 nonempty because it is unbounded, while it cannot be all of the plane because
 it lies in `Kᶜ` and `K` is connected, hence nonempty. -/
@@ -3786,6 +5366,57 @@ theorem planarContinuumUnboundedComplement_frontier_nonempty
       exact Set.mem_univ p
     exact (connectedComponentIn_subset Kᶜ x hp_component) hpK
 
+/-- The pairwise subcontinuum-between source is equivalent in strength to
+the connected-frontier source in the connected compactum setting.
+
+The earlier reducer used subcontinuum-between only to prove preconnectedness.
+Here the nonempty frontier row supplies the missing connectedness witness, so
+future topology work can treat the two source surfaces as the same planar
+continuum theorem rather than cycling through both. -/
+theorem planarContinuumUnboundedComplementFrontierConnected_of_subcontinuumBetween
+    (subcontinuum_between :
+      PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween) :
+    PlanarContinuumUnboundedComplementFrontierConnected := by
+  intro K x hcompact hconnected hx hunbounded
+  exact
+    ⟨planarContinuumUnboundedComplement_frontier_nonempty
+        (K := K) (x := x) hcompact hconnected hx hunbounded,
+      (planarContinuumUnboundedComplementFrontierPreconnected_of_subcontinuumBetween
+        subcontinuum_between) K x hcompact hconnected hx hunbounded⟩
+
+/-- Claim `S2-k6b-topology-connected-frontier-source`.
+
+The connected-frontier topology leaf is strictly lowered to the current
+U-indexed subcontinuum-carrier boundary-bumping source.  The carrier first
+gives pointwise frontier subcontinua, then the connected compactum reducer
+uses the whole compactum `K` to obtain the pairwise
+`PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween` theorem, and
+the existing nonempty-frontier adapter closes connectedness. -/
+theorem S2_k6b_topology_connected_frontier_source
+    (subcontinuum_carrier :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumCarrier) :
+    PlanarContinuumUnboundedComplementFrontierConnected :=
+  planarContinuumUnboundedComplementFrontierConnected_of_subcontinuumBetween
+    (planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_janiszewskiSubcontinuumPointsBetween
+      (planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_subcontinuumCarrier
+        subcontinuum_carrier))
+
+/-- Claim `S2-agent-topology-connected-frontier-20260521k6`.
+
+The reusable connected-frontier planar-continuum source is strictly lowered to
+the U-indexed Janiszewski bounded-subcontinuum source.  The proof first turns
+boundedness/crosscut into the pointwise boundary-bumping theorem, then chooses
+the whole connected compactum `K` as the displayed subcontinuum and uses the
+standard nonempty-frontier adapter for connectedness. -/
+theorem S2_agent_topology_connected_frontier_20260521k6
+    (subcontinuum_forces_bounded :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierSubcontinuumForcesBounded) :
+    PlanarContinuumUnboundedComplementFrontierConnected :=
+  planarContinuumUnboundedComplementFrontierConnected_of_subcontinuumBetween
+    (planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_janiszewskiSubcontinuumPointsBetween
+      (planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_subcontinuumForcesBounded
+        subcontinuum_forces_bounded))
+
 /-- The direct closed-piece contradiction/crosscut source closes the connected
 frontier theorem.  Thus the exact remaining planar-topology lemma is the
 impossibility of separating this frontier into two disjoint nonempty closed
@@ -3801,6 +5432,63 @@ theorem planarContinuumUnboundedComplementFrontierConnected_of_noClosedSeparatio
       (planarContinuumUnboundedComplement_frontier_nonempty
         (K := K) (x := x) hcompact hconnected hx hunbounded)
       (frontier_noClosedSeparation K x hcompact hconnected hx hunbounded)
+
+/-- The closed-piece no-separation theorem also supplies the pairwise
+subcontinuum-between surface.
+
+Once no closed separation gives connectedness of the unbounded component
+frontier, the whole frontier itself is the compact connected witness between
+any two of its points. -/
+theorem planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_noClosedSeparation
+    (frontier_noClosedSeparation :
+      PlanarContinuumUnboundedComplementFrontierNoClosedSeparation) :
+    PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween := by
+  intro K x hcompact hconnected hx hunbounded y z hy hz
+  refine
+    ⟨frontier (connectedComponentIn Kᶜ x),
+      planarContinuumUnboundedComplement_frontier_compact
+        (K := K) (x := x) hcompact,
+      ?_,
+      subset_rfl,
+      hy,
+      hz⟩
+  exact
+    planarContinuumUnboundedComplementFrontierConnected_of_noClosedSeparation
+      frontier_noClosedSeparation K x hcompact hconnected hx hunbounded
+
+/-- Claim `S2-dynamic-topology-subcontinuum-between-k4`.
+
+The current pairwise subcontinuum-between topology leaf is strictly lowered to
+the boundedness-contradiction closed-split source.  If a nonempty disjoint
+closed cover of the selected frontier existed, the source would force the
+selected complement component to be bounded, contradicting the unbounded input.
+The whole frontier is then the compact connected subcontinuum between the two
+requested frontier points. -/
+theorem
+    planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_closedSeparationForcesBounded
+    (closed_split_forces_bounded :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesBounded) :
+    PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween := by
+  intro K x hcompact hconnected hx hunbounded y z hy hz
+  refine
+    ⟨frontier (connectedComponentIn Kᶜ x),
+      planarContinuumUnboundedComplement_frontier_compact
+        (K := K) (x := x) hcompact,
+      ?_,
+      subset_rfl,
+      hy,
+      hz⟩
+  exact
+    isConnected_of_noClosedSeparation
+      isClosed_frontier
+      (planarContinuumUnboundedComplement_frontier_nonempty
+        (K := K) (x := x) hcompact hconnected hx hunbounded)
+      (by
+        intro A B hAclosed hBclosed hABdisjoint hcover hAnonempty hBnonempty
+        exact
+          hunbounded
+            (closed_split_forces_bounded K x A B hcompact hconnected hx
+              hAclosed hBclosed hABdisjoint hcover hAnonempty hBnonempty))
 
 /-- Claim `S2-codex-current-20260520-planar-connected-frontier-source`.
 
@@ -3972,6 +5660,81 @@ theorem S2_codex_current_20260520_relative_clopen_k_side_leaf
     PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
   janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
     nontrivial_side
+
+/-- Claim `S2-agent-janiszewski-relative-clopen-k-side-source-20260520h`.
+
+The shared Janiszewski relative-clopen `K`-side topology leaf is strictly
+reduced to the `x`-indexed planar-continuum nontrivial relative-clopen source.
+The checked adapter only opens the component witness
+`U = connectedComponentIn Kᶜ x`; it introduces no synthetic enclosure,
+endpoint/chord shortcut, or no-subcontinuum cycle. -/
+theorem S2_agent_janiszewski_relative_clopen_k_side_source_20260520h
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+    nontrivial_side
+
+/-- The same-`K` point-between source is reduced directly to the
+`x`-indexed nontrivial relative-clopen planar-continuum source.
+
+This is the non-circular topology handoff for the `KComponentPointsBetween`
+residual: it first opens the component witness to get the Janiszewski
+relative-clopen `K`-side row, then uses the compact-frontier component proof
+that turns that row into point-between data.  It does not route through
+component avoidance, the no-subcontinuum obstruction, or a boundary-cycle row. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_nontrivialRelativeClopenKSide
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween :=
+  planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_relativeClopenKSide
+    (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+      nontrivial_side)
+
+/-- Claim `S2-agent-kcomponent-pointbetween-worker-20260521d4`.
+
+The live same-`K` Janiszewski boundary-bumping point-between residual is
+strictly reduced to the `x`-indexed nontrivial relative-clopen
+planar-continuum theorem.  This keeps the route below the no-subcontinuum
+obstruction and avoids the older component-avoidance loop. -/
+theorem S2_agent_kcomponent_pointbetween_worker_20260521d4
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween :=
+  planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_nontrivialRelativeClopenKSide
+    nontrivial_side
+
+/-- Claim `S2-agent-no-subcontinuum-route-scout-20260521d3`.
+
+The Janiszewski no-subcontinuum residual strictly reduces to the `x`-indexed
+nontrivial relative-clopen source.  This composes only the component-witness
+adapter with the direct relative-clopen split of a compact connected
+subcontinuum; it avoids the same-`K` point-between cycle, trace surfaces, and
+boundary-cycle rows. -/
+theorem S2_agent_no_subcontinuum_route_scout_20260521d3
+    (nontrivial_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierNoSubcontinuumObstruction :=
+  planarJaniszewskiBoundaryBumpingNoSubcontinuumObstruction_of_relativeClopenKSide
+    (janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+      nontrivial_side)
+
+/-- Claim `S2-agent-relative-clopen-k-side-worker-20260520o4`.
+
+The relative-clopen `K`-side source needed by the same-`K` point-between
+theorem is strictly reduced to the x-indexed whole-frontier no-subcontinuum
+obstruction.  The composition uses only the compact-Hausdorff clopen separator
+and the component-witness adapter; it does not pass through
+`KComponentPointsBetween`, crossing-boundedness, component avoidance, or any
+boundary-cycle rows. -/
+theorem S2_agent_relative_clopen_k_side_worker_20260520o4
+    (no_subcontinuum :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoSubcontinuumObstruction) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  janiszewskiBoundaryBumping_of_nontrivialRelativeClopenKSide
+    (planarContinuumUnboundedComplementFrontierNontrivialRelativeClopenKSide_of_noSubcontinuumObstruction
+      no_subcontinuum)
 
 /-- The component-witness Janiszewski relative-clopen leaf is reduced directly
 to the compact-plane crossing-boundedness source.
@@ -4257,6 +6020,36 @@ theorem planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_closedSe
       K₁ K₂ hK₁closed hK₂closed hKdisjoint hKcover
       hK₁nonempty hK₂nonempty
 
+/-- The closed-frontier continuum-separation theorem directly supplies the
+finite-drawing no-closed-separation source.
+
+This removes the drawing-specific closed-separation premise from the live S2
+topology handoff.  The exact remaining source is the planar continuum theorem
+that every nonempty closed split of an unbounded complement frontier forces a
+closed split of the original compactum. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_closedSeparationForcesContinuumSeparation
+    (closed_split_forces_continuum_split :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_planarContinuum
+    (planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_closedSeparationForcesContinuumSeparation
+      closed_split_forces_continuum_split)
+
+/-- Claim `S2-agent-topology-source-implementation-20260520g3`.
+
+The finite embedded-drawing no-closed-separation row is strictly reduced to the
+existing Janiszewski-style closed-frontier continuum-separation theorem.  This
+uses only the planar-continuum specialization adapter for `embeddedEdgeSet C`
+and does not pass through final boundary-cycle rows, induced carrier graphs,
+arbitrary cycles, or synthetic enclosures. -/
+theorem S2_agent_topology_source_implementation_20260520g3
+    (closed_split_forces_continuum_split :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_closedSeparationForcesContinuumSeparation
+    closed_split_forces_continuum_split
+
 /-- The closed-split-forces-continuum-split source also closes the connected
 frontier theorem directly, via the checked closed-separation criterion. -/
 theorem planarContinuumUnboundedComplementFrontierConnected_of_closedSeparationForcesContinuumSeparation
@@ -4264,6 +6057,16 @@ theorem planarContinuumUnboundedComplementFrontierConnected_of_closedSeparationF
       PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation) :
     PlanarContinuumUnboundedComplementFrontierConnected :=
   planarContinuumUnboundedComplementFrontierConnected_of_noClosedSeparation
+    (planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_closedSeparationForcesContinuumSeparation
+      closed_split_forces_continuum_split)
+
+/-- The closed-frontier continuum-separation theorem also supplies the live
+preconnectedness source directly. -/
+theorem planarContinuumUnboundedComplementFrontierPreconnected_of_closedSeparationForcesContinuumSeparation
+    (closed_split_forces_continuum_split :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation) :
+    PlanarContinuumUnboundedComplementFrontierPreconnected :=
+  planarContinuumUnboundedComplementFrontierPreconnected_of_noClosedSeparation
     (planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_closedSeparationForcesContinuumSeparation
       closed_split_forces_continuum_split)
 
@@ -4278,6 +6081,57 @@ theorem S2_codex_main_20260520_planar_connected_frontier_theorem
     PlanarContinuumUnboundedComplementFrontierConnected :=
   planarContinuumUnboundedComplementFrontierConnected_of_closedSeparationForcesContinuumSeparation
     closed_split_forces_continuum_split
+
+/-- The closed-separation boundedness leaf reduces to the crossing-subcontinuum
+boundedness source.
+
+For a nonempty closed frontier split, both sides lie in `K` by the standard
+frontier-subset lemma.  Since `K` is itself compact and connected, it is the
+crossing compactum required by the smaller source. -/
+theorem
+    planarContinuumUnboundedComplementFrontierClosedSeparationForcesBounded_of_crossingSubcontinuumForcesBounded
+    (crossing_forces_bounded :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesBounded := by
+  intro K x A B hcompact hconnected hx hAclosed hBclosed hABdisjoint hcover
+    hAnonempty hBnonempty
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  have hAK : A ⊆ K := by
+    intro y hyA
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inl hyA)
+  have hBK : B ⊆ K := by
+    intro y hyB
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inr hyB)
+  have hKA : (K ∩ A).Nonempty := by
+    rcases hAnonempty with ⟨a, haA⟩
+    exact ⟨a, hAK haA, haA⟩
+  have hKB : (K ∩ B).Nonempty := by
+    rcases hBnonempty with ⟨b, hbB⟩
+    exact ⟨b, hBK hbB, hbB⟩
+  exact
+    crossing_forces_bounded K x A B K hcompact hx hAclosed hBclosed
+      hABdisjoint hcover hcompact hconnected subset_rfl hKA hKB
+
+/-- Direct k5 topology handoff for the displayed S2 route.
+
+The pairwise frontier subcontinuum theorem is obtained from the lower
+crossing-subcontinuum boundedness source by first erasing a closed frontier
+split to boundedness, then using the closed-split no-separation route. -/
+theorem
+    planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_crossingSubcontinuumForcesBounded
+    (crossing_forces_bounded :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded) :
+    PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween :=
+  planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_closedSeparationForcesBounded
+    (planarContinuumUnboundedComplementFrontierClosedSeparationForcesBounded_of_crossingSubcontinuumForcesBounded
+      crossing_forces_bounded)
 
 /-- The boundary-bumping/K-split source implies the complementary boundedness
 source.  For an attempted closed split of the selected frontier, either the
@@ -4348,6 +6202,45 @@ theorem planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_subconti
           ⟨T, hTcompact, hTconnected, hTsubset, hyT, hzT⟩
         exact ⟨T, hTcompact, hTconnected, hTsubset, hyT, hzT⟩)
 
+/-- Connected-compactum direct boundedness form for a displayed crossing.
+
+When `K` is connected, the pairwise frontier-subcontinuum theorem rules out the
+nonempty closed frontier split forced by the two crossing points.  Thus the
+same crossing can only occur when the selected complement component is bounded. -/
+theorem
+    planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_subcontinuumBetween_connected
+    (subcontinuum_between :
+      PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween)
+    {K : Set PlanarInterface.Point} {x : PlanarInterface.Point}
+    {A B T : Set PlanarInterface.Point}
+    (hcompact : IsCompact K)
+    (hconnected : IsConnected K)
+    (hx : x ∈ Kᶜ)
+    (hAclosed : IsClosed A)
+    (hBclosed : IsClosed B)
+    (hABdisjoint : Disjoint A B)
+    (hcover : frontier (connectedComponentIn Kᶜ x) = A ∪ B)
+    (_hTcompact : IsCompact T)
+    (_hTconnected : IsConnected T)
+    (_hTsubset : T ⊆ K)
+    (hTA : (T ∩ A).Nonempty)
+    (hTB : (T ∩ B).Nonempty) :
+    Bornology.IsBounded (connectedComponentIn Kᶜ x) := by
+  by_cases hbounded : Bornology.IsBounded (connectedComponentIn Kᶜ x)
+  · exact hbounded
+  · exfalso
+    have hAnonempty : A.Nonempty := by
+      rcases hTA with ⟨a, _haT, haA⟩
+      exact ⟨a, haA⟩
+    have hBnonempty : B.Nonempty := by
+      rcases hTB with ⟨b, _hbT, hbB⟩
+      exact ⟨b, hbB⟩
+    exact
+      (planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_subcontinuumBetween
+        subcontinuum_between)
+        K x hcompact hconnected hx hbounded A B hAclosed hBclosed
+        hABdisjoint hcover hAnonempty hBnonempty
+
 /-- Claim `S2-dyn-20260520-planar-frontier-no-closed-separation`.
 
 The exact closed-separation residual is strictly reduced to the checked
@@ -4417,6 +6310,1182 @@ def
                                 K = K1 ∪ K2 /\
                                   A ⊆ K1 /\
                                     B ⊆ K2
+
+/-- Ambient open-cover form of the hard aligned K-split source.
+
+For a nontrivial closed split `A ∪ B` of the selected unbounded-component
+frontier, this asks for two ambient open neighborhoods whose traces on `K` are
+disjoint and cover `K`.  The closed aligned split is then recovered by taking
+the complementary closed sides `K \ OB` and `K \ OA`. -/
+def
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesOpenKCoverSeparation :
+    Prop :=
+  forall (K : Set PlanarInterface.Point) (x : PlanarInterface.Point)
+      (A B : Set PlanarInterface.Point),
+    IsCompact K ->
+      x ∈ Kᶜ ->
+        ¬ Bornology.IsBounded (connectedComponentIn Kᶜ x) ->
+          IsClosed A ->
+            IsClosed B ->
+              Disjoint A B ->
+                frontier (connectedComponentIn Kᶜ x) = A ∪ B ->
+                  A.Nonempty ->
+                    B.Nonempty ->
+                      Exists fun OA : Set PlanarInterface.Point =>
+                        Exists fun OB : Set PlanarInterface.Point =>
+                          IsOpen OA /\
+                            IsOpen OB /\
+                              A ⊆ OA /\
+                                B ⊆ OB /\
+                                  K ⊆ OA ∪ OB /\
+                                    Disjoint (K ∩ OA) (K ∩ OB)
+
+/-- A nontrivial relative-clopen `K`-side gives the ambient open-cover
+separation used by the current S2 topology route.
+
+This is a normality/compact-Hausdorff wrapper, not a new topology assumption:
+the closed relative side `K₁` and its closed complement `K \ K₁` get disjoint
+ambient open neighborhoods, whose traces separate `K`. -/
+theorem
+    planarContinuumUnboundedComplementFrontierNontrivialOpenKCoverSeparation_of_nontrivialRelativeClopenKSide
+    (relative_side :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesNontrivialRelativeClopenKSide) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesOpenKCoverSeparation := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint
+    hcover hAnonempty hBnonempty
+  rcases
+      relative_side K x A B hcompact hx hunbounded hAclosed hBclosed
+        hABdisjoint hcover hAnonempty hBnonempty with
+    ⟨K₁, hK₁subset, hK₁closed, hKdiffclosed, hAK₁, hK₁Bdisjoint⟩
+  let K₂ : Set PlanarInterface.Point := K \ K₁
+  have hK₂closed : IsClosed K₂ := by
+    simpa [K₂] using hKdiffclosed
+  have hK₁K₂disjoint : Disjoint K₁ K₂ := by
+    rw [Set.disjoint_left]
+    intro y hyK₁ hyK₂
+    exact hyK₂.2 hyK₁
+  rcases normal_separation hK₁closed hK₂closed hK₁K₂disjoint with
+    ⟨OA, OB, hOAopen, hOBopen, hK₁OA, hK₂OB, hOAOBdisjoint⟩
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  have hBK : B ⊆ K := by
+    intro y hyB
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inr hyB)
+  have hBK₂ : B ⊆ K₂ := by
+    intro y hyB
+    exact
+      ⟨hBK hyB,
+        fun hyK₁ => (Set.disjoint_left.mp hK₁Bdisjoint) hyK₁ hyB⟩
+  refine
+    ⟨OA, OB, hOAopen, hOBopen,
+      hAK₁.trans hK₁OA,
+      hBK₂.trans hK₂OB,
+      ?_, ?_⟩
+  · intro y hyK
+    by_cases hyK₁ : y ∈ K₁
+    · exact Or.inl (hK₁OA hyK₁)
+    · exact Or.inr (hK₂OB ⟨hyK, hyK₁⟩)
+  · rw [Set.disjoint_left]
+    intro y hyOA hyOB
+    exact (Set.disjoint_left.mp hOAOBdisjoint) hyOA.2 hyOB.2
+
+/-- Direct open-cover source from the Janiszewski component-avoidance row.
+
+This composes the existing component-avoidance-to-relative-clopen row with the
+main-thread open-cover reducer, so the final open-neighborhood construction is
+not duplicated here. -/
+theorem
+    planarContinuumUnboundedComplementFrontierOpenKCoverSeparation_of_janiszewskiComponentAvoidance
+    (component_avoidance :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesOpenKCoverSeparation :=
+  planarContinuumUnboundedComplementFrontierNontrivialOpenKCoverSeparation_of_nontrivialRelativeClopenKSide
+    (S2_dyn_20260520_nontrivial_relative_clopen_source
+      (planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_componentAvoidance
+        component_avoidance))
+
+/-- Claim `S2-agent-open-k-cover-source-worker-20260521e18`.
+
+The current topology leaf is reduced to the existing
+Janiszewski/boundary-bumping component-avoidance source. -/
+theorem S2_agent_open_k_cover_source_worker_20260521e18
+    (component_avoidance :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesOpenKCoverSeparation :=
+  planarContinuumUnboundedComplementFrontierOpenKCoverSeparation_of_janiszewskiComponentAvoidance
+    component_avoidance
+
+/-- An ambient open-cover separation strictly supplies the hard aligned
+closed `K₁/K₂` split.
+
+This is the e15 reduction surface: it works directly with open neighborhoods
+of the two frontier pieces and closed complements inside `K`, avoiding the
+relative-clopen, no-subcontinuum, component-avoidance, same-`K`, and final
+boundary-cycle routes. -/
+theorem
+    planarContinuumUnboundedComplementFrontierNontrivialAlignedKSplit_of_openKCoverSeparation
+    (open_cover :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesOpenKCoverSeparation) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint
+    hcover hAnonempty hBnonempty
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  have hAK : A ⊆ K := by
+    intro y hyA
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inl hyA)
+  have hBK : B ⊆ K := by
+    intro y hyB
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inr hyB)
+  rcases
+      open_cover K x A B hcompact hx hunbounded hAclosed hBclosed
+        hABdisjoint hcover hAnonempty hBnonempty with
+    ⟨OA, OB, hOAopen, hOBopen, hAOA, hBOB, hKcoverOpen, hKOdisjoint⟩
+  let K1 : Set PlanarInterface.Point := K \ OB
+  let K2 : Set PlanarInterface.Point := K \ OA
+  have hKclosed : IsClosed K := hcompact.isClosed
+  have hK1closed : IsClosed K1 := by
+    change IsClosed (K \ OB)
+    rw [Set.diff_eq]
+    exact hKclosed.inter hOBopen.isClosed_compl
+  have hK2closed : IsClosed K2 := by
+    change IsClosed (K \ OA)
+    rw [Set.diff_eq]
+    exact hKclosed.inter hOAopen.isClosed_compl
+  have hnot_both :
+      forall {y : PlanarInterface.Point}, y ∈ K -> y ∈ OA -> y ∈ OB -> False := by
+    intro y hyK hyOA hyOB
+    exact (Set.disjoint_left.mp hKOdisjoint) ⟨hyK, hyOA⟩ ⟨hyK, hyOB⟩
+  have hKdisjoint : Disjoint K1 K2 := by
+    rw [Set.disjoint_left]
+    intro y hyK1 hyK2
+    have hyK : y ∈ K := hyK1.1
+    have hyCover : y ∈ OA ∪ OB := hKcoverOpen hyK
+    rcases hyCover with hyOA | hyOB
+    · exact hyK2.2 hyOA
+    · exact hyK1.2 hyOB
+  have hKcover : K = K1 ∪ K2 := by
+    ext y
+    constructor
+    · intro hyK
+      have hyCover : y ∈ OA ∪ OB := hKcoverOpen hyK
+      rcases hyCover with hyOA | hyOB
+      · exact Or.inl ⟨hyK, fun hyOB => hnot_both hyK hyOA hyOB⟩
+      · exact Or.inr ⟨hyK, fun hyOA => hnot_both hyK hyOA hyOB⟩
+    · intro hy
+      rcases hy with hyK1 | hyK2
+      · exact hyK1.1
+      · exact hyK2.1
+  have hAK1 : A ⊆ K1 := by
+    intro y hyA
+    exact
+      ⟨hAK hyA, fun hyOB => hnot_both (hAK hyA) (hAOA hyA) hyOB⟩
+  have hBK2 : B ⊆ K2 := by
+    intro y hyB
+    exact
+      ⟨hBK hyB, fun hyOA => hnot_both (hBK hyB) hyOA (hBOB hyB)⟩
+  exact ⟨K1, K2, hK1closed, hK2closed, hKdisjoint, hKcover, hAK1, hBK2⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-nontrivial-aligned-k-split-source-worker-20260521e15`.
+
+The live hard-case aligned K-split leaf is reduced to the ambient open-cover
+separation theorem above.  The remaining source is to construct the two open
+neighborhoods of the nonempty frontier pieces whose traces disjointly cover
+the compactum. -/
+theorem S2_agent_nontrivial_aligned_k_split_source_worker_20260521e15
+    (open_cover :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesOpenKCoverSeparation) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit :=
+  planarContinuumUnboundedComplementFrontierNontrivialAlignedKSplit_of_openKCoverSeparation
+    open_cover
+
+/-- A hard-case aligned `K`-split source supplies the full aligned split.
+
+The nontrivial source handles the only case with two nonempty frontier pieces.
+If one closed frontier side is empty, compactness puts the other side inside
+`K`, and the split is the trivial `K / empty` or `empty / K` cover. -/
+theorem
+    planarContinuumUnboundedComplementFrontierAlignedKSplit_of_nontrivialAlignedKSplit
+    (nontrivial_aligned_K_split :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesAlignedKSplit := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  by_cases hAnonempty : A.Nonempty
+  · by_cases hBnonempty : B.Nonempty
+    · exact
+        nontrivial_aligned_K_split K x A B hcompact hx hunbounded hAclosed
+          hBclosed hABdisjoint hcover hAnonempty hBnonempty
+    · have hAsubsetK : A ⊆ K := by
+        intro y hyA
+        exact hfrontier_subset_K (by
+          rw [hcover]
+          exact Or.inl hyA)
+      have hBempty : B = ∅ := Set.not_nonempty_iff_eq_empty.mp hBnonempty
+      refine
+        ⟨K, ∅, hcompact.isClosed, isClosed_empty, ?_, ?_, hAsubsetK, ?_⟩
+      · simp
+      · simp
+      · intro y hyB
+        simpa [hBempty] using hyB
+  · have hBsubsetK : B ⊆ K := by
+      intro y hyB
+      exact hfrontier_subset_K (by
+        rw [hcover]
+        exact Or.inr hyB)
+    have hAempty : A = ∅ := Set.not_nonempty_iff_eq_empty.mp hAnonempty
+    refine
+      ⟨∅, K, isClosed_empty, hcompact.isClosed, ?_, ?_, ?_, hBsubsetK⟩
+    · simp
+    · simp
+    · intro y hyA
+      simpa [hAempty] using hyA
+
+/-- Generic compact-subspace eraser from a continuous Boolean side labelling
+to an ambient closed `K₁/K₂` split.
+
+The source theorem below only has to produce the side map on the compactum.
+Closedness of the two ambient sides is recovered here by viewing the Boolean
+fibres as closed subsets of the subtype `K` and then using the closed
+embedding `Subtype.val : K -> X`. -/
+theorem exists_closed_k_split_of_continuous_bool_side
+    {X : Type u} [TopologicalSpace X] [T2Space X]
+    {K A B : Set X}
+    (hK : IsCompact K)
+    (hAK : A ⊆ K) (hBK : B ⊆ K)
+    (side : K -> Bool)
+    (hside : Continuous side)
+    (hA_side : forall a : K, (a : X) ∈ A -> side a = true)
+    (hB_side : forall b : K, (b : X) ∈ B -> side b = false) :
+    Exists fun K1 : Set X =>
+      Exists fun K2 : Set X =>
+        IsClosed K1 /\
+          IsClosed K2 /\
+            Disjoint K1 K2 /\
+              K = K1 ∪ K2 /\
+                A ⊆ K1 /\
+                  B ⊆ K2 := by
+  let S1 : Set K := side ⁻¹' {true}
+  let S2 : Set K := side ⁻¹' {false}
+  let K1 : Set X := Subtype.val '' S1
+  let K2 : Set X := Subtype.val '' S2
+  have hKclosed : IsClosed K := hK.isClosed
+  have hS1closed : IsClosed S1 := by
+    exact isClosed_singleton.preimage hside
+  have hS2closed : IsClosed S2 := by
+    exact isClosed_singleton.preimage hside
+  have hK1closed : IsClosed K1 := by
+    exact
+      hKclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+        hS1closed
+  have hK2closed : IsClosed K2 := by
+    exact
+      hKclosed.isClosedEmbedding_subtypeVal.isClosed_iff_image_isClosed.mp
+        hS2closed
+  have hdisjoint : Disjoint K1 K2 := by
+    rw [Set.disjoint_left]
+    intro y hyK1 hyK2
+    rcases hyK1 with ⟨p, hpS1, rfl⟩
+    rcases hyK2 with ⟨q, hqS2, hq⟩
+    have hqp : q = p := Subtype.ext hq
+    have hp_true : side p = true := by
+      simpa [S1] using hpS1
+    have hq_false : side q = false := by
+      simpa [S2] using hqS2
+    rw [hqp, hp_true] at hq_false
+    simp at hq_false
+  have hcover : K = K1 ∪ K2 := by
+    ext y
+    constructor
+    · intro hyK
+      by_cases htrue : side ⟨y, hyK⟩ = true
+      · exact Or.inl ⟨⟨y, hyK⟩, by simpa [S1] using htrue, rfl⟩
+      · have hfalse : side ⟨y, hyK⟩ = false := by
+          cases h : side ⟨y, hyK⟩ <;> simp [h] at htrue ⊢
+        exact Or.inr ⟨⟨y, hyK⟩, by simpa [S2] using hfalse, rfl⟩
+    · intro hy
+      rcases hy with hyK1 | hyK2
+      · rcases hyK1 with ⟨p, _hpS1, rfl⟩
+        exact p.property
+      · rcases hyK2 with ⟨p, _hpS2, rfl⟩
+        exact p.property
+  have hAK1 : A ⊆ K1 := by
+    intro y hyA
+    exact
+      ⟨⟨y, hAK hyA⟩,
+        by simpa [S1] using hA_side ⟨y, hAK hyA⟩ hyA,
+        rfl⟩
+  have hBK2 : B ⊆ K2 := by
+    intro y hyB
+    exact
+      ⟨⟨y, hBK hyB⟩,
+        by simpa [S2] using hB_side ⟨y, hBK hyB⟩ hyB,
+        rfl⟩
+  exact ⟨K1, K2, hK1closed, hK2closed, hdisjoint, hcover, hAK1, hBK2⟩
+
+/-- Generic compact-subspace constructor for a continuous Boolean side
+labelling from an already aligned closed `K₁/K₂` split.
+
+The map is the characteristic Boolean of the first closed side, restricted to
+the subtype `K`.  Continuity is reduced to the two Boolean fibres: the `true`
+fibre is `K₁ ∩ K` and the `false` fibre is its complement in `K`, which is
+`K₂ ∩ K` by the disjoint cover hypothesis. -/
+theorem exists_continuous_bool_side_of_closed_k_split
+    {X : Type u} [TopologicalSpace X]
+    {K A B K1 K2 : Set X}
+    (hK1closed : IsClosed K1)
+    (hK2closed : IsClosed K2)
+    (hKdisjoint : Disjoint K1 K2)
+    (hKcover : K = K1 ∪ K2)
+    (hAK1 : A ⊆ K1)
+    (hBK2 : B ⊆ K2) :
+    Exists fun side : K -> Bool =>
+      Continuous side /\
+        (forall a : K, (a : X) ∈ A -> side a = true) /\
+          (forall b : K, (b : X) ∈ B -> side b = false) := by
+  classical
+  let S1 : Set K := {p | (p : X) ∈ K1}
+  let side : K -> Bool := fun p => if (p : X) ∈ K1 then true else false
+  have hS1closed : IsClosed S1 := by
+    exact hK1closed.preimage continuous_subtype_val
+  have hS1compl_closed : IsClosed S1ᶜ := by
+    have hS1compl_eq : S1ᶜ = {p : K | (p : X) ∈ K2} := by
+      ext p
+      constructor
+      · intro hp
+        have hpnotK1 : (p : X) ∉ K1 := by
+          intro hpK1
+          exact hp hpK1
+        have hpK_union : (p : X) ∈ K1 ∪ K2 := by
+          simpa [hKcover] using p.property
+        rcases hpK_union with hpK1 | hpK2
+        · exact (hpnotK1 hpK1).elim
+        · exact hpK2
+      · intro hpK2 hpS1
+        exact (Set.disjoint_left.mp hKdisjoint) hpS1 hpK2
+    rw [hS1compl_eq]
+    exact hK2closed.preimage continuous_subtype_val
+  have hside : Continuous side := by
+    rw [continuous_iff_isClosed]
+    intro s _hs
+    by_cases htrue : true ∈ s
+    · by_cases hfalse : false ∈ s
+      · have hpre : side ⁻¹' s = Set.univ := by
+          ext p
+          by_cases hp : (p : X) ∈ K1 <;> simp [side, hp, htrue, hfalse]
+        rw [hpre]
+        exact isClosed_univ
+      · have hpre : side ⁻¹' s = S1 := by
+          ext p
+          by_cases hp : (p : X) ∈ K1 <;> simp [side, S1, hp, htrue, hfalse]
+        rw [hpre]
+        exact hS1closed
+    · by_cases hfalse : false ∈ s
+      · have hpre : side ⁻¹' s = S1ᶜ := by
+          ext p
+          by_cases hp : (p : X) ∈ K1 <;> simp [side, S1, hp, htrue, hfalse]
+        rw [hpre]
+        exact hS1compl_closed
+      · have hpre : side ⁻¹' s = ∅ := by
+          ext p
+          by_cases hp : (p : X) ∈ K1 <;> simp [side, hp, htrue, hfalse]
+        rw [hpre]
+        exact isClosed_empty
+  have hA_side : forall a : K, (a : X) ∈ A -> side a = true := by
+    intro a ha
+    have haK1 : (a : X) ∈ K1 := hAK1 ha
+    simp [side, haK1]
+  have hB_side : forall b : K, (b : X) ∈ B -> side b = false := by
+    intro b hb
+    have hbK2 : (b : X) ∈ K2 := hBK2 hb
+    have hbnotK1 : (b : X) ∉ K1 := by
+      intro hbK1
+      exact (Set.disjoint_left.mp hKdisjoint) hbK1 hbK2
+    simp [side, hbnotK1]
+  exact ⟨side, hside, hA_side, hB_side⟩
+
+/-- Compact Hausdorff Boolean separator for two closed subsets not crossed by
+any compact connected subset of the compactum.
+
+This is the direct side-map form of the quasicomponent argument: pointwise
+clopen separation and compactness of the two closed traces produce one clopen
+side in the subtype `K`, whose characteristic map is continuous. -/
+theorem exists_continuous_bool_side_of_no_compact_connected_crossing
+    {X : Type u} [TopologicalSpace X] [T2Space X]
+    {K A B : Set X}
+    (hK : IsCompact K)
+    (hAclosed : IsClosed A) (hBclosed : IsClosed B)
+    (hno_crossing :
+      forall T : Set X,
+        IsCompact T ->
+          IsConnected T ->
+            T ⊆ K ->
+              (T ∩ A).Nonempty ->
+                (T ∩ B).Nonempty ->
+                  False) :
+    Exists fun side : K -> Bool =>
+      Continuous side /\
+        (forall a : K, (a : X) ∈ A -> side a = true) /\
+          (forall b : K, (b : X) ∈ B -> side b = false) := by
+  classical
+  haveI : CompactSpace K := isCompact_iff_compactSpace.mp hK
+  let AK : Set K := {x | (x : X) ∈ A}
+  let BK : Set K := {x | (x : X) ∈ B}
+  have hAKclosed : IsClosed AK := hAclosed.preimage continuous_subtype_val
+  have hBKclosed : IsClosed BK := hBclosed.preimage continuous_subtype_val
+  have hAKcompact : IsCompact AK := hAKclosed.isCompact
+  have hBKcompact : IsCompact BK := hBKclosed.isCompact
+
+  have hpoint_clopen :
+      forall (b : K), (b : X) ∈ B ->
+        forall a : {x : K // (x : X) ∈ A},
+          Exists fun V : Set K =>
+            IsClopen V ∧ (a : K) ∈ V ∧ b ∉ V := by
+    intro b hb a
+    have ha_not_component : (a : K) ∉ connectedComponent b := by
+      intro hab
+      let T : Set X := Subtype.val '' connectedComponent b
+      have hTcompact : IsCompact T := by
+        exact isClosed_connectedComponent.isCompact.image continuous_subtype_val
+      have hTconnected : IsConnected T := by
+        exact
+          isConnected_connectedComponent.image Subtype.val
+            continuous_subtype_val.continuousOn
+      have hTsubset : T ⊆ K := by
+        intro x hx
+        rcases hx with ⟨y, _hy, rfl⟩
+        exact y.property
+      have hTA : (T ∩ A).Nonempty := by
+        exact ⟨a, ⟨a, hab, rfl⟩, a.property⟩
+      have hTB : (T ∩ B).Nonempty := by
+        exact ⟨b, ⟨b, mem_connectedComponent, rfl⟩, hb⟩
+      exact hno_crossing T hTcompact hTconnected hTsubset hTA hTB
+    have hex :
+        Exists fun s : {s : Set K // IsClopen s ∧ b ∈ s} =>
+          (a : K) ∉ (s : Set K) := by
+      by_contra h
+      have hall :
+          forall s : {s : Set K // IsClopen s ∧ b ∈ s},
+            (a : K) ∈ (s : Set K) := by
+        intro s
+        by_contra hs
+        exact h ⟨s, hs⟩
+      exact ha_not_component (by
+        rw [connectedComponent_eq_iInter_isClopen]
+        exact Set.mem_iInter.mpr hall)
+    rcases hex with ⟨s, has⟩
+    exact ⟨(s : Set K)ᶜ, s.property.1.compl, has, by simpa using s.property.2⟩
+
+  have hclopen_A_away :
+      forall b : {x : K // (x : X) ∈ B},
+        Exists fun U : Set K =>
+          IsClopen U ∧ AK ⊆ U ∧ (b : K) ∉ U := by
+    intro b
+    choose V hV using
+      fun a : {x : K // (x : X) ∈ A} =>
+        hpoint_clopen (b : K) b.property a
+    have hcover : AK ⊆ ⋃ a : {x : K // (x : X) ∈ A}, V a := by
+      intro y hy
+      exact Set.mem_iUnion.mpr ⟨⟨y, hy⟩, (hV ⟨y, hy⟩).2.1⟩
+    rcases hAKcompact.elim_finite_subcover V
+        (fun a => (hV a).1.isOpen) hcover with
+      ⟨t, ht⟩
+    let U : Set K := ⋃ a ∈ t, V a
+    have hUclopen : IsClopen U := by
+      exact isClopen_biUnion_finset fun a _ha => (hV a).1
+    have hAKU : AK ⊆ U := by
+      simpa [U] using ht
+    have hbU : (b : K) ∉ U := by
+      intro hbmem
+      change (b : K) ∈ (⋃ a ∈ t, V a) at hbmem
+      rcases Set.mem_iUnion.mp hbmem with ⟨a, hbmem⟩
+      rcases Set.mem_iUnion.mp hbmem with ⟨_ha, hbVa⟩
+      exact (hV a).2.2 hbVa
+    exact ⟨U, hUclopen, hAKU, hbU⟩
+
+  choose U hU using hclopen_A_away
+  have hcoverB : BK ⊆ ⋃ b : {x : K // (x : X) ∈ B}, (U b)ᶜ := by
+    intro y hy
+    exact Set.mem_iUnion.mpr ⟨⟨y, hy⟩, (hU ⟨y, hy⟩).2.2⟩
+  rcases hBKcompact.elim_finite_subcover
+      (fun b : {x : K // (x : X) ∈ B} => (U b)ᶜ)
+      (fun b => (hU b).1.compl.isOpen) hcoverB with
+    ⟨t, ht⟩
+  let C : Set K := ⋂ b ∈ t, U b
+  have hCclopen : IsClopen C := by
+    exact isClopen_biInter_finset fun b _hb => (hU b).1
+  have hAKC : AK ⊆ C := by
+    intro y hyA
+    change y ∈ (⋂ b ∈ t, U b)
+    exact Set.mem_iInter.mpr fun b =>
+      Set.mem_iInter.mpr fun _hb => (hU b).2.1 hyA
+  have hCBdisj : Disjoint C BK := by
+    rw [Set.disjoint_left]
+    intro y hyC hyB
+    change y ∈ (⋂ b ∈ t, U b) at hyC
+    have hycover := ht hyB
+    rcases Set.mem_iUnion.mp hycover with ⟨b, hycover⟩
+    rcases Set.mem_iUnion.mp hycover with ⟨hb, hy_not_Ub⟩
+    have hyUb : y ∈ U b := by
+      have hy_all_b := Set.mem_iInter.mp hyC b
+      exact Set.mem_iInter.mp hy_all_b hb
+    exact hy_not_Ub hyUb
+
+  let side : K -> Bool := fun p => if p ∈ C then true else false
+  have hside : Continuous side := by
+    rw [continuous_iff_isClosed]
+    intro s _hs
+    by_cases htrue : true ∈ s
+    · by_cases hfalse : false ∈ s
+      · have hpre : side ⁻¹' s = Set.univ := by
+          ext p
+          by_cases hp : p ∈ C <;> simp [side, hp, htrue, hfalse]
+        rw [hpre]
+        exact isClosed_univ
+      · have hpre : side ⁻¹' s = C := by
+          ext p
+          by_cases hp : p ∈ C <;> simp [side, hp, htrue, hfalse]
+        rw [hpre]
+        exact hCclopen.isClosed
+    · by_cases hfalse : false ∈ s
+      · have hpre : side ⁻¹' s = Cᶜ := by
+          ext p
+          by_cases hp : p ∈ C <;> simp [side, hp, htrue, hfalse]
+        rw [hpre]
+        exact hCclopen.compl.isClosed
+      · have hpre : side ⁻¹' s = ∅ := by
+          ext p
+          by_cases hp : p ∈ C <;> simp [side, hp, htrue, hfalse]
+        rw [hpre]
+        exact isClosed_empty
+  have hA_side : forall a : K, (a : X) ∈ A -> side a = true := by
+    intro a ha
+    have haC : a ∈ C := hAKC ha
+    simp [side, haC]
+  have hB_side : forall b : K, (b : X) ∈ B -> side b = false := by
+    intro b hb
+    have hbnotC : b ∉ C := by
+      intro hbC
+      exact (Set.disjoint_left.mp hCBdisj) hbC hb
+    simp [side, hbnotC]
+  exact ⟨side, hside, hA_side, hB_side⟩
+
+/-- Continuous-side form of the hard Janiszewski split source.
+
+For every nontrivial closed split of the unbounded component frontier, this
+source asks for a continuous Boolean side labelling of the original compactum
+`K`, with all points of `A` on the `true` side and all points of `B` on the
+`false` side.  The generic compact-subspace eraser above turns this into the
+ambient closed `K₁/K₂` split. -/
+def
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide :
+    Prop :=
+  forall (K : Set PlanarInterface.Point) (x : PlanarInterface.Point)
+      (A B : Set PlanarInterface.Point),
+    IsCompact K ->
+      x ∈ Kᶜ ->
+        ¬ Bornology.IsBounded (connectedComponentIn Kᶜ x) ->
+          IsClosed A ->
+            IsClosed B ->
+              Disjoint A B ->
+                frontier (connectedComponentIn Kᶜ x) = A ∪ B ->
+                  A.Nonempty ->
+                    B.Nonempty ->
+                      Exists fun side : K -> Bool =>
+                        Continuous side /\
+                          (forall a : K, (a : PlanarInterface.Point) ∈ A ->
+                            side a = true) /\
+                          (forall b : K, (b : PlanarInterface.Point) ∈ B ->
+                              side b = false)
+
+/-- Compact/frontier no-crossing form below the continuous Boolean side source.
+
+For a closed split of the selected unbounded component frontier, no compact
+connected subset of `K` may meet both closed sides.  The generic compact
+Hausdorff separator then turns this lower compact/frontier theorem into the
+continuous side map on `K`. -/
+def
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing :
+    Prop :=
+  forall (K : Set PlanarInterface.Point) (x : PlanarInterface.Point)
+      (A B : Set PlanarInterface.Point),
+    IsCompact K ->
+      x ∈ Kᶜ ->
+        ¬ Bornology.IsBounded (connectedComponentIn Kᶜ x) ->
+          IsClosed A ->
+            IsClosed B ->
+              Disjoint A B ->
+                frontier (connectedComponentIn Kᶜ x) = A ∪ B ->
+                  forall T : Set PlanarInterface.Point,
+                    IsCompact T ->
+                      IsConnected T ->
+                        T ⊆ K ->
+                          (T ∩ A).Nonempty ->
+                            (T ∩ B).Nonempty ->
+                              False
+
+/-- The compact/frontier no-crossing theorem directly supplies the continuous
+Boolean side source. -/
+theorem
+    planarContinuumUnboundedComplementFrontierContinuousKSide_of_noCompactConnectedKCrossing
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+    _hAnonempty _hBnonempty
+  exact
+    exists_continuous_bool_side_of_no_compact_connected_crossing
+      (K := K) (A := A) (B := B)
+      hcompact hAclosed hBclosed
+      (no_crossing K x A B hcompact hx hunbounded hAclosed hBclosed
+        hABdisjoint hcover)
+
+/-- Claim `S2-agent-continuous-side-source-20260521k10`.
+
+The live continuous-side source is strictly lowered to the compact/frontier
+no-crossing theorem above.  This checked handoff is only the compact Hausdorff
+Boolean separator; it does not route through relative-clopen, no-subcontinuum,
+component-avoidance, crossing-boundedness, finite no-closed-separation, or
+final cycle rows. -/
+theorem S2_agent_continuous_side_source_20260521k10
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide :=
+  planarContinuumUnboundedComplementFrontierContinuousKSide_of_noCompactConnectedKCrossing
+    no_crossing
+
+/-- The point-between frontier source supplies the compact/frontier
+no-crossing theorem directly.
+
+If a compact connected subset of `K` met both sides of a closed split of the
+selected unbounded-component frontier, the point-between source would produce a
+compact connected subset of the frontier meeting both sides.  The closed split
+would then separate that connected witness. -/
+theorem
+    planarContinuumUnboundedComplementFrontierNoCompactConnectedKCrossing_of_pointsBetween
+    (points_between :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+    T hTcompact hTconnected hTsubset hTA hTB
+  rcases hTA with ⟨y, hyT, hyA⟩
+  rcases hTB with ⟨z, hzT, hzB⟩
+  have hyFrontier :
+      y ∈ frontier (connectedComponentIn Kᶜ x) := by
+    rw [hcover]
+    exact Or.inl hyA
+  have hzFrontier :
+      z ∈ frontier (connectedComponentIn Kᶜ x) := by
+    rw [hcover]
+    exact Or.inr hzB
+  rcases
+      points_between K x T y z hcompact hx hunbounded hTcompact
+        hTconnected hTsubset hyT hzT hyFrontier hzFrontier with
+    ⟨S, hScompact, hSconnected, hSsubset, hyS, hzS⟩
+  have hSclosed : IsClosed S := hScompact.isClosed
+  have hleftClosed : IsClosed (S ∩ A) := hSclosed.inter hAclosed
+  have hrightClosed : IsClosed (S ∩ B) := hSclosed.inter hBclosed
+  have hdisjoint : Disjoint (S ∩ A) (S ∩ B) := by
+    rw [Set.disjoint_left]
+    intro p hpLeft hpRight
+    exact (Set.disjoint_left.mp hABdisjoint) hpLeft.2 hpRight.2
+  have hScover : S = (S ∩ A) ∪ (S ∩ B) := by
+    ext p
+    constructor
+    · intro hpS
+      have hpFrontier :
+          p ∈ frontier (connectedComponentIn Kᶜ x) :=
+        hSsubset hpS
+      have hpAB : p ∈ A ∪ B := by
+        simpa [hcover] using hpFrontier
+      rcases hpAB with hpA | hpB
+      · exact Or.inl ⟨hpS, hpA⟩
+      · exact Or.inr ⟨hpS, hpB⟩
+    · intro hp
+      rcases hp with hpLeft | hpRight
+      · exact hpLeft.1
+      · exact hpRight.1
+  exact
+    (noClosedSeparation_of_isPreconnected hSconnected.isPreconnected)
+      (S ∩ A) (S ∩ B) hleftClosed hrightClosed hdisjoint hScover
+      ⟨y, hyS, hyA⟩ ⟨z, hzS, hzB⟩
+
+/-- Claim `S2-agent-no-compact-crossing-points-between-20260521k11`.
+
+The compact/frontier no-crossing source below the continuous-side route is
+strictly reduced to the existing point-between frontier-subcontinuum source. -/
+theorem S2_agent_no_compact_crossing_points_between_20260521k11
+    (points_between :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing :=
+  planarContinuumUnboundedComplementFrontierNoCompactConnectedKCrossing_of_pointsBetween
+    points_between
+
+/-- A continuous Boolean side theorem supplies the Janiszewski relative-clopen
+`K`-side theorem.
+
+The component witness only rewrites `U` to `connectedComponentIn Kᶜ x`.  The
+closed relative side is recovered from the `true` Boolean fibre in the compact
+subspace `K`; no boundary-cycle or W-level facade is used. -/
+theorem
+    planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_continuousKSide
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide := by
+  intro K U A B hcompact hcomponent hunbounded hAclosed hBclosed hABdisjoint
+    hcover hAnonempty hBnonempty
+  rcases hcomponent with ⟨x, hx, rfl⟩
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  have hAK : A ⊆ K := by
+    intro y hyA
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inl hyA)
+  have hBK : B ⊆ K := by
+    intro y hyB
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inr hyB)
+  rcases
+      continuous_side K x A B hcompact hx hunbounded hAclosed hBclosed
+        hABdisjoint hcover hAnonempty hBnonempty with
+    ⟨side, hside, hA_side, hB_side⟩
+  rcases
+      exists_closed_k_split_of_continuous_bool_side
+        (K := K) (A := A) (B := B)
+        hcompact hAK hBK side hside hA_side hB_side with
+    ⟨K1, K2, hK1closed, hK2closed, hKdisjoint, hKcover, hAK1, hBK2⟩
+  refine ⟨K1, ?_, hK1closed, ?_, hAK1, ?_⟩
+  · intro y hyK1
+    rw [hKcover]
+    exact Or.inl hyK1
+  · have hdiff_eq : K \ K1 = K2 := by
+      ext y
+      constructor
+      · intro hy
+        have hyUnion : y ∈ K1 ∪ K2 := by
+          simpa [hKcover] using hy.1
+        rcases hyUnion with hyK1 | hyK2
+        · exact (hy.2 hyK1).elim
+        · exact hyK2
+      · intro hyK2
+        refine ⟨?_, ?_⟩
+        · rw [hKcover]
+          exact Or.inr hyK2
+        · intro hyK1
+          exact (Set.disjoint_left.mp hKdisjoint) hyK1 hyK2
+    simpa [hdiff_eq] using hK2closed
+  · rw [Set.disjoint_left]
+    intro y hyK1 hyB
+    exact (Set.disjoint_left.mp hKdisjoint) hyK1 (hBK2 hyB)
+
+/-- Claim `S2-agent-relative-clopen-source-prover-20260521e49`.
+
+The remaining standard Janiszewski/boundary-bumping relative-clopen source is
+strictly reduced to the x-indexed continuous Boolean side source.  The checked
+adapter only opens the component witness `U = connectedComponentIn Kᶜ x`,
+places the two closed frontier sides inside `K`, and erases the continuous
+Boolean labelling to an ambient closed relative side.  It does not pass through
+same-`K` point-between, no-subcontinuum, component-avoidance,
+crossing-boundedness, finite no-closed-separation, or final boundary-cycle
+rows. -/
+theorem S2_agent_relative_clopen_source_prover_20260521e49
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_continuousKSide
+    continuous_side
+
+/-- Claim `S2-agent-relative-clopen-source-20260521k9`.
+
+The Janiszewski relative-clopen source is strictly lowered to the direct
+continuous Boolean side source.  This is only the component-witness rewrite and
+compact-subspace clopen erasure already checked above; it does not route
+through the no-subcontinuum obstruction or any downstream S2 cycle source. -/
+theorem S2_agent_relative_clopen_source_20260521k9
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_continuousKSide
+    continuous_side
+
+/-- The same-`K` frontier-component theorem is reduced directly to the
+continuous Boolean side source.
+
+This composes the checked continuous-side-to-relative-clopen bridge with the
+frontier-component reducer.  It stays below the compact witness packaging and
+does not use final S2 rows, finite frontier-cycle rows, finite
+no-closed-separation, or a new source facade. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_continuousKSide
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent :=
+  planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_relativeClopenKSide
+    (planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_continuousKSide
+      continuous_side)
+
+/-- Claim `S2-agent-topology-k-component-source-20260521f2`.
+
+The active same-`K` frontier-component source is strictly reduced to the
+x-indexed continuous Boolean side theorem, reusing only the existing
+relative-clopen eraser as topology bookkeeping. -/
+theorem S2_agent_topology_k_component_source_20260521f2
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent :=
+  planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_continuousKSide
+    continuous_side
+
+/-- The component-avoidance leaf is strictly reduced to the current
+continuous-side planar topology source. -/
+theorem planarJaniszewskiBoundaryBumpingComponentAvoidance_of_continuousKSide
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance :=
+  planarJaniszewskiBoundaryBumpingComponentAvoidance_of_relativeClopenKSide
+    (planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_continuousKSide
+      continuous_side)
+
+/-- Claim `S2-live-component-avoidance-source-worker-20260521`.
+
+The assigned component-avoidance topology leaf now reduces to the side-map
+leaf already tracked by the compressed S2 topology route. -/
+theorem S2_live_component_avoidance_source_worker_20260521
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance :=
+  planarJaniszewskiBoundaryBumpingComponentAvoidance_of_continuousKSide
+    continuous_side
+
+set_option linter.style.longLine false in
+/-- A continuous Boolean side source supplies the ambient open-cover source.
+
+The two open neighborhoods are obtained by lifting the open Boolean fibres
+from the subtype `K` to ambient open sets.  This keeps the topology source
+focused on constructing a side map on the compactum, not on a final boundary
+cycle or an arbitrary trace-connectedness statement. -/
+theorem
+    planarContinuumUnboundedComplementFrontierOpenKCoverSeparation_of_continuousKSide
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesOpenKCoverSeparation := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+    hAnonempty hBnonempty
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  have hAK : A ⊆ K := by
+    intro y hyA
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inl hyA)
+  have hBK : B ⊆ K := by
+    intro y hyB
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inr hyB)
+  rcases
+      continuous_side K x A B hcompact hx hunbounded hAclosed hBclosed
+        hABdisjoint hcover hAnonempty hBnonempty with
+    ⟨side, hside, hA_side, hB_side⟩
+  let Strue : Set K := side ⁻¹' ({true} : Set Bool)
+  let Sfalse : Set K := side ⁻¹' ({false} : Set Bool)
+  have hStrueOpen : IsOpen Strue :=
+    hside.isOpen_preimage _ (isOpen_discrete _)
+  have hSfalseOpen : IsOpen Sfalse :=
+    hside.isOpen_preimage _ (isOpen_discrete _)
+  rcases isOpen_induced_iff.mp hStrueOpen with ⟨OA, hOAopen, hOApre⟩
+  rcases isOpen_induced_iff.mp hSfalseOpen with ⟨OB, hOBopen, hOBpre⟩
+  refine ⟨OA, OB, hOAopen, hOBopen, ?_, ?_, ?_, ?_⟩
+  · intro y hyA
+    let yK : K := ⟨y, hAK hyA⟩
+    have hyS : yK ∈ Strue := by
+      simpa [Strue] using hA_side yK hyA
+    have hyOA : yK ∈ Subtype.val ⁻¹' OA := by
+      simpa [hOApre] using hyS
+    exact hyOA
+  · intro y hyB
+    let yK : K := ⟨y, hBK hyB⟩
+    have hyS : yK ∈ Sfalse := by
+      simpa [Sfalse] using hB_side yK hyB
+    have hyOB : yK ∈ Subtype.val ⁻¹' OB := by
+      simpa [hOBpre] using hyS
+    exact hyOB
+  · intro y hyK
+    let yK : K := ⟨y, hyK⟩
+    by_cases htrue : side yK = true
+    · left
+      have hyS : yK ∈ Strue := by
+        simp [Strue, htrue]
+      have hyOA : yK ∈ Subtype.val ⁻¹' OA := by
+        simpa [hOApre] using hyS
+      exact hyOA
+    · right
+      have hfalse : side yK = false := by
+        cases hval : side yK <;> simp [hval] at htrue ⊢
+      have hyS : yK ∈ Sfalse := by
+        simp [Sfalse, hfalse]
+      have hyOB : yK ∈ Subtype.val ⁻¹' OB := by
+        simpa [hOBpre] using hyS
+      exact hyOB
+  · rw [Set.disjoint_left]
+    intro y hyOA hyOB
+    let yK : K := ⟨y, hyOA.1⟩
+    have hyStrue : yK ∈ Strue := by
+      have hpre : yK ∈ Subtype.val ⁻¹' OA := hyOA.2
+      simpa [hOApre] using hpre
+    have hySfalse : yK ∈ Sfalse := by
+      have hpre : yK ∈ Subtype.val ⁻¹' OB := hyOB.2
+      simpa [hOBpre] using hpre
+    have htrue : side yK = true := by
+      simpa [Strue] using hyStrue
+    have hfalse : side yK = false := by
+      simpa [Sfalse] using hySfalse
+    rw [htrue] at hfalse
+    simp at hfalse
+
+/-- The point-between frontier theorem gives the continuous Boolean side source
+directly.
+
+If a compact connected subset of `K` met both closed sides of the selected
+frontier split, the point-between source would join those two points inside the
+frontier by a compact connected set.  The closed split would then separate that
+set, contradicting connectedness.  The compact-Hausdorff Boolean separator
+turns this no-crossing fact into the required continuous side map on `K`. -/
+theorem
+    planarContinuumUnboundedComplementFrontierContinuousKSide_of_pointsBetween_closedSplit
+    (points_between :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+    _hAnonempty _hBnonempty
+  exact
+    exists_continuous_bool_side_of_no_compact_connected_crossing
+      (K := K) (A := A) (B := B)
+      hcompact hAclosed hBclosed
+      (by
+        intro T hTcompact hTconnected hTsubset hTA hTB
+        rcases hTA with ⟨y, hyT, hyA⟩
+        rcases hTB with ⟨z, hzT, hzB⟩
+        have hyFrontier :
+            y ∈ frontier (connectedComponentIn Kᶜ x) := by
+          rw [hcover]
+          exact Or.inl hyA
+        have hzFrontier :
+            z ∈ frontier (connectedComponentIn Kᶜ x) := by
+          rw [hcover]
+          exact Or.inr hzB
+        rcases
+            points_between K x T y z hcompact hx hunbounded hTcompact
+              hTconnected hTsubset hyT hzT hyFrontier hzFrontier with
+          ⟨S, hScompact, hSconnected, hSsubset, hyS, hzS⟩
+        have hSclosed : IsClosed S := hScompact.isClosed
+        have hleftClosed : IsClosed (S ∩ A) := hSclosed.inter hAclosed
+        have hrightClosed : IsClosed (S ∩ B) := hSclosed.inter hBclosed
+        have hdisjoint : Disjoint (S ∩ A) (S ∩ B) := by
+          rw [Set.disjoint_left]
+          intro p hpLeft hpRight
+          exact (Set.disjoint_left.mp hABdisjoint) hpLeft.2 hpRight.2
+        have hScover : S = (S ∩ A) ∪ (S ∩ B) := by
+          ext p
+          constructor
+          · intro hpS
+            have hpFrontier :
+                p ∈ frontier (connectedComponentIn Kᶜ x) :=
+              hSsubset hpS
+            have hpAB : p ∈ A ∪ B := by
+              simpa [hcover] using hpFrontier
+            rcases hpAB with hpA | hpB
+            · exact Or.inl ⟨hpS, hpA⟩
+            · exact Or.inr ⟨hpS, hpB⟩
+          · intro hp
+            rcases hp with hpLeft | hpRight
+            · exact hpLeft.1
+            · exact hpRight.1
+        exact
+          (noClosedSeparation_of_isPreconnected hSconnected.isPreconnected)
+            (S ∩ A) (S ∩ B) hleftClosed hrightClosed hdisjoint hScover
+            ⟨y, hyS, hyA⟩ ⟨z, hzS, hzB⟩)
+
+/-- Claim `S2-agent-continuous-side-source-prover-20260521e51`.
+
+The continuous side-map leaf is strictly reduced to the point-level
+crossing-subcontinuum frontier theorem.  The proof builds the Boolean side map
+from the compact connected crossing contradiction and does not pass through
+relative-clopen, no-subcontinuum, component-avoidance, crossing-boundedness,
+finite no-closed-separation, or final boundary-cycle rows. -/
+theorem S2_agent_continuous_side_source_prover_20260521e51
+    (points_between :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide :=
+  planarContinuumUnboundedComplementFrontierContinuousKSide_of_pointsBetween_closedSplit
+    points_between
+
+/-- The crossing-subcontinuum boundedness theorem gives the continuous Boolean
+side source directly.
+
+Under the selected unboundedness hypothesis, a compact connected subset of `K`
+cannot meet both closed frontier sides, because the crossing-boundedness source
+would make the selected complement component bounded.  The compact-Hausdorff
+Boolean separator then constructs the side map on `K`. -/
+theorem
+    planarContinuumUnboundedComplementFrontierContinuousKSide_of_crossingSubcontinuumForcesBounded
+    (crossing_forces_bounded :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+    _hAnonempty _hBnonempty
+  exact
+    exists_continuous_bool_side_of_no_compact_connected_crossing
+      (K := K) (A := A) (B := B)
+      hcompact hAclosed hBclosed
+      (by
+        intro T hTcompact hTconnected hTsubset hTA hTB
+        exact
+          hunbounded
+            (crossing_forces_bounded K x A B T hcompact hx hAclosed
+              hBclosed hABdisjoint hcover hTcompact hTconnected hTsubset
+              hTA hTB))
+
+/-- Claim `S2-agent-continuous-side-source-worker-20260521e22`.
+
+The continuous side-map leaf is strictly reduced to the crossing-subcontinuum
+boundedness source.  The proof constructs the Boolean side map from the
+compact-Hausdorff no-crossing separator and does not pass through the
+open-cover, component-avoidance, relative-clopen, or no-subcontinuum source
+cluster. -/
+theorem S2_agent_continuous_side_source_worker_20260521e22
+    (crossing_forces_bounded :
+      PlanarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide :=
+  planarContinuumUnboundedComplementFrontierContinuousKSide_of_crossingSubcontinuumForcesBounded
+    crossing_forces_bounded
+
+/-- The hard aligned `K₁/K₂` split produces the requested continuous Boolean
+side map on the compactum.
+
+This is the compact-topology step below the aligned split: the side map is the
+Boolean characteristic of `K₁` on the subtype `K`, and continuity follows from
+the closed disjoint cover `K = K₁ ∪ K₂`. -/
+theorem
+    planarContinuumUnboundedComplementFrontierContinuousKSide_of_nontrivialAlignedKSplit
+    (nontrivial_aligned_K_split :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+    hAnonempty hBnonempty
+  rcases
+      nontrivial_aligned_K_split K x A B hcompact hx hunbounded hAclosed
+        hBclosed hABdisjoint hcover hAnonempty hBnonempty with
+    ⟨K1, K2, hK1closed, hK2closed, hKdisjoint, hKcover, hAK1, hBK2⟩
+  exact
+    exists_continuous_bool_side_of_closed_k_split
+      (K := K) (A := A) (B := B) (K1 := K1) (K2 := K2)
+      hK1closed hK2closed hKdisjoint hKcover hAK1 hBK2
+
+/-- Claim `S2-agent-continuous-k-side-source-worker-20260521e12`.
+
+The continuous `Bool` side source is reduced to the aligned hard-case
+`K₁/K₂` split by explicitly constructing the side map on the compactum.  This
+uses no relative-clopen, no-subcontinuum, component-avoidance, same-`K`
+point-between, or final boundary-cycle assumption. -/
+theorem S2_agent_continuous_k_side_source_worker_20260521e12
+    (nontrivial_aligned_K_split :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide :=
+  planarContinuumUnboundedComplementFrontierContinuousKSide_of_nontrivialAlignedKSplit
+    nontrivial_aligned_K_split
+
+/-- A continuous Boolean side source strictly reduces the hard aligned
+`K₁/K₂` split source.
+
+This adapter uses only the component-frontier containment
+`frontier (connectedComponentIn Kᶜ x) ⊆ K` and the compact-subspace Boolean
+eraser above.  It avoids the relative-clopen, no-subcontinuum,
+component-avoidance, and same-`K` point-between reducers. -/
+theorem
+    planarContinuumUnboundedComplementFrontierNontrivialAlignedKSplit_of_continuousKSide
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+    hAnonempty hBnonempty
+  have hfrontier_subset_K :
+      frontier (connectedComponentIn Kᶜ x) ⊆ K :=
+    planarContinuumUnboundedComplement_frontier_subset
+      (K := K) (x := x) hcompact
+  have hAK : A ⊆ K := by
+    intro y hyA
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inl hyA)
+  have hBK : B ⊆ K := by
+    intro y hyB
+    exact hfrontier_subset_K (by
+      rw [hcover]
+      exact Or.inr hyB)
+  rcases
+      continuous_side K x A B hcompact hx hunbounded hAclosed hBclosed
+        hABdisjoint hcover hAnonempty hBnonempty with
+    ⟨side, hside, hA_side, hB_side⟩
+  exact
+    exists_closed_k_split_of_continuous_bool_side
+      (K := K) (A := A) (B := B)
+      hcompact hAK hBK side hside hA_side hB_side
+
+/-- Closed-frontier continuum separation from the continuous-side source. -/
+theorem
+    planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_continuousKSide
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation := by
+  intro K x A B hcompact hx hunbounded hAclosed hBclosed hABdisjoint hcover
+    hAnonempty hBnonempty
+  rcases
+      planarContinuumUnboundedComplementFrontierNontrivialAlignedKSplit_of_continuousKSide
+        continuous_side K x A B hcompact hx hunbounded hAclosed hBclosed
+        hABdisjoint hcover hAnonempty hBnonempty with
+    ⟨K1, K2, hK1closed, hK2closed, hKdisjoint, hKcover, hAK1, hBK2⟩
+  refine
+    ⟨K1, K2, hK1closed, hK2closed, hKdisjoint, hKcover, ?_, ?_⟩
+  · rcases hAnonempty with ⟨a, haA⟩
+    exact ⟨a, hAK1 haA⟩
+  · rcases hBnonempty with ⟨b, hbB⟩
+    exact ⟨b, hBK2 hbB⟩
+
+/-- Claim `S2-agent-continuum-aligned-split-worker-20260521e10`.
+
+The aligned hard-case split residual is lowered to an exact continuous Boolean
+side theorem on the compactum.  The remaining planar-continuum source leaf is
+`PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide`:
+given a nontrivial closed split `A ∪ B` of the selected unbounded component
+frontier, construct a continuous `Bool`-valued side map on `K` that is `true`
+on `A` and `false` on `B`. -/
+theorem S2_agent_continuum_aligned_split_worker_20260521e10
+    (continuous_side :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesContinuousKSide) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation :=
+  planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_continuousKSide
+    continuous_side
 
 /-- The hard-case aligned K-split source strictly reduces the assigned
 closed-separation source.
@@ -4606,6 +7675,45 @@ theorem S2_codex_cont_20260520_aligned_k_source
   S2_codex_current_20260520_aligned_k_split_source_of_componentAvoidance
     component_avoidance
 
+/-- The component-avoidance Janiszewski source directly supplies the assigned
+closed-frontier continuum-separation theorem.
+
+The only checked work is the existing hard-case aligned `K`-split adapter and
+the erasure of its stronger containment fields to the closed split of `K`.
+This stays entirely in the planar-continuum layer. -/
+theorem
+    planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_janiszewskiComponentAvoidance
+    (component_avoidance :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation :=
+  planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_nontrivialAlignedKSplit
+    (planarContinuumUnboundedComplementFrontierNontrivialAlignedKSplit_of_janiszewskiComponentAvoidance
+      component_avoidance)
+
+/-- Claim `S2-agent-continuum-closed-split-source-implementation-20260520g4`.
+
+The live closed-split continuum source is strictly reduced to the sharp
+Janiszewski component-avoidance theorem for the same compactum and unbounded
+complement component.  No final boundary-cycle, induced frontier graph,
+arbitrary carrier/cycle, or synthetic enclosure assumption is introduced. -/
+theorem S2_agent_continuum_closed_split_source_implementation_20260520g4
+    (component_avoidance :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation :=
+  planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_janiszewskiComponentAvoidance
+    component_avoidance
+
+/-- The same-`K` boundary-bumping point source directly supplies the
+closed-frontier continuum-separation theorem through component avoidance. -/
+theorem
+    planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_janiszewskiKComponentPointsBetween
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation :=
+  planarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation_of_janiszewskiComponentAvoidance
+    (planarJaniszewskiBoundaryBumpingComponentAvoidance_of_kComponentPointsBetween
+      points_between)
+
 /-- Component avoidance directly supplies the finite-drawing
 no-closed-separation source.
 
@@ -4750,6 +7858,128 @@ theorem
     (planarContinuumUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiBoundaryBumping
       boundary_bumping)
 
+set_option linter.style.longLine false in
+/-- A hard-case aligned closed split supplies the Janiszewski relative-clopen
+side by taking the aligned `K1` side as the relative clopen set. -/
+theorem
+    janiszewskiBoundaryBumping_of_nontrivialAlignedKSplit
+    (nontrivial_aligned_K_split :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide := by
+  intro K U A B hcompact hcomponent hunbounded hAclosed hBclosed hABdisjoint
+    hcover hAnonempty hBnonempty
+  rcases hcomponent with ⟨x, hx, rfl⟩
+  rcases
+      nontrivial_aligned_K_split K x A B hcompact hx hunbounded hAclosed
+        hBclosed hABdisjoint hcover hAnonempty hBnonempty with
+    ⟨K1, K2, hK1closed, hK2closed, hKdisjoint, hKcover, hAK1, hBK2⟩
+  refine ⟨K1, ?_, hK1closed, ?_, hAK1, ?_⟩
+  · intro p hpK1
+    rw [hKcover]
+    exact Or.inl hpK1
+  · have hdiff_eq : K \ K1 = K2 := by
+      ext p
+      constructor
+      · intro hp
+        have hp_union : p ∈ K1 ∪ K2 := by
+          rw [← hKcover]
+          exact hp.1
+        rcases hp_union with hpK1 | hpK2
+        · exact False.elim (hp.2 hpK1)
+        · exact hpK2
+      · intro hpK2
+        refine ⟨?_, ?_⟩
+        · rw [hKcover]
+          exact Or.inr hpK2
+        · intro hpK1
+          exact (Set.disjoint_left.mp hKdisjoint) hpK1 hpK2
+    simpa [hdiff_eq] using hK2closed
+  · rw [Set.disjoint_left]
+    intro p hpK1 hpB
+    exact (Set.disjoint_left.mp hKdisjoint) hpK1 (hBK2 hpB)
+
+set_option linter.style.longLine false in
+/-- The same-`K` frontier-component source is lowered directly to the
+hard-case aligned closed-split planar source.
+
+The aligned split first gives the Janiszewski relative-clopen side theorem;
+the existing component/quasicomponent argument then supplies the selected
+frontier component. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_nontrivialAlignedKSplit
+    (nontrivial_aligned_K_split :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentFrontierComponent :=
+  planarJaniszewskiBoundaryBumpingKComponentFrontierComponent_of_relativeClopenKSide
+    (janiszewskiBoundaryBumping_of_nontrivialAlignedKSplit
+      nontrivial_aligned_K_split)
+
+set_option linter.style.longLine false in
+/-- The same-`K` point-between source is lowered directly to the hard-case
+aligned closed-split planar-continuum source. -/
+theorem
+    planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_nontrivialAlignedKSplit
+    (nontrivial_aligned_K_split :
+      PlanarContinuumUnboundedComplementFrontierNontrivialClosedSeparationForcesAlignedKSplit) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween :=
+  planarJaniszewskiBoundaryBumpingKComponentPointsBetween_of_relativeClopenKSide
+    (janiszewskiBoundaryBumping_of_nontrivialAlignedKSplit
+      nontrivial_aligned_K_split)
+
+/-- Same-`K` point-between source to component avoidance, routed through the
+existing point-between and crossing-boundedness reducers.
+
+This wrapper deliberately does not derive component avoidance from a
+relative-clopen side that was itself sourced from component avoidance. -/
+theorem
+    planarJaniszewskiBoundaryBumpingComponentAvoidance_of_kComponentPointsBetween_via_crossingBounded
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierComponentAvoidance :=
+  planarJaniszewskiBoundaryBumpingComponentAvoidance_of_crossingSubcontinuumForcesBounded
+    (planarContinuumUnboundedComplementFrontierCrossingSubcontinuumForcesBounded_of_pointsBetween
+      (planarContinuumUnboundedComplementFrontierCrossingSubcontinuumPointsBetween_of_janiszewskiBoundaryBumpingPointsBetween
+        (planarJaniszewskiBoundaryBumpingSubcontinuumPointsBetween_of_kComponentPointsBetween
+          points_between)))
+
+/-- Same-`K` point-between source to the relative-clopen side, after the
+non-circular component-avoidance route has already been established. -/
+theorem
+    planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_kComponentPointsBetween_via_componentAvoidance
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierClosedSeparationRelativeClopenKSide :=
+  planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_componentAvoidance
+    (planarJaniszewskiBoundaryBumpingComponentAvoidance_of_kComponentPointsBetween_via_crossingBounded
+      points_between)
+
+/-- Finite-drawing no-closed-separation from the same-`K` point-between source,
+via the existing point-between, crossing-boundedness, component-avoidance, and
+relative-clopen reducers.
+
+The relative-clopen theorem is used only downstream of component avoidance, so
+this does not form the older relative-clopen/component-avoidance loop. -/
+theorem
+    finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_kComponentPointsBetween_via_nonCircularTopologyReducers
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_janiszewskiBoundaryBumping
+    (planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_kComponentPointsBetween_via_componentAvoidance
+      points_between)
+
+/-- Claim `S2-agent-kcomponent-to-finite-no-closed-worker-20260520n4`.
+
+This is the checked non-circular topology reducer from the same-`K`
+Janiszewski boundary-bumping point source to the finite drawing
+no-closed-separation source.  It uses no final boundary-cycle assumption. -/
+theorem S2_agent_kcomponent_to_finite_no_closed_worker_20260520n4
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    FiniteDrawingUnboundedComplementFrontierNoClosedSeparation :=
+  finiteDrawingUnboundedComplementFrontierNoClosedSeparation_of_kComponentPointsBetween_via_nonCircularTopologyReducers
+    points_between
+
 /-- Claim `S2-codex-20260520-no-closed-separation-source`.
 
 The planar no-closed-separation source used by the selected-edge S2 route is
@@ -4818,6 +8048,23 @@ theorem
     PlanarContinuumUnboundedComplementFrontierPreconnected :=
   planarContinuumUnboundedComplementFrontierPreconnected_of_janiszewskiRelativeClopenKSide
     (S2_dyn_20260520_component_avoidance_relative_clopen component_avoidance)
+
+/-- The compact/frontier no-crossing source supplies direct frontier
+preconnectedness for unbounded complement components.
+
+This is the topology-only lowering used by the source-side connectedness
+branch: no-crossing gives the continuous `K`-side separator, the checked
+Janiszewski adapter turns that into the relative-clopen boundary-bumping row,
+and the existing closed-separation criterion gives preconnectedness. -/
+theorem
+    planarContinuumUnboundedComplementFrontierPreconnected_of_noCompactConnectedKCrossing
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing) :
+    PlanarContinuumUnboundedComplementFrontierPreconnected :=
+  planarContinuumUnboundedComplementFrontierPreconnected_of_janiszewskiRelativeClopenKSide
+    (planarJaniszewskiBoundaryBumpingRelativeClopenKSide_of_continuousKSide
+      (planarContinuumUnboundedComplementFrontierContinuousKSide_of_noCompactConnectedKCrossing
+        no_crossing))
 
 /-- Claim `S2-codex-20260520-janiszewski-frontier-source-now`.
 
@@ -4950,6 +8197,32 @@ theorem S2_codex_main_20260520_planar_subcontinuum_connected_source
   planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_connected
     frontier_connected
 
+/-- Closed-frontier continuum-separation source for the subcontinuum-between
+leaf.
+
+This composes the checked connected-frontier reduction with the whole-frontier
+subcontinuum construction, so the remaining topology source is the
+Janiszewski-style closed-split theorem rather than connectedness itself. -/
+theorem
+    planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_closedSeparationForcesContinuumSeparation
+    (closed_split_forces_continuum_split :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation) :
+    PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween :=
+  planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_connected
+    (planarContinuumUnboundedComplementFrontierConnected_of_closedSeparationForcesContinuumSeparation
+      closed_split_forces_continuum_split)
+
+/-- Claim `S2-codex-main-20260520-subcontinuum-between-source`.
+
+The subcontinuum-between leaf is strictly reduced to the existing
+closed-frontier continuum-separation residual. -/
+theorem S2_codex_main_20260520_subcontinuum_between_source
+    (closed_split_forces_continuum_split :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationForcesContinuumSeparation) :
+    PlanarContinuumUnboundedComplementFrontierSubcontinuumBetween :=
+  planarContinuumUnboundedComplementFrontierSubcontinuumBetween_of_closedSeparationForcesContinuumSeparation
+    closed_split_forces_continuum_split
+
 /-- The connected-frontier planar-continuum theorem implies the finite-drawing
 no-open-separation residual directly. -/
 theorem finiteDrawingUnboundedComplementFrontierNoOpenSeparation_of_connected
@@ -5063,11 +8336,9 @@ vertices on this frontier form the outer cycle. -/
 theorem frontier_subset_embeddedEdgeSet
     (E : ExteriorConnectedComponentRows C inputs) :
     frontier E.exterior ⊆ embeddedEdgeSet C := by
-  intro p hp
-  exact
-    frontier_drawingComplement_subset_embeddedEdgeSet C
-      (frontier_connectedComponentIn_subset_frontier
-        (drawingComplement_open C) hp)
+  simpa [ExteriorConnectedComponentRows.exterior] using
+    frontier_connectedComponentIn_drawingComplement_subset_embeddedEdgeSet
+      C E.base
 
 /-- A point on a selected complement component's frontier lies on some
 canonical unit-edge segment.  The remaining S2 proof must show which of these
@@ -5082,7 +8353,9 @@ theorem exists_edge_segment_of_mem_frontier
           p ∈ closedSegment
             ((canonicalGraph C).point i)
             ((canonicalGraph C).point j) := by
-  simpa [embeddedEdgeSet] using E.frontier_subset_embeddedEdgeSet hp
+  exact
+    exists_edge_segment_of_mem_frontier_connectedComponentIn_drawingComplement
+      (by simpa [ExteriorConnectedComponentRows.exterior] using hp)
 
 theorem frontier_graph_vertex_mem_embeddedEdgeSet
     (E : ExteriorConnectedComponentRows C inputs)
@@ -5097,8 +8370,9 @@ theorem frontier_graph_vertex_incident
     (hv : (canonicalGraph C).point v ∈ frontier E.exterior) :
     Exists fun w : Fin n => (canonicalGraph C).Adj v w := by
   exact
-    graph_vertex_mem_embeddedEdgeSet_iff_exists_adj.1
-      (E.frontier_graph_vertex_mem_embeddedEdgeSet hv)
+    frontier_connectedComponentIn_drawingComplement_graph_vertex_incident
+      (C := C) (base := E.base)
+      (by simpa [ExteriorConnectedComponentRows.exterior] using hv)
 
 theorem frontier_not_mem_exterior
     (E : ExteriorConnectedComponentRows C inputs)
@@ -5507,15 +8781,19 @@ theorem exists_ball_forall_unboundedExterior_frontier_mem_incident_closedSegment
                   q ∈ closedSegment
                     ((canonicalGraph C).point v)
                     ((canonicalGraph C).point w) := by
+  let E := (unboundedExteriorComponentRows C inputs).component
   rcases
-      exists_ball_forall_mem_incident_closedSegment_of_vertex
-        (C := C) v with
-    ⟨ε, hεpos, hlocal⟩
+      exists_ball_inter_frontier_connectedComponentIn_drawingComplement_subset_incident_closedSegment
+        (C := C) E.base v with
+    ⟨ε, hεpos, hsubset⟩
   refine ⟨ε, hεpos, ?_⟩
   intro q hqball hqfrontier
-  exact hlocal q hqball
-    ((unboundedExteriorComponentRows C inputs).frontier_subset_embeddedEdgeSet
-      hqfrontier)
+  exact
+    hsubset
+      ⟨hqball,
+        by
+          simpa [ExteriorUnboundedComponentRows.exterior,
+            ExteriorConnectedComponentRows.exterior, E] using hqfrontier⟩
 
 /-- Pointed local frontier isolation at a graph vertex: after shrinking around
 `v`, every non-vertex frontier point near `v` lies in the relative interior of
@@ -5676,6 +8954,374 @@ theorem mem_unboundedFrontierVertexSet_iff
         frontier (unboundedExteriorComponentRows C inputs).exterior := by
   classical
   simp [unboundedFrontierVertexSet]
+
+/-- The finite planar S2 input has at least two ambient vertices.
+
+This is graph-side bookkeeping from the supplied simple unit-distance cycle:
+two distinct positions on the cycle give two distinct vertices of `Fin n`. -/
+theorem nontrivial_vertices_of_finitePlanarOuterComponentInputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    Nontrivial (Fin n) := by
+  rcases inputs.hasUnitDistanceCycle with ⟨B⟩
+  let k0 : Fin B.length := ⟨0, B.length_pos⟩
+  let k1 : Fin B.length :=
+    ⟨1, Nat.lt_of_lt_of_le (by decide : 1 < 3) B.length_ge_three⟩
+  have hk : k0 ≠ k1 := by
+    intro h
+    have hval : (k0 : Fin B.length).val = k1.val := congrArg Fin.val h
+    norm_num [k0, k1] at hval
+  have hv : B.vertex k0 ≠ B.vertex k1 := by
+    intro h
+    exact hk (B.simple h)
+  exact ⟨⟨B.vertex k0, B.vertex k1, hv⟩⟩
+
+/-- Every graph vertex has a unit-distance neighbour under the finite planar
+S2 inputs.  This is only a graph-side no-isolated-vertex fact; it does not
+claim the neighbour is selected on the unbounded exterior frontier. -/
+theorem exists_unitDistanceSimpleGraph_adjacent_of_finitePlanarOuterComponentInputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (v : Fin n) :
+    Exists fun w : Fin n =>
+      (GraphBridge.unitDistanceSimpleGraph C).Adj v w := by
+  letI : Nontrivial (Fin n) :=
+    nontrivial_vertices_of_finitePlanarOuterComponentInputs
+      (C := C) inputs
+  exact inputs.preconnected.exists_adj_of_nontrivial v
+
+/-- The finite planar S2 input has at least three ambient vertices.
+
+This is again pure graph-side bookkeeping from the supplied simple
+unit-distance cycle: its injective vertex map embeds a length-at-least-three
+finite type into `Fin n`. -/
+theorem three_le_vertices_of_finitePlanarOuterComponentInputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    3 <= n := by
+  rcases inputs.hasUnitDistanceCycle with ⟨B⟩
+  have hcard :
+      Fintype.card (Fin B.length) <= Fintype.card (Fin n) :=
+    Fintype.card_le_of_injective B.vertex B.simple
+  have hle : B.length <= n := by
+    simpa only [Fintype.card_fin] using hcard
+  exact Nat.le_trans (JordanBoundaryConcrete.UnitDistanceCycleBoundary.length_ge_three B) hle
+
+/-- If a vertex has a unique unit-distance neighbour and there is at least one
+other vertex, that unique neighbour is a cut vertex.
+
+The partition is completely explicit: the leaf vertex is one side and all
+remaining non-cut vertices are the other side. -/
+noncomputable def cutVertexPartition_of_unique_unitDistance_neighbor
+    {C : _root_.UDConfig n} {v u : Fin n}
+    (hn : 3 <= n)
+    (hvu : (GraphBridge.unitDistanceSimpleGraph C).Adj v u)
+    (hunique :
+      forall w : Fin n,
+        (GraphBridge.unitDistanceSimpleGraph C).Adj v w -> w = u) :
+    CutVertexInterface.CutVertexPartition C := by
+  classical
+  let G := GraphBridge.unitDistanceSimpleGraph C
+  let left : Finset (Fin n) := {v}
+  let right : Finset (Fin n) := (Finset.univ.erase u).erase v
+  have hv_ne_u : v ≠ u := G.ne_of_adj hvu
+  have hv_mem : v ∈ (Finset.univ : Finset (Fin n)).erase u := by
+    simp [Finset.mem_erase, hv_ne_u]
+  refine
+    { cut := u
+      left := left
+      right := right
+      left_nonempty := ?_
+      right_nonempty := ?_
+      left_cut_not_mem := ?_
+      right_cut_not_mem := ?_
+      disjoint := ?_
+      cover_without_cut := ?_
+      anticomplete := ?_ }
+  · simp [left]
+  · have hcard :
+        right.card = n - 2 := by
+      rw [show right = ((Finset.univ : Finset (Fin n)).erase u).erase v by rfl]
+      rw [Finset.card_erase_of_mem hv_mem]
+      rw [Finset.card_erase_of_mem (Finset.mem_univ u)]
+      simp only [Finset.card_univ, Fintype.card_fin]
+      omega
+    exact Finset.card_pos.1 (by
+      rw [hcard]
+      omega)
+  · simp [left, hv_ne_u.symm]
+  · simp [right]
+  · rw [Finset.disjoint_left]
+    intro x hxleft hxright
+    have hxv : x = v := by
+      simpa [left] using hxleft
+    have hxnotv : x ≠ v := by
+      have hxright' :
+          x ∈ ((Finset.univ : Finset (Fin n)).erase u).erase v := by
+        simpa [right] using hxright
+      exact (Finset.mem_erase.mp hxright').1
+    exact hxnotv hxv
+  · rw [Finset.singleton_union]
+    exact Finset.insert_erase hv_mem
+  · intro i hi j hj hij
+    have hiv : i = v := by
+      simpa [left] using hi
+    have hju : j ≠ u := by
+      have hjright :
+          j ∈ ((Finset.univ : Finset (Fin n)).erase u).erase v := by
+        simpa [right] using hj
+      exact (Finset.mem_erase.mp (Finset.mem_erase.mp hjright).2).1
+    have hvj : G.Adj v j := by
+      simpa [G, hiv] using hij
+    exact hju (hunique j hvj)
+
+/-- Under the finite planar S2 inputs, the ambient unit-distance graph has no
+leaf vertices, in neighbour-set cardinality form.
+
+This is a genuine use of the no-cut input: a degree-one vertex would make its
+unique neighbour into the explicit cut partition above. -/
+theorem two_le_unitDistanceSimpleGraph_neighborSet_ncard_of_finitePlanarOuterComponentInputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (v : Fin n) :
+    2 <= ((GraphBridge.unitDistanceSimpleGraph C).neighborSet v).ncard := by
+  let G := GraphBridge.unitDistanceSimpleGraph C
+  letI : Nontrivial (Fin n) :=
+    nontrivial_vertices_of_finitePlanarOuterComponentInputs
+      (C := C) inputs
+  have hneighbor_nonempty : (G.neighborSet v).Nonempty := by
+    cases inputs.preconnected.exists_adj_of_nontrivial v with
+    | intro u hvu =>
+        exact Exists.intro u hvu
+  have hcard_pos : 0 < (G.neighborSet v).ncard :=
+    (Set.ncard_pos (s := G.neighborSet v)).mpr hneighbor_nonempty
+  by_contra hnot
+  have hlt : (G.neighborSet v).ncard < 2 := Nat.lt_of_not_ge hnot
+  have hcard : (G.neighborSet v).ncard = 1 := by omega
+  have hsingle := Set.ncard_eq_one.mp hcard
+  cases hsingle with
+  | intro u hneighbors =>
+      have hvu : G.Adj v u := by
+        have hu_mem : (G.neighborSet v) u := by
+          rw [hneighbors]
+          exact Set.mem_singleton u
+        exact hu_mem
+      have hunique : forall w : Fin n, G.Adj v w -> w = u := by
+        intro w hw
+        have hw_mem : (G.neighborSet v) w := hw
+        rw [hneighbors] at hw_mem
+        exact Set.mem_singleton_iff.mp hw_mem
+      exact
+        inputs.noCutVertex
+          (Nonempty.intro
+            (cutVertexPartition_of_unique_unitDistance_neighbor
+              (C := C)
+              (hn := three_le_vertices_of_finitePlanarOuterComponentInputs
+                (C := C) inputs)
+              hvu hunique))
+
+/-- No-cut plus the supplied cycle gives two distinct ambient unit-distance
+neighbours at every vertex. -/
+theorem exists_two_unitDistanceSimpleGraph_adjacent_of_finitePlanarOuterComponentInputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (v : Fin n) :
+    Exists fun w1 : Fin n =>
+      Exists fun w2 : Fin n =>
+        And (Ne w1 w2)
+          (And ((GraphBridge.unitDistanceSimpleGraph C).Adj v w1)
+            ((GraphBridge.unitDistanceSimpleGraph C).Adj v w2)) := by
+  classical
+  let G := GraphBridge.unitDistanceSimpleGraph C
+  have hcard : 2 <= (G.neighborSet v).ncard := by
+    simpa [G] using
+      two_le_unitDistanceSimpleGraph_neighborSet_ncard_of_finitePlanarOuterComponentInputs
+        (C := C) inputs v
+  have htwo :
+      Exists fun w1 : Fin n =>
+        Exists fun w2 : Fin n =>
+          And (Ne w1 w2)
+            (And ((G.neighborSet v) w1) ((G.neighborSet v) w2)) := by
+    by_contra hnot
+    have hsubsingleton : (G.neighborSet v).Subsingleton := by
+      intro a ha b hb
+      by_contra hne
+      exact hnot
+        (Exists.intro a
+          (Exists.intro b (And.intro hne (And.intro ha hb))))
+    have hcard_le_one : (G.neighborSet v).ncard <= 1 := by
+      exact (Set.ncard_le_one_iff_subsingleton (s := G.neighborSet v)).2
+        hsubsingleton
+    omega
+  cases htwo with
+  | intro w1 htwo1 =>
+      cases htwo1 with
+      | intro w2 hprops =>
+          exact
+            Exists.intro w1
+              (Exists.intro w2
+                (And.intro hprops.1
+                  (And.intro (by simpa [G] using hprops.2.1)
+                    (by simpa [G] using hprops.2.2))))
+
+/-- Canonical-graph form of the two-neighbour no-leaf consequence. -/
+theorem exists_two_canonicalGraph_adjacent_of_finitePlanarOuterComponentInputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (v : Fin n) :
+    Exists fun w₁ : Fin n =>
+      Exists fun w₂ : Fin n =>
+        w₁ ≠ w₂ ∧
+          (canonicalGraph C).Adj v w₁ ∧
+            (canonicalGraph C).Adj v w₂ := by
+  rcases
+      exists_two_unitDistanceSimpleGraph_adjacent_of_finitePlanarOuterComponentInputs
+        (C := C) inputs v with
+    ⟨w₁, w₂, hne, hw₁, hw₂⟩
+  exact
+    ⟨w₁, w₂, hne,
+      ((canonicalGraph C).adj_iff_unitDistanceAdj v w₁).2
+        ((GraphBridge.unitDistanceSimpleGraph_adj C v w₁).1 hw₁),
+      ((canonicalGraph C).adj_iff_unitDistanceAdj v w₂).2
+        ((GraphBridge.unitDistanceSimpleGraph_adj C v w₂).1 hw₂)⟩
+
+/-- Canonical-graph form of
+`exists_unitDistanceSimpleGraph_adjacent_of_finitePlanarOuterComponentInputs`. -/
+theorem exists_canonicalGraph_adjacent_of_finitePlanarOuterComponentInputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (v : Fin n) :
+    Exists fun w : Fin n => (canonicalGraph C).Adj v w := by
+  rcases
+      exists_unitDistanceSimpleGraph_adjacent_of_finitePlanarOuterComponentInputs
+        (C := C) inputs v with
+    ⟨w, hw⟩
+  exact
+    ⟨w,
+      ((canonicalGraph C).adj_iff_unitDistanceAdj v w).2
+        ((GraphBridge.unitDistanceSimpleGraph_adj C v w).1 hw)⟩
+
+/-- Every graph vertex has a distinct nearby point on the frontier of the
+whole drawing complement.
+
+Choose any incident canonical edge and take its midpoint.  The finite-drawing
+edge-interior half-ball theorem puts that midpoint on the ambient drawing
+complement frontier, and open-segment nondegeneracy keeps it distinct from the
+chosen vertex. -/
+theorem exists_drawingComplement_frontier_point_ne_graph_vertex
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (v : Fin n) :
+    Exists fun p : PlanarInterface.Point =>
+      p ∈ frontier (drawingComplement C) ∧
+        p ≠ (canonicalGraph C).point v := by
+  rcases
+      exists_canonicalGraph_adjacent_of_finitePlanarOuterComponentInputs
+        (C := C) inputs v with
+    ⟨w, hvw⟩
+  let p : PlanarInterface.Point :=
+    PlanarInterface.segmentPoint
+      ((canonicalGraph C).point v)
+      ((canonicalGraph C).point w)
+      (1 / 2 : Real)
+  have hpopen :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point v)
+        ((canonicalGraph C).point w) := by
+    simpa [p] using
+      midpoint_inOpenSegment
+        ((canonicalGraph C).point v)
+        ((canonicalGraph C).point w)
+  refine
+    ⟨p,
+      inOpenSegment_mem_frontier_drawingComplement_of_adj
+        (C := C) hvw hpopen,
+      ?_⟩
+  exact left_ne_of_inOpenSegment (canonical_adj_point_ne hvw) hpopen
+
+/-- Ambient drawing-complement frontier points that are not on the selected
+unbounded exterior frontier have arbitrarily close complement points outside
+the selected unbounded exterior component.
+
+This is the metric separation adapter needed for the singleton-frontier
+residual: once a nearby ambient frontier point is known not to be part of the
+actual unbounded exterior frontier, openness of the selected exterior
+component gives a punctured neighbourhood missed by that component, while the
+ambient frontier supplies complement points in every smaller ball. -/
+theorem exists_drawingComplement_point_not_unboundedExterior_near_of_ambient_frontier_not_unboundedExterior_frontier
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {q : PlanarInterface.Point}
+    (hqAmbient : q ∈ frontier (drawingComplement C))
+    (hqNotActual :
+      q ∉ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    forall ε : Real,
+      0 < ε ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ Metric.ball q ε ∧
+            y ∈ drawingComplement C ∧
+              y ∉ (unboundedExteriorComponentRows C inputs).exterior := by
+  intro ε hεpos
+  have hqAmbient' := hqAmbient
+  rw [(drawingComplement_open C).frontier_eq] at hqAmbient'
+  have hqClosureComplement :
+      q ∈ closure (drawingComplement C) := hqAmbient'.1
+  have hqNotComplement :
+      q ∉ drawingComplement C := hqAmbient'.2
+  have hqNotExterior :
+      q ∉ (unboundedExteriorComponentRows C inputs).exterior := by
+    intro hqExterior
+    exact hqNotComplement
+      ((unboundedExteriorComponentRows C inputs).exterior_subset_drawingComplement
+        hqExterior)
+  have hqNotClosureExterior :
+      q ∉ closure (unboundedExteriorComponentRows C inputs).exterior := by
+    intro hqClosureExterior
+    exact hqNotActual (by
+      rw [(unboundedExteriorComponentRows C inputs).exterior_open.frontier_eq]
+      exact ⟨hqClosureExterior, hqNotExterior⟩)
+  have hmetric :
+      ¬ forall δ : Real,
+          0 < δ ->
+            Exists fun y : PlanarInterface.Point =>
+              y ∈ (unboundedExteriorComponentRows C inputs).exterior ∧
+                dist y q < δ := by
+    intro hnear
+    exact hqNotClosureExterior (by
+      rw [Metric.mem_closure_iff]
+      intro δ hδpos
+      rcases hnear δ hδpos with ⟨y, hyExterior, hydist⟩
+      exact ⟨y, hyExterior, by simpa [dist_comm] using hydist⟩)
+  push_neg at hmetric
+  rcases hmetric with ⟨δ, hδpos, hδ⟩
+  have hqClosureComplementMetric := hqClosureComplement
+  rw [Metric.mem_closure_iff] at hqClosureComplementMetric
+  let ρ : Real := min ε δ / 2
+  have hρpos : 0 < ρ := by
+    exact half_pos (lt_min hεpos hδpos)
+  rcases hqClosureComplementMetric ρ hρpos with ⟨y, hyComplement, hyρ⟩
+  have hyball : y ∈ Metric.ball q ε := by
+    have hyε : dist q y < ε := by
+      calc
+        dist q y < ρ := hyρ
+        _ = min ε δ / 2 := rfl
+        _ ≤ min ε δ := by linarith [lt_min hεpos hδpos]
+        _ ≤ ε := min_le_left ε δ
+    have hyε' : dist y q < ε := by
+      simpa [dist_comm] using hyε
+    simpa [Metric.mem_ball] using hyε'
+  have hyNotExterior :
+      y ∉ (unboundedExteriorComponentRows C inputs).exterior := by
+    intro hyExterior
+    have hyδ : dist y q < δ := by
+      calc
+        dist y q = dist q y := dist_comm y q
+        _ < ρ := hyρ
+        _ = min ε δ / 2 := rfl
+        _ ≤ min ε δ := by linarith [lt_min hεpos hδpos]
+        _ ≤ δ := min_le_right ε δ
+    exact not_lt_of_ge (hδ y hyExterior) hyδ
+  exact ⟨y, hyball, hyComplement, hyNotExterior⟩
 
 /-- The unbounded exterior frontier seed can be read either as a selected
 frontier graph vertex or as a frontier point in the relative interior of an
@@ -6596,6 +10242,144 @@ theorem unboundedExterior_frontierEdgeLocalRows_of_inOpenSegment_frontier
   · intro q hq
     exact canonicalEdge_inOpenSegment_not_mem_unboundedExterior
       inputs he hq
+
+/-- Claim `S2-q20-selected-frontier-edge-local-source`.
+
+A concrete selected unbounded-frontier edge already produces the local
+frontier-edge rows needed by the raw exterior-dart route.  The interior point is
+the selected edge midpoint supplied by `unboundedFrontierEdgeSet`, and the
+local carrier row is exactly the finite edge-interior isolation constructor
+above. -/
+theorem S2_q20_unboundedExteriorFrontierEdgeLocalRows_of_unboundedFrontierEdgeSet_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n}
+    (he : e ∈ unboundedFrontierEdgeSet C inputs) :
+    Exists fun p : PlanarInterface.Point =>
+      UnboundedExteriorFrontierEdgeLocalRows C inputs e p := by
+  rcases unboundedFrontierEdgeSet_has_frontier_interior_point he with
+    ⟨p, hpfrontier, hpopen⟩
+  exact
+    ⟨p,
+      unboundedExterior_frontierEdgeLocalRows_of_inOpenSegment_frontier
+        (mem_unboundedFrontierEdgeSet_iff.1 he).1 hpopen hpfrontier⟩
+
+/-- A selected `unboundedFrontierEdgeSet` edge locally carries the actual
+unbounded exterior frontier by its closed segment near any interior point. -/
+theorem exists_ball_inter_unboundedExterior_frontier_subset_closedSegment_of_unboundedFrontierEdgeSet_inOpenSegment
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ unboundedFrontierEdgeSet C inputs)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball p ε ∩
+            frontier (unboundedExteriorComponentRows C inputs).exterior ⊆
+          closedSegment
+            ((canonicalGraph C).point e.1)
+            ((canonicalGraph C).point e.2) := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_closedSegment_of_inOpenSegment
+        (C := C) (p := p) (e := e)
+        (mem_unboundedFrontierEdgeSet_iff.1 he).1 hp with
+    ⟨ε, hεpos, hlocal⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hq
+  exact hlocal
+    ⟨hq.1,
+      (unboundedExteriorComponentRows C inputs).frontier_subset_embeddedEdgeSet
+        hq.2⟩
+
+/-- A selected `unboundedFrontierEdgeSet` edge locally carries the actual
+unbounded exterior frontier by the same open edge segment near any interior
+point. -/
+theorem exists_ball_inter_unboundedExterior_frontier_subset_inOpenSegment_of_unboundedFrontierEdgeSet_inOpenSegment
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ unboundedFrontierEdgeSet C inputs)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        Metric.ball p ε ∩
+            frontier (unboundedExteriorComponentRows C inputs).exterior ⊆
+          {q | PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point e.1)
+            ((canonicalGraph C).point e.2)} := by
+  rcases
+      exists_ball_inter_embeddedEdgeSet_subset_inOpenSegment_of_inOpenSegment
+        (C := C) (p := p) (e := e)
+        (mem_unboundedFrontierEdgeSet_iff.1 he).1 hp with
+    ⟨ε, hεpos, hlocal⟩
+  refine ⟨ε, hεpos, ?_⟩
+  intro q hq
+  exact hlocal
+    ⟨hq.1,
+      (unboundedExteriorComponentRows C inputs).frontier_subset_embeddedEdgeSet
+        hq.2⟩
+
+/-- Pointwise closed-segment form of local carrier isolation for a selected
+`unboundedFrontierEdgeSet` edge. -/
+theorem exists_ball_forall_unboundedExterior_frontier_mem_closedSegment_of_unboundedFrontierEdgeSet_inOpenSegment
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ unboundedFrontierEdgeSet C inputs)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball p ε ->
+            q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+              q ∈ closedSegment
+                ((canonicalGraph C).point e.1)
+                ((canonicalGraph C).point e.2) := by
+  rcases
+      exists_ball_inter_unboundedExterior_frontier_subset_closedSegment_of_unboundedFrontierEdgeSet_inOpenSegment
+        (C := C) (inputs := inputs) he hp with
+    ⟨ε, hεpos, hsubset⟩
+  exact ⟨ε, hεpos, fun q hqball hqfrontier =>
+    hsubset ⟨hqball, hqfrontier⟩⟩
+
+/-- Pointwise open-segment form of local carrier isolation for a selected
+`unboundedFrontierEdgeSet` edge. -/
+theorem exists_ball_forall_unboundedExterior_frontier_mem_inOpenSegment_of_unboundedFrontierEdgeSet_inOpenSegment
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ unboundedFrontierEdgeSet C inputs)
+    (hp :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2)) :
+    Exists fun ε : Real =>
+      0 < ε ∧
+        forall q : PlanarInterface.Point,
+          q ∈ Metric.ball p ε ->
+            q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+              PlanarInterface.InOpenSegment q
+                ((canonicalGraph C).point e.1)
+                ((canonicalGraph C).point e.2) := by
+  rcases
+      exists_ball_inter_unboundedExterior_frontier_subset_inOpenSegment_of_unboundedFrontierEdgeSet_inOpenSegment
+        (C := C) (inputs := inputs) he hp with
+    ⟨ε, hεpos, hsubset⟩
+  exact ⟨ε, hεpos, fun q hqball hqfrontier =>
+    hsubset ⟨hqball, hqfrontier⟩⟩
 
 namespace UnboundedExteriorFrontierEdgeLocalRows
 
@@ -9685,6 +13469,315 @@ theorem endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
   endpoints_mem_unboundedFrontierVertexSet_of_edge_openSegment_frontier
     (hwhole e he)
 
+/-- A selected unbounded-frontier edge gives two distinct points on the actual
+unbounded exterior frontier: its two graph endpoints. -/
+theorem exists_two_frontier_points_of_unboundedFrontierEdgeSet
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n}
+    (he : e ∈ unboundedFrontierEdgeSet C inputs) :
+    Exists fun p : PlanarInterface.Point =>
+      Exists fun q : PlanarInterface.Point =>
+        p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            p ≠ q := by
+  have hendpoints :
+      e.1 ∈ unboundedFrontierVertexSet C inputs ∧
+        e.2 ∈ unboundedFrontierVertexSet C inputs :=
+    endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+      unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition he
+  refine
+    ⟨(canonicalGraph C).point e.1, (canonicalGraph C).point e.2,
+      mem_unboundedFrontierVertexSet_iff.1 hendpoints.1,
+      mem_unboundedFrontierVertexSet_iff.1 hendpoints.2, ?_⟩
+  exact canonical_edge_point_ne_of_mem_edgeSet
+    (mem_unboundedFrontierEdgeSet_iff.1 he).1
+
+/-- A singleton graph-frontier carrier has no selected unbounded-frontier
+edges.
+
+Any selected edge has both endpoints in the graph-frontier carrier, and those
+endpoints are distinct as canonical graph points. -/
+theorem unboundedFrontierEdgeSet_empty_of_unboundedFrontierVertexSet_card_eq_one
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hcard :
+      (unboundedFrontierVertexSet C inputs).card = 1) :
+    unboundedFrontierEdgeSet C inputs = ∅ := by
+  classical
+  apply Finset.eq_empty_iff_forall_notMem.2
+  intro e he
+  rcases Finset.card_eq_one.mp hcard with ⟨v, hsingleton⟩
+  have hendpoints :
+      e.1 ∈ unboundedFrontierVertexSet C inputs ∧
+        e.2 ∈ unboundedFrontierVertexSet C inputs :=
+    endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+      unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition he
+  have hleft : e.1 = v := by
+    simpa [hsingleton] using hendpoints.1
+  have hright : e.2 = v := by
+    simpa [hsingleton] using hendpoints.2
+  have hpoint_ne :
+      (canonicalGraph C).point e.1 ≠ (canonicalGraph C).point e.2 :=
+    canonical_edge_point_ne_of_mem_edgeSet
+      (mem_unboundedFrontierEdgeSet_iff.1 he).1
+  exact hpoint_ne (by simp [hleft, hright])
+
+/-- An unbounded-frontier point in the relative interior of a canonical edge
+gives two distinct actual unbounded-frontier points.  The finite drawing's
+fixed-side local theorem first promotes the interior point to membership of
+the whole edge in `unboundedFrontierEdgeSet`; the selected-edge endpoint row
+then supplies the two distinct frontier endpoints. -/
+theorem exists_two_frontier_points_of_frontier_edgeInterior
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpEdge :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hpFrontier :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun p : PlanarInterface.Point =>
+      Exists fun q : PlanarInterface.Point =>
+        p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            p ≠ q :=
+  exists_two_frontier_points_of_unboundedFrontierEdgeSet
+    (C := C) (inputs := inputs)
+    (interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+      (C := C) (inputs := inputs) he hpEdge hpFrontier)
+
+/-- In the singleton graph-frontier carrier case, no actual frontier point can
+lie in the relative interior of a canonical edge.
+
+Such an interior frontier point is promoted by the fixed-side local theorem to
+a selected `unboundedFrontierEdgeSet` edge, contradicting the previous
+singleton-edge emptiness lemma. -/
+theorem no_frontier_edgeInterior_of_unboundedFrontierVertexSet_card_eq_one
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hcard :
+      (unboundedFrontierVertexSet C inputs).card = 1) :
+    ¬ Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          e ∈ (canonicalGraph C).edgeSet ∧
+            p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              PlanarInterface.InOpenSegment p
+                ((canonicalGraph C).point e.1)
+                ((canonicalGraph C).point e.2) := by
+  intro h
+  rcases h with ⟨e, p, he, hpFrontier, hpEdge⟩
+  have hselected :
+      e ∈ unboundedFrontierEdgeSet C inputs :=
+    interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+      (C := C) (inputs := inputs) he hpEdge hpFrontier
+  have hempty :
+      unboundedFrontierEdgeSet C inputs = ∅ :=
+    unboundedFrontierEdgeSet_empty_of_unboundedFrontierVertexSet_card_eq_one
+      (C := C) (inputs := inputs) hcard
+  have hnot : e ∉ unboundedFrontierEdgeSet C inputs := by
+    rw [hempty]
+    simp
+  exact hnot hselected
+
+/-- If the actual selected unbounded exterior frontier were a singleton graph
+point, then some other ambient drawing-complement frontier point has
+arbitrarily nearby complement points outside the selected unbounded exterior
+component.
+
+This is the concrete boundary-bumping residual left by the singleton case:
+the finite drawing supplies an ambient edge-interior frontier point distinct
+from the singleton, and the previous metric separation lemma supplies nearby
+points belonging to other complement components. -/
+theorem exists_ambient_frontier_nearby_complement_outside_unboundedExterior_of_frontier_singleton
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    {v : Fin n}
+    (hfrontier :
+      frontier (unboundedExteriorComponentRows C inputs).exterior =
+        {(canonicalGraph C).point v}) :
+    Exists fun q : PlanarInterface.Point =>
+      q ∈ frontier (drawingComplement C) ∧
+        q ≠ (canonicalGraph C).point v ∧
+          forall ε : Real,
+            0 < ε ->
+              Exists fun y : PlanarInterface.Point =>
+                y ∈ Metric.ball q ε ∧
+                  y ∈ drawingComplement C ∧
+                    y ∉ (unboundedExteriorComponentRows C inputs).exterior := by
+  rcases exists_drawingComplement_frontier_point_ne_graph_vertex
+      (C := C) inputs v with
+    ⟨q, hqAmbient, hqne⟩
+  have hqNotActual :
+      q ∉ frontier (unboundedExteriorComponentRows C inputs).exterior := by
+    intro hqActual
+    have hqSingleton :
+        q ∈ ({(canonicalGraph C).point v} : Set PlanarInterface.Point) := by
+      simpa [hfrontier] using hqActual
+    exact hqne (by simpa using hqSingleton)
+  exact
+    ⟨q, hqAmbient, hqne,
+      exists_drawingComplement_point_not_unboundedExterior_near_of_ambient_frontier_not_unboundedExterior_frontier
+        (C := C) (inputs := inputs) hqAmbient hqNotActual⟩
+
+/-- If the graph-frontier carrier is a singleton, the whole actual unbounded
+exterior frontier is that single graph point.
+
+This isolates the remaining singleton residual as a pure point-frontier
+topology contradiction: the open-edge branch is impossible by
+`no_frontier_edgeInterior_of_unboundedFrontierVertexSet_card_eq_one`, and all
+vertex points are forced to be the unique graph-frontier vertex. -/
+theorem unboundedExterior_frontier_eq_singleton_of_unboundedFrontierVertexSet_card_eq_one
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hcard :
+      (unboundedFrontierVertexSet C inputs).card = 1) :
+    Exists fun v : Fin n =>
+      frontier (unboundedExteriorComponentRows C inputs).exterior =
+        {(canonicalGraph C).point v} := by
+  classical
+  rcases Finset.card_eq_one.mp hcard with ⟨v, hsingleton⟩
+  refine ⟨v, Set.Subset.antisymm ?_ ?_⟩
+  · intro p hp
+    rcases
+        unboundedExterior_frontier_point_vertex_or_ordered_edgeInterior
+          inputs hp with hvertex | hedge
+    · rcases hvertex with ⟨w, hpw⟩
+      have hw : w ∈ unboundedFrontierVertexSet C inputs :=
+        mem_unboundedFrontierVertexSet_iff.2 (by simpa [hpw] using hp)
+      have hwv : w = v := by
+        simpa [hsingleton] using hw
+      simp [hpw, hwv]
+    · exact False.elim
+        (no_frontier_edgeInterior_of_unboundedFrontierVertexSet_card_eq_one
+          (C := C) (inputs := inputs) hcard
+          (by
+            rcases hedge with ⟨e, he, hpEdge⟩
+            exact ⟨e, p, he, hp, hpEdge⟩))
+  · intro p hp
+    have hpv : p = (canonicalGraph C).point v := by
+      simpa using hp
+    rw [hpv]
+    have hv : v ∈ unboundedFrontierVertexSet C inputs := by
+      simp [hsingleton]
+    exact mem_unboundedFrontierVertexSet_iff.1 hv
+
+/-- Cardinality-one graph-frontier carriers reduce to the same concrete
+boundary-bumping residual as the singleton actual-frontier case. -/
+theorem exists_ambient_frontier_nearby_complement_outside_unboundedExterior_of_unboundedFrontierVertexSet_card_eq_one
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard :
+      (unboundedFrontierVertexSet C inputs).card = 1) :
+    Exists fun q : PlanarInterface.Point =>
+      q ∈ frontier (drawingComplement C) ∧
+        (Exists fun v : Fin n =>
+          q ≠ (canonicalGraph C).point v ∧
+            frontier (unboundedExteriorComponentRows C inputs).exterior =
+              {(canonicalGraph C).point v}) ∧
+          forall ε : Real,
+            0 < ε ->
+              Exists fun y : PlanarInterface.Point =>
+                y ∈ Metric.ball q ε ∧
+                  y ∈ drawingComplement C ∧
+                    y ∉ (unboundedExteriorComponentRows C inputs).exterior := by
+  rcases
+      unboundedExterior_frontier_eq_singleton_of_unboundedFrontierVertexSet_card_eq_one
+        (C := C) (inputs := inputs) hcard with
+    ⟨v, hfrontier⟩
+  rcases
+      exists_ambient_frontier_nearby_complement_outside_unboundedExterior_of_frontier_singleton
+        (C := C) inputs hfrontier with
+    ⟨q, hqAmbient, hqne, hnear⟩
+  exact ⟨q, hqAmbient, ⟨v, hqne, hfrontier⟩, hnear⟩
+
+/-- Two distinct graph vertices on the actual unbounded exterior frontier give
+two distinct frontier points. -/
+theorem exists_two_frontier_points_of_two_unboundedFrontierVertices
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {v w : Fin n}
+    (hv : v ∈ unboundedFrontierVertexSet C inputs)
+    (hw : w ∈ unboundedFrontierVertexSet C inputs)
+    (hvw : v ≠ w) :
+    Exists fun p : PlanarInterface.Point =>
+      Exists fun q : PlanarInterface.Point =>
+        p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            p ≠ q := by
+  refine
+    ⟨(canonicalGraph C).point v, (canonicalGraph C).point w,
+      mem_unboundedFrontierVertexSet_iff.1 hv,
+      mem_unboundedFrontierVertexSet_iff.1 hw, ?_⟩
+  intro hpoint
+  exact hvw (canonical_point_injective C hpoint)
+
+/-- The canonical unbounded-frontier seed either is already a graph-frontier
+vertex, or it yields two distinct points on the actual unbounded exterior
+frontier through the open-edge branch. -/
+theorem exists_unboundedFrontierVertexSet_or_two_frontier_points
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    (Exists fun v : Fin n => v ∈ unboundedFrontierVertexSet C inputs) ∨
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun q : PlanarInterface.Point =>
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              p ≠ q := by
+  rcases exists_unboundedFrontierVertexSet_or_frontier_edgeInterior
+      (C := C) inputs with hvertex | hedge
+  · exact Or.inl hvertex
+  · rcases hedge with ⟨e, p, he, hpfrontier, hpedge⟩
+    exact Or.inr
+      (exists_two_frontier_points_of_frontier_edgeInterior
+        (C := C) (inputs := inputs) he hpedge hpfrontier)
+
+/-- If the graph vertices on the actual unbounded exterior frontier do not
+form a singleton, then either there are no such graph vertices or two distinct
+actual frontier points are already available from two distinct graph vertices.
+
+This isolates the only remaining graph-vertex seed case as the singleton
+frontier-vertex carrier case. -/
+theorem exists_two_frontier_points_or_no_unboundedFrontierVertexSet_of_card_ne_one
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hcard_ne :
+      (unboundedFrontierVertexSet C inputs).card ≠ 1) :
+    (¬ Exists fun v : Fin n => v ∈ unboundedFrontierVertexSet C inputs) ∨
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun q : PlanarInterface.Point =>
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              p ≠ q := by
+  classical
+  let S : Finset (Fin n) := unboundedFrontierVertexSet C inputs
+  by_cases hnonempty : Exists fun v : Fin n => v ∈ S
+  · rcases hnonempty with ⟨v, hv⟩
+    have hexists_other :
+        Exists fun w : Fin n => w ∈ S ∧ w ≠ v := by
+      by_contra hno
+      have hall : forall w : Fin n, w ∈ S -> w = v := by
+        intro w hw
+        by_contra hwv
+        exact hno ⟨w, hw, hwv⟩
+      have hS_eq : S = {v} := by
+        apply Finset.Subset.antisymm
+        · intro w hw
+          simp [hall w hw]
+        · intro w hw
+          simpa using (by
+            have hwv : w = v := by simpa using hw
+            simpa [hwv] using hv)
+      exact hcard_ne (by simp [S, hS_eq])
+    rcases hexists_other with ⟨w, hw, hw_ne_v⟩
+    exact Or.inr
+      (exists_two_frontier_points_of_two_unboundedFrontierVertices
+        (C := C) (inputs := inputs) hv hw hw_ne_v.symm)
+  · exact Or.inl (by simpa [S] using hnonempty)
+
 /-- The actual finite boundary-edge carrier graph on unbounded-frontier
 vertices.  Its edges are exactly ordered canonical graph edges whose relative
 interiors meet the unbounded exterior frontier. -/
@@ -10470,6 +14563,30 @@ abbrev BoundaryFrontierClosedSegmentLocalExteriorAngularSector
       _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryPredSuccAngularBetween
         C B k other
 
+/-- Selected-edge form of the closed-segment local exterior residual.
+
+This keeps the far-endpoint case honest: instead of classifying arbitrary
+adjacent frontier endpoints as boundary predecessor/successor vertices, the
+source says that the specific incident closed segment carrying the frontier
+point is an actual selected `unboundedFrontierEdgeSet` edge. -/
+abbrev BoundaryFrontierClosedSegmentSelectedEdgeSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C) : Prop :=
+  forall (k : Fin B.length) (eps : Real) (q : PlanarInterface.Point)
+      (other : Fin n),
+    q ∈ Metric.ball ((canonicalGraph C).point (B.vertex k)) eps ->
+    q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+    (canonicalGraph C).Adj (B.vertex k) other ->
+    q ∈ closedSegment
+      ((canonicalGraph C).point (B.vertex k))
+      ((canonicalGraph C).point other) ->
+    q ≠ (canonicalGraph C).point (B.vertex k) ->
+    other ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+    other ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+      ((B.vertex k, other) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (other, B.vertex k) ∈ unboundedFrontierEdgeSet C inputs)
+
 /-- Open-segment form of the local exterior angular residual.
 
 This isolates the genuinely local case of
@@ -10651,6 +14768,29 @@ abbrev BoundaryFrontierIncidentEdgeExteriorAngularSector
       _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryPredSuccAngularBetween
         C B k other
 
+/-- Closed-segment angular control from selected-edge promotion plus the
+selected incident-edge angular row.
+
+The endpoint branch is not handled by an all-adjacent no-chord classifier: the
+closed-segment source first promotes the exact incident edge to the actual
+unbounded-frontier edge set, and the angular row is then applied to that
+selected edge. -/
+theorem boundary_frontier_closedSegment_local_exterior_angular_sector_of_closedSegment_selected_edge_incident_edge_angular
+    {C : _root_.UDConfig n} {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (closedSegment_selected_edge :
+      BoundaryFrontierClosedSegmentSelectedEdgeSource inputs B)
+    (incident_edge_angular :
+      BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B) :
+    BoundaryFrontierClosedSegmentLocalExteriorAngularSector inputs B := by
+  intro k eps q other hqball hqfrontier hadj hqseg hqne hother_pred
+    hother_succ
+  exact
+    incident_edge_angular k other
+      (closedSegment_selected_edge k eps q other hqball hqfrontier hadj
+        hqseg hqne hother_pred hother_succ)
+      hother_pred hother_succ
+
 /-- Promote the third open-segment frontier case to a concrete selected
 unbounded-frontier edge, using the relative-closure propagation row. -/
 theorem boundary_frontier_openSegment_frontierEdge_or_symm_of_relative_closure
@@ -10707,6 +14847,38 @@ theorem boundary_frontier_openSegment_frontierEdge_or_symm_of_relative_closure
       (mem_unboundedFrontierEdgeSet_of_edge_openSegment_frontier
         (C := C) (inputs := inputs) (e := (other, B.vertex k))
         hedge hfrontier_rev)
+
+/-- Closed-segment selected-edge source from the endpoint-selected-edge row and
+the open-segment relative-closure promotion.
+
+The far-endpoint branch is handled only by the explicit adjacent-endpoint
+selected-edge membership source.  The relative-interior branch reuses
+`boundary_frontier_openSegment_frontierEdge_or_symm_of_relative_closure`, and
+the center endpoint is ruled out by the noncenter hypothesis. -/
+theorem boundary_frontier_closedSegment_selectedEdgeSource_of_endpoint_incident_and_relative_closure
+    {C : _root_.UDConfig n} {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (boundary_vertex_frontier :
+      forall k : Fin B.length,
+        (canonicalGraph C).point (B.vertex k) ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (endpoint_incident_edge :
+      AdjacentFrontierEndpointsIncidentUnboundedFrontierEdgeSource C inputs)
+    (relative_closure :
+      BoundaryFrontierOpenSegmentRelativeClosurePropagation inputs B) :
+    BoundaryFrontierClosedSegmentSelectedEdgeSource inputs B := by
+  intro k _eps q other _hqball hqfrontier hadj hqseg hqne hother_pred
+    hother_succ
+  rcases mem_closedSegment_eq_left_or_eq_right_or_inOpenSegment hqseg with
+      hleft | hright | hopen
+  · exact False.elim (hqne hleft)
+  · exact
+      endpoint_incident_edge hadj (boundary_vertex_frontier k)
+        (by simpa [hright] using hqfrontier)
+  · exact
+      boundary_frontier_openSegment_frontierEdge_or_symm_of_relative_closure
+        (C := C) (inputs := inputs) (B := B) relative_closure
+        k q other hqfrontier hadj hopen hother_pred hother_succ
 
 /-- Reducer from the sharper edge/propagation source rows to the open-segment
 point-sector row.
@@ -11622,6 +15794,97 @@ structure UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
                       b.1 ≠ right ->
                         Nonempty (CutVertexInterface.CutVertexPartition C)
 
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-cutpartition-source-construction-worker-20260521e1`,
+pointwise row constructor.
+
+Two actual incident `unboundedFrontierEdgeSet` heads at `a`, together with a
+cut partition for every third concrete carrier neighbour, construct the sharp
+pointwise cut-partition rows. -/
+def
+    unboundedFrontierCarrierNeighborPairCutPartitionRowsAt_of_selectedEdges_thirdCuts_20260521e1
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}}
+    {left right : Fin n}
+    (left_edge :
+      (a.1, left) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (left, a.1) ∈ unboundedFrontierEdgeSet C inputs)
+    (right_edge :
+      (a.1, right) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (right, a.1) ∈ unboundedFrontierEdgeSet C inputs)
+    (heads_ne : left ≠ right)
+    (third_neighbor_cutPartitions :
+      forall b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        (unboundedFrontierCarrierGraph C inputs).Adj a b ->
+          b.1 ≠ left ->
+            b.1 ≠ right ->
+              Nonempty (CutVertexInterface.CutVertexPartition C)) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt inputs a where
+  left := left
+  right := right
+  left_edge := left_edge
+  right_edge := right_edge
+  heads_ne := heads_ne
+  third_neighbor_cutPartitions := third_neighbor_cutPartitions
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-cutpartition-source-construction-worker-20260521e1`.
+
+This is the strict primitive reduction of the requested input source: from
+`FinitePlanarOuterComponentInputs C`, it remains exactly to select two actual
+`unboundedFrontierEdgeSet` carrier edges at each exterior-frontier vertex and
+prove that any third concrete carrier neighbour gives a
+`CutVertexInterface.CutVertexPartition C`. -/
+def S2_agent_cutpartition_source_construction_worker_20260521e1
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun left : Fin n =>
+          Exists fun right : Fin n =>
+            ((a.1, left) ∈ unboundedFrontierEdgeSet C inputs ∨
+                (left, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+              ((a.1, right) ∈ unboundedFrontierEdgeSet C inputs ∨
+                  (right, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+                left ≠ right ∧
+                  forall b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+                    (unboundedFrontierCarrierGraph C inputs).Adj a b ->
+                      b.1 ≠ left ->
+                        b.1 ≠ right ->
+                          Nonempty (CutVertexInterface.CutVertexPartition C)) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs where
+  rows := source
+
+set_option linter.style.longLine false in
+/-- The 20260521e1 worker is an exact reformulation of the existing sharp
+input source, not an eraser through cycle rows or neighbour-list shortcuts. -/
+theorem
+    S2_agent_cutpartition_source_construction_worker_exact_iff_20260521e1
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C} :
+    Nonempty (UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs) ↔
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun left : Fin n =>
+          Exists fun right : Fin n =>
+            ((a.1, left) ∈ unboundedFrontierEdgeSet C inputs ∨
+                (left, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+              ((a.1, right) ∈ unboundedFrontierEdgeSet C inputs ∨
+                  (right, a.1) ∈ unboundedFrontierEdgeSet C inputs) ∧
+                left ≠ right ∧
+                  forall b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+                    (unboundedFrontierCarrierGraph C inputs).Adj a b ->
+                      b.1 ≠ left ->
+                        b.1 ≠ right ->
+                          Nonempty (CutVertexInterface.CutVertexPartition C) := by
+  constructor
+  · rintro ⟨source⟩
+    exact source.rows
+  · intro source
+    exact
+      ⟨S2_agent_cutpartition_source_construction_worker_20260521e1
+        (C := C) inputs source⟩
+
 /-- The input-shaped source fills the sharper pointwise cut-partition rows
 without passing through a boundary cycle, induced carrier cycle, or synthetic
 enclosure. -/
@@ -11655,6 +15918,26 @@ noncomputable def unboundedFrontierCarrierNeighborPairCutPartitionRows_of_inputS
       right_edge := hsource.2.1
       heads_ne := hsource.2.2.1
       third_neighbor_cutPartitions := hsource.2.2.2 }
+
+/-- Input-source packaging for already checked pointwise cut-partition rows.
+
+The selected heads and third-neighbour cut partitions are copied fieldwise from
+the row family, so this does not erase through neighbour-pair rows or any
+cycle/endpoint shortcut. -/
+noncomputable def
+    unboundedFrontierCarrierNeighborPairCutPartitionInputSource_of_cutPartitionRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierNeighborPairCutPartitionRowsAt inputs a) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs where
+  rows := by
+    intro a
+    let r := rows a
+    exact
+      ⟨r.left, r.right, r.left_edge, r.right_edge, r.heads_ne,
+        r.third_neighbor_cutPartitions⟩
 
 /-- Claim `S2-agent-frontier-neighbor-pair-input-20260520ax`, sharp
 cut-partition form.
@@ -11755,6 +16038,81 @@ theorem unboundedFrontierCarrierGraph_degree_two_of_noCutVertex_cutPartitionRows
     inputs
     (unboundedFrontierCarrierNeighborPairRows_of_noCutVertex_cutPartitionRows
       rows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-carrier-degree-two-source-worker-20260521d1`, pointwise
+neighbour-pair reduction.
+
+The bare carrier-degree source is reduced to the sharp actual-carrier
+cut-partition input: two genuine `unboundedFrontierEdgeSet` incidences at each
+frontier vertex, plus a concrete cut partition for any third carrier
+neighbour.  The eraser is exactly the existing no-cut route for the actual
+`unboundedFrontierCarrierGraph`; it does not use an induced frontier graph,
+endpoint shortcut, final cycle row, arbitrary carrier cycle, synthetic
+enclosure, or selected-head outgoing-list no-between source. -/
+noncomputable def
+    S2_agent_carrier_degree_two_source_worker_20260521d1_neighborPairRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      UnboundedFrontierCarrierNeighborPairAt inputs a :=
+  unboundedFrontierCarrierNeighborPairRows_of_noCutVertex_cutPartitionRows
+    (unboundedFrontierCarrierNeighborPairCutPartitionRows_of_inputSource
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-carrier-degree-two-source-worker-20260521d1`, exact
+`neighborFinset.card = 2` reduction.
+
+This is the requested hdegree-shaped output for the concrete carrier graph,
+with the same sharp residual as the pointwise row above. -/
+theorem
+    S2_agent_carrier_degree_two_source_worker_20260521d1_neighborFinset_card_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  intro a
+  rw [SimpleGraph.card_neighborFinset_eq_degree]
+  exact
+    unboundedFrontierCarrierGraph_degree_two_of_neighborPairRows
+      (C := C) inputs
+      (S2_agent_carrier_degree_two_source_worker_20260521d1_neighborPairRows
+        (C := C) (inputs := inputs) source) a
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_carrier_degree_two_source_worker_20260521d1_neighborFinset_card_two`.
+
+Thus the remaining bare-input source is exactly the family of sharp
+cut-partition inputs over `FinitePlanarOuterComponentInputs`. -/
+theorem
+    S2_agent_carrier_degree_two_source_worker_family_20260521d1
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairCutPartitionInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2 := by
+  intro m C inputs
+  exact
+    S2_agent_carrier_degree_two_source_worker_20260521d1_neighborFinset_card_two
+      (C := C) inputs (source C inputs)
 
 /-! ### Dart-pair bookkeeping for local exterior sectors -/
 
@@ -12035,6 +16393,216 @@ def UnboundedFrontierCarrierLocalSelectedNoThirdGermSource
     (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
   forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
     UnboundedFrontierCarrierLocalSelectedNoThirdGermSourceAt inputs a
+
+set_option linter.style.longLine false in
+/-- Local closed-germ membership promotes to an actual selected frontier edge.
+
+This is the e35 owner-file version of the local finite-star step: after
+shrinking to the graph-vertex isolation radius at `a`, a noncenter point of the
+unbounded exterior frontier lying in an incident W3 germ cannot be the far
+endpoint of a different graph edge.  The remaining relative-interior branch is
+selected by the checked interior-frontier carrier-membership theorem. -/
+theorem unboundedFrontierEdgeSet_or_symm_of_local_incident_frontier_germ_e35
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+    (ε : Real) (q : PlanarInterface.Point) (x : Fin n)
+    (hqradius :
+      q ∈ Metric.ball ((canonicalGraph C).point a.1)
+        (Classical.choose
+          (exists_ball_forall_graph_vertex_eq_of_mem_ball (C := C) a.1)))
+    (_hqeps : q ∈ Metric.ball ((canonicalGraph C).point a.1) ε)
+    (hqfrontier :
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hadj : (canonicalGraph C).Adj a.1 x)
+    (hgerm : q ∈ vertexIncidentGermW3 C a.1 x ε)
+    (hqcenter : q ≠ (canonicalGraph C).point a.1) :
+    (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+      (x, a.1) ∈ unboundedFrontierEdgeSet C inputs := by
+  have hvertexRadius :
+      forall w : Fin n,
+        (canonicalGraph C).point w ∈
+            Metric.ball ((canonicalGraph C).point a.1)
+              (Classical.choose
+                (exists_ball_forall_graph_vertex_eq_of_mem_ball
+                  (C := C) a.1)) ->
+          w = a.1 :=
+    (Classical.choose_spec
+      (exists_ball_forall_graph_vertex_eq_of_mem_ball (C := C) a.1)).2
+  rcases hgerm with ⟨_hgerm_ball, hqseg⟩
+  rcases mem_closedSegment_eq_left_or_eq_right_or_inOpenSegment hqseg with
+    hq_left | hq_right | hq_open
+  · exact False.elim (hqcenter hq_left)
+  · have hx_eq_a : x = a.1 :=
+      hvertexRadius x (by simpa [hq_right] using hqradius)
+    exact False.elim
+      ((canonical_adj_point_ne hadj) (by simp [hx_eq_a]))
+  · have hsource : InteriorFrontierEdgeCarrierMembershipSource C inputs :=
+      interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+    rcases hadj with hadj_forward | hadj_backward
+    · exact Or.inl
+        (hsource (e := (a.1, x)) (p := q)
+          hadj_forward hq_open hqfrontier)
+    · exact Or.inr
+        (hsource (e := (x, a.1)) (p := q)
+          hadj_backward (inOpenSegment_symm hq_open) hqfrontier)
+
+/-- e35 pure selected incident-edge source.
+
+At every actual unbounded-frontier vertex this source chooses two selected
+incident `unboundedFrontierEdgeSet` heads and asserts that every other selected
+incident head is one of those two.  The metric no-third-germ row is derived
+below from finite graph-vertex isolation, not assumed. -/
+structure UnboundedFrontierCarrierSelectedIncidentEdgePairSourceRowsE35
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) where
+  left :
+    {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} -> Fin n
+  right :
+    {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} -> Fin n
+  left_edge :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      (a.1, left a) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (left a, a.1) ∈ unboundedFrontierEdgeSet C inputs
+  right_edge :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      (a.1, right a) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (right a, a.1) ∈ unboundedFrontierEdgeSet C inputs
+  heads_ne :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      left a ≠ right a
+  only_selected_incident :
+    forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+        (x : Fin n),
+      (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (x, a.1) ∈ unboundedFrontierEdgeSet C inputs ->
+        x = left a ∨ x = right a
+
+set_option linter.style.longLine false in
+/-- Actual carrier degree two supplies the e35 selected incident-edge source.
+
+The residual is exactly degree two of the concrete
+`unboundedFrontierCarrierGraph`: the two selected heads are chosen from its
+neighbour finset, so no induced frontier graph, endpoint all-adjacent shortcut,
+arbitrary cycle, or angular-order facade is introduced. -/
+noncomputable def
+    unboundedFrontierCarrierSelectedIncidentEdgePairSourceRowsE35_of_carrier_degree_two
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    [DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj]
+    (hdegree :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    UnboundedFrontierCarrierSelectedIncidentEdgePairSourceRowsE35
+      inputs := by
+  classical
+  let G := unboundedFrontierCarrierGraph C inputs
+  let leftV :
+      (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}) ->
+        {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+    fun a => Classical.choose (Finset.card_eq_two.mp (hdegree a))
+  let rightV :
+      (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}) ->
+        {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+    fun a =>
+      Classical.choose
+        (Classical.choose_spec (Finset.card_eq_two.mp (hdegree a)))
+  have pairSpec :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        leftV a ≠ rightV a ∧
+          G.neighborFinset a = {leftV a, rightV a} := by
+    intro a
+    exact
+      Classical.choose_spec
+        (Classical.choose_spec (Finset.card_eq_two.mp (hdegree a)))
+  refine
+    { left := fun a => (leftV a).1
+      right := fun a => (rightV a).1
+      left_edge := ?_
+      right_edge := ?_
+      heads_ne := ?_
+      only_selected_incident := ?_ }
+  · intro a
+    have hmem : leftV a ∈ G.neighborFinset a := by
+      rw [(pairSpec a).2]
+      simp
+    have hadj : G.Adj a (leftV a) := by
+      simpa [G, SimpleGraph.mem_neighborFinset] using hmem
+    exact (unboundedFrontierCarrierGraph_adj_iff).1 (by simpa [G] using hadj)
+  · intro a
+    have hmem : rightV a ∈ G.neighborFinset a := by
+      rw [(pairSpec a).2]
+      simp
+    have hadj : G.Adj a (rightV a) := by
+      simpa [G, SimpleGraph.mem_neighborFinset] using hmem
+    exact (unboundedFrontierCarrierGraph_adj_iff).1 (by simpa [G] using hadj)
+  · intro a hheads
+    exact (pairSpec a).1 (Subtype.ext hheads)
+  · intro a x hedge
+    have hxmem : x ∈ unboundedFrontierVertexSet C inputs := by
+      let hwhole :
+          UnboundedFrontierEdgeSetWholeOpenSegmentFrontier C inputs :=
+        unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition
+      rcases hedge with hedge | hedge
+      · exact
+          (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+            hwhole hedge).2
+      · exact
+          (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+            hwhole hedge).1
+    let b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+      ⟨x, hxmem⟩
+    have hbAdj : G.Adj a b := by
+      exact (unboundedFrontierCarrierGraph_adj_iff).2 hedge
+    have hbmem : b ∈ G.neighborFinset a := by
+      simpa [G, SimpleGraph.mem_neighborFinset] using hbAdj
+    have hbpair : b = leftV a ∨ b = rightV a := by
+      simpa [(pairSpec a).2] using hbmem
+    rcases hbpair with hb_left | hb_right
+    · left
+      exact congrArg Subtype.val hb_left
+    · right
+      exact congrArg Subtype.val hb_right
+
+set_option linter.style.longLine false in
+/-- e35 strict reducer from selected incident-edge pairs to the local
+selected-edge/no-third-germ source.
+
+The only local topology used here is the finite graph-vertex isolation radius:
+nearby frontier W3 germs first become actual selected
+`unboundedFrontierEdgeSet` incidences, and the selected incident-edge pair row
+then excludes a third head. -/
+noncomputable def
+    unboundedFrontierCarrierLocalSelectedNoThirdGermSource_of_selectedIncidentEdgePairRowsE35
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierSelectedIncidentEdgePairSourceRowsE35
+        inputs) :
+    UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs := by
+  classical
+  intro a
+  refine
+    ⟨source.left a, source.right a, source.left_edge a,
+      source.right_edge a, source.heads_ne a, ?_⟩
+  refine
+    ⟨Classical.choose
+        (exists_ball_forall_graph_vertex_eq_of_mem_ball (C := C) a.1),
+      ?_, ?_⟩
+  · exact
+      (Classical.choose_spec
+        (exists_ball_forall_graph_vertex_eq_of_mem_ball (C := C) a.1)).1
+  · intro ε q x hqradius hqeps hqfrontier hadj hgerm hqcenter hx_left hx_right
+    have hedge :
+        (a.1, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (x, a.1) ∈ unboundedFrontierEdgeSet C inputs :=
+      unboundedFrontierEdgeSet_or_symm_of_local_incident_frontier_germ_e35
+        (C := C) (inputs := inputs) a ε q x hqradius hqeps hqfrontier
+        hadj hgerm hqcenter
+    rcases source.only_selected_incident a x hedge with hx | hx
+    · exact hx_left hx
+    · exact hx_right hx
 
 /-- Boundary-cycle local drawing rows give the actual selected-edge/no-third
 germ source.
@@ -12510,6 +17078,77 @@ noncomputable def
   exact False.elim
     (hradiusSpec.2 starRadius q x hqlocal hqstar hqfrontier
       hadj hgerm hqcenter hx_left hx_right)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-local-two-germ-source-worker-20260521e35`, selected-edge
+pair residual.
+
+This proves the boundary-free local two-germ rows from the e35 selected
+incident-edge pair source.  The strict residual is concrete carrier degree two
+or, equivalently, the selected incident-edge pair rows above; the local radius
+and no-third-germ material is derived internally from finite vertex isolation. -/
+noncomputable def
+    S2_agent_local_two_germ_source_worker_20260521e35_of_selectedIncidentEdgePairRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierSelectedIncidentEdgePairSourceRowsE35
+        inputs) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a :=
+  S2_dyn_20260520_local_two_germ_rows_of_selected_no_third_germ_source
+    (C := C) (inputs := inputs)
+    (unboundedFrontierCarrierLocalSelectedNoThirdGermSource_of_selectedIncidentEdgePairRowsE35
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-local-two-germ-source-worker-20260521e35`, carrier-degree
+residual.
+
+For bare `FinitePlanarOuterComponentInputs C`, it is enough to prove degree
+two of the actual selected exterior carrier graph.  The selected heads are
+chosen from that graph's own neighbour finsets. -/
+noncomputable def
+    S2_agent_local_two_germ_source_worker_20260521e35_of_carrier_degree_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hdegree :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    S2_agent_local_two_germ_source_worker_20260521e35_of_selectedIncidentEdgePairRows
+      (C := C) (inputs := inputs)
+      (unboundedFrontierCarrierSelectedIncidentEdgePairSourceRowsE35_of_carrier_degree_two
+        (C := C) (inputs := inputs) (by simpa using hdegree))
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_local_two_germ_source_worker_20260521e35_of_carrier_degree_two`. -/
+noncomputable def
+    S2_agent_local_two_germ_source_worker_family_20260521e35_of_carrier_degree_two
+    (hdegree :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          UnboundedFrontierCarrierLocalTwoGermRowsAt inputs a := by
+  intro m C inputs
+  exact
+    S2_agent_local_two_germ_source_worker_20260521e35_of_carrier_degree_two
+      (C := C) inputs (hdegree C inputs)
 
 /-- Claim `S2-dyn-20260520-local-two-germ-from-janiszewski-noSubcontinuum`.
 
@@ -13331,6 +17970,133 @@ theorem frontierVertexIncidentSource_of_frontier_edge_cover
   · exact ⟨e.2, Or.inl (by simpa [hleft] using he)⟩
   · exact ⟨e.1, Or.inr (by simpa [hright] using he)⟩
 
+/-- The concrete unbounded-frontier carrier has at least one vertex.
+
+Choose any point on the unbounded exterior frontier.  If it is a graph vertex,
+that vertex is already in `unboundedFrontierVertexSet`.  If it lies in the
+relative interior of a canonical edge, the fixed-side interior-edge theorem
+promotes that edge to `unboundedFrontierEdgeSet`, whose endpoints are frontier
+vertices. -/
+theorem unboundedFrontierCarrier_nonempty
+    (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    Nonempty {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} := by
+  rcases exists_unboundedExterior_frontier_vertex_or_edgeInterior inputs with
+    ⟨p, hpfrontier, hp_kind⟩
+  rcases hp_kind with hvertex | hedge
+  · rcases hvertex with ⟨v, hpv⟩
+    exact
+      ⟨⟨v,
+        mem_unboundedFrontierVertexSet_iff.2
+          (by simpa [hpv] using hpfrontier)⟩⟩
+  · rcases hedge with ⟨i, j, hij, hpseg⟩
+    have hsource :
+        InteriorFrontierEdgeCarrierMembershipSource C inputs :=
+      interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+    let hwhole :
+        UnboundedFrontierEdgeSetWholeOpenSegmentFrontier C inputs :=
+      unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition
+    rcases hij with hij | hji
+    · have hEdge : (i, j) ∈ unboundedFrontierEdgeSet C inputs :=
+        hsource hij hpseg hpfrontier
+      exact
+        ⟨⟨i,
+          (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+            hwhole hEdge).1⟩⟩
+    · have hEdge : (j, i) ∈ unboundedFrontierEdgeSet C inputs :=
+        hsource hji (inOpenSegment_symm hpseg) hpfrontier
+      exact
+        ⟨⟨j,
+          (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+            hwhole hEdge).1⟩⟩
+
+/-- The selected endpoint-incidence source gives an actual carrier neighbour
+at every concrete unbounded-frontier carrier vertex.
+
+This is only endpoint/carrying bookkeeping: the neighbour is obtained from a
+real `unboundedFrontierEdgeSet` edge incident to the vertex, and the opposite
+endpoint is promoted back into `unboundedFrontierVertexSet` by the selected
+edge's whole-open-segment frontier row. -/
+theorem exists_unboundedFrontierCarrierGraph_adj_of_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident : FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}) :
+    Exists fun b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} =>
+      (unboundedFrontierCarrierGraph C inputs).Adj a b := by
+  have ha_frontier :
+      (canonicalGraph C).point a.1 ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    mem_unboundedFrontierVertexSet_iff.1 a.2
+  rcases incident ha_frontier with ⟨w, hEdge⟩
+  let hwhole :
+      UnboundedFrontierEdgeSetWholeOpenSegmentFrontier C inputs :=
+    unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition
+  have hw :
+      w ∈ unboundedFrontierVertexSet C inputs := by
+    rcases hEdge with hEdge | hEdge
+    · exact
+        (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+          hwhole hEdge).2
+    · exact
+        (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+          hwhole hEdge).1
+  exact ⟨⟨w, hw⟩, (unboundedFrontierCarrierGraph_adj_iff).2 hEdge⟩
+
+/-- The selected endpoint-incidence source rules out the singleton
+graph-frontier carrier case.
+
+If the graph-vertex part of the unbounded exterior frontier had exactly one
+vertex, the incident source would give a selected frontier edge from that
+vertex to another carrier vertex.  Since the carrier graph is loopless, that
+adjacent carrier vertex cannot be the same singleton. -/
+theorem unboundedFrontierVertexSet_card_ne_one_of_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident : FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    (unboundedFrontierVertexSet C inputs).card ≠ 1 := by
+  intro hcard
+  rcases Finset.card_eq_one.mp hcard with ⟨v, hsingleton⟩
+  let a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+    ⟨v, by simp [hsingleton]⟩
+  rcases
+      exists_unboundedFrontierCarrierGraph_adj_of_frontierVertexIncidentSource
+        (C := C) (inputs := inputs) incident a with
+    ⟨b, hb⟩
+  have hb_val : b.1 = v := by
+    simpa [hsingleton] using b.2
+  have hb_eq : a = b := by
+    exact Subtype.ext hb_val.symm
+  exact (unboundedFrontierCarrierGraph C inputs).ne_of_adj hb hb_eq
+
+/-- Neighbor-finset form of
+`exists_unboundedFrontierCarrierGraph_adj_of_frontierVertexIncidentSource`. -/
+theorem unboundedFrontierCarrierGraph_neighborFinset_nonempty_of_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    [DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj]
+    (incident : FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}) :
+    ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).Nonempty := by
+  rcases
+      exists_unboundedFrontierCarrierGraph_adj_of_frontierVertexIncidentSource
+        (C := C) (inputs := inputs) incident a with
+    ⟨b, hb⟩
+  exact ⟨b, by simpa [SimpleGraph.mem_neighborFinset] using hb⟩
+
+/-- Cardinal form: the concrete carrier has no isolated vertices once the
+selected endpoint-incidence source is available. -/
+theorem unboundedFrontierCarrierGraph_neighborFinset_card_pos_of_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    [DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj]
+    (incident : FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}) :
+    0 < ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card :=
+  Finset.card_pos.2
+    (unboundedFrontierCarrierGraph_neighborFinset_nonempty_of_frontierVertexIncidentSource
+      (C := C) (inputs := inputs) incident a)
+
 /-- Claim `S2-agent-component-carrier-proof-step-20260520am`.
 
 The pointwise local-sector rows already prove the endpoint incident-edge
@@ -13846,6 +18612,94 @@ noncomputable def unboundedFrontierCarrierDartPairRows_of_localSectorRows
       UnboundedFrontierCarrierDartPairAt inputs a :=
   fun a => unboundedFrontierCarrierDartPairAt_of_localSectorRows (rows a)
 
+set_option linter.style.longLine false in
+/-- Actual selected-edge carrier source at one exterior-frontier carrier
+vertex.
+
+The proof takes the left incident edge named by the local-sector row and then
+uses the definition of `unboundedFrontierEdgeSet` to promote its opposite
+endpoint to `unboundedFrontierVertexSet`.  The output is an actual selected
+edge together with the corresponding adjacency in
+`unboundedFrontierCarrierGraph`, not an induced frontier edge or an arbitrary
+cycle edge. -/
+theorem selectedUnboundedFrontierCarrierEdgeAt_of_localSectorRows_20260521o5
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}}
+    (rows : UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    Exists fun b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} =>
+      Exists fun e :
+          {e : PlanarInterface.Edge n //
+            e ∈ unboundedFrontierEdgeSet C inputs} =>
+        (((e.1.1 = a.1 ∧ e.1.2 = b.1) ∨
+            (e.1.1 = b.1 ∧ e.1.2 = a.1)) ∧
+          (unboundedFrontierCarrierGraph C inputs).Adj a b) := by
+  let hwhole :
+      UnboundedFrontierEdgeSetWholeOpenSegmentFrontier C inputs :=
+    unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition
+  rcases rows.left_edge with hleft | hleft
+  · have hbmem : rows.left ∈ unboundedFrontierVertexSet C inputs :=
+      (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+        hwhole hleft).2
+    let b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+      ⟨rows.left, hbmem⟩
+    let e :
+        {e : PlanarInterface.Edge n //
+          e ∈ unboundedFrontierEdgeSet C inputs} :=
+      ⟨(a.1, rows.left), hleft⟩
+    refine ⟨b, e, ?_⟩
+    constructor
+    · exact Or.inl ⟨rfl, rfl⟩
+    · exact
+        unboundedFrontierCarrierGraph_adj_of_ordered_edge
+          (C := C) (inputs := inputs) (a := a) (b := b)
+          (by simpa [b] using hleft)
+  · have hbmem : rows.left ∈ unboundedFrontierVertexSet C inputs :=
+      (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+        hwhole hleft).1
+    let b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+      ⟨rows.left, hbmem⟩
+    let e :
+        {e : PlanarInterface.Edge n //
+          e ∈ unboundedFrontierEdgeSet C inputs} :=
+      ⟨(rows.left, a.1), hleft⟩
+    refine ⟨b, e, ?_⟩
+    constructor
+    · exact Or.inr ⟨rfl, rfl⟩
+    · exact
+        unboundedFrontierCarrierGraph_adj_of_ordered_edge_symm
+          (C := C) (inputs := inputs) (a := a) (b := b)
+          (by simpa [b] using hleft)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-dynamic-exterior-component-carrier-source-20260521o5`.
+
+Pointwise local-sector rows supply an actual selected carrier edge and the
+opposite actual carrier vertex for some vertex of the selected unbounded
+exterior frontier.  The frontier vertex seed is the existing
+`unboundedFrontierCarrier_nonempty`, and the selected edge/adjacency payload is
+the pointwise source above. -/
+theorem S2_dynamic_exterior_component_carrier_source_20260521o5
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    Exists fun a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} =>
+      Exists fun b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} =>
+        Exists fun e :
+            {e : PlanarInterface.Edge n //
+              e ∈ unboundedFrontierEdgeSet C inputs} =>
+          (((e.1.1 = a.1 ∧ e.1.2 = b.1) ∨
+              (e.1.1 = b.1 ∧ e.1.2 = a.1)) ∧
+            (unboundedFrontierCarrierGraph C inputs).Adj a b) := by
+  rcases unboundedFrontierCarrier_nonempty C inputs with ⟨a⟩
+  rcases
+      selectedUnboundedFrontierCarrierEdgeAt_of_localSectorRows_20260521o5
+        (C := C) (inputs := inputs) (a := a) (localSectorRows a) with
+    ⟨b, e, hpayload⟩
+  exact ⟨a, b, e, hpayload⟩
+
 /-- Local-sector rows also discharge degree two directly via the finite
 neighbour-pair reducer.  This is the same local data as the dart-pair route,
 without constructing the intermediate darts. -/
@@ -13907,6 +18761,24 @@ theorem S2_agent_boundary_carrier_degree_two_from_local_sectors
   exact
     unboundedFrontierCarrierGraph_degree_two_of_localSectorRows
       inputs localSectorRows
+
+/-- If a frontier vertex has an incident canonical edge whose whole relative
+interior is in the closure of the unbounded exterior component, then that edge
+is a selected unbounded-frontier carrier edge incident to the vertex. -/
+def FrontierVertexIncidentOpenSegmentClosureSource
+    (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
+  forall {v : Fin n},
+    (canonicalGraph C).point v ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior ->
+      Exists fun e : PlanarInterface.Edge n =>
+        e ∈ (canonicalGraph C).edgeSet ∧
+          (e.1 = v ∨ e.2 = v) ∧
+            forall p : PlanarInterface.Point,
+              PlanarInterface.InOpenSegment p
+                ((canonicalGraph C).point e.1)
+                ((canonicalGraph C).point e.2) ->
+              p ∈ closure (unboundedExteriorComponentRows C inputs).exterior
 
 /-- If a frontier vertex has an incident canonical edge whose whole relative
 interior is in the closure of the unbounded exterior component, then that edge
@@ -14198,6 +19070,108 @@ theorem exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierEdgeLoc
         C)
       start
 
+/-- Claim `S2-r7j-selected-edge-local-row-from-incident-closure`.
+
+The proposed frontier-vertex incident open-segment closure primitive is exactly
+the vertex-side input needed to build a local unbounded-exterior frontier edge
+from any concrete unbounded-exterior frontier seed.  This stays before
+boundary cycles: the edge-interior branch is handled directly by the seed, and
+the graph-vertex branch is handled by the incident closure primitive. -/
+theorem S2_r7j_edgeLocalRows_of_seed_incidentOpenSegmentClosure_20260521r7j
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (seed : UnboundedExteriorFrontierSeed inputs)
+    (hprop : FrontierVertexIncidentOpenSegmentClosureSource C inputs) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        UnboundedExteriorFrontierEdgeLocalRows C inputs e p := by
+  rcases seed.vertex_or_edgeInterior with hvertex | hedge
+  · rcases hvertex with ⟨v, hv⟩
+    rcases
+        seed_vertex_edgeInterior_frontier_point_of_incident_openSegment_closure
+          seed hv hprop with
+      ⟨e, p, he, _hinc, hpfrontier, hpseg⟩
+    exact
+      ⟨e, p,
+        unboundedExterior_frontierEdgeLocalRows_of_inOpenSegment_frontier
+          (mem_unboundedFrontierEdgeSet_iff.1 he).1 hpseg hpfrontier⟩
+  · rcases hedge with ⟨i, j, hij, hpseg⟩
+    rcases hij with hij | hji
+    · exact
+        ⟨(i, j), seed.point,
+          unboundedExterior_frontierEdgeLocalRows_of_inOpenSegment_frontier
+            hij hpseg seed.point_mem_frontier⟩
+    · exact
+        ⟨(j, i), seed.point,
+          unboundedExterior_frontierEdgeLocalRows_of_inOpenSegment_frontier
+            hji (inOpenSegment_symm hpseg) seed.point_mem_frontier⟩
+
+/-- The incident open-segment closure primitive selects a genuine local
+frontier edge, promotes it to the actual selected unbounded-frontier carrier,
+and orients it into a geometric raw `faceSucc` seed. -/
+theorem S2_r7j_selected_geometricRawFaceSuccOrbitSeed_of_seed_incidentOpenSegmentClosure_20260521r7j
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (seed : UnboundedExteriorFrontierSeed inputs)
+    (hprop : FrontierVertexIncidentOpenSegmentClosureSource C inputs) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun start : UnitDistanceDart C =>
+          e ∈ unboundedFrontierEdgeSet C inputs ∧
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+              start.tail = e.1 ∧
+                start.head = e.2 ∧
+                  Nonempty
+                    (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                      start) := by
+  rcases
+      S2_r7j_edgeLocalRows_of_seed_incidentOpenSegmentClosure_20260521r7j
+        (C := C) (inputs := inputs) seed hprop with
+    ⟨e, p, edgeRows⟩
+  rcases
+      exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierEdgeLocalRows
+        edgeRows with
+    ⟨start, htail, hhead, horbit⟩
+  have hselected : e ∈ unboundedFrontierEdgeSet C inputs := by
+    exact
+      (interior_frontier_edge_carrier_membership_source_of_fixed_side_halfballs
+        (C := C) (inputs := inputs))
+        edgeRows.edge_mem edgeRows.center_in_openSegment
+        edgeRows.center_frontier
+  exact ⟨e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+
+/-- Input-facing seed/local-edge source for the r7j closure primitive.
+
+The existing unbounded exterior frontier seed source supplies the seed; the
+incident closure primitive then supplies the selected local edge row and raw
+geometric starting dart.  No actual-sector, boundary-cycle, or W32 package is
+used. -/
+theorem S2_r7j_selected_geometricRawFaceSuccOrbitSeed_of_inputs_incidentOpenSegmentClosure_20260521r7j
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hprop : FrontierVertexIncidentOpenSegmentClosureSource C inputs) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            e ∈ unboundedFrontierEdgeSet C inputs ∧
+              UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                start.tail = e.1 ∧
+                  start.head = e.2 ∧
+                    Nonempty
+                      (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                          C)
+                        start) := by
+  rcases unboundedExteriorFrontierSeed_nonempty inputs with ⟨seed⟩
+  rcases
+      S2_r7j_selected_geometricRawFaceSuccOrbitSeed_of_seed_incidentOpenSegmentClosure_20260521r7j
+        (C := C) (inputs := inputs) seed hprop with
+    ⟨e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+  exact ⟨seed, e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+
 /-- Orient a concrete unbounded-exterior frontier seed into the geometric raw
 face-successor orbit seed.  The edge-interior branch is unconditional.  The
 only extra input is the exact local-side theorem needed when the seed lands on
@@ -14294,6 +19268,329 @@ theorem exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_lo
       seed ?_
   intro v hv
   exact seed_vertex_edgeInterior_frontier_point_of_localSectorRows rows seed hv
+
+/-- Claim `S2-r57-exterior-seed-source-lowering-20260521r57`.
+
+Local-sector rows orient any chosen unbounded-exterior frontier seed into the
+geometric raw face-successor seed while also exposing that the selected seed
+edge is genuinely in `unboundedFrontierEdgeSet`.  The selected-edge proof uses
+the fixed-side finite-drawing carrier theorem on the actual local edge row,
+not an arbitrary adjacent-frontier-endpoint shortcut. -/
+theorem S2_r57_selected_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localSectorRows_20260521r57
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (seed : UnboundedExteriorFrontierSeed inputs) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun start : UnitDistanceDart C =>
+          e ∈ unboundedFrontierEdgeSet C inputs ∧
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+              start.tail = e.1 ∧
+                start.head = e.2 ∧
+                  Nonempty
+                    (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                      (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                        C)
+                      start) := by
+  rcases
+      exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localSectorRows
+        (C := C) (inputs := inputs) rows seed with
+    ⟨e, p, start, edgeRows, htail, hhead, horbit⟩
+  have hselected : e ∈ unboundedFrontierEdgeSet C inputs := by
+    exact
+      (interior_frontier_edge_carrier_membership_source_of_fixed_side_halfballs
+        (C := C) (inputs := inputs))
+        edgeRows.edge_mem edgeRows.center_in_openSegment edgeRows.center_frontier
+  exact ⟨e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+
+/-- Claim `S2-r21-finite-plane-source-lemma-20260521r21`.
+
+Local-sector rows now give an actual selected starting edge for the exterior
+geometric face-successor walk.  The theorem first chooses a concrete point on
+the unbounded exterior frontier, handles the graph-vertex seed case by the
+local-sector incident-edge row, and then promotes the resulting open-edge
+frontier point to membership in `unboundedFrontierEdgeSet` by the fixed-side
+finite-plane local carrier theorem.  No final boundary cycle or W32 row is
+used. -/
+theorem S2_r21_selected_geometricRawFaceSuccOrbitSeed_of_localSectorRows_20260521r21
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            e ∈ unboundedFrontierEdgeSet C inputs ∧
+              UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                start.tail = e.1 ∧
+                  start.head = e.2 ∧
+                    Nonempty
+                      (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                          C)
+                        start) := by
+  rcases unboundedExteriorFrontierSeed_nonempty inputs with ⟨seed⟩
+  rcases
+      exists_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localSectorRows
+        (C := C) (inputs := inputs) rows seed with
+    ⟨e, p, start, localRows, htail, hhead, horbit⟩
+  have hselected : e ∈ unboundedFrontierEdgeSet C inputs := by
+    exact
+      (interior_frontier_edge_carrier_membership_source_of_fixed_side_halfballs
+        (C := C) (inputs := inputs))
+        localRows.edge_mem localRows.center_in_openSegment
+        localRows.center_frontier
+  exact ⟨seed, e, p, start, hselected, localRows, htail, hhead, horbit⟩
+
+/-- Claim `S2-r45-exterior-seed-frontier-source-20260521r45`.
+
+From the bare finite planar outer-component inputs, choose a concrete point on
+the unbounded exterior frontier.  If that point is a graph vertex, it is a
+member of the concrete unbounded-frontier vertex carrier.  If it lies in the
+relative interior of a canonical edge, the fixed-side finite-drawing theorem
+promotes that edge to the actual selected `unboundedFrontierEdgeSet`.  This is
+the local seed/edge source available before any boundary cycle, exterior-sector
+rows, or W32 package. -/
+theorem S2_r45_unboundedExteriorFrontierSeed_selectedEdge_or_vertex_20260521r45
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    Exists fun seed : UnboundedExteriorFrontierSeed inputs =>
+      (Exists fun v : Fin n =>
+        seed.point = (canonicalGraph C).point v ∧
+          v ∈ unboundedFrontierVertexSet C inputs) ∨
+        Exists fun e : PlanarInterface.Edge n =>
+          e ∈ unboundedFrontierEdgeSet C inputs ∧
+            PlanarInterface.InOpenSegment seed.point
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2) := by
+  rcases unboundedExteriorFrontierSeed_nonempty inputs with ⟨seed⟩
+  refine ⟨seed, ?_⟩
+  rcases seed.vertex_or_edgeInterior with hvertex | hedge
+  · rcases hvertex with ⟨v, hv⟩
+    exact Or.inl
+      ⟨v, hv, mem_unboundedFrontierVertexSet_iff.2
+        (by simpa [hv] using seed.point_mem_frontier)⟩
+  · rcases hedge with ⟨i, j, hij, hpseg⟩
+    have hsource :
+        InteriorFrontierEdgeCarrierMembershipSource C inputs :=
+      interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+    rcases hij with hij | hji
+    · exact Or.inr ⟨(i, j), hsource hij hpseg seed.point_mem_frontier, hpseg⟩
+    · exact Or.inr
+        ⟨(j, i), hsource hji (inOpenSegment_symm hpseg) seed.point_mem_frontier,
+          inOpenSegment_symm hpseg⟩
+
+/-- Claim `S2-r58-unbounded-exterior-frontier-seed-input-source-20260521r58`.
+
+The selected unbounded exterior component is the concrete rightward x-axis
+component chosen in `unboundedExteriorComponentRows`.  Its extremal frontier
+point is therefore an input-level `UnboundedExteriorFrontierSeed`.  If that
+point is edge-interior, the fixed-side frontier-edge source promotes the
+carrying edge to the actual selected `unboundedFrontierEdgeSet`; if it is a
+graph vertex, the theorem keeps the honest frontier-vertex branch visible. -/
+theorem S2_r58_unboundedExteriorFrontierSeed_of_inputs_xAxis_extremal_selectedEdge_or_vertex_20260521r58
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    Exists fun seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun R : Real =>
+        0 <= R /\
+          xAxisRay R ⊆ (unboundedExteriorComponentRows C inputs).exterior /\
+            Metric.infDist (xAxisRayBase R)
+                ((unboundedExteriorComponentRows C inputs).exterior)ᶜ =
+              dist (xAxisRayBase R) seed.point /\
+              ((Exists fun v : Fin n =>
+                seed.point = (canonicalGraph C).point v /\
+                  v ∈ unboundedFrontierVertexSet C inputs) ∨
+                Exists fun e : PlanarInterface.Edge n =>
+                  e ∈ unboundedFrontierEdgeSet C inputs /\
+                    PlanarInterface.InOpenSegment seed.point
+                      ((canonicalGraph C).point e.1)
+                      ((canonicalGraph C).point e.2)) := by
+  classical
+  let R : Real := Classical.choose (exists_xAxisRay_subset_drawingComplement C)
+  have hR_spec : 0 <= R /\ xAxisRay R ⊆ drawingComplement C :=
+    Classical.choose_spec (exists_xAxisRay_subset_drawingComplement C)
+  have hR_nonneg : 0 <= R := hR_spec.1
+  have hR_subset : xAxisRay R ⊆ drawingComplement C := hR_spec.2
+  rcases
+      exists_xAxisRayBase_extremal_frontier_seed
+        (C := C) inputs (R := R) hR_subset with
+    ⟨p, hpfrontier_component, _hpdraw, hpdist⟩
+  have hpfrontier :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior := by
+    simpa [unboundedExteriorComponentRows, ExteriorUnboundedComponentRows.exterior,
+      ExteriorConnectedComponentRows.exterior, R] using hpfrontier_component
+  let seed : UnboundedExteriorFrontierSeed inputs :=
+    { point := p
+      point_mem_frontier := hpfrontier
+      vertex_or_edgeInterior := by
+        rcases
+            unboundedExterior_frontier_point_vertex_or_ordered_edgeInterior
+              (C := C) inputs hpfrontier with hvertex | hedge
+        · exact Or.inl hvertex
+        · rcases hedge with ⟨e, he, hpseg⟩
+          exact Or.inr ⟨e.1, e.2, Or.inl he, hpseg⟩ }
+  have hray_subset :
+      xAxisRay R ⊆ (unboundedExteriorComponentRows C inputs).exterior := by
+    intro q hq
+    change
+      q ∈ connectedComponentIn (drawingComplement C)
+        ((R + 1, 0) : PlanarInterface.Point)
+    exact
+      (xAxisRay_preconnected R).subset_connectedComponentIn
+        (xAxisRayBase_mem R) hR_subset hq
+  have hpdist_exterior :
+      Metric.infDist (xAxisRayBase R)
+          ((unboundedExteriorComponentRows C inputs).exterior)ᶜ =
+        dist (xAxisRayBase R) seed.point := by
+    simpa [unboundedExteriorComponentRows, ExteriorUnboundedComponentRows.exterior,
+      ExteriorConnectedComponentRows.exterior, seed, R] using hpdist
+  have hselected_or_vertex :
+      (Exists fun v : Fin n =>
+        seed.point = (canonicalGraph C).point v /\
+          v ∈ unboundedFrontierVertexSet C inputs) ∨
+        Exists fun e : PlanarInterface.Edge n =>
+          e ∈ unboundedFrontierEdgeSet C inputs /\
+            PlanarInterface.InOpenSegment seed.point
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2) := by
+    rcases seed.vertex_or_edgeInterior with hvertex | hedge
+    · rcases hvertex with ⟨v, hv⟩
+      exact Or.inl
+        ⟨v, hv, mem_unboundedFrontierVertexSet_iff.2
+          (by simpa [hv] using seed.point_mem_frontier)⟩
+    · rcases hedge with ⟨i, j, hij, hpseg⟩
+      have hsource :
+          InteriorFrontierEdgeCarrierMembershipSource C inputs :=
+        interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+      rcases hij with hij | hji
+      · exact Or.inr
+          ⟨(i, j), hsource hij hpseg seed.point_mem_frontier, hpseg⟩
+      · exact Or.inr
+          ⟨(j, i), hsource hji (inOpenSegment_symm hpseg)
+            seed.point_mem_frontier, inOpenSegment_symm hpseg⟩
+  exact
+    ⟨seed, R, hR_nonneg, hray_subset, hpdist_exterior,
+      hselected_or_vertex⟩
+
+/-- Exact nonempty seed source extracted from the r58 extremal x-axis seed. -/
+theorem S2_r58_unboundedExteriorFrontierSeed_nonempty_of_inputs_20260521r58
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) :
+    Nonempty (UnboundedExteriorFrontierSeed inputs) := by
+  rcases
+      S2_r58_unboundedExteriorFrontierSeed_of_inputs_xAxis_extremal_selectedEdge_or_vertex_20260521r58
+        (C := C) inputs with
+    ⟨seed, _R, _hR⟩
+  exact ⟨seed⟩
+
+set_option linter.style.longLine false in
+/-- r58 seed source, promoted through the r21/r57 local-sector seed machinery.
+
+This is the input-facing version of the selected geometric raw `faceSucc`
+seed: the exterior seed is chosen by the r58 x-axis extremal source, and
+local-sector rows orient it into an actual selected frontier edge and raw
+geometric start dart. -/
+theorem S2_r58_selected_geometricRawFaceSuccOrbitSeed_of_inputs_localSectorRows_20260521r58
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (rows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    Exists fun seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            e ∈ unboundedFrontierEdgeSet C inputs ∧
+              UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                start.tail = e.1 ∧
+                  start.head = e.2 ∧
+                    Nonempty
+                      (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                          C)
+                        start) := by
+  let seed : UnboundedExteriorFrontierSeed inputs :=
+    Classical.choice
+      (S2_r58_unboundedExteriorFrontierSeed_nonempty_of_inputs_20260521r58
+        (C := C) inputs)
+  rcases
+      S2_r57_selected_geometricRawFaceSuccOrbitSeed_of_unboundedExteriorFrontierSeed_localSectorRows_20260521r57
+        (C := C) (inputs := inputs) rows seed with
+    ⟨e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+  exact
+    ⟨seed, e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q14-exterior-seed-dart-source`, incident-closure form.
+
+The finite input package supplies the unbounded exterior seed; the displayed
+incident open-segment closure row handles the graph-vertex seed case, and the
+geometric rotation system supplies the raw `faceSucc` orbit from the selected
+dart.  The output is only a seed/orbit support row: it does not assume an
+actual-sector package, a completed boundary cycle, an arbitrary carrier cycle,
+or a synthetic enclosure. -/
+theorem S2_q14_exterior_seed_dart_source_of_incidentOpenSegmentClosure
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hprop : FrontierVertexIncidentOpenSegmentClosureSource C inputs) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            Exists fun _O :
+              UnitDistanceRotationSystem.RawFaceSuccOrbit
+                (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                  C)
+                start =>
+              e ∈ unboundedFrontierEdgeSet C inputs ∧
+                UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                  start.tail = e.1 ∧
+                    start.head = e.2 := by
+  rcases
+      S2_r7j_selected_geometricRawFaceSuccOrbitSeed_of_inputs_incidentOpenSegmentClosure_20260521r7j
+        (C := C) inputs hprop with
+    ⟨seed, e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+  rcases horbit with ⟨O⟩
+  exact ⟨seed, e, p, start, O, hselected, edgeRows, htail, hhead⟩
+
+set_option linter.style.longLine false in
+/-- Claim `S2-q14-exterior-seed-dart-source`, local-sector form.
+
+This is the same seed/orbit support row with the vertex-side incident edge
+read from the concrete unbounded-frontier local-sector rows.  It exposes the
+actual raw orbit object selected by the geometric face-successor system, while
+staying strictly upstream of actual exterior-sector and boundary-cycle rows. -/
+theorem S2_q14_exterior_seed_dart_source_of_localSectorRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (rows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    Exists fun _seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            Exists fun _O :
+              UnitDistanceRotationSystem.RawFaceSuccOrbit
+                (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                  C)
+                start =>
+              e ∈ unboundedFrontierEdgeSet C inputs ∧
+                UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                  start.tail = e.1 ∧
+                    start.head = e.2 := by
+  rcases
+      S2_r58_selected_geometricRawFaceSuccOrbitSeed_of_inputs_localSectorRows_20260521r58
+        (C := C) inputs rows with
+    ⟨seed, e, p, start, hselected, edgeRows, htail, hhead, horbit⟩
+  rcases horbit with ⟨O⟩
+  exact ⟨seed, e, p, start, O, hselected, edgeRows, htail, hhead⟩
 
 /-- Claim `S2-agent-cw-exterior-raw-orbit-seed-source`.
 
@@ -14407,6 +19704,102 @@ theorem nearby_nonvertex_unboundedExterior_frontier_of_punctured_vertex
     have huv : u = v := hvertex u (by simpa [hqu] using hqballη)
     exact hq_ne_center (by simpa [huv] using hqu)
 
+/-- A preconnected frontier with another point has punctured accumulation at
+the chosen point.
+
+This is a purely topological local source reducer.  If some ball around `x`
+met the preconnected set only at `x`, then `{x}` would be a nonempty clopen
+subset of the subtype, forcing the whole subtype to be the singleton. -/
+theorem punctured_points_of_preconnected_nontrivial
+    {s : Set PlanarInterface.Point}
+    (hs : IsPreconnected s)
+    {x y : PlanarInterface.Point}
+    (hx : x ∈ s)
+    (hy : y ∈ s)
+    (hyx : y ≠ x) :
+    forall ε : Real,
+      0 < ε ->
+        Exists fun q : PlanarInterface.Point =>
+          q ∈ Metric.ball x ε ∧ q ∈ s ∧ q ≠ x := by
+  intro ε hεpos
+  by_contra hnone
+  have hball_singleton :
+      forall z : PlanarInterface.Point,
+        z ∈ s -> z ∈ Metric.ball x ε -> z = x := by
+    intro z hzS hzball
+    by_contra hzx
+    exact hnone ⟨z, hzball, hzS, hzx⟩
+  let xS : s := ⟨x, hx⟩
+  let isolated : Set s := {z : s | z = xS}
+  have hisolated_open : IsOpen isolated := by
+    let U : Set s :=
+      ((fun z : s => (z : PlanarInterface.Point)) ⁻¹'
+        Metric.ball x ε)
+    have hUopen : IsOpen U :=
+      Metric.isOpen_ball.preimage continuous_subtype_val
+    have hUeq : U = isolated := by
+      ext z
+      constructor
+      · intro hzU
+        apply Subtype.ext
+        exact hball_singleton z z.property hzU
+      · intro hzIso
+        have hz : (z : PlanarInterface.Point) = x := by
+          exact congrArg Subtype.val hzIso
+        simpa [U, hz] using
+          (Metric.mem_ball_self hεpos : x ∈ Metric.ball x ε)
+    rw [← hUeq]
+    exact hUopen
+  have hisolated_closed : IsClosed isolated := by
+    simpa [isolated] using isClosed_singleton
+  have hpre_univ : IsPreconnected (Set.univ : Set s) := by
+    haveI : PreconnectedSpace s :=
+      Subtype.preconnectedSpace (by simpa using hs)
+    exact preconnectedSpace_iff_univ.mp inferInstance
+  have hisolated_clopen : IsClopen isolated :=
+    ⟨hisolated_closed, hisolated_open⟩
+  have hnonempty : (Set.univ ∩ isolated : Set s).Nonempty := by
+    exact ⟨xS, by simp [isolated]⟩
+  have hsubset : (Set.univ : Set s) ⊆ isolated :=
+    hpre_univ.subset_isClopen hisolated_clopen hnonempty
+  have hyIso_mem : (⟨y, hy⟩ : s) ∈ isolated :=
+    hsubset (by simp)
+  have hyIso : (⟨y, hy⟩ : s) = xS := by
+    simpa [isolated] using hyIso_mem
+  exact hyx (congrArg Subtype.val hyIso)
+
+/-- Frontier-specific punctured accumulation reducer.
+
+The remaining nontriviality input is pointwise: at the graph-frontier vertex,
+produce some other point of the same actual unbounded exterior frontier. -/
+theorem punctured_vertex_frontier_of_preconnected_frontier_nontrivialAt
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hpre :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (hnontrivialAt :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v) :
+    forall {v : Fin n},
+      (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ->
+        forall ε : Real,
+          0 < ε ->
+            Exists fun q : PlanarInterface.Point =>
+              q ∈ Metric.ball ((canonicalGraph C).point v) ε ∧
+                q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+                  q ≠ (canonicalGraph C).point v := by
+  intro v hvfrontier ε hεpos
+  rcases hnontrivialAt hvfrontier with ⟨y, hyfrontier, hyne⟩
+  exact
+    punctured_points_of_preconnected_nontrivial
+      hpre hvfrontier hyfrontier hyne ε hεpos
+
 /-- A sharper local-topology reducer for the vertex-seed side condition.
 
 Near a graph-vertex seed, it is enough to find an actual unbounded-exterior
@@ -14489,6 +19882,53 @@ theorem vertex_seed_side_of_punctured_vertex_unboundedExterior_frontier
       (nearby_nonvertex_unboundedExterior_frontier_of_punctured_vertex
         (C := C) (inputs := inputs) v hnear)
 
+/-- Sharp local residual for the graph-vertex branch of the exterior-frontier
+seed construction.
+
+At a graph vertex lying on the actual unbounded exterior frontier, the frontier
+must accumulate by another point of that same frontier at every scale.  This is
+strictly earlier than carrier rows, boundary-cycle rows, or sector rows; the
+finite-drawing fixed-side argument below then turns it into the incident
+open-segment closure source. -/
+def UnboundedExteriorFrontierVertexPuncturedAccumulationSource
+    (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
+  forall {v : Fin n},
+    (canonicalGraph C).point v ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior ->
+      forall eps : Real,
+        0 < eps ->
+          Exists fun q : PlanarInterface.Point =>
+            q ∈ Metric.ball ((canonicalGraph C).point v) eps ∧
+              q ∈ frontier
+                (unboundedExteriorComponentRows C inputs).exterior ∧
+                q ≠ (canonicalGraph C).point v
+
+/-- Actual-frontier preconnectedness plus pointwise nontriviality is exactly
+the point-set source needed for punctured accumulation at graph-frontier
+vertices.
+
+This is still before carrier, boundary-cycle, actual-sector, or W32 rows: it
+uses only the topological fact that an isolated point in a preconnected
+frontier would force the whole frontier to be a singleton. -/
+theorem unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_nontrivialAt
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (frontier_nontrivialAt :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  punctured_vertex_frontier_of_preconnected_frontier_nontrivialAt
+    (C := C) (inputs := inputs)
+    frontier_preconnected frontier_nontrivialAt
+
 /-- Incident open-segment closure from punctured vertex accumulation plus the
 interior relative-ball closure row.
 
@@ -14542,6 +19982,71 @@ theorem incident_openSegment_closure_of_punctured_vertex_and_relative_ball_closu
         he hpopen hpfrontier
         (interior_relative_ball_closure he hpopen hpfrontier)
         q hqopen)
+
+/-- Claim `S2-r7j-frontier-vertex-incident-edge-source`.
+
+The first graph-vertex seed source is strictly reduced to the punctured
+accumulation primitive for the same actual unbounded exterior frontier.  The
+rest of the handoff is checked here: local vertex-star isolation selects an
+incident canonical edge, and the fixed-side finite-drawing closure propagation
+extends one interior frontier point to closure along the whole open segment.
+
+This does not use final boundary-cycle rows, actual exterior-sector rows, W32,
+the induced frontier graph, or all-adjacent endpoint rows. -/
+theorem S2_r7j_frontier_vertex_incident_openSegment_closure_of_puncturedAccumulation_20260521r7j
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hpunctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs)
+    {v : Fin n}
+    (hv :
+      (canonicalGraph C).point v ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun e : PlanarInterface.Edge n =>
+      e ∈ (canonicalGraph C).edgeSet ∧
+        (e.1 = v ∨ e.2 = v) ∧
+          forall p : PlanarInterface.Point,
+            PlanarInterface.InOpenSegment p
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2) ->
+            p ∈ closure (unboundedExteriorComponentRows C inputs).exterior := by
+  exact
+    incident_openSegment_closure_of_punctured_vertex_and_relative_ball_closure
+      (C := C) (inputs := inputs) hpunctured
+      (interiorRelativeBallClosureRow_of_fixed_side_halfballs
+        (C := C) (inputs := inputs))
+      hv
+
+/-- Punctured accumulation at graph-frontier vertices now feeds the selected
+seed/local-edge source directly.
+
+This is the same r7j handoff one step lower than the closure primitive:
+punctured accumulation gives the incident open-segment closure row, which then
+produces the selected local frontier edge and raw geometric `faceSucc` seed. -/
+theorem S2_r7j_selected_geometricRawFaceSuccOrbitSeed_of_inputs_puncturedAccumulation_20260521r7j
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hpunctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs) :
+    Exists fun seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            e ∈ unboundedFrontierEdgeSet C inputs ∧
+              UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                start.tail = e.1 ∧
+                  start.head = e.2 ∧
+                    Nonempty
+                      (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                          C)
+                        start) := by
+  exact
+    S2_r7j_selected_geometricRawFaceSuccOrbitSeed_of_inputs_incidentOpenSegmentClosure_20260521r7j
+      (C := C) inputs
+      (fun {v} hv =>
+        S2_r7j_frontier_vertex_incident_openSegment_closure_of_puncturedAccumulation_20260521r7j
+          (C := C) (inputs := inputs) hpunctured hv)
 
 /-- Incident open-segment closure gives the selected incident-edge source at
 every graph vertex on the actual unbounded exterior frontier. -/
@@ -14623,6 +20128,242 @@ theorem frontierVertexIncidentSource_of_punctured_vertex
     (C := C) (inputs := inputs) hpunctured
     (interiorRelativeBallClosureRow_of_fixed_side_halfballs
       (C := C) (inputs := inputs))
+
+/-- Claim `S2-r51-r45-frontier-vertex-incident-edge-20260521r51`.
+
+Pointwise vertex branch for the r45 exterior-frontier seed split.  Once the
+existing local punctured-frontier row is available at graph-frontier vertices,
+the finite drawing/component topology reducers select a genuine incident
+`unboundedFrontierEdgeSet` edge.  The proof routes through local vertex-star
+isolation and fixed-side open-edge propagation; it does not use actual-sector
+rows, final boundary-cycle rows, W32, an induced frontier graph, or all-adjacent
+endpoint closure. -/
+theorem S2_r51_frontier_vertex_incident_unboundedFrontierEdgeSet_of_punctured_vertex_20260521r51
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hpunctured :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          forall ε : Real,
+            0 < ε ->
+              Exists fun q : PlanarInterface.Point =>
+                q ∈ Metric.ball ((canonicalGraph C).point v) ε ∧
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior ∧
+                    q ≠ (canonicalGraph C).point v)
+    {v : Fin n}
+    (hv :
+      (canonicalGraph C).point v ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun w : Fin n =>
+      (v, w) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (w, v) ∈ unboundedFrontierEdgeSet C inputs := by
+  exact
+    frontierVertexIncidentSource_of_punctured_vertex
+      (C := C) (inputs := inputs) hpunctured hv
+
+/-- r45 seed split with the graph-vertex branch upgraded to an incident
+selected unbounded-frontier edge, under the same local punctured-frontier row.
+
+The non-vertex branch is exactly r45's selected-edge branch; the vertex branch
+uses `S2_r51_frontier_vertex_incident_unboundedFrontierEdgeSet_of_punctured_vertex_20260521r51`. -/
+theorem S2_r51_unboundedExteriorFrontierSeed_selectedEdge_or_incidentVertexEdge_20260521r51
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hpunctured :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          forall ε : Real,
+            0 < ε ->
+              Exists fun q : PlanarInterface.Point =>
+                q ∈ Metric.ball ((canonicalGraph C).point v) ε ∧
+                  q ∈ frontier
+                    (unboundedExteriorComponentRows C inputs).exterior ∧
+                    q ≠ (canonicalGraph C).point v) :
+    Exists fun seed : UnboundedExteriorFrontierSeed inputs =>
+      (Exists fun v : Fin n =>
+        Exists fun w : Fin n =>
+          seed.point = (canonicalGraph C).point v ∧
+            ((v, w) ∈ unboundedFrontierEdgeSet C inputs ∨
+              (w, v) ∈ unboundedFrontierEdgeSet C inputs)) ∨
+        Exists fun e : PlanarInterface.Edge n =>
+          e ∈ unboundedFrontierEdgeSet C inputs ∧
+            PlanarInterface.InOpenSegment seed.point
+              ((canonicalGraph C).point e.1)
+              ((canonicalGraph C).point e.2) := by
+  rcases
+      S2_r45_unboundedExteriorFrontierSeed_selectedEdge_or_vertex_20260521r45
+        (C := C) inputs with
+    ⟨seed, hseed⟩
+  refine ⟨seed, ?_⟩
+  rcases hseed with hvertex | hedge
+  · rcases hvertex with ⟨v, hvpoint, hvfrontierSet⟩
+    have hvfrontier :
+        (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior :=
+      mem_unboundedFrontierVertexSet_iff.1 hvfrontierSet
+    rcases
+        S2_r51_frontier_vertex_incident_unboundedFrontierEdgeSet_of_punctured_vertex_20260521r51
+          (C := C) (inputs := inputs) hpunctured hvfrontier with
+      ⟨w, hw⟩
+    exact Or.inl ⟨v, w, hvpoint, hw⟩
+  · exact Or.inr hedge
+
+/-- Actual-frontier preconnectedness plus pointwise nontriviality gives the
+selected incident-edge source at graph-frontier vertices.
+
+This composes the pure punctured-accumulation lemma with the fixed-side
+edge-propagation reducer; it still asks only for another point of the same
+actual unbounded exterior frontier, not for any induced frontier graph or
+all-adjacent endpoint claim. -/
+theorem frontierVertexIncidentSource_of_frontierPreconnected_nontrivialAt
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hpre :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (hnontrivialAt :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_punctured_vertex
+    (C := C) (inputs := inputs)
+    (punctured_vertex_frontier_of_preconnected_frontier_nontrivialAt
+      (C := C) (inputs := inputs) hpre hnontrivialAt)
+
+/-- A selected incident frontier edge gives a second point of the same actual
+frontier at every graph-frontier vertex.
+
+This is the easy direction of the local equivalence: once an incident edge is
+known to be in the actual `unboundedFrontierEdgeSet`, its midpoint is a
+frontier point and cannot coincide with the endpoint graph vertex. -/
+theorem frontier_nontrivialAt_of_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {v : Fin n},
+      (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            y ≠ (canonicalGraph C).point v := by
+  intro v hvfrontier
+  rcases incident hvfrontier with ⟨w, hEdge | hEdge⟩
+  · let y : PlanarInterface.Point :=
+      PlanarInterface.segmentPoint
+        ((canonicalGraph C).point v)
+        ((canonicalGraph C).point w)
+        (1 / 2 : Real)
+    have hyopen :
+        PlanarInterface.InOpenSegment y
+          ((canonicalGraph C).point v)
+          ((canonicalGraph C).point w) := by
+      simpa [y] using
+        midpoint_inOpenSegment
+          ((canonicalGraph C).point v)
+          ((canonicalGraph C).point w)
+    refine
+      ⟨y, (mem_unboundedFrontierEdgeSet_iff.1 hEdge).2 y hyopen, ?_⟩
+    intro hy
+    exact
+      (graph_vertex_not_inOpenSegment_of_adj
+        (C := C) (v := v) (i := v) (j := w)
+        (unboundedFrontierEdgeSet_adj hEdge))
+        (by simpa [hy] using hyopen)
+  · let y : PlanarInterface.Point :=
+      PlanarInterface.segmentPoint
+        ((canonicalGraph C).point w)
+        ((canonicalGraph C).point v)
+        (1 / 2 : Real)
+    have hyopen :
+        PlanarInterface.InOpenSegment y
+          ((canonicalGraph C).point w)
+          ((canonicalGraph C).point v) := by
+      simpa [y] using
+        midpoint_inOpenSegment
+          ((canonicalGraph C).point w)
+          ((canonicalGraph C).point v)
+    refine
+      ⟨y, (mem_unboundedFrontierEdgeSet_iff.1 hEdge).2 y hyopen, ?_⟩
+    intro hy
+    exact
+      (graph_vertex_not_inOpenSegment_of_adj
+        (C := C) (v := v) (i := w) (j := v)
+        (unboundedFrontierEdgeSet_adj hEdge))
+        (by simpa [hy] using hyopen)
+
+/-- Under actual-frontier preconnectedness, the selected incident-edge source
+is equivalent to pointwise nontriviality of that same frontier at graph
+frontier vertices. -/
+theorem frontierVertexIncidentSource_iff_frontier_nontrivialAt_of_preconnected
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hpre :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior)) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs ↔
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v := by
+  constructor
+  · exact frontier_nontrivialAt_of_frontierVertexIncidentSource
+  · exact
+      frontierVertexIncidentSource_of_frontierPreconnected_nontrivialAt
+        (C := C) (inputs := inputs) hpre
+
+/-- Two distinct points on the actual unbounded exterior frontier make the
+pointwise nontriviality row uniform at every graph-frontier vertex. -/
+theorem frontier_nontrivialAt_of_two_frontier_points
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {p q : PlanarInterface.Point}
+    (hp :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hq :
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hpq : p ≠ q) :
+    forall {v : Fin n},
+      (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            y ≠ (canonicalGraph C).point v := by
+  intro v _hvfrontier
+  by_cases hpv : p = (canonicalGraph C).point v
+  · refine ⟨q, hq, ?_⟩
+    intro hqv
+    exact hpq (hpv.trans hqv.symm)
+  · exact ⟨p, hp, hpv⟩
+
+/-- Actual-frontier preconnectedness plus two distinct frontier points gives
+the selected incident-edge source at graph-frontier vertices. -/
+theorem frontierVertexIncidentSource_of_frontierPreconnected_two_frontier_points
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (hpre :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    {p q : PlanarInterface.Point}
+    (hp :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hq :
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hpq : p ≠ q) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_frontierPreconnected_nontrivialAt
+    (C := C) (inputs := inputs) hpre
+    (frontier_nontrivialAt_of_two_frontier_points
+      (C := C) (inputs := inputs) hp hq hpq)
 
 /-- Claim `S2-agent-frontier-vertex-incident-source-20260520by`.
 
@@ -17717,6 +23458,16 @@ theorem unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows
     (unboundedFrontierCarrierGraph_nonempty_adjClosed_all_of_topologyRows
       inputs rows)
 
+/-- Connectedness from adjacency-closed topology rows, using the intrinsic
+nonemptiness of the actual unbounded-frontier carrier. -/
+theorem unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows_noAuxNonempty
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (rows : UnboundedFrontierCarrierAdjClosedTopologySourceRows inputs) :
+    (unboundedFrontierCarrierGraph C inputs).Connected :=
+  unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows
+    inputs (unboundedFrontierCarrier_nonempty C inputs) rows
+
 /-- A genuine frontier-edge cover makes the concrete carrier vertex type
 nonempty.  This removes the auxiliary nonemptiness row from the source-facing
 connectedness handoff below. -/
@@ -17762,13 +23513,9 @@ theorem unboundedFrontierCarrierGraph_connected_of_frontier_preconnected_and_fro
   let topologyRows :=
     unboundedFrontierCarrierAdjClosedTopologyRows_of_frontier_preconnected_and_frontier_edge_cover
       (C := C) (inputs := inputs) frontier_preconnected frontier_edge_cover
-  let frontier_vertices_nonempty :
-      Nonempty {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
-    unboundedFrontierCarrier_nonempty_of_frontier_edge_cover
-      inputs frontier_edge_cover
   exact
-    unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows
-      inputs frontier_vertices_nonempty topologyRows
+    unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows_noAuxNonempty
+      inputs topologyRows
 
 /-- Minimal component-topology source for connectedness of the concrete
 unbounded-frontier carrier.
@@ -17808,6 +23555,132 @@ def UnboundedExteriorSelectedFrontierEdgeCover
           p ∈ closedSegment
             ((canonicalGraph C).point e.1)
             ((canonicalGraph C).point e.2)
+
+/-- Claim `S2-q15-frontier-incident-source`.
+
+The actual selected frontier-edge cover directly gives the selected
+incident-edge source at graph vertices on the unbounded exterior frontier.
+At a graph vertex, the cover supplies a selected edge whose closed segment
+contains that vertex; unit-edge endpoint separation then identifies the graph
+vertex as one endpoint of that same selected edge. -/
+theorem S2_q15_frontierVertexIncidentSource_of_selectedFrontierEdgeCover_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selected_frontier_edge_cover :
+      UnboundedExteriorSelectedFrontierEdgeCover C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_frontier_edge_cover
+    (C := C) (inputs := inputs) selected_frontier_edge_cover
+
+/-- Family form of
+`S2_q15_frontierVertexIncidentSource_of_selectedFrontierEdgeCover_20260522`. -/
+theorem S2_q15_frontierVertexIncidentSource_family_of_selectedFrontierEdgeCover_20260522
+    (selected_frontier_edge_cover :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSelectedFrontierEdgeCover C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  fun C inputs =>
+    S2_q15_frontierVertexIncidentSource_of_selectedFrontierEdgeCover_20260522
+      (C := C) (inputs := inputs)
+      (selected_frontier_edge_cover C inputs)
+
+/-- Claim `S2-q20-selected-frontier-edge-local-source`.
+
+The selected incident-edge source at a frontier graph vertex produces an
+actual selected edge together with local finite-drawing frontier-edge rows on
+that same edge.  This is only local edge isolation plus the actual selected
+`unboundedFrontierEdgeSet` row; it does not pass through boundary cycles,
+actual-sector rows, W32 consumers, induced frontier graphs, or all-adjacent
+endpoint closure. -/
+theorem S2_q20_selectedFrontierEdgeLocalRows_of_frontierVertexIncidentSource_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs)
+    {v : Fin n}
+    (hv :
+      (canonicalGraph C).point v ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        e ∈ unboundedFrontierEdgeSet C inputs ∧
+          (e.1 = v ∨ e.2 = v) ∧
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p := by
+  rcases incident hv with ⟨w, hEdge | hEdge⟩
+  · rcases
+      S2_q20_unboundedExteriorFrontierEdgeLocalRows_of_unboundedFrontierEdgeSet_20260522
+        (C := C) (inputs := inputs) hEdge with
+      ⟨p, rows⟩
+    exact ⟨(v, w), p, hEdge, Or.inl rfl, rows⟩
+  · rcases
+      S2_q20_unboundedExteriorFrontierEdgeLocalRows_of_unboundedFrontierEdgeSet_20260522
+        (C := C) (inputs := inputs) hEdge with
+      ⟨p, rows⟩
+    exact ⟨(w, v), p, hEdge, Or.inr rfl, rows⟩
+
+/-- The selected frontier-edge cover produces a selected actual frontier edge
+covering the requested frontier point, plus local finite-drawing frontier-edge
+rows on that same selected edge. -/
+theorem S2_q20_selectedFrontierEdgeLocalRows_of_selectedFrontierEdgeCover_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (selected_frontier_edge_cover :
+      UnboundedExteriorSelectedFrontierEdgeCover C inputs)
+    {x : PlanarInterface.Point}
+    (hx :
+      x ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    Exists fun e : PlanarInterface.Edge n =>
+      Exists fun p : PlanarInterface.Point =>
+        e ∈ unboundedFrontierEdgeSet C inputs ∧
+          x ∈ closedSegment
+            ((canonicalGraph C).point e.1)
+            ((canonicalGraph C).point e.2) ∧
+            UnboundedExteriorFrontierEdgeLocalRows C inputs e p := by
+  rcases selected_frontier_edge_cover x hx with ⟨e, he, hxseg⟩
+  rcases
+      S2_q20_unboundedExteriorFrontierEdgeLocalRows_of_unboundedFrontierEdgeSet_20260522
+        (C := C) (inputs := inputs) he with
+    ⟨p, rows⟩
+  exact ⟨e, p, he, hxseg, rows⟩
+
+/-- Family form of
+`S2_q20_selectedFrontierEdgeLocalRows_of_selectedFrontierEdgeCover_20260522`. -/
+theorem S2_q20_selectedFrontierEdgeLocalRows_family_of_selectedFrontierEdgeCover_20260522
+    (selected_frontier_edge_cover :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSelectedFrontierEdgeCover C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C)
+      {x : PlanarInterface.Point},
+        x ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun e : PlanarInterface.Edge m =>
+            Exists fun p : PlanarInterface.Point =>
+              e ∈ unboundedFrontierEdgeSet C inputs ∧
+                x ∈ closedSegment
+                  ((canonicalGraph C).point e.1)
+                  ((canonicalGraph C).point e.2) ∧
+                  UnboundedExteriorFrontierEdgeLocalRows C inputs e p :=
+  fun {m} (C : _root_.UDConfig m) inputs {x} hx =>
+    S2_q20_selectedFrontierEdgeLocalRows_of_selectedFrontierEdgeCover_20260522
+      (C := C) (inputs := inputs) (x := x)
+      (selected_frontier_edge_cover (C := C) inputs) hx
+
+/-- Component-topology source rows expose the same selected-edge cover used by
+the exterior seed constructor.
+
+This is a source-side eraser only: the cover is the concrete
+`unboundedFrontierEdgeSet` cover of the actual unbounded exterior frontier
+already stored in `UnboundedExteriorFrontierComponentTopologySourceRows`. -/
+theorem unboundedExterior_selectedFrontierEdgeCover_of_componentTopologySourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : UnboundedExteriorFrontierComponentTopologySourceRows inputs) :
+    UnboundedExteriorSelectedFrontierEdgeCover C inputs :=
+  rows.frontier_edge_cover
 
 /-- No-open-separation form of preconnectedness for the actual unbounded
 exterior frontier.
@@ -18072,6 +23945,33 @@ theorem actualFrontierPreconnected_of_finiteDrawing_noClosedSeparation
     (C := C) inputs
     (finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation
       frontier_noClosedSeparation)
+
+/-- The same-`K` boundary-bumping source gives actual preconnectedness for the
+selected unbounded exterior frontier. -/
+theorem actualFrontierPreconnected_of_janiszewskiKComponentPointsBetween
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    UnboundedExteriorActualFrontierPreconnectedSource C inputs :=
+  actualFrontierPreconnected_of_finiteDrawing_frontierPreconnected
+    (C := C) inputs
+    (finiteDrawingUnboundedComplementFrontierPreconnected_of_janiszewskiKComponentPointsBetween
+      points_between)
+
+/-- Exact actual-frontier preconnectedness row consumed by the boundary-free
+local component reducers, sourced from the same-`K` boundary-bumping point
+theorem. -/
+theorem S2_agent_frontier_preconnected_source_for_boundaryFreeReducers_20260520f
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (points_between :
+      PlanarJaniszewskiBoundaryBumpingUnboundedComponentFrontierKComponentPointsBetween) :
+    IsPreconnected
+      (frontier (unboundedExteriorComponentRows C inputs).exterior) := by
+  simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+    actualFrontierPreconnected_of_janiszewskiKComponentPointsBetween
+      (C := C) inputs points_between
 
 /-- The finite-drawing no-closed-separation source specializes to the actual
 unbounded exterior component selected by
@@ -18459,6 +24359,25 @@ theorem
   actualFrontierPreconnected_of_janiszewskiBoundaryBumping
     (C := C) inputs boundary_bumping
 
+/-- Source-side actual frontier-preconnectedness for the unbounded exterior
+component, lowered to the compact/frontier no-crossing topology primitive.
+
+This is the named branch needed before carrier connectedness: the only global
+mathematical residual is
+`PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing`;
+the finite drawing contributes compactness, connectedness, and the selected
+unbounded exterior component through `FinitePlanarOuterComponentInputs`. -/
+theorem unboundedExteriorFrontier_frontierPreconnected_of_inputs
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (no_crossing :
+      PlanarContinuumUnboundedComplementFrontierClosedSeparationNoCompactConnectedKCrossing) :
+    UnboundedExteriorActualFrontierPreconnectedSource C inputs :=
+  S2_dyn_20260520_frontier_preconnected_source_of_planarContinuum
+    (C := C) inputs
+    (planarContinuumUnboundedComplementFrontierPreconnected_of_noCompactConnectedKCrossing
+      no_crossing)
+
 /-- Claim `S2-dyn-20260520-planar-continuum-frontier-preconnected-source`.
 
 The planar-continuum residual is strictly reduced to the standard
@@ -18802,6 +24721,914 @@ structure UnboundedExteriorFrontierComponentTopologyInputSourceRows
   frontier_vertex_incident :
     FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs
 
+/-- Actual-frontier preconnectedness plus selected incident edges at
+graph-frontier vertices is exactly the input-facing component-topology source.
+
+This is the narrow source eraser for S2-r13: it uses only the concrete
+unbounded exterior frontier and the selected `unboundedFrontierEdgeSet`
+incidence row, not a boundary cycle, actual-sector rows, an induced frontier
+graph, or a W32 consumer. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_actualFrontierPreconnected_frontierVertexIncident
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      UnboundedExteriorActualFrontierPreconnectedSource C inputs)
+    (frontier_vertex_incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs where
+  frontier_preconnected := by
+    simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+      frontier_preconnected
+  frontier_vertex_incident := frontier_vertex_incident
+
+/-- No-open-separation of the actual selected exterior frontier plus selected
+incident edges at graph-frontier vertices fills the input-facing
+component-topology source.
+
+This is lower than the finite-drawing no-closed-separation route: the topology
+premise is only the open-set preconnectedness criterion on
+`frontier (unboundedExteriorComponentRows C inputs).exterior`. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_noOpenSeparation_frontierVertexIncident
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_noOpen :
+      UnboundedExteriorFrontierNoOpenSeparationSource C inputs)
+    (frontier_vertex_incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  unboundedExteriorFrontierComponentTopologyInputSourceRows_of_actualFrontierPreconnected_frontierVertexIncident
+    (C := C) (inputs := inputs)
+    (by
+      simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+        unboundedExterior_frontier_preconnected_of_noOpenSeparationSource
+          (C := C) (inputs := inputs) frontier_noOpen)
+    frontier_vertex_incident
+
+/-- S2-r13 source eraser from the actual no-open-separation frontier theorem
+and the exact selected incident-edge row. -/
+theorem S2_r13_component_topology_input_source_of_noOpenSeparation_vertexIncident_20260521r13
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_noOpen :
+      UnboundedExteriorFrontierNoOpenSeparationSource C inputs)
+    (frontier_vertex_incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  unboundedExteriorFrontierComponentTopologyInputSourceRows_of_noOpenSeparation_frontierVertexIncident
+    (C := C) (inputs := inputs) frontier_noOpen frontier_vertex_incident
+
+/-- S2-r13 source eraser from the finite-drawing no-open-separation theorem.
+
+The finite drawing premise is specialized to the concrete unbounded component
+selected by `unboundedExteriorComponentRows C inputs`; the selected
+graph-frontier incidence row is passed through unchanged. -/
+theorem S2_r13_component_topology_input_source_of_finiteDrawingNoOpenSeparation_vertexIncident_20260521r13
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  S2_r13_component_topology_input_source_of_noOpenSeparation_vertexIncident_20260521r13
+    (C := C) (inputs := inputs)
+    (unboundedExterior_frontier_noOpenSeparation_of_finiteDrawing_continuum
+      (C := C) inputs frontier_noOpen)
+    frontier_vertex_incident
+
+/-- Family form of the finite-drawing no-open-separation S2-r13 source eraser. -/
+theorem S2_r13_component_topology_input_source_family_of_finiteDrawingNoOpenSeparation_vertexIncident_20260521r13
+    (frontier_noOpen :
+      FiniteDrawingUnboundedComplementFrontierNoOpenSeparation)
+    (frontier_vertex_incident :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  fun C inputs =>
+    S2_r13_component_topology_input_source_of_finiteDrawingNoOpenSeparation_vertexIncident_20260521r13
+      (C := C) inputs frontier_noOpen (frontier_vertex_incident C inputs)
+
+/-- Actual-frontier preconnectedness plus pointwise nontriviality fills the
+input-facing component-topology source rows.
+
+The incident-edge field is obtained by punctured accumulation and the existing
+fixed-side edge propagation; the frontier-edge cover remains the checked
+component-topology erasure from this input package. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_frontierPreconnected_nontrivialAt
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (frontier_nontrivialAt :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs where
+  frontier_preconnected := frontier_preconnected
+  frontier_vertex_incident :=
+    frontierVertexIncidentSource_of_frontierPreconnected_nontrivialAt
+      (C := C) (inputs := inputs)
+      frontier_preconnected frontier_nontrivialAt
+
+/-- Finite-drawing frontier-preconnectedness plus pointwise nontriviality
+fills the input-facing component-topology rows for the selected unbounded
+exterior component. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingPreconnected_nontrivialAt
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_preconnected :
+      FiniteDrawingUnboundedComplementFrontierPreconnected)
+    (frontier_nontrivialAt :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  unboundedExteriorFrontierComponentTopologyInputSourceRows_of_frontierPreconnected_nontrivialAt
+    (C := C) (inputs := inputs)
+    (by
+      simpa [UnboundedExteriorActualFrontierPreconnectedSource] using
+        actualFrontierPreconnected_of_finiteDrawing_frontierPreconnected
+          (C := C) inputs frontier_preconnected)
+    frontier_nontrivialAt
+
+/-- Finite-drawing no-closed-separation plus pointwise nontriviality fills the
+same component-topology input rows, via finite-drawing frontier
+preconnectedness. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_nontrivialAt
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_nontrivialAt :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingPreconnected_nontrivialAt
+    (C := C) inputs
+    (finiteDrawingUnboundedComplementFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      frontier_noClosedSeparation)
+    frontier_nontrivialAt
+
+/-- Finite-drawing no-closed-separation plus the selected endpoint-incidence
+row fills the input-facing component-topology rows.
+
+This is the strict input reducer: the finite topology theorem supplies only
+actual frontier preconnectedness, and the selected incidence row is stored
+unchanged for graph-frontier vertices. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontierVertexIncident
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_vertex_incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs where
+  frontier_preconnected :=
+    actualFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      (C := C) inputs frontier_noClosedSeparation
+  frontier_vertex_incident := frontier_vertex_incident
+
+/-- Finite-drawing no-closed-separation plus two distinct points on the same
+actual unbounded exterior frontier fills the component-topology input rows.
+
+This is a source reducer only: the two points must already be proved to lie on
+the actual selected unbounded exterior frontier.  It does not assert that an
+arbitrary graph chord between frontier vertices is an exterior boundary edge. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_points
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    {p q : PlanarInterface.Point}
+    (hp :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hq :
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hpq : p ≠ q) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_nontrivialAt
+    (C := C) inputs frontier_noClosedSeparation
+    (frontier_nontrivialAt_of_two_frontier_points
+      (C := C) (inputs := inputs) hp hq hpq)
+
+/-- Finite-drawing no-closed-separation plus one selected unbounded-frontier
+edge fills the component-topology input rows.  The selected edge contributes
+two distinct actual frontier endpoints. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_selectedEdge
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    {e : PlanarInterface.Edge n}
+    (he : e ∈ unboundedFrontierEdgeSet C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs := by
+  rcases
+      exists_two_frontier_points_of_unboundedFrontierEdgeSet
+        (C := C) (inputs := inputs) he with
+    ⟨p, q, hp, hq, hpq⟩
+  exact
+    unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_points
+      (C := C) inputs frontier_noClosedSeparation hp hq hpq
+
+/-- Finite-drawing no-closed-separation plus an actual frontier point in the
+relative interior of a canonical edge fills the component-topology input rows.
+The interior point first selects the whole edge, then the selected-edge
+endpoint row gives two distinct frontier points. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontier_edgeInterior
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpEdge :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hpFrontier :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_selectedEdge
+    (C := C) inputs frontier_noClosedSeparation
+    (interiorFrontierEdgeCarrierMembershipSource_of_frontier_edge_point
+      (C := C) (inputs := inputs) he hpEdge hpFrontier)
+
+/-- Finite-drawing no-closed-separation plus two distinct graph-frontier
+vertices fills the component-topology input rows. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_vertices
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    {v w : Fin n}
+    (hv : v ∈ unboundedFrontierVertexSet C inputs)
+    (hw : w ∈ unboundedFrontierVertexSet C inputs)
+    (hvw : v ≠ w) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs := by
+  rcases
+      exists_two_frontier_points_of_two_unboundedFrontierVertices
+        (C := C) (inputs := inputs) hv hw hvw with
+    ⟨p, q, hp, hq, hpq⟩
+  exact
+    unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_points
+      (C := C) inputs frontier_noClosedSeparation hp hq hpq
+
+/-- If no graph vertex lies on the actual unbounded exterior frontier, the
+pointwise graph-frontier nontriviality row is vacuous. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_no_frontier_vertex
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (hno_vertex :
+      ¬ Exists fun v : Fin n => v ∈ unboundedFrontierVertexSet C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_nontrivialAt
+    (C := C) inputs frontier_noClosedSeparation
+    (by
+      intro v hvfrontier
+      exact False.elim
+        (hno_vertex
+          ⟨v, mem_unboundedFrontierVertexSet_iff.2 hvfrontier⟩))
+
+/-- Finite-drawing no-closed-separation fills the component-topology input
+rows whenever the graph-vertex part of the actual unbounded frontier is not a
+singleton.  The proof splits into the vacuous no-graph-vertex case and the
+two-distinct-frontier-point case. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (hcard_ne :
+      (unboundedFrontierVertexSet C inputs).card ≠ 1) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs := by
+  rcases
+      exists_two_frontier_points_or_no_unboundedFrontierVertexSet_of_card_ne_one
+        (C := C) inputs hcard_ne with hno_vertex | htwo
+  · exact
+      unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_no_frontier_vertex
+        (C := C) inputs frontier_noClosedSeparation hno_vertex
+  · rcases htwo with ⟨p, q, hp, hq, hpq⟩
+    exact
+      unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_points
+        (C := C) inputs frontier_noClosedSeparation hp hq hpq
+
+/-- Claim `S2-q15-frontier-incident-source`.
+
+Finite no-closed-separation plus the honest non-singleton carrier fact already
+give the selected incident-edge source at graph vertices on the actual
+unbounded exterior frontier.  This is the direct projection of the checked
+component-topology input reducer: the no-vertex case is vacuous, while the
+two-frontier-point case gives punctured accumulation and the fixed-side local
+edge propagation. -/
+theorem S2_q15_frontierVertexIncidentSource_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one_20260522
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (hcard_ne :
+      (unboundedFrontierVertexSet C inputs).card ≠ 1) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one
+    (C := C) inputs frontier_noClosedSeparation hcard_ne).frontier_vertex_incident
+
+/-- Family form of
+`S2_q15_frontierVertexIncidentSource_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one_20260522`. -/
+theorem S2_q15_frontierVertexIncidentSource_family_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one_20260522
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (card_ne_one :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          (unboundedFrontierVertexSet C inputs).card ≠ 1) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  fun C inputs =>
+    S2_q15_frontierVertexIncidentSource_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one_20260522
+      (C := C) inputs frontier_noClosedSeparation
+      (card_ne_one C inputs)
+
+/-- Concrete singleton-frontier boundary-bumping obstruction.
+
+If the actual selected unbounded exterior frontier were a singleton graph
+point, the finite drawing supplies a different ambient drawing-complement
+frontier point, and the metric boundary-bumping row below produces arbitrarily
+nearby complement points outside the selected unbounded exterior component.
+This source says that such a singleton boundary-bumping configuration is
+impossible. -/
+def UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+    (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
+  ¬ Exists fun q : PlanarInterface.Point =>
+      q ∈ frontier (drawingComplement C) /\
+        (Exists fun v : Fin n =>
+          q ≠ (canonicalGraph C).point v /\
+            frontier (unboundedExteriorComponentRows C inputs).exterior =
+              {(canonicalGraph C).point v}) /\
+          forall eps : Real,
+            0 < eps ->
+              Exists fun y : PlanarInterface.Point =>
+                y ∈ Metric.ball q eps /\
+                y ∈ drawingComplement C /\
+                    y ∉ (unboundedExteriorComponentRows C inputs).exterior
+
+/-- Pointwise boundary-bumping source for the singleton-frontier obstruction.
+
+This is the exact missing topological assertion behind the r5q singleton
+case: if an ambient drawing-complement frontier point has complement points
+arbitrarily close outside the selected unbounded exterior component, then in
+the singleton-frontier configuration that ambient point must itself lie on the
+selected actual frontier. -/
+def UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+    (C : _root_.UDConfig n)
+    (inputs : FinitePlanarOuterComponentInputs C) : Prop :=
+  forall (q : PlanarInterface.Point) (v : Fin n),
+    q ∈ frontier (drawingComplement C) ->
+      q ≠ (canonicalGraph C).point v ->
+        frontier (unboundedExteriorComponentRows C inputs).exterior =
+            {(canonicalGraph C).point v} ->
+          (forall eps : Real,
+            0 < eps ->
+              Exists fun y : PlanarInterface.Point =>
+                y ∈ Metric.ball q eps /\
+                  y ∈ drawingComplement C /\
+                    y ∉ (unboundedExteriorComponentRows C inputs).exterior) ->
+            q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior
+
+/-- The pointwise outside-accumulation boundary-bumping source proves the
+concrete singleton-frontier obstruction used by r5q. -/
+theorem
+    unboundedExteriorSingletonFrontierBoundaryBumpingObstruction_of_outsideAccumulationForcesActualFrontier
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (outside_accumulation :
+      UnboundedExteriorSingletonFrontierOutsideAccumulationForcesActualFrontier
+        C inputs) :
+    UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs := by
+  intro hsingleton_bumping
+  rcases hsingleton_bumping with ⟨q, hqAmbient, hsingleton, hnear⟩
+  rcases hsingleton with ⟨v, hqne, hfrontier⟩
+  have hqActual :
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    outside_accumulation q v hqAmbient hqne hfrontier hnear
+  have hqSingleton :
+      q ∈ ({(canonicalGraph C).point v} : Set PlanarInterface.Point) := by
+    simpa [hfrontier] using hqActual
+  exact hqne (by simpa using hqSingleton)
+
+/-- The singleton boundary-bumping obstruction rules out a singleton actual
+unbounded exterior frontier. -/
+theorem unboundedExterior_frontier_not_singleton_of_boundaryBumpingObstruction
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    ¬ Exists fun v : Fin n =>
+      frontier (unboundedExteriorComponentRows C inputs).exterior =
+        {(canonicalGraph C).point v} := by
+  intro hsingleton
+  rcases hsingleton with ⟨v, hfrontier⟩
+  rcases
+      exists_ambient_frontier_nearby_complement_outside_unboundedExterior_of_frontier_singleton
+        (C := C) inputs hfrontier with
+    ⟨q, hqAmbient, hqne, hnear⟩
+  exact no_singleton_bumping ⟨q, hqAmbient, ⟨v, hqne, hfrontier⟩, hnear⟩
+
+/-- A selected incident frontier edge rules out a singleton actual exterior
+frontier.
+
+If the whole frontier were one graph vertex, the selected incident edge at that
+vertex would have both endpoints on the same singleton frontier.  But any
+selected `unboundedFrontierEdgeSet` edge already gives two distinct actual
+frontier points. -/
+theorem unboundedExterior_frontier_not_singleton_of_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    ¬ Exists fun v : Fin n =>
+      frontier (unboundedExteriorComponentRows C inputs).exterior =
+        {(canonicalGraph C).point v} := by
+  intro hsingleton
+  rcases hsingleton with ⟨v, hfrontier⟩
+  have hvfrontier :
+      (canonicalGraph C).point v ∈
+        frontier (unboundedExteriorComponentRows C inputs).exterior := by
+    rw [hfrontier]
+    simp
+  rcases incident hvfrontier with ⟨w, hedge⟩
+  have htwo :
+      Exists fun p : PlanarInterface.Point =>
+        Exists fun q : PlanarInterface.Point =>
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              p ≠ q := by
+    rcases hedge with hedge | hedge
+    · exact
+        exists_two_frontier_points_of_unboundedFrontierEdgeSet
+          (C := C) (inputs := inputs) (e := (v, w)) hedge
+    · exact
+        exists_two_frontier_points_of_unboundedFrontierEdgeSet
+          (C := C) (inputs := inputs) (e := (w, v)) hedge
+  rcases htwo with ⟨p, q, hp, hq, hpq⟩
+  have hp_singleton :
+      p ∈ ({(canonicalGraph C).point v} : Set PlanarInterface.Point) := by
+    simpa [hfrontier] using hp
+  have hq_singleton :
+      q ∈ ({(canonicalGraph C).point v} : Set PlanarInterface.Point) := by
+    simpa [hfrontier] using hq
+  have hp_eq : p = (canonicalGraph C).point v := by
+    simpa using hp_singleton
+  have hq_eq : q = (canonicalGraph C).point v := by
+    simpa using hq_singleton
+  exact hpq (hp_eq.trans hq_eq.symm)
+
+/-- Selected component-frontier vertex incidence is enough for the concrete
+singleton boundary-bumping obstruction.
+
+This lowers the singleton source to the same selected incident-edge source
+used by the component-topology frontier cover, with no boundary cycle,
+actual-sector row, carrier cycle, or W32 dependency. -/
+theorem unboundedExteriorSingletonFrontierBoundaryBumpingObstruction_of_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs := by
+  intro hsingleton_bumping
+  rcases hsingleton_bumping with ⟨_q, _hqAmbient, hsingleton, _hnear⟩
+  rcases hsingleton with ⟨v, _hqne, hfrontier⟩
+  exact
+    unboundedExterior_frontier_not_singleton_of_frontierVertexIncidentSource
+      (C := C) (inputs := inputs) incident ⟨v, hfrontier⟩
+
+/-- A non-singleton actual exterior frontier gives the pointwise
+nontriviality row at graph-frontier vertices.
+
+This is pure point-set bookkeeping: if a graph-frontier vertex had no other
+frontier point, then the whole selected exterior frontier would be the
+singleton graph point. -/
+theorem frontier_nontrivialAt_of_unboundedExterior_frontier_not_singleton
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_not_singleton :
+      ¬ Exists fun v : Fin n =>
+        frontier (unboundedExteriorComponentRows C inputs).exterior =
+          {(canonicalGraph C).point v}) :
+    forall {v : Fin n},
+      (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            y ≠ (canonicalGraph C).point v := by
+  intro v hvfrontier
+  by_contra hnone
+  have hsingleton :
+      frontier (unboundedExteriorComponentRows C inputs).exterior =
+        ({(canonicalGraph C).point v} : Set PlanarInterface.Point) := by
+    ext y
+    constructor
+    · intro hy
+      by_cases hy_eq : y = (canonicalGraph C).point v
+      · simpa [hy_eq]
+      · exact False.elim (hnone ⟨y, hy, hy_eq⟩)
+    · intro hy
+      have hy_eq : y = (canonicalGraph C).point v := by
+        simpa using hy
+      simpa [hy_eq] using hvfrontier
+  exact frontier_not_singleton ⟨v, hsingleton⟩
+
+/-- Claim `S2-q30-frontier-nontrivial-source`, pointwise form.
+
+The actual-frontier nontriviality row at graph-frontier vertices is lowered
+to exactly the singleton-frontier boundary-bumping obstruction.  No
+preconnectedness is needed for this pointwise row; preconnectedness enters only
+when upgrading the row to punctured accumulation. -/
+theorem S2_q30_frontier_nontrivialAt_of_boundaryBumpingObstruction_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    forall {v : Fin n},
+      (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ->
+        Exists fun y : PlanarInterface.Point =>
+          y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+            y ≠ (canonicalGraph C).point v :=
+  frontier_nontrivialAt_of_unboundedExterior_frontier_not_singleton
+    (C := C) (inputs := inputs)
+    (unboundedExterior_frontier_not_singleton_of_boundaryBumpingObstruction
+      (C := C) (inputs := inputs) no_singleton_bumping)
+
+/-- Actual-frontier preconnectedness plus non-singleton actual frontier proves
+the punctured accumulation source at every graph-frontier vertex.
+
+The only topological content is that preconnected frontiers have no isolated
+proper point.  The non-singleton row supplies the required second frontier
+point without mentioning carrier, boundary-cycle, actual-sector, or W32 data. -/
+theorem unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_not_singleton
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (frontier_not_singleton :
+      ¬ Exists fun v : Fin n =>
+        frontier (unboundedExteriorComponentRows C inputs).exterior =
+          {(canonicalGraph C).point v}) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_nontrivialAt
+    (C := C) (inputs := inputs)
+    frontier_preconnected
+    (frontier_nontrivialAt_of_unboundedExterior_frontier_not_singleton
+      (C := C) (inputs := inputs) frontier_not_singleton)
+
+/-- Claim `S2-q30-frontier-nontrivial-source`, punctured form.
+
+The punctured-accumulation source is the pointwise q30 nontriviality row plus
+actual-frontier preconnectedness.  The only remaining pointwise primitive is
+the singleton-frontier boundary-bumping obstruction. -/
+theorem S2_q30_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_nontrivialAt
+    (C := C) (inputs := inputs)
+    frontier_preconnected
+    (S2_q30_frontier_nontrivialAt_of_boundaryBumpingObstruction_20260522
+      (C := C) (inputs := inputs) no_singleton_bumping)
+
+/-- Claim `S2-r7j-punctured-accumulation-source`.
+
+The graph-vertex punctured accumulation source is reduced to two earlier
+topology facts: preconnectedness of the actual unbounded exterior frontier and
+the concrete singleton-frontier boundary-bumping obstruction.  No carrier,
+boundary-cycle, actual-sector, induced frontier graph, all-adjacent endpoint
+row, or W32 consumer is used. -/
+theorem S2_r7j_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_20260521r7j
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_not_singleton
+    (C := C) (inputs := inputs)
+    frontier_preconnected
+    (unboundedExterior_frontier_not_singleton_of_boundaryBumpingObstruction
+      (C := C) (inputs := inputs) no_singleton_bumping)
+
+/-- Actual-frontier preconnectedness plus selected component-frontier vertex
+incidence proves punctured accumulation at graph-frontier vertices.
+
+The selected incidence row rules out the singleton frontier case, so the
+preconnected frontier has no isolated graph-frontier point. -/
+theorem unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (frontier_preconnected :
+      IsPreconnected
+        (frontier (unboundedExteriorComponentRows C inputs).exterior))
+    (incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_not_singleton
+    (C := C) (inputs := inputs)
+    frontier_preconnected
+    (unboundedExterior_frontier_not_singleton_of_frontierVertexIncidentSource
+      (C := C) (inputs := inputs) incident)
+
+/-- Finite-drawing no-closed-separation plus selected component-frontier vertex
+incidence gives the graph-vertex punctured accumulation source. -/
+theorem unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_frontierVertexIncidentSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (incident :
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  unboundedExteriorFrontierVertexPuncturedAccumulationSource_of_frontierPreconnected_frontierVertexIncidentSource
+    (C := C) (inputs := inputs)
+    (actualFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      (C := C) inputs frontier_noClosedSeparation)
+    incident
+
+/-- Finite-drawing no-closed-separation plus the singleton boundary-bumping
+obstruction gives the punctured accumulation source for graph-frontier
+vertices.
+
+This is the finite-drawing specialization of the previous theorem: the
+no-closed-separation row supplies actual frontier preconnectedness for
+`unboundedExteriorComponentRows C inputs`; the boundary-bumping obstruction
+rules out the only singleton frontier case. -/
+theorem S2_r7j_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260521r7j
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+  S2_r7j_puncturedAccumulationSource_of_frontierPreconnected_boundaryBumpingObstruction_20260521r7j
+    (C := C) (inputs := inputs)
+    (actualFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      (C := C) inputs frontier_noClosedSeparation)
+    no_singleton_bumping
+
+/-- Claim `S2-r19-frontier-incident-source`.
+
+The finite-drawing incident-edge source is reduced to the two point-set
+frontier facts already isolated upstream: finite no-closed-separation for
+unbounded drawing-complement frontiers, and the singleton-frontier
+boundary-bumping obstruction for the selected unbounded exterior component.
+The checked handoff is punctured accumulation at graph-frontier vertices
+followed by the fixed-side open-edge propagation theorem; it does not use
+sector rows, final boundary-cycle rows, W32, or an induced frontier graph. -/
+theorem S2_r19_frontierVertexIncidentSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260521r19
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_punctured_vertex
+    (C := C) (inputs := inputs)
+    (S2_r7j_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260521r7j
+      (C := C) inputs frontier_noClosedSeparation no_singleton_bumping)
+
+/--
+Claim `S2-agent-q9-seed-and-incident-frontier`.
+
+The selected exterior seed/local frontier edge and the pointwise selected
+frontier-vertex incident source have the same two upstream point-set leaves:
+finite no-closed-separation for the selected unbounded drawing-complement
+frontier, and the singleton boundary-bumping obstruction.  This packages the
+two checked consequences together so later raw-orbit source rows can use one
+common input spine instead of separately reproving the seed and endpoint
+branches.
+-/
+theorem S2_q9_selectedSeed_and_frontierVertexIncidentSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q9
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    (Exists fun seed : UnboundedExteriorFrontierSeed inputs =>
+      Exists fun e : PlanarInterface.Edge n =>
+        Exists fun p : PlanarInterface.Point =>
+          Exists fun start : UnitDistanceDart C =>
+            e ∈ unboundedFrontierEdgeSet C inputs ∧
+              UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                start.tail = e.1 ∧
+                  start.head = e.2 ∧
+                    Nonempty
+                      (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                          C)
+                        start)) ∧
+      FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs := by
+  let punctured :
+      UnboundedExteriorFrontierVertexPuncturedAccumulationSource C inputs :=
+    S2_r7j_puncturedAccumulationSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260521r7j
+      (C := C) inputs frontier_noClosedSeparation no_singleton_bumping
+  exact
+    ⟨S2_r7j_selected_geometricRawFaceSuccOrbitSeed_of_inputs_puncturedAccumulation_20260521r7j
+        (C := C) inputs punctured,
+      S2_r19_frontierVertexIncidentSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260521r19
+        (C := C) inputs frontier_noClosedSeparation no_singleton_bumping⟩
+
+/-- Family form of the q9 seed-and-incident handoff. -/
+theorem S2_q9_selectedSeed_and_frontierVertexIncidentSource_family_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q9
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        (Exists fun seed : UnboundedExteriorFrontierSeed inputs =>
+          Exists fun e : PlanarInterface.Edge m =>
+            Exists fun p : PlanarInterface.Point =>
+              Exists fun start : UnitDistanceDart C =>
+                e ∈ unboundedFrontierEdgeSet C inputs ∧
+                  UnboundedExteriorFrontierEdgeLocalRows C inputs e p ∧
+                    start.tail = e.1 ∧
+                      start.head = e.2 ∧
+                        Nonempty
+                          (UnitDistanceRotationSystem.RawFaceSuccOrbit
+                            (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+                              C)
+                            start)) ∧
+          FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  fun C inputs =>
+    S2_q9_selectedSeed_and_frontierVertexIncidentSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522q9
+      (C := C) inputs frontier_noClosedSeparation
+      (no_singleton_bumping C inputs)
+
+/-- Finite-drawing no-closed-separation fills the component-topology input
+rows once the actual unbounded exterior frontier is known not to be a single
+graph point.
+
+The only graph-cardinality case not handled by the non-singleton reducer is
+`card = 1`; the singleton-frontier theorem above then identifies the whole
+actual frontier with that one graph point, contradicting the supplied
+non-singleton frontier row. -/
+def unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontier_not_singleton
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_not_singleton :
+      ¬ Exists fun v : Fin n =>
+        frontier (unboundedExteriorComponentRows C inputs).exterior =
+          {(canonicalGraph C).point v}) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs := by
+  by_cases hcard :
+      (unboundedFrontierVertexSet C inputs).card = 1
+  · exact False.elim
+      (frontier_not_singleton
+        (unboundedExterior_frontier_eq_singleton_of_unboundedFrontierVertexSet_card_eq_one
+          (C := C) (inputs := inputs) hcard))
+  · exact
+      unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one
+        (C := C) inputs frontier_noClosedSeparation hcard
+
+/-- Claim `S2-r5q-topology-component-input-source-20260521r5q`.
+
+The component-topology input package is strictly lowered to the finite-drawing
+no-closed-separation theorem and the concrete singleton boundary-bumping
+obstruction for the selected unbounded exterior component. -/
+theorem S2_r5q_topology_component_input_source_20260521r5q
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs :=
+  unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontier_not_singleton
+    (C := C) inputs frontier_noClosedSeparation
+    (unboundedExterior_frontier_not_singleton_of_boundaryBumpingObstruction
+      (C := C) (inputs := inputs) no_singleton_bumping)
+
+/-- Claim `S2-q16-selected-edge-cover-source`.
+
+The singleton boundary-bumping obstruction is the exact topology datum needed
+to rule out a one-vertex graph-frontier carrier.  The proof is only the
+contrapositive of the checked singleton identification theorem; no selected
+cycle, induced frontier graph, or downstream sector row is used. -/
+theorem S2_q16_unboundedFrontierVertexSet_card_ne_one_of_boundaryBumpingObstruction_20260522
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    (unboundedFrontierVertexSet C inputs).card ≠ 1 := by
+  intro hcard
+  exact
+    unboundedExterior_frontier_not_singleton_of_boundaryBumpingObstruction
+      (C := C) (inputs := inputs) no_singleton_bumping
+      (unboundedExterior_frontier_eq_singleton_of_unboundedFrontierVertexSet_card_eq_one
+        (C := C) (inputs := inputs) hcard)
+
+/-- Family form of
+`S2_q16_unboundedFrontierVertexSet_card_ne_one_of_boundaryBumpingObstruction_20260522`. -/
+theorem S2_q16_unboundedFrontierVertexSet_card_ne_one_family_of_boundaryBumpingObstruction_20260522
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        (unboundedFrontierVertexSet C inputs).card ≠ 1 :=
+  fun C inputs =>
+    S2_q16_unboundedFrontierVertexSet_card_ne_one_of_boundaryBumpingObstruction_20260522
+      (C := C) inputs (no_singleton_bumping C inputs)
+
+/-- Claim `S2-q16-selected-edge-cover-source`.
+
+Finite no-closed separation plus the singleton boundary-bumping obstruction
+strictly lower the actual selected frontier-edge cover.  The selected cover is
+the concrete `unboundedFrontierEdgeSet` closed-segment cover of the actual
+unbounded exterior frontier, projected from the existing component-topology
+input reducer. -/
+theorem S2_q16_selectedFrontierEdgeCover_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    UnboundedExteriorSelectedFrontierEdgeCover C inputs := by
+  let rows :=
+    S2_r5q_topology_component_input_source_20260521r5q
+      (C := C) inputs frontier_noClosedSeparation no_singleton_bumping
+  exact
+    frontier_edge_cover_of_frontierVertexIncidentSource
+      (C := C) inputs rows.frontier_vertex_incident
+
+/-- Family form of
+`S2_q16_selectedFrontierEdgeCover_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522`. -/
+theorem S2_q16_selectedFrontierEdgeCover_family_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorSelectedFrontierEdgeCover C inputs :=
+  fun C inputs =>
+    S2_q16_selectedFrontierEdgeCover_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522
+      (C := C) inputs frontier_noClosedSeparation
+      (no_singleton_bumping C inputs)
+
+/-- The q16 selected-edge-cover lowering also closes the q15 frontier-incident
+source through the explicit selected-cover reducer. -/
+theorem S2_q16_frontierVertexIncidentSource_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_selectedCover_20260522
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (no_singleton_bumping :
+      UnboundedExteriorSingletonFrontierBoundaryBumpingObstruction C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  S2_q15_frontierVertexIncidentSource_of_selectedFrontierEdgeCover_20260522
+    (C := C) (inputs := inputs)
+    (S2_q16_selectedFrontierEdgeCover_of_finiteDrawingNoClosedSeparation_boundaryBumpingObstruction_20260522
+      (C := C) inputs frontier_noClosedSeparation no_singleton_bumping)
+
 /-- Component-topology source rows also contain the endpoint-incidence source:
 their frontier-edge cover can be specialized to graph vertices. -/
 theorem frontierVertexIncidentSource_of_componentTopologySourceRows
@@ -18841,6 +25668,140 @@ def UnboundedExteriorFrontierComponentTopologyInputSourceRows.toComponentTopolog
     UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
   unboundedExteriorFrontierComponentTopologySourceRows_of_frontierPreconnected_vertexIncident
     inputs rows.frontier_preconnected rows.frontier_vertex_incident
+
+/-- Input-facing component-topology rows supply the selected frontier-edge
+cover needed by the exterior seed constructor. -/
+theorem unboundedExterior_selectedFrontierEdgeCover_of_componentTopologyInputSourceRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    UnboundedExteriorSelectedFrontierEdgeCover C inputs :=
+  unboundedExterior_selectedFrontierEdgeCover_of_componentTopologySourceRows
+    (C := C) (inputs := inputs) rows.toComponentTopologyRows
+
+/-- Direct source-row form of the finite no-closed-separation plus
+pointwise-nontriviality reducer. -/
+def unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_nontrivialAt
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_nontrivialAt :
+      forall {v : Fin n},
+        (canonicalGraph C).point v ∈
+            frontier (unboundedExteriorComponentRows C inputs).exterior ->
+          Exists fun y : PlanarInterface.Point =>
+            y ∈ frontier (unboundedExteriorComponentRows C inputs).exterior ∧
+              y ≠ (canonicalGraph C).point v) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_nontrivialAt
+    (C := C) inputs frontier_noClosedSeparation frontier_nontrivialAt).toComponentTopologyRows
+
+/-- Direct source-row form of the finite no-closed-separation plus two-point
+frontier nontriviality reducer. -/
+def unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_points
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    {p q : PlanarInterface.Point}
+    (hp :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hq :
+      q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hpq : p ≠ q) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_points
+    (C := C) inputs frontier_noClosedSeparation hp hq hpq).toComponentTopologyRows
+
+/-- Direct source-row form of the finite no-closed-separation plus selected
+unbounded-frontier edge reducer. -/
+def unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_selectedEdge
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    {e : PlanarInterface.Edge n}
+    (he : e ∈ unboundedFrontierEdgeSet C inputs) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_selectedEdge
+    (C := C) inputs frontier_noClosedSeparation he).toComponentTopologyRows
+
+/-- Direct source-row form of the finite no-closed-separation plus open-edge
+frontier point reducer. -/
+def unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_frontier_edgeInterior
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    {e : PlanarInterface.Edge n}
+    {p : PlanarInterface.Point}
+    (he : e ∈ (canonicalGraph C).edgeSet)
+    (hpEdge :
+      PlanarInterface.InOpenSegment p
+        ((canonicalGraph C).point e.1)
+        ((canonicalGraph C).point e.2))
+    (hpFrontier :
+      p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontier_edgeInterior
+    (C := C) inputs frontier_noClosedSeparation he hpEdge hpFrontier).toComponentTopologyRows
+
+/-- Direct source-row form of the finite no-closed-separation plus two
+distinct graph-frontier vertices reducer. -/
+def unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_vertices
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    {v w : Fin n}
+    (hv : v ∈ unboundedFrontierVertexSet C inputs)
+    (hw : w ∈ unboundedFrontierVertexSet C inputs)
+    (hvw : v ≠ w) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_two_frontier_vertices
+    (C := C) inputs frontier_noClosedSeparation hv hw hvw).toComponentTopologyRows
+
+/-- Direct source-row form of the finite no-closed-separation plus no
+graph-frontier-vertex reducer. -/
+def unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_no_frontier_vertex
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (hno_vertex :
+      ¬ Exists fun v : Fin n => v ∈ unboundedFrontierVertexSet C inputs) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_no_frontier_vertex
+    (C := C) inputs frontier_noClosedSeparation hno_vertex).toComponentTopologyRows
+
+/-- Direct source-row form of the finite no-closed-separation plus
+non-singleton graph-frontier carrier reducer. -/
+def unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (hcard_ne :
+      (unboundedFrontierVertexSet C inputs).card ≠ 1) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontierVertexSet_card_ne_one
+    (C := C) inputs frontier_noClosedSeparation hcard_ne).toComponentTopologyRows
+
+/-- Direct source-row form of the finite no-closed-separation plus
+actual-frontier-not-singleton reducer. -/
+def unboundedExteriorFrontierComponentTopologySourceRows_of_finiteDrawingNoClosedSeparation_frontier_not_singleton
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (frontier_not_singleton :
+      ¬ Exists fun v : Fin n =>
+        frontier (unboundedExteriorComponentRows C inputs).exterior =
+          {(canonicalGraph C).point v}) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  (unboundedExteriorFrontierComponentTopologyInputSourceRows_of_finiteDrawingNoClosedSeparation_frontier_not_singleton
+    (C := C) inputs frontier_noClosedSeparation frontier_not_singleton).toComponentTopologyRows
 
 /-- Claim `S2-agent-component-topology-input-source-20260520bx`.
 
@@ -18917,6 +25878,61 @@ def componentTopologySourceRows_of_frontierPreconnected_localSectorRows
   frontier_preconnected := frontier_preconnected
   frontier_edge_cover :=
     frontier_edge_cover_of_localSectorRows_fixedSide inputs localSectorRows
+
+/-- Finite-drawing no-closed-separation plus a selected-edge cover fill the
+component-topology source rows for the actual unbounded exterior frontier.
+
+The finite-drawing topology row is used only to specialize
+preconnectedness to `unboundedExteriorComponentRows C inputs`; the selected
+cover remains the concrete `unboundedFrontierEdgeSet` cover supplied by the
+caller. -/
+def componentTopologySourceRows_of_finiteDrawingNoClosedSeparation_selectedFrontierEdgeCover
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (selected_frontier_edge_cover :
+      UnboundedExteriorSelectedFrontierEdgeCover C inputs) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs where
+  frontier_preconnected :=
+    actualFrontierPreconnected_of_finiteDrawing_noClosedSeparation
+      (C := C) inputs frontier_noClosedSeparation
+  frontier_edge_cover := selected_frontier_edge_cover
+
+/-- Claim `S2-agent-component-topology-source-worker-20260520r4`.
+
+Strict component-topology source reducer.  The exact remaining leaves are the
+finite-drawing no-closed-separation theorem for unbounded complement-component
+frontiers and the selected-edge cover of the same actual unbounded exterior
+frontier.  No final cycle rows, induced frontier graph, endpoint-classifier,
+or synthetic enclosure source is used. -/
+theorem S2_agent_component_topology_source_worker_20260520r4
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (selected_frontier_edge_cover :
+      UnboundedExteriorSelectedFrontierEdgeCover C inputs) :
+    UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  componentTopologySourceRows_of_finiteDrawingNoClosedSeparation_selectedFrontierEdgeCover
+    inputs frontier_noClosedSeparation selected_frontier_edge_cover
+
+/-- Family form of
+`S2_agent_component_topology_source_worker_20260520r4`. -/
+theorem S2_agent_component_topology_source_worker_family_20260520r4
+    (frontier_noClosedSeparation :
+      FiniteDrawingUnboundedComplementFrontierNoClosedSeparation)
+    (selected_frontier_edge_cover :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorSelectedFrontierEdgeCover C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedExteriorFrontierComponentTopologySourceRows inputs :=
+  fun C inputs =>
+    S2_agent_component_topology_source_worker_20260520r4
+      (C := C) inputs frontier_noClosedSeparation
+      (selected_frontier_edge_cover C inputs)
 
 /-- Connected planar-continuum frontier theorem plus fixed-side local-sector
 rows fill the component-topology source package.
@@ -19529,6 +26545,36 @@ theorem unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
     (unboundedFrontierCarrierGraph C inputs).Connected :=
   unboundedFrontierCarrierGraph_connected_of_frontier_preconnected_and_frontier_edge_cover
     inputs rows.frontier_preconnected rows.frontier_edge_cover
+
+/-- Input-facing component-topology rows imply connectedness of the concrete
+unbounded-frontier carrier graph.
+
+This is the source-leaf form of the carrier-connectedness handoff: the input
+rows provide actual frontier preconnectedness and selected incident frontier
+edges at graph-frontier vertices; the checked input eraser supplies the
+selected frontier-edge cover.  No final boundary-cycle rows, actual-sector
+rows, or arbitrary carrier rows are used. -/
+theorem unboundedFrontierCarrierGraph_connected_of_componentTopologyInputSourceRows
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (rows : UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    (unboundedFrontierCarrierGraph C inputs).Connected :=
+  unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
+    inputs rows.toComponentTopologyRows
+
+/-- Family form of
+`unboundedFrontierCarrierGraph_connected_of_componentTopologyInputSourceRows`. -/
+theorem unboundedFrontierCarrierGraph_connected_family_of_componentTopologyInputSourceRows
+    (rows :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedExteriorFrontierComponentTopologyInputSourceRows inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        (unboundedFrontierCarrierGraph C inputs).Connected :=
+  fun C inputs =>
+    unboundedFrontierCarrierGraph_connected_of_componentTopologyInputSourceRows
+      inputs (rows C inputs)
 
 /-- Carrier-connectedness consequence of
 `S2_agent_frontier_preconnected_source_20260520bm`. -/
@@ -22760,13 +29806,24 @@ theorem rawFaceSuccOrbit_tail_adj_cyclicSucc
     (k : Fin O.period) :
     (GraphBridge.unitDistanceSimpleGraph C).Adj
       (O.dart k).tail
-      (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail := by
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail := by
   have hsucc := rawFaceSuccOrbit_faceSucc_eq_cyclicSucc O k
   have hhead :
       (O.dart k).head =
         (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
     R.endpoint_chaining_of_faceSucc_eq_next hsucc
   simpa [hhead] using (O.dart k).adj
+
+theorem rawFaceSuccOrbit_tail_ne_cyclicSucc
+    {C : _root_.UDConfig n}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (k : Fin O.period) :
+    (O.dart k).tail ≠
+      (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail :=
+  (GraphBridge.unitDistanceSimpleGraph C).ne_of_adj
+    (rawFaceSuccOrbit_tail_adj_cyclicSucc O k)
 
 namespace RawFaceSuccOrbitExplicitBoundary
 
@@ -23817,6 +30874,58 @@ theorem rawFaceSuccOrbit_edge_mem_unboundedFrontierEdgeSet_or_symm
   exact
     unboundedFrontierEdgeSet_or_symm_of_adj_openSegment_frontier
       (C := C) (inputs := inputs) hadj (edge_openSegment_frontier k)
+
+/-- Consecutive raw face-successor tails determine a selected
+unbounded-frontier edge once the local edge-frontier source rows have been
+proved directly: one interior frontier point on each side, plus nearby
+exterior points along the side, first gives whole open-segment frontier and
+then the concrete `unboundedFrontierEdgeSet` membership, up to orientation. -/
+theorem rawFaceSuccOrbit_edge_mem_unboundedFrontierEdgeSet_or_symm_of_inOpenSegment_frontier_and_nearby_edge_point_exterior_points
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_frontier_point :
+      forall k : Fin O.period,
+        Exists fun p : PlanarInterface.Point =>
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) /\
+            p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (hnear :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ closure (unboundedExteriorComponentRows C inputs).exterior ->
+            Exists fun r : Real =>
+              0 < r /\
+                forall z : PlanarInterface.Point,
+                  z ∈ Metric.ball q r ->
+                  PlanarInterface.InOpenSegment z
+                    ((canonicalGraph C).point (O.dart k).tail)
+                    ((canonicalGraph C).point
+                      (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+                  forall eps : Real,
+                    0 < eps ->
+                      Exists fun y : PlanarInterface.Point =>
+                        y ∈ (unboundedExteriorComponentRows C inputs).exterior /\
+                          dist y z < eps)
+    (k : Fin O.period) :
+    ((O.dart k).tail,
+        (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ∈
+        unboundedFrontierEdgeSet C inputs ∨
+      ((O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail,
+        (O.dart k).tail) ∈ unboundedFrontierEdgeSet C inputs :=
+  rawFaceSuccOrbit_edge_mem_unboundedFrontierEdgeSet_or_symm
+    O
+    (rawFaceSuccOrbit_edge_openSegment_frontier_of_inOpenSegment_frontier_and_nearby_edge_point_exterior_points
+      O edge_frontier_point hnear)
+    k
 
 /-- Consecutive raw orbit tails form actual selected unbounded-frontier edges
 once the raw dart edges have whole open segments on the unbounded exterior
@@ -24945,6 +32054,78 @@ theorem S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source_no_edgeRow
         (C := C) (inputs := inputs) O dart_edge_openSegment_frontier
         carrier_connected localSectorRows raw_pred_succ_tail_ne⟩
 
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-frontier-vertex-iff-source-20260520d`.
+
+For the selected geometric raw face-successor orbit, graph vertices on the
+actual unbounded exterior frontier are exactly the tails appearing in that same
+raw orbit.  This is a strict same-carrier/orbit reduction: the reverse
+direction comes from the actual raw dart frontier row, while the forward
+direction is the positive raw-tail coverage obtained from connectedness of the
+concrete unbounded-frontier carrier and local-sector neighbour closure. -/
+theorem S2_agent_frontier_vertex_iff_source_20260520d
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected)
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) :
+    forall v : Fin n,
+      (canonicalGraph C).point v ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior ↔
+        Exists fun k : Fin O.period => (O.dart k).tail = v := by
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall q : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment q
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          q ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  let frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+    (S2_agent_selected_raw_orbit_frontier_and_tail_coverage_source_no_edgeRows
+      (C := C) (inputs := inputs) localSectorRows carrier_connected O
+      dart_edge_openSegment_frontier).2
+  intro v
+  constructor
+  · intro hv
+    exact
+      frontier_vertex_tail_coverage
+        ⟨v, mem_unboundedFrontierVertexSet_iff.2 hv⟩
+  · rintro ⟨k, hk⟩
+    have htail_mem :
+        (O.dart k).tail ∈ unboundedFrontierVertexSet C inputs := by
+      exact
+        (endpoints_mem_unboundedFrontierVertexSet_of_edge_openSegment_frontier
+          (C := C) (inputs := inputs)
+          (e :=
+            ((O.dart k).tail,
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail))
+          (edge_openSegment_frontier k)).1
+    have htail_frontier :
+        (canonicalGraph C).point (O.dart k).tail ∈
+          frontier (unboundedExteriorComponentRows C inputs).exterior :=
+      mem_unboundedFrontierVertexSet_iff.1 htail_mem
+    simpa [hk] using htail_frontier
+
 /-- Topology-row variant of
 `S2_agent_raw_tail_hit_from_exterior_frontier`.
 
@@ -24987,19 +32168,125 @@ theorem S2_agent_raw_tail_hit_from_exterior_frontier_topologyRows
           p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
     rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
       (inputs := inputs) O dart_edge_openSegment_frontier
-  let frontier_vertices_nonempty :
-      Nonempty {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
-    ⟨⟨(O.dart ⟨0, O.period_pos⟩).tail,
-        rawFaceSuccOrbit_tail_mem_unboundedFrontierVertexSet
-          O edge_openSegment_frontier ⟨0, O.period_pos⟩⟩⟩
   exact
     S2_agent_raw_tail_hit_from_exterior_frontier
       (C := C) (inputs := inputs) O
       dart_edge_openSegment_frontier
-      (unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows
-        inputs frontier_vertices_nonempty topologyRows)
+      (unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows_noAuxNonempty
+        inputs topologyRows)
       localSectorRows
       raw_pred_succ_tail_ne
+
+/-- Component-frontier row variant of
+`S2_agent_raw_tail_hit_from_exterior_frontier`.
+
+The carrier connectedness used by the raw-tail coverage argument is sourced
+from the actual unbounded exterior component frontier rows: preconnectedness
+of `frontier (unboundedExteriorComponentRows C inputs).exterior` plus the
+selected `unboundedFrontierEdgeSet` cover.  The local-sector rows only supply
+the raw-tail neighbour-closure input. -/
+theorem S2_q13_raw_tail_hit_from_component_frontier_rows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (componentRows :
+      UnboundedExteriorFrontierComponentTopologySourceRows inputs)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      Exists fun k : Fin O.period => (O.dart k).tail = a.1 :=
+  S2_agent_raw_tail_hit_from_exterior_frontier
+    (C := C) (inputs := inputs) O
+    dart_edge_openSegment_frontier
+    (unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
+      inputs componentRows)
+    localSectorRows
+    raw_pred_succ_tail_ne
+
+/-- Claim `S2-q13-exterior-orbit-carrier-source`.
+
+Strict source-level handoff for the actual unbounded exterior face-orbit
+route.  From the existing component/frontier rows for
+`FinitePlanarOuterComponentInputs`, plus the local-sector rows on
+`unboundedFrontierVertexSet`, it exposes exactly the three rows needed by the
+raw exterior-orbit producer: connectedness of the concrete carrier, whole
+frontier for consecutive raw tail edges, and coverage of every concrete
+frontier carrier vertex by a raw tail. -/
+theorem S2_q13_exterior_orbit_carrier_source
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {start : UnitDistanceDart C}
+    (O :
+      UnitDistanceRotationSystem.RawFaceSuccOrbit
+        (_root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.geometricUnitDistanceRotationSystem
+          C)
+        start)
+    (dart_edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point (O.dart k).head) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (componentRows :
+      UnboundedExteriorFrontierComponentTopologySourceRows inputs)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
+    (raw_pred_succ_tail_ne :
+      forall k : Fin O.period,
+        (O.dart (PlanarInterface.cyclicPred O.period_pos k)).tail ≠
+          (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) :
+    (unboundedFrontierCarrierGraph C inputs).Connected ∧
+      (forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior) ∧
+        (forall a :
+          {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+            Exists fun k : Fin O.period => (O.dart k).tail = a.1) := by
+  let carrier_connected :
+      (unboundedFrontierCarrierGraph C inputs).Connected :=
+    unboundedFrontierCarrierGraph_connected_of_componentTopologySourceRows
+      inputs componentRows
+  let edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior :=
+    rawFaceSuccOrbit_edge_openSegment_frontier_of_dart_edge_openSegment_frontier
+      (inputs := inputs) O dart_edge_openSegment_frontier
+  exact
+    ⟨carrier_connected, edge_openSegment_frontier,
+      S2_agent_raw_tail_hit_from_exterior_frontier
+        (C := C) (inputs := inputs) O
+        dart_edge_openSegment_frontier
+        carrier_connected
+        localSectorRows
+        raw_pred_succ_tail_ne⟩
 
 /-- The raw-tail hit row also gives the raw reachable-root handoff along the
 selected exterior face-successor orbit. -/
@@ -29900,6 +37187,89 @@ noncomputable def toUnreachableAfterDeleteRowsAt
 
 end UnboundedFrontierCarrierDeletedNeighborLocalSeparationRowsAt
 
+set_option linter.style.longLine false in
+/-- Ambient deleted-graph nonreachability supplies the exact local Boolean
+deleted-neighbour separation row.
+
+For each actual third carrier neighbour, the Boolean side is the connected
+component of the selected left head in the graph induced after deleting the
+frontier vertex.  The supplied nonreachability puts the third neighbour on the
+opposite side, and adjacency in the induced graph preserves the component side.
+-/
+noncomputable def
+    UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteRowsAt.toDeletedNeighborLocalSeparationRowsAt
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}}
+    (rows :
+      UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteRowsAt
+        inputs a) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationRowsAt
+      inputs a := by
+  classical
+  let left_ne_cut : rows.left ≠ a.1 :=
+    selectedIncidentUnboundedFrontierEdge_head_ne_cut
+      (C := C) (inputs := inputs) (a := a) rows.left_edge
+  let side :
+      forall (b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+        (hb : (unboundedFrontierCarrierGraph C inputs).Adj a b),
+          b.1 ≠ rows.left -> b.1 ≠ rows.right -> Fin n -> Bool :=
+    fun _ _ _ _ x =>
+      let s : Set (Fin n) := {a.1}ᶜ
+      let H := (GraphBridge.unitDistanceSimpleGraph C).induce s
+      let left' : s := ⟨rows.left, by simpa [s] using left_ne_cut⟩
+      let comp : H.ConnectedComponent := H.connectedComponentMk left'
+      if hx : x ≠ a.1 then
+        decide ((⟨x, by simpa [s] using hx⟩ : s) ∈ comp.supp)
+      else
+        false
+  refine
+    { left := rows.left
+      right := rows.right
+      left_edge := rows.left_edge
+      right_edge := rows.right_edge
+      heads_ne := rows.heads_ne
+      third_neighbor_side := side
+      left_side := ?_
+      third_neighbor_side_false := ?_
+      anticomplete := ?_ }
+  · intro b hb hb_left hb_right
+    dsimp [side]
+    rw [dif_pos left_ne_cut]
+    simp [SimpleGraph.ConnectedComponent.mem_supp_iff]
+  · intro b hb hb_left hb_right
+    let b_ne_cut : b.1 ≠ a.1 :=
+      unboundedFrontierCarrierGraph_adj_val_ne
+        (C := C) (inputs := inputs) (a := a) hb
+    dsimp [side]
+    rw [dif_pos b_ne_cut]
+    rw [decide_eq_false_iff_not]
+    intro hmem
+    exact
+      rows.third_neighbor_unreachable b hb hb_left hb_right
+        (SimpleGraph.ConnectedComponent.exact hmem.symm)
+  · intro b hb hb_left hb_right x y hx_cut hy_cut hx_side hy_side hxy
+    let s : Set (Fin n) := {a.1}ᶜ
+    let H := (GraphBridge.unitDistanceSimpleGraph C).induce s
+    let left' : s := ⟨rows.left, by simpa [s] using left_ne_cut⟩
+    let comp : H.ConnectedComponent := H.connectedComponentMk left'
+    let x' : s := ⟨x, by simpa [s] using hx_cut⟩
+    let y' : s := ⟨y, by simpa [s] using hy_cut⟩
+    dsimp [side] at hx_side hy_side
+    rw [dif_pos hx_cut] at hx_side
+    rw [dif_pos hy_cut] at hy_side
+    have hxmem : x' ∈ comp.supp := by
+      dsimp [x']
+      exact of_decide_eq_true hx_side
+    have hymem : y' ∉ comp.supp := by
+      dsimp [y']
+      exact of_decide_eq_false hy_side
+    have hxyH : H.Adj x' y' := by
+      simpa [H, x', y'] using hxy
+    exact hymem
+      (SimpleGraph.ConnectedComponent.mem_supp_of_adj_mem_supp
+        comp hxmem hxyH)
+
 /-- Input-family local planar separation source for the deleted-neighbour
 residual. -/
 structure UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
@@ -30204,6 +37574,452 @@ noncomputable def
     S2_agent_cu_neighbor_cutpartition_source_of_unreachableAfterDelete_20260520
       (C := C) (inputs := inputs) (source C inputs)
 
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-cutpartition-source-construction-worker-20260521e4`.
+
+Strict input-source reduction from `FinitePlanarOuterComponentInputs C` to the
+ambient deleted-graph separation source.  The row source already selects two
+actual incident `unboundedFrontierEdgeSet` carrier edges at each frontier
+vertex; each third carrier-neighbour branch is converted into a concrete
+`CutVertexInterface.CutVertexPartition` by the deleted-graph
+nonreachability-to-cut construction. -/
+noncomputable def
+    S2_agent_cutpartition_source_construction_worker_20260521e4_of_unreachableAfterDelete
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+        C inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  unboundedFrontierCarrierNeighborPairCutPartitionInputSource_of_cutPartitionRows
+    (C := C) (inputs := inputs)
+    (S2_agent_cu_neighbor_cutpartition_source_of_unreachableAfterDelete_20260520
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-cutpartition-source-construction-worker-20260521e4`,
+canonical handoff name. -/
+noncomputable def
+    S2_agent_cutpartition_source_construction_worker_20260521e4
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+        C inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_agent_cutpartition_source_construction_worker_20260521e4_of_unreachableAfterDelete
+    (C := C) (inputs := inputs) source
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_cutpartition_source_construction_worker_20260521e4_of_unreachableAfterDelete`.
+
+This is the family-level e4 leaf: for every finite planar input package it
+remains to supply the honest ambient deleted-neighbour separation rows for the
+same actual selected carrier edges. -/
+noncomputable def
+    S2_agent_cutpartition_source_construction_worker_family_20260521e4_of_unreachableAfterDelete
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs := by
+  intro m C inputs
+  exact
+    S2_agent_cutpartition_source_construction_worker_20260521e4_of_unreachableAfterDelete
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-cutpartition-source-construction-worker-20260521e4`,
+local-separation leaf.
+
+Boolean deleted-neighbour local separation rows are first promoted to ambient
+deleted-graph nonreachability, and then to honest third-neighbour cut
+partitions for the requested cut-partition input source. -/
+noncomputable def
+    S2_agent_cutpartition_source_construction_worker_20260521e4_of_localSeparation
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+        C inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_agent_cutpartition_source_construction_worker_20260521e4_of_unreachableAfterDelete
+    (C := C) (inputs := inputs)
+    (S2_agent_cv_deleted_neighbor_source_of_localSeparation_20260520
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_cutpartition_source_construction_worker_20260521e4_of_localSeparation`. -/
+noncomputable def
+    S2_agent_cutpartition_source_construction_worker_family_20260521e4_of_localSeparation
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+            C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs := by
+  intro m C inputs
+  exact
+    S2_agent_cutpartition_source_construction_worker_20260521e4_of_localSeparation
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Fieldwise source for the deleted-neighbour local separation rows.
+
+At each actual unbounded-frontier carrier vertex this names two selected
+incident `unboundedFrontierEdgeSet` heads and, for every third concrete
+carrier neighbour, a Boolean side separation in the graph with the centre
+deleted.  This is intentionally only the exact local-separation data: it does
+not mention endpoint closure rows, induced frontier graphs, arbitrary cycles,
+or outgoing-list no-between sources. -/
+structure UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C) where
+  left :
+    {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} → Fin n
+  right :
+    {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} → Fin n
+  left_edge :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      (a.1, left a) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (left a, a.1) ∈ unboundedFrontierEdgeSet C inputs
+  right_edge :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      (a.1, right a) ∈ unboundedFrontierEdgeSet C inputs ∨
+        (right a, a.1) ∈ unboundedFrontierEdgeSet C inputs
+  heads_ne :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      left a ≠ right a
+  third_neighbor_side :
+    forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (hb : (unboundedFrontierCarrierGraph C inputs).Adj a b),
+        b.1 ≠ left a -> b.1 ≠ right a -> Fin n -> Bool
+  left_side :
+    forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (hb : (unboundedFrontierCarrierGraph C inputs).Adj a b)
+      (hb_left : b.1 ≠ left a) (hb_right : b.1 ≠ right a),
+        third_neighbor_side a b hb hb_left hb_right (left a) = true
+  third_neighbor_side_false :
+    forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (hb : (unboundedFrontierCarrierGraph C inputs).Adj a b)
+      (hb_left : b.1 ≠ left a) (hb_right : b.1 ≠ right a),
+        third_neighbor_side a b hb hb_left hb_right b.1 = false
+  anticomplete :
+    forall (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
+      (hb : (unboundedFrontierCarrierGraph C inputs).Adj a b)
+      (hb_left : b.1 ≠ left a) (hb_right : b.1 ≠ right a)
+      {x y : Fin n},
+        x ≠ a.1 ->
+        y ≠ a.1 ->
+        third_neighbor_side a b hb hb_left hb_right x = true ->
+        third_neighbor_side a b hb hb_left hb_right y = false ->
+          ¬ (GraphBridge.unitDistanceSimpleGraph C).Adj x y
+
+namespace UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+
+variable {C : _root_.UDConfig n}
+variable {inputs : FinitePlanarOuterComponentInputs C}
+
+/-- Genuine local-sector rows construct the exact fieldwise deleted-neighbour
+source.
+
+The selected heads and their `unboundedFrontierEdgeSet` incidences are copied
+from the local-sector rows.  For a requested third concrete carrier neighbour,
+the Boolean side labelling is a witness surface; the local-sector `only` row
+already proves that such a neighbour cannot be distinct from both selected
+heads, so the anticompleteness branch is discharged at that exact local
+vertex. -/
+def ofLocalSectorRows
+    (rows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+      inputs where
+  left := fun a => (rows a).left
+  right := fun a => (rows a).right
+  left_edge := fun a => (rows a).left_edge
+  right_edge := fun a => (rows a).right_edge
+  heads_ne := fun a => (rows a).heads_ne
+  third_neighbor_side := fun a _ _ _ _ x =>
+    if x = (rows a).left then true else false
+  left_side := by
+    intro a b hb hb_left hb_right
+    simp
+  third_neighbor_side_false := by
+    intro a b hb hb_left hb_right
+    simp [hb_left]
+  anticomplete := by
+    intro a b hb hb_left hb_right x y hx_cut hy_cut hx_side hy_side hAdj
+    rcases (rows a).only b hb with hb_left_eq | hb_right_eq
+    · exact hb_left hb_left_eq
+    · exact hb_right hb_right_eq
+
+/-- Package the fieldwise e6 source at one vertex into the existing row type. -/
+def toRowsAt
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+        inputs)
+    (a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs}) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationRowsAt
+      inputs a where
+  left := source.left a
+  right := source.right a
+  left_edge := source.left_edge a
+  right_edge := source.right_edge a
+  heads_ne := source.heads_ne a
+  third_neighbor_side := source.third_neighbor_side a
+  left_side := source.left_side a
+  third_neighbor_side_false := source.third_neighbor_side_false a
+  anticomplete := source.anticomplete a
+
+/-- Package the fieldwise e6 source into the existing deleted-neighbour input
+source. -/
+def toInputSource
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+        inputs) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+      C inputs where
+  rows := source.toRowsAt
+
+/-- Route the fieldwise e6 source directly to the existing e4 cut-partition
+worker declarations. -/
+noncomputable def toNeighborPairCutPartitionInputSource
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+        inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  S2_agent_cutpartition_source_construction_worker_20260521e4_of_localSeparation
+    (C := C) (inputs := inputs) source.toInputSource
+
+/-- Ambient deleted-graph nonreachability rows construct the exact fieldwise
+deleted-neighbour local separation source.
+
+This is the reverse reachability-to-local-side handoff: for each actual third
+unbounded-frontier carrier neighbour, the connected component of the selected
+left head in the deleted graph is used as the Boolean side separation. -/
+noncomputable def ofUnreachableAfterDeleteInputSource
+    (source :
+      UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+        C inputs) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+      inputs where
+  left := fun a => (source.rows a).left
+  right := fun a => (source.rows a).right
+  left_edge := fun a => (source.rows a).left_edge
+  right_edge := fun a => (source.rows a).right_edge
+  heads_ne := fun a => (source.rows a).heads_ne
+  third_neighbor_side := fun a =>
+    ((source.rows a).toDeletedNeighborLocalSeparationRowsAt).third_neighbor_side
+  left_side := fun a =>
+    ((source.rows a).toDeletedNeighborLocalSeparationRowsAt).left_side
+  third_neighbor_side_false := fun a =>
+    ((source.rows a).toDeletedNeighborLocalSeparationRowsAt).third_neighbor_side_false
+  anticomplete := fun a =>
+    ((source.rows a).toDeletedNeighborLocalSeparationRowsAt).anticomplete
+
+end UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-exact-deleted-neighbor-field-source-worker-20260521e9`.
+
+Strict reduction of the exact field source to pointwise local-sector rows.  The
+remaining source is materially smaller: at each actual unbounded-frontier
+carrier vertex it only has to provide two genuine incident
+`unboundedFrontierEdgeSet` heads, distinctness, and the local `only` row saying
+every concrete carrier neighbour is one of those heads.  The required deleted
+Boolean side fields are then filled here without using all-adjacent endpoint
+rows, induced frontier graphs, arbitrary cycles, or selected-head
+outgoing-list no-between as the live source. -/
+def S2_agent_exact_deleted_neighbor_field_source_worker_20260521e9_of_localSectorRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+      inputs :=
+  UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource.ofLocalSectorRows
+    (C := C) (inputs := inputs) rows
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_exact_deleted_neighbor_field_source_worker_20260521e9_of_localSectorRows`. -/
+def S2_agent_exact_deleted_neighbor_field_source_worker_family_20260521e9_of_localSectorRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+          inputs := by
+  intro m C inputs
+  exact
+    S2_agent_exact_deleted_neighbor_field_source_worker_20260521e9_of_localSectorRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6k-deleted-neighbor-local-separation-exact-field-source`.
+
+Strictly lowers the k6j residual exact deleted-neighbour field source to the
+actual pointwise local-sector rows for the concrete unbounded-frontier carrier.
+The selected heads and `unboundedFrontierEdgeSet` incidences are copied from
+the local-sector rows, and every requested third-neighbour separation branch is
+contradictory against the local `only` row.  No induced frontier graph,
+arbitrary cycle, all-adjacent endpoint source, or outgoing no-between source is
+introduced. -/
+def S2_k6k_deleted_neighbor_local_separation_exact_field_source_of_localSectorRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+      inputs :=
+  UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource.ofLocalSectorRows
+    (C := C) (inputs := inputs) rows
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_k6k_deleted_neighbor_local_separation_exact_field_source_of_localSectorRows`. -/
+def S2_k6k_deleted_neighbor_local_separation_exact_field_source_family_of_localSectorRows
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+            UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+          inputs := by
+  intro m C inputs
+  exact
+    S2_k6k_deleted_neighbor_local_separation_exact_field_source_of_localSectorRows
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Selected-edge/no-third-germ handoff for claim
+`S2-agent-exact-deleted-neighbor-field-source-worker-20260521e9`.
+
+This keeps the live source below the exact deleted-neighbour field package:
+the existing local selected-edge/no-third-germ source is first erased to
+genuine local-sector rows, and those rows provide the exact selected heads and
+the vacuous third-neighbour Boolean separation fields above. -/
+noncomputable def
+    S2_agent_exact_deleted_neighbor_field_source_worker_20260521e9_of_localSelectedNoThirdGermSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+      inputs :=
+  S2_agent_exact_deleted_neighbor_field_source_worker_20260521e9_of_localSectorRows
+    (C := C) (inputs := inputs)
+    (unboundedFrontierCarrierLocalSectorRows_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Family selected-edge/no-third-germ handoff for claim
+`S2-agent-exact-deleted-neighbor-field-source-worker-20260521e9`. -/
+noncomputable def
+    S2_agent_exact_deleted_neighbor_field_source_worker_family_20260521e9_of_localSelectedNoThirdGermSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierLocalSelectedNoThirdGermSource C inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+          inputs := by
+  intro m C inputs
+  exact
+    S2_agent_exact_deleted_neighbor_field_source_worker_20260521e9_of_localSelectedNoThirdGermSource
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-deleted-neighbor-local-separation-worker-20260521e6`.
+
+Strict reducer from the exact fieldwise local separation source to
+`UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource`.  The two
+selected heads are the actual `unboundedFrontierEdgeSet` incidences carried by
+the source, and the only remaining leaf is the displayed Boolean
+anticomplete separation for each third carrier neighbour. -/
+def S2_agent_deleted_neighbor_local_separation_worker_20260521e6
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+        inputs) :
+    UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+      C inputs :=
+  source.toInputSource
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_agent_deleted_neighbor_local_separation_worker_20260521e6`. -/
+def S2_agent_deleted_neighbor_local_separation_worker_family_20260521e6
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+            inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+          C inputs := by
+  intro m C inputs
+  exact
+    S2_agent_deleted_neighbor_local_separation_worker_20260521e6
+      (C := C) (inputs := inputs) (source C inputs)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-deleted-neighbor-local-separation-worker-20260521e6`,
+e4 handoff.
+
+The exact local-separation fields feed the existing e4 cut-partition worker:
+local Boolean separation is promoted to deleted-graph nonreachability and then
+to concrete third-neighbour cut partitions. -/
+noncomputable def
+    S2_agent_deleted_neighbor_local_separation_worker_20260521e6_to_e4_cutpartition
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+        inputs) :
+    UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs :=
+  source.toNeighborPairCutPartitionInputSource
+
+set_option linter.style.longLine false in
+/-- Family e4 handoff for
+`S2_agent_deleted_neighbor_local_separation_worker_20260521e6_to_e4_cutpartition`. -/
+noncomputable def
+    S2_agent_deleted_neighbor_local_separation_worker_family_20260521e6_to_e4_cutpartition
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+            inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        UnboundedFrontierCarrierNeighborPairCutPartitionInputSource C inputs := by
+  intro m C inputs
+  exact
+    S2_agent_deleted_neighbor_local_separation_worker_20260521e6_to_e4_cutpartition
+      (C := C) (inputs := inputs) (source C inputs)
+
 /-- Family eraser from ambient deleted-graph rows to pointwise neighbour-pair
 rows. -/
 noncomputable def
@@ -30216,6 +38032,61 @@ noncomputable def
     forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
       UnboundedFrontierCarrierNeighborPairAt inputs a :=
   fun a => (source.rows a).toNeighborPairAt
+
+/-- Ambient deleted-graph rows already contain the selected incident edge
+needed at every graph-frontier vertex.
+
+This extracts the frontier-vertex incident source directly from the actual
+`unboundedFrontierEdgeSet` edge named by the deleted-neighbour source, before
+any degree-two, cycle, or endpoint-closure consumer is involved. -/
+theorem frontierVertexIncidentSource_of_unreachableAfterDeleteInputSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+        C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs := by
+  intro v hvfrontier
+  let a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+    ⟨v, mem_unboundedFrontierVertexSet_iff.2 hvfrontier⟩
+  exact ⟨(source.rows a).left, (source.rows a).left_edge⟩
+
+/-- Local Boolean deleted-neighbour separation rows feed the endpoint incident
+selected-edge source by the same field projection.
+
+The only information used is the actual selected `unboundedFrontierEdgeSet`
+left edge at the frontier vertex; the Boolean separation fields remain for the
+carrier neighbour-pair/degree-two route. -/
+theorem frontierVertexIncidentSource_of_deletedNeighborLocalSeparationInputSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationInputSource
+        C inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_unreachableAfterDeleteInputSource
+    (C := C) (inputs := inputs)
+    (S2_agent_cv_deleted_neighbor_source_of_localSeparation_20260520
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-frontier-vertex-incident-source-20260522a`.
+
+The exact fieldwise deleted-neighbour source strictly lowers the
+frontier-vertex incident selected-edge source: at a graph vertex on the actual
+unbounded exterior frontier, take the named left selected
+`unboundedFrontierEdgeSet` edge.  No induced frontier graph, arbitrary cycle,
+all-adjacent endpoint closure, convex hull, final actual-sector row, or W32
+consumer is used. -/
+theorem S2_agent_frontier_vertex_incident_source_20260522a
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+        inputs) :
+    FrontierVertexIncidentUnboundedFrontierEdgeSource C inputs :=
+  frontierVertexIncidentSource_of_deletedNeighborLocalSeparationInputSource
+    (C := C) (inputs := inputs) source.toInputSource
 
 /-- Ambient deleted-graph unreachable rows prove two-regularity of the
 concrete unbounded-frontier carrier graph.
@@ -30286,6 +38157,84 @@ theorem
     inputs
     (unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_localSeparation
       source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6j-exterior-component-carrier-degree-two-source`,
+neighbour-pair form.
+
+The exact fieldwise deleted-neighbour source names the actual selected
+`unboundedFrontierEdgeSet` heads and the Boolean separation row for every
+third concrete carrier neighbour.  This eraser routes those fields through
+the checked deleted-neighbour/cut-partition/no-cut chain to obtain the
+pointwise neighbour-pair rows for the actual
+`unboundedFrontierCarrierGraph`. -/
+noncomputable def
+    S2_k6j_exterior_component_carrier_neighborPairRows_of_deletedNeighborLocalSeparationExactFieldSource
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+        inputs) :
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      UnboundedFrontierCarrierNeighborPairAt inputs a :=
+  unboundedFrontierCarrierNeighborPairRows_of_unreachableAfterDeleteInputSource
+    (C := C) (inputs := inputs)
+    (S2_agent_cv_deleted_neighbor_source_of_localSeparation_20260520
+      (C := C) (inputs := inputs) source.toInputSource)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6j-exterior-component-carrier-degree-two-source`.
+
+Strict lowering of the actual carrier degree-two source from
+`FinitePlanarOuterComponentInputs` to the exact deleted-neighbour local
+separation fields.  The residual is precisely:
+`UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource inputs`.
+
+No induced frontier graph, arbitrary carrier cycle, all-adjacent endpoint row,
+synthetic enclosure, final exterior-cycle row, or all-outgoing no-between
+source is used. -/
+theorem
+    S2_k6j_exterior_component_carrier_degree_two_source_of_deletedNeighborLocalSeparationExactFieldSource
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (source :
+      UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+        inputs) :
+    letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+      unboundedFrontierCarrierGraph_decidableAdj C inputs
+    forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+      ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+        2 := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    unboundedFrontierCarrierGraph_neighborFinset_card_two_of_deletedNeighborLocalSeparationInputSource
+      (C := C) inputs source.toInputSource
+
+set_option linter.style.longLine false in
+/-- Family form of
+`S2_k6j_exterior_component_carrier_degree_two_source_of_deletedNeighborLocalSeparationExactFieldSource`.
+
+Thus the family-level actual carrier degree-two theorem is now lowered in the
+exterior-component owner file to the exact deleted-neighbour field source. -/
+theorem
+    S2_k6j_exterior_component_carrier_degree_two_source_family_of_deletedNeighborLocalSeparationExactFieldSource
+    (source :
+      forall {m : Nat} (C : _root_.UDConfig m)
+        (inputs : FinitePlanarOuterComponentInputs C),
+          UnboundedFrontierCarrierDeletedNeighborLocalSeparationExactFieldSource
+            inputs) :
+    forall {m : Nat} (C : _root_.UDConfig m)
+      (inputs : FinitePlanarOuterComponentInputs C),
+        letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+          unboundedFrontierCarrierGraph_decidableAdj C inputs
+        forall a : {v : Fin m // v ∈ unboundedFrontierVertexSet C inputs},
+          ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+            2 := by
+  intro m C inputs
+  exact
+    S2_k6j_exterior_component_carrier_degree_two_source_of_deletedNeighborLocalSeparationExactFieldSource
+      (C := C) inputs (source C inputs)
 
 /-- Local-sector rows discharge the ambient deleted-graph source pointwise.
 
@@ -30410,6 +38359,54 @@ noncomputable def
   unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_localSectorRows
     (localSectorRows_of_localTwoGermRows rows)
 
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-local-two-germ-source-worker-20260521e35`, deleted-neighbour
+target from selected incident-edge pairs.
+
+The selected incident-edge pair source first gives the e35 local two-germ
+family, and the existing local-two-germ eraser supplies the ambient
+unreachable-after-delete input source. -/
+noncomputable def
+    S2_agent_local_two_germ_source_worker_20260521e35_unreachableAfterDelete_of_selectedIncidentEdgePairRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (source :
+      UnboundedFrontierCarrierSelectedIncidentEdgePairSourceRowsE35
+        inputs) :
+    UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+      C inputs :=
+  unboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource_of_localTwoGermRows
+    (C := C) (inputs := inputs)
+    (S2_agent_local_two_germ_source_worker_20260521e35_of_selectedIncidentEdgePairRows
+      (C := C) (inputs := inputs) source)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-local-two-germ-source-worker-20260521e35`, deleted-neighbour
+target from concrete carrier degree two.
+
+For bare `FinitePlanarOuterComponentInputs C`, it is enough to prove degree
+two of the actual selected exterior carrier graph; the rest is the checked
+e35 selected-edge/local-two-germ/deleted-neighbour eraser chain. -/
+noncomputable def
+    S2_agent_local_two_germ_source_worker_20260521e35_unreachableAfterDelete_of_carrier_degree_two
+    {C : _root_.UDConfig n}
+    (inputs : FinitePlanarOuterComponentInputs C)
+    (hdegree :
+      letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+        unboundedFrontierCarrierGraph_decidableAdj C inputs
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        ((unboundedFrontierCarrierGraph C inputs).neighborFinset a).card =
+          2) :
+    UnboundedFrontierCarrierNeighborPairUnreachableAfterDeleteInputSource
+      C inputs := by
+  letI : DecidableRel (unboundedFrontierCarrierGraph C inputs).Adj :=
+    unboundedFrontierCarrierGraph_decidableAdj C inputs
+  exact
+    S2_agent_local_two_germ_source_worker_20260521e35_unreachableAfterDelete_of_selectedIncidentEdgePairRows
+      (C := C) (inputs := inputs)
+      (unboundedFrontierCarrierSelectedIncidentEdgePairSourceRowsE35_of_carrier_degree_two
+        (C := C) (inputs := inputs) (by simpa using hdegree))
+
 /-! ### Finite cyclic-arc rows for repeated exterior boundary vertices -/
 
 /-- The open cyclic arc from `i` to `j`, moving forward through the finite
@@ -30521,6 +38518,46 @@ theorem cyclicForwardOpenArc_or_reverse_of_ne_endpoints
     · exact Or.inl (Or.inr (by
         have hkj_le : k.val <= j.val := le_of_not_gt hjk
         omega))
+
+/-- The cyclic successor of the left endpoint lies in the open forward arc
+unless it is exactly the right endpoint. -/
+theorem cyclicForwardOpenArc_cyclicSucc_left
+    {m : Nat} (hm : 0 < m) {i j : Fin m}
+    (hsucc_ne : PlanarInterface.cyclicSucc hm i ≠ j) :
+    cyclicForwardOpenArc i j (PlanarInterface.cyclicSucc hm i) := by
+  dsimp [cyclicForwardOpenArc]
+  by_cases hijval : i.val < j.val
+  · simp [hijval]
+    have hnext_lt : i.val + 1 < m := by omega
+    have hsucc_val :
+        (PlanarInterface.cyclicSucc hm i).val = i.val + 1 := by
+      simp [PlanarInterface.cyclicSucc, Nat.mod_eq_of_lt hnext_lt]
+    constructor
+    · simp [Nat.mod_eq_of_lt hnext_lt]
+    · have hle : i.val + 1 <= j.val := by omega
+      have hne_val : i.val + 1 ≠ j.val := by
+        intro hval
+        exact hsucc_ne (Fin.ext (hsucc_val.trans hval))
+      simp [Nat.mod_eq_of_lt hnext_lt]
+      omega
+  · simp [hijval]
+    by_cases hnext_lt : i.val + 1 < m
+    · left
+      have hsucc_val :
+          (PlanarInterface.cyclicSucc hm i).val = i.val + 1 := by
+        simp [PlanarInterface.cyclicSucc, Nat.mod_eq_of_lt hnext_lt]
+      simp [Nat.mod_eq_of_lt hnext_lt]
+    · right
+      have hlast : i.val + 1 = m := by
+        exact eq_of_le_of_not_lt (Nat.succ_le_of_lt i.isLt) hnext_lt
+      have hsucc_val :
+          (PlanarInterface.cyclicSucc hm i).val = 0 := by
+        simp [PlanarInterface.cyclicSucc, hlast]
+      have hj_ne_zero : j.val ≠ 0 := by
+        intro hj0
+        exact hsucc_ne (Fin.ext (hsucc_val.trans hj0.symm))
+      simp [hlast]
+      omega
 
 /-- The graph-vertex image of an open cyclic boundary arc. -/
 def repeatedBoundaryArcImage
@@ -30885,6 +38922,119 @@ theorem boundaryCycleIncidentFrontierEdgeCompleteness_of_badIncidentEdge_arcSepa
       rcases packedRows' with ⟨j, rows⟩
       exact
         ⟨⟨i, j, rows.toRepeatedExteriorBoundarySeparationRows⟩⟩)
+
+set_option linter.style.longLine false in
+/-- Actual bad incident-edge impossibility makes the selected incident-edge
+angular row vacuous.
+
+The hypothesis quantifies only concrete `unboundedFrontierEdgeSet` incidences
+at the boundary vertex and excludes the two boundary-cycle neighbours. -/
+theorem
+    boundary_frontier_incident_edge_exterior_angular_sector_of_badIncidentEdge_impossible
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (badIncidentEdge_impossible :
+      forall k : Fin B.length, forall x : Fin n,
+        ((B.vertex k, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (x, B.vertex k) ∈ unboundedFrontierEdgeSet C inputs) ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              False) :
+    BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B := by
+  intro k x hedge hnot_pred hnot_succ
+  exact False.elim
+    (badIncidentEdge_impossible k x hedge hnot_pred hnot_succ)
+
+set_option linter.style.longLine false in
+/-- Repeated-boundary separation rows for every actual bad incident edge
+strictly reduce the selected incident-edge angular source.
+
+The no-cut field in `inputs` first rules out each bad actual
+`unboundedFrontierEdgeSet` incidence via the existing repeated-boundary
+separation eraser; the angular row is then vacuous. -/
+theorem
+    boundary_frontier_incident_edge_exterior_angular_sector_of_badIncidentEdge_repeatedBoundarySeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (badIncidentEdge_repeatedRows :
+      forall k : Fin B.length, forall x : Fin n,
+        ((B.vertex k, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (x, B.vertex k) ∈ unboundedFrontierEdgeSet C inputs) ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              Nonempty
+                (Sigma fun i : Fin B.length =>
+                  Sigma fun j : Fin B.length =>
+                    RepeatedExteriorBoundarySeparationRows C B.vertex i j)) :
+    BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B :=
+  boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
+    (C := C) (inputs := inputs) (B := B)
+    (boundaryCycleIncidentFrontierEdgeCompleteness_of_badIncidentEdge_repeatedBoundarySeparationRows
+      (C := C) (inputs := inputs) (B := B) badIncidentEdge_repeatedRows)
+
+set_option linter.style.longLine false in
+/-- Arc-separation version of
+`boundary_frontier_incident_edge_exterior_angular_sector_of_badIncidentEdge_repeatedBoundarySeparationRows`.
+
+Each actual bad incident frontier edge supplies concrete repeated exterior
+boundary arc separation rows, which erase to the repeated-boundary rows used by
+the no-cut completeness proof. -/
+theorem
+    boundary_frontier_incident_edge_exterior_angular_sector_of_badIncidentEdge_arcSeparationRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (badIncidentEdge_arcRows :
+      forall k : Fin B.length, forall x : Fin n,
+        ((B.vertex k, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (x, B.vertex k) ∈ unboundedFrontierEdgeSet C inputs) ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              Nonempty
+                (Sigma fun i : Fin B.length =>
+                  Sigma fun j : Fin B.length =>
+                    RepeatedExteriorBoundaryArcSeparationRows C B.vertex i j)) :
+    BoundaryFrontierIncidentEdgeExteriorAngularSector inputs B :=
+  boundary_frontier_incident_edge_exterior_angular_sector_of_boundaryCycleIncidentFrontierEdgeCompleteness
+    (C := C) (inputs := inputs) (B := B)
+    (boundaryCycleIncidentFrontierEdgeCompleteness_of_badIncidentEdge_arcSeparationRows
+      (C := C) (inputs := inputs) (B := B) badIncidentEdge_arcRows)
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-closed-segment-local-exterior-angular-source-20260520g`.
+
+The same-boundary closed-segment local exterior angular row is reduced to two
+selected-edge-gated source rows.  First, the exact incident closed segment
+carrying the frontier point is promoted to `unboundedFrontierEdgeSet`; second,
+every bad selected incident edge supplies repeated exterior-boundary arc
+separation rows, so `inputs.noCutVertex` makes the angular conclusion vacuous.
+
+No all-adjacent endpoint/chord classifier, induced frontier graph, synthetic
+enclosure, or hidden primitive source is used. -/
+theorem S2_agent_closed_segment_local_exterior_angular_source_20260520g
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {B : JordanBoundaryConcrete.UnitDistanceCycleBoundary C}
+    (closedSegment_selected_edge :
+      BoundaryFrontierClosedSegmentSelectedEdgeSource inputs B)
+    (badIncidentEdge_arcRows :
+      forall k : Fin B.length, forall x : Fin n,
+        ((B.vertex k, x) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (x, B.vertex k) ∈ unboundedFrontierEdgeSet C inputs) ->
+          x ≠ B.vertex (PlanarInterface.cyclicPred B.length_pos k) ->
+            x ≠ B.vertex (PlanarInterface.cyclicSucc B.length_pos k) ->
+              Nonempty
+                (Sigma fun i : Fin B.length =>
+                  Sigma fun j : Fin B.length =>
+                    RepeatedExteriorBoundaryArcSeparationRows C B.vertex i j)) :
+    BoundaryFrontierClosedSegmentLocalExteriorAngularSector inputs B :=
+  boundary_frontier_closedSegment_local_exterior_angular_sector_of_closedSegment_selected_edge_incident_edge_angular
+    (C := C) (inputs := inputs) (B := B)
+    closedSegment_selected_edge
+    (boundary_frontier_incident_edge_exterior_angular_sector_of_badIncidentEdge_arcSeparationRows
+      (C := C) (inputs := inputs) (B := B) badIncidentEdge_arcRows)
 
 /-- If every repeated pair in a boundary vertex sequence supplies the concrete
 cut partition rows, `NoCutVertex` forces the sequence to be vertex-injective. -/
@@ -31572,6 +39722,41 @@ noncomputable def toCutVertexPartition
     (rows.toBoolSideSeparationRows hij htail)
 
 end RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+
+/-- Source-level constructor for raw exterior-frontier arc separation from raw
+edge-frontier rows plus concrete cut partitions for hypothetical repeated
+tails.
+
+The repeated-tail arc row is used only under a repeated-tail hypothesis.  A
+concrete cut partition for that same hypothesis contradicts the checked
+`inputs.noCutVertex` row, so the stronger finite arc-separation payload is
+available by contradiction without introducing final boundary rows, an
+arbitrary carrier cycle, or an induced frontier graph. -/
+def rawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows_of_edge_openSegment_frontier_cutPartitions
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (cut_partitions :
+      forall {i j : Fin O.period},
+        i ≠ j ->
+        (O.dart i).tail = (O.dart j).tail ->
+          Nonempty (CutVertexInterface.CutVertexPartition C)) :
+    RawFaceSuccOrbitExteriorFrontierArcSeparationSourceRows
+      (inputs := inputs) O where
+  edge_openSegment_frontier := edge_openSegment_frontier
+  repeated_tail_arcSeparation := by
+    intro i j hij htail
+    exact False.elim (inputs.noCutVertex (cut_partitions hij htail))
 
 /-- Claim `S2-agent-repeated-tail-arc-separation-source`.
 
@@ -33209,6 +41394,118 @@ theorem rawFaceSuccOrbit_period_three_le_of_edge_openSegment_frontier_tail_cover
       O edge_openSegment_frontier frontier_vertex_tail_coverage)
     localSectorRows
 
+set_option linter.style.longLine false in
+/-- Claim `S2-dynamic-carrier-connectedness-k4`.
+
+Raw `faceSucc` orbit coverage and local sector rows prove connectedness of the
+actual unbounded-frontier carrier graph.  The carrier adjacencies are still
+the selected edges of `unboundedFrontierEdgeSet`: the proof derives cyclic
+coverage from the raw consecutive-edge frontier rows, then projects that
+cyclic coverage to connectedness of `unboundedFrontierCarrierGraph C inputs`.
+-/
+theorem unboundedFrontierCarrierGraph_connected_of_rawFaceSuccOrbit_tail_coverage_localSectorRows_20260521k4
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    (unboundedFrontierCarrierGraph C inputs).Connected :=
+  unboundedFrontierCarrierGraph_connected_of_cyclicCoverageRows
+    (unboundedFrontierCarrierCyclicCoverageRows_of_rawFaceSuccOrbit_tail_coverage
+      O
+      (rawFaceSuccOrbit_period_three_le_of_frontier_iff_tail_localSectorRows
+        O
+        (rawFaceSuccOrbit_frontier_iff_tail_of_frontier_vertex_tail_coverage
+          O edge_openSegment_frontier frontier_vertex_tail_coverage)
+        localSectorRows)
+      edge_openSegment_frontier
+      frontier_vertex_tail_coverage)
+
+set_option linter.style.longLine false in
+/-- Raw `faceSucc` orbit rows fill the actual frontier-preconnected source.
+
+This keeps the handoff on the concrete unbounded-frontier carrier: the raw
+orbit rows first prove connectedness of `unboundedFrontierCarrierGraph C inputs`,
+then the fixed-side local-sector rows provide the selected
+`unboundedFrontierEdgeSet` cover of the actual unbounded exterior frontier. -/
+def
+    unboundedExteriorFrontierPreconnectedSourceRows_of_rawFaceSuccOrbit_tail_coverage_localSectorRows_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    UnboundedExteriorFrontierPreconnectedSourceRows inputs :=
+  unboundedExteriorFrontierPreconnectedSourceRows_of_connectedCarrier_localSectorRows_fixedSide
+    (C := C) (inputs := inputs)
+    (unboundedFrontierCarrierGraph_connected_of_rawFaceSuccOrbit_tail_coverage_localSectorRows_20260521k4
+      (C := C) (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage localSectorRows)
+    localSectorRows
+
+set_option linter.style.longLine false in
+/-- Claim `S2-agent-frontier-preconnected-raw-orbit-tail-coverage-20260522`.
+
+Selected raw exterior-orbit tracing plus local-sector rows prove
+preconnectedness of the actual unbounded exterior frontier, without passing
+through a completed boundary cycle or induced frontier graph. -/
+theorem
+    S2_agent_frontier_preconnected_raw_orbit_tail_coverage_20260522
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    {R : UnitDistanceRotationSystem C}
+    {start : UnitDistanceDart C}
+    (O : UnitDistanceRotationSystem.RawFaceSuccOrbit R start)
+    (edge_openSegment_frontier :
+      forall k : Fin O.period,
+        forall p : PlanarInterface.Point,
+          PlanarInterface.InOpenSegment p
+            ((canonicalGraph C).point (O.dart k).tail)
+            ((canonicalGraph C).point
+              (O.dart (PlanarInterface.cyclicSucc O.period_pos k)).tail) ->
+          p ∈ frontier (unboundedExteriorComponentRows C inputs).exterior)
+    (frontier_vertex_tail_coverage :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        Exists fun k : Fin O.period => (O.dart k).tail = a.1)
+    (localSectorRows :
+      forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
+        UnboundedFrontierCarrierLocalSectorRowsAt inputs a) :
+    IsPreconnected
+      (frontier (unboundedExteriorComponentRows C inputs).exterior) :=
+  unboundedExterior_frontier_preconnected_of_sourceRows
+    inputs
+    (unboundedExteriorFrontierPreconnectedSourceRows_of_rawFaceSuccOrbit_tail_coverage_localSectorRows_20260522
+      (C := C) (inputs := inputs) O edge_openSegment_frontier
+      frontier_vertex_tail_coverage localSectorRows)
+
 /-- No-cut injectivity of a selected raw exterior face walk, using the actual
 exterior arc-separation package. -/
 theorem S2_agent_rawExteriorFaceWalk_tail_injective_of_actualArcRows
@@ -34536,8 +42833,6 @@ noncomputable def S2_agent_input_s2_assembly_gap_reducer_topologyRows
     (localSectorRows :
       forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
         UnboundedFrontierCarrierLocalSectorRowsAt inputs a)
-    (frontier_vertices_nonempty :
-      Nonempty {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs})
     (topologyRows : UnboundedFrontierCarrierAdjClosedTopologySourceRows inputs)
     {e : PlanarInterface.Edge n} {p : PlanarInterface.Point}
     {start : UnitDistanceDart C}
@@ -34567,8 +42862,8 @@ noncomputable def S2_agent_input_s2_assembly_gap_reducer_topologyRows
             (fun k : Fin O.period => (O.dart k).tail) i j) :
     UnboundedExteriorFrontierCycleRows C inputs := by
   let carrier_connected :=
-    unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows
-      inputs frontier_vertices_nonempty topologyRows
+    unboundedFrontierCarrierGraph_connected_of_adjClosed_topologyRows_noAuxNonempty
+      inputs topologyRows
   let dartFrontier := dart_edge_openSegment_frontier
   let hedges :=
     S2_agent_raw_orbit_edge_membership_source
@@ -36677,6 +44972,120 @@ structure ActualExteriorSectorInputSourceRows
   localSectorRows :
     forall a : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs},
       UnboundedFrontierCarrierLocalSectorRowsAt inputs a
+
+set_option linter.style.longLine false in
+/-- Same-boundary primitive exterior-sector rows from an honest face-dart
+carrier and the angular no-between payload.
+
+The carrier supplies the exact boundary, exact frontier-vertex equivalence,
+actual predecessor/successor memberships in `unboundedFrontierEdgeSet`, and
+the selected incident-edge exclusion row.  The only extra residual is the
+ordinary angular no-between row at the same boundary vertices. -/
+noncomputable def
+    boundaryVertexExteriorSectorRows_of_faceDartOrbitExteriorCarrierRows_angularRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : FaceDartOrbitExteriorCarrierRows C inputs)
+    (angularRows :
+      forall k : Fin rows.orbit.boundary.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k) :
+    forall k : Fin rows.orbit.boundary.length,
+      BoundaryVertexExteriorSectorRowsAt inputs rows.orbit.boundary k := by
+  classical
+  intro k
+  let B := rows.orbit.boundary
+  refine
+    { angle := (angularRows k).angle
+      no_between := (angularRows k).no_between
+      pred_edge := ?_
+      succ_edge := ?_
+      local_two_germ := ?_ }
+  · let pred := PlanarInterface.cyclicPred B.length_pos k
+    have hsucc_pred :
+        PlanarInterface.cyclicSucc B.length_pos pred = k := by
+      dsimp [pred, B]
+      exact PlanarInterface.cyclicSucc_cyclicPred B.length_pos k
+    have hedge :
+        (B.vertex pred, B.vertex k) ∈ unboundedFrontierEdgeSet C inputs ∨
+          (B.vertex k, B.vertex pred) ∈
+            unboundedFrontierEdgeSet C inputs := by
+      simpa [B, pred, hsucc_pred] using
+        rows.orbit_edge_mem_unboundedFrontierEdgeSet pred
+    rcases hedge with h | h
+    · exact Or.inr h
+    · exact Or.inl h
+  · simpa [B] using rows.orbit_edge_mem_unboundedFrontierEdgeSet k
+  · intro x hedge
+    have hwhole :
+        UnboundedFrontierEdgeSetWholeOpenSegmentFrontier C inputs :=
+      unboundedFrontierEdgeSetWholeOpenSegmentFrontier_of_definition
+    have hx : x ∈ unboundedFrontierVertexSet C inputs := by
+      rcases hedge with h | h
+      · exact
+          (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+            hwhole h).2
+      · exact
+          (endpoints_mem_unboundedFrontierVertexSet_of_unboundedFrontierEdgeSet
+            hwhole h).1
+    let b : {v : Fin n // v ∈ unboundedFrontierVertexSet C inputs} :=
+      ⟨x, hx⟩
+    have hab :
+        (unboundedFrontierCarrierGraph C inputs).Adj
+          (rows.carrierVertex k) b := by
+      rw [unboundedFrontierCarrierGraph_adj_iff]
+      rcases hedge with h | h
+      · exact Or.inl (by simpa [FaceDartOrbitExteriorCarrierRows.carrierVertex, b] using h)
+      · exact Or.inr (by simpa [FaceDartOrbitExteriorCarrierRows.carrierVertex, b] using h)
+    have honly :=
+      rows.incident_only_pred_succ k (rows.carrierVertex k) b rfl hab
+    simpa [B, b] using honly
+
+set_option linter.style.longLine false in
+/-- Actual exterior-sector input rows from an honest face-dart carrier.
+
+This is the same-boundary packaging of
+`boundaryVertexExteriorSectorRows_of_faceDartOrbitExteriorCarrierRows_angularRows`:
+the sector fields retain the carrier's actual `unboundedFrontierEdgeSet`
+predecessor/successor edges, while the pointwise local-sector family is read
+directly from the face-dart carrier rows. -/
+noncomputable def
+    actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_angularRows
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : FaceDartOrbitExteriorCarrierRows C inputs)
+    (angularRows :
+      forall k : Fin rows.orbit.boundary.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k) :
+    ActualExteriorSectorInputSourceRows inputs rows.orbit.boundary := by
+  let sectorRows :=
+    boundaryVertexExteriorSectorRows_of_faceDartOrbitExteriorCarrierRows_angularRows
+      (C := C) (inputs := inputs) rows angularRows
+  exact
+    { angularRows := angularRows
+      sectorRows := sectorRows
+      localSectorRows := rows.toLocalSectorRows }
+
+set_option linter.style.longLine false in
+/-- Claim `S2-k6b-actual-sector-source-from-face-dart-carrier`.
+
+An honest exterior face-dart carrier, together with the same-boundary angular
+no-between rows, sources `ActualExteriorSectorInputSourceRows` without adding
+any wrapper package.  All edge honesty in the primitive sector rows is copied
+from the carrier's actual `unboundedFrontierEdgeSet` predecessor/successor
+memberships. -/
+noncomputable def S2_k6b_actual_sector_source_from_face_dart_carrier
+    {C : _root_.UDConfig n}
+    {inputs : FinitePlanarOuterComponentInputs C}
+    (rows : FaceDartOrbitExteriorCarrierRows C inputs)
+    (angularRows :
+      forall k : Fin rows.orbit.boundary.length,
+        _root_.ErdosProblems1066.Swanepoel.GeometricRotationSystem.BoundaryVertexAngularNoBetweenRows
+          C rows.orbit.boundary k) :
+    ActualExteriorSectorInputSourceRows inputs rows.orbit.boundary :=
+  actualExteriorSectorInputSourceRows_of_faceDartOrbitExteriorCarrierRows_angularRows
+    (C := C) (inputs := inputs) rows angularRows
 
 /-- Strong actual exterior-sector source rows erase immediately to the
 input-level pointwise carrier local-sector family. -/

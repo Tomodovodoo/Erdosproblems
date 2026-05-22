@@ -278,6 +278,9 @@ import ErdosProblems1066.Swanepoel.FinitePlaneDrawing
 import ErdosProblems1066.Swanepoel.GeometricRotationSystem
 import ErdosProblems1066.Swanepoel.ExteriorComponentTopology
 import ErdosProblems1066.Swanepoel.S2LocalTwoGermAssembly
+import ErdosProblems1066.Swanepoel.S2CarrierCutSource
+import ErdosProblems1066.Swanepoel.S2CarrierLocalSource
+import ErdosProblems1066.Swanepoel.S2TopologySource
 import ErdosProblems1066.Swanepoel.S2ExteriorBoundarySource
 import ErdosProblems1066.Swanepoel.S2BoundaryFreeRawSource
 import ErdosProblems1066.Swanepoel.S2SeededRawOrbitSource
