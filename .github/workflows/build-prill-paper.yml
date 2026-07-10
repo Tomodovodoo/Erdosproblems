@@ -1,5 +1,6 @@
 name: Build Prill problem 14 paper
 
+# Triggered on the source paper and on workflow maintenance.
 on:
   push:
     branches:
