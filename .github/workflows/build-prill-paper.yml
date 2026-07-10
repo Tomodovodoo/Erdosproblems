@@ -7,6 +7,12 @@ on:
     paths:
       - Problemsilike/14/prills_problem_every_genus.tex
       - .github/workflows/build-prill-paper.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - Problemsilike/14/prills_problem_every_genus.tex
+      - .github/workflows/build-prill-paper.yml
   workflow_dispatch:
 
 permissions:
@@ -19,6 +25,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Install LaTeX
         run: |
