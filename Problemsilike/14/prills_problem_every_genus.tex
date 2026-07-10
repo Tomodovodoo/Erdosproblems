@@ -1,0 +1,387 @@
+\documentclass[a4paper]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Prill's Problem in Every Genus g >= 2},
+  pdfauthor={Tom de Groot}
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\Pic}{Pic}
+\DeclareMathOperator{\rk}{rk}
+\DeclareMathOperator{\Fun}{Fun}
+
+\newcommand{\OO}{\mathcal O}
+\newcommand{\CC}{\mathbb C}
+\newcommand{\tors}{\mathrm{tors}}
+
+\title{Prill's Problem in Every Genus \(g\geq 2\)}
+\author{Tom de Groot}
+\date{}
+
+\begin{document}
+
+\begin{abstract}
+Let \(Y\) be a smooth projective connected complex curve of genus at least two.
+We construct a connected finite \(\acute{e}\)tale Galois cover \(f:X\to Y\) for which every fiber divisor \(f^{-1}(y)\) moves in a pencil.
+The essential input is Raynaud's bundle \(P_g\), obtained by restricting the Fourier--Mukai transform of \(\OO_{\Pic^0(Y)}(-g\Theta)\), together with Mukai's formula showing that this transform splits as copies of one line bundle after a polarization isogeny.
+We choose a degree \(-1\) twist with torsion determinant, which turns that splitting into a finite \(\acute{e}\)tale trivialization; the regular representation of the resulting deck group then supplies the required second section.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+All curves and varieties are defined over \(\CC\).  Let \(f:X\to Y\) be a finite morphism of smooth projective connected curves, and write \(D_y=f^*y\) for its scheme-theoretic fiber over \(y\in Y\).  Prill asked whether
+\[
+ h^0\bigl(X,\OO_X(D_y)\bigr)=1
+\]
+for a general point \(y\) whenever \(g(Y)\geq 2\); see \cite[Chapter VI, Exercise D]{ACGH}.  The condition \(h^0(X,\OO_X(D_y))\geq 2\) is closed in \(y\) by upper semicontinuity.  Hence, for a fixed cover, it holds for a general point if and only if it holds for every point.  Following Landesman and Litt, such a cover is called \emph{Prill exceptional}.  They constructed a finite \(\acute{e}\)tale Prill-exceptional cover of every complex curve of genus two and asked whether examples exist in higher genus \cite[Theorem 1.2 and Remark 1.4]{LandesmanLitt}.
+
+We answer this question in every genus, and the cover we obtain is Galois.
+
+\begin{theorem}\label{thm:main}
+Let \(Y\) be a smooth projective connected complex curve of genus \(g\geq 2\).  There is a connected finite \(\acute{e}\)tale Galois cover \(f:X\to Y\) such that
+\[
+ h^0\bigl(X,\OO_X(f^{-1}(y))\bigr)\geq 2
+ \qquad\text{for every }y\in Y.
+\]
+\end{theorem}
+
+The proof begins with Raynaud's bundle \(P_g\) on \(Y\).  This bundle has two complementary properties.  First, it has no theta divisor:
+\[
+ H^0(Y,P_g\otimes L)\neq 0
+ \qquad\text{for every }L\in\Pic^0(Y).
+\]
+Second, Mukai's pullback formula says that the vector bundle on the Jacobian from which \(P_g\) is restricted becomes a direct sum of copies of a single line bundle after a finite isogeny.  Thus, after a finite \(\acute{e}\)tale base change, the associated projective bundle is already trivial; the only remaining obstruction to trivializing the vector bundle is one scalar line bundle.
+
+The choice of the index \(g\) is essential.  Raynaud's bundle \(P_m\) has slope \(g/m\), so \(P_g\) has slope one.  We can therefore choose a line bundle \(B\) of degree \(-1\) such that
+\[
+ E=P_g\otimes B,\qquad H^0(Y,E)=0,\qquad
+ \det E\in\Pic^0(Y)_{\tors},
+\]
+while the Raynaud nonvanishing still gives \(H^0(Y,E(y))\neq 0\) for every \(y\).  Mukai's formula makes a finite \(\acute{e}\)tale pullback of \(E\) equal to \(M^{\oplus g^g}\) for one line bundle \(M\).  The torsion determinant forces \(M\) itself to be torsion, so a further finite \(\acute{e}\)tale cover makes \(E\) trivial.  The bundle \(E\) then comes from a representation of a finite group.  One irreducible constituent has a section after twisting by every point of \(Y\), and the same constituent occurs in the regular representation, hence in the pushforward of the structure sheaf of the final cover.
+
+\section{The Raynaud--Mukai mechanism}
+
+Fix a point \(y_0\in Y\), put \(A=\Pic^0(Y)\), and let \(J=\widehat A\) be the dual abelian variety.  Write \(\iota:Y\hookrightarrow J\) for the Abel--Jacobi embedding determined by \(y_0\).  We use the theta divisor attached to the same base point,
+\[
+ \Theta=\bigl\{\alpha\in\Pic^0(Y):
+ H^1\bigl(Y,\alpha((g-1)y_0)\bigr)\neq 0\bigr\},
+\]
+as in Hein's normalization of Raynaud's construction \cite[\S2.1]{Hein}.  Let \(\mathcal P\) be the Poincar\'e bundle on \(J\times A\), normalized along \(\{0\}\times A\) and \(J\times\{0\}\), and let
+\(p:J\times A\to A\) and \(q:J\times A\to J\) be the projections.
+
+The Fourier--Mukai transform with kernel \(\mathcal P\) is
+\[
+ \Phi_{\mathcal P}(F)=Rq_*\bigl(\mathcal P\otimes p^*F\bigr),
+ \qquad F\in D^b(A).
+\]
+For \(\xi\in J=\Pic^0(A)\), write
+\(\mathcal P_\xi=\mathcal P|_{\{\xi\}\times A}\).  Proper base change identifies the derived fiber at \(\xi\) with
+\[
+ L\xi^*\Phi_{\mathcal P}(F)
+ \simeq R\Gamma\bigl(A,F\otimes\mathcal P_\xi\bigr).
+\]
+Thus the transform packages, in one object on \(J\), the cohomology of all degree-zero twists of \(F\).  Raynaud applies it to the inverse of a positive multiple of the theta line bundle.
+
+For an ample line bundle \(\mathcal N\) on \(A\), the homomorphism
+\[
+ \varphi_{\mathcal N}:A\longrightarrow\widehat A,
+ \qquad x\longmapsto t_x^*\mathcal N\otimes\mathcal N^{-1},
+\]
+measures the failure of \(\mathcal N\) to be invariant under translation.  It is an isogeny.  Mukai's formula says that this same isogeny completely splits the Fourier--Mukai transform of \(\mathcal N^{-1}\).
+
+\begin{proposition}[Mukai--Raynaud]\label{prop:raynaud}
+For \(m\geq 1\), set \(\mathcal N_m=\OO_A(m\Theta)\) and
+\[
+ \widetilde{\mathcal R}_m
+ =R^gq_*\bigl(\mathcal P\otimes p^*\mathcal N_m^{-1}\bigr),
+ \qquad
+ \mathcal R_m=[-1_J]^*\widetilde{\mathcal R}_m,
+ \qquad
+ P_m=\iota^*\mathcal R_m.
+\]
+Then \(P_m\) is semistable and
+\[
+ \rk(P_m)=m^g,\qquad \deg(P_m)=g m^{g-1},\qquad
+ H^0(Y,P_m\otimes L)\neq 0
+ \quad\text{for every }L\in\Pic^0(Y).
+\]
+Let \(\varphi_m=\varphi_{\mathcal N_m}:A\to J\), and put
+\(a_m=[-1_J]\circ\varphi_m\).  Then
+\[
+ a_m^*\mathcal R_m\simeq \mathcal N_m^{\oplus m^g}.
+\]
+\end{proposition}
+
+\begin{proof}
+For \(\xi\in J\), the line bundle
+\(\mathcal N_m\otimes\mathcal P_\xi^{-1}\) is ample.  Since
+\(\omega_A\simeq\OO_A\), Serre duality and Kodaira vanishing give
+\[
+ H^i\bigl(A,\mathcal N_m^{-1}\otimes\mathcal P_\xi\bigr)=0
+ \qquad(i\neq g).
+\]
+Riemann--Roch on the principally polarized abelian variety \(A\) gives
+\[
+ h^g\bigl(A,\mathcal N_m^{-1}\otimes\mathcal P_\xi\bigr)
+ =h^0\bigl(A,\mathcal N_m\otimes\mathcal P_\xi^{-1}\bigr)
+ =\chi(\mathcal N_m)=m^g.
+\]
+Cohomology and base change therefore show that
+\(\Phi_{\mathcal P}(\mathcal N_m^{-1})\) is concentrated in degree \(g\), and that
+\(\widetilde{\mathcal R}_m\) is a vector bundle of rank \(m^g\).
+
+Mukai's pullback formula, applied to \(\mathcal N_m\), is
+\[
+ \varphi_m^*\widetilde{\mathcal R}_m
+ \simeq \mathcal N_m^{\oplus h^0(A,\mathcal N_m)}
+ =\mathcal N_m^{\oplus m^g};
+\]
+see \cite[Proposition 3.11(1)]{Mukai}.  Raynaud records and uses exactly this formula in \cite[\S3.1]{Raynaud}.  Since
+\(a_m=[-1_J]\circ\varphi_m\) and
+\(\mathcal R_m=[-1_J]^*\widetilde{\mathcal R}_m\), the displayed formula is equivalent to
+\(a_m^*\mathcal R_m\simeq\mathcal N_m^{\oplus m^g}\).
+
+Restricting this identity to the inverse image of the Abel--Jacobi curve shows why the resulting bundle is semistable: after a finite \(\acute{e}\)tale base change it is a direct sum of copies of one line bundle.  Raynaud's intersection calculation on that inverse-image curve gives
+\(\mu(P_m)=g/m\), and hence
+\(\deg(P_m)=g m^{g-1}\).  Hein records the same construction, including the pullback by \([-1_J]\), and the resulting rank, degree, slope, and semistability in \cite[\S2, Lemma 2.3]{Hein}.
+
+It remains to explain the nonvanishing.  The second Fourier--Mukai identity used by Raynaud identifies the transform of
+\(\widetilde{\mathcal R}_m\) back on \(A\) with the line bundle
+\((-1_A)^*\mathcal N_m^{-1}\).  Using this identity, Raynaud produces a nonzero family of sections after restricting to an Abel--Jacobi translate, and hence obtains \(H^0(Y,P_m\otimes L)\neq 0\) for general \(L\in\Pic^0(Y)\); see \cite[\S3.1]{Raynaud}.  Hein's definition above is the corresponding normalized form of Raynaud's bundle.  The locus
+\[
+ \bigl\{L\in\Pic^0(Y):H^0(Y,P_m\otimes L)\neq 0\bigr\}
+\]
+is closed by upper semicontinuity.  Since it contains a dense open subset, it is all of \(\Pic^0(Y)\).  This all-twists formulation is also recorded explicitly in \cite[Introduction]{Hein}.
+\end{proof}
+
+\begin{remark}[Why the determinant is made torsion]\label{rem:projective}
+Let \(r=m^g\), and consider a twist \(E=P_m\otimes B\).  Pulling the isogeny \(a_m\) back along the Abel--Jacobi embedding gives a finite \(\acute{e}\)tale cover \(\rho:Z\to Y\).  Mukai's formula then takes the form
+\[
+ \rho^*E\simeq M^{\oplus r}
+\]
+for a line bundle \(M\) on \(Z\).  Hence
+\[
+ \mathbb P(\rho^*E)\simeq Z\times\mathbb P^{r-1},
+ \qquad
+ M^{\otimes r}\simeq\det(\rho^*E)=\rho^*(\det E).
+\]
+The first identity says that the projective part of the bundle has disappeared, but it does not yet trivialize the vector bundle: the common factor \(M\) is the remaining obstruction.  The determinant detects exactly this factor.  If \(\det E\) is torsion, then the second identity shows that \(M^{\otimes r}\), and hence \(M\), is torsion.  A finite \(\acute{e}\)tale cover associated with a trivialization of a power of \(M\) then makes \(M\), and therefore \(E\), trivial.  Conversely, if a finite cover \(u:U\to Z\) trivializes \(M\), then
+\[
+ \operatorname{Nm}_u(u^*M)\simeq M^{\otimes\deg u}
+\]
+is trivial, so \(M\) must already be torsion.  Thus the torsion-determinant condition is precisely what turns Mukai's projective trivialization into a genuine finite \(\acute{e}\)tale trivialization of the vector bundle.
+\end{remark}
+
+\section{A degree-zero bundle with finite étale trivialization}
+
+We now take \(m=g\) and put \(r=g^g\).  Proposition~\ref{prop:raynaud} gives
+\[
+ \rk(P_g)=\deg(P_g)=r,
+\]
+so \(P_g\) has slope one.
+
+\begin{lemma}\label{lem:finite-support}
+If \(F\) is a semistable vector bundle of degree zero on \(Y\), then
+\[
+ V^0(F)=\{L\in\Pic^0(Y):H^0(Y,F\otimes L)\neq 0\}
+\]
+is finite.
+\end{lemma}
+
+\begin{proof}
+Choose a Jordan--H\"older filtration
+\(0=F_0\subset F_1\subset\cdots\subset F_N=F\), with stable degree-zero quotients \(Q_j=F_j/F_{j-1}\).  If \(L\in V^0(F)\), a nonzero section of \(F\otimes L\) gives a nonzero map \(L^{-1}\to F\).  The saturation of its image is \(L^{-1}(D)\) for an effective divisor \(D\).  Semistability of \(F\) gives \(\deg D\leq 0\), hence \(D=0\); thus \(L^{-1}\) is a degree-zero line subbundle of \(F\).
+
+Choose the least \(j\) for which \(L^{-1}\subset F_j\).  The induced map \(L^{-1}\to Q_j\) is nonzero.  A nonzero morphism between stable bundles of the same slope is an isomorphism.  Hence \(Q_j\simeq L^{-1}\), and in particular \(Q_j\) has rank one.  Thus \(L^{-1}\) is isomorphic to one of the finitely many rank-one Jordan--H\"older factors of \(F\).
+\end{proof}
+
+\begin{proposition}\label{prop:auxiliary-bundle}
+There is a vector bundle \(E\) on \(Y\) such that
+\[
+ \deg E=0,\qquad H^0(Y,E)=0,\qquad
+ \det E\in\Pic^0(Y)_{\tors},\qquad
+ H^0(Y,E(y))\neq 0\quad\text{for every }y\in Y.
+\]
+\end{proposition}
+
+\begin{proof}
+Choose \(B_0\in\Pic^{-1}(Y)\) and set \(E_0=P_g\otimes B_0\).  Since \(P_g\) is semistable of slope one, \(E_0\) is semistable of degree zero.  Let \(D=\det(E_0)\in\Pic^0(Y)\).  Multiplication by \(r\) on the abelian variety \(\Pic^0(Y)\) is surjective, so choose \(L_0\in\Pic^0(Y)\) with
+\(L_0^{\otimes r}\simeq D^{-1}\).
+
+The torsion subgroup of \(\Pic^0(Y)\) is infinite, whereas \(V^0(E_0)\) is finite by Lemma~\ref{lem:finite-support}.  We may therefore choose a torsion line bundle \(\eta\) such that
+\(L_0\otimes\eta\notin V^0(E_0)\).  Set
+\[
+ B=B_0\otimes L_0\otimes\eta,
+ \qquad
+ E=P_g\otimes B=E_0\otimes L_0\otimes\eta.
+\]
+Then \(\deg E=0\), \(H^0(Y,E)=0\), and
+\[
+ \det E
+ \simeq D\otimes(L_0\otimes\eta)^{\otimes r}
+ \simeq\eta^{\otimes r},
+\]
+so \(\det E\) is torsion.  For every \(y\in Y\), the line bundle
+\(B(y)=B\otimes\OO_Y(y)\) has degree zero.  Proposition~\ref{prop:raynaud} therefore gives
+\[
+ H^0(Y,E(y))
+ =H^0\bigl(Y,P_g\otimes B(y)\bigr)\neq 0.
+\]
+\end{proof}
+
+\begin{proposition}\label{prop:trivialization}
+The bundle \(E\) of Proposition~\ref{prop:auxiliary-bundle} is trivialized by a connected finite \(\acute{e}\)tale Galois cover of \(Y\).
+\end{proposition}
+
+\begin{proof}
+Mukai's formula has already trivialized the projective bundle associated with \(E\); we now remove the common line-bundle factor described in Remark~\ref{rem:projective}.  Let
+\(a=a_g:A\to J\) and \(\mathcal N=\mathcal N_g\) be as in Proposition~\ref{prop:raynaud}, and form the Cartesian square
+\[
+\begin{array}{ccc}
+ Z & \xrightarrow{\ \tau\ } & A\\
+ \rho\downarrow && \downarrow a\\
+ Y & \xrightarrow{\ \iota\ } & J.
+\end{array}
+\]
+The morphism \(\rho\) is finite \(\acute{e}\)tale.  Choose a connected component \(Z_0\) of \(Z\), and write \(\rho_0:Z_0\to Y\) and \(\tau_0:Z_0\to A\) for the restrictions.  The image of \(Z_0\) in \(Y\) is nonempty, open, and closed, hence \(\rho_0\) is surjective.  Proposition~\ref{prop:raynaud} gives
+\[
+ \rho_0^*E
+ \simeq\bigl(\tau_0^*\mathcal N\otimes\rho_0^*B\bigr)^{\oplus r}.
+\]
+Put \(M=\tau_0^*\mathcal N\otimes\rho_0^*B\).  Taking determinants yields
+\[
+ M^{\otimes r}\simeq\rho_0^*(\det E).
+\]
+If \((\det E)^{\otimes d}\simeq\OO_Y\), then
+\(M^{\otimes rd}\simeq\OO_{Z_0}\).  Thus \(M\) is torsion.
+
+Choose \(n\geq 1\) and an isomorphism
+\(M^{\otimes n}\simeq\OO_{Z_0}\).  Using this isomorphism to define multiplication, form the \(\OO_{Z_0}\)-algebra
+\[
+ \mathcal A=\OO_{Z_0}\oplus M^{-1}\oplus\cdots\oplus M^{-(n-1)}
+\]
+and the finite cover
+\(u:U=\operatorname{Spec}_{Z_0}(\mathcal A)\to Z_0\).  Locally this cover has equation \(t^n=v\), where \(v\) is a unit.  Since the characteristic is zero, the derivative \(nt^{n-1}\) is a unit on the cover, so \(u\) is \(\acute{e}\)tale.  The tautological root trivializes \(u^*M\), and hence
+\((\rho_0\circ u)^*E\simeq\OO_U^{\oplus r}\).
+
+A connected component \(U_0\) of \(U\) still maps surjectively and finite \(\acute{e}\)tale to \(Y\).  Let \(T\to Y\) be the normalization of \(Y\) in a Galois closure of the finite extension \(\CC(U_0)/\CC(Y)\).  Conjugates of an unramified extension of function fields are unramified, and so is their compositum.  Hence \(T\to Y\) is a connected finite \(\acute{e}\)tale Galois cover dominating \(U_0\to Y\), and the pullback of \(E\) to \(T\) is trivial.
+\end{proof}
+
+\section{The Galois cover}
+
+We fix the descent convention used below.  Let \(q:X\to Y\) be a connected finite \(\acute{e}\)tale Galois cover with group \(G\), acting on \(X\) on the right.  For a finite-dimensional left \(G\)-module \(V\), set
+\[
+ \mathcal E(V)=X\times^G V
+ =(X\times V)/\bigl((xg,v)\sim(x,gv)\bigr).
+\]
+
+\begin{lemma}\label{lem:descent}
+With this convention:
+\begin{enumerate}
+\item every vector bundle on \(Y\) that becomes trivial on \(X\) is isomorphic to \(\mathcal E(V)\) for a finite-dimensional \(G\)-module \(V\);
+\item \(H^0(Y,\mathcal E(V))\simeq V^G\);
+\item \(q_*\OO_X\simeq\mathcal E(\Fun(G,\CC))\), where
+\((g\cdot\varphi)(h)=\varphi(g^{-1}h)\).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Choose a trivialization \(q^*F\simeq\OO_X\otimes V\) of a vector bundle \(F\).  In this trivialization its descent isomorphisms are regular maps
+\(X\to\operatorname{GL}(V)\).  Every such map is constant because \(X\) is connected and projective whereas \(\operatorname{GL}(V)\) is affine.  The cocycle identity therefore gives a linear action of \(G\) on \(V\), and the descended bundle is \(\mathcal E(V)\).
+
+A section of \(\mathcal E(V)\) pulls back to a regular map
+\(\phi:X\to V\) satisfying \(\phi(xg)=g^{-1}\phi(x)\).  The map \(\phi\) is constant because \(X\) is projective and \(V\) is affine, and the equivariance condition says that its value lies in \(V^G\).  This proves the second assertion.
+
+\(\acute{E}\)tale-locally on \(Y\), a section of the \(G\)-torsor identifies \(X\) with \(Y\times G\) and \(q_*\OO_X\) with \(\OO_Y\otimes\Fun(G,\CC)\).  Changing the local section by right multiplication by \(g^{-1}\) changes a function \(\varphi\) to \(h\mapsto\varphi(g^{-1}h)\), which gives the stated associated bundle.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Let \(E\) be the bundle constructed in Proposition~\ref{prop:auxiliary-bundle}, and choose a connected finite \(\acute{e}\)tale Galois cover
+\(f:X\to Y\) that trivializes it, as supplied by Proposition~\ref{prop:trivialization}.  Let \(G\) be the deck group.  By Lemma~\ref{lem:descent},
+\(E\simeq\mathcal E(V)\) for a finite-dimensional complex representation \(V\) of \(G\).  Maschke's theorem gives
+\[
+ V\simeq\bigoplus_{i=1}^s V_i^{\oplus n_i},
+ \qquad
+ E\simeq\bigoplus_{i=1}^s W_i^{\oplus n_i},
+ \qquad
+ W_i=\mathcal E(V_i),
+\]
+where the \(V_i\) are pairwise nonisomorphic irreducible representations.  Since \(H^0(Y,E)=0\), Lemma~\ref{lem:descent} gives \(V^G=0\), so none of the \(V_i\) is trivial.
+
+For each \(i\), let
+\[
+ S_i=\{y\in Y:H^0(Y,W_i(y))\neq 0\}.
+\]
+This set is closed by upper semicontinuity, applied to
+\(\operatorname{pr}_1^*W_i\otimes\OO_{Y\times Y}(\Delta)\) over the second projection.  Since
+\(H^0(Y,E(y))\neq 0\) for every \(y\), the finitely many sets \(S_i\) cover \(Y\).  The curve \(Y\) is irreducible, so one of them equals \(Y\).  Fix such an index and write \(W=W_i\).  Then
+\[
+ H^0(Y,W(y))\neq 0
+ \qquad\text{for every }y\in Y.
+\]
+
+By Lemma~\ref{lem:descent},
+\(f_*\OO_X\simeq\mathcal E(\Fun(G,\CC))\).  The regular representation \(\Fun(G,\CC)\) contains both the trivial representation and \(V_i\) as direct summands.  Hence \(f_*\OO_X\) contains \(\OO_Y\oplus W\) as a direct summand.  Finally,
+\(\OO_X(f^{-1}(y))\simeq f^*\OO_Y(y)\), so the projection formula gives
+\[
+ H^0\bigl(X,\OO_X(f^{-1}(y))\bigr)
+ \simeq H^0\bigl(Y,f_*\OO_X\otimes\OO_Y(y)\bigr).
+\]
+The direct summand \(\OO_Y\oplus W\) therefore gives an injection
+\[
+ H^0(Y,\OO_Y(y))\oplus H^0(Y,W(y))
+ \hookrightarrow H^0\bigl(X,\OO_X(f^{-1}(y))\bigr).
+\]
+The first summand contains the canonical section of the effective divisor \(y\), and the second is nonzero by construction.  Thus the target has dimension at least two for every \(y\in Y\).
+\end{proof}
+
+\section*{Acknowledgements}
+
+The author thanks Daniel Litt for his guidance, enthusiasm, and expertise.
+
+The author acknowledges the use of OpenAI's ChatGPT, specifically GPT-5.5 Pro for the original partial proof and GPT-5.6-sol Pro for subsequent simplification, cross-auditing, and improvement of the exposition.  The central construction, proof strategy, exploratory work, and substantial portions of the initial drafting were generated autonomously by these models.  The author has repeatedly revised and audited the manuscript and takes full responsibility for the accuracy of its final contents.
+
+\begin{thebibliography}{99}
+
+\bibitem[ACGH85]{ACGH}
+E.~Arbarello, M.~Cornalba, P.~A.~Griffiths, and J.~Harris,
+\emph{Geometry of Algebraic Curves. Vol. I},
+Grundlehren der mathematischen Wissenschaften, vol.~267,
+Springer-Verlag, New York, 1985.
+
+\bibitem[Hei07]{Hein}
+G.~Hein,
+\emph{Raynaud's vector bundles and base points of the generalized theta divisor},
+Math. Z. \textbf{257} (2007), no.~3, 597--611.
+
+\bibitem[LL24]{LandesmanLitt}
+A.~Landesman and D.~Litt,
+\emph{Prill's problem},
+Algebraic Geometry \textbf{11} (2024), no.~2, 290--295.
+
+\bibitem[Muk81]{Mukai}
+S.~Mukai,
+\emph{Duality between \(D(X)\) and \(D(\widehat X)\) with its application to Picard sheaves},
+Nagoya Math. J. \textbf{81} (1981), 153--175.
+
+\bibitem[Ray82]{Raynaud}
+M.~Raynaud,
+\emph{Sections des fibr\'es vectoriels sur une courbe},
+Bull. Soc. Math. France \textbf{110} (1982), no.~1, 103--125.
+
+\end{thebibliography}
+
+\end{document}
