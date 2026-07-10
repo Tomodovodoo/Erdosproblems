@@ -1,5 +1,6 @@
 name: Build Prill problem 14 paper
 
+# Triggered on the source paper and on workflow maintenance.
 on:
   push:
     branches:
@@ -31,7 +32,7 @@ jobs:
       - name: Install LaTeX
         run: |
           sudo apt-get update
-          sudo apt-get install -y latexmk texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+          sudo apt-get install -y latexmk texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended cm-super
 
       - name: Compile paper
         run: |
