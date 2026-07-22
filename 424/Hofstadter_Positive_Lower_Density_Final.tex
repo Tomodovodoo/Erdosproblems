@@ -1,0 +1,502 @@
+\documentclass[11pt,a4paper]{amsart}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\hypersetup{
+  pdftitle={Positive Lower Density in Hofstadter's ab-1 Sequence},
+  pdfauthor={Samuel Korsky},
+  pdfsubject={A solution of Hofstadter's ab-1 density problem},
+  pdfkeywords={recursive sequence, lower density, affine semigroup, Markov chain, renewal theorem}
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\A}{\mathcal A}
+\newcommand{\M}{\mathcal M}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Pp}{\mathbb P}
+\newcommand{\Ee}{\mathbb E}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+
+\title{Positive Lower Density in Hofstadter's \texorpdfstring{$ab-1$}{ab-1} Sequence}
+\author{Samuel Korsky}
+\date{}
+
+\subjclass[2020]{Primary 11B05; Secondary 11B83, 60J10, 60K05}
+\keywords{recursive sequence, lower density, affine semigroup, Markov chain, renewal theorem}
+
+\begin{document}
+
+\begin{abstract}
+Let $\A$ be the least set of positive integers containing $2$ and $3$ such that $ab-1\in\A$ whenever $a,b\in\A$ are distinct. We prove that $\A$ has positive lower density, answering a question of Hofstadter recorded by Erd\H{o}s. The proof constructs an injective finite-state family of affine compositions, uses a state-dependent Markov rule to keep the prime exponents of their slopes near a fixed ray, and applies the arithmetic renewal theorem to obtain linearly many distinct values.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+Let $\A$ be the least subset of $\N$ containing $2,3$ and satisfying
+\[
+ a,b\in\A,\quad a\ne b \quad\Longrightarrow\quad ab-1\in\A.
+\]
+Write $A(x)=\abs{\A\cap[1,x]}$. Hofstadter asked whether $\A$ has positive density; Erd\H{o}s recorded the question in this form in \cite{Erdos1977}, and it is catalogued as Erd\H{o}s Problem~424 and OEIS~A005244 \cite{Bloom424,OEIS}. The later formulation in \cite{ErdosGraham1980} asks whether almost all integers belong to $\A$, but this is false: induction modulo $3$ gives $\A\subseteq\{0,2\}\pmod 3$. We prove the positive lower-density statement.
+
+\begin{theorem}\label{thm:main}
+There is a constant $c>0$ such that
+\[
+ A(x)\ge cx
+\]
+for all sufficiently large $x$. Equivalently,
+\[
+ \liminf_{x\to\infty}\frac{A(x)}x>0.
+\]
+\end{theorem}
+
+The proof uses only the fixed multipliers
+\[
+ \M=\{2,3,5,9,14\}
+\]
+and the affine maps $T_a(x)=ax-1$. All these multipliers, together with the seed $17$, belong to $\A$. We construct many distinct compositions of the $T_a$ having one common slope. A finite family of inverse intervals makes a suitable collection of compositions injective, even though the full affine semigroup is not free; for example, $T_9\circ T_2=T_3\circ T_2\circ T_3$. Transition probabilities on the interval states are chosen so that a closed path has probability equal to the reciprocal of its slope.
+
+The slopes are products of $2,3,5,7$. A state-dependent rule selects among four transition systems so that the three imbalances
+\[
+ \nu_2-31\nu_7,\qquad \nu_3-26\nu_7,\qquad \nu_5-11\nu_7
+\]
+form a recurrent process. First returns to one recurrent state consequently have slopes
+\[
+ q^m,\qquad q=2^{31}3^{26}5^{11}7.
+\]
+The first-return paths form an injective code. The arithmetic renewal theorem then gives $\gg q^m$ distinct compositions of slope $q^m$ along an arithmetic progression of exponents. Evaluating them at $17$ yields the required elements of $\A$.
+
+Affine closures of recursively generated sets were initiated by Klarner and Rado \cite{KlarnerRado}; see also the survey \cite{Lagarias}. A close recent result of Shamazov and Talambutsa proves positive density for affine orbit sets under an exact covering hypothesis \cite{ShamazovTalambutsa}. That hypothesis does not hold here, and the semigroup above has relations; the interval construction below instead isolates an injective finite-state subfamily.
+
+\section{A finite interval system}
+
+We first record why the fixed affine orbit is contained in $\A$.
+
+\begin{lemma}\label{lem:orbit-in-A}
+If $a_1,\ldots,a_r\in\M$, then
+\[
+ T_{a_r}\circ\cdots\circ T_{a_1}(17)\in\A.
+\]
+\end{lemma}
+
+\begin{proof}
+The identities
+\[
+ 5=2\cdot3-1,\quad 9=2\cdot5-1,\quad
+ 14=3\cdot5-1,\quad 17=2\cdot9-1
+\]
+show that $\M\cup\{17\}\subseteq\A$, with distinct inputs at every step. If $x\ge17$ and $a\in\M$, then $a<17\le x$ and $T_a(x)=ax-1>x$. Thus $a$ and $x$ are distinct members of $\A$, so $T_a(x)\in\A$. Induction proves the assertion.
+\end{proof}
+
+Put $h_a=T_a^{-1}$, so $h_a(x)=(x+1)/a$. Let
+\[
+ K_i=[e_i,e_{i+1})\qquad(1\le i\le19),
+\]
+where
+\begin{align*}
+(e_1,\ldots,e_{20})={}&\left(
+\frac19,\frac{10}{81},\frac17,\frac15,\frac29,\frac27,\frac13,
+\frac{10}{27},\frac25,\frac{11}{27},\frac37,\frac{37}{81},\frac59,
+\frac35,\frac23,\frac{19}{27},\frac{59}{81},\frac45,\frac{23}{27},1
+\right).
+\end{align*}
+For $r\le s$, write $K_{r:s}=K_r\cup\cdots\cup K_s$. The following identities are exact; each row means $T_a(K_i)=K_{r:s}$.
+
+\begin{center}
+\small
+\begin{tabular}{ccc@{\qquad}ccc}
+\toprule
+$i$ & $a$ & image & $i$ & $a$ & image\\
+\midrule
+1&14&$K_{13:16}$ &11&3&$K_{6:7}$\\
+2&14&$K_{17:19}$ &12&3&$K_{8:14}$\\
+2&9 &$K_{1:5}$   &13&3&$K_{15:17}$\\
+3&9 &$K_{6:17}$  &13&2&$K_{1:3}$\\
+4&9 &$K_{18:19}$ &14&3&$K_{18:19}$\\
+5&5 &$K_{1:10}$  &14&2&$K_{4:6}$\\
+6&5 &$K_{11:14}$ &15&2&$K_{7:9}$\\
+7&5 &$K_{15:18}$ &16&2&$K_{10:11}$\\
+8&5 &$K_{19}$    &17&2&$K_{12:13}$\\
+8&3 &$K_{1:3}$   &18&2&$K_{14:15}$\\
+9&3 &$K_4$       &19&2&$K_{16:19}$\\
+10&3&$K_5$       &&&\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+There are choices at $K_2$ and $K_8$, and at $K_{13},K_{14}$ we use either multiplier $3$ at both states or multiplier $2$ at both states. We use the four assignments
+\[
+ \alpha_0=(14,5,3),\quad \alpha_1=(9,5,3),\quad
+ \alpha_2=(14,3,3),\quad \alpha_3=(14,5,2),
+\]
+where the entries specify the choices at $K_2$, at $K_8$, and jointly at $K_{13},K_{14}$. Let $a_i^{(\ell)}$ be the multiplier assigned to $K_i$ by $\alpha_\ell$. Define a transition matrix $P_\ell=(p_{ij}^{(\ell)})$ by
+\[
+ p_{ij}^{(\ell)}=
+ \begin{cases}
+ \displaystyle\frac{\abs{K_j}}{a_i^{(\ell)}\abs{K_i}},
+ &K_j\subseteq T_{a_i^{(\ell)}}(K_i),\\[6pt]
+ 0,&\text{otherwise}.
+ \end{cases}
+\]
+The intervals $h_{a_i^{(\ell)}}(K_j)$ over the allowed successors $j$ partition $K_i$, so $P_\ell$ is stochastic. Its directed transition graph is strongly connected; directly from the table, every state reaches $19$, and $19$ reaches every state.
+
+An allowed path is a sequence
+\[
+ \gamma=(i_0,a_0,i_1,a_1,\ldots,a_{r-1},i_r)
+\]
+in which $a_t$ is the multiplier used on leaving $K_{i_t}$ and $K_{i_{t+1}}\subseteq T_{a_t}(K_{i_t})$. Its probability is
+\begin{equation}\label{eq:path-probability}
+ \Pp(\gamma)=\prod_{t=0}^{r-1}
+ \frac{\abs{K_{i_{t+1}}}}{a_t\abs{K_{i_t}}}
+ =\frac{\abs{K_{i_r}}}{\abs{K_{i_0}}}\,
+  \frac1{a_0a_1\cdots a_{r-1}}.
+\end{equation}
+The telescoping identity remains valid when the assignment changes along the path.
+
+For a product of multipliers, let
+\[
+ \nu=(\nu_2,\nu_3,\nu_5,\nu_7)\in\Z_{\ge0}^4
+\]
+be its prime-exponent vector, and set
+\[
+ H(\nu)=(\nu_2-31\nu_7,\ \nu_3-26\nu_7,\ \nu_5-11\nu_7)\in\Z^3.
+\]
+Then $H(\nu)=0$ exactly when $\nu=m(31,26,11,1)$ for some $m\ge0$, in which case the product is $q^m$, where
+\[
+ q=2^{31}3^{26}5^{11}7.
+\]
+
+For assignment $\alpha_\ell$, let $\xi_\ell(i)$ be the increment of $H$ produced by the multiplier $a_i^{(\ell)}$. Let $\pi_\ell$ be the stationary distribution of $P_\ell$ and put
+\[
+ d_\ell=\sum_{i=1}^{19}\pi_\ell(i)\xi_\ell(i).
+\]
+
+\begin{lemma}\label{lem:finite-data}
+The four stationary drifts are
+\[
+\begin{array}{c|c}
+\ell&d_\ell\\ \hline
+0&\dfrac1{209179}(82502,60472,22315)\\[4pt]
+1&\dfrac1{9240032}(4122816,3176276,1187745)\\[4pt]
+2&\dfrac1{154297}(-17374,2952,-12847)\\[4pt]
+3&\dfrac1{938829}(-410774,-384064,-82315).
+\end{array}
+\]
+The origin lies in the interior of $\operatorname{conv}\{d_0,d_1,d_2,d_3\}$.
+\end{lemma}
+
+\begin{proof}
+Appendix~\ref{app:data} records exact stationary distributions, verifies the displayed drifts, and gives a positive affine dependence together with a nonzero determinant certificate. These calculations show that the four drifts are affinely independent and that the origin lies in the interior of their tetrahedron.
+\end{proof}
+
+\section{A recurrent controlled chain}
+
+We now allow the assignment to depend on the accumulated imbalance. The following lemma is the only recurrence input.
+
+\begin{lemma}\label{lem:recurrence}
+There is a deterministic rule for choosing among $\alpha_0,\ldots,\alpha_3$ such that the interval state together with the imbalance vector has a positive recurrent state.
+\end{lemma}
+
+\begin{proof}
+Use the Euclidean norm on $\R^3$. For a fixed $\ell$, the finite irreducible chain with transition matrix $P_\ell$ has stationary distribution $\pi_\ell$. Since $\xi_\ell-d_\ell$ has stationary mean zero, the Poisson equation
+\[
+ g_\ell-P_\ell g_\ell=\xi_\ell-d_\ell
+\]
+has a solution $g_\ell:\{1,\ldots,19\}\to\R^3$, coordinatewise. Consequently, for every initial interval state $i$ and every $N\ge1$,
+\begin{equation}\label{eq:poisson-bound}
+ \norm{\Ee_i^{(\ell)}\!\left[\sum_{t=0}^{N-1}\xi_\ell(I_t)\right]-Nd_\ell}
+ \le C_0,
+\end{equation}
+where $C_0=2\max_{\ell,i}\norm{g_\ell(i)}$.
+
+By Lemma~\ref{lem:finite-data}, the origin is an interior point of the convex hull of the drifts. Hence there is $\delta>0$ such that, for every unit vector $u\in\R^3$,
+\begin{equation}\label{eq:inward-drift}
+ \min_{0\le\ell\le3}\langle u,d_\ell\rangle\le-\delta.
+\end{equation}
+Choose a block length $N$, to be fixed below. At time $kN$, if the current imbalance is $h\ne0$, choose an index $\ell(h)$ minimizing $\langle h/\norm{h},d_\ell\rangle$ and use assignment $\alpha_{\ell(h)}$ for the next $N$ steps. Use $\alpha_0$ when $h=0$, and fix a deterministic rule for ties. Then
+\[
+ X_k=(I_{kN},H_{kN})
+\]
+is a time-homogeneous Markov chain on $\{1,\ldots,19\}\times\Z^3$.
+
+Put $M_0=\max_{\ell,i}\norm{\xi_\ell(i)}$. If the block increment is $Z=H_{(k+1)N}-H_{kN}$, then $\norm{Z}\le M_0N$. For $h\ne0$ we use the elementary inequality
+\[
+ \norm{h+z}-\norm{h}
+ \le \left\langle\frac{h}{\norm{h}},z\right\rangle
+     +\frac{\norm{z}^2}{2\norm{h}},
+\]
+After adding $\norm{h}$, the right-hand side is nonnegative; squaring reduces the claim to a square. Combining this with \eqref{eq:poisson-bound} and \eqref{eq:inward-drift} gives
+\begin{equation}\label{eq:lyapunov-drift}
+ \Ee\!\left[\norm{H_{(k+1)N}}-\norm{H_{kN}}\mid X_k=(i,h)\right]
+ \le -N\delta+C_0+\frac{M_0^2N^2}{2\norm{h}}.
+\end{equation}
+Choose $N$ so that $N\delta>C_0+2$, and then choose $R$ so large that the right-hand side of \eqref{eq:lyapunov-drift} is at most $-1$ whenever $\norm{h}>R$. Let
+\[
+ C=\{(i,h):1\le i\le19,\ h\in\Z^3,\ \norm{h}\le R\}.
+\]
+This set is finite. If $\tau_C=\inf\{k\ge0:X_k\in C\}$, the drift estimate and optional stopping applied to $\norm{H_{kN}}$ give
+\begin{equation}\label{eq:hitting-bound}
+ \Ee_{(i,h)}\tau_C\le\norm{h}
+ \qquad((i,h)\notin C).
+\end{equation}
+Indeed, apply the drift inequality to $\tau_C\wedge n$ and let $n\to\infty$.
+
+For $x=(i,h)\in C$, put $\tau_C^+=\inf\{k\ge1:X_k\in C\}$. After one block the imbalance has norm at most $R+M_0N$, so by the Markov property and \eqref{eq:hitting-bound},
+\[
+ \Ee_x\tau_C^+
+ \le1+\Ee_x\!\left[\mathbf{1}_{\{X_1\notin C\}}
+     \Ee_{X_1}\tau_C\right]
+ \le1+R+M_0N.
+\]
+Thus successive visits to $C$ define a Markov chain on a finite state space, with uniformly bounded expected excursion lengths in the original block chain. Choose a state $s$ in a recurrent class of this embedded finite chain. Its expected return time in the embedded chain is finite; summing the uniformly bounded expected excursion lengths shows that its return time in $(X_k)$ also has finite mean. Hence $s$ is positive recurrent.
+\end{proof}
+
+Fix a positive recurrent state
+\[
+ s=(i_*,h_*),
+\]
+and start the controlled chain from $s$.
+
+\section{Return paths and renewal}
+
+Let
+\[
+ \tau=\inf\{k\ge1:X_k=s\}
+\]
+be the first return time in block units. A realization of this return determines an underlying path of length $L=N\tau$,
+\[
+ \gamma=(i_0,a_0,i_1,a_1,\ldots,a_{L-1},i_L),
+ \qquad i_0=i_L=i_*.
+\]
+Let $\mathcal R$ be the set of all such first-return paths. Define
+\[
+ G_\gamma=T_{a_{L-1}}\circ\cdots\circ T_{a_0},
+ \qquad Q_\gamma=a_0a_1\cdots a_{L-1},
+\]
+and
+\[
+ J_\gamma=G_\gamma^{-1}(K_{i_*})\subseteq K_{i_*}.
+\]
+
+\begin{lemma}\label{lem:injectivity}
+Distinct finite concatenations of paths from $\mathcal R$ give distinct affine maps.
+\end{lemma}
+
+\begin{proof}
+No first-return path is a proper initial segment of another. Consider two distinct paths in $\mathcal R$, and let their first differing transition occur after a common path prefix. Starting from the same full state $s$, the common prefix gives the same accumulated imbalance, so the deterministic rule chooses the same multiplier at the point of divergence. The two paths enter distinct successor intervals. Their corresponding inverse branches $h_a(K_j)$ are disjoint subsets of the current interval, and pulling them back through the common preceding composition shows that the intervals $J_\gamma$ for the two paths are disjoint. Equality of their affine maps would give equal inverse images of $K_{i_*}$, which is impossible.
+
+Now consider two concatenations. Delete their common initial return paths. If both have a return path remaining, their full inverse images of $K_{i_*}$ lie, after pulling back through the common prefix, inside the disjoint intervals associated with their first different return paths. The maps cannot be equal. If only one concatenation has a path remaining, its slope is strictly larger than that of the other, since every multiplier exceeds one. Thus the maps are distinct in all cases.
+\end{proof}
+
+For $\gamma\in\mathcal R$, equation~\eqref{eq:path-probability} and $i_0=i_L$ give
+\begin{equation}\label{eq:return-probability}
+ \Pp(\gamma)=Q_\gamma^{-1}.
+\end{equation}
+The return also restores the imbalance coordinate. Hence the net prime-exponent vector of $Q_\gamma$ lies in the kernel of $H$, so
+\[
+ Q_\gamma=q^m
+\]
+for a unique integer $m\ge1$.
+
+Let $b_m$ be the number of first-return paths of slope $q^m$. Positive recurrence implies $\tau<\infty$ almost surely, and the first-return events are disjoint, so \eqref{eq:return-probability} gives
+\begin{equation}\label{eq:first-return-mass}
+ \sum_{m\ge1}b_mq^{-m}=1.
+\end{equation}
+If such a path has length $L$, each multiplier contributes one or two prime factors counted with multiplicity, whereas $q^m$ has $69m$ prime factors. Therefore
+\begin{equation}\label{eq:length-exponent}
+ L\le69m\le2L.
+\end{equation}
+In particular, each $b_m$ is finite, since the interval graph has only finitely many paths of bounded length. If $M$ is the exponent of the random first-return path, then $L=N\tau$ and
+\begin{equation}\label{eq:finite-mean}
+ \Ee M=\sum_{m\ge1}m b_mq^{-m}
+ \le\frac{2N}{69}\Ee\tau<\infty.
+\end{equation}
+
+\begin{proposition}\label{prop:renewal-count}
+There are an integer $d\ge1$ and a constant $\eta>0$ such that, for all sufficiently large $r$, at least $\eta q^{rd}$ distinct concatenations of first-return paths have slope $q^{rd}$.
+\end{proposition}
+
+\begin{proof}
+Put $p_m=b_mq^{-m}$. By \eqref{eq:first-return-mass} and \eqref{eq:finite-mean}, $(p_m)_{m\ge1}$ is a probability distribution of finite mean
+\[
+ \mu=\sum_{m\ge1}mp_m.
+\]
+Successive returns to $s$ have independent, identically distributed exponents by the strong Markov property. Let $c_n$ be the number of ordered concatenations of return paths whose total exponent is $n$, including the empty concatenation at $n=0$. Every such concatenation has probability $q^{-n}$, and hence
+\begin{equation}\label{eq:renewal-mass}
+ c_nq^{-n}=\sum_{k\ge0}p^{*k}(n).
+\end{equation}
+Let $d=\gcd\{m:p_m>0\}$. The arithmetic renewal theorem gives
+\[
+ \sum_{k\ge0}p^{*k}(rd)\longrightarrow\frac d\mu
+ \qquad(r\to\infty)
+\]
+\cite[Chapter~XI, Section~1]{Feller}. Taking $\eta=d/(2\mu)$, equation~\eqref{eq:renewal-mass} gives $c_{rd}\ge\eta q^{rd}$ for all sufficiently large $r$. Lemma~\ref{lem:injectivity} makes the corresponding affine maps distinct.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Every nonempty composition of the maps $T_a$ has the form
+\[
+ G(x)=Qx-C
+\]
+with integers $Q,C$ satisfying $0<C<Q$. This follows by induction: it is true for $T_a$, and
+\[
+ T_a(Qx-C)=aQx-(aC+1),
+ \qquad 0<aC+1<aQ.
+\]
+
+Fix a sufficiently large $r$ and put $Q=q^{rd}$. Proposition~\ref{prop:renewal-count} gives at least $\eta Q$ distinct compositions of slope $Q$. They have distinct constant terms by Lemma~\ref{lem:injectivity}, and therefore take distinct values at $17$. Lemma~\ref{lem:orbit-in-A} puts all these values in $\A$, while $0<C<Q$ gives
+\[
+ 16Q<G(17)=17Q-C<17Q.
+\]
+Consequently,
+\[
+ A(17q^{rd})\ge\eta q^{rd}
+\]
+for all sufficiently large $r$. Given sufficiently large $x$, choose $r$ with
+\[
+ 17q^{rd}\le x<17q^{(r+1)d}.
+\]
+Then
+\[
+ \frac{A(x)}x\ge
+ \frac{\eta q^{rd}}{17q^{(r+1)d}}
+ =\frac{\eta}{17q^d}>0.
+\]
+This proves the theorem.
+\end{proof}
+
+\appendix
+\section{Exact stationary data}\label{app:data}
+
+For $0\le\ell\le3$, write $\pi_\ell=w^{(\ell)}/D_\ell$. The denominators are
+\[
+ (D_0,D_1,D_2,D_3)=(5647833,83160288,6943365,76045149),
+\]
+and the integer weights are listed below.
+
+\begin{center}
+\scriptsize
+\renewcommand{\arraystretch}{0.93}
+\begin{tabular}{r|rrrr}
+\toprule
+$i$&$w_i^{(0)}$&$w_i^{(1)}$&$w_i^{(2)}$&$w_i^{(3)}$\\
+\midrule
+1&7350&126000&48510&877590\\
+2&11550&198000&76230&1379070\\
+3&34020&583200&224532&4061988\\
+4&66150&1008045&87318&2296350\\
+5&189000&2880000&239400&6561000\\
+6&145125&2160000&201825&5323725\\
+7&264600&3910725&352800&3483900\\
+8&211680&3124980&282240&2787120\\
+9&52920&781245&70560&696780\\
+10&151200&2232000&191520&1990800\\
+11&202000&2976000&258000&2702160\\
+12&707000&10380000&903000&9457560\\
+13&320040&4703400&418824&4481568\\
+14&490644&7211349&628236&6841800\\
+15&303450&4461450&391650&2487450\\
+16&202300&2974000&237580&1658300\\
+17&586670&8572400&688982&4809070\\
+18&441294&6450654&498918&3668238\\
+19&1260840&18426840&1143240&10480680\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Each column sums to the corresponding $D_\ell$. Substitution in the transition matrices defined in Section~2 gives
+\[
+ w^{(\ell)}P_\ell=w^{(\ell)}.
+\]
+Thus the normalized columns are the stationary distributions. The multiplier increments are
+\[
+ \xi(2)=(1,0,0),\quad \xi(3)=(0,1,0),\quad \xi(5)=(0,0,1),
+\]
+\[
+ \xi(9)=(0,2,0),\qquad \xi(14)=(-30,-26,-11).
+\]
+Summing these increments against the four stationary distributions gives the drift vectors in Lemma~\ref{lem:finite-data}.
+
+For the convex-hull assertion, let
+\begin{align*}
+(c_0,c_1,c_2,c_3)={}&(
+90039171528246091,
+305527530231216384,\\
+&237978342976556325,
+331488754119440400).
+\end{align*}
+All four coefficients are positive, and exact arithmetic gives
+\[
+ c_0d_0+c_1d_1+c_2d_2+c_3d_3=0,
+\]
+while
+\[
+ \det(d_1-d_0,d_2-d_0,d_3-d_0)
+ =\frac{203470981686392000}{105416226360733049619}\ne0.
+\]
+Thus the origin is an interior point of the tetrahedron spanned by the four drifts. All verifications in this appendix use exact integer and rational arithmetic.
+
+\section*{Acknowledgements}
+
+The author thanks Thomas Bloom for helpful advice on the exposition. OpenAI's GPT-5.6 Pro assisted in searching for and checking the finite interval system and the exact drift data. The author has independently verified the argument and takes full responsibility for the final manuscript.
+
+\begin{thebibliography}{99}
+
+\bibitem{Bloom424}
+T.~F. Bloom,
+\emph{Erd\H{o}s Problem \#424},
+\url{https://www.erdosproblems.com/424}, accessed 22 July 2026.
+
+\bibitem{Erdos1977}
+P.~Erd\H{o}s,
+\emph{Problems and results on combinatorial number theory III},
+in \emph{Number Theory Day}, Lecture Notes in Math., vol.~626,
+Springer, Berlin, 1977, pp.~43--72.
+
+\bibitem{ErdosGraham1980}
+P.~Erd\H{o}s and R.~L. Graham,
+\emph{Old and New Problems and Results in Combinatorial Number Theory},
+Monographies de L'Enseignement Math\'ematique, vol.~28,
+L'Enseignement Math\'ematique, Geneva, 1980.
+
+\bibitem{Feller}
+W.~Feller,
+\emph{An Introduction to Probability Theory and Its Applications}, vol.~II,
+2nd ed., Wiley, New York, 1971.
+
+\bibitem{KlarnerRado}
+D.~A. Klarner and R.~Rado,
+\emph{Arithmetic properties of certain recursively defined sets},
+Pacific J. Math. \textbf{53} (1974), 445--463.
+
+\bibitem{Lagarias}
+J.~C. Lagarias,
+\emph{Erd\H{o}s, Klarner, and the $3x+1$ problem},
+Amer. Math. Monthly \textbf{123} (2016), 753--776.
+
+\bibitem{OEIS}
+OEIS Foundation Inc.,
+\emph{The On-Line Encyclopedia of Integer Sequences, A005244},
+\url{https://oeis.org/A005244}, accessed 22 July 2026.
+
+\bibitem{ShamazovTalambutsa}
+K.~F. Shamazov and A.~L. Talambutsa,
+\emph{On orbit sets generated by semigroups of one-dimensional affine functions},
+Expo. Math. \textbf{44} (2026), no.~3, Article~125765.
+
+\end{thebibliography}
+
+\end{document}
